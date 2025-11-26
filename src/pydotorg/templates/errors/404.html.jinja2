@@ -1,0 +1,24 @@
+{% extends 'base.html.jinja2' %}
+
+{% block title %}{{ title | default('Page Not Found') }} - {{ site_name }}{% endblock %}
+
+{% block content %}
+<div class="min-h-[60vh] flex items-center justify-center">
+  <div class="text-center max-w-md mx-auto px-4">
+    <div class="text-9xl font-bold text-primary opacity-20 mb-4">404</div>
+    <h1 class="text-3xl font-bold mb-4">{{ title | default('Page Not Found') }}</h1>
+    <p class="text-base-content/70 mb-8">
+      {{ message | default("The page you're looking for doesn't exist or has been moved.") }}
+    </p>
+    {% if path %}
+    <p class="text-sm text-base-content/50 mb-6 font-mono bg-base-200 rounded px-3 py-2 inline-block">
+      {{ path }}
+    </p>
+    {% endif %}
+    <div class="flex gap-4 justify-center">
+      <a href="/" class="btn btn-primary">Go Home</a>
+      <button onclick="history.back()" class="btn btn-outline">Go Back</button>
+    </div>
+  </div>
+</div>
+{% endblock %}

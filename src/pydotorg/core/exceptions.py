@@ -1,0 +1,219 @@
+"""Site-wide exception handlers with HTMX-aware flash message support."""
+
+from __future__ import annotations
+
+import json
+import logging
+from typing import TYPE_CHECKING
+from urllib.parse import quote
+
+from litestar.exceptions import (
+    HTTPException,
+    InternalServerException,
+    NotFoundException,
+    PermissionDeniedException,
+)
+from litestar.response import Redirect, Response, Template
+from litestar.status_codes import (
+    HTTP_401_UNAUTHORIZED,
+    HTTP_403_FORBIDDEN,
+    HTTP_404_NOT_FOUND,
+    HTTP_500_INTERNAL_SERVER_ERROR,
+)
+
+if TYPE_CHECKING:
+    from litestar import Request
+
+logger = logging.getLogger(__name__)
+
+
+def _is_htmx_request(request: Request) -> bool:
+    """Check if the request is an HTMX request."""
+    return request.headers.get("HX-Request") == "true"
+
+
+def _create_toast_response(
+    message: str,
+    toast_type: str = "error",
+    status_code: int = HTTP_404_NOT_FOUND,
+) -> Response:
+    """Create an HTMX-compatible response that triggers a toast notification.
+
+    Args:
+        message: The message to display in the toast
+        toast_type: Type of toast (error, warning, info, success)
+        status_code: HTTP status code for the response
+
+    Returns:
+        Response with HX-Trigger header for toast display
+    """
+    toast_event = json.dumps(
+        {
+            "showToast": {
+                "message": message,
+                "type": toast_type,
+            }
+        }
+    )
+    return Response(
+        content=None,
+        status_code=status_code,
+        headers={"HX-Trigger": toast_event, "HX-Reswap": "none"},
+    )
+
+
+def not_found_exception_handler(request: Request, exc: NotFoundException) -> Response | Template:
+    """Handle 404 Not Found exceptions site-wide.
+
+    For HTMX requests: Returns empty response with HX-Trigger for toast notification.
+    For regular requests: Renders the 404 error template.
+
+    Args:
+        request: The incoming request
+        exc: The NotFoundException that was raised
+
+    Returns:
+        HTMX toast response or rendered error template
+    """
+    path = request.url.path
+    detail = exc.detail if exc.detail else f"The page '{path}' was not found."
+    logger.info("404 Not Found: %s", path)
+
+    if _is_htmx_request(request):
+        return _create_toast_response(
+            message=detail,
+            toast_type="warning",
+            status_code=HTTP_404_NOT_FOUND,
+        )
+
+    return Template(
+        template_name="errors/404.html.jinja2",
+        context={
+            "title": "Page Not Found",
+            "message": detail,
+            "path": path,
+        },
+        status_code=HTTP_404_NOT_FOUND,
+    )
+
+
+def http_exception_handler(request: Request, exc: HTTPException) -> Response | Template | Redirect:
+    """Handle generic HTTP exceptions site-wide.
+
+    Args:
+        request: The incoming request
+        exc: The HTTPException that was raised
+
+    Returns:
+        Appropriate response based on request type and exception
+    """
+    status_code = exc.status_code
+    detail = exc.detail if exc.detail else f"An error occurred (HTTP {status_code})"
+    logger.warning("HTTP %d on %s: %s", status_code, request.url.path, detail)
+
+    if _is_htmx_request(request):
+        toast_type = "warning" if status_code < HTTP_500_INTERNAL_SERVER_ERROR else "error"
+        return _create_toast_response(
+            message=detail,
+            toast_type=toast_type,
+            status_code=status_code,
+        )
+
+    if status_code == HTTP_401_UNAUTHORIZED:
+        next_url = quote(str(request.url), safe="")
+        return Redirect(f"/auth/login?next={next_url}")
+
+    if status_code == HTTP_403_FORBIDDEN:
+        return Template(
+            template_name="errors/403.html.jinja2",
+            context={
+                "title": "Access Denied",
+                "message": detail,
+            },
+            status_code=status_code,
+        )
+
+    return Template(
+        template_name="errors/generic.html.jinja2",
+        context={
+            "title": f"Error {status_code}",
+            "message": detail,
+            "status_code": status_code,
+        },
+        status_code=status_code,
+    )
+
+
+def permission_denied_handler(request: Request, exc: PermissionDeniedException) -> Response | Template:
+    """Handle permission denied exceptions.
+
+    Args:
+        request: The incoming request
+        exc: The PermissionDeniedException that was raised
+
+    Returns:
+        HTMX toast response or rendered 403 template
+    """
+    detail = exc.detail if exc.detail else "You do not have permission to access this resource."
+    logger.warning("403 Forbidden on %s", request.url.path)
+
+    if _is_htmx_request(request):
+        return _create_toast_response(
+            message=detail,
+            toast_type="error",
+            status_code=HTTP_403_FORBIDDEN,
+        )
+
+    return Template(
+        template_name="errors/403.html.jinja2",
+        context={
+            "title": "Access Denied",
+            "message": detail,
+        },
+        status_code=HTTP_403_FORBIDDEN,
+    )
+
+
+def internal_server_error_handler(request: Request, exc: InternalServerException) -> Response | Template:
+    """Handle internal server errors.
+
+    Args:
+        request: The incoming request
+        exc: The InternalServerException that was raised
+
+    Returns:
+        HTMX toast response or rendered 500 template
+    """
+    logger.exception("500 Internal Server Error on %s", request.url.path)
+
+    message = "An unexpected error occurred. Please try again later."
+
+    if _is_htmx_request(request):
+        return _create_toast_response(
+            message=message,
+            toast_type="error",
+            status_code=HTTP_500_INTERNAL_SERVER_ERROR,
+        )
+
+    return Template(
+        template_name="errors/500.html.jinja2",
+        context={
+            "title": "Server Error",
+            "message": message,
+        },
+        status_code=HTTP_500_INTERNAL_SERVER_ERROR,
+    )
+
+
+def get_exception_handlers() -> dict:
+    """Get all site-wide exception handlers.
+
+    Returns:
+        Dictionary mapping exception types to their handlers
+    """
+    return {
+        NotFoundException: not_found_exception_handler,
+        PermissionDeniedException: permission_denied_handler,
+        InternalServerException: internal_server_error_handler,
+        HTTPException: http_exception_handler,
+    }

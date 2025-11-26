@@ -1,0 +1,19 @@
+{% extends 'base.html.jinja2' %}
+
+{% block title %}{{ title | default('Server Error') }} - {{ site_name }}{% endblock %}
+
+{% block content %}
+<div class="min-h-[60vh] flex items-center justify-center">
+  <div class="text-center max-w-md mx-auto px-4">
+    <div class="text-9xl font-bold text-error opacity-20 mb-4">500</div>
+    <h1 class="text-3xl font-bold mb-4">{{ title | default('Server Error') }}</h1>
+    <p class="text-base-content/70 mb-8">
+      {{ message | default("Something went wrong on our end. Please try again later.") }}
+    </p>
+    <div class="flex gap-4 justify-center">
+      <a href="/" class="btn btn-primary">Go Home</a>
+      <button onclick="location.reload()" class="btn btn-outline">Try Again</button>
+    </div>
+  </div>
+</div>
+{% endblock %}
