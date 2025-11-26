@@ -1,0 +1,60 @@
+{% extends "sqladmin/layout.html" %}
+
+{% block content_header %}
+<div class="mb-6">
+    <h1 class="text-3xl font-bold text-python-blue">Database Admin</h1>
+    <p class="text-base-content/70 mt-1">Manage database models and records</p>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for item in admin._menu.items %}
+    {% if item.is_visible(request) and item.is_accessible(request) %}
+    {% if item.type_ == "View" %}
+    <a href="{{ item.url(request) }}" class="card bg-base-100 shadow-lg border border-base-300 hover:shadow-xl transition-shadow cursor-pointer group">
+        <div class="card-body">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-python-blue/10 text-python-blue rounded-lg flex items-center justify-center group-hover:bg-python-blue group-hover:text-white transition-colors">
+                    {% if item.icon %}
+                    <i class="{{ item.icon }} text-xl"></i>
+                    {% else %}
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" />
+                    </svg>
+                    {% endif %}
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg">{{ item.display_name }}</h3>
+                    <p class="text-sm text-base-content/60">Manage {{ item.display_name|lower }}</p>
+                </div>
+            </div>
+        </div>
+    </a>
+    {% elif item.type_ == "Category" %}
+    <div class="card bg-base-100 shadow-lg border border-base-300">
+        <div class="card-body">
+            <h3 class="card-title text-python-blue">
+                {% if item.icon %}<i class="{{ item.icon }}"></i>{% endif %}
+                {{ item.display_name }}
+            </h3>
+            <div class="divider my-1"></div>
+            <ul class="menu menu-sm p-0">
+                {% for sub_menu in item.children %}
+                {% if sub_menu.is_visible(request) and sub_menu.is_accessible(request) %}
+                <li>
+                    <a href="{{ sub_menu.url(request) }}" class="py-2">
+                        {% if sub_menu.icon %}<i class="{{ sub_menu.icon }}"></i>{% endif %}
+                        {{ sub_menu.display_name }}
+                    </a>
+                </li>
+                {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+</div>
+{% endblock %}

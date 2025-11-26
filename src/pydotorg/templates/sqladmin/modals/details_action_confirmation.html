@@ -1,0 +1,15 @@
+<dialog id="confirmationModal{{ custom_action }}" class="modal">
+    <div class="modal-box">
+        <h3 class="font-bold text-lg">Confirm Action</h3>
+        <p class="py-4">{{ confirmation_message }}</p>
+        <form action="{{ url }}" method="post">
+            <div class="modal-action">
+                <button type="button" class="btn btn-ghost" onclick="confirmationModal{{ custom_action }}.close()">Cancel</button>
+                <button type="submit" class="btn btn-primary">Confirm</button>
+            </div>
+        </form>
+    </div>
+    <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+    </form>
+</dialog>

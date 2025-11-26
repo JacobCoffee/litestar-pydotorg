@@ -1,0 +1,97 @@
+{% extends "sqladmin/base.html" %}
+{% from 'sqladmin/_macros.html' import display_menu %}
+
+{% block body %}
+<div class="drawer lg:drawer-open min-h-screen" x-data>
+    <input id="sqladmin-drawer" type="checkbox" class="drawer-toggle" />
+
+    <div class="drawer-content flex flex-col bg-base-100">
+        <div class="sticky top-0 z-30 flex h-16 w-full justify-between items-center bg-base-200 border-b border-base-300 px-6">
+            <div class="flex items-center gap-4">
+                <label for="sqladmin-drawer" class="btn btn-square btn-ghost lg:hidden">
+                    <i data-lucide="menu" class="h-6 w-6"></i>
+                </label>
+
+                <div class="breadcrumbs text-sm hidden sm:block">
+                    <ul>
+                        <li><a href="/admin" class="text-python-blue hover:text-python-yellow">Admin</a></li>
+                        <li><a href="{{ url_for('admin:index') }}" class="text-python-blue hover:text-python-yellow">Database</a></li>
+                        {% block breadcrumb_items %}
+                        <li><span class="font-semibold">{{ title }}</span></li>
+                        {% endblock %}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <button
+                    class="btn btn-ghost btn-sm gap-2"
+                    @click="$store.theme.toggle()"
+                >
+                    <i data-lucide="moon" class="h-5 w-5" x-show="!$store.theme.dark"></i>
+                    <i data-lucide="sun" class="h-5 w-5" x-show="$store.theme.dark" x-cloak></i>
+                </button>
+
+                <a href="/" class="btn btn-ghost btn-sm gap-2">
+                    <i data-lucide="home" class="h-5 w-5"></i>
+                    <span class="hidden sm:inline">View Site</span>
+                </a>
+
+                {% if admin.authentication_backend %}
+                <a href="{{ request.url_for('admin:logout') }}" class="btn btn-ghost btn-sm gap-2">
+                    <i data-lucide="log-out" class="h-5 w-5"></i>
+                    <span class="hidden sm:inline">Logout</span>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <main class="flex-1 p-6">
+            {% block content_header %}
+            <div class="mb-6">
+                <h1 class="text-2xl font-bold text-python-blue">{{ title }}</h1>
+                {% if subtitle %}
+                <p class="text-base-content/70 mt-1">{{ subtitle }}</p>
+                {% endif %}
+            </div>
+            {% endblock %}
+
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <div class="drawer-side z-40">
+        <label for="sqladmin-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+        <aside class="w-64 min-h-screen bg-base-200 border-r border-base-300 flex flex-col">
+            <div class="sticky top-0 z-20 bg-base-200 border-b border-base-300">
+                <a href="{{ url_for('admin:index') }}" class="flex items-center gap-3 px-4 py-4">
+                    {% if admin.logo_url %}
+                    <img src="{{ admin.logo_url }}" alt="{{ admin.title }}" class="w-10 h-10" />
+                    {% else %}
+                    <div class="w-10 h-10 bg-python-blue text-white rounded-lg flex items-center justify-center">
+                        <i data-lucide="database" class="h-6 w-6"></i>
+                    </div>
+                    {% endif %}
+                    <div>
+                        <span class="text-lg font-bold text-python-blue">Database</span>
+                        <p class="text-xs text-base-content/60">SQLAdmin Panel</p>
+                    </div>
+                </a>
+            </div>
+
+            <div class="flex-1 overflow-y-auto py-4 px-2">
+                <div class="mb-4 px-2">
+                    <a href="/admin" class="btn btn-ghost btn-sm w-full justify-start gap-2">
+                        <i data-lucide="arrow-left" class="h-4 w-4"></i>
+                        Back to Admin
+                    </a>
+                </div>
+
+                <div class="divider my-2 px-2">Models</div>
+
+                {{ display_menu(admin._menu, request) }}
+            </div>
+        </aside>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "sqladmin/layout.html" %}
+{% from 'sqladmin/_macros.html' import render_form_fields %}
+
+{% block breadcrumb_items %}
+<li><a href="{{ url_for('admin:list', identity=model_view.identity) }}" class="text-python-blue hover:text-python-yellow">{{ model_view.name_plural }}</a></li>
+<li><span class="font-semibold">Create New</span></li>
+{% endblock %}
+
+{% block content_header %}
+<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+    <div>
+        <h1 class="text-2xl font-bold text-python-blue">Create {{ model_view.name }}</h1>
+        <p class="text-base-content/70 mt-1">Add a new {{ model_view.name|lower }}</p>
+    </div>
+    <a href="{{ url_for('admin:list', identity=model_view.identity) }}" class="btn btn-ghost btn-sm gap-2">
+        <i data-lucide="x" class="h-4 w-4"></i>
+        Cancel
+    </a>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="card bg-base-100 shadow-lg border border-base-300">
+    <div class="card-body">
+        <form action="{{ url_for('admin:create', identity=model_view.identity) }}" method="POST" enctype="multipart/form-data">
+            {{ render_form_fields(form) }}
+
+            <div class="flex gap-2 justify-end mt-6 pt-4 border-t border-base-300">
+                <a href="{{ url_for('admin:list', identity=model_view.identity) }}" class="btn btn-ghost">Cancel</a>
+                <button type="submit" name="_continue" value="1" class="btn btn-outline btn-primary gap-2">
+                    <i data-lucide="check" class="h-4 w-4"></i>
+                    Save and continue editing
+                </button>
+                <button type="submit" name="_add_another" value="1" class="btn btn-outline gap-2">
+                    <i data-lucide="plus" class="h-4 w-4"></i>
+                    Save and add another
+                </button>
+                <button type="submit" class="btn btn-primary gap-2">
+                    <i data-lucide="check" class="h-4 w-4"></i>
+                    Save
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

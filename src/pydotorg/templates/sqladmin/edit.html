@@ -1,0 +1,66 @@
+{% extends "sqladmin/layout.html" %}
+{% from 'sqladmin/_macros.html' import render_form_fields %}
+
+{% block breadcrumb_items %}
+<li><a href="{{ url_for('admin:list', identity=model_view.identity) }}" class="text-python-blue hover:text-python-yellow">{{ model_view.name_plural }}</a></li>
+<li><span class="font-semibold">Edit {{ title }}</span></li>
+{% endblock %}
+
+{% block content_header %}
+<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+    <div>
+        <h1 class="text-2xl font-bold text-python-blue">Edit {{ title }}</h1>
+        <p class="text-base-content/70 mt-1">Update {{ model_view.name|lower }} details</p>
+    </div>
+    <div class="flex gap-2">
+        {% if model_view.can_view_details %}
+        <a href="{{ model_view._build_url_for('admin:details', request, model) }}" class="btn btn-ghost btn-sm gap-2">
+            <i data-lucide="eye" class="h-4 w-4"></i>
+            View Details
+        </a>
+        {% endif %}
+        <a href="{{ url_for('admin:list', identity=model_view.identity) }}" class="btn btn-ghost btn-sm gap-2">
+            <i data-lucide="x" class="h-4 w-4"></i>
+            Cancel
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="card bg-base-100 shadow-lg border border-base-300">
+    <div class="card-body">
+        <form action="{{ model_view._build_url_for('admin:edit', request, model) }}" method="POST" enctype="multipart/form-data">
+            {{ render_form_fields(form) }}
+
+            <div class="flex gap-2 justify-end mt-6 pt-4 border-t border-base-300">
+                <a href="{{ url_for('admin:list', identity=model_view.identity) }}" class="btn btn-ghost">Cancel</a>
+                <button type="submit" name="_continue" value="1" class="btn btn-outline btn-primary gap-2">
+                    <i data-lucide="check" class="h-4 w-4"></i>
+                    Save and continue editing
+                </button>
+                <button type="submit" class="btn btn-primary gap-2">
+                    <i data-lucide="check" class="h-4 w-4"></i>
+                    Save
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% if model_view.can_delete %}
+<div class="card bg-base-100 shadow-lg border border-error mt-6">
+    <div class="card-body">
+        <h3 class="card-title text-error">Danger Zone</h3>
+        <p class="text-base-content/70">Once you delete this {{ model_view.name|lower }}, there is no going back. Please be certain.</p>
+        <div class="card-actions justify-end mt-4">
+            <button class="btn btn-error btn-sm gap-2" data-name="{{ model_view.name }}" data-pk="{{ get_object_identifier(model) }}" data-url="{{ model_view._url_for_delete(request, model) }}" onclick="deleteModal.showModal()">
+                <i data-lucide="trash-2" class="h-4 w-4"></i>
+                Delete this {{ model_view.name|lower }}
+            </button>
+        </div>
+    </div>
+</div>
+{% include 'sqladmin/modals/delete.html' %}
+{% endif %}
+{% endblock %}

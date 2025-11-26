@@ -1,0 +1,93 @@
+{% macro menu_category(menu, request) %}
+{% if menu.is_visible(request) and menu.is_accessible(request) %}
+<li>
+    <details {% if menu.is_active(request) %}open{% endif %}>
+        <summary class="font-medium">
+            {% if menu.icon %}<i class="{{ menu.icon }}"></i>{% endif %}
+            {{ menu.display_name }}
+        </summary>
+        <ul>
+            {% for sub_menu in menu.children %}
+            {% if sub_menu.is_visible(request) and sub_menu.is_accessible(request) %}
+            <li>
+                <a href="{{ sub_menu.url(request) }}" class="{% if sub_menu.is_active(request) %}active{% endif %}">
+                    {% if sub_menu.icon %}<i class="{{ sub_menu.icon }}"></i>{% endif %}
+                    {{ sub_menu.display_name }}
+                </a>
+            </li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+    </details>
+</li>
+{% endif %}
+{% endmacro %}
+
+{% macro menu_item(menu, request) %}
+{% if menu.is_visible(request) and menu.is_accessible(request) %}
+<li>
+    <a href="{{ menu.url(request) }}" class="{% if menu.is_active(request) %}active{% endif %}">
+        {% if menu.icon %}<i class="{{ menu.icon }}"></i>{% endif %}
+        {{ menu.display_name }}
+    </a>
+</li>
+{% endif %}
+{% endmacro %}
+
+{% macro display_menu(menu, request) %}
+<ul class="menu menu-sm w-full">
+    {% for item in menu.items %}
+    {% if item.type_ == "View" %}
+    {{ menu_item(item, request) }}
+    {% elif item.type_ == "Category" %}
+    {{ menu_category(item, request) }}
+    {% endif %}
+    {% endfor %}
+</ul>
+{% endmacro %}
+
+{% macro render_field(field, kwargs={}) %}
+<div class="form-control w-full mb-4">
+    <label class="label">
+        <span class="label-text font-medium {% if field.flags.required %}after:content-['*'] after:text-error after:ml-1{% endif %}">
+            {{ field.label.text }}
+        </span>
+    </label>
+    {% if field.type == 'BooleanField' %}
+    <label class="cursor-pointer label justify-start gap-4">
+        {{ field(class_="checkbox checkbox-primary") }}
+        <span class="label-text">{{ field.label.text }}</span>
+    </label>
+    {% elif field.type == 'TextAreaField' %}
+    {{ field(class_="textarea textarea-bordered w-full" + (' textarea-error' if field.errors else ''), rows=4) }}
+    {% elif field.type == 'SelectField' or field.type == 'SelectMultipleField' %}
+    {{ field(class_="select select-bordered w-full" + (' select-error' if field.errors else '')) }}
+    {% else %}
+    {{ field(class_="input input-bordered w-full" + (' input-error' if field.errors else '')) }}
+    {% endif %}
+    {% for error in field.errors %}
+    <label class="label">
+        <span class="label-text-alt text-error">{{ error }}</span>
+    </label>
+    {% endfor %}
+    {% if field.description %}
+    <label class="label">
+        <span class="label-text-alt text-base-content/60">{{ field.description }}</span>
+    </label>
+    {% endif %}
+</div>
+{% endmacro %}
+
+{% macro render_form_fields(form, form_opts=None) %}
+{% if form.hidden_tag is defined %}
+{{ form.hidden_tag() }}
+{% else %}
+{% for f in form if f.widget.input_type == 'hidden' %}
+{{ f }}
+{% endfor %}
+{% endif %}
+
+{% for f in form if f.widget.input_type != 'hidden' %}
+{{ render_field(f, kwargs) }}
+{% endfor %}
+{% endmacro %}
