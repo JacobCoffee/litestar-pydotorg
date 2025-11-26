@@ -11,7 +11,7 @@ from litestar import Controller, Request, Response, get, post
 from litestar.di import Provide
 from litestar.exceptions import NotFoundException, PermissionDeniedException
 from litestar.params import Parameter
-from litestar.response import Redirect
+from litestar.response import Redirect, Template
 from sqlalchemy import select
 
 from pydotorg.config import settings
@@ -413,3 +413,66 @@ class AuthController(Controller):
         email_service.send_verification_email(current_user.email, current_user.username, verification_link)
 
         return VerifyEmailResponse(message="Verification email sent")
+
+
+class AuthPageController(Controller):
+    """Controller for authentication HTML pages."""
+
+    path = "/auth"
+
+    @get("/login")
+    async def login_page(self) -> Template:
+        """Render the login page."""
+        return Template(
+            template_name="auth/login.html.jinja2",
+            context={
+                "title": "Sign In",
+                "description": "Sign in to your Python.org account",
+            },
+        )
+
+    @get("/register")
+    async def register_page(self) -> Template:
+        """Render the registration page."""
+        return Template(
+            template_name="auth/register.html.jinja2",
+            context={
+                "title": "Create Account",
+                "description": "Create a new Python.org account",
+            },
+        )
+
+    @get("/profile", guards=[require_authenticated])
+    async def profile_page(self, request: Request) -> Template:
+        """Render the user profile page."""
+        return Template(
+            template_name="auth/profile.html.jinja2",
+            context={
+                "user": request.user,
+                "title": "Your Profile",
+                "description": "Manage your Python.org account",
+            },
+        )
+
+    @get("/forgot-password")
+    async def forgot_password_page(self) -> Template:
+        """Render the forgot password page."""
+        return Template(
+            template_name="auth/forgot_password.html.jinja2",
+            context={
+                "title": "Reset Password",
+                "description": "Reset your Python.org password",
+            },
+        )
+
+    @get("/reset-password/{token:str}")
+    async def reset_password_page(self, token: str) -> Template:
+        """Render the password reset page."""
+        return Template(
+            template_name="auth/reset_password.html.jinja2",
+            context={
+                "token": token,
+                "title": "Set New Password",
+                "description": "Set a new password for your account",
+            },
+        )
