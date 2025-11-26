@@ -1051,8 +1051,8 @@ async def _check_litestar_session(self, request: Request) -> User | None:
 |-----------------|-------------|----------------------------------------------------|
 | /admin/users    | ✅ Done     | User management with CRUD, roles, activation       |
 | /admin/jobs     | ✅ Done     | Job moderation queue with approve/reject/comment   |
-| /admin/db       | ✅ Done     | Database Admin (SQLAdmin) with SSO                 |
-| /admin/sponsors | ⏳ Pending  | Sponsor application management                     |
+| /admin/sponsors | ✅ Done     | Sponsor application management with workflow       |
+| /admin/db       | ✅ Done     | Database Admin (SQLAdmin) with DaisyUI restyling   |
 | /admin/events   | ⏳ Pending  | Event moderation                                   |
 | /admin/pages    | ⏳ Pending  | CMS page editing                                   |
 | /admin/blogs    | ⏳ Pending  | Blog post management                               |
@@ -1076,6 +1076,28 @@ async def _check_litestar_session(self, request: Request) -> User | None:
 - [x] Created user list template with search and filters
 - [x] Created user edit template with role management
 - [x] Created 19 unit tests for UserAdminService
+
+**Completed for /admin/sponsors** (2025-11-26):
+- [x] Created `SponsorAdminService` with list/get/approve/reject/finalize methods
+- [x] Created `AdminSponsorsController` with workflow endpoints
+- [x] Created sponsor templates: `list.html.jinja2`, `detail.html.jinja2`, `sponsors_list.html.jinja2`, `sponsor_detail.html.jinja2`
+- [x] Created sponsor partials: `sponsorship_row.html.jinja2`, `sponsorship_preview.html.jinja2`
+- [x] Updated sidebar with sponsor links
+- [x] Registered controller and dependency provider
+- [x] Created 23 unit tests for SponsorAdminService
+
+**Completed for /admin/db SQLAdmin Restyling** (2025-11-26):
+- [x] Created custom DaisyUI templates (`templates/sqladmin/`)
+- [x] Created `base.html` with TailwindCSS/DaisyUI styling
+- [x] Created `layout.html` with sidebar navigation and theme toggle
+- [x] Created `list.html` with DaisyUI table and pagination
+- [x] Created `details.html` with DaisyUI cards
+- [x] Created `create.html` and `edit.html` with DaisyUI forms
+- [x] Created `login.html` with DaisyUI card layout
+- [x] Created modal templates (`modals/delete.html`, `modals/list_action_confirmation.html`, `modals/details_action_confirmation.html`)
+- [x] Updated SQLAdmin config to use custom templates directory
+- [x] Added Vite bundling for admin JS/CSS (jQuery, Select2, Flatpickr, Lucide icons)
+- [x] Converted all SQLAdmin templates to use Lucide icons site-wide
 
 ---
 
@@ -1222,6 +1244,82 @@ tests/
 ├── integration/
 └── e2e/
 ```
+
+---
+
+## Next Steps - Tiered Priority List
+
+### Tier 1: CRITICAL (Must Complete for MVP)
+
+| Task | Phase | Priority | Effort | Description |
+|------|-------|----------|--------|-------------|
+| **JWT Authentication Middleware** | 2.2 | CRITICAL | High | Implement proper JWT auth for API endpoints |
+| **Session-based Auth (Fallback)** | 2.2 | CRITICAL | Medium | Already partially done, needs completion |
+| **Password Hashing Service** | 2.2 | CRITICAL | Low | ✅ Done (bcrypt in security.py) |
+| **CSRF Protection** | 2.2 | HIGH | Medium | Required for all forms |
+| **Docker Setup** | 10.3 | HIGH | Medium | Dockerfile + docker-compose for deployment |
+
+### Tier 2: HIGH PRIORITY (Core Functionality)
+
+| Task | Phase | Priority | Effort | Description |
+|------|-------|----------|--------|-------------|
+| **Admin Events Page** | 10.2 | HIGH | Medium | `/admin/events` - Event moderation queue |
+| **Admin Pages (CMS)** | 10.2 | HIGH | High | `/admin/pages` - CMS page editing interface |
+| **SAQ Task Queue** | 6.1 | HIGH | High | Background job processing (feed refresh, email) |
+| **Email System** | 6.2 | HIGH | Medium | SMTP config + email templates |
+| **User Registration Flow** | 2.2 | HIGH | Medium | Email verification, activation |
+| **CI/CD Pipeline** | 10.4 | HIGH | Medium | GitHub Actions for lint/test/deploy |
+
+### Tier 3: MEDIUM PRIORITY (Enhanced Features)
+
+| Task | Phase | Priority | Effort | Description |
+|------|-------|----------|--------|-------------|
+| **Admin Blogs Page** | 10.2 | MEDIUM | Medium | `/admin/blogs` - Blog post management |
+| **Admin Settings** | 10.2 | MEDIUM | Low | `/admin/settings` - Site settings |
+| **Admin Logs/Audit** | 10.2 | MEDIUM | Medium | `/admin/logs` - Activity audit log |
+| **Search (Meilisearch)** | 6.3 | MEDIUM | High | Full-text search for pages, jobs, events |
+| **OAuth2 Social Login** | 2.2 | MEDIUM | Medium | GitHub, Google authentication |
+| **API Rate Limiting** | 5.1 | MEDIUM | Low | Prevent API abuse |
+| **API Documentation** | 9.1 | MEDIUM | Medium | OpenAPI/Swagger UI setup |
+| **Mailing Domain** | 3.x | MEDIUM | Low | Last remaining domain (models/services) |
+
+### Tier 4: LOW PRIORITY (Nice to Have)
+
+| Task | Phase | Priority | Effort | Description |
+|------|-------|----------|--------|-------------|
+| **GraphQL API** | 5.2 | LOW | High | Optional alternative to REST |
+| **CDN Integration (Fastly)** | 6.4 | LOW | Medium | Cache purging, surrogate keys |
+| **Feature Flags** | 2.3 | LOW | Low | Runtime feature toggles |
+| **Developer Documentation** | 9.2 | LOW | Medium | ARCHITECTURE.md, deployment guide |
+
+### Skipped/Deferred Items
+
+| Task | Phase | Status | Reason |
+|------|-------|--------|--------|
+| **Boxes Domain** | 3.2 | ✅ SKIPPED | Using pure Jinja2 templates instead |
+| **Companies Domain** | 3.x | ✅ MERGED | Merged into Sponsors domain |
+
+### Recommended Next Actions (In Order)
+
+1. **Complete Admin Sub-Pages** (Tier 2 - /admin/events, /admin/pages)
+   - Already have patterns from jobs/users/sponsors
+   - Quick wins that complete the admin interface
+
+2. **Docker Setup** (Tier 1)
+   - Required for deployment
+   - Enables testing in production-like environment
+
+3. **CI/CD Pipeline** (Tier 2)
+   - Automates testing/linting on PRs
+   - Enables safer development workflow
+
+4. **SAQ Task Queue** (Tier 2)
+   - Foundation for background processing
+   - Required for email, feed refresh, job expiration
+
+5. **Email System** (Tier 2)
+   - Enables user registration flow completion
+   - Password reset functionality
 
 ---
 
