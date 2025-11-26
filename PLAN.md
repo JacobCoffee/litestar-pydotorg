@@ -977,11 +977,111 @@ tests/e2e/
 
 ---
 
-## Phase 10: DevOps & Deployment
+## Phase 10: Admin Sub-Pages & Integration
+**Status**: 🔄 IN PROGRESS (2025-11-26)
 
-### Task 10.1: Docker Setup
+### Task 10.0: Admin Fixes & Improvements (COMPLETED)
+**Date**: 2025-11-26
+
+**Completed**:
+- [x] Fixed SQLAdmin auth - changed from `pbkdf2_sha256` to `bcrypt` (matching app password hashing)
+- [x] Fixed `passlib` compatibility - replaced with direct `bcrypt` module in `domains/users/security.py`
+- [x] Fixed admin/users list template - renamed `pagination` context var to `page_info` to avoid collision with imported macro
+- [x] Added dev logging to Makefile (`make serve-log`, `make serve-debug`)
+- [x] Merged SQLAdmin under `/admin/db` (was `/sqladmin`)
+- [x] Added "Database Admin" link to admin sidebar
+- [x] Created 14 unit tests for SQLAdmin auth (`tests/unit/domains/sqladmin/test_sqladmin_auth.py`)
+- [x] Created `JobAdminService` with list/approve/reject/comment methods
+- [x] Created `AdminJobsController` with moderation endpoints
+
+**Files Modified**:
+- `src/pydotorg/domains/sqladmin/auth.py` - Use bcrypt via verify_password
+- `src/pydotorg/domains/users/security.py` - Replace passlib with direct bcrypt
+- `src/pydotorg/domains/sqladmin/config.py` - Changed base_url to `/admin/db`
+- `src/pydotorg/domains/admin/controllers/users.py` - Renamed pagination to page_info
+- `src/pydotorg/templates/admin/users/list.html.jinja2` - Use page_info instead of pagination
+- `src/pydotorg/templates/admin/partials/sidebar.html.jinja2` - Added Database Admin link
+- `Makefile` - Added serve-log and serve-debug targets
+
+**Files Created**:
+- `src/pydotorg/domains/admin/services/jobs.py` - JobAdminService
+- `src/pydotorg/domains/admin/controllers/jobs.py` - AdminJobsController
+- `src/pydotorg/templates/admin/jobs/detail.html.jinja2` - Job detail view
+- `src/pydotorg/templates/admin/jobs/partials/job_preview.html.jinja2` - Modal preview
+- `tests/unit/domains/sqladmin/__init__.py`
+- `tests/unit/domains/sqladmin/test_sqladmin_auth.py` - 16 tests (incl. SSO)
+- `tests/unit/domains/admin/test_job_admin_service.py` - 15 tests
+
+---
+
+### Task 10.1: SQLAdmin/Litestar Auth Integration (COMPLETED)
 **Agent**: `python-backend-engineer`
 **Priority**: HIGH
+**Status**: ✅ COMPLETE (2025-11-26)
+
+**Problem Solved**: SQLAdmin now shares auth with Litestar! Users logged into the main admin panel are automatically authenticated in SQLAdmin (Database Admin).
+
+**Implementation** (Option A - Recommended approach):
+- Modified `AdminAuthBackend.authenticate()` to first check for Litestar session cookie
+- Uses `SessionService.get_user_id_from_session()` to validate existing sessions
+- If valid superuser session exists, auto-authenticates without requiring SQLAdmin login
+- Falls back to SQLAdmin's own session if no Litestar session present
+
+**Files Modified**:
+- `src/pydotorg/domains/sqladmin/auth.py` - Added `_check_litestar_session()` method, integrated SSO
+- `tests/unit/domains/sqladmin/test_sqladmin_auth.py` - Added 2 new SSO tests (16 total)
+
+**Key Code** (from `auth.py`):
+```python
+async def _check_litestar_session(self, request: Request) -> User | None:
+    litestar_session_id = request.cookies.get(settings.session_cookie_name)
+    if not litestar_session_id:
+        return None
+    user_id = self._litestar_session_service.get_user_id_from_session(litestar_session_id)
+    # ... validate user is superuser and active
+```
+
+---
+
+### Task 10.2: Admin Sub-Pages Implementation
+**Agent**: `python-backend-engineer`
+**Priority**: HIGH
+
+| Route           | Status      | Description                                        |
+|-----------------|-------------|----------------------------------------------------|
+| /admin/users    | ✅ Done     | User management with CRUD, roles, activation       |
+| /admin/jobs     | ✅ Done     | Job moderation queue with approve/reject/comment   |
+| /admin/db       | ✅ Done     | Database Admin (SQLAdmin) with SSO                 |
+| /admin/sponsors | ⏳ Pending  | Sponsor application management                     |
+| /admin/events   | ⏳ Pending  | Event moderation                                   |
+| /admin/pages    | ⏳ Pending  | CMS page editing                                   |
+| /admin/blogs    | ⏳ Pending  | Blog post management                               |
+| /admin/settings | ⏳ Pending  | Site settings                                      |
+| /admin/logs     | ⏳ Pending  | Activity audit log                                 |
+
+**Completed for /admin/jobs** (2025-11-26):
+- [x] Registered `AdminJobsController` in `main.py` route_handlers
+- [x] Added `JobAdminService` to dependencies in `domains/admin/dependencies.py`
+- [x] Created job list template `admin/jobs/list.html.jinja2`
+- [x] Created job detail template `admin/jobs/detail.html.jinja2`
+- [x] Created job preview partial `admin/jobs/partials/job_preview.html.jinja2`
+- [x] Created job row partial `admin/jobs/partials/job_row.html.jinja2`
+- [x] Fixed status enum comparison (use `.value` for StrEnum)
+- [x] Created 15 unit tests for JobAdminService
+- [x] Fixed `NameError: JobAdminService not defined` - moved import outside TYPE_CHECKING block for runtime DI
+
+**Completed for /admin/users** (2025-11-26):
+- [x] Created `UserAdminService` with list/get/update/delete/toggle methods
+- [x] Created `AdminUsersController` with CRUD endpoints
+- [x] Created user list template with search and filters
+- [x] Created user edit template with role management
+- [x] Created 19 unit tests for UserAdminService
+
+---
+
+### Task 10.3: Docker Setup
+**Agent**: `python-backend-engineer`
+**Priority**: MEDIUM
 
 **Tasks**:
 - [ ] Create Dockerfile (multi-stage)
@@ -992,9 +1092,9 @@ tests/e2e/
 
 ---
 
-### Task 10.2: CI/CD Pipeline
+### Task 10.4: CI/CD Pipeline
 **Agent**: `github-git-expert`
-**Priority**: HIGH
+**Priority**: MEDIUM
 
 **Tasks**:
 - [ ] Create GitHub Actions workflow
