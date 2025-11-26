@@ -30,6 +30,7 @@ from pydotorg.core.admin import AdminController
 from pydotorg.core.database.base import AuditBase
 from pydotorg.core.dependencies import get_core_dependencies
 from pydotorg.core.features import FeatureFlags
+from pydotorg.core.openapi import get_openapi_plugins
 from pydotorg.domains.banners import (
     BannerController,
     BannersPageController,
@@ -325,6 +326,7 @@ app = Litestar(
         title=settings.site_name,
         version="0.1.0",
         description=settings.site_description,
+        render_plugins=get_openapi_plugins(),
     ),
     compression_config=CompressionConfig(backend="gzip", gzip_compress_level=6),
     debug=settings.is_debug,
