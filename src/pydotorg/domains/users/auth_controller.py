@@ -7,7 +7,7 @@ from datetime import UTC, datetime
 from typing import TYPE_CHECKING
 from uuid import UUID
 
-from litestar import Controller, Response, get, post
+from litestar import Controller, Request, Response, get, post
 from litestar.di import Provide
 from litestar.exceptions import NotFoundException, PermissionDeniedException
 from litestar.params import Parameter
@@ -34,21 +34,20 @@ from pydotorg.core.logging import get_logger
 from pydotorg.domains.users.models import User
 
 if TYPE_CHECKING:
-    from litestar.connection import ASGIConnection
     from sqlalchemy.ext.asyncio import AsyncSession
 
 logger = get_logger(__name__)
 
 
-async def get_current_user(connection: ASGIConnection) -> User:
-    if not connection.user:
+async def get_current_user(request: Request) -> User:
+    if not request.user:
         raise NotFoundException("User not found")
-    return connection.user
+    return request.user
 
 
 class AuthController(Controller):
     path = "/api/auth"
-    tags = ["auth"]
+    tags = ["Authentication"]
     dependencies = {"current_user": Provide(get_current_user)}
 
     @post("/register")
@@ -120,11 +119,12 @@ class AuthController(Controller):
         if not user.is_active:
             raise PermissionDeniedException("Account is inactive")
 
+        user_id = user.id
         user.last_login = datetime.now(UTC)
         await db_session.commit()
 
-        access_token = jwt_service.create_access_token(user.id)
-        refresh_token = jwt_service.create_refresh_token(user.id)
+        access_token = jwt_service.create_access_token(user_id)
+        refresh_token = jwt_service.create_refresh_token(user_id)
 
         return TokenResponse(
             access_token=access_token,
@@ -206,8 +206,8 @@ class AuthController(Controller):
         return response
 
     @post("/session/logout", guards=[require_authenticated])
-    async def session_logout(self, connection: ASGIConnection) -> Response[dict[str, str]]:
-        session_id = connection.cookies.get(settings.session_cookie_name)
+    async def session_logout(self, request: Request) -> Response[dict[str, str]]:
+        session_id = request.cookies.get(settings.session_cookie_name)
 
         if session_id:
             session_service.destroy_session(session_id)
@@ -232,7 +232,7 @@ class AuthController(Controller):
     async def oauth_login(
         self,
         provider: str,
-        connection: ASGIConnection,
+        request: Request,
     ) -> Redirect:
         oauth_service = get_oauth_service(settings)
 
@@ -242,7 +242,7 @@ class AuthController(Controller):
             raise PermissionDeniedException(str(e)) from e
 
         state = secrets.token_urlsafe(32)
-        connection.set_session({"oauth_state": state, "oauth_provider": provider})
+        request.set_session({"oauth_state": state, "oauth_provider": provider})
 
         redirect_uri = f"{settings.oauth_redirect_base_url}/api/auth/oauth/{provider}/callback"
         auth_url = oauth_provider.get_authorization_url(redirect_uri, state)
@@ -253,13 +253,13 @@ class AuthController(Controller):
     async def oauth_callback(
         self,
         provider: str,
-        connection: ASGIConnection,
+        request: Request,
         db_session: AsyncSession,
         code: str = Parameter(query="code"),
         oauth_state: str = Parameter(query="state"),
     ) -> Response[TokenResponse]:
-        session_state = connection.session.get("oauth_state")
-        session_provider = connection.session.get("oauth_provider")
+        session_state = request.session.get("oauth_state")
+        session_provider = request.session.get("oauth_provider")
 
         if not session_state or session_state != oauth_state:
             raise PermissionDeniedException("Invalid OAuth state")
@@ -267,7 +267,7 @@ class AuthController(Controller):
         if session_provider != provider:
             raise PermissionDeniedException("OAuth provider mismatch")
 
-        connection.clear_session()
+        request.clear_session()
 
         oauth_service = get_oauth_service(settings)
 
