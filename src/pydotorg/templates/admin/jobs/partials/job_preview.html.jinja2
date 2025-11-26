@@ -1,0 +1,130 @@
+<div class="space-y-6">
+    <div class="flex items-start justify-between">
+        <div>
+            <h2 class="text-2xl font-bold text-python-blue">{{ job.job_title }}</h2>
+            <p class="text-lg text-base-content/70">{{ job.company_name }}</p>
+        </div>
+        {% if job.status.value == 'review' %}
+        <span class="badge badge-warning badge-lg">Pending Review</span>
+        {% elif job.status.value == 'approved' %}
+        <span class="badge badge-success badge-lg">Approved</span>
+        {% elif job.status.value == 'rejected' %}
+        <span class="badge badge-error badge-lg">Rejected</span>
+        {% elif job.status.value == 'draft' %}
+        <span class="badge badge-ghost badge-lg">Draft</span>
+        {% endif %}
+    </div>
+
+    <div class="grid grid-cols-2 gap-4 text-sm">
+        {% if job.city or job.country %}
+        <div>
+            <span class="font-semibold">Location:</span>
+            {{ job.city }}{% if job.city and job.country %}, {% endif %}{{ job.country }}
+        </div>
+        {% endif %}
+
+        {% if job.telecommuting %}
+        <div>
+            <span class="badge badge-success badge-sm">Remote Available</span>
+        </div>
+        {% endif %}
+
+        {% if job.contact_email %}
+        <div>
+            <span class="font-semibold">Contact:</span>
+            <a href="mailto:{{ job.contact_email }}" class="link link-primary">{{ job.contact_email }}</a>
+        </div>
+        {% endif %}
+
+        {% if job.contact_url %}
+        <div>
+            <span class="font-semibold">Apply URL:</span>
+            <a href="{{ job.contact_url }}" target="_blank" class="link link-primary">{{ job.contact_url }}</a>
+        </div>
+        {% endif %}
+
+        {% if job.created_at %}
+        <div>
+            <span class="font-semibold">Posted:</span>
+            {{ job.created_at.strftime('%B %d, %Y') }}
+        </div>
+        {% endif %}
+
+        {% if job.category %}
+        <div>
+            <span class="font-semibold">Category:</span>
+            {{ job.category.name }}
+        </div>
+        {% endif %}
+    </div>
+
+    {% if job.job_types %}
+    <div>
+        <span class="font-semibold">Job Types:</span>
+        <div class="flex flex-wrap gap-2 mt-1">
+            {% for job_type in job.job_types %}
+            <span class="badge badge-outline">{{ job_type.name }}</span>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if job.requirements %}
+    <div>
+        <h3 class="font-semibold mb-2">Requirements</h3>
+        <div class="prose prose-sm max-w-none">
+            {{ job.requirements | safe }}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if job.description %}
+    <div>
+        <h3 class="font-semibold mb-2">Description</h3>
+        <div class="prose prose-sm max-w-none">
+            {{ job.description | safe }}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if job.creator %}
+    <div class="text-sm text-base-content/60 border-t pt-4">
+        <span class="font-semibold">Submitted by:</span>
+        {{ job.creator.name or job.creator.email }}
+    </div>
+    {% endif %}
+
+    <div class="flex gap-2 justify-end border-t pt-4">
+        {% if job.status.value == 'review' %}
+        <button
+            class="btn btn-success gap-1"
+            hx-post="/admin/jobs/{{ job.id }}/approve"
+            hx-target="#job-{{ job.id }}"
+            hx-swap="outerHTML"
+            hx-confirm="Approve this job posting?"
+            onclick="job_preview_modal.close()"
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            Approve
+        </button>
+        <button
+            class="btn btn-error gap-1"
+            hx-post="/admin/jobs/{{ job.id }}/reject"
+            hx-target="#job-{{ job.id }}"
+            hx-swap="outerHTML"
+            hx-confirm="Reject this job posting?"
+            onclick="job_preview_modal.close()"
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+            Reject
+        </button>
+        {% endif %}
+        <a href="/admin/jobs/{{ job.id }}" class="btn btn-ghost">
+            View Full Details
+        </a>
+    </div>
+</div>

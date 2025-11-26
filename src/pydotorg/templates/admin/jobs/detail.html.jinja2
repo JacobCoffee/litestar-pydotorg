@@ -1,0 +1,248 @@
+{% extends "admin/base.html.jinja2" %}
+
+{% block title %}{{ job.job_title }} - Job Review{% endblock %}
+
+{% block admin_content %}
+<div class="space-y-6">
+    <div class="flex items-center gap-4">
+        <a href="/admin/jobs" class="btn btn-ghost btn-sm gap-1">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            Back to Jobs
+        </a>
+    </div>
+
+    <div class="card bg-base-100 shadow-lg border border-base-300">
+        <div class="card-body">
+            <div class="flex items-start justify-between gap-4">
+                <div>
+                    <h1 class="text-3xl font-bold text-python-blue">{{ job.job_title }}</h1>
+                    <p class="text-xl text-base-content/70 mt-1">{{ job.company_name }}</p>
+                </div>
+                <div class="flex flex-col items-end gap-2">
+                    {% if job.status.value == 'review' %}
+                    <span class="badge badge-warning badge-lg">Pending Review</span>
+                    {% elif job.status.value == 'approved' %}
+                    <span class="badge badge-success badge-lg">Approved</span>
+                    {% elif job.status.value == 'rejected' %}
+                    <span class="badge badge-error badge-lg">Rejected</span>
+                    {% elif job.status.value == 'draft' %}
+                    <span class="badge badge-ghost badge-lg">Draft</span>
+                    {% elif job.status.value == 'archived' %}
+                    <span class="badge badge-neutral badge-lg">Archived</span>
+                    {% elif job.status.value == 'expired' %}
+                    <span class="badge badge-neutral badge-lg">Expired</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-4">
+                    <h2 class="text-lg font-semibold">Job Details</h2>
+
+                    {% if job.city or job.country %}
+                    <div class="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-base-content/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        <span>{{ job.city }}{% if job.city and job.country %}, {% endif %}{{ job.country }}</span>
+                    </div>
+                    {% endif %}
+
+                    {% if job.telecommuting %}
+                    <div class="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span class="text-success font-medium">Remote Available</span>
+                    </div>
+                    {% endif %}
+
+                    {% if job.category %}
+                    <div class="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-base-content/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                        </svg>
+                        <span>{{ job.category.name }}</span>
+                    </div>
+                    {% endif %}
+
+                    {% if job.job_types %}
+                    <div>
+                        <span class="font-medium">Job Types:</span>
+                        <div class="flex flex-wrap gap-2 mt-1">
+                            {% for job_type in job.job_types %}
+                            <span class="badge badge-outline">{{ job_type.name }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="space-y-4">
+                    <h2 class="text-lg font-semibold">Contact Information</h2>
+
+                    {% if job.contact_email %}
+                    <div class="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-base-content/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                        <a href="mailto:{{ job.contact_email }}" class="link link-primary">{{ job.contact_email }}</a>
+                    </div>
+                    {% endif %}
+
+                    {% if job.contact_url %}
+                    <div class="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-base-content/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                        </svg>
+                        <a href="{{ job.contact_url }}" target="_blank" class="link link-primary">Apply Link</a>
+                    </div>
+                    {% endif %}
+
+                    {% if job.created_at %}
+                    <div class="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-base-content/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        <span>Posted {{ job.created_at.strftime('%B %d, %Y at %I:%M %p') }}</span>
+                    </div>
+                    {% endif %}
+
+                    {% if job.creator %}
+                    <div class="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-base-content/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        <span>Submitted by {{ job.creator.name or job.creator.email }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if job.requirements %}
+            <div class="divider"></div>
+            <div>
+                <h2 class="text-lg font-semibold mb-3">Requirements</h2>
+                <div class="prose max-w-none">
+                    {{ job.requirements | safe }}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if job.description %}
+            <div class="divider"></div>
+            <div>
+                <h2 class="text-lg font-semibold mb-3">Description</h2>
+                <div class="prose max-w-none">
+                    {{ job.description | safe }}
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="divider"></div>
+
+            <div class="flex flex-wrap gap-2">
+                {% if job.status.value == 'review' %}
+                <button
+                    class="btn btn-success gap-1"
+                    hx-post="/admin/jobs/{{ job.id }}/approve"
+                    hx-swap="none"
+                    hx-confirm="Approve this job posting?"
+                    hx-on::after-request="window.location.reload()"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    Approve Job
+                </button>
+                <button
+                    class="btn btn-error gap-1"
+                    hx-post="/admin/jobs/{{ job.id }}/reject"
+                    hx-swap="none"
+                    hx-confirm="Reject this job posting?"
+                    hx-on::after-request="window.location.reload()"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                    Reject Job
+                </button>
+                {% elif job.status.value == 'approved' %}
+                <button
+                    class="btn btn-warning gap-1"
+                    hx-post="/admin/jobs/{{ job.id }}/reject"
+                    hx-swap="none"
+                    hx-confirm="Revoke approval for this job?"
+                    hx-on::after-request="window.location.reload()"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                    Revoke Approval
+                </button>
+                {% elif job.status.value == 'rejected' %}
+                <button
+                    class="btn btn-success gap-1"
+                    hx-post="/admin/jobs/{{ job.id }}/approve"
+                    hx-swap="none"
+                    hx-confirm="Re-approve this job posting?"
+                    hx-on::after-request="window.location.reload()"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    Re-approve Job
+                </button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {% if job.review_comments %}
+    <div class="card bg-base-100 shadow-lg border border-base-300">
+        <div class="card-body">
+            <h2 class="card-title">Review Comments</h2>
+            <div class="space-y-4">
+                {% for comment in job.review_comments %}
+                <div class="bg-base-200 rounded-lg p-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="font-medium">{{ comment.creator.name or comment.creator.email if comment.creator else 'Unknown' }}</span>
+                        <span class="text-sm text-base-content/60">{{ comment.created_at.strftime('%B %d, %Y at %I:%M %p') }}</span>
+                    </div>
+                    <p>{{ comment.comment }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="card bg-base-100 shadow-lg border border-base-300">
+        <div class="card-body">
+            <h2 class="card-title">Add Review Comment</h2>
+            <form
+                hx-post="/admin/jobs/{{ job.id }}/comment"
+                hx-swap="none"
+                hx-on::after-request="this.reset(); window.location.reload()"
+                class="space-y-4"
+            >
+                <textarea
+                    name="comment"
+                    class="textarea textarea-bordered w-full"
+                    placeholder="Add a comment about this job posting..."
+                    rows="3"
+                    required
+                ></textarea>
+                <button type="submit" class="btn btn-primary">
+                    Add Comment
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
