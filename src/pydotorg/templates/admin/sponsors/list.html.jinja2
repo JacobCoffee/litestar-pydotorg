@@ -1,0 +1,191 @@
+{% extends "admin/base.html.jinja2" %}
+
+{% block title %}Sponsor Management - Python.org Admin{% endblock %}
+
+{% block admin_content %}
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold text-python-blue">Sponsor Management</h1>
+            <p class="text-base-content/70 mt-1">Manage sponsorship applications and active sponsors</p>
+        </div>
+        <div class="flex gap-2">
+            <a href="/admin/sponsors/sponsors" class="btn btn-outline btn-sm" hx-boost="true">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+                View All Sponsors
+            </a>
+        </div>
+    </div>
+
+    {% if stats %}
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+        <div class="stat bg-base-100 shadow rounded-lg p-4">
+            <div class="stat-title text-xs">Total Sponsors</div>
+            <div class="stat-value text-2xl text-python-blue">{{ stats.total_sponsors }}</div>
+        </div>
+        <div class="stat bg-base-100 shadow rounded-lg p-4">
+            <div class="stat-title text-xs">Sponsorships</div>
+            <div class="stat-value text-2xl">{{ stats.total_sponsorships }}</div>
+        </div>
+        <div class="stat bg-base-100 shadow rounded-lg p-4">
+            <div class="stat-title text-xs">Pending</div>
+            <div class="stat-value text-2xl text-warning">{{ stats.pending_sponsorships }}</div>
+        </div>
+        <div class="stat bg-base-100 shadow rounded-lg p-4">
+            <div class="stat-title text-xs">Approved</div>
+            <div class="stat-value text-2xl text-info">{{ stats.approved_sponsorships }}</div>
+        </div>
+        <div class="stat bg-base-100 shadow rounded-lg p-4">
+            <div class="stat-title text-xs">Finalized</div>
+            <div class="stat-value text-2xl text-success">{{ stats.finalized_sponsorships }}</div>
+        </div>
+        <div class="stat bg-base-100 shadow rounded-lg p-4">
+            <div class="stat-title text-xs">Rejected</div>
+            <div class="stat-value text-2xl text-error">{{ stats.rejected_sponsorships }}</div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="flex gap-2 flex-wrap">
+        <a
+            href="/admin/sponsors"
+            class="btn btn-sm {% if not request.query_params.get('status') %}btn-primary{% else %}btn-ghost{% endif %}"
+            hx-boost="true"
+        >
+            All
+            {% if stats %}
+            <span class="badge badge-sm">{{ stats.total_sponsorships }}</span>
+            {% endif %}
+        </a>
+        <a
+            href="/admin/sponsors?status=applied"
+            class="btn btn-sm {% if request.query_params.get('status') == 'applied' %}btn-primary{% else %}btn-ghost{% endif %}"
+            hx-boost="true"
+        >
+            Pending
+            {% if stats and stats.pending_sponsorships %}
+            <span class="badge badge-warning badge-sm">{{ stats.pending_sponsorships }}</span>
+            {% endif %}
+        </a>
+        <a
+            href="/admin/sponsors?status=approved"
+            class="btn btn-sm {% if request.query_params.get('status') == 'approved' %}btn-primary{% else %}btn-ghost{% endif %}"
+            hx-boost="true"
+        >
+            Approved
+            {% if stats and stats.approved_sponsorships %}
+            <span class="badge badge-info badge-sm">{{ stats.approved_sponsorships }}</span>
+            {% endif %}
+        </a>
+        <a
+            href="/admin/sponsors?status=finalized"
+            class="btn btn-sm {% if request.query_params.get('status') == 'finalized' %}btn-primary{% else %}btn-ghost{% endif %}"
+            hx-boost="true"
+        >
+            Finalized
+            {% if stats and stats.finalized_sponsorships %}
+            <span class="badge badge-success badge-sm">{{ stats.finalized_sponsorships }}</span>
+            {% endif %}
+        </a>
+        <a
+            href="/admin/sponsors?status=rejected"
+            class="btn btn-sm {% if request.query_params.get('status') == 'rejected' %}btn-primary{% else %}btn-ghost{% endif %}"
+            hx-boost="true"
+        >
+            Rejected
+        </a>
+    </div>
+
+    <div id="sponsorships-list">
+        {% if sponsorships %}
+        <div class="space-y-4">
+            {% for sponsorship in sponsorships %}
+            {% include 'admin/sponsors/partials/sponsorship_row.html.jinja2' %}
+            {% endfor %}
+        </div>
+
+        {% if pagination and pagination.total > pagination.limit %}
+        <div class="flex justify-center mt-6">
+            <div class="join">
+                {% if pagination.offset > 0 %}
+                <button
+                    class="join-item btn btn-sm"
+                    hx-get="/admin/sponsors?status={{ request.query_params.get('status', '') }}&limit={{ pagination.limit }}&offset={{ [0, pagination.offset - pagination.limit]|max }}"
+                    hx-target="#sponsorships-list"
+                    hx-swap="outerHTML"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                    Previous
+                </button>
+                {% endif %}
+
+                {% set current_page = (pagination.offset // pagination.limit) + 1 %}
+                {% set total_pages = (pagination.total // pagination.limit) + (1 if pagination.total % pagination.limit else 0) %}
+
+                <button class="join-item btn btn-sm btn-active">
+                    Page {{ current_page }} of {{ total_pages }}
+                </button>
+
+                {% if pagination.offset + pagination.limit < pagination.total %}
+                <button
+                    class="join-item btn btn-sm"
+                    hx-get="/admin/sponsors?status={{ request.query_params.get('status', '') }}&limit={{ pagination.limit }}&offset={{ pagination.offset + pagination.limit }}"
+                    hx-target="#sponsorships-list"
+                    hx-swap="outerHTML"
+                >
+                    Next
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+        {% else %}
+        <div class="card bg-base-100 shadow-lg border border-base-300">
+            <div class="card-body text-center py-12">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-base-content/30 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <h3 class="text-xl font-bold mb-2">No Sponsorships Found</h3>
+                <p class="text-base-content/60 mb-4">
+                    {% if request.query_params.get('status') == 'applied' %}
+                    No pending sponsorship applications!
+                    {% else %}
+                    There are no sponsorships matching your criteria
+                    {% endif %}
+                </p>
+                <a href="/admin/sponsors" class="btn btn-primary btn-sm">
+                    View All Sponsorships
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<dialog id="sponsorship_preview_modal" class="modal">
+    <div class="modal-box max-w-4xl">
+        <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+        </form>
+        <div id="sponsorship_preview_content">
+        </div>
+    </div>
+</dialog>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.body.addEventListener('htmx:afterSwap', function(evt) {
+        if (evt.detail.target.id === 'sponsorship_preview_content') {
+            sponsorship_preview_modal.showModal();
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,280 @@
+{% extends "admin/base.html.jinja2" %}
+
+{% block title %}{{ sponsorship.sponsor.name }} - Sponsorship Review{% endblock %}
+
+{% block admin_content %}
+<div class="space-y-6">
+    <div class="flex items-center gap-4">
+        <a href="/admin/sponsors" class="btn btn-ghost btn-sm" hx-boost="true">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            Back to Sponsorships
+        </a>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2 space-y-6">
+            <div class="card bg-base-100 shadow-lg border border-base-300">
+                <div class="card-body">
+                    <div class="flex items-start gap-6">
+                        {% if sponsorship.sponsor.web_logo %}
+                        <div class="avatar">
+                            <div class="w-24 h-24 rounded-lg bg-base-200">
+                                <img src="{{ sponsorship.sponsor.web_logo }}" alt="{{ sponsorship.sponsor.name }}" class="object-contain" />
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="avatar placeholder">
+                            <div class="bg-python-blue text-white rounded-lg w-24 h-24">
+                                <span class="text-3xl">{{ sponsorship.sponsor.name[:2]|upper }}</span>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <div class="flex-1">
+                            <div class="flex items-center gap-3 flex-wrap">
+                                <h1 class="text-2xl font-bold">{{ sponsorship.sponsor.name }}</h1>
+                                {% if sponsorship.status.value == 'applied' %}
+                                <span class="badge badge-warning">Pending Review</span>
+                                {% elif sponsorship.status.value == 'approved' %}
+                                <span class="badge badge-info">Approved</span>
+                                {% elif sponsorship.status.value == 'finalized' %}
+                                <span class="badge badge-success">Active</span>
+                                {% elif sponsorship.status.value == 'rejected' %}
+                                <span class="badge badge-error">Rejected</span>
+                                {% endif %}
+                                {% if sponsorship.renewal %}
+                                <span class="badge badge-outline">Renewal</span>
+                                {% endif %}
+                            </div>
+
+                            <div class="mt-2 flex items-center gap-4 text-sm text-base-content/70">
+                                <span class="flex items-center gap-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                                    </svg>
+                                    {{ sponsorship.level.name }}
+                                </span>
+                                {% if sponsorship.sponsorship_fee %}
+                                <span class="flex items-center gap-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    ${{ "{:,.0f}".format(sponsorship.sponsorship_fee) }}
+                                </span>
+                                {% endif %}
+                                {% if sponsorship.year %}
+                                <span>Year: {{ sponsorship.year }}</span>
+                                {% endif %}
+                            </div>
+
+                            {% if sponsorship.sponsor.description %}
+                            <p class="mt-4 text-base-content/70">{{ sponsorship.sponsor.description }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card bg-base-100 shadow-lg border border-base-300">
+                <div class="card-body">
+                    <h2 class="card-title text-lg">Sponsor Details</h2>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        {% if sponsorship.sponsor.landing_page_url %}
+                        <div>
+                            <label class="text-sm font-medium text-base-content/60">Website</label>
+                            <p>
+                                <a href="{{ sponsorship.sponsor.landing_page_url }}" target="_blank" class="link link-primary">
+                                    {{ sponsorship.sponsor.landing_page_url }}
+                                </a>
+                            </p>
+                        </div>
+                        {% endif %}
+
+                        {% if sponsorship.sponsor.twitter_handle %}
+                        <div>
+                            <label class="text-sm font-medium text-base-content/60">Twitter</label>
+                            <p>
+                                <a href="https://twitter.com/{{ sponsorship.sponsor.twitter_handle }}" target="_blank" class="link link-primary">
+                                    @{{ sponsorship.sponsor.twitter_handle }}
+                                </a>
+                            </p>
+                        </div>
+                        {% endif %}
+
+                        {% if sponsorship.sponsor.linked_in_page_url %}
+                        <div>
+                            <label class="text-sm font-medium text-base-content/60">LinkedIn</label>
+                            <p>
+                                <a href="{{ sponsorship.sponsor.linked_in_page_url }}" target="_blank" class="link link-primary">
+                                    LinkedIn Profile
+                                </a>
+                            </p>
+                        </div>
+                        {% endif %}
+
+                        {% if sponsorship.sponsor.primary_phone %}
+                        <div>
+                            <label class="text-sm font-medium text-base-content/60">Phone</label>
+                            <p>{{ sponsorship.sponsor.primary_phone }}</p>
+                        </div>
+                        {% endif %}
+
+                        {% if sponsorship.sponsor.full_address %}
+                        <div class="md:col-span-2">
+                            <label class="text-sm font-medium text-base-content/60">Address</label>
+                            <p>{{ sponsorship.sponsor.full_address }}</p>
+                        </div>
+                        {% endif %}
+
+                        {% if sponsorship.sponsor.country_of_incorporation %}
+                        <div>
+                            <label class="text-sm font-medium text-base-content/60">Country of Incorporation</label>
+                            <p>{{ sponsorship.sponsor.country_of_incorporation }}</p>
+                        </div>
+                        {% endif %}
+
+                        {% if sponsorship.sponsor.state_of_incorporation %}
+                        <div>
+                            <label class="text-sm font-medium text-base-content/60">State of Incorporation</label>
+                            <p>{{ sponsorship.sponsor.state_of_incorporation }}</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="space-y-6">
+            <div class="card bg-base-100 shadow-lg border border-base-300">
+                <div class="card-body">
+                    <h2 class="card-title text-lg">Actions</h2>
+
+                    <div class="space-y-3 mt-4">
+                        {% if sponsorship.status.value == 'applied' %}
+                        <button
+                            class="btn btn-success btn-block"
+                            hx-post="/admin/sponsors/{{ sponsorship.id }}/approve"
+                            hx-swap="none"
+                            hx-confirm="Are you sure you want to approve this sponsorship?"
+                            hx-on::after-request="if(event.detail.successful) window.location.reload()"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            Approve Sponsorship
+                        </button>
+                        <button
+                            class="btn btn-error btn-block"
+                            hx-post="/admin/sponsors/{{ sponsorship.id }}/reject"
+                            hx-swap="none"
+                            hx-confirm="Are you sure you want to reject this sponsorship?"
+                            hx-on::after-request="if(event.detail.successful) window.location.reload()"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                            Reject Sponsorship
+                        </button>
+                        {% elif sponsorship.status.value == 'approved' %}
+                        <button
+                            class="btn btn-primary btn-block"
+                            hx-post="/admin/sponsors/{{ sponsorship.id }}/finalize"
+                            hx-swap="none"
+                            hx-confirm="Are you sure you want to finalize this sponsorship?"
+                            hx-on::after-request="if(event.detail.successful) window.location.reload()"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Finalize Sponsorship
+                        </button>
+                        {% endif %}
+
+                        <a href="/admin/sponsors/sponsor/{{ sponsorship.sponsor.id }}" class="btn btn-outline btn-block" hx-boost="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                            </svg>
+                            View Sponsor Profile
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card bg-base-100 shadow-lg border border-base-300">
+                <div class="card-body">
+                    <h2 class="card-title text-lg">Timeline</h2>
+
+                    <ul class="timeline timeline-vertical mt-4">
+                        {% if sponsorship.applied_on %}
+                        <li>
+                            <div class="timeline-start text-xs text-base-content/60">{{ sponsorship.applied_on.strftime('%b %d, %Y') }}</div>
+                            <div class="timeline-middle">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5 text-warning"><circle cx="10" cy="10" r="5" /></svg>
+                            </div>
+                            <div class="timeline-end timeline-box">Applied</div>
+                            <hr />
+                        </li>
+                        {% endif %}
+
+                        {% if sponsorship.approved_on %}
+                        <li>
+                            <hr />
+                            <div class="timeline-start text-xs text-base-content/60">{{ sponsorship.approved_on.strftime('%b %d, %Y') }}</div>
+                            <div class="timeline-middle">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5 text-info"><circle cx="10" cy="10" r="5" /></svg>
+                            </div>
+                            <div class="timeline-end timeline-box">Approved</div>
+                            <hr />
+                        </li>
+                        {% endif %}
+
+                        {% if sponsorship.rejected_on %}
+                        <li>
+                            <hr />
+                            <div class="timeline-start text-xs text-base-content/60">{{ sponsorship.rejected_on.strftime('%b %d, %Y') }}</div>
+                            <div class="timeline-middle">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5 text-error"><circle cx="10" cy="10" r="5" /></svg>
+                            </div>
+                            <div class="timeline-end timeline-box">Rejected</div>
+                        </li>
+                        {% endif %}
+
+                        {% if sponsorship.finalized_on %}
+                        <li>
+                            <hr />
+                            <div class="timeline-start text-xs text-base-content/60">{{ sponsorship.finalized_on.strftime('%b %d, %Y') }}</div>
+                            <div class="timeline-middle">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5 text-success"><circle cx="10" cy="10" r="5" /></svg>
+                            </div>
+                            <div class="timeline-end timeline-box">Finalized</div>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+
+            {% if sponsorship.start_date and sponsorship.end_date %}
+            <div class="card bg-base-100 shadow-lg border border-base-300">
+                <div class="card-body">
+                    <h2 class="card-title text-lg">Sponsorship Period</h2>
+                    <div class="mt-2">
+                        <p class="text-sm text-base-content/70">Start Date</p>
+                        <p class="font-medium">{{ sponsorship.start_date.strftime('%B %d, %Y') }}</p>
+                    </div>
+                    <div class="mt-2">
+                        <p class="text-sm text-base-content/70">End Date</p>
+                        <p class="font-medium">{{ sponsorship.end_date.strftime('%B %d, %Y') }}</p>
+                    </div>
+                    {% if sponsorship.is_active %}
+                    <div class="badge badge-success badge-lg mt-3">Currently Active</div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,132 @@
+<div class="space-y-4">
+    <div class="flex items-start gap-4">
+        {% if sponsorship.sponsor.web_logo %}
+        <div class="avatar">
+            <div class="w-20 h-20 rounded-lg bg-base-200">
+                <img src="{{ sponsorship.sponsor.web_logo }}" alt="{{ sponsorship.sponsor.name }}" class="object-contain" />
+            </div>
+        </div>
+        {% else %}
+        <div class="avatar placeholder">
+            <div class="bg-python-blue text-white rounded-lg w-20 h-20">
+                <span class="text-2xl">{{ sponsorship.sponsor.name[:2]|upper }}</span>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="flex-1">
+            <h3 class="text-xl font-bold">{{ sponsorship.sponsor.name }}</h3>
+            <div class="flex items-center gap-2 mt-1">
+                {% if sponsorship.status.value == 'applied' %}
+                <span class="badge badge-warning">Pending Review</span>
+                {% elif sponsorship.status.value == 'approved' %}
+                <span class="badge badge-info">Approved</span>
+                {% elif sponsorship.status.value == 'finalized' %}
+                <span class="badge badge-success">Active</span>
+                {% elif sponsorship.status.value == 'rejected' %}
+                <span class="badge badge-error">Rejected</span>
+                {% endif %}
+                <span class="badge badge-outline">{{ sponsorship.level.name }}</span>
+                {% if sponsorship.renewal %}
+                <span class="badge badge-outline">Renewal</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {% if sponsorship.sponsor.description %}
+    <div>
+        <h4 class="font-medium text-sm text-base-content/60 mb-1">Description</h4>
+        <p class="text-sm">{{ sponsorship.sponsor.description }}</p>
+    </div>
+    {% endif %}
+
+    <div class="grid grid-cols-2 gap-4">
+        {% if sponsorship.sponsorship_fee %}
+        <div>
+            <h4 class="font-medium text-sm text-base-content/60">Sponsorship Fee</h4>
+            <p class="font-bold text-lg">${{ "{:,.0f}".format(sponsorship.sponsorship_fee) }}</p>
+        </div>
+        {% endif %}
+
+        {% if sponsorship.year %}
+        <div>
+            <h4 class="font-medium text-sm text-base-content/60">Year</h4>
+            <p class="font-bold text-lg">{{ sponsorship.year }}</p>
+        </div>
+        {% endif %}
+
+        {% if sponsorship.sponsor.landing_page_url %}
+        <div class="col-span-2">
+            <h4 class="font-medium text-sm text-base-content/60">Website</h4>
+            <a href="{{ sponsorship.sponsor.landing_page_url }}" target="_blank" class="link link-primary text-sm">
+                {{ sponsorship.sponsor.landing_page_url }}
+            </a>
+        </div>
+        {% endif %}
+
+        {% if sponsorship.sponsor.full_address %}
+        <div class="col-span-2">
+            <h4 class="font-medium text-sm text-base-content/60">Address</h4>
+            <p class="text-sm">{{ sponsorship.sponsor.full_address }}</p>
+        </div>
+        {% endif %}
+    </div>
+
+    {% if sponsorship.start_date and sponsorship.end_date %}
+    <div class="bg-base-200 rounded-lg p-3">
+        <h4 class="font-medium text-sm text-base-content/60 mb-2">Sponsorship Period</h4>
+        <p class="text-sm">
+            {{ sponsorship.start_date.strftime('%B %d, %Y') }} - {{ sponsorship.end_date.strftime('%B %d, %Y') }}
+            {% if sponsorship.is_active %}
+            <span class="badge badge-success badge-sm ml-2">Active</span>
+            {% endif %}
+        </p>
+    </div>
+    {% endif %}
+
+    {% if sponsorship.submitted_by %}
+    <div class="text-xs text-base-content/50">
+        Submitted by {{ sponsorship.submitted_by.username }}
+        {% if sponsorship.applied_on %}
+        on {{ sponsorship.applied_on.strftime('%B %d, %Y') }}
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <div class="flex gap-2 pt-4 border-t border-base-300">
+        <a href="/admin/sponsors/{{ sponsorship.id }}" class="btn btn-primary btn-sm flex-1" hx-boost="true">
+            View Full Details
+        </a>
+        {% if sponsorship.status.value == 'applied' %}
+        <button
+            class="btn btn-success btn-sm"
+            hx-post="/admin/sponsors/{{ sponsorship.id }}/approve"
+            hx-swap="none"
+            hx-confirm="Are you sure you want to approve this sponsorship?"
+            onclick="sponsorship_preview_modal.close()"
+        >
+            Approve
+        </button>
+        <button
+            class="btn btn-error btn-sm"
+            hx-post="/admin/sponsors/{{ sponsorship.id }}/reject"
+            hx-swap="none"
+            hx-confirm="Are you sure you want to reject this sponsorship?"
+            onclick="sponsorship_preview_modal.close()"
+        >
+            Reject
+        </button>
+        {% elif sponsorship.status.value == 'approved' %}
+        <button
+            class="btn btn-primary btn-sm"
+            hx-post="/admin/sponsors/{{ sponsorship.id }}/finalize"
+            hx-swap="none"
+            hx-confirm="Are you sure you want to finalize this sponsorship?"
+            onclick="sponsorship_preview_modal.close()"
+        >
+            Finalize
+        </button>
+        {% endif %}
+    </div>
+</div>

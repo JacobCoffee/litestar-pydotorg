@@ -1,0 +1,197 @@
+{% extends "admin/base.html.jinja2" %}
+
+{% block title %}All Sponsors - Python.org Admin{% endblock %}
+
+{% block admin_content %}
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold text-python-blue">All Sponsors</h1>
+            <p class="text-base-content/70 mt-1">View and manage all sponsor organizations</p>
+        </div>
+        <div class="flex gap-2">
+            <a href="/admin/sponsors" class="btn btn-outline btn-sm" hx-boost="true">
+                <i data-lucide="file-text" class="h-4 w-4"></i>
+                Sponsorships
+            </a>
+        </div>
+    </div>
+
+    {% if stats %}
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <div class="stat bg-base-100 shadow rounded-lg p-4">
+            <div class="stat-title text-xs">Total Sponsors</div>
+            <div class="stat-value text-2xl text-python-blue">{{ stats.total_sponsors }}</div>
+        </div>
+        <div class="stat bg-base-100 shadow rounded-lg p-4">
+            <div class="stat-title text-xs">Active Sponsorships</div>
+            <div class="stat-value text-2xl text-success">{{ stats.finalized_sponsorships }}</div>
+        </div>
+        <div class="stat bg-base-100 shadow rounded-lg p-4">
+            <div class="stat-title text-xs">Pending Applications</div>
+            <div class="stat-value text-2xl text-warning">{{ stats.pending_sponsorships }}</div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="card bg-base-100 shadow-lg border border-base-300">
+        <div class="card-body">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+                <h2 class="card-title">
+                    <i data-lucide="building-2" class="h-5 w-5"></i>
+                    Sponsors
+                </h2>
+                <div class="form-control">
+                    <div class="input-group input-group-sm">
+                        <input
+                            type="text"
+                            placeholder="Search sponsors..."
+                            class="input input-bordered input-sm w-full max-w-xs"
+                            hx-get="/admin/sponsors/sponsors"
+                            hx-trigger="input changed delay:300ms"
+                            hx-target="#sponsors-table"
+                            hx-swap="innerHTML"
+                            name="q"
+                        >
+                        <button class="btn btn-sm btn-primary">
+                            <i data-lucide="search" class="h-4 w-4"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto" id="sponsors-table">
+                <table class="table table-zebra">
+                    <thead>
+                        <tr class="bg-base-200">
+                            <th>Sponsor</th>
+                            <th>Contact</th>
+                            <th>Website</th>
+                            <th>Sponsorships</th>
+                            <th class="w-24">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for sponsor in sponsors %}
+                        <tr class="hover">
+                            <td>
+                                <div class="flex items-center gap-3">
+                                    {% if sponsor.logo_url %}
+                                    <div class="avatar">
+                                        <div class="mask mask-squircle w-12 h-12">
+                                            <img src="{{ sponsor.logo_url }}" alt="{{ sponsor.name }}" />
+                                        </div>
+                                    </div>
+                                    {% else %}
+                                    <div class="avatar placeholder">
+                                        <div class="bg-neutral text-neutral-content mask mask-squircle w-12 h-12">
+                                            <span class="text-xl">{{ sponsor.name[:1].upper() }}</span>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                    <div>
+                                        <div class="font-bold">{{ sponsor.name }}</div>
+                                        {% if sponsor.is_published %}
+                                        <span class="badge badge-success badge-xs">Published</span>
+                                        {% else %}
+                                        <span class="badge badge-ghost badge-xs">Draft</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                {% if sponsor.contact_email %}
+                                <a href="mailto:{{ sponsor.contact_email }}" class="link link-primary text-sm">
+                                    {{ sponsor.contact_email }}
+                                </a>
+                                {% else %}
+                                <span class="text-base-content/40">—</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if sponsor.company_url %}
+                                <a href="{{ sponsor.company_url }}" target="_blank" class="link link-primary text-sm">
+                                    <i data-lucide="external-link" class="h-3 w-3 inline"></i>
+                                    Visit
+                                </a>
+                                {% else %}
+                                <span class="text-base-content/40">—</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% set sponsorship_count = sponsor.sponsorships|length if sponsor.sponsorships else 0 %}
+                                <span class="badge badge-outline">{{ sponsorship_count }}</span>
+                            </td>
+                            <td>
+                                <div class="flex gap-1">
+                                    <a
+                                        href="/admin/sponsors/sponsor/{{ sponsor.id }}"
+                                        class="btn btn-ghost btn-xs btn-square"
+                                        title="View Details"
+                                        hx-boost="true"
+                                    >
+                                        <i data-lucide="eye" class="h-4 w-4"></i>
+                                    </a>
+                                    <a
+                                        href="/admin/db/sponsor/details/{{ sponsor.id }}"
+                                        class="btn btn-ghost btn-xs btn-square"
+                                        title="Edit in DB Admin"
+                                    >
+                                        <i data-lucide="pencil" class="h-4 w-4"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="5" class="text-center py-8 text-base-content/50">
+                                <i data-lucide="building-2" class="h-12 w-12 mx-auto mb-2 opacity-30"></i>
+                                <p>No sponsors found</p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            {% if pagination.total > pagination.limit %}
+            <div class="flex justify-center mt-4 pt-4 border-t border-base-300">
+                <div class="join">
+                    {% if pagination.offset > 0 %}
+                    <a
+                        href="?offset={{ pagination.offset - pagination.limit }}&limit={{ pagination.limit }}"
+                        class="join-item btn btn-sm"
+                        hx-boost="true"
+                    >
+                        <i data-lucide="chevron-left" class="h-4 w-4"></i>
+                    </a>
+                    {% else %}
+                    <button class="join-item btn btn-sm" disabled>
+                        <i data-lucide="chevron-left" class="h-4 w-4"></i>
+                    </button>
+                    {% endif %}
+
+                    <button class="join-item btn btn-sm btn-active">
+                        {{ (pagination.offset // pagination.limit) + 1 }} / {{ ((pagination.total - 1) // pagination.limit) + 1 }}
+                    </button>
+
+                    {% if pagination.offset + pagination.limit < pagination.total %}
+                    <a
+                        href="?offset={{ pagination.offset + pagination.limit }}&limit={{ pagination.limit }}"
+                        class="join-item btn btn-sm"
+                        hx-boost="true"
+                    >
+                        <i data-lucide="chevron-right" class="h-4 w-4"></i>
+                    </a>
+                    {% else %}
+                    <button class="join-item btn btn-sm" disabled>
+                        <i data-lucide="chevron-right" class="h-4 w-4"></i>
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

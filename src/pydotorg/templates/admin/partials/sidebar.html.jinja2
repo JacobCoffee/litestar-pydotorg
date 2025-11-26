@@ -150,8 +150,8 @@
         </li>
         <li>
             <a
-                href="/admin/sponsors/pending"
-                class="{% if request.url.path == '/admin/sponsors/pending' %}active bg-primary text-primary-content{% endif %}"
+                href="/admin/sponsors?status=applied"
+                class="{% if request.url.path == '/admin/sponsors' and request.query_params.get('status') == 'applied' %}active bg-primary text-primary-content{% endif %}"
                 hx-boost="true"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

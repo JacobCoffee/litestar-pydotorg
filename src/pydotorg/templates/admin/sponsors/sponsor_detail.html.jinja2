@@ -1,0 +1,243 @@
+{% extends "admin/base.html.jinja2" %}
+
+{% block title %}{{ sponsor.name }} - Python.org Admin{% endblock %}
+
+{% block admin_content %}
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <div class="flex items-center gap-4">
+            {% if sponsor.logo_url %}
+            <div class="avatar">
+                <div class="w-16 h-16 rounded-lg">
+                    <img src="{{ sponsor.logo_url }}" alt="{{ sponsor.name }}" />
+                </div>
+            </div>
+            {% else %}
+            <div class="avatar placeholder">
+                <div class="bg-neutral text-neutral-content w-16 h-16 rounded-lg">
+                    <span class="text-2xl">{{ sponsor.name[:1].upper() }}</span>
+                </div>
+            </div>
+            {% endif %}
+            <div>
+                <h1 class="text-3xl font-bold text-python-blue">{{ sponsor.name }}</h1>
+                <div class="flex items-center gap-2 mt-1">
+                    {% if sponsor.is_published %}
+                    <span class="badge badge-success">Published</span>
+                    {% else %}
+                    <span class="badge badge-ghost">Draft</span>
+                    {% endif %}
+                    <span class="text-base-content/50">•</span>
+                    <span class="text-base-content/70">{{ sponsor.sponsorships|length if sponsor.sponsorships else 0 }} sponsorship(s)</span>
+                </div>
+            </div>
+        </div>
+        <div class="flex gap-2">
+            <a href="/admin/sponsors/sponsors" class="btn btn-ghost btn-sm" hx-boost="true">
+                <i data-lucide="arrow-left" class="h-4 w-4"></i>
+                Back to Sponsors
+            </a>
+            <a href="/admin/db/sponsor/details/{{ sponsor.id }}" class="btn btn-outline btn-sm">
+                <i data-lucide="pencil" class="h-4 w-4"></i>
+                Edit in DB Admin
+            </a>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2 space-y-6">
+            <div class="card bg-base-100 shadow-lg border border-base-300">
+                <div class="card-body">
+                    <h2 class="card-title">
+                        <i data-lucide="building-2" class="h-5 w-5"></i>
+                        Sponsor Details
+                    </h2>
+                    <div class="divider my-2"></div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-sm font-medium text-base-content/60">Contact Email</label>
+                            {% if sponsor.contact_email %}
+                            <p class="mt-1">
+                                <a href="mailto:{{ sponsor.contact_email }}" class="link link-primary">
+                                    {{ sponsor.contact_email }}
+                                </a>
+                            </p>
+                            {% else %}
+                            <p class="mt-1 text-base-content/40">Not provided</p>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <label class="text-sm font-medium text-base-content/60">Company Website</label>
+                            {% if sponsor.company_url %}
+                            <p class="mt-1">
+                                <a href="{{ sponsor.company_url }}" target="_blank" class="link link-primary">
+                                    <i data-lucide="external-link" class="h-3 w-3 inline"></i>
+                                    {{ sponsor.company_url }}
+                                </a>
+                            </p>
+                            {% else %}
+                            <p class="mt-1 text-base-content/40">Not provided</p>
+                            {% endif %}
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="text-sm font-medium text-base-content/60">Description</label>
+                            {% if sponsor.description %}
+                            <p class="mt-1 whitespace-pre-wrap">{{ sponsor.description }}</p>
+                            {% else %}
+                            <p class="mt-1 text-base-content/40">No description available</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card bg-base-100 shadow-lg border border-base-300">
+                <div class="card-body">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="card-title">
+                            <i data-lucide="file-text" class="h-5 w-5"></i>
+                            Sponsorships
+                        </h2>
+                        <a href="/admin/sponsors?sponsor_id={{ sponsor.id }}" class="btn btn-ghost btn-xs" hx-boost="true">
+                            View All
+                        </a>
+                    </div>
+
+                    {% if sponsor.sponsorships %}
+                    <div class="overflow-x-auto">
+                        <table class="table table-zebra">
+                            <thead>
+                                <tr class="bg-base-200">
+                                    <th>Status</th>
+                                    <th>Applied</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for sponsorship in sponsor.sponsorships[:5] %}
+                                <tr class="hover">
+                                    <td>
+                                        {% if sponsorship.status.value == "APPLIED" %}
+                                        <span class="badge badge-info badge-sm">Applied</span>
+                                        {% elif sponsorship.status.value == "APPROVED" %}
+                                        <span class="badge badge-success badge-sm">Approved</span>
+                                        {% elif sponsorship.status.value == "REJECTED" %}
+                                        <span class="badge badge-error badge-sm">Rejected</span>
+                                        {% elif sponsorship.status.value == "FINALIZED" %}
+                                        <span class="badge badge-primary badge-sm">Finalized</span>
+                                        {% else %}
+                                        <span class="badge badge-ghost badge-sm">{{ sponsorship.status.value }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {{ sponsorship.created_at.strftime('%Y-%m-%d') if sponsorship.created_at else '—' }}
+                                    </td>
+                                    <td>
+                                        <a
+                                            href="/admin/sponsors/{{ sponsorship.id }}"
+                                            class="btn btn-ghost btn-xs btn-square"
+                                            title="View Details"
+                                            hx-boost="true"
+                                        >
+                                            <i data-lucide="eye" class="h-4 w-4"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% if sponsor.sponsorships|length > 5 %}
+                    <div class="text-center mt-4">
+                        <a href="/admin/sponsors?sponsor_id={{ sponsor.id }}" class="btn btn-ghost btn-sm" hx-boost="true">
+                            View all {{ sponsor.sponsorships|length }} sponsorships
+                        </a>
+                    </div>
+                    {% endif %}
+                    {% else %}
+                    <div class="text-center py-8 text-base-content/50">
+                        <i data-lucide="file-text" class="h-12 w-12 mx-auto mb-2 opacity-30"></i>
+                        <p>No sponsorships found for this sponsor</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="space-y-6">
+            <div class="card bg-base-100 shadow-lg border border-base-300">
+                <div class="card-body">
+                    <h3 class="card-title text-lg">
+                        <i data-lucide="info" class="h-5 w-5"></i>
+                        Quick Info
+                    </h3>
+                    <div class="divider my-2"></div>
+                    <dl class="space-y-3 text-sm">
+                        <div class="flex justify-between">
+                            <dt class="text-base-content/60">ID</dt>
+                            <dd class="font-mono text-xs">{{ sponsor.id }}</dd>
+                        </div>
+                        <div class="flex justify-between">
+                            <dt class="text-base-content/60">Published</dt>
+                            <dd>
+                                {% if sponsor.is_published %}
+                                <span class="text-success">Yes</span>
+                                {% else %}
+                                <span class="text-base-content/40">No</span>
+                                {% endif %}
+                            </dd>
+                        </div>
+                        <div class="flex justify-between">
+                            <dt class="text-base-content/60">Created</dt>
+                            <dd>{{ sponsor.created_at.strftime('%Y-%m-%d %H:%M') if sponsor.created_at else '—' }}</dd>
+                        </div>
+                        <div class="flex justify-between">
+                            <dt class="text-base-content/60">Updated</dt>
+                            <dd>{{ sponsor.updated_at.strftime('%Y-%m-%d %H:%M') if sponsor.updated_at else '—' }}</dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+
+            {% if sponsor.logo_url %}
+            <div class="card bg-base-100 shadow-lg border border-base-300">
+                <div class="card-body">
+                    <h3 class="card-title text-lg">
+                        <i data-lucide="image" class="h-5 w-5"></i>
+                        Logo Preview
+                    </h3>
+                    <div class="divider my-2"></div>
+                    <div class="flex justify-center p-4 bg-base-200 rounded-lg">
+                        <img
+                            src="{{ sponsor.logo_url }}"
+                            alt="{{ sponsor.name }}"
+                            class="max-w-full max-h-32 object-contain"
+                        />
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="card bg-base-100 shadow-lg border border-base-300">
+                <div class="card-body">
+                    <h3 class="card-title text-lg">
+                        <i data-lucide="settings" class="h-5 w-5"></i>
+                        Actions
+                    </h3>
+                    <div class="divider my-2"></div>
+                    <div class="space-y-2">
+                        <a href="/admin/db/sponsor/edit/{{ sponsor.id }}" class="btn btn-outline btn-block btn-sm">
+                            <i data-lucide="pencil" class="h-4 w-4"></i>
+                            Edit Sponsor
+                        </a>
+                        <a href="/admin/sponsors?sponsor_id={{ sponsor.id }}" class="btn btn-outline btn-block btn-sm" hx-boost="true">
+                            <i data-lucide="file-text" class="h-4 w-4"></i>
+                            View Sponsorships
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
