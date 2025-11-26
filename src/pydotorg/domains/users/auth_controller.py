@@ -98,7 +98,7 @@ class AuthController(Controller):
             expires_in=settings.jwt_expiration_minutes * 60,
         )
 
-    @post("/login")
+    @post("/login", status_code=200)
     async def login(
         self,
         data: LoginRequest,
@@ -132,7 +132,7 @@ class AuthController(Controller):
             expires_in=settings.jwt_expiration_minutes * 60,
         )
 
-    @post("/refresh")
+    @post("/refresh", status_code=200)
     async def refresh_token(
         self,
         data: RefreshTokenRequest,
@@ -158,7 +158,7 @@ class AuthController(Controller):
             expires_in=settings.jwt_expiration_minutes * 60,
         )
 
-    @post("/logout", guards=[require_authenticated])
+    @post("/logout", guards=[require_authenticated], status_code=200)
     async def logout(self) -> dict[str, str]:
         return {"message": "Successfully logged out"}
 
@@ -224,7 +224,7 @@ class AuthController(Controller):
 
         return response
 
-    @post("/me", guards=[require_authenticated])
+    @post("/me", guards=[require_authenticated], status_code=200)
     async def get_me(self, current_user: User) -> UserResponse:
         return UserResponse.model_validate(current_user)
 
