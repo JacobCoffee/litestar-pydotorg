@@ -139,7 +139,7 @@ async def delete_user(self, user_id: UUID) -> None:
 2. Run database migrations: `uv run alembic upgrade head`
 3. Update `main.py` with auth configuration
 4. Run tests: `make test`
-5. Start server: `make run-dev-server`
+5. Start server: `make serve`
 6. Test endpoints with curl or Postman
 
 ## Example Request Flow

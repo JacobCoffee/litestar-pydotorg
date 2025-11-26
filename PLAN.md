@@ -57,6 +57,7 @@
 ### Task 2.1: Database Layer Completion
 **Agent**: `python-backend-architect`
 **Priority**: CRITICAL
+**Status**: ✅ COMPLETE (2025-11-26)
 
 **Design Guide**:
 - Use Advanced Alchemy's `SQLAlchemyAsyncRepository` pattern
@@ -66,11 +67,12 @@
 - Follow Service-Repository-Model architecture
 
 **Tasks**:
-- [ ] Complete Alembic migration setup with proper env.py
-- [ ] Create initial migration for existing 4 domains (users, pages, downloads, sponsors)
-- [ ] Implement database seeding for development
-- [ ] Add connection pooling configuration
-- [ ] Implement health check for database connectivity
+- [x] Complete Alembic migration setup with proper env.py
+- [x] Create initial migration for existing 4 domains (users, pages, downloads, sponsors)
+- [x] Create migration for all remaining domains (002_add_remaining_models.py)
+- [x] Implement database seeding for development (db/seed.py - 1006 lines)
+- [x] Add connection pooling configuration (pool_size=20, max_overflow=10)
+- [x] Implement health check for database connectivity (/health endpoint)
 
 **Files to Create/Modify**:
 ```
@@ -153,23 +155,23 @@ src/pydotorg/
 ### Domain Migration Order (by dependency)
 
 ```
-1. users (no dependencies)
-2. boxes (no dependencies)
-3. pages (depends on: users, boxes)
-4. downloads (depends on: users, pages)
-5. blogs (depends on: users)
-6. jobs (depends on: users, companies)
-7. companies (depends on: users)
-8. events (depends on: users)
-9. sponsors (depends on: users, companies)
-10. community (depends on: users)
-11. successstories (depends on: users)
-12. nominations (depends on: users)
-13. codesamples (depends on: users)
-14. minutes (depends on: users)
-15. banners (depends on: users)
-16. mailing (depends on: users)
-17. work_groups (depends on: users)
+1. users (no dependencies)                    ✅ DONE (models, repos, services, controllers)
+2. boxes → SKIPPED (using pure Jinja2)        ✅ SKIPPED
+3. pages (depends on: users)                  ✅ DONE (models, repos, services, controllers)
+4. downloads (depends on: users, pages)       ✅ DONE (models, repos, services, controllers)
+5. blogs (depends on: users)                  ✅ DONE (models, repos, services, controllers)
+6. jobs (depends on: users, companies)        ✅ DONE (models, repos, services, controllers)
+7. companies → merged into sponsors           ✅ MERGED
+8. events (depends on: users)                 ✅ DONE (models, repos, services, controllers)
+9. sponsors (depends on: users)               ✅ DONE (models, repos, services, controllers)
+10. community (depends on: users)             ✅ DONE (models, repos, services, controllers)
+11. successstories (depends on: users)        ✅ DONE (models, repos, services, controllers)
+12. nominations (depends on: users)           ✅ DONE (models, repos, services, controllers)
+13. codesamples (depends on: users)           ✅ DONE (models, repos, services, controllers)
+14. minutes (depends on: users)               ✅ DONE (models, repos, services, controllers)
+15. banners (depends on: users)               ✅ DONE (models, repos, services, controllers)
+16. mailing (depends on: users)               ⏳ PENDING
+17. work_groups (depends on: users)           ✅ DONE (models, repos, services, controllers)
 ```
 
 ---
@@ -217,59 +219,32 @@ src/pydotorg/domains/users/
 
 ---
 
-### Task 3.2: Boxes Domain (NEW - Jinja Components)
-**Agent**: `ui-engineer`
-**Priority**: CRITICAL
+### Task 3.2: Boxes Domain → SKIPPED (Pure Jinja Approach)
+**Status**: ✅ SKIPPED - Using pure Jinja2 templates instead
+**Decision Date**: 2025-11-26
 
-**Design Guide**:
-Django Boxes are content widgets rendered in templates. Replace with:
-- Jinja2 macros for reusable components
-- Database-driven content blocks
-- TailwindCSS/DaisyUI styling
+**Rationale**:
+Django Boxes were database-driven content widgets. For this rewrite, we're using:
+- **Pure Jinja2 templates** for all content rendering
+- **Jinja2 macros** (`templates/macros/`) for reusable components
+- **Jinja2 partials** (`templates/partials/`) for shared sections
+- **Domain models** (Page, Blog, etc.) for database-driven content
 
-**Django Box Model**:
-```python
-class Box:
-    label (unique identifier)
-    content (rendered HTML/text)
-    content_markup_type (markdown/rst/html)
+This eliminates the need for a separate Boxes/ContentBlock domain. If CMS-editable
+content slots are needed later, we can either:
+1. Add a simple `ContentSnippet` model
+2. Integrate with Strapi CMS via `litestar-strapi` plugin
+
+**What Exists Now**:
 ```
-
-**Litestar Approach**:
-```python
-# Model for dynamic content
-class ContentBlock(Base):
-    __tablename__ = "content_blocks"
-    label: Mapped[str] = mapped_column(unique=True)
-    content: Mapped[str]
-    markup_type: Mapped[ContentType]
-
-# Jinja2 macro for rendering
-{% macro content_block(label) %}
-  {{ render_content_block(label) }}
-{% endmacro %}
-```
-
-**Tasks**:
-- [ ] Create ContentBlock model (replaces Box)
-- [ ] Create content rendering service (markdown/rst/html)
-- [ ] Create Jinja2 macros for common components
-- [ ] Create admin interface for content management
-- [ ] Migrate existing box content
-
-**Files to Create**:
-```
-src/pydotorg/
-├── domains/boxes/
-│   ├── __init__.py
-│   ├── models.py
-│   ├── services.py        # Content rendering
-│   └── controllers.py
-├── templates/
-│   └── macros/
-│       ├── content_blocks.html.jinja2
-│       ├── navigation.html.jinja2
-│       └── cards.html.jinja2
+src/pydotorg/templates/
+├── macros/
+│   ├── forms.html.jinja2      ✅ Form components
+│   ├── cards.html.jinja2      ✅ Card components
+│   └── buttons.html.jinja2    ✅ Button components
+├── partials/
+│   ├── navbar.html.jinja2     ✅ Navigation
+│   └── footer.html.jinja2     ✅ Footer
 ```
 
 ---
