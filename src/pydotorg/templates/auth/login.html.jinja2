@@ -16,14 +16,8 @@
 
                 <form
                     id="login-form"
-                    hx-post="/api/auth/session/login"
-                    hx-target="#auth-messages"
-                    hx-swap="innerHTML"
-                    hx-indicator="#login-spinner"
-                    hx-ext="json-enc"
                     class="space-y-4"
                 >
-                    {{ csrf_input|safe }}
 
                     {{ input_field(
                         name='username',
@@ -99,45 +93,61 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="https://unpkg.com/htmx-ext-json-enc@2.0.1/json-enc.js"></script>
 <script>
-    document.body.addEventListener('htmx:afterRequest', function(evt) {
-        const messagesDiv = document.getElementById('auth-messages');
+    document.getElementById('login-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
 
-        if (evt.detail.successful && evt.detail.xhr.status === 200) {
-            try {
-                const response = JSON.parse(evt.detail.xhr.responseText);
-                if (response.message) {
-                    messagesDiv.innerHTML = '<div class="alert alert-success"><svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg><span>' + response.message + '</span></div>';
-                    setTimeout(function() {
-                        const nextUrl = new URLSearchParams(window.location.search).get('next');
-                        window.location.href = nextUrl || '/';
-                    }, 500);
-                }
-            } catch (e) {
-                console.error('Parse error:', e);
-            }
-        }
-    });
-
-    document.body.addEventListener('htmx:responseError', function(evt) {
+        const form = e.target;
         const messagesDiv = document.getElementById('auth-messages');
-        let errorMessage = 'Login failed. Please try again.';
+        const spinner = document.getElementById('login-spinner');
+        const submitBtn = form.querySelector('button[type="submit"]');
+
+        // Show loading state
+        spinner.classList.remove('htmx-indicator');
+        submitBtn.disabled = true;
+
+        // Gather form data as JSON
+        const formData = new FormData(form);
+        const data = {
+            username: formData.get('username'),
+            password: formData.get('password'),
+            remember_me: formData.get('remember_me') === 'on'
+        };
 
         try {
-            const response = JSON.parse(evt.detail.xhr.responseText);
-            if (response.detail) {
-                errorMessage = response.detail;
-            }
-        } catch (e) {
-            if (evt.detail.xhr.status === 401) {
-                errorMessage = 'Invalid username or password.';
-            } else if (evt.detail.xhr.status === 403) {
-                errorMessage = 'Access denied. Please check your credentials.';
-            }
-        }
+            const response = await fetch('/api/auth/session/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            });
 
-        messagesDiv.innerHTML = '<div class="alert alert-error"><svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg><span>' + errorMessage + '</span></div>';
+            const result = await response.json();
+
+            if (response.ok) {
+                messagesDiv.innerHTML = '<div class="alert alert-success"><svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg><span>' + (result.message || 'Login successful!') + '</span></div>';
+                setTimeout(function() {
+                    const nextUrl = new URLSearchParams(window.location.search).get('next');
+                    window.location.href = nextUrl || '/';
+                }, 500);
+            } else {
+                let errorMessage = result.detail || 'Login failed. Please try again.';
+                if (response.status === 401) {
+                    errorMessage = result.detail || 'Invalid username or password.';
+                } else if (response.status === 403) {
+                    errorMessage = result.detail || 'Access denied. Please check your credentials.';
+                }
+                messagesDiv.innerHTML = '<div class="alert alert-error"><svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg><span>' + errorMessage + '</span></div>';
+            }
+        } catch (error) {
+            console.error('Login error:', error);
+            messagesDiv.innerHTML = '<div class="alert alert-error"><svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg><span>An error occurred. Please try again.</span></div>';
+        } finally {
+            // Reset loading state
+            spinner.classList.add('htmx-indicator');
+            submitBtn.disabled = false;
+        }
     });
 </script>
 {% endblock %}
