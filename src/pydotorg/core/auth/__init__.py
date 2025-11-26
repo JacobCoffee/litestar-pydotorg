@@ -17,12 +17,15 @@ from pydotorg.core.auth.schemas import (
     TokenResponse,
     UserResponse,
 )
+from pydotorg.core.auth.session import SessionAuthMiddleware, SessionService, session_service
 
 __all__ = [
     "JWTAuthMiddleware",
     "LoginRequest",
     "RefreshTokenRequest",
     "RegisterRequest",
+    "SessionAuthMiddleware",
+    "SessionService",
     "TokenResponse",
     "UserResponse",
     "jwt_service",
@@ -32,4 +35,5 @@ __all__ = [
     "require_higher_membership",
     "require_membership",
     "require_staff",
+    "session_service",
 ]

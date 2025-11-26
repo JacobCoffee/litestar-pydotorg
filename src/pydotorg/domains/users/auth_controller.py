@@ -2,30 +2,42 @@
 
 from __future__ import annotations
 
+import secrets
 from datetime import UTC, datetime
 from typing import TYPE_CHECKING
+from uuid import UUID
 
-from litestar import Controller, post
+from litestar import Controller, Response, get, post
 from litestar.di import Provide
 from litestar.exceptions import NotFoundException, PermissionDeniedException
+from litestar.params import Parameter
+from litestar.response import Redirect
 from sqlalchemy import select
 
 from pydotorg.config import settings
 from pydotorg.core.auth.guards import require_authenticated
 from pydotorg.core.auth.jwt import jwt_service
+from pydotorg.core.auth.oauth import get_oauth_service
 from pydotorg.core.auth.password import password_service
 from pydotorg.core.auth.schemas import (
     LoginRequest,
     RefreshTokenRequest,
     RegisterRequest,
+    SendVerificationRequest,
     TokenResponse,
     UserResponse,
+    VerifyEmailResponse,
 )
+from pydotorg.core.auth.session import session_service
+from pydotorg.core.email import email_service
+from pydotorg.core.logging import get_logger
 from pydotorg.domains.users.models import User
 
 if TYPE_CHECKING:
     from litestar.connection import ASGIConnection
     from sqlalchemy.ext.asyncio import AsyncSession
+
+logger = get_logger(__name__)
 
 
 async def get_current_user(connection: ASGIConnection) -> User:
@@ -73,6 +85,11 @@ class AuthController(Controller):
         await db_session.commit()
         await db_session.refresh(user)
 
+        verification_token = jwt_service.create_verification_token(user.id, user.email)
+        verification_link = f"{settings.oauth_redirect_base_url}/verify-email/{verification_token}"
+
+        email_service.send_verification_email(user.email, user.username, verification_link)
+
         access_token = jwt_service.create_access_token(user.id)
         refresh_token = jwt_service.create_refresh_token(user.id)
 
@@ -91,7 +108,13 @@ class AuthController(Controller):
         result = await db_session.execute(select(User).where(User.username == data.username))
         user = result.scalar_one_or_none()
 
-        if not user or not password_service.verify_password(data.password, user.password_hash):
+        if not user:
+            raise PermissionDeniedException("Invalid credentials")
+
+        if user.oauth_provider:
+            raise PermissionDeniedException(f"This account uses {user.oauth_provider} login")
+
+        if not user.password_hash or not password_service.verify_password(data.password, user.password_hash):
             raise PermissionDeniedException("Invalid credentials")
 
         if not user.is_active:
@@ -139,6 +162,254 @@ class AuthController(Controller):
     async def logout(self) -> dict[str, str]:
         return {"message": "Successfully logged out"}
 
+    @post("/session/login")
+    async def session_login(
+        self,
+        data: LoginRequest,
+        db_session: AsyncSession,
+    ) -> Response[dict[str, str]]:
+        result = await db_session.execute(select(User).where(User.username == data.username))
+        user = result.scalar_one_or_none()
+
+        if not user:
+            raise PermissionDeniedException("Invalid credentials")
+
+        if user.oauth_provider:
+            raise PermissionDeniedException(f"This account uses {user.oauth_provider} login")
+
+        if not user.password_hash or not password_service.verify_password(data.password, user.password_hash):
+            raise PermissionDeniedException("Invalid credentials")
+
+        if not user.is_active:
+            raise PermissionDeniedException("Account is inactive")
+
+        user.last_login = datetime.now(UTC)
+        await db_session.commit()
+
+        session_id = session_service.create_session(user.id)
+
+        response = Response(
+            content={"message": "Successfully logged in"},
+            status_code=200,
+        )
+
+        response.set_cookie(
+            key=settings.session_cookie_name,
+            value=session_id,
+            max_age=settings.session_expire_minutes * 60,
+            httponly=True,
+            secure=not settings.is_debug,
+            samesite="lax",
+            path="/",
+        )
+
+        return response
+
+    @post("/session/logout", guards=[require_authenticated])
+    async def session_logout(self, connection: ASGIConnection) -> Response[dict[str, str]]:
+        session_id = connection.cookies.get(settings.session_cookie_name)
+
+        if session_id:
+            session_service.destroy_session(session_id)
+
+        response = Response(
+            content={"message": "Successfully logged out"},
+            status_code=200,
+        )
+
+        response.delete_cookie(
+            key=settings.session_cookie_name,
+            path="/",
+        )
+
+        return response
+
     @post("/me", guards=[require_authenticated])
     async def get_me(self, current_user: User) -> UserResponse:
         return UserResponse.model_validate(current_user)
+
+    @get("/oauth/{provider:str}")
+    async def oauth_login(
+        self,
+        provider: str,
+        connection: ASGIConnection,
+    ) -> Redirect:
+        oauth_service = get_oauth_service(settings)
+
+        try:
+            oauth_provider = oauth_service.get_provider(provider)
+        except ValueError as e:
+            raise PermissionDeniedException(str(e)) from e
+
+        state = secrets.token_urlsafe(32)
+        connection.set_session({"oauth_state": state, "oauth_provider": provider})
+
+        redirect_uri = f"{settings.oauth_redirect_base_url}/api/auth/oauth/{provider}/callback"
+        auth_url = oauth_provider.get_authorization_url(redirect_uri, state)
+
+        return Redirect(path=auth_url)
+
+    @get("/oauth/{provider:str}/callback")
+    async def oauth_callback(
+        self,
+        provider: str,
+        connection: ASGIConnection,
+        db_session: AsyncSession,
+        code: str = Parameter(query="code"),
+        oauth_state: str = Parameter(query="state"),
+    ) -> Response[TokenResponse]:
+        session_state = connection.session.get("oauth_state")
+        session_provider = connection.session.get("oauth_provider")
+
+        if not session_state or session_state != oauth_state:
+            raise PermissionDeniedException("Invalid OAuth state")
+
+        if session_provider != provider:
+            raise PermissionDeniedException("OAuth provider mismatch")
+
+        connection.clear_session()
+
+        oauth_service = get_oauth_service(settings)
+
+        try:
+            oauth_provider = oauth_service.get_provider(provider)
+        except ValueError as e:
+            raise PermissionDeniedException(str(e)) from e
+
+        redirect_uri = f"{settings.oauth_redirect_base_url}/api/auth/oauth/{provider}/callback"
+
+        try:
+            token_data = await oauth_provider.exchange_code_for_token(code, redirect_uri)
+            access_token = token_data.get("access_token")
+
+            if not access_token:
+                raise PermissionDeniedException("Failed to obtain access token")
+
+            user_info = await oauth_provider.get_user_info(access_token)
+
+        except Exception as e:
+            raise PermissionDeniedException(f"OAuth authentication failed: {e!s}") from e
+
+        result = await db_session.execute(
+            select(User).where((User.oauth_provider == user_info.provider) & (User.oauth_id == user_info.oauth_id))
+        )
+        user = result.scalar_one_or_none()
+
+        if not user:
+            email_result = await db_session.execute(select(User).where(User.email == user_info.email))
+            user = email_result.scalar_one_or_none()
+
+            if user:
+                if user.oauth_provider:
+                    raise PermissionDeniedException(f"Email already registered with {user.oauth_provider}")
+
+                user.oauth_provider = user_info.provider
+                user.oauth_id = user_info.oauth_id
+                user.email_verified = user_info.email_verified
+            else:
+                username = user_info.username
+                username_check = await db_session.execute(select(User).where(User.username == username))
+                if username_check.scalar_one_or_none():
+                    username = f"{username}_{secrets.token_hex(4)}"
+
+                user = User(
+                    username=username,
+                    email=user_info.email,
+                    password_hash=None,
+                    first_name=user_info.first_name,
+                    last_name=user_info.last_name,
+                    oauth_provider=user_info.provider,
+                    oauth_id=user_info.oauth_id,
+                    email_verified=user_info.email_verified,
+                    is_active=True,
+                    last_login=datetime.now(UTC),
+                )
+                db_session.add(user)
+        else:
+            user.last_login = datetime.now(UTC)
+
+        await db_session.commit()
+        await db_session.refresh(user)
+
+        jwt_access_token = jwt_service.create_access_token(user.id)
+        jwt_refresh_token = jwt_service.create_refresh_token(user.id)
+
+        return Response(
+            content=TokenResponse(
+                access_token=jwt_access_token,
+                refresh_token=jwt_refresh_token,
+                expires_in=settings.jwt_expiration_minutes * 60,
+            )
+        )
+
+    @post("/send-verification")
+    async def send_verification(
+        self,
+        data: SendVerificationRequest,
+        db_session: AsyncSession,
+    ) -> VerifyEmailResponse:
+        result = await db_session.execute(select(User).where(User.email == data.email))
+        user = result.scalar_one_or_none()
+
+        if not user:
+            raise NotFoundException("User not found")
+
+        if user.email_verified:
+            return VerifyEmailResponse(message="Email already verified")
+
+        verification_token = jwt_service.create_verification_token(user.id, user.email)
+        verification_link = f"{settings.oauth_redirect_base_url}/verify-email/{verification_token}"
+
+        email_service.send_verification_email(user.email, user.username, verification_link)
+
+        return VerifyEmailResponse(message="Verification email sent")
+
+    @get("/verify-email/{token:str}")
+    async def verify_email(
+        self,
+        token: str,
+        db_session: AsyncSession,
+    ) -> VerifyEmailResponse:
+        try:
+            payload = jwt_service.decode_token(token)
+            jwt_service.verify_token_type(payload, "verify_email")
+
+            user_id_str = payload.get("sub")
+            email = payload.get("email")
+
+            if not user_id_str or not email:
+                raise PermissionDeniedException("Invalid verification token")
+
+            user_id = UUID(user_id_str)
+
+        except ValueError as e:
+            raise PermissionDeniedException("Invalid or expired verification token") from e
+
+        result = await db_session.execute(select(User).where(User.id == user_id, User.email == email))
+        user = result.scalar_one_or_none()
+
+        if not user:
+            raise NotFoundException("User not found")
+
+        if user.email_verified:
+            return VerifyEmailResponse(message="Email already verified")
+
+        user.email_verified = True
+        await db_session.commit()
+
+        return VerifyEmailResponse(message="Email verified successfully")
+
+    @post("/resend-verification", guards=[require_authenticated])
+    async def resend_verification(
+        self,
+        current_user: User,
+    ) -> VerifyEmailResponse:
+        if current_user.email_verified:
+            return VerifyEmailResponse(message="Email already verified")
+
+        verification_token = jwt_service.create_verification_token(current_user.id, current_user.email)
+        verification_link = f"{settings.oauth_redirect_base_url}/verify-email/{verification_token}"
+
+        email_service.send_verification_email(current_user.email, current_user.username, verification_link)
+
+        return VerifyEmailResponse(message="Verification email sent")

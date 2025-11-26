@@ -43,6 +43,19 @@ class JWTService:
         return jwt.encode(to_encode, settings.secret_key, algorithm=settings.jwt_algorithm)
 
     @staticmethod
+    def create_verification_token(user_id: UUID, email: str) -> str:
+        expires_delta = timedelta(hours=settings.email_verification_expire_hours)
+        expire = datetime.now(UTC) + expires_delta
+        to_encode = {
+            "sub": str(user_id),
+            "email": email,
+            "exp": expire,
+            "iat": datetime.now(UTC),
+            "type": "verify_email",
+        }
+        return jwt.encode(to_encode, settings.secret_key, algorithm=settings.jwt_algorithm)
+
+    @staticmethod
     def decode_token(token: str) -> dict[str, Any]:
         try:
             return jwt.decode(token, settings.secret_key, algorithms=[settings.jwt_algorithm])
