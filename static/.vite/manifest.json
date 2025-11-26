@@ -1,0 +1,45 @@
+{
+  "_module.esm-BScJx0li.js": {
+    "file": "js/module.esm-BScJx0li.js",
+    "name": "module.esm"
+  },
+  "css/admin.css": {
+    "file": "css/admin.css",
+    "src": "css/admin.css",
+    "isEntry": true
+  },
+  "css/input.css": {
+    "file": "css/styles-CwQKvkuG.css",
+    "src": "css/input.css",
+    "isEntry": true
+  },
+  "css/timeline.css": {
+    "file": "css/timeline.css",
+    "src": "css/timeline.css",
+    "isEntry": true
+  },
+  "js/admin.ts": {
+    "file": "js/admin.js",
+    "name": "admin",
+    "src": "js/admin.ts",
+    "isEntry": true,
+    "imports": [
+      "_module.esm-BScJx0li.js"
+    ]
+  },
+  "js/main.ts": {
+    "file": "js/main-Bvxx6Sso.js",
+    "name": "main",
+    "src": "js/main.ts",
+    "isEntry": true,
+    "imports": [
+      "_module.esm-BScJx0li.js"
+    ]
+  },
+  "js/timeline.ts": {
+    "file": "js/timeline.js",
+    "name": "timeline",
+    "src": "js/timeline.ts",
+    "isEntry": true
+  }
+}
