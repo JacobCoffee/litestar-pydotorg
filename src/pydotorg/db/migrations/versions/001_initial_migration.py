@@ -5,12 +5,16 @@ Revises:
 Create Date: 2025-11-25 18:30:00.000000
 
 """
+
 from __future__ import annotations
 
-from collections.abc import Sequence
+from typing import TYPE_CHECKING
 
 import sqlalchemy as sa
 from alembic import op
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 revision: str = "001"
 down_revision: str | None = None
@@ -24,18 +28,22 @@ def upgrade() -> None:
         sa.Column("id", sa.UUID(), nullable=False),
         sa.Column("username", sa.String(length=150), nullable=False),
         sa.Column("email", sa.String(length=254), nullable=False),
-        sa.Column("password_hash", sa.String(length=255), nullable=False),
+        sa.Column("password_hash", sa.String(length=255), nullable=True),
         sa.Column("first_name", sa.String(length=150), nullable=False),
         sa.Column("last_name", sa.String(length=150), nullable=False),
         sa.Column("is_active", sa.Boolean(), nullable=False),
         sa.Column("is_staff", sa.Boolean(), nullable=False),
         sa.Column("is_superuser", sa.Boolean(), nullable=False),
+        sa.Column("email_verified", sa.Boolean(), nullable=False, server_default="false"),
+        sa.Column("oauth_provider", sa.String(length=50), nullable=True),
+        sa.Column("oauth_id", sa.String(length=255), nullable=True),
         sa.Column("date_joined", sa.DateTime(timezone=True), nullable=False),
         sa.Column("last_login", sa.DateTime(timezone=True), nullable=True),
         sa.Column("bio", sa.Text(), nullable=False),
-        sa.Column("search_visibility", sa.Enum("PUBLIC", "PRIVATE", name="searchvisibility"), nullable=False),
-        sa.Column("email_privacy", sa.Enum("PUBLIC", "PRIVATE", "NEVER", name="emailprivacy"), nullable=False),
+        sa.Column("search_visibility", sa.Enum("public", "private", name="searchvisibility"), nullable=False),
+        sa.Column("email_privacy", sa.Enum("public", "private", "never", name="emailprivacy"), nullable=False),
         sa.Column("public_profile", sa.Boolean(), nullable=False),
+        sa.Column("sa_orm_sentinel", sa.Integer(), nullable=True),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
         sa.Column("updated_at", sa.DateTime(timezone=True), nullable=False),
         sa.PrimaryKeyConstraint("id"),
@@ -44,12 +52,18 @@ def upgrade() -> None:
     )
     op.create_index(op.f("ix_users_username"), "users", ["username"], unique=False)
     op.create_index(op.f("ix_users_email"), "users", ["email"], unique=False)
+    op.create_index(op.f("ix_users_oauth_provider"), "users", ["oauth_provider"], unique=False)
+    op.create_index(op.f("ix_users_oauth_id"), "users", ["oauth_id"], unique=False)
 
     op.create_table(
         "memberships",
         sa.Column("id", sa.UUID(), nullable=False),
         sa.Column("user_id", sa.UUID(), nullable=False),
-        sa.Column("membership_type", sa.Enum("BASIC", "SUPPORTING", "SPONSOR", "MANAGING", "CONTRIBUTING", "FELLOW", name="membershiptype"), nullable=False),
+        sa.Column(
+            "membership_type",
+            sa.Enum("basic", "supporting", "sponsor", "managing", "contributing", "fellow", name="membershiptype"),
+            nullable=False,
+        ),
         sa.Column("legal_name", sa.String(length=255), nullable=False),
         sa.Column("preferred_name", sa.String(length=255), nullable=False),
         sa.Column("email_address", sa.String(length=254), nullable=False),
@@ -61,6 +75,7 @@ def upgrade() -> None:
         sa.Column("psf_announcements", sa.Boolean(), nullable=False),
         sa.Column("votes", sa.Boolean(), nullable=False),
         sa.Column("last_vote_affirmation", sa.Date(), nullable=True),
+        sa.Column("sa_orm_sentinel", sa.Integer(), nullable=True),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
         sa.Column("updated_at", sa.DateTime(timezone=True), nullable=False),
         sa.PrimaryKeyConstraint("id"),
@@ -74,10 +89,11 @@ def upgrade() -> None:
         sa.Column("name", sa.String(length=255), nullable=False),
         sa.Column("location", sa.String(length=255), nullable=False),
         sa.Column("url", sa.String(length=500), nullable=False),
-        sa.Column("url_type", sa.Enum("MEETUP", "DISTRIBUTION_LIST", "OTHER", name="usergrouptype"), nullable=False),
+        sa.Column("url_type", sa.Enum("meetup", "distribution_list", "other", name="usergrouptype"), nullable=False),
         sa.Column("start_date", sa.Date(), nullable=True),
         sa.Column("approved", sa.Boolean(), nullable=False),
         sa.Column("trusted", sa.Boolean(), nullable=False),
+        sa.Column("sa_orm_sentinel", sa.Integer(), nullable=True),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
         sa.Column("updated_at", sa.DateTime(timezone=True), nullable=False),
         sa.PrimaryKeyConstraint("id"),
@@ -91,13 +107,14 @@ def upgrade() -> None:
         sa.Column("description", sa.Text(), nullable=False),
         sa.Column("path", sa.String(length=500), nullable=False),
         sa.Column("content", sa.Text(), nullable=False),
-        sa.Column("content_type", sa.Enum("MARKDOWN", "RESTRUCTUREDTEXT", "HTML", name="contenttype"), nullable=False),
+        sa.Column("content_type", sa.Enum("markdown", "restructuredtext", "html", name="contenttype"), nullable=False),
         sa.Column("is_published", sa.Boolean(), nullable=False),
         sa.Column("template_name", sa.String(length=255), nullable=False),
         sa.Column("created", sa.DateTime(timezone=True), nullable=False),
         sa.Column("updated", sa.DateTime(timezone=True), nullable=False),
         sa.Column("creator_id", sa.UUID(), nullable=True),
         sa.Column("last_modified_by_id", sa.UUID(), nullable=True),
+        sa.Column("sa_orm_sentinel", sa.Integer(), nullable=True),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
         sa.Column("updated_at", sa.DateTime(timezone=True), nullable=False),
         sa.PrimaryKeyConstraint("id"),
@@ -114,6 +131,7 @@ def upgrade() -> None:
         sa.Column("id", sa.UUID(), nullable=False),
         sa.Column("page_id", sa.UUID(), nullable=False),
         sa.Column("image", sa.String(length=500), nullable=False),
+        sa.Column("sa_orm_sentinel", sa.Integer(), nullable=True),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
         sa.Column("updated_at", sa.DateTime(timezone=True), nullable=False),
         sa.PrimaryKeyConstraint("id"),
@@ -125,6 +143,7 @@ def upgrade() -> None:
         sa.Column("id", sa.UUID(), nullable=False),
         sa.Column("page_id", sa.UUID(), nullable=False),
         sa.Column("document", sa.String(length=500), nullable=False),
+        sa.Column("sa_orm_sentinel", sa.Integer(), nullable=True),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
         sa.Column("updated_at", sa.DateTime(timezone=True), nullable=False),
         sa.PrimaryKeyConstraint("id"),
@@ -140,6 +159,7 @@ def upgrade() -> None:
         sa.Column("updated", sa.DateTime(timezone=True), nullable=False),
         sa.Column("creator_id", sa.UUID(), nullable=True),
         sa.Column("last_modified_by_id", sa.UUID(), nullable=True),
+        sa.Column("sa_orm_sentinel", sa.Integer(), nullable=True),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
         sa.Column("updated_at", sa.DateTime(timezone=True), nullable=False),
         sa.PrimaryKeyConstraint("id"),
@@ -155,7 +175,7 @@ def upgrade() -> None:
         sa.Column("id", sa.UUID(), nullable=False),
         sa.Column("name", sa.String(length=200), nullable=False),
         sa.Column("slug", sa.String(length=200), nullable=False),
-        sa.Column("version", sa.Enum("1", "2", "3", "manager", name="pythonversion"), nullable=False),
+        sa.Column("version", sa.Enum("1", "2", "3", "manager", name="pythonversion"), nullable=False, server_default="3"),
         sa.Column("is_latest", sa.Boolean(), nullable=False),
         sa.Column("is_published", sa.Boolean(), nullable=False),
         sa.Column("pre_release", sa.Boolean(), nullable=False),
@@ -168,6 +188,7 @@ def upgrade() -> None:
         sa.Column("updated", sa.DateTime(timezone=True), nullable=False),
         sa.Column("creator_id", sa.UUID(), nullable=True),
         sa.Column("last_modified_by_id", sa.UUID(), nullable=True),
+        sa.Column("sa_orm_sentinel", sa.Integer(), nullable=True),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
         sa.Column("updated_at", sa.DateTime(timezone=True), nullable=False),
         sa.PrimaryKeyConstraint("id"),
@@ -203,6 +224,7 @@ def upgrade() -> None:
         sa.Column("updated", sa.DateTime(timezone=True), nullable=False),
         sa.Column("creator_id", sa.UUID(), nullable=True),
         sa.Column("last_modified_by_id", sa.UUID(), nullable=True),
+        sa.Column("sa_orm_sentinel", sa.Integer(), nullable=True),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
         sa.Column("updated_at", sa.DateTime(timezone=True), nullable=False),
         sa.PrimaryKeyConstraint("id"),
@@ -220,6 +242,7 @@ def upgrade() -> None:
         "sponsors",
         sa.Column("id", sa.UUID(), nullable=False),
         sa.Column("name", sa.String(length=200), nullable=False),
+        sa.Column("slug", sa.String(length=200), nullable=False),
         sa.Column("description", sa.Text(), nullable=False),
         sa.Column("landing_page_url", sa.String(length=500), nullable=False),
         sa.Column("twitter_handle", sa.String(length=100), nullable=False),
@@ -239,21 +262,43 @@ def upgrade() -> None:
         sa.Column("updated", sa.DateTime(timezone=True), nullable=False),
         sa.Column("creator_id", sa.UUID(), nullable=True),
         sa.Column("last_modified_by_id", sa.UUID(), nullable=True),
+        sa.Column("sa_orm_sentinel", sa.Integer(), nullable=True),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
         sa.Column("updated_at", sa.DateTime(timezone=True), nullable=False),
         sa.PrimaryKeyConstraint("id"),
         sa.ForeignKeyConstraint(["creator_id"], ["users.id"], ondelete="SET NULL"),
         sa.ForeignKeyConstraint(["last_modified_by_id"], ["users.id"], ondelete="SET NULL"),
-        sa.UniqueConstraint("name"),
+        sa.UniqueConstraint("slug"),
     )
+    op.create_index(op.f("ix_sponsors_slug"), "sponsors", ["slug"], unique=False)
     op.create_index(op.f("ix_sponsors_created"), "sponsors", ["created"], unique=False)
+
+    op.create_table(
+        "sponsorship_levels",
+        sa.Column("id", sa.UUID(), nullable=False),
+        sa.Column("name", sa.String(length=200), nullable=False),
+        sa.Column("slug", sa.String(length=200), nullable=False),
+        sa.Column("order", sa.Integer(), nullable=False, server_default="0"),
+        sa.Column("sponsorship_amount", sa.Integer(), nullable=False, server_default="0"),
+        sa.Column("logo_dimension", sa.Integer(), nullable=True),
+        sa.Column("sa_orm_sentinel", sa.Integer(), nullable=True),
+        sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
+        sa.Column("updated_at", sa.DateTime(timezone=True), nullable=False),
+        sa.PrimaryKeyConstraint("id"),
+        sa.UniqueConstraint("slug"),
+    )
+    op.create_index(op.f("ix_sponsorship_levels_order"), "sponsorship_levels", ["order"], unique=False)
+    op.create_index(op.f("ix_sponsorship_levels_slug"), "sponsorship_levels", ["slug"], unique=False)
 
     op.create_table(
         "sponsorships",
         sa.Column("id", sa.UUID(), nullable=False),
         sa.Column("sponsor_id", sa.UUID(), nullable=False),
+        sa.Column("level_id", sa.UUID(), nullable=False),
         sa.Column("submitted_by_id", sa.UUID(), nullable=True),
-        sa.Column("status", sa.Enum("APPLIED", "REJECTED", "APPROVED", "FINALIZED", name="sponsorshipstatus"), nullable=False),
+        sa.Column(
+            "status", sa.Enum("applied", "rejected", "approved", "finalized", name="sponsorshipstatus"), nullable=False
+        ),
         sa.Column("locked", sa.Boolean(), nullable=False),
         sa.Column("start_date", sa.Date(), nullable=True),
         sa.Column("end_date", sa.Date(), nullable=True),
@@ -269,10 +314,12 @@ def upgrade() -> None:
         sa.Column("updated", sa.DateTime(timezone=True), nullable=False),
         sa.Column("creator_id", sa.UUID(), nullable=True),
         sa.Column("last_modified_by_id", sa.UUID(), nullable=True),
+        sa.Column("sa_orm_sentinel", sa.Integer(), nullable=True),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
         sa.Column("updated_at", sa.DateTime(timezone=True), nullable=False),
         sa.PrimaryKeyConstraint("id"),
         sa.ForeignKeyConstraint(["sponsor_id"], ["sponsors.id"], ondelete="CASCADE"),
+        sa.ForeignKeyConstraint(["level_id"], ["sponsorship_levels.id"], ondelete="CASCADE"),
         sa.ForeignKeyConstraint(["submitted_by_id"], ["users.id"], ondelete="SET NULL"),
         sa.ForeignKeyConstraint(["creator_id"], ["users.id"], ondelete="SET NULL"),
         sa.ForeignKeyConstraint(["last_modified_by_id"], ["users.id"], ondelete="SET NULL"),
@@ -286,7 +333,12 @@ def downgrade() -> None:
     op.drop_index(op.f("ix_sponsorships_status"), table_name="sponsorships")
     op.drop_table("sponsorships")
 
+    op.drop_index(op.f("ix_sponsorship_levels_slug"), table_name="sponsorship_levels")
+    op.drop_index(op.f("ix_sponsorship_levels_order"), table_name="sponsorship_levels")
+    op.drop_table("sponsorship_levels")
+
     op.drop_index(op.f("ix_sponsors_created"), table_name="sponsors")
+    op.drop_index(op.f("ix_sponsors_slug"), table_name="sponsors")
     op.drop_table("sponsors")
 
     op.drop_index(op.f("ix_release_files_created"), table_name="release_files")
@@ -314,6 +366,8 @@ def downgrade() -> None:
     op.drop_table("user_groups")
     op.drop_table("memberships")
 
+    op.drop_index(op.f("ix_users_oauth_id"), table_name="users")
+    op.drop_index(op.f("ix_users_oauth_provider"), table_name="users")
     op.drop_index(op.f("ix_users_email"), table_name="users")
     op.drop_index(op.f("ix_users_username"), table_name="users")
     op.drop_table("users")
