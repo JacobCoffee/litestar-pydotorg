@@ -554,7 +554,11 @@ async def seed_blogs(session: AsyncSession) -> tuple[list[Feed], list[BlogEntry]
     entries = []
 
     feed_data = [
-        ("Python Insider", "https://pythoninsider.blogspot.com", "https://pythoninsider.blogspot.com/feeds/posts/default"),
+        (
+            "Python Insider",
+            "https://pythoninsider.blogspot.com",
+            "https://pythoninsider.blogspot.com/feeds/posts/default",
+        ),
         ("Real Python", "https://realpython.com", "https://realpython.com/atom.xml"),
         ("Planet Python", "https://planetpython.org", "https://planetpython.org/rss20.xml"),
     ]
@@ -630,7 +634,7 @@ async def seed_events(session: AsyncSession, users: list[User]) -> list[Event]:
             title=title,
             description=description,
             calendar_id=calendar.id,
-            venue_id=location.id if i == 2 else None,
+            venue_id=location.id if i == 2 else None,  # noqa: PLR2004
             featured=i == 0,
             creator_id=users[0].id,
         )
@@ -739,7 +743,7 @@ async def seed_elections(session: AsyncSession, users: list[User]) -> list[Elect
         nominee = Nominee(
             election_id=election.id,
             user_id=user.id,
-            accepted=i < 2,
+            accepted=i < 2,  # noqa: PLR2004
         )
         session.add(nominee)
         await session.flush()
@@ -823,7 +827,11 @@ async def seed_code_samples(session: AsyncSession, users: list[User]) -> list[Co
 
     sample_data = [
         ("hello-world", "print('Hello, World!')", "The classic Hello World program"),
-        ("fibonacci", "def fib(n):\n    a, b = 0, 1\n    for _ in range(n):\n        a, b = b, a + b\n    return a", "Calculate Fibonacci numbers"),
+        (
+            "fibonacci",
+            "def fib(n):\n    a, b = 0, 1\n    for _ in range(n):\n        a, b = b, a + b\n    return a",
+            "Calculate Fibonacci numbers",
+        ),
         ("list-comprehension", "squares = [x**2 for x in range(10)]", "Example of list comprehension"),
     ]
 

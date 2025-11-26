@@ -2,13 +2,15 @@
 
 from __future__ import annotations
 
-import datetime
-from typing import Annotated
-from uuid import UUID
+from typing import TYPE_CHECKING, Annotated
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from pydotorg.domains.nominations.models import ElectionStatus
+if TYPE_CHECKING:
+    import datetime
+    from uuid import UUID
+
+    from pydotorg.domains.nominations.models import ElectionStatus
 
 
 class ElectionBase(BaseModel):

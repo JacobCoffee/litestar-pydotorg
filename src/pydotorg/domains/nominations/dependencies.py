@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from sqlalchemy.ext.asyncio import AsyncSession
+from typing import TYPE_CHECKING
 
 from pydotorg.domains.nominations.repositories import (
     ElectionRepository,
@@ -14,6 +14,9 @@ from pydotorg.domains.nominations.services import (
     NominationService,
     NomineeService,
 )
+
+if TYPE_CHECKING:
+    from sqlalchemy.ext.asyncio import AsyncSession
 
 
 async def provide_election_repository(db_session: AsyncSession) -> ElectionRepository:

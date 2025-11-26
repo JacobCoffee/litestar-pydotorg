@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
-from sqlalchemy.ext.asyncio import AsyncSession
+from typing import TYPE_CHECKING
 
 from pydotorg.domains.minutes.repositories import MinutesRepository
 from pydotorg.domains.minutes.services import MinutesService
+
+if TYPE_CHECKING:
+    from sqlalchemy.ext.asyncio import AsyncSession
 
 
 async def provide_minutes_repository(db_session: AsyncSession) -> MinutesRepository:

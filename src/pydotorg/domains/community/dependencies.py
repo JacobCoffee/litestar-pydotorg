@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
-from sqlalchemy.ext.asyncio import AsyncSession
+from typing import TYPE_CHECKING
 
 from pydotorg.domains.community.repositories import LinkRepository, PhotoRepository, PostRepository, VideoRepository
 from pydotorg.domains.community.services import LinkService, PhotoService, PostService, VideoService
+
+if TYPE_CHECKING:
+    from sqlalchemy.ext.asyncio import AsyncSession
 
 
 async def provide_post_repository(db_session: AsyncSession) -> PostRepository:

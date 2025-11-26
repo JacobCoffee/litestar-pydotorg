@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
-import datetime
-from typing import Annotated
-from uuid import UUID
+from typing import TYPE_CHECKING, Annotated
 
 from pydantic import BaseModel, ConfigDict, Field
+
+if TYPE_CHECKING:
+    import datetime
+    from uuid import UUID
 
 
 class FeedBase(BaseModel):

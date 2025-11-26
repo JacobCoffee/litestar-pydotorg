@@ -2,12 +2,15 @@
 
 from __future__ import annotations
 
-import datetime
-from uuid import UUID
+from typing import TYPE_CHECKING
 
 from pydantic import BaseModel, ConfigDict
 
 from pydotorg.domains.pages.models import ContentType
+
+if TYPE_CHECKING:
+    import datetime
+    from uuid import UUID
 
 
 class MinutesBase(BaseModel):

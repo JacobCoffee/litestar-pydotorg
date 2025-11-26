@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
-from sqlalchemy.ext.asyncio import AsyncSession
+from typing import TYPE_CHECKING
 
 from pydotorg.domains.users.repositories import MembershipRepository, UserGroupRepository, UserRepository
 from pydotorg.domains.users.services import MembershipService, UserGroupService, UserService
+
+if TYPE_CHECKING:
+    from sqlalchemy.ext.asyncio import AsyncSession
 
 
 async def provide_user_repository(db_session: AsyncSession) -> UserRepository:

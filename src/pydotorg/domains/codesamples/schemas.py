@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
-import datetime
-from uuid import UUID
+from typing import TYPE_CHECKING
 
 from pydantic import BaseModel, ConfigDict
+
+if TYPE_CHECKING:
+    import datetime
+    from uuid import UUID
 
 
 class CodeSampleBase(BaseModel):

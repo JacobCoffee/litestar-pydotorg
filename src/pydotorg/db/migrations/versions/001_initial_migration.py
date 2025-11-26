@@ -175,7 +175,9 @@ def upgrade() -> None:
         sa.Column("id", sa.UUID(), nullable=False),
         sa.Column("name", sa.String(length=200), nullable=False),
         sa.Column("slug", sa.String(length=200), nullable=False),
-        sa.Column("version", sa.Enum("1", "2", "3", "manager", name="pythonversion"), nullable=False, server_default="3"),
+        sa.Column(
+            "version", sa.Enum("1", "2", "3", "manager", name="pythonversion"), nullable=False, server_default="3"
+        ),
         sa.Column("is_latest", sa.Boolean(), nullable=False),
         sa.Column("is_published", sa.Boolean(), nullable=False),
         sa.Column("pre_release", sa.Boolean(), nullable=False),

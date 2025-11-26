@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
-from sqlalchemy.ext.asyncio import AsyncSession
+from typing import TYPE_CHECKING
 
 from pydotorg.domains.work_groups.repositories import WorkGroupRepository
 from pydotorg.domains.work_groups.services import WorkGroupService
+
+if TYPE_CHECKING:
+    from sqlalchemy.ext.asyncio import AsyncSession
 
 
 async def provide_work_group_repository(db_session: AsyncSession) -> WorkGroupRepository:

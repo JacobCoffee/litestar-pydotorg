@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from sqlalchemy.ext.asyncio import AsyncSession
+from typing import TYPE_CHECKING
 
 from pydotorg.domains.events.repositories import (
     CalendarRepository,
@@ -18,6 +18,9 @@ from pydotorg.domains.events.services import (
     EventOccurrenceService,
     EventService,
 )
+
+if TYPE_CHECKING:
+    from sqlalchemy.ext.asyncio import AsyncSession
 
 
 async def provide_calendar_repository(db_session: AsyncSession) -> CalendarRepository:

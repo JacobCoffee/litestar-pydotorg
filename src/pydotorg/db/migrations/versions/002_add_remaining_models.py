@@ -22,7 +22,7 @@ branch_labels: Sequence[str] | None = None
 depends_on: Sequence[str] | None = None
 
 
-def upgrade() -> None:
+def upgrade() -> None:  # noqa: PLR0915
     # ==================== BLOGS ====================
     op.create_table(
         "feeds",
@@ -280,7 +280,11 @@ def upgrade() -> None:
         sa.Column("slug", sa.String(length=200), nullable=False),
         sa.Column("date", sa.Date(), nullable=False),
         sa.Column("content", sa.Text(), nullable=False),
-        sa.Column("content_type", sa.Enum("markdown", "restructuredtext", "html", name="contenttype", create_type=False), nullable=False),
+        sa.Column(
+            "content_type",
+            sa.Enum("markdown", "restructuredtext", "html", name="contenttype", create_type=False),
+            nullable=False,
+        ),
         sa.Column("is_published", sa.Boolean(), nullable=False, server_default="false"),
         sa.Column("creator_id", sa.UUID(), nullable=False),
         sa.Column("sa_orm_sentinel", sa.Integer(), nullable=True),
@@ -367,7 +371,11 @@ def upgrade() -> None:
         sa.Column("company_url", sa.String(length=500), nullable=True),
         sa.Column("category_id", sa.UUID(), nullable=False),
         sa.Column("content", sa.Text(), nullable=False),
-        sa.Column("content_type", sa.Enum("markdown", "restructuredtext", "html", name="contenttype", create_type=False), nullable=False),
+        sa.Column(
+            "content_type",
+            sa.Enum("markdown", "restructuredtext", "html", name="contenttype", create_type=False),
+            nullable=False,
+        ),
         sa.Column("is_published", sa.Boolean(), nullable=False, server_default="false"),
         sa.Column("featured", sa.Boolean(), nullable=False, server_default="false"),
         sa.Column("image", sa.String(length=500), nullable=True),
@@ -430,7 +438,11 @@ def upgrade() -> None:
         sa.Column("slug", sa.String(length=200), nullable=False),
         sa.Column("title", sa.String(length=500), nullable=False),
         sa.Column("content", sa.Text(), nullable=False),
-        sa.Column("content_type", sa.Enum("markdown", "restructuredtext", "html", name="contenttype", create_type=False), nullable=False),
+        sa.Column(
+            "content_type",
+            sa.Enum("markdown", "restructuredtext", "html", name="contenttype", create_type=False),
+            nullable=False,
+        ),
         sa.Column("creator_id", sa.UUID(), nullable=False),
         sa.Column("is_published", sa.Boolean(), nullable=False, server_default="false"),
         sa.Column("sa_orm_sentinel", sa.Integer(), nullable=True),
@@ -503,7 +515,7 @@ def upgrade() -> None:
     op.create_index(op.f("ix_banners_end_date"), "banners", ["end_date"], unique=False)
 
 
-def downgrade() -> None:
+def downgrade() -> None:  # noqa: PLR0915
     # ==================== BANNERS ====================
     op.drop_index(op.f("ix_banners_end_date"), table_name="banners")
     op.drop_index(op.f("ix_banners_start_date"), table_name="banners")

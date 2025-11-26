@@ -2,13 +2,15 @@
 
 from __future__ import annotations
 
-import datetime
-from typing import Annotated
-from uuid import UUID
+from typing import TYPE_CHECKING, Annotated
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
 
 from pydotorg.domains.users.models import EmailPrivacy, MembershipType, SearchVisibility, UserGroupType
+
+if TYPE_CHECKING:
+    import datetime
+    from uuid import UUID
 
 MIN_PASSWORD_LENGTH = 8
 

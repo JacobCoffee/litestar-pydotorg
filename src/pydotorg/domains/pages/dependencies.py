@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
-from sqlalchemy.ext.asyncio import AsyncSession
+from typing import TYPE_CHECKING
 
 from pydotorg.domains.pages.repositories import DocumentFileRepository, ImageRepository, PageRepository
 from pydotorg.domains.pages.services import DocumentFileService, ImageService, PageService
+
+if TYPE_CHECKING:
+    from sqlalchemy.ext.asyncio import AsyncSession
 
 
 async def provide_page_repository(db_session: AsyncSession) -> PageRepository:

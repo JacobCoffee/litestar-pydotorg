@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
-from sqlalchemy.ext.asyncio import AsyncSession
+from typing import TYPE_CHECKING
 
 from pydotorg.domains.downloads.repositories import OSRepository, ReleaseFileRepository, ReleaseRepository
 from pydotorg.domains.downloads.services import OSService, ReleaseFileService, ReleaseService
+
+if TYPE_CHECKING:
+    from sqlalchemy.ext.asyncio import AsyncSession
 
 
 async def provide_os_repository(db_session: AsyncSession) -> OSRepository:

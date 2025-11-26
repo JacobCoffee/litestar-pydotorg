@@ -2,13 +2,15 @@
 
 from __future__ import annotations
 
-import datetime
-from typing import Annotated
-from uuid import UUID
+from typing import TYPE_CHECKING, Annotated
 
 from pydantic import BaseModel, ConfigDict, Field
 
 from pydotorg.domains.pages.models import ContentType
+
+if TYPE_CHECKING:
+    import datetime
+    from uuid import UUID
 
 
 class StoryCategoryBase(BaseModel):

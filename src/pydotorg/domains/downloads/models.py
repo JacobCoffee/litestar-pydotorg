@@ -2,10 +2,10 @@
 
 from __future__ import annotations
 
-import datetime  # noqa: TC003 - needed for SQLAlchemy column type
+import datetime
 from enum import StrEnum
 from typing import TYPE_CHECKING
-from uuid import UUID  # noqa: TC003 - needed for SQLAlchemy column type
+from uuid import UUID
 
 from sqlalchemy import BigInteger, Boolean, Date, Enum, ForeignKey, String, Text, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship

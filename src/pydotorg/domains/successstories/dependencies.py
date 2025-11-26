@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
-from sqlalchemy.ext.asyncio import AsyncSession
+from typing import TYPE_CHECKING
 
 from pydotorg.domains.successstories.repositories import StoryCategoryRepository, StoryRepository
 from pydotorg.domains.successstories.services import StoryCategoryService, StoryService
+
+if TYPE_CHECKING:
+    from sqlalchemy.ext.asyncio import AsyncSession
 
 
 async def provide_story_category_repository(db_session: AsyncSession) -> StoryCategoryRepository:

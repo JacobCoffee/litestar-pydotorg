@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from sqlalchemy.ext.asyncio import AsyncSession
+from typing import TYPE_CHECKING
 
 from pydotorg.domains.jobs.repositories import (
     JobCategoryRepository,
@@ -16,6 +16,9 @@ from pydotorg.domains.jobs.services import (
     JobService,
     JobTypeService,
 )
+
+if TYPE_CHECKING:
+    from sqlalchemy.ext.asyncio import AsyncSession
 
 
 async def provide_job_type_repository(db_session: AsyncSession) -> JobTypeRepository:

@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
-from sqlalchemy.ext.asyncio import AsyncSession
+from typing import TYPE_CHECKING
 
 from pydotorg.domains.codesamples.repositories import CodeSampleRepository
 from pydotorg.domains.codesamples.services import CodeSampleService
+
+if TYPE_CHECKING:
+    from sqlalchemy.ext.asyncio import AsyncSession
 
 
 async def provide_code_sample_repository(db_session: AsyncSession) -> CodeSampleRepository:

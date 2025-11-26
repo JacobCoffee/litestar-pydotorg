@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
-from sqlalchemy.ext.asyncio import AsyncSession
+from typing import TYPE_CHECKING
 
 from pydotorg.domains.banners.repositories import BannerRepository
 from pydotorg.domains.banners.services import BannerService
+
+if TYPE_CHECKING:
+    from sqlalchemy.ext.asyncio import AsyncSession
 
 
 async def provide_banner_repository(db_session: AsyncSession) -> BannerRepository:

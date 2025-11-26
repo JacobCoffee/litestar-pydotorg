@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
-from datetime import datetime
-from uuid import UUID
+from typing import TYPE_CHECKING
 
 from pydantic import BaseModel, EmailStr, Field
+
+if TYPE_CHECKING:
+    from datetime import datetime
+    from uuid import UUID
 
 
 class LoginRequest(BaseModel):
