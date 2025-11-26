@@ -1,0 +1,19 @@
+{% extends 'base.html.jinja2' %}
+
+{% block title %}{{ title | default('Access Denied') }} - {{ site_name }}{% endblock %}
+
+{% block content %}
+<div class="min-h-[60vh] flex items-center justify-center">
+  <div class="text-center max-w-md mx-auto px-4">
+    <div class="text-9xl font-bold text-primary opacity-20 mb-4">403</div>
+    <h1 class="text-3xl font-bold mb-4">{{ title | default('Access Denied') }}</h1>
+    <p class="text-base-content/70 mb-8">
+      {{ message | default('You do not have permission to access this page.') }}
+    </p>
+    <div class="flex gap-4 justify-center">
+      <a href="/" class="btn btn-primary">Go Home</a>
+      <a href="/auth/login" class="btn btn-outline">Sign In</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
