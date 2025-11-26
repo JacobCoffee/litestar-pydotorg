@@ -1,12 +1,16 @@
-"""Minutes domain API controllers."""
+"""Minutes domain API and page controllers."""
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Annotated
+import datetime
+from typing import Annotated
+from uuid import UUID
 
+from advanced_alchemy.filters import LimitOffset
 from litestar import Controller, delete, get, post, put
 from litestar.exceptions import NotFoundException
 from litestar.params import Parameter
+from litestar.response import Template
 
 from pydotorg.domains.minutes.schemas import (
     MinutesCreate,
@@ -14,14 +18,7 @@ from pydotorg.domains.minutes.schemas import (
     MinutesRead,
     MinutesUpdate,
 )
-
-if TYPE_CHECKING:
-    import datetime
-    from uuid import UUID
-
-    from advanced_alchemy.filters import LimitOffset
-
-    from pydotorg.domains.minutes.services import MinutesService
+from pydotorg.domains.minutes.services import MinutesService
 
 
 class MinutesController(Controller):
@@ -115,3 +112,44 @@ class MinutesController(Controller):
     ) -> None:
         """Delete minutes."""
         await minutes_service.delete(minutes_id)
+
+
+class MinutesPageController(Controller):
+    """Controller for minutes HTML pages."""
+
+    path = "/psf/records/board/minutes"
+
+    @get("/")
+    async def minutes_index(
+        self,
+        minutes_service: MinutesService,
+    ) -> Template:
+        """Render the PSF board minutes index page."""
+        minutes_list = await minutes_service.get_published_minutes(limit=100)
+
+        return Template(
+            template_name="minutes/index.html.jinja2",
+            context={
+                "minutes_list": minutes_list,
+                "page_title": "PSF Board Meeting Minutes",
+            },
+        )
+
+    @get("/{slug:str}/")
+    async def minutes_detail(
+        self,
+        minutes_service: MinutesService,
+        slug: str,
+    ) -> Template:
+        """Render the minutes detail page."""
+        minutes = await minutes_service.get_by_slug(slug)
+        if not minutes:
+            raise NotFoundException(f"Minutes with slug {slug} not found")
+
+        return Template(
+            template_name="minutes/detail.html.jinja2",
+            context={
+                "minutes": minutes,
+                "page_title": f"Minutes - {minutes.date}",
+            },
+        )

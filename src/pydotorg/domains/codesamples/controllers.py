@@ -1,12 +1,15 @@
-"""Code Samples domain API controllers."""
+"""Code Samples domain API and page controllers."""
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Annotated
+from typing import Annotated
+from uuid import UUID
 
+from advanced_alchemy.filters import LimitOffset
 from litestar import Controller, delete, get, post, put
 from litestar.exceptions import NotFoundException
 from litestar.params import Parameter
+from litestar.response import Template
 
 from pydotorg.domains.codesamples.schemas import (
     CodeSampleCreate,
@@ -14,13 +17,7 @@ from pydotorg.domains.codesamples.schemas import (
     CodeSampleRead,
     CodeSampleUpdate,
 )
-
-if TYPE_CHECKING:
-    from uuid import UUID
-
-    from advanced_alchemy.filters import LimitOffset
-
-    from pydotorg.domains.codesamples.services import CodeSampleService
+from pydotorg.domains.codesamples.services import CodeSampleService
 
 
 class CodeSampleController(Controller):
@@ -102,3 +99,44 @@ class CodeSampleController(Controller):
     ) -> None:
         """Delete a code sample."""
         await code_sample_service.delete(sample_id)
+
+
+class CodeSamplesPageController(Controller):
+    """Controller for code samples HTML pages."""
+
+    path = "/code-samples"
+
+    @get("/")
+    async def code_samples_index(
+        self,
+        code_sample_service: CodeSampleService,
+    ) -> Template:
+        """Render the code samples index page."""
+        samples = await code_sample_service.get_published_samples(limit=50)
+
+        return Template(
+            template_name="codesamples/index.html.jinja2",
+            context={
+                "samples": samples,
+                "page_title": "Python Code Samples",
+            },
+        )
+
+    @get("/{slug:str}/")
+    async def code_sample_detail(
+        self,
+        code_sample_service: CodeSampleService,
+        slug: str,
+    ) -> Template:
+        """Render the code sample detail page."""
+        sample = await code_sample_service.get_by_slug(slug)
+        if not sample:
+            raise NotFoundException(f"Code sample with slug {slug} not found")
+
+        return Template(
+            template_name="codesamples/detail.html.jinja2",
+            context={
+                "sample": sample,
+                "page_title": sample.title,
+            },
+        )

@@ -1,6 +1,10 @@
 """Success Stories domain."""
 
-from pydotorg.domains.successstories.controllers import StoryCategoryController, StoryController
+from pydotorg.domains.successstories.controllers import (
+    StoryCategoryController,
+    StoryController,
+    SuccessStoriesPageController,
+)
 from pydotorg.domains.successstories.dependencies import get_successstories_dependencies
 from pydotorg.domains.successstories.models import Story, StoryCategory
 from pydotorg.domains.successstories.repositories import StoryCategoryRepository, StoryRepository
@@ -33,5 +37,6 @@ __all__ = [
     "StoryService",
     "StoryUpdate",
     "StoryWithCategory",
+    "SuccessStoriesPageController",
     "get_successstories_dependencies",
 ]

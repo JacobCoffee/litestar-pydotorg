@@ -1,6 +1,6 @@
 """Minutes domain."""
 
-from pydotorg.domains.minutes.controllers import MinutesController
+from pydotorg.domains.minutes.controllers import MinutesController, MinutesPageController
 from pydotorg.domains.minutes.dependencies import get_minutes_dependencies
 from pydotorg.domains.minutes.models import Minutes
 from pydotorg.domains.minutes.repositories import MinutesRepository
@@ -17,6 +17,7 @@ __all__ = [
     "MinutesController",
     "MinutesCreate",
     "MinutesList",
+    "MinutesPageController",
     "MinutesRead",
     "MinutesRepository",
     "MinutesService",

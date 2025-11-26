@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 from typing import Annotated
+from uuid import UUID
 
+from advanced_alchemy.filters import LimitOffset
 from litestar import Controller, delete, get, post, put
 from litestar.exceptions import NotFoundException
 from litestar.params import Parameter
@@ -27,10 +29,6 @@ from pydotorg.domains.blogs.schemas import (
     RelatedBlogRead,
     RelatedBlogUpdate,
 )
-
-from uuid import UUID
-
-from advanced_alchemy.filters import LimitOffset
 from pydotorg.domains.blogs.services import BlogEntryService, FeedAggregateService, FeedService, RelatedBlogService
 
 

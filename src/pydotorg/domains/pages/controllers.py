@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 from typing import Annotated
+from uuid import UUID
 
+from advanced_alchemy.filters import LimitOffset
 from litestar import Controller, delete, get, patch, post, put
 from litestar.exceptions import NotFoundException
 from litestar.params import Parameter
@@ -19,10 +21,6 @@ from pydotorg.domains.pages.schemas import (
     PageRead,
     PageUpdate,
 )
-
-from uuid import UUID
-
-from advanced_alchemy.filters import LimitOffset
 from pydotorg.domains.pages.services import DocumentFileService, ImageService, PageService
 
 
@@ -37,21 +35,10 @@ class PageController(Controller):
         self,
         page_service: PageService,
         limit_offset: LimitOffset,
-    ) -> list[PageRead]:
-        """List all pages with pagination."""
-        pages, _total = await page_service.list_and_count(limit_offset)
-        return [PageRead.model_validate(page) for page in pages]
-
-    @get("/published")
-    async def list_published_pages(
-        self,
-        page_service: PageService,
-        limit: Annotated[int, Parameter(ge=1, le=1000)] = 100,
-        offset: Annotated[int, Parameter(ge=0)] = 0,
     ) -> list[PagePublic]:
-        """List published pages."""
-        pages = await page_service.list_published(limit=limit, offset=offset)
-        return [PagePublic.model_validate(page) for page in pages]
+        """List all pages."""
+        results, _total = await page_service.list_and_count(limit_offset)
+        return [PagePublic.model_validate(page) for page in results]
 
     @get("/{page_id:uuid}")
     async def get_page(
@@ -63,22 +50,16 @@ class PageController(Controller):
         page = await page_service.get(page_id)
         return PageRead.model_validate(page)
 
-    @post("/path")
+    @get("/by-path/{page_path:path}")
     async def get_page_by_path(
         self,
         page_service: PageService,
-        data: dict[str, str],
+        page_path: Annotated[str, Parameter(title="Page Path", description="The page path")],
     ) -> PagePublic:
         """Get a page by path."""
-        path = data.get("path")
-        if not path:
-            msg = "Path is required"
-            raise ValueError(msg)
-
-        page = await page_service.get_by_path(path)
-        if not page:
-            msg = f"Page with path {path} not found"
-            raise NotFoundException(msg)
+        page = await page_service.get_one_or_none(path=f"/{page_path}")
+        if page is None:
+            raise NotFoundException(f"Page not found: /{page_path}")
         return PagePublic.model_validate(page)
 
     @post("/")
@@ -88,7 +69,7 @@ class PageController(Controller):
         data: PageCreate,
     ) -> PageRead:
         """Create a new page."""
-        page = await page_service.create_page(data)
+        page = await page_service.create(data.model_dump(exclude_unset=True))
         return PageRead.model_validate(page)
 
     @put("/{page_id:uuid}")
@@ -99,8 +80,7 @@ class PageController(Controller):
         page_id: Annotated[UUID, Parameter(title="Page ID", description="The page ID")],
     ) -> PageRead:
         """Update a page."""
-        update_data = data.model_dump(exclude_unset=True)
-        page = await page_service.update(page_id, update_data)
+        page = await page_service.update(data.model_dump(exclude_unset=True), item_id=page_id)
         return PageRead.model_validate(page)
 
     @patch("/{page_id:uuid}/publish")
@@ -110,7 +90,7 @@ class PageController(Controller):
         page_id: Annotated[UUID, Parameter(title="Page ID", description="The page ID")],
     ) -> PageRead:
         """Publish a page."""
-        page = await page_service.publish(page_id)
+        page = await page_service.update({"is_published": True}, item_id=page_id)
         return PageRead.model_validate(page)
 
     @patch("/{page_id:uuid}/unpublish")
@@ -120,7 +100,7 @@ class PageController(Controller):
         page_id: Annotated[UUID, Parameter(title="Page ID", description="The page ID")],
     ) -> PageRead:
         """Unpublish a page."""
-        page = await page_service.unpublish(page_id)
+        page = await page_service.update({"is_published": False}, item_id=page_id)
         return PageRead.model_validate(page)
 
     @delete("/{page_id:uuid}")
@@ -133,59 +113,23 @@ class PageController(Controller):
         await page_service.delete(page_id)
 
 
-class PageRenderController(Controller):
-    """Controller for rendering pages as HTML."""
-
-    path = ""
-    tags = ["pages-render"]
-
-    @get("/{path:path}")
-    async def render_page(
-        self,
-        page_service: PageService,
-        path: Annotated[str, Parameter(title="Page Path", description="The page URL path")],
-    ) -> Template:
-        """Render a page as HTML."""
-        page_path = f"/{path}/"
-        page = await page_service.get_by_path(page_path)
-
-        if not page or not page.is_published:
-            msg = "Page not found"
-            raise NotFoundException(msg)
-
-        rendered_content = await page_service.render_content(page)
-
-        return Template(
-            template_name=page.template_name,
-            context={
-                "page": page,
-                "content": rendered_content,
-                "title": page.title,
-                "description": page.description,
-                "keywords": page.keywords,
-            },
-        )
-
-
 class ImageController(Controller):
     """Controller for Image CRUD operations."""
 
-    path = "/api/v1"
+    path = "/api/v1/images"
     tags = ["images"]
 
-    @get("/pages/{page_id:uuid}/images")
-    async def list_page_images(
+    @get("/")
+    async def list_images(
         self,
         image_service: ImageService,
-        page_id: Annotated[UUID, Parameter(title="Page ID", description="The page ID")],
-        limit: Annotated[int, Parameter(ge=1, le=1000)] = 100,
-        offset: Annotated[int, Parameter(ge=0)] = 0,
+        limit_offset: LimitOffset,
     ) -> list[ImageRead]:
-        """List images for a specific page."""
-        images = await image_service.list_by_page_id(page_id, limit=limit, offset=offset)
-        return [ImageRead.model_validate(image) for image in images]
+        """List all images."""
+        results, _total = await image_service.list_and_count(limit_offset)
+        return [ImageRead.model_validate(image) for image in results]
 
-    @get("/images/{image_id:uuid}")
+    @get("/{image_id:uuid}")
     async def get_image(
         self,
         image_service: ImageService,
@@ -195,19 +139,17 @@ class ImageController(Controller):
         image = await image_service.get(image_id)
         return ImageRead.model_validate(image)
 
-    @post("/pages/{page_id:uuid}/images")
+    @post("/")
     async def create_image(
         self,
         image_service: ImageService,
         data: ImageCreate,
-        page_id: Annotated[UUID, Parameter(title="Page ID", description="The page ID")],
     ) -> ImageRead:
-        """Create a new image for a page."""
-        data.page_id = page_id
-        image = await image_service.create_image(data)
+        """Create a new image."""
+        image = await image_service.create(data.model_dump(exclude_unset=True))
         return ImageRead.model_validate(image)
 
-    @delete("/images/{image_id:uuid}")
+    @delete("/{image_id:uuid}")
     async def delete_image(
         self,
         image_service: ImageService,
@@ -218,50 +160,71 @@ class ImageController(Controller):
 
 
 class DocumentFileController(Controller):
-    """Controller for DocumentFile CRUD operations."""
+    """Controller for Document File CRUD operations."""
 
-    path = "/api/v1"
+    path = "/api/v1/documents"
     tags = ["documents"]
 
-    @get("/pages/{page_id:uuid}/documents")
-    async def list_page_documents(
+    @get("/")
+    async def list_documents(
         self,
-        document_file_service: DocumentFileService,
-        page_id: Annotated[UUID, Parameter(title="Page ID", description="The page ID")],
-        limit: Annotated[int, Parameter(ge=1, le=1000)] = 100,
-        offset: Annotated[int, Parameter(ge=0)] = 0,
+        document_service: DocumentFileService,
+        limit_offset: LimitOffset,
     ) -> list[DocumentFileRead]:
-        """List document files for a specific page."""
-        documents = await document_file_service.list_by_page_id(page_id, limit=limit, offset=offset)
-        return [DocumentFileRead.model_validate(doc) for doc in documents]
+        """List all documents."""
+        results, _total = await document_service.list_and_count(limit_offset)
+        return [DocumentFileRead.model_validate(doc) for doc in results]
 
-    @get("/documents/{document_id:uuid}")
+    @get("/{document_id:uuid}")
     async def get_document(
         self,
-        document_file_service: DocumentFileService,
+        document_service: DocumentFileService,
         document_id: Annotated[UUID, Parameter(title="Document ID", description="The document ID")],
     ) -> DocumentFileRead:
-        """Get a document file by ID."""
-        document = await document_file_service.get(document_id)
+        """Get a document by ID."""
+        document = await document_service.get(document_id)
         return DocumentFileRead.model_validate(document)
 
-    @post("/pages/{page_id:uuid}/documents")
+    @post("/")
     async def create_document(
         self,
-        document_file_service: DocumentFileService,
+        document_service: DocumentFileService,
         data: DocumentFileCreate,
-        page_id: Annotated[UUID, Parameter(title="Page ID", description="The page ID")],
     ) -> DocumentFileRead:
-        """Create a new document file for a page."""
-        data.page_id = page_id
-        document = await document_file_service.create_document(data)
+        """Create a new document."""
+        document = await document_service.create(data.model_dump(exclude_unset=True))
         return DocumentFileRead.model_validate(document)
 
-    @delete("/documents/{document_id:uuid}")
+    @delete("/{document_id:uuid}")
     async def delete_document(
         self,
-        document_file_service: DocumentFileService,
+        document_service: DocumentFileService,
         document_id: Annotated[UUID, Parameter(title="Document ID", description="The document ID")],
     ) -> None:
-        """Delete a document file."""
-        await document_file_service.delete(document_id)
+        """Delete a document."""
+        await document_service.delete(document_id)
+
+
+class PageRenderController(Controller):
+    """Controller for rendering page templates."""
+
+    path = "/{page_path:path}"
+    tags = ["page-render"]
+    include_in_schema = False
+
+    @get("/")
+    async def render_page(
+        self,
+        page_service: PageService,
+        page_path: str,
+    ) -> Template:
+        """Render a page template by path."""
+        path = f"/{page_path}" if page_path else "/"
+        page = await page_service.get_one_or_none(path=path, is_published=True)
+        if page is None:
+            raise NotFoundException(f"Page not found: {path}")
+
+        return Template(
+            template_name=page.template_name or "pages/default.html.jinja2",
+            context={"page": page},
+        )

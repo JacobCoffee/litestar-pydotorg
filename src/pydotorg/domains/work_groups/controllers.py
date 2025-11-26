@@ -1,12 +1,15 @@
-"""Work Groups domain API controllers."""
+"""Work Groups domain API and page controllers."""
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Annotated
+from typing import Annotated
+from uuid import UUID
 
+from advanced_alchemy.filters import LimitOffset
 from litestar import Controller, delete, get, post, put
 from litestar.exceptions import NotFoundException
 from litestar.params import Parameter
+from litestar.response import Template
 
 from pydotorg.domains.work_groups.schemas import (
     WorkGroupCreate,
@@ -14,13 +17,7 @@ from pydotorg.domains.work_groups.schemas import (
     WorkGroupRead,
     WorkGroupUpdate,
 )
-
-if TYPE_CHECKING:
-    from uuid import UUID
-
-    from advanced_alchemy.filters import LimitOffset
-
-    from pydotorg.domains.work_groups.services import WorkGroupService
+from pydotorg.domains.work_groups.services import WorkGroupService
 
 
 class WorkGroupController(Controller):
@@ -102,3 +99,44 @@ class WorkGroupController(Controller):
     ) -> None:
         """Delete a work group."""
         await work_group_service.delete(work_group_id)
+
+
+class WorkGroupsPageController(Controller):
+    """Controller for work groups HTML pages."""
+
+    path = "/psf/workgroups"
+
+    @get("/")
+    async def work_groups_index(
+        self,
+        work_group_service: WorkGroupService,
+    ) -> Template:
+        """Render the work groups index page."""
+        active_groups = await work_group_service.get_active_work_groups(limit=100)
+
+        return Template(
+            template_name="work_groups/index.html.jinja2",
+            context={
+                "work_groups": active_groups,
+                "page_title": "PSF Work Groups",
+            },
+        )
+
+    @get("/{slug:str}/")
+    async def work_group_detail(
+        self,
+        work_group_service: WorkGroupService,
+        slug: str,
+    ) -> Template:
+        """Render the work group detail page."""
+        work_group = await work_group_service.get_by_slug(slug)
+        if not work_group:
+            raise NotFoundException(f"Work group with slug {slug} not found")
+
+        return Template(
+            template_name="work_groups/detail.html.jinja2",
+            context={
+                "work_group": work_group,
+                "page_title": work_group.name,
+            },
+        )

@@ -1,11 +1,15 @@
-"""Community domain API controllers."""
+"""Community domain API and page controllers."""
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Annotated
+from typing import Annotated
+from uuid import UUID
 
+from advanced_alchemy.filters import LimitOffset
 from litestar import Controller, delete, get, post, put
+from litestar.exceptions import NotFoundException
 from litestar.params import Parameter
+from litestar.response import Template
 
 from pydotorg.domains.community.schemas import (
     LinkCreate,
@@ -23,13 +27,7 @@ from pydotorg.domains.community.schemas import (
     VideoRead,
     VideoUpdate,
 )
-
-if TYPE_CHECKING:
-    from uuid import UUID
-
-    from advanced_alchemy.filters import LimitOffset
-
-    from pydotorg.domains.community.services import LinkService, PhotoService, PostService, VideoService
+from pydotorg.domains.community.services import LinkService, PhotoService, PostService, VideoService
 
 
 class PostController(Controller):
@@ -283,3 +281,44 @@ class LinkController(Controller):
     ) -> None:
         """Delete a link."""
         await link_service.delete(link_id)
+
+
+class CommunityPageController(Controller):
+    """Controller for community HTML pages."""
+
+    path = "/community"
+
+    @get("/")
+    async def community_index(
+        self,
+        post_service: PostService,
+    ) -> Template:
+        """Render the community index page."""
+        posts = await post_service.get_published_posts(limit=20)
+
+        return Template(
+            template_name="community/index.html.jinja2",
+            context={
+                "posts": posts,
+                "page_title": "Python Community",
+            },
+        )
+
+    @get("/posts/{slug:str}/")
+    async def post_detail(
+        self,
+        post_service: PostService,
+        slug: str,
+    ) -> Template:
+        """Render the community post detail page."""
+        post = await post_service.get_by_slug(slug)
+        if not post:
+            raise NotFoundException(f"Post with slug {slug} not found")
+
+        return Template(
+            template_name="community/post_detail.html.jinja2",
+            context={
+                "post": post,
+                "page_title": post.title,
+            },
+        )

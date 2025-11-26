@@ -1,12 +1,15 @@
-"""Success Stories domain API controllers."""
+"""Success Stories domain API and page controllers."""
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Annotated
+from typing import Annotated
+from uuid import UUID
 
+from advanced_alchemy.filters import LimitOffset
 from litestar import Controller, delete, get, post, put
 from litestar.exceptions import NotFoundException
 from litestar.params import Parameter
+from litestar.response import Template
 
 from pydotorg.domains.successstories.schemas import (
     StoryCategoryCreate,
@@ -18,13 +21,7 @@ from pydotorg.domains.successstories.schemas import (
     StoryUpdate,
     StoryWithCategory,
 )
-
-if TYPE_CHECKING:
-    from uuid import UUID
-
-    from advanced_alchemy.filters import LimitOffset
-
-    from pydotorg.domains.successstories.services import StoryCategoryService, StoryService
+from pydotorg.domains.successstories.services import StoryCategoryService, StoryService
 
 
 class StoryCategoryController(Controller):
@@ -198,3 +195,72 @@ class StoryController(Controller):
     ) -> None:
         """Delete a story."""
         await story_service.delete(story_id)
+
+
+class SuccessStoriesPageController(Controller):
+    """Controller for success stories HTML pages."""
+
+    path = "/success-stories"
+
+    @get("/")
+    async def stories_index(
+        self,
+        story_service: StoryService,
+        story_category_service: StoryCategoryService,
+    ) -> Template:
+        """Render the success stories index page."""
+        featured_stories = await story_service.get_featured_stories(limit=6)
+        stories = await story_service.get_published_stories(limit=50)
+        categories, _ = await story_category_service.list_and_count()
+
+        return Template(
+            template_name="successstories/index.html.jinja2",
+            context={
+                "featured_stories": featured_stories,
+                "stories": stories,
+                "categories": list(categories),
+                "page_title": "Success Stories",
+            },
+        )
+
+    @get("/{slug:str}/")
+    async def story_detail(
+        self,
+        story_service: StoryService,
+        slug: str,
+    ) -> Template:
+        """Render the story detail page."""
+        story = await story_service.get_by_slug(slug)
+        if not story:
+            raise NotFoundException(f"Story with slug {slug} not found")
+
+        return Template(
+            template_name="successstories/detail.html.jinja2",
+            context={
+                "story": story,
+                "page_title": story.name,
+            },
+        )
+
+    @get("/category/{slug:str}/")
+    async def category_stories(
+        self,
+        story_service: StoryService,
+        story_category_service: StoryCategoryService,
+        slug: str,
+    ) -> Template:
+        """Render stories by category."""
+        category = await story_category_service.get_by_slug(slug)
+        if not category:
+            raise NotFoundException(f"Category with slug {slug} not found")
+
+        stories = await story_service.get_by_category_id(category.id, limit=100)
+
+        return Template(
+            template_name="successstories/category.html.jinja2",
+            context={
+                "category": category,
+                "stories": stories,
+                "page_title": f"Success Stories - {category.name}",
+            },
+        )

@@ -1,7 +1,6 @@
 """Users domain - User management, memberships, and authentication."""
 
 from pydotorg.domains.users import urls
-from pydotorg.domains.users.auth_controller import AuthController
 from pydotorg.domains.users.controllers import MembershipController, UserController, UserGroupController
 from pydotorg.domains.users.dependencies import get_user_dependencies
 from pydotorg.domains.users.models import (
@@ -29,7 +28,6 @@ from pydotorg.domains.users.schemas import (
 from pydotorg.domains.users.services import MembershipService, UserGroupService, UserService
 
 __all__ = [
-    "AuthController",
     "EmailPrivacy",
     "Membership",
     "MembershipController",

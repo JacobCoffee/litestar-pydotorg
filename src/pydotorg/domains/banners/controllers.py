@@ -1,13 +1,16 @@
-"""Banners domain API controllers."""
+"""Banners domain API and page controllers."""
 
 from __future__ import annotations
 
 from datetime import UTC, datetime
-from typing import TYPE_CHECKING, Annotated
+from typing import Annotated
+from uuid import UUID
 
+from advanced_alchemy.filters import LimitOffset
 from litestar import Controller, delete, get, post, put
 from litestar.exceptions import NotFoundException
 from litestar.params import Parameter
+from litestar.response import Template
 
 from pydotorg.domains.banners.schemas import (
     BannerCreate,
@@ -15,13 +18,7 @@ from pydotorg.domains.banners.schemas import (
     BannerRead,
     BannerUpdate,
 )
-
-if TYPE_CHECKING:
-    from uuid import UUID
-
-    from advanced_alchemy.filters import LimitOffset
-
-    from pydotorg.domains.banners.services import BannerService
+from pydotorg.domains.banners.services import BannerService
 
 
 class BannerController(Controller):
@@ -104,3 +101,46 @@ class BannerController(Controller):
     ) -> None:
         """Delete a banner."""
         await banner_service.delete(banner_id)
+
+
+class BannersPageController(Controller):
+    """Controller for banners HTML pages (admin preview)."""
+
+    path = "/admin/banners"
+
+    @get("/")
+    async def banners_index(
+        self,
+        banner_service: BannerService,
+    ) -> Template:
+        """Render the banners admin preview page."""
+        banners, _ = await banner_service.list_and_count()
+        active_banners = await banner_service.get_active_banners()
+
+        return Template(
+            template_name="banners/index.html.jinja2",
+            context={
+                "banners": banners,
+                "active_banners": active_banners,
+                "page_title": "Banner Management",
+            },
+        )
+
+    @get("/{name:str}/preview/")
+    async def banner_preview(
+        self,
+        banner_service: BannerService,
+        name: str,
+    ) -> Template:
+        """Render the banner preview page."""
+        banner = await banner_service.get_by_name(name)
+        if not banner:
+            raise NotFoundException(f"Banner with name {name} not found")
+
+        return Template(
+            template_name="banners/preview.html.jinja2",
+            context={
+                "banner": banner,
+                "page_title": f"Banner Preview - {banner.name}",
+            },
+        )
