@@ -123,6 +123,10 @@ class Settings(BaseSettings):
 
     fastly_api_key: str | None = None
 
+    meilisearch_url: str = "http://localhost:7700"
+    meilisearch_api_key: str | None = None
+    meilisearch_index_prefix: str = "pydotorg_"
+
     features: FeatureFlagsConfig = FeatureFlagsConfig()
 
     @field_validator("secret_key")
@@ -316,6 +320,7 @@ Features:
   Email:            {bool(cfg.smtp_host and cfg.smtp_host != "localhost")}
   GitHub OAuth:     {bool(cfg.github_client_id)}
   Google OAuth:     {bool(cfg.google_client_id)}
+  Meilisearch:      {cfg.meilisearch_url}
   Jobs:             {cfg.features.enable_jobs}
   Sponsors:         {cfg.features.enable_sponsors}
   Search:           {cfg.features.enable_search}
