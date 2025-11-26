@@ -34,81 +34,87 @@
   overflow: visible;
 }
 
-/* River stem - wavy animated line with S-curve illusion */
-.timeline-river::before {
-  content: "";
+/* SVG River Container - positioned absolutely behind content */
+.river-svg-container {
   position: absolute;
-  left: 50%;
+  left: 0;
+  right: 0;
   top: 0;
   bottom: 0;
-  width: 8px;
-  background: linear-gradient(
-    to bottom,
-    transparent 0%,
-    var(--python-blue) 2%,
-    var(--python-blue) 100%
-  );
-  transform: translateX(-50%);
-  z-index: 1;
-  border-radius: 4px;
-  box-shadow:
-    0 0 30px rgba(55, 118, 171, 0.4),
-    0 0 60px rgba(55, 118, 171, 0.2),
-    -4px 0 20px rgba(55, 118, 171, 0.15),
-    4px 0 20px rgba(55, 118, 171, 0.15);
-  animation: riverSway 8s ease-in-out infinite;
-}
-
-/* Animated water flow effect with wave animation */
-.timeline-river::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 0;
-  bottom: 0;
-  width: 8px;
-  background: linear-gradient(
-    to bottom,
-    transparent 0%,
-    rgba(255, 212, 59, 0.95) 5%,
-    rgba(55, 118, 171, 0.3) 20%,
-    rgba(255, 212, 59, 0.95) 35%,
-    rgba(55, 118, 171, 0.3) 50%,
-    rgba(255, 212, 59, 0.95) 65%,
-    rgba(55, 118, 171, 0.3) 80%,
-    rgba(255, 212, 59, 0.95) 95%,
-    transparent 100%
-  );
-  background-size: 8px 400px;
-  transform: translateX(-50%);
-  z-index: 2;
-  animation: riverFlow 3s linear infinite, riverSway 8s ease-in-out infinite;
-  border-radius: 4px;
   pointer-events: none;
+  z-index: 1;
+  overflow: visible;
 }
 
-/* River swaying animation for organic feel */
-@keyframes riverSway {
-  0%, 100% {
-    transform: translateX(-50%) scaleX(1);
-  }
-  25% {
-    transform: translateX(calc(-50% + 2px)) scaleX(1.1);
-  }
-  50% {
-    transform: translateX(-50%) scaleX(1);
-  }
-  75% {
-    transform: translateX(calc(-50% - 2px)) scaleX(1.1);
-  }
+.river-svg {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 200px;
+  height: 100%;
+  transform: translateX(-50%);
+  overflow: visible;
 }
 
-@keyframes riverFlow {
+/* Flowing river path - main blue channel */
+.river-path {
+  fill: none;
+  stroke: var(--python-blue);
+  stroke-width: 8;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 20px rgba(55, 118, 171, 0.4))
+          drop-shadow(0 0 40px rgba(55, 118, 171, 0.2));
+}
+
+/* Animated gradient overlay for flowing water effect */
+.river-flow-path {
+  fill: none;
+  stroke: url(#riverGradient);
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-dasharray: 60 40;
+  animation: riverFlowAnimation 4s linear infinite;
+}
+
+/* Glowing edges for depth */
+.river-glow-path {
+  fill: none;
+  stroke: var(--python-yellow);
+  stroke-width: 12;
+  stroke-linecap: round;
+  opacity: 0.2;
+  filter: blur(8px);
+  animation: riverGlowPulse 3s ease-in-out infinite;
+}
+
+/* Inner highlight for shimmer */
+.river-highlight-path {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.3);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-dasharray: 40 60;
+  animation: riverFlowAnimation 3s linear infinite reverse;
+}
+
+/* Keyframe animations */
+@keyframes riverFlowAnimation {
   0% {
-    background-position: 0 0;
+    stroke-dashoffset: 0;
   }
   100% {
-    background-position: 0 400px;
+    stroke-dashoffset: 100;
+  }
+}
+
+@keyframes riverGlowPulse {
+  0%, 100% {
+    opacity: 0.15;
+    stroke-width: 12;
+  }
+  50% {
+    opacity: 0.3;
+    stroke-width: 16;
   }
 }
 
@@ -655,9 +661,9 @@
 
 /* Mobile responsive */
 @media (max-width: 768px) {
-  .timeline-river::before,
-  .timeline-river::after {
+  .river-svg {
     left: 1.5rem;
+    transform: translateX(0);
   }
 
   .timeline-event,

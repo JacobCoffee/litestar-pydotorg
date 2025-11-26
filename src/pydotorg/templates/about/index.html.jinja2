@@ -203,6 +203,49 @@
 
             {# Timeline River #}
             <div class="timeline-river">
+                {# SVG Flowing River Path #}
+                <div class="river-svg-container">
+                    <svg class="river-svg" preserveAspectRatio="xMidYMin slice" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            {# Animated gradient for flowing water #}
+                            <linearGradient id="riverGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" style="stop-color:var(--python-yellow);stop-opacity:0" />
+                                <stop offset="15%" style="stop-color:var(--python-yellow);stop-opacity:0.8">
+                                    <animate attributeName="offset" values="0%;1%;0%" dur="4s" repeatCount="indefinite" />
+                                </stop>
+                                <stop offset="30%" style="stop-color:rgba(55, 118, 171, 0.3);stop-opacity:0.4">
+                                    <animate attributeName="offset" values="0.15%;1.15%;0.15%" dur="4s" repeatCount="indefinite" />
+                                </stop>
+                                <stop offset="45%" style="stop-color:var(--python-yellow);stop-opacity:0.8">
+                                    <animate attributeName="offset" values="0.3%;1.3%;0.3%" dur="4s" repeatCount="indefinite" />
+                                </stop>
+                                <stop offset="60%" style="stop-color:rgba(55, 118, 171, 0.3);stop-opacity:0.4">
+                                    <animate attributeName="offset" values="0.45%;1.45%;0.45%" dur="4s" repeatCount="indefinite" />
+                                </stop>
+                                <stop offset="75%" style="stop-color:var(--python-yellow);stop-opacity:0.8">
+                                    <animate attributeName="offset" values="0.6%;1.6%;0.6%" dur="4s" repeatCount="indefinite" />
+                                </stop>
+                                <stop offset="90%" style="stop-color:rgba(55, 118, 171, 0.3);stop-opacity:0.4">
+                                    <animate attributeName="offset" values="0.75%;1.75%;0.75%" dur="4s" repeatCount="indefinite" />
+                                </stop>
+                                <stop offset="100%" style="stop-color:var(--python-yellow);stop-opacity:0" />
+                            </linearGradient>
+                        </defs>
+
+                        {# Glowing outer path #}
+                        <path class="river-glow-path" d="M100,0 Q120,100 100,200 Q80,300 100,400 Q120,500 100,600 Q80,700 100,800 Q120,900 100,1000 Q80,1100 100,1200 Q120,1300 100,1400 Q80,1500 100,1600 Q120,1700 100,1800 Q80,1900 100,2000 Q120,2100 100,2200 Q80,2300 100,2400 Q120,2500 100,2600 Q80,2700 100,2800 Q120,2900 100,3000 Q80,3100 100,3200 Q120,3300 100,3400 Q80,3500 100,3600 Q120,3700 100,3800 Q80,3900 100,4000 L100,5000" />
+
+                        {# Main river path - blue base #}
+                        <path class="river-path" d="M100,0 Q120,100 100,200 Q80,300 100,400 Q120,500 100,600 Q80,700 100,800 Q120,900 100,1000 Q80,1100 100,1200 Q120,1300 100,1400 Q80,1500 100,1600 Q120,1700 100,1800 Q80,1900 100,2000 Q120,2100 100,2200 Q80,2300 100,2400 Q120,2500 100,2600 Q80,2700 100,2800 Q120,2900 100,3000 Q80,3100 100,3200 Q120,3300 100,3400 Q80,3500 100,3600 Q120,3700 100,3800 Q80,3900 100,4000 L100,5000" />
+
+                        {# Animated flow overlay - yellow waves #}
+                        <path class="river-flow-path" d="M100,0 Q120,100 100,200 Q80,300 100,400 Q120,500 100,600 Q80,700 100,800 Q120,900 100,1000 Q80,1100 100,1200 Q120,1300 100,1400 Q80,1500 100,1600 Q120,1700 100,1800 Q80,1900 100,2000 Q120,2100 100,2200 Q80,2300 100,2400 Q120,2500 100,2600 Q80,2700 100,2800 Q120,2900 100,3000 Q80,3100 100,3200 Q120,3300 100,3400 Q80,3500 100,3600 Q120,3700 100,3800 Q80,3900 100,4000 L100,5000" />
+
+                        {# Inner highlight - white shimmer #}
+                        <path class="river-highlight-path" d="M100,0 Q120,100 100,200 Q80,300 100,400 Q120,500 100,600 Q80,700 100,800 Q120,900 100,1000 Q80,1100 100,1200 Q120,1300 100,1400 Q80,1500 100,1600 Q120,1700 100,1800 Q80,1900 100,2000 Q120,2100 100,2200 Q80,2300 100,2400 Q120,2500 100,2600 Q80,2700 100,2800 Q120,2900 100,3000 Q80,3100 100,3200 Q120,3300 100,3400 Q80,3500 100,3600 Q120,3700 100,3800 Q80,3900 100,4000 L100,5000" />
+                    </svg>
+                </div>
+
                 {# River wave overlay for flowing effect #}
                 <div class="river-wave"></div>
 
