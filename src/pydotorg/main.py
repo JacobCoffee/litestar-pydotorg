@@ -41,6 +41,7 @@ from pydotorg.domains.about import AboutRenderController
 from pydotorg.domains.admin import (
     AdminDashboardController,
     AdminJobsController,
+    AdminSponsorsController,
     AdminUsersController,
     get_admin_dependencies,
 )
@@ -388,6 +389,7 @@ app = Litestar(
         SearchRenderController,
         AdminDashboardController,
         AdminJobsController,
+        AdminSponsorsController,
         AdminUsersController,
     ],
     dependencies=get_all_dependencies(),
