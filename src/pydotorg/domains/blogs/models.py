@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-import datetime  # noqa: TC003 - needed for SQLAlchemy column type
-from uuid import UUID  # noqa: TC003 - needed for SQLAlchemy column type
+import datetime
+from uuid import UUID
 
 from sqlalchemy import Boolean, Column, DateTime, ForeignKey, String, Table, Text, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship

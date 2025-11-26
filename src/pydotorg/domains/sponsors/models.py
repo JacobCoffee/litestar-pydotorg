@@ -5,7 +5,7 @@ from __future__ import annotations
 import datetime
 from enum import StrEnum
 from typing import TYPE_CHECKING
-from uuid import UUID  # noqa: TC003 - needed for SQLAlchemy column type
+from uuid import UUID
 
 from sqlalchemy import Boolean, Date, Enum, ForeignKey, Integer, Numeric, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -85,7 +85,7 @@ class Sponsorship(AuditBase, ContentManageableMixin):
         nullable=True,
     )
     status: Mapped[SponsorshipStatus] = mapped_column(
-        Enum(SponsorshipStatus),
+        Enum(SponsorshipStatus, values_callable=lambda x: [e.value for e in x]),
         default=SponsorshipStatus.APPLIED,
         index=True,
     )

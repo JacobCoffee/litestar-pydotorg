@@ -17,7 +17,7 @@ class Post(AuditBase, SlugMixin):
     title: Mapped[str] = mapped_column(String(500))
     content: Mapped[str] = mapped_column(Text)
     content_type: Mapped[ContentType] = mapped_column(
-        Enum(ContentType),
+        Enum(ContentType, values_callable=lambda x: [e.value for e in x]),
         default=ContentType.MARKDOWN,
     )
     creator_id: Mapped[UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))

@@ -18,7 +18,7 @@ class Minutes(AuditBase, SlugMixin):
     date: Mapped[datetime.date] = mapped_column(Date, index=True)
     content: Mapped[str] = mapped_column(Text)
     content_type: Mapped[ContentType] = mapped_column(
-        Enum(ContentType),
+        Enum(ContentType, values_callable=lambda x: [e.value for e in x]),
         default=ContentType.MARKDOWN,
     )
     is_published: Mapped[bool] = mapped_column(Boolean, default=False, index=True)

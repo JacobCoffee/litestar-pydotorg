@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from enum import StrEnum
-from uuid import UUID  # noqa: TC003 - needed for SQLAlchemy column type
+from uuid import UUID
 
 from sqlalchemy import Boolean, Enum, ForeignKey, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -26,7 +26,7 @@ class Page(AuditBase, ContentManageableMixin):
     path: Mapped[str] = mapped_column(String(500), unique=True, index=True)
     content: Mapped[str] = mapped_column(Text, default="")
     content_type: Mapped[ContentType] = mapped_column(
-        Enum(ContentType),
+        Enum(ContentType, values_callable=lambda x: [e.value for e in x]),
         default=ContentType.MARKDOWN,
     )
     is_published: Mapped[bool] = mapped_column(Boolean, default=True, index=True)

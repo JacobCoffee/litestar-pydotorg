@@ -5,7 +5,7 @@ from __future__ import annotations
 import datetime
 from enum import StrEnum
 from typing import TYPE_CHECKING
-from uuid import UUID  # noqa: TC003 - needed for SQLAlchemy column type
+from uuid import UUID
 
 from sqlalchemy import Boolean, Column, Date, Enum, ForeignKey, String, Table, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -86,7 +86,7 @@ class Job(AuditBase):
     url: Mapped[str | None] = mapped_column(String(500), nullable=True)
     email: Mapped[str] = mapped_column(String(254))
     status: Mapped[JobStatus] = mapped_column(
-        Enum(JobStatus),
+        Enum(JobStatus, values_callable=lambda x: [e.value for e in x]),
         default=JobStatus.DRAFT,
         index=True,
     )

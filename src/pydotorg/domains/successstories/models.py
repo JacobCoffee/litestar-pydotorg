@@ -30,7 +30,7 @@ class Story(AuditBase, SlugMixin):
     category_id: Mapped[UUID] = mapped_column(ForeignKey("story_categories.id", ondelete="CASCADE"))
     content: Mapped[str] = mapped_column(Text)
     content_type: Mapped[ContentType] = mapped_column(
-        Enum(ContentType),
+        Enum(ContentType, values_callable=lambda x: [e.value for e in x]),
         default=ContentType.MARKDOWN,
     )
     is_published: Mapped[bool] = mapped_column(Boolean, default=False, index=True)

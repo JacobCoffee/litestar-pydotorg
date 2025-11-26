@@ -5,7 +5,7 @@ from __future__ import annotations
 import datetime
 from enum import StrEnum
 from typing import TYPE_CHECKING
-from uuid import UUID  # noqa: TC003 - needed for SQLAlchemy column type
+from uuid import UUID
 
 from advanced_alchemy.base import UUIDAuditBase
 from sqlalchemy import Boolean, Date, DateTime, Enum, ForeignKey, String, Text, func
@@ -48,22 +48,26 @@ class User(UUIDAuditBase):
 
     username: Mapped[str] = mapped_column(String(150), unique=True, index=True)
     email: Mapped[str] = mapped_column(String(254), unique=True, index=True)
-    password_hash: Mapped[str] = mapped_column(String(255))
+    password_hash: Mapped[str | None] = mapped_column(String(255), nullable=True)
     first_name: Mapped[str] = mapped_column(String(150), default="")
     last_name: Mapped[str] = mapped_column(String(150), default="")
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     is_staff: Mapped[bool] = mapped_column(Boolean, default=False)
     is_superuser: Mapped[bool] = mapped_column(Boolean, default=False)
+    email_verified: Mapped[bool] = mapped_column(Boolean, default=False)
+
+    oauth_provider: Mapped[str | None] = mapped_column(String(50), nullable=True, index=True)
+    oauth_id: Mapped[str | None] = mapped_column(String(255), nullable=True, index=True)
     date_joined: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), default=func.now())
     last_login: Mapped[datetime.datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
     bio: Mapped[str] = mapped_column(Text, default="")
     search_visibility: Mapped[SearchVisibility] = mapped_column(
-        Enum(SearchVisibility),
+        Enum(SearchVisibility, values_callable=lambda x: [e.value for e in x]),
         default=SearchVisibility.PUBLIC,
     )
     email_privacy: Mapped[EmailPrivacy] = mapped_column(
-        Enum(EmailPrivacy),
+        Enum(EmailPrivacy, values_callable=lambda x: [e.value for e in x]),
         default=EmailPrivacy.PRIVATE,
     )
     public_profile: Mapped[bool] = mapped_column(Boolean, default=True)
@@ -95,7 +99,7 @@ class Membership(UUIDAuditBase):
 
     user_id: Mapped[UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), unique=True)
     membership_type: Mapped[MembershipType] = mapped_column(
-        Enum(MembershipType),
+        Enum(MembershipType, values_callable=lambda x: [e.value for e in x]),
         default=MembershipType.BASIC,
     )
     legal_name: Mapped[str] = mapped_column(String(255), default="")
@@ -132,7 +136,7 @@ class UserGroup(UUIDAuditBase):
     location: Mapped[str] = mapped_column(String(255), default="")
     url: Mapped[str] = mapped_column(String(500), default="")
     url_type: Mapped[UserGroupType] = mapped_column(
-        Enum(UserGroupType),
+        Enum(UserGroupType, values_callable=lambda x: [e.value for e in x]),
         default=UserGroupType.OTHER,
     )
     start_date: Mapped[datetime.date | None] = mapped_column(Date, nullable=True)
