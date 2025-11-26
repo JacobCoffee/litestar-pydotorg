@@ -4,7 +4,12 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from pydotorg.domains.admin.services import DashboardService, JobAdminService, UserAdminService
+from pydotorg.domains.admin.services import (
+    DashboardService,
+    JobAdminService,
+    SponsorAdminService,
+    UserAdminService,
+)
 
 if TYPE_CHECKING:
     from sqlalchemy.ext.asyncio import AsyncSession
@@ -46,6 +51,18 @@ async def provide_job_admin_service(db_session: AsyncSession) -> JobAdminService
     return JobAdminService(session=db_session)
 
 
+async def provide_sponsor_admin_service(db_session: AsyncSession) -> SponsorAdminService:
+    """Provide a SponsorAdminService instance.
+
+    Args:
+        db_session: Database session
+
+    Returns:
+        SponsorAdminService instance
+    """
+    return SponsorAdminService(session=db_session)
+
+
 def get_admin_dependencies() -> dict:
     """Get all admin domain dependency providers.
 
@@ -56,4 +73,5 @@ def get_admin_dependencies() -> dict:
         "dashboard_service": provide_dashboard_service,
         "user_admin_service": provide_user_admin_service,
         "job_admin_service": provide_job_admin_service,
+        "sponsor_admin_service": provide_sponsor_admin_service,
     }
