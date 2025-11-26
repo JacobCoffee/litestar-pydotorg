@@ -1,0 +1,264 @@
+/* Python.org Custom Scalar Theme
+ * Colors match the Python.org website design
+ * Primary: Python Blue (#3776AB)
+ * Secondary: Python Yellow (#FFD43B)
+ */
+
+:root {
+  /* Python.org Brand Colors */
+  --python-blue: #3776AB;
+  --python-blue-light: #4B8BBE;
+  --python-blue-dark: #2B5B8A;
+  --python-yellow: #FFD43B;
+  --python-yellow-light: #FFE873;
+  --python-yellow-dark: #FFD700;
+  --python-gray: #646464;
+  --python-gray-light: #999999;
+  --python-gray-dark: #333333;
+}
+
+/* Light Theme */
+.light-mode,
+[data-theme="light"] {
+  --scalar-color-1: #1F2937;
+  --scalar-color-2: #374151;
+  --scalar-color-3: #6B7280;
+  --scalar-color-accent: #3776AB;
+  --scalar-color-background-1: #FFFFFF;
+  --scalar-color-background-2: #F5F5F5;
+  --scalar-color-background-3: #E5E5E5;
+  --scalar-color-background-accent: rgba(55, 118, 171, 0.1);
+  --scalar-color-border: #E5E7EB;
+  --scalar-color-green: #36D399;
+  --scalar-color-red: #F87272;
+  --scalar-color-yellow: #FFD43B;
+  --scalar-color-blue: #3776AB;
+  --scalar-color-orange: #FB923C;
+  --scalar-color-purple: #A855F7;
+
+  /* Sidebar */
+  --scalar-sidebar-background-1: #FFFFFF;
+  --scalar-sidebar-color-1: #1F2937;
+  --scalar-sidebar-color-2: #374151;
+  --scalar-sidebar-color-active: #3776AB;
+  --scalar-sidebar-border-color: #E5E7EB;
+  --scalar-sidebar-item-hover-background: rgba(55, 118, 171, 0.08);
+  --scalar-sidebar-item-active-background: rgba(55, 118, 171, 0.12);
+
+  /* Buttons */
+  --scalar-button-1: #3776AB;
+  --scalar-button-1-hover: #2B5B8A;
+  --scalar-button-1-color: #FFFFFF;
+
+  /* Code */
+  --scalar-color-code-background: #F8FAFC;
+
+  /* Search */
+  --scalar-search-background: #FFFFFF;
+  --scalar-search-border-color: #E5E7EB;
+  --scalar-search-color: #1F2937;
+}
+
+/* Dark Theme */
+.dark-mode,
+[data-theme="dark"] {
+  --scalar-color-1: #E5E7EB;
+  --scalar-color-2: #D1D5DB;
+  --scalar-color-3: #9CA3AF;
+  --scalar-color-accent: #4B8BBE;
+  --scalar-color-background-1: #1F2937;
+  --scalar-color-background-2: #1A1F2E;
+  --scalar-color-background-3: #14161F;
+  --scalar-color-background-accent: rgba(75, 139, 190, 0.15);
+  --scalar-color-border: #374151;
+  --scalar-color-green: #36D399;
+  --scalar-color-red: #F87272;
+  --scalar-color-yellow: #FFE873;
+  --scalar-color-blue: #4B8BBE;
+  --scalar-color-orange: #FB923C;
+  --scalar-color-purple: #A855F7;
+
+  /* Sidebar */
+  --scalar-sidebar-background-1: #1A1F2E;
+  --scalar-sidebar-color-1: #E5E7EB;
+  --scalar-sidebar-color-2: #D1D5DB;
+  --scalar-sidebar-color-active: #4B8BBE;
+  --scalar-sidebar-border-color: #374151;
+  --scalar-sidebar-item-hover-background: rgba(75, 139, 190, 0.1);
+  --scalar-sidebar-item-active-background: rgba(75, 139, 190, 0.15);
+
+  /* Buttons */
+  --scalar-button-1: #4B8BBE;
+  --scalar-button-1-hover: #3776AB;
+  --scalar-button-1-color: #FFFFFF;
+
+  /* Code */
+  --scalar-color-code-background: #14161F;
+
+  /* Search */
+  --scalar-search-background: #1A1F2E;
+  --scalar-search-border-color: #374151;
+  --scalar-search-color: #E5E7EB;
+}
+
+/* Custom Header Styling */
+.scalar-app header,
+.scalar-api-reference header {
+  background: linear-gradient(135deg, var(--python-blue) 0%, var(--python-blue-dark) 100%);
+}
+
+/* HTTP Method Badge Colors - Python themed */
+.scalar-api-reference [data-method="get"],
+.http-method-badge--get {
+  --scalar-color-green: #36D399;
+  background-color: rgba(54, 211, 153, 0.15);
+  color: #36D399;
+}
+
+.scalar-api-reference [data-method="post"],
+.http-method-badge--post {
+  --scalar-color-blue: #3776AB;
+  background-color: rgba(55, 118, 171, 0.15);
+  color: #3776AB;
+}
+
+.scalar-api-reference [data-method="put"],
+.http-method-badge--put {
+  --scalar-color-yellow: #FFD43B;
+  background-color: rgba(255, 212, 59, 0.15);
+  color: #D4A600;
+}
+
+.scalar-api-reference [data-method="patch"],
+.http-method-badge--patch {
+  --scalar-color-orange: #FB923C;
+  background-color: rgba(251, 146, 60, 0.15);
+  color: #FB923C;
+}
+
+.scalar-api-reference [data-method="delete"],
+.http-method-badge--delete {
+  --scalar-color-red: #F87272;
+  background-color: rgba(248, 114, 114, 0.15);
+  color: #F87272;
+}
+
+/* Logo and Branding Area */
+.scalar-app .scalar-sidebar-header,
+.scalar-api-reference .scalar-sidebar-header {
+  border-bottom: 2px solid var(--python-yellow);
+}
+
+/* Tag/Section Headers */
+.scalar-api-reference .section-header,
+.scalar-api-reference h2 {
+  color: var(--python-blue);
+  border-left: 3px solid var(--python-yellow);
+  padding-left: 12px;
+}
+
+/* Links */
+.scalar-api-reference a:not(.button) {
+  color: var(--scalar-color-accent);
+}
+
+.scalar-api-reference a:not(.button):hover {
+  color: var(--python-blue-dark);
+  text-decoration: underline;
+}
+
+/* Custom scrollbar for Python theme */
+.scalar-app ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.scalar-app ::-webkit-scrollbar-track {
+  background: var(--scalar-color-background-2);
+}
+
+.scalar-app ::-webkit-scrollbar-thumb {
+  background: var(--python-blue-light);
+  border-radius: 4px;
+}
+
+.scalar-app ::-webkit-scrollbar-thumb:hover {
+  background: var(--python-blue);
+}
+
+/* Response/Request panels */
+.scalar-api-reference .scalar-card {
+  border-radius: 8px;
+  border: 1px solid var(--scalar-color-border);
+}
+
+/* Code blocks */
+.scalar-api-reference pre,
+.scalar-api-reference code {
+  font-family: 'SFMono-Regular', 'Consolas', 'Liberation Mono', 'Menlo', 'Courier', monospace;
+  border-radius: 6px;
+}
+
+/* Try it out button */
+.scalar-api-reference .try-it-button,
+.scalar-api-reference button[data-testid="send-request"] {
+  background: linear-gradient(135deg, var(--python-blue) 0%, var(--python-blue-dark) 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.scalar-api-reference .try-it-button:hover,
+.scalar-api-reference button[data-testid="send-request"]:hover {
+  background: linear-gradient(135deg, var(--python-blue-dark) 0%, var(--python-blue) 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(55, 118, 171, 0.3);
+}
+
+/* Authentication section */
+.scalar-api-reference .auth-section {
+  background: var(--scalar-color-background-accent);
+  border: 1px solid var(--python-blue);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+/* Table styling */
+.scalar-api-reference table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.scalar-api-reference th {
+  background: var(--scalar-color-background-2);
+  color: var(--python-blue);
+  font-weight: 600;
+  text-align: left;
+  padding: 12px;
+  border-bottom: 2px solid var(--python-yellow);
+}
+
+.scalar-api-reference td {
+  padding: 12px;
+  border-bottom: 1px solid var(--scalar-color-border);
+}
+
+/* Schema property styling */
+.scalar-api-reference .property-name {
+  color: var(--python-blue);
+  font-weight: 500;
+}
+
+.scalar-api-reference .property-type {
+  color: var(--python-gray);
+  font-size: 0.875rem;
+}
+
+/* Footer branding */
+.scalar-api-reference footer {
+  border-top: 1px solid var(--scalar-color-border);
+  padding-top: 16px;
+  margin-top: 24px;
+}
