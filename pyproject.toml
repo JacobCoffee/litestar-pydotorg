@@ -39,6 +39,9 @@ dependencies = [
     "python-slugify>=8.0.0",
     "granian>=1.6.0",
     "email-validator>=2.3.0",
+    "meilisearch-python-sdk>=5.5.0",
+    "sqladmin-litestar-plugin>=0.2.0",
+    "itsdangerous>=2.2.0",
 ]
 
 [project.urls]
