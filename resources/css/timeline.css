@@ -4,48 +4,103 @@
 .timeline-river {
   position: relative;
   padding: 2rem 0;
-  overflow: hidden;
+  overflow: visible;
+  pointer-events: none;
 }
 
+.timeline-river > * {
+  pointer-events: auto;
+}
+
+/* SVG River Path - flowing S-curve */
+.river-path-container {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: visible;
+}
+
+.river-path-svg {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 120px;
+  height: 100%;
+  transform: translateX(-50%);
+  overflow: visible;
+}
+
+/* River stem - wavy animated line with S-curve illusion */
 .timeline-river::before {
   content: "";
   position: absolute;
   left: 50%;
   top: 0;
   bottom: 0;
-  width: 4px;
+  width: 8px;
   background: linear-gradient(
     to bottom,
     transparent 0%,
-    var(--python-blue) 5%,
-    var(--python-blue) 95%,
-    transparent 100%
+    var(--python-blue) 2%,
+    var(--python-blue) 100%
   );
   transform: translateX(-50%);
   z-index: 1;
+  border-radius: 4px;
+  box-shadow:
+    0 0 30px rgba(55, 118, 171, 0.4),
+    0 0 60px rgba(55, 118, 171, 0.2),
+    -4px 0 20px rgba(55, 118, 171, 0.15),
+    4px 0 20px rgba(55, 118, 171, 0.15);
+  animation: riverSway 8s ease-in-out infinite;
 }
 
-/* Animated water flow effect */
+/* Animated water flow effect with wave animation */
 .timeline-river::after {
   content: "";
   position: absolute;
   left: 50%;
   top: 0;
   bottom: 0;
-  width: 4px;
+  width: 8px;
   background: linear-gradient(
     to bottom,
     transparent 0%,
-    rgba(255, 212, 59, 0.8) 20%,
-    rgba(55, 118, 171, 0.6) 40%,
-    rgba(255, 212, 59, 0.8) 60%,
-    rgba(55, 118, 171, 0.6) 80%,
+    rgba(255, 212, 59, 0.95) 5%,
+    rgba(55, 118, 171, 0.3) 20%,
+    rgba(255, 212, 59, 0.95) 35%,
+    rgba(55, 118, 171, 0.3) 50%,
+    rgba(255, 212, 59, 0.95) 65%,
+    rgba(55, 118, 171, 0.3) 80%,
+    rgba(255, 212, 59, 0.95) 95%,
     transparent 100%
   );
-  background-size: 4px 200px;
+  background-size: 8px 400px;
   transform: translateX(-50%);
   z-index: 2;
-  animation: riverFlow 3s linear infinite;
+  animation: riverFlow 3s linear infinite, riverSway 8s ease-in-out infinite;
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+/* River swaying animation for organic feel */
+@keyframes riverSway {
+  0%, 100% {
+    transform: translateX(-50%) scaleX(1);
+  }
+  25% {
+    transform: translateX(calc(-50% + 2px)) scaleX(1.1);
+  }
+  50% {
+    transform: translateX(-50%) scaleX(1);
+  }
+  75% {
+    transform: translateX(calc(-50% - 2px)) scaleX(1.1);
+  }
 }
 
 @keyframes riverFlow {
@@ -53,7 +108,36 @@
     background-position: 0 0;
   }
   100% {
-    background-position: 0 200px;
+    background-position: 0 400px;
+  }
+}
+
+/* Flowing wave overlays for depth */
+.river-wave {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 20px;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 3;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    rgba(255, 255, 255, 0.1) 50px,
+    transparent 100px
+  );
+  animation: waveFlow 2s linear infinite;
+  opacity: 0.5;
+}
+
+@keyframes waveFlow {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 100px;
   }
 }
 
@@ -84,7 +168,7 @@
   padding-left: 52%;
 }
 
-/* Event dot on the river */
+/* Event dot on the river - high z-index to be ABOVE river */
 .timeline-dot {
   position: absolute;
   left: 50%;
@@ -95,37 +179,98 @@
   border: 4px solid var(--python-yellow);
   border-radius: 50%;
   transform: translateX(-50%);
-  z-index: 10;
-  transition: all 0.3s ease;
-  box-shadow: 0 0 0 0 rgba(255, 212, 59, 0.4);
+  z-index: 50; /* High z-index to be above river */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow:
+    0 0 0 0 rgba(255, 212, 59, 0.4),
+    0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: dotFloat 4s ease-in-out infinite;
+}
+
+/* Floating animation for dots */
+@keyframes dotFloat {
+  0%, 100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(-3px);
+  }
+}
+
+/* Staggered floating for visual interest */
+.timeline-event:nth-child(odd) .timeline-dot {
+  animation-delay: 0s;
+}
+
+.timeline-event:nth-child(even) .timeline-dot {
+  animation-delay: 2s;
 }
 
 .timeline-event:hover .timeline-dot {
-  transform: translateX(-50%) scale(1.2);
-  box-shadow: 0 0 0 8px rgba(255, 212, 59, 0.3);
+  transform: translateX(-50%) scale(1.3);
+  box-shadow:
+    0 0 0 10px rgba(255, 212, 59, 0.25),
+    0 0 30px rgba(255, 212, 59, 0.4),
+    0 8px 20px rgba(0, 0, 0, 0.2);
+  animation: none;
+}
+
+/* Ripple effect on dots */
+.timeline-dot::before {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border: 2px solid var(--python-yellow);
+  border-radius: 50%;
+  opacity: 0;
+  animation: dotRipple 3s ease-out infinite;
+}
+
+@keyframes dotRipple {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
 }
 
 /* Version release dots */
 .timeline-dot.major {
-  width: 32px;
-  height: 32px;
-  background: var(--python-yellow);
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, var(--python-yellow) 0%, #e6c135 100%);
   border-color: var(--python-blue);
+  border-width: 5px;
+  box-shadow:
+    0 0 20px rgba(255, 212, 59, 0.5),
+    0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .timeline-dot.pep {
-  background: #10b981;
-  border-color: #059669;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border-color: #34d399;
+  box-shadow:
+    0 0 15px rgba(16, 185, 129, 0.4),
+    0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .timeline-dot.organization {
-  background: #8b5cf6;
-  border-color: #7c3aed;
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  border-color: #a78bfa;
+  box-shadow:
+    0 0 15px rgba(139, 92, 246, 0.4),
+    0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .timeline-dot.community {
-  background: #ec4899;
-  border-color: #db2777;
+  background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+  border-color: #f472b6;
+  box-shadow:
+    0 0 15px rgba(236, 72, 153, 0.4),
+    0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 /* Connecting line to dot */
@@ -378,33 +523,34 @@
 
 .particle {
   position: absolute;
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
   background: var(--python-yellow);
   border-radius: 50%;
   opacity: 0;
-  animation: particleFloat 4s ease-in-out infinite;
+  animation: particleFloat 6s ease-in-out infinite;
+  box-shadow: 0 0 10px rgba(255, 212, 59, 0.8);
 }
 
-.particle:nth-child(1) { left: 20%; animation-delay: 0s; }
-.particle:nth-child(2) { left: 40%; animation-delay: 0.8s; }
-.particle:nth-child(3) { left: 60%; animation-delay: 1.6s; }
-.particle:nth-child(4) { left: 80%; animation-delay: 2.4s; }
-.particle:nth-child(5) { left: 30%; animation-delay: 3.2s; }
+.particle:nth-child(1) { left: 45%; animation-delay: 0s; }
+.particle:nth-child(2) { left: 50%; animation-delay: 1.2s; }
+.particle:nth-child(3) { left: 55%; animation-delay: 2.4s; }
+.particle:nth-child(4) { left: 48%; animation-delay: 3.6s; }
+.particle:nth-child(5) { left: 52%; animation-delay: 4.8s; }
 
 @keyframes particleFloat {
   0% {
-    transform: translateY(0);
+    transform: translateY(100vh) scale(0.5);
     opacity: 0;
   }
-  10% {
-    opacity: 0.6;
+  5% {
+    opacity: 1;
   }
-  90% {
-    opacity: 0.6;
+  95% {
+    opacity: 1;
   }
   100% {
-    transform: translateY(-100px);
+    transform: translateY(-100px) scale(1);
     opacity: 0;
   }
 }
@@ -463,18 +609,27 @@
   background: oklch(var(--b3));
   border: 2px solid oklch(var(--bc) / 0.2);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
 }
 
 .progress-dot.active {
+  width: 18px;
+  height: 18px;
   background: var(--python-blue);
   border-color: var(--python-yellow);
-  transform: scale(1.2);
+  border-width: 3px;
+  box-shadow:
+    0 0 0 4px rgba(255, 212, 59, 0.3),
+    0 0 12px rgba(55, 118, 171, 0.5);
 }
 
 .progress-dot:hover {
-  transform: scale(1.3);
+  transform: scale(1.2);
+}
+
+.progress-dot.active:hover {
+  transform: scale(1.1);
 }
 
 .progress-dot::after {
@@ -699,4 +854,151 @@
 .version-badge svg {
   width: 16px;
   height: 16px;
+}
+
+/* ========================================
+   "We Are Here" Timeline Terminus
+   ======================================== */
+.timeline-terminus {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2rem;
+  padding: 2rem 2rem 3rem;
+  z-index: 30;
+  background: transparent;
+}
+
+/* No pseudo-elements needed - keep it clean */
+.timeline-terminus::after {
+  display: none;
+}
+
+.timeline-terminus::before {
+  display: none;
+}
+
+.terminus-logo-container {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    135deg,
+    var(--python-blue) 0%,
+    #2c5f8a 40%,
+    var(--python-yellow) 100%
+  );
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 4px oklch(var(--b1)),
+    0 0 0 6px var(--python-blue),
+    0 0 30px rgba(55, 118, 171, 0.4),
+    0 0 60px rgba(255, 212, 59, 0.2);
+  animation: terminusPulse 3s ease-in-out infinite;
+}
+
+.terminus-logo {
+  width: 80px;
+  height: 80px;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4));
+}
+
+.terminus-text {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.terminus-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--python-blue), var(--python-yellow));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.02em;
+}
+
+.terminus-subtitle {
+  font-size: 0.875rem;
+  color: oklch(var(--bc) / 0.6);
+  margin-top: 0.25rem;
+}
+
+.terminus-year {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding: 0.5rem 1.5rem;
+  background: var(--python-blue);
+  color: white;
+  border-radius: 9999px;
+  font-weight: 700;
+  font-size: 1.125rem;
+  box-shadow: 0 4px 15px rgba(55, 118, 171, 0.4);
+}
+
+.terminus-year::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  background: var(--python-yellow);
+  border-radius: 50%;
+  animation: terminusBlink 1.5s ease-in-out infinite;
+}
+
+@keyframes terminusPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow:
+      0 0 0 4px white,
+      0 0 0 8px var(--python-blue),
+      0 0 40px rgba(55, 118, 171, 0.5),
+      0 0 80px rgba(255, 212, 59, 0.3);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow:
+      0 0 0 4px white,
+      0 0 0 8px var(--python-blue),
+      0 0 60px rgba(55, 118, 171, 0.6),
+      0 0 100px rgba(255, 212, 59, 0.4);
+  }
+}
+
+
+@keyframes terminusBlink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+
+/* Mobile adjustments for terminus */
+@media (max-width: 768px) {
+  .timeline-terminus::before {
+    left: 1.5rem;
+    transform: translateX(0);
+  }
+
+  .terminus-logo-container {
+    width: 100px;
+    height: 100px;
+  }
+
+  .terminus-logo {
+    width: 55px;
+    height: 55px;
+  }
+
+  .terminus-title {
+    font-size: 1.25rem;
+  }
 }

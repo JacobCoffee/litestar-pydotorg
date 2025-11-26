@@ -343,15 +343,26 @@ document.addEventListener('alpine:init', () => {
           highlights: ['match-case', 'Better errors', 'Union types X | Y']
         },
         {
+          id: 'sc-election-2024',
+          year: 2023,
+          month: 'Dec',
+          title: 'Steering Council Election (2024 Term)',
+          description: 'First election after adopting new governance model continues.',
+          type: 'event',
+          details: 'Of 87 eligible voters, 68 cast ballots. Elected members: Pablo Galindo Salgado, Gregory P. Smith, Emily Morehouse, Barry Warsaw, Thomas Wouters.',
+          highlights: ['68/87 voters', '5 members elected', 'Second full council term'],
+          links: [{ label: 'PEP 8105', url: 'https://peps.python.org/pep-8105/' }]
+        },
+        {
           id: 'pep-703',
-          year: 2022,
-          month: 'Jan',
-          title: 'PEP 703 - No-GIL Python',
-          description: 'Proposal to make the Global Interpreter Lock optional, accepted for Python 3.13+.',
+          year: 2023,
+          month: 'Oct',
+          title: 'PEP 703 - Optional GIL Accepted',
+          description: 'Proposal to make the Global Interpreter Lock optional accepted by Steering Council.',
           type: 'pep',
           pepNumber: 703,
-          details: 'This historic PEP proposes making Python truly multi-threaded by allowing the GIL to be disabled, potentially revolutionizing Python performance.',
-          highlights: ['Optional GIL', 'True parallelism', 'Multi-threaded Python'],
+          details: 'The Steering Council accepted this historic PEP on October 24, 2023 with a gradual rollout plan. Introduces --disable-gil build flag for CPython to run without the GIL.',
+          highlights: ['--disable-gil flag', 'Gradual rollout', 'Py_GIL_DISABLED macro'],
           links: [{ label: 'PEP 703', url: 'https://peps.python.org/pep-0703/' }]
         },
         {
@@ -377,18 +388,6 @@ document.addEventListener('alpine:init', () => {
           highlights: ['Per-interpreter GIL', 'F-string expressions', 'Type param syntax', 'Faster startup']
         },
         {
-          id: 'pep-723',
-          year: 2023,
-          month: 'Aug',
-          title: 'PEP 723 - Inline Script Metadata',
-          description: 'Standardized way to embed dependencies and metadata in single-file Python scripts.',
-          type: 'pep',
-          pepNumber: 723,
-          details: 'Enables tools like uv and pip to automatically install dependencies for standalone scripts.',
-          highlights: ['Script dependencies', 'Single-file scripts', 'Tool support'],
-          links: [{ label: 'PEP 723', url: 'https://peps.python.org/pep-0723/' }]
-        },
-        {
           id: 'python-3.13',
           year: 2024,
           month: 'Oct',
@@ -400,15 +399,93 @@ document.addEventListener('alpine:init', () => {
           highlights: ['Free-threaded (no-GIL)', 'JIT compiler', 'New REPL', 'iOS/Android support']
         },
         {
+          id: 'core-sprint-2024',
+          year: 2024,
+          month: 'Sep',
+          title: 'Core Dev Sprint 2024',
+          description: 'Meta hosts 40+ core developers at Bellevue WA for intensive Python development.',
+          type: 'event',
+          details: 'A week at Meta\'s Spring District campus brought together core developers, triagers, and guests. Key topics: JIT compiler progress, type annotations in CPython, PEP 2026, and 5-year deprecation cycles. Python 3.13 release was delayed due to incremental GC issue discovered during the sprint.',
+          highlights: ['40+ core devs', 'Meta Bellevue campus', 'JIT compiler updates', 'PEP 2026 submitted'],
+          links: [{ label: 'Sprint Report', url: 'https://hugovk.dev/blog/2024/python-core-developer-sprint-2024/' }]
+        },
+        {
+          id: 'sc-election-2025',
+          year: 2024,
+          month: 'Dec',
+          title: 'Steering Council Election (2025 Term)',
+          description: 'Donghee Na joins the Steering Council, replacing Thomas Wouters.',
+          type: 'event',
+          details: 'Of 100 eligible voters, 76 cast ballots. Elected members: Barry Warsaw, Donghee Na, Emily Morehouse, Gregory P. Smith, Pablo Galindo Salgado. Voting period: Nov 25 - Dec 9, 2024.',
+          highlights: ['76/100 voters', 'Donghee Na elected', 'Thomas Wouters steps down'],
+          links: [{ label: 'PEP 8106', url: 'https://peps.python.org/pep-8106/' }]
+        },
+        {
+          id: 'pep-649',
+          year: 2023,
+          month: 'May',
+          title: 'PEP 649 - Deferred Annotations (Final)',
+          description: 'Deferred evaluation of annotations finalized, superseding PEP 563.',
+          type: 'pep',
+          pepNumber: 649,
+          details: 'Annotations are now evaluated lazily via __annotate__ descriptor when accessed, not at binding time. This became the default in Python 3.14.',
+          highlights: ['__annotate__ descriptor', 'Lazy evaluation', 'Supersedes PEP 563'],
+          links: [{ label: 'PEP 649', url: 'https://peps.python.org/pep-0649/' }]
+        },
+        {
+          id: 'pep-723-final',
+          year: 2024,
+          month: 'Jan',
+          title: 'PEP 723 - Inline Script Metadata (Final)',
+          description: 'Standard for embedding dependencies in single-file Python scripts finalized.',
+          type: 'pep',
+          pepNumber: 723,
+          details: 'Enables tools like uv and pip to automatically install dependencies for standalone scripts. Canonical spec maintained by PyPA.',
+          highlights: ['Script dependencies', 'uv/pip support', 'PyPA standard'],
+          links: [{ label: 'PEP 723', url: 'https://peps.python.org/pep-0723/' }]
+        },
+        {
           id: 'python-3.14',
           year: 2025,
           month: 'Oct',
-          title: 'Python 3.14 (Upcoming)',
-          description: 'Expected to include deferred evaluation of annotations and continued no-GIL improvements.',
+          title: 'Python 3.14 Released',
+          description: 'Free-threaded Python official, PEP 649 default, template strings, and major performance gains.',
           type: 'release',
           version: '3.14',
-          details: 'Development in progress with focus on stabilizing free-threaded Python and additional performance improvements.',
-          highlights: ['PEP 649', 'No-GIL stable', 'Template strings']
+          details: 'Historic release: free-threaded Python (PEP 779) officially supported, deferred annotations default (PEP 649), t-strings (PEP 750), multiple interpreters (PEP 734), and 3-5% faster via tail-call interpreter.',
+          highlights: ['Free-threaded official', 'PEP 649 default', 'T-strings (PEP 750)', 'Zstd compression', 'Tail-call interpreter']
+        },
+        {
+          id: 'python-3.9-eol',
+          year: 2025,
+          month: 'Oct',
+          title: 'Python 3.9 End of Life',
+          description: 'Python 3.9 reaches end of life after 5 years of support.',
+          type: 'milestone',
+          details: 'Python 3.9 officially reached EOL on October 31, 2025. Python 3.10 is now the oldest supported version (security fixes only until October 2026).',
+          highlights: ['5-year lifecycle', 'Security-only since 2022', 'Upgrade to 3.10+']
+        },
+        {
+          id: 'core-sprint-2025',
+          year: 2025,
+          month: 'Sep',
+          title: 'Core Dev Sprint 2025',
+          description: 'Arm Ltd hosts 35 core developers and 13 guests in Cambridge, UK.',
+          type: 'event',
+          details: 'A week at Arm headquarters featured mentorship discussions, Claude AI demos for CPython development, Python 3.14.0rc3 release during sprint, and social events including punting on the River Cam. Savannah Ostrowski shadowed as future release manager for 3.16/3.17.',
+          highlights: ['35 core devs + 13 guests', 'Arm Cambridge HQ', 'Mentorship focus', 'AI tooling demos'],
+          links: [{ label: 'Sprint Report', url: 'https://hugovk.dev/blog/2025/python-core-sprint/' }]
+        },
+        {
+          id: 'psf-nsf-withdrawal',
+          year: 2025,
+          month: 'Oct',
+          title: 'PSF Withdraws $1.5M NSF Grant',
+          description: 'PSF unanimously votes to withdraw NSF grant over DEI policy conflict.',
+          type: 'event',
+          details: 'The PSF Board withdrew a recommended $1.5M NSF grant for Python/PyPI security improvements after grant terms required affirming no DEI programs, conflicting with PSF\'s mission to support a diverse international community.',
+          highlights: ['$1.5M security grant', 'DEI policy conflict', 'Unanimous board vote'],
+          links: [{ label: 'PSF Statement', url: 'https://pyfound.blogspot.com/2025/10/NSF-funding-statement.html' }]
         }
       ];
     },
@@ -447,19 +524,20 @@ document.addEventListener('alpine:init', () => {
 
         this.showProgress = rect.top < windowHeight && rect.bottom > 0;
 
-        // Update current era based on scroll position
+        // Update current era based on scroll position - use lowercase to match getEraForYear()
         const events = document.querySelectorAll('.timeline-event');
         events.forEach((event) => {
           const eventRect = event.getBoundingClientRect();
           if (eventRect.top < windowHeight / 2 && eventRect.bottom > 0) {
             const year = event.getAttribute('data-year');
             if (year) {
-              if (parseInt(year) < 1995) this.currentEra = 'Origins';
-              else if (parseInt(year) < 2001) this.currentEra = 'Growth';
-              else if (parseInt(year) < 2009) this.currentEra = 'PSF Era';
-              else if (parseInt(year) < 2016) this.currentEra = 'Python 3';
-              else if (parseInt(year) < 2021) this.currentEra = 'Modern';
-              else this.currentEra = 'Current';
+              // Use same values as getEraForYear() for consistency
+              if (parseInt(year) < 1995) this.currentEra = 'origins';
+              else if (parseInt(year) < 2001) this.currentEra = 'growth';
+              else if (parseInt(year) < 2009) this.currentEra = 'psf';
+              else if (parseInt(year) < 2016) this.currentEra = 'python3';
+              else if (parseInt(year) < 2021) this.currentEra = 'modern';
+              else this.currentEra = 'current';
             }
           }
         });

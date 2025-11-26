@@ -203,6 +203,9 @@
 
             {# Timeline River #}
             <div class="timeline-river">
+                {# River wave overlay for flowing effect #}
+                <div class="river-wave"></div>
+
                 {# Floating Particles #}
                 <div class="timeline-particles">
                     <div class="particle"></div>
@@ -308,11 +311,29 @@
                         Clear filters
                     </button>
                 </div>
+
+                {# "We Are Here" Timeline Terminus #}
+                <div class="timeline-terminus" x-show="filteredEvents.length > 0 && activeFilter === 'all'">
+                    <div class="terminus-logo-container">
+                        {# Python Logo SVG #}
+                        <svg class="terminus-logo" viewBox="0 0 110 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M54.5 0C25 0 27 12.5 27 12.5V25.5H55V29H17S0 27 0 55s15 27 15 27h9V68s-.5-14 14-14h24s13 .5 13-12.5V16S77 0 54.5 0zM40 9.5a4.5 4.5 0 110 9 4.5 4.5 0 010-9z" fill="#3776AB"/>
+                            <path d="M55.5 110c29.5 0 27.5-12.5 27.5-12.5V84.5H55V81h38s17 2 17-26-15-27-15-27h-9v14s.5 14-14 14H48s-13-.5-13 12.5V94s-2 16 20.5 16zM70 100.5a4.5 4.5 0 110-9 4.5 4.5 0 010 9z" fill="#FFD43B"/>
+                        </svg>
+                    </div>
+                    <div class="terminus-text">
+                        <div class="terminus-title">We Are Here</div>
+                        <div class="terminus-subtitle">The journey continues...</div>
+                        <div class="terminus-year">
+                            <span x-text="new Date().getFullYear()"></span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             {# Progress indicator (fixed position) #}
             <div class="timeline-progress" :class="{ 'visible': showProgress }">
-                <template x-for="year in [1991, 2000, 2008, 2015, 2020, 2024]" :key="year">
+                <template x-for="year in [1991, 2000, 2008, 2015, 2020, 2025]" :key="year">
                     <div
                         class="progress-dot"
                         :class="{ 'active': currentEra === getEraForYear(year) }"
