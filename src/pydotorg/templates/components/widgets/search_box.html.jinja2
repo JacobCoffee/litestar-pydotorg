@@ -1,0 +1,98 @@
+{% macro search_box(placeholder='Search Python.org...', action='/search', size='md') %}
+<form action="{{ action }}" method="get" class="form-control">
+  <div class="input-group">
+    <input
+      type="text"
+      name="q"
+      placeholder="{{ placeholder }}"
+      class="input input-bordered {% if size == 'lg' %}input-lg{% elif size == 'sm' %}input-sm{% endif %} w-full"
+      required
+    />
+    <button type="submit" class="btn btn-primary {% if size == 'lg' %}btn-lg{% elif size == 'sm' %}btn-sm{% endif %}">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+      </svg>
+    </button>
+  </div>
+</form>
+{% endmacro %}
+
+{% macro search_modal(placeholder='Search...', action='/search') %}
+<div>
+  <label for="search-modal" class="btn btn-ghost gap-2">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+    </svg>
+    <span class="hidden sm:inline">Search</span>
+    <kbd class="kbd kbd-sm hidden lg:inline">⌘K</kbd>
+  </label>
+
+  <input type="checkbox" id="search-modal" class="modal-toggle" />
+  <div class="modal">
+    <div class="modal-box max-w-2xl">
+      <label for="search-modal" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
+      <h3 class="font-bold text-lg mb-4">Search Python.org</h3>
+
+      <form action="{{ action }}" method="get">
+        <div class="form-control">
+          <div class="input-group">
+            <input
+              type="text"
+              name="q"
+              placeholder="{{ placeholder }}"
+              class="input input-bordered input-lg w-full"
+              autofocus
+              required
+            />
+            <button type="submit" class="btn btn-primary btn-lg">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <div class="divider">Quick Links</div>
+
+      <div class="grid grid-cols-2 gap-2">
+        <a href="/docs" class="btn btn-ghost btn-sm justify-start">Documentation</a>
+        <a href="/downloads" class="btn btn-ghost btn-sm justify-start">Downloads</a>
+        <a href="/community" class="btn btn-ghost btn-sm justify-start">Community</a>
+        <a href="/success-stories" class="btn btn-ghost btn-sm justify-start">Success Stories</a>
+      </div>
+    </div>
+    <label class="modal-backdrop" for="search-modal">Close</label>
+  </div>
+</div>
+{% endmacro %}
+
+{% macro search_autocomplete(suggestions=None, action='/search') %}
+<div class="dropdown dropdown-end w-full max-w-md">
+  <form action="{{ action }}" method="get" class="form-control">
+    <input
+      type="text"
+      name="q"
+      placeholder="Search..."
+      class="input input-bordered w-full"
+      tabindex="0"
+      autocomplete="off"
+    />
+  </form>
+
+  {% if suggestions %}
+  <ul tabindex="0" class="dropdown-content z-50 menu p-2 shadow-xl bg-base-100 rounded-box w-full mt-2">
+    {% for suggestion in suggestions %}
+    <li>
+      <a href="{{ suggestion.url }}">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        {{ suggestion.title }}
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+</div>
+{% endmacro %}

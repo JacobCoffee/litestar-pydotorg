@@ -1,0 +1,198 @@
+{% macro input_field(name, label, type='text', placeholder='', value='', required=false, error='', help_text='') %}
+<div class="form-control w-full">
+    <label class="label" for="{{ name }}">
+        <span class="label-text">
+            {{ label }}
+            {% if required %}<span class="text-error">*</span>{% endif %}
+        </span>
+    </label>
+    <input
+        type="{{ type }}"
+        name="{{ name }}"
+        id="{{ name }}"
+        placeholder="{{ placeholder }}"
+        value="{{ value }}"
+        class="input input-bordered w-full {% if error %}input-error{% endif %}"
+        {% if required %}required{% endif %}
+    />
+    {% if error %}
+        <label class="label">
+            <span class="label-text-alt text-error">{{ error }}</span>
+        </label>
+    {% elif help_text %}
+        <label class="label">
+            <span class="label-text-alt">{{ help_text }}</span>
+        </label>
+    {% endif %}
+</div>
+{% endmacro %}
+
+{% macro textarea_field(name, label, placeholder='', value='', rows=4, required=false, error='', help_text='') %}
+<div class="form-control w-full">
+    <label class="label" for="{{ name }}">
+        <span class="label-text">
+            {{ label }}
+            {% if required %}<span class="text-error">*</span>{% endif %}
+        </span>
+    </label>
+    <textarea
+        name="{{ name }}"
+        id="{{ name }}"
+        placeholder="{{ placeholder }}"
+        rows="{{ rows }}"
+        class="textarea textarea-bordered w-full {% if error %}textarea-error{% endif %}"
+        {% if required %}required{% endif %}
+    >{{ value }}</textarea>
+    {% if error %}
+        <label class="label">
+            <span class="label-text-alt text-error">{{ error }}</span>
+        </label>
+    {% elif help_text %}
+        <label class="label">
+            <span class="label-text-alt">{{ help_text }}</span>
+        </label>
+    {% endif %}
+</div>
+{% endmacro %}
+
+{% macro select_field(name, label, options, selected='', required=false, error='', help_text='') %}
+<div class="form-control w-full">
+    <label class="label" for="{{ name }}">
+        <span class="label-text">
+            {{ label }}
+            {% if required %}<span class="text-error">*</span>{% endif %}
+        </span>
+    </label>
+    <select
+        name="{{ name }}"
+        id="{{ name }}"
+        class="select select-bordered w-full {% if error %}select-error{% endif %}"
+        {% if required %}required{% endif %}
+    >
+        <option value="" disabled {% if not selected %}selected{% endif %}>Choose one</option>
+        {% for option in options %}
+            <option
+                value="{{ option.value }}"
+                {% if option.value == selected %}selected{% endif %}
+            >
+                {{ option.label }}
+            </option>
+        {% endfor %}
+    </select>
+    {% if error %}
+        <label class="label">
+            <span class="label-text-alt text-error">{{ error }}</span>
+        </label>
+    {% elif help_text %}
+        <label class="label">
+            <span class="label-text-alt">{{ help_text }}</span>
+        </label>
+    {% endif %}
+</div>
+{% endmacro %}
+
+{% macro checkbox_field(name, label, checked=false, error='', help_text='') %}
+<div class="form-control">
+    <label class="label cursor-pointer justify-start gap-3">
+        <input
+            type="checkbox"
+            name="{{ name }}"
+            id="{{ name }}"
+            class="checkbox checkbox-primary {% if error %}checkbox-error{% endif %}"
+            {% if checked %}checked{% endif %}
+        />
+        <span class="label-text">{{ label }}</span>
+    </label>
+    {% if error %}
+        <label class="label">
+            <span class="label-text-alt text-error">{{ error }}</span>
+        </label>
+    {% elif help_text %}
+        <label class="label">
+            <span class="label-text-alt">{{ help_text }}</span>
+        </label>
+    {% endif %}
+</div>
+{% endmacro %}
+
+{% macro radio_group(name, label, options, selected='', required=false, error='', help_text='') %}
+<div class="form-control w-full">
+    <label class="label">
+        <span class="label-text">
+            {{ label }}
+            {% if required %}<span class="text-error">*</span>{% endif %}
+        </span>
+    </label>
+    <div class="flex flex-col gap-2">
+        {% for option in options %}
+            <label class="label cursor-pointer justify-start gap-3">
+                <input
+                    type="radio"
+                    name="{{ name }}"
+                    value="{{ option.value }}"
+                    class="radio radio-primary {% if error %}radio-error{% endif %}"
+                    {% if option.value == selected %}checked{% endif %}
+                    {% if required %}required{% endif %}
+                />
+                <span class="label-text">{{ option.label }}</span>
+            </label>
+        {% endfor %}
+    </div>
+    {% if error %}
+        <label class="label">
+            <span class="label-text-alt text-error">{{ error }}</span>
+        </label>
+    {% elif help_text %}
+        <label class="label">
+            <span class="label-text-alt">{{ help_text }}</span>
+        </label>
+    {% endif %}
+</div>
+{% endmacro %}
+
+{% macro search_field(name='q', placeholder='Search...', value='', size='md') %}
+<div class="form-control">
+    <div class="input-group">
+        <input
+            type="search"
+            name="{{ name }}"
+            placeholder="{{ placeholder }}"
+            value="{{ value }}"
+            class="input input-bordered input-{{ size }}"
+        />
+        <button class="btn btn-square btn-{{ size }}">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+        </button>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro file_upload(name, label, accept='', required=false, error='', help_text='') %}
+<div class="form-control w-full">
+    <label class="label" for="{{ name }}">
+        <span class="label-text">
+            {{ label }}
+            {% if required %}<span class="text-error">*</span>{% endif %}
+        </span>
+    </label>
+    <input
+        type="file"
+        name="{{ name }}"
+        id="{{ name }}"
+        class="file-input file-input-bordered w-full {% if error %}file-input-error{% endif %}"
+        {% if accept %}accept="{{ accept }}"{% endif %}
+        {% if required %}required{% endif %}
+    />
+    {% if error %}
+        <label class="label">
+            <span class="label-text-alt text-error">{{ error }}</span>
+        </label>
+    {% elif help_text %}
+        <label class="label">
+            <span class="label-text-alt">{{ help_text }}</span>
+        </label>
+    {% endif %}
+</div>
+{% endmacro %}

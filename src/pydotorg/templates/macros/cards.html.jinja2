@@ -1,0 +1,134 @@
+{% macro basic_card(title, content, image_url='', footer='') %}
+<div class="card bg-base-100 shadow-xl">
+    {% if image_url %}
+        <figure><img src="{{ image_url }}" alt="{{ title }}" /></figure>
+    {% endif %}
+    <div class="card-body">
+        <h2 class="card-title">{{ title }}</h2>
+        <p>{{ content }}</p>
+        {% if footer %}
+            <div class="card-actions justify-end">
+                {{ footer }}
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endmacro %}
+
+{% macro news_card(title, excerpt, date, url, author='', image_url='') %}
+<article class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow">
+    {% if image_url %}
+        <figure class="h-48 overflow-hidden">
+            <img src="{{ image_url }}" alt="{{ title }}" class="w-full h-full object-cover" />
+        </figure>
+    {% endif %}
+    <div class="card-body">
+        <div class="flex items-center gap-2 text-sm text-base-content/60 mb-2">
+            <time datetime="{{ date }}">{{ date }}</time>
+            {% if author %}
+                <span>•</span>
+                <span>{{ author }}</span>
+            {% endif %}
+        </div>
+        <h3 class="card-title text-python-blue hover:text-python-blue-dark transition-colors">
+            <a href="{{ url }}">{{ title }}</a>
+        </h3>
+        <p class="text-base-content/80">{{ excerpt }}</p>
+        <div class="card-actions justify-end mt-4">
+            <a href="{{ url }}" class="python-link font-semibold">
+                Read more →
+            </a>
+        </div>
+    </div>
+</article>
+{% endmacro %}
+
+{% macro feature_card(icon, title, description, url='') %}
+<div class="card bg-base-100 shadow-lg hover:shadow-xl transition-all hover:-translate-y-1">
+    <div class="card-body items-center text-center">
+        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-python-blue to-python-blue-dark flex items-center justify-center text-white mb-4">
+            {{ icon|safe }}
+        </div>
+        <h3 class="card-title text-python-blue">{{ title }}</h3>
+        <p class="text-base-content/80">{{ description }}</p>
+        {% if url %}
+            <div class="card-actions mt-4">
+                <a href="{{ url }}" class="btn btn-ghost btn-sm">Learn More →</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endmacro %}
+
+{% macro download_card(platform, version, size, url, icon='') %}
+<div class="card bg-base-100 shadow-lg border-2 border-base-300 hover:border-python-blue transition-colors">
+    <div class="card-body">
+        <div class="flex items-start justify-between">
+            <div class="flex-1">
+                {% if icon %}
+                    <div class="mb-3">{{ icon|safe }}</div>
+                {% endif %}
+                <h3 class="card-title text-lg">{{ platform }}</h3>
+                <p class="text-sm text-base-content/60 mt-1">Version {{ version }}</p>
+                {% if size %}
+                    <p class="text-xs text-base-content/50 mt-1">{{ size }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="card-actions justify-end mt-4">
+            <a href="{{ url }}" class="btn btn-primary btn-sm gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                Download
+            </a>
+        </div>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro event_card(title, date, location, url, type='') %}
+<div class="card bg-base-100 shadow-lg">
+    <div class="card-body">
+        {% if type %}
+            <div class="badge badge-primary badge-sm">{{ type }}</div>
+        {% endif %}
+        <h3 class="card-title text-python-blue mt-2">
+            <a href="{{ url }}" class="hover:underline">{{ title }}</a>
+        </h3>
+        <div class="flex flex-col gap-2 text-sm text-base-content/70 mt-2">
+            <div class="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <time datetime="{{ date }}">{{ date }}</time>
+            </div>
+            <div class="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <span>{{ location }}</span>
+            </div>
+        </div>
+        <div class="card-actions justify-end mt-4">
+            <a href="{{ url }}" class="btn btn-ghost btn-sm">Details →</a>
+        </div>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro stats_card(value, label, trend='', icon='') %}
+<div class="stat bg-base-100 shadow-lg rounded-lg">
+    <div class="stat-figure text-python-blue">
+        {% if icon %}
+            {{ icon|safe }}
+        {% endif %}
+    </div>
+    <div class="stat-value text-python-blue">{{ value }}</div>
+    <div class="stat-title">{{ label }}</div>
+    {% if trend %}
+        <div class="stat-desc">{{ trend }}</div>
+    {% endif %}
+</div>
+{% endmacro %}

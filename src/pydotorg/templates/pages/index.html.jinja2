@@ -1,0 +1,265 @@
+{% extends "base.html.jinja2" %}
+{% import "macros/buttons.html.jinja2" as buttons %}
+{% import "macros/cards.html.jinja2" as cards %}
+
+{% block title %}Welcome to Python.org{% endblock %}
+
+{% block content %}
+<section class="python-gradient text-white">
+    <div class="section-container py-20">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-5xl md:text-6xl font-bold mb-6">
+                Python is powerful... and fast
+            </h1>
+            <p class="text-xl md:text-2xl mb-8 opacity-90">
+                plays well with others; runs everywhere; is friendly & easy to learn; is Open.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                {{ buttons.download_button('Download Python', '/downloads', 'lg', 'Latest: Python 3.12.0') }}
+                {{ buttons.outline_button('Learn More', '/about', 'button', 'lg', false, 'text-white border-white hover:bg-white/10') }}
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {{ cards.feature_card(
+                '<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>',
+                'Get Started',
+                'Whether you\'re new to programming or an experienced developer, it\'s easy to learn and use Python.',
+                '/about/gettingstarted'
+            ) }}
+
+            {{ cards.feature_card(
+                '<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>',
+                'Download',
+                'Download the latest version of Python. Python 3.12.0 is the latest stable release.',
+                '/downloads'
+            ) }}
+
+            {{ cards.feature_card(
+                '<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>',
+                'Docs',
+                'Browse the official documentation and tutorials to learn more about Python.',
+                'https://docs.python.org'
+            ) }}
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-200 py-16">
+    <div class="section-container">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-python-blue mb-4">Latest News & Updates</h2>
+                <p class="text-lg text-base-content/80">Stay up to date with the latest Python releases and community news</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {{ cards.news_card(
+                    'Python 3.12.0 is now available',
+                    'The latest version of Python is now available for download with exciting new features and improvements.',
+                    '2024-10-02',
+                    '/downloads/release/python-3120',
+                    'Python Release Team'
+                ) }}
+
+                {{ cards.news_card(
+                    'PyCon US 2024 Announced',
+                    'Join us for the largest annual gathering for the community using and developing Python.',
+                    '2024-09-15',
+                    '/events/pycon-us-2024',
+                    'PSF Events'
+                ) }}
+
+                {{ cards.news_card(
+                    'Python Enhancement Proposal Updates',
+                    'Several new PEPs have been accepted and are now part of the Python development process.',
+                    '2024-09-01',
+                    '/dev/peps',
+                    'Python Core Team'
+                ) }}
+            </div>
+
+            <div class="text-center mt-12">
+                <a href="/news" class="btn btn-outline btn-primary">View All News</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+                <h2 class="text-4xl font-bold text-python-blue mb-6">
+                    What is Python?
+                </h2>
+                <div class="prose prose-lg max-w-none">
+                    <p class="text-base-content/80">
+                        Python is a programming language that lets you work quickly and integrate systems more effectively.
+                    </p>
+                    <p class="text-base-content/80">
+                        Python is an interpreted, object-oriented, high-level programming language with dynamic semantics.
+                        Its high-level built-in data structures, combined with dynamic typing and dynamic binding, make it
+                        very attractive for Rapid Application Development, as well as for use as a scripting or glue language
+                        to connect existing components together.
+                    </p>
+                    <div class="mt-6">
+                        <a href="/about" class="python-link font-semibold text-lg">
+                            Learn more about Python →
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-base-300 rounded-lg p-8">
+                <div class="code-block">
+                    <pre class="text-sm"><code><span class="text-purple-500"># Python syntax example</span>
+<span class="text-blue-500">def</span> <span class="text-green-500">greet</span>(name):
+    <span class="text-blue-500">return</span> <span class="text-yellow-500">f"Hello, {name}!"</span>
+
+<span class="text-purple-500"># Simple and readable</span>
+message = <span class="text-green-500">greet</span>(<span class="text-yellow-500">"World"</span>)
+<span class="text-blue-500">print</span>(message)
+
+<span class="text-purple-500"># Output: Hello, World!</span></code></pre>
+                </div>
+                <div class="mt-6 flex gap-4">
+                    <a href="/about/gettingstarted" class="btn btn-primary btn-sm">Get Started</a>
+                    <a href="https://docs.python.org/3/tutorial/" class="btn btn-ghost btn-sm">View Tutorial</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-gradient-to-r from-python-yellow to-python-yellow-light py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Success Stories</h2>
+                <p class="text-lg text-gray-800">See how companies use Python to build amazing products</p>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-2xl p-8 md:p-12">
+                <blockquote class="text-xl text-gray-700 italic mb-6">
+                    "Python has been an important part of our development infrastructure for over a decade.
+                    It's flexibility and ease of use have made it instrumental in our data analysis and
+                    machine learning workflows."
+                </blockquote>
+                <div class="flex items-center gap-4">
+                    <div class="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center text-2xl font-bold text-python-blue">
+                        G
+                    </div>
+                    <div>
+                        <p class="font-semibold text-gray-900">Google</p>
+                        <p class="text-sm text-gray-600">Technology Company</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-8">
+                <a href="/success-stories" class="btn btn-outline">Read More Success Stories</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-python-blue mb-4">Upcoming Events</h2>
+                <p class="text-lg text-base-content/80">Connect with the Python community at events around the world</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {{ cards.event_card(
+                    'PyCon US 2024',
+                    'May 15-23, 2024',
+                    'Pittsburgh, PA',
+                    '/events/pycon-us-2024',
+                    'Conference'
+                ) }}
+
+                {{ cards.event_card(
+                    'EuroPython 2024',
+                    'July 8-14, 2024',
+                    'Prague, Czech Republic',
+                    '/events/europython-2024',
+                    'Conference'
+                ) }}
+
+                {{ cards.event_card(
+                    'Python Web Conf 2024',
+                    'March 13-17, 2024',
+                    'Online',
+                    '/events/python-web-conf-2024',
+                    'Virtual'
+                ) }}
+            </div>
+
+            <div class="text-center mt-12">
+                <a href="/events" class="btn btn-outline btn-primary">View All Events</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-python-blue text-white py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-4xl font-bold mb-6">Support Python Development</h2>
+            <p class="text-xl mb-8 opacity-90">
+                The Python Software Foundation is a non-profit organization devoted to advancing open source
+                technology related to the Python programming language.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="/donate" class="btn btn-secondary btn-lg">
+                    Donate to the PSF
+                </a>
+                <a href="/psf/membership" class="btn btn-outline btn-lg text-white border-white hover:bg-white/10">
+                    Become a Member
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-12">
+    <div class="section-container">
+        <div class="stats stats-vertical lg:stats-horizontal shadow w-full">
+            {{ cards.stats_card(
+                '3.12',
+                'Latest Version',
+                '',
+                '<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>'
+            ) }}
+
+            {{ cards.stats_card(
+                '30+',
+                'Years of Development',
+                'Since 1991',
+                '<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>'
+            ) }}
+
+            {{ cards.stats_card(
+                '400K+',
+                'PyPI Packages',
+                'Growing daily',
+                '<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>'
+            ) }}
+
+            {{ cards.stats_card(
+                'Millions',
+                'Python Developers',
+                'Worldwide',
+                '<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>'
+            ) }}
+        </div>
+    </div>
+</section>
+{% endblock %}

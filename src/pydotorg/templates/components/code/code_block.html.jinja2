@@ -1,0 +1,84 @@
+{% macro code_block(code, language='python', filename='', show_line_numbers=True, highlight_lines=None) %}
+<div class="mockup-code bg-base-300 shadow-lg">
+  {% if filename %}
+  <div class="flex items-center gap-2 px-6 py-3 bg-base-100 border-b border-base-300">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-python-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+    </svg>
+    <span class="font-mono text-sm font-semibold">{{ filename }}</span>
+    <button class="btn btn-ghost btn-xs ml-auto" onclick="navigator.clipboard.writeText(this.closest('.mockup-code').querySelector('code').textContent)">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+      </svg>
+    </button>
+  </div>
+  {% endif %}
+
+  <pre data-prefix="$" class="text-warning"><code class="language-{{ language }}">{{ code }}</code></pre>
+</div>
+{% endmacro %}
+
+{% macro inline_code(code) %}
+<code class="px-2 py-1 bg-base-300 rounded font-mono text-sm text-python-blue">{{ code }}</code>
+{% endmacro %}
+
+{% macro code_tabs(tabs, default_tab=0) %}
+<div class="card bg-base-100 shadow-lg">
+  <div role="tablist" class="tabs tabs-lifted tabs-lg">
+    {% for tab in tabs %}
+    <input
+      type="radio"
+      name="code_tabs"
+      role="tab"
+      class="tab"
+      aria-label="{{ tab.label }}"
+      {% if loop.index0 == default_tab %}checked{% endif %}
+      id="tab-{{ loop.index }}"
+    />
+    <div role="tabpanel" class="tab-content bg-base-300 border-base-300 p-0">
+      <div class="relative">
+        <button
+          class="btn btn-ghost btn-sm absolute top-2 right-2 z-10"
+          onclick="navigator.clipboard.writeText(this.nextElementSibling.textContent)"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+          </svg>
+        </button>
+        <pre class="p-6 overflow-x-auto"><code class="language-{{ tab.language or 'python' }}">{{ tab.code }}</code></pre>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endmacro %}
+
+{% macro code_compare(before, after, before_label='Before', after_label='After', language='python') %}
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+  <div>
+    <div class="badge badge-error mb-2">{{ before_label }}</div>
+    <div class="mockup-code bg-base-300">
+      <pre><code class="language-{{ language }}">{{ before }}</code></pre>
+    </div>
+  </div>
+
+  <div>
+    <div class="badge badge-success mb-2">{{ after_label }}</div>
+    <div class="mockup-code bg-base-300">
+      <pre><code class="language-{{ language }}">{{ after }}</code></pre>
+    </div>
+  </div>
+</div>
+{% endmacro %}
+
+{% macro terminal_output(commands, prompt='$') %}
+<div class="mockup-code bg-neutral text-neutral-content shadow-lg">
+  {% for command in commands %}
+  {% if command.type == 'input' %}
+  <pre data-prefix="{{ prompt }}"><code>{{ command.text }}</code></pre>
+  {% else %}
+  <pre data-prefix="" class="text-success"><code>{{ command.text }}</code></pre>
+  {% endif %}
+  {% endfor %}
+</div>
+{% endmacro %}

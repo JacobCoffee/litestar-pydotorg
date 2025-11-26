@@ -1,0 +1,70 @@
+{% macro feature_grid(features, title=None, subtitle=None, columns=3) %}
+<section class="py-16 bg-base-100">
+  <div class="section-container">
+    {% if title %}
+    <div class="text-center mb-12">
+      <h2 class="text-4xl font-bold text-python-blue mb-4">{{ title }}</h2>
+      {% if subtitle %}
+      <p class="text-xl text-base-content/70 max-w-3xl mx-auto">{{ subtitle }}</p>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    <div class="grid grid-cols-1 {% if columns == 4 %}md:grid-cols-2 lg:grid-cols-4{% elif columns == 3 %}md:grid-cols-2 lg:grid-cols-3{% elif columns == 2 %}md:grid-cols-2{% endif %} gap-8">
+      {% for feature in features %}
+      <div class="card bg-base-200 shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 duration-300">
+        <div class="card-body items-center text-center">
+          {% if feature.icon %}
+          <div class="w-16 h-16 rounded-full bg-gradient-to-br from-python-blue to-blue-700 flex items-center justify-center text-white mb-4">
+            {{ feature.icon|safe }}
+          </div>
+          {% endif %}
+          <h3 class="card-title text-python-blue text-xl mb-2">{{ feature.title }}</h3>
+          <p class="text-base-content/80">{{ feature.description }}</p>
+          {% if feature.url %}
+          <div class="card-actions mt-4">
+            <a href="{{ feature.url }}" class="python-link font-semibold">
+              Learn More →
+            </a>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endmacro %}
+
+{% macro feature_list(features, title=None) %}
+<section class="py-16 bg-base-200">
+  <div class="section-container">
+    {% if title %}
+    <h2 class="text-4xl font-bold text-python-blue mb-12 text-center">{{ title }}</h2>
+    {% endif %}
+
+    <div class="max-w-4xl mx-auto space-y-8">
+      {% for feature in features %}
+      <div class="flex gap-6 items-start bg-base-100 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+        {% if feature.icon %}
+        <div class="flex-shrink-0">
+          <div class="w-12 h-12 rounded-full bg-python-blue/10 flex items-center justify-center text-python-blue">
+            {{ feature.icon|safe }}
+          </div>
+        </div>
+        {% endif %}
+        <div class="flex-1">
+          <h3 class="text-xl font-bold text-python-blue mb-2">{{ feature.title }}</h3>
+          <p class="text-base-content/80">{{ feature.description }}</p>
+          {% if feature.url %}
+          <a href="{{ feature.url }}" class="python-link font-semibold mt-2 inline-block">
+            Learn More →
+          </a>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endmacro %}

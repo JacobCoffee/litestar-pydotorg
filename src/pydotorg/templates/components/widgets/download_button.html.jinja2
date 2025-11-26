@@ -1,0 +1,92 @@
+{% macro download_button(version, url, platform='', size='lg', style='primary') %}
+<a
+  href="{{ url }}"
+  class="btn btn-{{ style }} {% if size == 'lg' %}btn-lg{% elif size == 'sm' %}btn-sm{% endif %} gap-2 shadow-lg hover:shadow-xl transition-shadow"
+  download
+>
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+  </svg>
+  <span>
+    Download Python {{ version }}
+    {% if platform %}<span class="text-sm opacity-80">for {{ platform }}</span>{% endif %}
+  </span>
+</a>
+{% endmacro %}
+
+{% macro download_card(platform, version, size='', url='', icon=None, release_date='', checksum='') %}
+<div class="card bg-base-100 shadow-lg border-2 border-base-300 hover:border-python-blue transition-colors">
+  <div class="card-body">
+    <div class="flex items-start justify-between">
+      <div class="flex-1">
+        {% if icon %}
+        <div class="mb-3 text-python-blue">{{ icon|safe }}</div>
+        {% endif %}
+        <h3 class="card-title text-lg mb-1">{{ platform }}</h3>
+        <p class="text-sm text-base-content/60">Version {{ version }}</p>
+        {% if size %}
+        <p class="text-xs text-base-content/50 mt-1">{{ size }}</p>
+        {% endif %}
+        {% if release_date %}
+        <p class="text-xs text-base-content/50">Released: {{ release_date }}</p>
+        {% endif %}
+      </div>
+    </div>
+
+    {% if checksum %}
+    <details class="collapse collapse-arrow bg-base-200 mt-2">
+      <summary class="collapse-title text-xs font-medium">Checksum</summary>
+      <div class="collapse-content">
+        <code class="text-xs break-all">{{ checksum }}</code>
+      </div>
+    </details>
+    {% endif %}
+
+    <div class="card-actions justify-end mt-4">
+      <a href="{{ url }}" class="btn btn-primary btn-sm gap-2" download>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+        </svg>
+        Download
+      </a>
+    </div>
+  </div>
+</div>
+{% endmacro %}
+
+{% macro download_hero(latest_version, platforms, pre_release=None) %}
+<section class="hero min-h-[60vh] bg-gradient-to-br from-python-blue to-blue-900">
+  <div class="hero-content text-center text-neutral-content">
+    <div class="max-w-4xl">
+      <h1 class="text-5xl md:text-6xl font-bold text-white mb-6">
+        Download Python
+      </h1>
+      <p class="text-2xl text-blue-100 mb-8">
+        Latest Release: <span class="font-bold text-yellow-300">{{ latest_version }}</span>
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
+        {% for platform in platforms %}
+        <a href="{{ platform.url }}" class="btn btn-warning btn-lg gap-2" download>
+          {% if platform.icon %}{{ platform.icon|safe }}{% endif %}
+          {{ platform.name }}
+        </a>
+        {% endfor %}
+      </div>
+
+      {% if pre_release %}
+      <div class="mt-8 text-blue-200">
+        <p class="text-sm">
+          Pre-release version {{ pre_release.version }} is also available
+          <a href="{{ pre_release.url }}" class="link link-warning">here</a>
+        </p>
+      </div>
+      {% endif %}
+
+      <p class="text-sm text-blue-200 mt-6">
+        <a href="#all-downloads" class="link link-hover">View all downloads</a>
+      </p>
+    </div>
+  </div>
+</section>
+{% endmacro %}

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="python">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>{% block title %}Python.org{% endblock %}</title>
+
+    <meta name="description" content="{% block meta_description %}The official home of the Python Programming Language{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}Python, programming, development, code{% endblock %}">
+
+    <meta property="og:title" content="{% block og_title %}{{ self.title() }}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{{ self.meta_description() }}{% endblock %}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.url }}">
+    <meta property="og:image" content="{% block og_image %}/static/images/python-logo-og.png{% endblock %}">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@ThePSF">
+
+    <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/images/apple-touch-icon.png">
+
+    <link rel="stylesheet" href="/static/css/tailwind.css">
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="min-h-screen flex flex-col">
+    {% include 'partials/navbar.html.jinja2' %}
+
+    <main class="flex-grow">
+        {% block breadcrumbs %}{% endblock %}
+
+        {% block messages %}
+            {% if messages %}
+                <div class="section-container mt-4">
+                    {% for message in messages %}
+                        {% include 'partials/alert.html.jinja2' %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endblock %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    {% include 'partials/footer.html.jinja2' %}
+
+    <button
+        id="scroll-to-top"
+        class="hidden fixed bottom-8 right-8 btn btn-circle btn-primary shadow-lg z-50"
+        aria-label="Scroll to top"
+    >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+        </svg>
+    </button>
+
+    <script src="/static/js/main.js"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

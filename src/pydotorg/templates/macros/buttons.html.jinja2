@@ -1,0 +1,79 @@
+{% macro primary_button(text, url='#', type='button', size='md', disabled=false, extra_classes='') %}
+<a
+    {% if type == 'button' %}href="{{ url }}"{% endif %}
+    {% if type == 'submit' %}type="submit"{% endif %}
+    class="btn btn-primary btn-{{ size }} {{ extra_classes }} {% if disabled %}btn-disabled{% endif %}"
+    {% if disabled %}disabled{% endif %}
+>
+    {{ text }}
+</a>
+{% endmacro %}
+
+{% macro secondary_button(text, url='#', type='button', size='md', disabled=false, extra_classes='') %}
+<a
+    {% if type == 'button' %}href="{{ url }}"{% endif %}
+    {% if type == 'submit' %}type="submit"{% endif %}
+    class="btn btn-secondary btn-{{ size }} {{ extra_classes }} {% if disabled %}btn-disabled{% endif %}"
+    {% if disabled %}disabled{% endif %}
+>
+    {{ text }}
+</a>
+{% endmacro %}
+
+{% macro outline_button(text, url='#', type='button', size='md', disabled=false, extra_classes='') %}
+<a
+    {% if type == 'button' %}href="{{ url }}"{% endif %}
+    {% if type == 'submit' %}type="submit"{% endif %}
+    class="btn btn-outline btn-{{ size }} {{ extra_classes }} {% if disabled %}btn-disabled{% endif %}"
+    {% if disabled %}disabled{% endif %}
+>
+    {{ text }}
+</a>
+{% endmacro %}
+
+{% macro ghost_button(text, url='#', type='button', size='md', disabled=false, extra_classes='') %}
+<a
+    {% if type == 'button' %}href="{{ url }}"{% endif %}
+    {% if type == 'submit' %}type="submit"{% endif %}
+    class="btn btn-ghost btn-{{ size }} {{ extra_classes }} {% if disabled %}btn-disabled{% endif %}"
+    {% if disabled %}disabled{% endif %}
+>
+    {{ text }}
+</a>
+{% endmacro %}
+
+{% macro download_button(text, url='#', size='lg', version='') %}
+<a href="{{ url }}" class="btn btn-primary btn-{{ size }} gap-2">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+    </svg>
+    <div class="text-left">
+        <div>{{ text }}</div>
+        {% if version %}
+            <div class="text-xs opacity-80">{{ version }}</div>
+        {% endif %}
+    </div>
+</a>
+{% endmacro %}
+
+{% macro icon_button(icon_path, aria_label, url='#', size='md', extra_classes='') %}
+<a
+    href="{{ url }}"
+    class="btn btn-circle btn-{{ size }} {{ extra_classes }}"
+    aria-label="{{ aria_label }}"
+>
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ icon_path }}" />
+    </svg>
+</a>
+{% endmacro %}
+
+{% macro button_group(buttons, size='md') %}
+<div class="btn-group">
+    {% for button in buttons %}
+        <button class="btn btn-{{ size }} {{ button.class|default('') }} {{ 'btn-active' if button.active else '' }}">
+            {{ button.text }}
+        </button>
+    {% endfor %}
+</div>
+{% endmacro %}

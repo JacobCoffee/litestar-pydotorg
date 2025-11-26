@@ -1,0 +1,49 @@
+{% macro hero(title, subtitle=None, cta_text=None, cta_url=None, image=None, style='gradient', size='lg') %}
+<section class="hero min-h-[60vh] {% if style == 'gradient' %}bg-gradient-to-br from-python-blue to-blue-900{% elif style == 'image' and image %}bg-cover bg-center{% else %}bg-python-blue{% endif %}"{% if style == 'image' and image %} style="background-image: url('{{ image }}');"{% endif %}>
+  <div class="hero-overlay bg-opacity-60"></div>
+  <div class="hero-content text-center text-neutral-content z-10">
+    <div class="max-w-4xl px-4">
+      <h1 class="{% if size == 'xl' %}text-6xl md:text-7xl{% elif size == 'lg' %}text-5xl md:text-6xl{% else %}text-4xl md:text-5xl{% endif %} font-bold text-white mb-6 animate-fade-in">
+        {{ title }}
+      </h1>
+      {% if subtitle %}
+      <p class="py-6 text-xl md:text-2xl text-blue-100 max-w-2xl mx-auto">
+        {{ subtitle }}
+      </p>
+      {% endif %}
+      {% if cta_text and cta_url %}
+      <div class="flex flex-col sm:flex-row gap-4 justify-center mt-8">
+        <a href="{{ cta_url }}" class="btn btn-warning btn-lg gap-2 shadow-lg hover:shadow-xl transition-shadow">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+          </svg>
+          {{ cta_text }}
+        </a>
+        {% if caller %}
+          {{ caller() }}
+        {% endif %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endmacro %}
+
+{% macro hero_split(title, subtitle, cta_text=None, cta_url=None, image_url=None, reverse=False) %}
+<section class="hero min-h-[70vh] bg-base-100">
+  <div class="hero-content flex-col {% if reverse %}lg:flex-row-reverse{% else %}lg:flex-row{% endif %} gap-12 max-w-7xl px-4">
+    <div class="flex-1 text-center lg:text-left">
+      <h1 class="text-5xl md:text-6xl font-bold text-python-blue mb-6">{{ title }}</h1>
+      <p class="text-xl text-base-content/80 mb-8">{{ subtitle }}</p>
+      {% if cta_text and cta_url %}
+      <a href="{{ cta_url }}" class="btn btn-primary btn-lg">{{ cta_text }}</a>
+      {% endif %}
+    </div>
+    {% if image_url %}
+    <div class="flex-1">
+      <img src="{{ image_url }}" alt="{{ title }}" class="rounded-lg shadow-2xl w-full" />
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endmacro %}

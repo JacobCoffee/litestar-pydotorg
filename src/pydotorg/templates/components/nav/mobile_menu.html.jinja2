@@ -1,0 +1,81 @@
+{% macro mobile_menu(items, current_path='') %}
+<div class="drawer drawer-end lg:hidden">
+  <input id="mobile-menu" type="checkbox" class="drawer-toggle" />
+  <div class="drawer-content">
+    <label for="mobile-menu" class="btn btn-ghost drawer-button" aria-label="Open mobile menu">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </label>
+  </div>
+  <div class="drawer-side z-50">
+    <label for="mobile-menu" aria-label="Close mobile menu" class="drawer-overlay"></label>
+    <div class="menu p-4 w-80 min-h-full bg-base-100">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-xl font-bold text-python-blue">Menu</h2>
+        <label for="mobile-menu" class="btn btn-sm btn-circle btn-ghost">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </label>
+      </div>
+
+      <ul class="space-y-2">
+        {% for item in items %}
+        <li>
+          {% if item.children %}
+          <details {% if current_path.startswith(item.url) %}open{% endif %}>
+            <summary class="font-semibold">
+              {% if item.icon %}
+              <span class="text-python-blue">{{ item.icon|safe }}</span>
+              {% endif %}
+              {{ item.label }}
+            </summary>
+            <ul class="ml-4 mt-2 space-y-1">
+              {% for child in item.children %}
+              <li>
+                <a href="{{ child.url }}" class="{% if current_path == child.url %}active bg-python-blue/10{% endif %}">
+                  {{ child.label }}
+                  {% if child.badge %}
+                  <span class="badge badge-sm badge-primary">{{ child.badge }}</span>
+                  {% endif %}
+                </a>
+              </li>
+              {% endfor %}
+            </ul>
+          </details>
+          {% else %}
+          <a href="{{ item.url }}" class="{% if current_path == item.url %}active bg-python-blue/10{% endif %}">
+            {% if item.icon %}
+            <span class="text-python-blue">{{ item.icon|safe }}</span>
+            {% endif %}
+            {{ item.label }}
+            {% if item.badge %}
+            <span class="badge badge-sm badge-primary">{{ item.badge }}</span>
+            {% endif %}
+          </a>
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+
+      <div class="divider"></div>
+
+      {% if caller %}
+      {{ caller() }}
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endmacro %}
+
+{% macro mobile_menu_item(label, url, icon=None, active=False) %}
+<li>
+  <a href="{{ url }}" class="{% if active %}active bg-python-blue/10{% endif %}">
+    {% if icon %}
+    <span class="text-python-blue">{{ icon|safe }}</span>
+    {% endif %}
+    {{ label }}
+  </a>
+</li>
+{% endmacro %}

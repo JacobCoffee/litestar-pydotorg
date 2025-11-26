@@ -1,0 +1,101 @@
+{% macro news_feed(articles, title="Latest News", show_all_link=None, columns=3) %}
+<section class="py-16 bg-base-100">
+  <div class="section-container">
+    <div class="flex justify-between items-center mb-12">
+      <h2 class="text-4xl font-bold text-python-blue">{{ title }}</h2>
+      {% if show_all_link %}
+      <a href="{{ show_all_link }}" class="btn btn-ghost gap-2">
+        View All
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </a>
+      {% endif %}
+    </div>
+
+    <div class="grid grid-cols-1 {% if columns == 3 %}md:grid-cols-2 lg:grid-cols-3{% elif columns == 2 %}md:grid-cols-2{% elif columns == 4 %}md:grid-cols-2 lg:grid-cols-4{% endif %} gap-8">
+      {% for article in articles %}
+      <article class="card bg-base-200 shadow-lg hover:shadow-xl transition-shadow">
+        {% if article.image_url %}
+        <figure class="h-48 overflow-hidden">
+          <img src="{{ article.image_url }}" alt="{{ article.title }}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
+        </figure>
+        {% endif %}
+        <div class="card-body">
+          {% if article.category %}
+          <div class="badge badge-primary badge-sm">{{ article.category }}</div>
+          {% endif %}
+
+          <h3 class="card-title text-python-blue hover:text-python-blue-dark transition-colors mt-2">
+            <a href="{{ article.url }}">{{ article.title }}</a>
+          </h3>
+
+          <div class="flex items-center gap-2 text-sm text-base-content/60 mt-2">
+            <time datetime="{{ article.date }}">{{ article.date }}</time>
+            {% if article.author %}
+            <span>•</span>
+            <span>{{ article.author }}</span>
+            {% endif %}
+          </div>
+
+          <p class="text-base-content/80 mt-3">{{ article.excerpt }}</p>
+
+          <div class="card-actions justify-end mt-4">
+            <a href="{{ article.url }}" class="python-link font-semibold">
+              Read more →
+            </a>
+          </div>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endmacro %}
+
+{% macro news_list(articles, title="News", show_all_link=None) %}
+<section class="py-16 bg-base-200">
+  <div class="section-container max-w-4xl">
+    <div class="flex justify-between items-center mb-8">
+      <h2 class="text-3xl font-bold text-python-blue">{{ title }}</h2>
+      {% if show_all_link %}
+      <a href="{{ show_all_link }}" class="python-link">View All →</a>
+      {% endif %}
+    </div>
+
+    <div class="space-y-6">
+      {% for article in articles %}
+      <article class="bg-base-100 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+        <div class="flex flex-col md:flex-row gap-4">
+          {% if article.image_url %}
+          <div class="flex-shrink-0">
+            <img src="{{ article.image_url }}" alt="{{ article.title }}" class="w-full md:w-32 h-32 object-cover rounded-lg" />
+          </div>
+          {% endif %}
+
+          <div class="flex-1">
+            <div class="flex items-center gap-2 text-sm text-base-content/60 mb-2">
+              <time datetime="{{ article.date }}">{{ article.date }}</time>
+              {% if article.category %}
+              <span>•</span>
+              <span class="badge badge-primary badge-sm">{{ article.category }}</span>
+              {% endif %}
+            </div>
+
+            <h3 class="text-xl font-bold text-python-blue mb-2">
+              <a href="{{ article.url }}" class="hover:underline">{{ article.title }}</a>
+            </h3>
+
+            <p class="text-base-content/80 mb-3">{{ article.excerpt }}</p>
+
+            <a href="{{ article.url }}" class="python-link font-semibold text-sm">
+              Read more →
+            </a>
+          </div>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endmacro %}

@@ -1,0 +1,81 @@
+{% macro main_menu(items, current_path='') %}
+<ul class="menu menu-horizontal px-1 gap-1">
+  {% for item in items %}
+  <li class="{% if item.children %}dropdown dropdown-hover{% endif %}">
+    {% if item.children %}
+    <details>
+      <summary class="{% if current_path.startswith(item.url) %}active{% endif %}">
+        {{ item.label }}
+      </summary>
+      <ul class="p-2 bg-base-100 rounded-box shadow-xl z-50 w-56">
+        {% for child in item.children %}
+        <li>
+          <a href="{{ child.url }}" class="{% if current_path == child.url %}active{% endif %}">
+            {% if child.icon %}
+            <span class="text-python-blue">{{ child.icon|safe }}</span>
+            {% endif %}
+            <span>
+              {{ child.label }}
+              {% if child.badge %}
+              <span class="badge badge-sm badge-primary">{{ child.badge }}</span>
+              {% endif %}
+            </span>
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </details>
+    {% else %}
+    <a href="{{ item.url }}" class="{% if current_path == item.url %}active{% endif %}">
+      {% if item.icon %}
+      <span class="text-python-blue">{{ item.icon|safe }}</span>
+      {% endif %}
+      {{ item.label }}
+      {% if item.badge %}
+      <span class="badge badge-sm badge-primary">{{ item.badge }}</span>
+      {% endif %}
+    </a>
+    {% endif %}
+  </li>
+  {% endfor %}
+</ul>
+{% endmacro %}
+
+{% macro mega_menu(sections, current_path='') %}
+<div class="dropdown dropdown-hover">
+  <div tabindex="0" role="button" class="btn btn-ghost">
+    Menu
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+    </svg>
+  </div>
+  <div tabindex="0" class="dropdown-content z-50 card card-compact w-screen max-w-5xl p-2 shadow-2xl bg-base-100 mt-3">
+    <div class="card-body">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {% for section in sections %}
+        <div>
+          <h3 class="font-bold text-python-blue mb-4 text-lg">{{ section.title }}</h3>
+          <ul class="space-y-2">
+            {% for item in section.items %}
+            <li>
+              <a href="{{ item.url }}" class="flex items-start gap-3 p-2 rounded-lg hover:bg-base-200 transition-colors {% if current_path == item.url %}bg-base-200{% endif %}">
+                {% if item.icon %}
+                <span class="text-python-blue mt-1">{{ item.icon|safe }}</span>
+                {% endif %}
+                <div class="flex-1">
+                  <div class="font-semibold">{{ item.label }}</div>
+                  {% if item.description %}
+                  <div class="text-xs text-base-content/60">{{ item.description }}</div>
+                  {% endif %}
+                </div>
+              </a>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endmacro %}

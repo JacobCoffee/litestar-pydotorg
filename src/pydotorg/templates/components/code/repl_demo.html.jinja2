@@ -1,0 +1,174 @@
+{% macro repl_demo(examples=None, title='Try Python in Your Browser') %}
+<section class="py-16 bg-base-200">
+  <div class="section-container">
+    <h2 class="text-4xl font-bold text-python-blue text-center mb-8">{{ title }}</h2>
+
+    <div class="card bg-neutral text-neutral-content shadow-2xl max-w-4xl mx-auto">
+      <div class="card-body p-0">
+        <div class="bg-base-100 px-6 py-3 flex items-center justify-between border-b border-base-300">
+          <div class="flex items-center gap-2">
+            <div class="flex gap-1.5">
+              <div class="w-3 h-3 rounded-full bg-error"></div>
+              <div class="w-3 h-3 rounded-full bg-warning"></div>
+              <div class="w-3 h-3 rounded-full bg-success"></div>
+            </div>
+            <span class="font-mono text-sm text-base-content/70 ml-4">Python REPL</span>
+          </div>
+
+          <div class="flex gap-2">
+            <button class="btn btn-ghost btn-xs" onclick="document.getElementById('repl-input').value = ''">
+              Clear
+            </button>
+            <button class="btn btn-ghost btn-xs" onclick="runPythonCode()">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              Run
+            </button>
+          </div>
+        </div>
+
+        <div class="p-6 font-mono text-sm">
+          <div class="mb-4">
+            <div class="text-success mb-2">Python 3.12.0 (Interactive Shell)</div>
+            <div class="text-base-content/60 text-xs mb-4">
+              Type Python code below and click "Run" or press Ctrl+Enter
+            </div>
+          </div>
+
+          <div id="repl-output" class="mb-4 min-h-[100px] max-h-[300px] overflow-y-auto">
+            {% if examples %}
+            {% for example in examples %}
+            <div class="mb-2">
+              <span class="text-warning">>>> </span>
+              <span class="text-base-content">{{ example.input }}</span>
+            </div>
+            <div class="text-success mb-3">{{ example.output }}</div>
+            {% endfor %}
+            {% else %}
+            <div class="mb-2">
+              <span class="text-warning">>>> </span>
+              <span class="text-base-content">print("Hello, Python!")</span>
+            </div>
+            <div class="text-success mb-3">Hello, Python!</div>
+            {% endif %}
+          </div>
+
+          <div class="flex items-start gap-2">
+            <span class="text-warning mt-2">>>> </span>
+            <textarea
+              id="repl-input"
+              class="textarea textarea-ghost w-full focus:outline-none resize-none font-mono bg-transparent text-base-content"
+              placeholder="Enter Python code..."
+              rows="3"
+              onkeydown="if(event.ctrlKey && event.key === 'Enter') runPythonCode()"
+            ></textarea>
+          </div>
+        </div>
+
+        <div class="bg-base-100 px-6 py-3 border-t border-base-300 text-center">
+          <p class="text-sm text-base-content/60">
+            This is a demo REPL. For full Python functionality,
+            <a href="/downloads" class="link link-primary">download Python</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    {% if caller %}
+    <div class="mt-8 text-center">
+      {{ caller() }}
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<script>
+function runPythonCode() {
+  const input = document.getElementById('repl-input').value.trim();
+  if (!input) return;
+
+  const output = document.getElementById('repl-output');
+  const inputLine = document.createElement('div');
+  inputLine.className = 'mb-2';
+  inputLine.innerHTML = `<span class="text-warning">>>> </span><span class="text-base-content">${escapeHtml(input)}</span>`;
+  output.appendChild(inputLine);
+
+  const resultLine = document.createElement('div');
+  resultLine.className = 'text-info mb-3';
+  resultLine.textContent = '[Python execution not available in demo - download Python to run code]';
+  output.appendChild(resultLine);
+
+  document.getElementById('repl-input').value = '';
+  output.scrollTop = output.scrollHeight;
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+</script>
+{% endmacro %}
+
+{% macro code_playground(default_code='', language='python', height='400px') %}
+<div class="card bg-base-100 shadow-xl">
+  <div class="card-body p-0">
+    <div class="bg-base-200 px-6 py-3 flex items-center justify-between border-b border-base-300">
+      <div class="flex items-center gap-4">
+        <span class="font-semibold text-python-blue">Code Playground</span>
+        <div class="badge badge-sm">{{ language }}</div>
+      </div>
+
+      <div class="flex gap-2">
+        <button class="btn btn-ghost btn-sm" onclick="formatCode()">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+          Format
+        </button>
+        <button class="btn btn-primary btn-sm gap-2" onclick="runPlaygroundCode()">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+          </svg>
+          Run Code
+        </button>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 divide-x divide-base-300">
+      <div>
+        <div class="px-4 py-2 bg-base-200 border-b border-base-300 font-semibold text-sm">
+          Editor
+        </div>
+        <textarea
+          id="playground-editor"
+          class="textarea w-full font-mono text-sm p-4 focus:outline-none rounded-none resize-none"
+          style="height: {{ height }}"
+          placeholder="Write your Python code here..."
+        >{{ default_code }}</textarea>
+      </div>
+
+      <div>
+        <div class="px-4 py-2 bg-base-200 border-b border-base-300 font-semibold text-sm">
+          Output
+        </div>
+        <pre id="playground-output" class="p-4 font-mono text-sm overflow-auto" style="height: {{ height }}"></pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function runPlaygroundCode() {
+  const code = document.getElementById('playground-editor').value;
+  const output = document.getElementById('playground-output');
+  output.textContent = '[Python execution not available in demo]\n\nYour code:\n' + code;
+}
+
+function formatCode() {
+  alert('Code formatting requires Python to be installed locally.');
+}
+</script>
+{% endmacro %}

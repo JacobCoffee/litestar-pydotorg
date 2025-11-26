@@ -1,0 +1,167 @@
+[project]
+name = "litestar-pydotorg"
+version = "0.1.0"
+description = "Python.org rebuilt with Litestar"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.13,<3.14"
+authors = [{ name = "Jacob Coffee", email = "jacob@z7x.org" }]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Internet :: WWW/HTTP",
+]
+dependencies = [
+    "litestar[standard,jinja,structlog]>=2.14.0",
+    "advanced-alchemy>=0.31.0",
+    "sqlalchemy[asyncio]>=2.0.36",
+    "asyncpg>=0.30.0",
+    "alembic>=1.14.0",
+    "pydantic>=2.10.0",
+    "pydantic-settings>=2.6.0",
+    "python-dotenv>=1.0.0",
+    "httpx>=0.28.0",
+    "passlib[bcrypt]>=1.7.4",
+    "python-jose[cryptography]>=3.3.0",
+    "saq[hiredis]>=0.22.0",
+    "pillow>=11.0.0",
+    "cmarkgfm>=2024.11.20",
+    "docutils>=0.21.0",
+    "feedparser>=6.0.11",
+    "icalendar>=6.1.0",
+    "beautifulsoup4>=4.12.0",
+    "lxml>=5.3.0",
+    "python-dateutil>=2.9.0",
+    "python-slugify>=8.0.0",
+    "granian>=1.6.0",
+    "email-validator>=2.3.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/JacobCoffee/litestar-pydotorg"
+Repository = "https://github.com/JacobCoffee/litestar-pydotorg"
+Documentation = "https://litestar-pydotorg.readthedocs.io"
+
+[project.scripts]
+pydotorg = "pydotorg.cli:main"
+
+[build-system]
+requires = ["uv_build>=0.6.6"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "pydotorg"
+
+[dependency-groups]
+dev = [
+    "dirty-equals>=0.8.0",
+    "hypothesis>=6.118.0",
+    "polyfactory>=2.18.0",
+    "prek>=0.2.0",
+    "pytest-asyncio>=0.24.0",
+    "pytest-cov>=6.0.0",
+    "pytest-sugar>=1.1.1",
+    "pytest-xdist>=3.5.0",
+    "pytest>=8.3.0",
+    "respx>=0.22.0",
+    "ruff>=0.8.0",
+    "sphinx-autodoc-typehints>=2.5.0",
+    "shibuya>=2024.0.0",
+    "sphinx>=8.1.0",
+    "time-machine>=2.16.0",
+    "ty",
+]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 120
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "A",     # flake8-builtins
+    "B",     # flake8-bugbear
+    "BLE",   # flake8-blind-except
+    "C4",    # flake8-comprehensions
+    "DTZ",   # flake8-datetimez
+    "E",     # pycodestyle errors
+    "ERA",   # eradicate
+    "F",     # pyflakes
+    "FA",    # flake8-future-annotations
+    "FBT",   # flake8-boolean-trap
+    "FLY",   # flynt
+    "FURB",  # refurb
+    "I",     # isort
+    "ICN",   # flake8-import-conventions
+    "ISC",   # flake8-implicit-str-concat
+    "LOG",   # flake8-logging
+    "N",     # pep8-naming
+    "PERF",  # perflint
+    "PIE",   # flake8-pie
+    "PL",    # pylint
+    "PTH",   # flake8-use-pathlib
+    "Q",     # flake8-quotes
+    "RET",   # flake8-return
+    "RSE",   # flake8-raise
+    "RUF",   # ruff-specific
+    "S",     # flake8-bandit
+    "SIM",   # flake8-simplify
+    "SLOT",  # flake8-slots
+    "T10",   # flake8-debugger
+    "T20",   # flake8-print
+    "TCH",   # flake8-type-checking
+    "TID",   # flake8-tidy-imports
+    "TRY",   # tryceratops
+    "UP",    # pyupgrade
+    "W",     # pycodestyle warnings
+]
+ignore = [
+    "A003",    # class attribute shadowing builtin
+    "B010",    # setattr with constant
+    "E501",    # line too long (handled by formatter)
+    "ISC001",  # conflicts with formatter
+    "PLR0913", # too many arguments
+    "RUF012",  # mutable class attributes
+    "S101",    # assert usage (needed for tests)
+    "TRY003",  # long exception messages
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*" = ["S101", "PLR2004", "B011", "FBT001"]
+"src/pydotorg/db/migrations/**/*" = ["ERA001"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["pydotorg"]
+
+[tool.pytest.ini_options]
+addopts = "-ra -q --strict-markers --strict-config"
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+filterwarnings = [
+    "ignore::DeprecationWarning",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["src/pydotorg"]
+omit = [
+    "*/migrations/*",
+    "*/__init__.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "raise NotImplementedError",
+    "@abstractmethod",
+]
+fail_under = 75
+
+[tool.ty.environment]
+python-version = "3.12"

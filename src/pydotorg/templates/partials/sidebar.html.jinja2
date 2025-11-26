@@ -1,0 +1,38 @@
+<aside class="bg-base-200 rounded-lg p-6">
+    {% block sidebar_title %}
+        <h3 class="text-lg font-semibold mb-4 text-python-blue">Quick Links</h3>
+    {% endblock %}
+
+    {% block sidebar_content %}
+        <nav>
+            <ul class="menu menu-compact p-0">
+                {% if sidebar_links %}
+                    {% for link in sidebar_links %}
+                        <li>
+                            <a href="{{ link.url }}" class="python-nav-link {% if link.active %}bg-python-blue/10{% endif %}">
+                                {{ link.title }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                {% else %}
+                    <li><a href="/about" class="python-nav-link">About Python</a></li>
+                    <li><a href="/downloads" class="python-nav-link">Download Python</a></li>
+                    <li><a href="/docs" class="python-nav-link">Documentation</a></li>
+                    <li><a href="/community" class="python-nav-link">Community</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endblock %}
+
+    {% block sidebar_extra %}
+        <div class="divider my-4"></div>
+
+        <div class="bg-gradient-to-br from-python-blue to-python-blue-dark text-white rounded-lg p-4">
+            <h4 class="font-semibold mb-2">Support Python</h4>
+            <p class="text-sm mb-3 opacity-90">Help us make Python even better</p>
+            <a href="/donate" class="btn btn-secondary btn-sm w-full">
+                Donate Now
+            </a>
+        </div>
+    {% endblock %}
+</aside>

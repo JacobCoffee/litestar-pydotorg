@@ -1,0 +1,79 @@
+{% macro stats_bar(stats, title=None, bg_style='gradient') %}
+<section class="py-16 {% if bg_style == 'gradient' %}bg-gradient-to-br from-python-blue to-blue-900{% elif bg_style == 'solid' %}bg-python-blue{% else %}bg-base-200{% endif %}">
+  <div class="section-container">
+    {% if title %}
+    <h2 class="text-3xl font-bold {% if bg_style in ['gradient', 'solid'] %}text-white{% else %}text-python-blue{% endif %} text-center mb-12">
+      {{ title }}
+    </h2>
+    {% endif %}
+
+    <div class="stats stats-vertical sm:stats-horizontal shadow-xl w-full bg-base-100">
+      {% for stat in stats %}
+      <div class="stat">
+        {% if stat.icon %}
+        <div class="stat-figure text-python-blue">
+          {{ stat.icon|safe }}
+        </div>
+        {% endif %}
+
+        <div class="stat-title">{{ stat.label }}</div>
+        <div class="stat-value text-python-blue {% if stat.size == 'sm' %}text-3xl{% elif stat.size == 'lg' %}text-5xl{% endif %}">
+          {{ stat.value }}
+        </div>
+
+        {% if stat.description %}
+        <div class="stat-desc">{{ stat.description }}</div>
+        {% endif %}
+
+        {% if stat.trend %}
+        <div class="stat-desc {% if stat.trend_direction == 'up' %}text-success{% elif stat.trend_direction == 'down' %}text-error{% endif %}">
+          {% if stat.trend_direction == 'up' %}↗︎{% elif stat.trend_direction == 'down' %}↘︎{% endif %}
+          {{ stat.trend }}
+        </div>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endmacro %}
+
+{% macro stats_grid(stats, title=None, columns=4) %}
+<section class="py-16 bg-base-100">
+  <div class="section-container">
+    {% if title %}
+    <h2 class="text-4xl font-bold text-python-blue text-center mb-12">{{ title }}</h2>
+    {% endif %}
+
+    <div class="grid grid-cols-1 {% if columns == 4 %}sm:grid-cols-2 lg:grid-cols-4{% elif columns == 3 %}sm:grid-cols-2 lg:grid-cols-3{% elif columns == 2 %}sm:grid-cols-2{% endif %} gap-8">
+      {% for stat in stats %}
+      <div class="text-center bg-base-200 p-8 rounded-lg shadow-md hover:shadow-xl transition-shadow">
+        {% if stat.icon %}
+        <div class="flex justify-center mb-4">
+          <div class="w-16 h-16 rounded-full bg-gradient-to-br from-python-blue to-blue-700 flex items-center justify-center text-white">
+            {{ stat.icon|safe }}
+          </div>
+        </div>
+        {% endif %}
+
+        <div class="text-5xl font-bold text-python-blue mb-2">{{ stat.value }}</div>
+        <div class="text-lg text-base-content/80 font-semibold">{{ stat.label }}</div>
+
+        {% if stat.description %}
+        <p class="text-sm text-base-content/60 mt-3">{{ stat.description }}</p>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endmacro %}
+
+{% macro counter_stat(value, label, suffix='', prefix='', animate=True) %}
+<div class="text-center">
+  <div class="text-5xl font-bold text-python-blue mb-2"{% if animate %} data-counter="{{ value }}" data-prefix="{{ prefix }}" data-suffix="{{ suffix }}"{% endif %}>
+    {{ prefix }}{{ value }}{{ suffix }}
+  </div>
+  <div class="text-xl text-base-content/70 font-semibold">{{ label }}</div>
+</div>
+{% endmacro %}

@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply antialiased;
+  }
+}
+
+@layer components {
+  .python-gradient {
+    @apply bg-gradient-to-r from-python-blue to-python-blue-light;
+  }
+
+  .python-gradient-reverse {
+    @apply bg-gradient-to-r from-python-yellow to-python-yellow-light;
+  }
+
+  .section-container {
+    @apply container mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .content-wrapper {
+    @apply max-w-7xl mx-auto;
+  }
+
+  .python-link {
+    @apply text-python-blue hover:text-python-blue-dark transition-colors duration-200;
+  }
+
+  .python-btn-primary {
+    @apply bg-python-blue hover:bg-python-blue-dark text-white font-semibold py-2 px-6 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg;
+  }
+
+  .python-btn-secondary {
+    @apply bg-python-yellow hover:bg-python-yellow-dark text-gray-900 font-semibold py-2 px-6 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg;
+  }
+
+  .python-card {
+    @apply bg-base-100 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden;
+  }
+
+  .python-nav-link {
+    @apply text-base-content hover:text-python-blue transition-colors duration-200;
+  }
+
+  .code-block {
+    @apply bg-base-300 rounded-lg p-4 overflow-x-auto font-mono text-sm;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .glass-effect {
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.1);
+  }
+}

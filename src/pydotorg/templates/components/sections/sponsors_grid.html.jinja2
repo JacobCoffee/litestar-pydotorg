@@ -1,0 +1,82 @@
+{% macro sponsors_grid(sponsors, title="Our Sponsors", subtitle=None, tier_names=None) %}
+<section class="py-16 bg-base-100">
+  <div class="section-container">
+    <div class="text-center mb-12">
+      <h2 class="text-4xl font-bold text-python-blue mb-4">{{ title }}</h2>
+      {% if subtitle %}
+      <p class="text-xl text-base-content/70 max-w-3xl mx-auto">{{ subtitle }}</p>
+      {% endif %}
+    </div>
+
+    {% set sponsors_by_tier = sponsors | groupby('tier') %}
+    {% for tier, tier_sponsors in sponsors_by_tier %}
+    <div class="mb-12 last:mb-0">
+      <h3 class="text-2xl font-bold text-python-blue text-center mb-8">
+        {% if tier_names and tier_names[tier] %}
+          {{ tier_names[tier] }}
+        {% else %}
+          {{ tier | title }} Sponsors
+        {% endif %}
+      </h3>
+
+      <div class="grid grid-cols-2 {% if tier == 'platinum' %}md:grid-cols-2 lg:grid-cols-3{% elif tier == 'gold' %}md:grid-cols-3 lg:grid-cols-4{% else %}md:grid-cols-4 lg:grid-cols-6{% endif %} gap-8 items-center justify-items-center">
+        {% for sponsor in tier_sponsors %}
+        <a href="{{ sponsor.url }}"
+           class="flex items-center justify-center p-6 bg-base-200 rounded-lg hover:shadow-xl transition-shadow {% if tier == 'platinum' %}w-full max-w-sm{% elif tier == 'gold' %}w-48{% else %}w-32{% endif %}"
+           title="{{ sponsor.name }}"
+           target="_blank"
+           rel="noopener noreferrer">
+          <img src="{{ sponsor.logo_url }}"
+               alt="{{ sponsor.name }}"
+               class="max-w-full h-auto filter grayscale hover:grayscale-0 transition-all"
+               loading="lazy" />
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endmacro %}
+
+{% macro sponsors_carousel(sponsors, title="Supported By", auto_rotate=True) %}
+<section class="py-16 bg-base-200">
+  <div class="section-container">
+    <h2 class="text-3xl font-bold text-python-blue text-center mb-12">{{ title }}</h2>
+
+    <div class="carousel w-full rounded-box shadow-lg bg-base-100"{% if auto_rotate %} data-auto-rotate="true"{% endif %}>
+      {% for sponsor in sponsors %}
+      <div id="sponsor-{{ loop.index }}" class="carousel-item relative w-full justify-center items-center p-12">
+        <a href="{{ sponsor.url }}" target="_blank" rel="noopener noreferrer" class="flex flex-col items-center gap-4">
+          <img src="{{ sponsor.logo_url }}" alt="{{ sponsor.name }}" class="max-h-24" />
+          <p class="text-center text-base-content/70">{{ sponsor.name }}</p>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="flex justify-center gap-2 py-4">
+      {% for sponsor in sponsors %}
+      <a href="#sponsor-{{ loop.index }}" class="btn btn-xs">{{ loop.index }}</a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endmacro %}
+
+{% macro sponsor_become_cta(title="Become a Sponsor", description=None, cta_url="/sponsors/apply", cta_text="Support Python") %}
+<section class="py-16 bg-gradient-to-br from-python-blue to-blue-900">
+  <div class="section-container text-center">
+    <h2 class="text-4xl font-bold text-white mb-6">{{ title }}</h2>
+    {% if description %}
+    <p class="text-xl text-blue-100 max-w-3xl mx-auto mb-8">{{ description }}</p>
+    {% endif %}
+    <a href="{{ cta_url }}" class="btn btn-warning btn-lg gap-2">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+      </svg>
+      {{ cta_text }}
+    </a>
+  </div>
+</section>
+{% endmacro %}

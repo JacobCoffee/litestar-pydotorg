@@ -1,0 +1,121 @@
+{% macro events_grid(events, title="Upcoming Events", show_all_link=None, columns=3) %}
+<section class="py-16 bg-base-200">
+  <div class="section-container">
+    <div class="flex justify-between items-center mb-12">
+      <h2 class="text-4xl font-bold text-python-blue">{{ title }}</h2>
+      {% if show_all_link %}
+      <a href="{{ show_all_link }}" class="btn btn-ghost gap-2">
+        View All Events
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </a>
+      {% endif %}
+    </div>
+
+    <div class="grid grid-cols-1 {% if columns == 3 %}md:grid-cols-2 lg:grid-cols-3{% elif columns == 2 %}md:grid-cols-2{% elif columns == 4 %}md:grid-cols-2 lg:grid-cols-4{% endif %} gap-6">
+      {% for event in events %}
+      <div class="card bg-base-100 shadow-lg hover:shadow-xl transition-shadow">
+        <div class="card-body">
+          <div class="flex justify-between items-start mb-2">
+            {% if event.type %}
+            <div class="badge badge-primary">{{ event.type }}</div>
+            {% endif %}
+            {% if event.is_featured %}
+            <div class="badge badge-warning">Featured</div>
+            {% endif %}
+          </div>
+
+          <h3 class="card-title text-python-blue text-lg mt-2">
+            <a href="{{ event.url }}" class="hover:underline">{{ event.title }}</a>
+          </h3>
+
+          <div class="flex flex-col gap-2 text-sm text-base-content/70 mt-4">
+            <div class="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-python-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <time datetime="{{ event.date }}">{{ event.date }}</time>
+            </div>
+
+            {% if event.location %}
+            <div class="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-python-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              <span>{{ event.location }}</span>
+            </div>
+            {% endif %}
+          </div>
+
+          {% if event.description %}
+          <p class="text-base-content/80 mt-3 line-clamp-2">{{ event.description }}</p>
+          {% endif %}
+
+          <div class="card-actions justify-end mt-4">
+            <a href="{{ event.url }}" class="btn btn-ghost btn-sm">
+              Details →
+            </a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endmacro %}
+
+{% macro events_timeline(events, title="Event Timeline") %}
+<section class="py-16 bg-base-100">
+  <div class="section-container max-w-4xl">
+    <h2 class="text-4xl font-bold text-python-blue mb-12 text-center">{{ title }}</h2>
+
+    <div class="space-y-6">
+      {% for event in events %}
+      <div class="flex gap-6">
+        <div class="flex-shrink-0 w-24 text-right">
+          <time class="text-sm font-semibold text-python-blue block" datetime="{{ event.date }}">
+            {{ event.date }}
+          </time>
+          {% if event.time %}
+          <span class="text-xs text-base-content/60">{{ event.time }}</span>
+          {% endif %}
+        </div>
+
+        <div class="relative flex-1 pb-8 border-l-2 border-python-blue/20 pl-8">
+          <div class="absolute -left-2 top-0 w-4 h-4 rounded-full bg-python-blue border-4 border-base-100"></div>
+
+          <div class="bg-base-200 rounded-lg p-6 shadow-md">
+            {% if event.type %}
+            <div class="badge badge-primary badge-sm mb-2">{{ event.type }}</div>
+            {% endif %}
+
+            <h3 class="text-xl font-bold text-python-blue mb-2">
+              <a href="{{ event.url }}" class="hover:underline">{{ event.title }}</a>
+            </h3>
+
+            {% if event.location %}
+            <div class="flex items-center gap-2 text-sm text-base-content/70 mb-3">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              </svg>
+              {{ event.location }}
+            </div>
+            {% endif %}
+
+            {% if event.description %}
+            <p class="text-base-content/80">{{ event.description }}</p>
+            {% endif %}
+
+            <a href="{{ event.url }}" class="python-link font-semibold mt-3 inline-block">
+              Learn More →
+            </a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endmacro %}

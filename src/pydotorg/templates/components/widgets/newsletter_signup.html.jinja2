@@ -1,0 +1,132 @@
+{% macro newsletter_signup(title='Stay Updated', description=None, action='/newsletter/subscribe', button_text='Subscribe', style='inline') %}
+<div class="{% if style == 'card' %}card bg-base-200 shadow-lg{% endif %}">
+  <div class="{% if style == 'card' %}card-body{% else %}py-8{% endif %}">
+    <h3 class="{% if style == 'card' %}card-title{% else %}text-2xl font-bold{% endif %} text-python-blue mb-2">
+      {{ title }}
+    </h3>
+
+    {% if description %}
+    <p class="text-base-content/70 mb-4">{{ description }}</p>
+    {% endif %}
+
+    <form action="{{ action }}" method="post" class="form-control">
+      <div class="{% if style == 'inline' %}input-group{% else %}space-y-3{% endif %}">
+        <input
+          type="email"
+          name="email"
+          placeholder="your.email@example.com"
+          class="input input-bordered {% if style == 'inline' %}w-full{% endif %}"
+          required
+        />
+        <button type="submit" class="btn btn-primary {% if style != 'inline' %}w-full{% endif %}">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+          {{ button_text }}
+        </button>
+      </div>
+
+      <label class="label">
+        <span class="label-text-alt text-base-content/60">
+          We respect your privacy. Unsubscribe at any time.
+        </span>
+      </label>
+    </form>
+  </div>
+</div>
+{% endmacro %}
+
+{% macro newsletter_banner(title='Join Our Newsletter', description=None, action='/newsletter/subscribe') %}
+<section class="py-16 bg-gradient-to-r from-python-blue to-blue-900">
+  <div class="section-container max-w-4xl text-center">
+    <h2 class="text-4xl font-bold text-white mb-4">{{ title }}</h2>
+
+    {% if description %}
+    <p class="text-xl text-blue-100 mb-8">{{ description }}</p>
+    {% endif %}
+
+    <form action="{{ action }}" method="post" class="form-control max-w-2xl mx-auto">
+      <div class="input-group justify-center">
+        <input
+          type="email"
+          name="email"
+          placeholder="Enter your email address"
+          class="input input-bordered input-lg w-full max-w-md"
+          required
+        />
+        <button type="submit" class="btn btn-warning btn-lg gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+          Subscribe
+        </button>
+      </div>
+      <label class="label">
+        <span class="label-text-alt text-blue-200 mx-auto">
+          Get the latest Python news and updates delivered to your inbox
+        </span>
+      </label>
+    </form>
+  </div>
+</section>
+{% endmacro %}
+
+{% macro newsletter_modal(trigger_text='Newsletter', title='Subscribe to Our Newsletter') %}
+<div>
+  <label for="newsletter-modal" class="btn btn-ghost gap-2">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+    </svg>
+    {{ trigger_text }}
+  </label>
+
+  <input type="checkbox" id="newsletter-modal" class="modal-toggle" />
+  <div class="modal">
+    <div class="modal-box">
+      <label for="newsletter-modal" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
+      <h3 class="font-bold text-2xl text-python-blue mb-4">{{ title }}</h3>
+
+      <p class="text-base-content/70 mb-6">
+        Stay up to date with Python news, releases, and community updates.
+      </p>
+
+      <form action="/newsletter/subscribe" method="post" class="form-control space-y-4">
+        <div>
+          <label class="label">
+            <span class="label-text">Email Address</span>
+          </label>
+          <input
+            type="email"
+            name="email"
+            placeholder="your.email@example.com"
+            class="input input-bordered w-full"
+            required
+          />
+        </div>
+
+        <div>
+          <label class="label">
+            <span class="label-text">Name (optional)</span>
+          </label>
+          <input
+            type="text"
+            name="name"
+            placeholder="Your Name"
+            class="input input-bordered w-full"
+          />
+        </div>
+
+        <div class="form-control">
+          <label class="label cursor-pointer justify-start gap-3">
+            <input type="checkbox" name="agree" class="checkbox checkbox-primary" required />
+            <span class="label-text">I agree to receive newsletters from Python.org</span>
+          </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-full">Subscribe</button>
+      </form>
+    </div>
+    <label class="modal-backdrop" for="newsletter-modal">Close</label>
+  </div>
+</div>
+{% endmacro %}

@@ -1,0 +1,83 @@
+{% macro cta_banner(title, description=None, cta_text=None, cta_url=None, style='gradient', secondary_cta_text=None, secondary_cta_url=None) %}
+<section class="py-16 {% if style == 'gradient' %}bg-gradient-to-r from-python-blue to-blue-900{% elif style == 'solid' %}bg-python-blue{% else %}bg-base-200{% endif %}">
+  <div class="section-container text-center">
+    <h2 class="text-4xl md:text-5xl font-bold {% if style in ['gradient', 'solid'] %}text-white{% else %}text-python-blue{% endif %} mb-6">
+      {{ title }}
+    </h2>
+
+    {% if description %}
+    <p class="text-xl {% if style in ['gradient', 'solid'] %}text-blue-100{% else %}text-base-content/80{% endif %} max-w-3xl mx-auto mb-8">
+      {{ description }}
+    </p>
+    {% endif %}
+
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      {% if cta_text and cta_url %}
+      <a href="{{ cta_url }}" class="btn btn-warning btn-lg gap-2 shadow-lg hover:shadow-xl transition-shadow">
+        {{ cta_text }}
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+        </svg>
+      </a>
+      {% endif %}
+
+      {% if secondary_cta_text and secondary_cta_url %}
+      <a href="{{ secondary_cta_url }}" class="btn btn-outline {% if style in ['gradient', 'solid'] %}btn-warning text-white border-white hover:bg-white hover:text-python-blue{% else %}btn-primary{% endif %} btn-lg">
+        {{ secondary_cta_text }}
+      </a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endmacro %}
+
+{% macro cta_split(title, description, cta_text, cta_url, image_url=None, reverse=False) %}
+<section class="py-16 bg-base-100">
+  <div class="section-container">
+    <div class="hero">
+      <div class="hero-content flex-col {% if reverse %}lg:flex-row-reverse{% else %}lg:flex-row{% endif %} gap-12">
+        <div class="flex-1">
+          <h2 class="text-4xl md:text-5xl font-bold text-python-blue mb-6">{{ title }}</h2>
+          <p class="text-xl text-base-content/80 mb-8">{{ description }}</p>
+          <a href="{{ cta_url }}" class="btn btn-primary btn-lg gap-2">
+            {{ cta_text }}
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+          </a>
+        </div>
+
+        {% if image_url %}
+        <div class="flex-1">
+          <img src="{{ image_url }}" alt="{{ title }}" class="rounded-lg shadow-2xl" />
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endmacro %}
+
+{% macro cta_card(title, description, cta_text, cta_url, icon=None) %}
+<div class="card bg-gradient-to-br from-python-blue to-blue-900 text-white shadow-xl">
+  <div class="card-body items-center text-center">
+    {% if icon %}
+    <div class="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center mb-4">
+      {{ icon|safe }}
+    </div>
+    {% endif %}
+
+    <h3 class="card-title text-2xl mb-4">{{ title }}</h3>
+    <p class="text-blue-100 mb-6">{{ description }}</p>
+
+    <div class="card-actions">
+      <a href="{{ cta_url }}" class="btn btn-warning gap-2">
+        {{ cta_text }}
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+        </svg>
+      </a>
+    </div>
+  </div>
+</div>
+{% endmacro %}

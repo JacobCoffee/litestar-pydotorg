@@ -1,0 +1,77 @@
+<nav class="navbar bg-base-100 shadow-md sticky top-0 z-50">
+    <div class="section-container">
+        <div class="navbar-start">
+            <div class="dropdown lg:hidden">
+                <label id="mobile-menu-toggle" tabindex="0" class="btn btn-ghost">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </label>
+                <ul id="mobile-menu" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52 hidden">
+                    <li><a href="/about" class="python-nav-link">About</a></li>
+                    <li><a href="/downloads" class="python-nav-link">Downloads</a></li>
+                    <li><a href="/docs" class="python-nav-link">Documentation</a></li>
+                    <li><a href="/community" class="python-nav-link">Community</a></li>
+                    <li><a href="/success-stories" class="python-nav-link">Success Stories</a></li>
+                    <li><a href="/news" class="python-nav-link">News</a></li>
+                    <li><a href="/events" class="python-nav-link">Events</a></li>
+                </ul>
+            </div>
+
+            <a href="/" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
+                <svg class="w-12 h-12" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M255.5 0C114.3 0 0 114.3 0 255.5S114.3 511 255.5 511 511 396.7 511 255.5 396.7 0 255.5 0zm-85 402.3c-16.4 0-29.7-13.3-29.7-29.7s13.3-29.7 29.7-29.7 29.7 13.3 29.7 29.7-13.3 29.7-29.7 29.7zm0-261.9c0-46.4 37.6-84 84-84h85v85H254.5c-16.4 0-29.7 13.3-29.7 29.7v85h-85v-115.7zm170 261.9c-16.4 0-29.7-13.3-29.7-29.7s13.3-29.7 29.7-29.7 29.7 13.3 29.7 29.7-13.3 29.7-29.7 29.7zm85-115.7h-85v-85c0-16.4 13.3-29.7 29.7-29.7h85v85c0 46.4-37.6 84-84 84z" fill="#3776AB"/>
+                    <path d="M255.5 0v85h85c46.4 0 84 37.6 84 84v85h-85c-16.4 0-29.7 13.3-29.7 29.7v85h-85c-46.4 0-84-37.6-84-84v-85h85c16.4 0 29.7-13.3 29.7-29.7V85C170.5 38.6 208.1 0 255.5 0z" fill="#FFD43B"/>
+                </svg>
+                <span class="text-2xl font-bold text-python-blue">Python</span>
+            </a>
+        </div>
+
+        <div class="navbar-center hidden lg:flex">
+            <ul class="menu menu-horizontal px-1 gap-1">
+                <li><a href="/about" class="python-nav-link">About</a></li>
+                <li><a href="/downloads" class="python-nav-link">Downloads</a></li>
+                <li><a href="/docs" class="python-nav-link">Documentation</a></li>
+                <li>
+                    <details>
+                        <summary class="python-nav-link">Community</summary>
+                        <ul class="p-2 bg-base-100 rounded-box shadow-lg w-52">
+                            <li><a href="/community">Overview</a></li>
+                            <li><a href="/community/diversity">Diversity</a></li>
+                            <li><a href="/community/lists">Mailing Lists</a></li>
+                            <li><a href="/community/irc">IRC</a></li>
+                            <li><a href="/community/forums">Forums</a></li>
+                            <li><a href="/psf">PSF</a></li>
+                        </ul>
+                    </details>
+                </li>
+                <li><a href="/success-stories" class="python-nav-link">Success Stories</a></li>
+                <li><a href="/news" class="python-nav-link">News</a></li>
+                <li><a href="/events" class="python-nav-link">Events</a></li>
+            </ul>
+        </div>
+
+        <div class="navbar-end gap-2">
+            <div class="form-control hidden md:block">
+                <input type="text" placeholder="Search" class="input input-bordered input-sm w-full max-w-xs" />
+            </div>
+
+            <button
+                id="theme-toggle"
+                class="btn btn-ghost btn-circle"
+                aria-label="Toggle theme"
+            >
+                <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+                <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+            </button>
+
+            <a href="/donate" class="btn btn-primary btn-sm hidden lg:inline-flex">
+                Donate
+            </a>
+        </div>
+    </div>
+</nav>
