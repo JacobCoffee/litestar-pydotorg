@@ -33,6 +33,11 @@ from pydotorg.core.database.base import AuditBase
 from pydotorg.core.dependencies import get_core_dependencies
 from pydotorg.core.features import FeatureFlags
 from pydotorg.core.openapi import get_openapi_plugins
+from pydotorg.domains.about import AboutRenderController
+from pydotorg.domains.admin import (
+    AdminDashboardController,
+    get_admin_dependencies,
+)
 from pydotorg.domains.banners import (
     BannerController,
     BannersPageController,
@@ -60,6 +65,7 @@ from pydotorg.domains.community import (
     VideoController,
     get_community_dependencies,
 )
+from pydotorg.domains.docs import DocsRenderController
 from pydotorg.domains.downloads import (
     DownloadsPageController,
     OSController,
@@ -105,12 +111,18 @@ from pydotorg.domains.pages import (
     PageRenderController,
     get_page_dependencies,
 )
+from pydotorg.domains.search import (
+    SearchAPIController,
+    SearchRenderController,
+    get_search_dependencies,
+)
 from pydotorg.domains.sponsors import (
     SponsorController,
     SponsorRenderController,
     SponsorshipController,
     SponsorshipLevelController,
 )
+from pydotorg.domains.sqladmin import create_sqladmin_plugin
 from pydotorg.domains.successstories import (
     StoryCategoryController,
     StoryController,
@@ -124,7 +136,7 @@ from pydotorg.domains.users import (
     UserGroupController,
     get_user_dependencies,
 )
-from pydotorg.domains.users.auth_controller import AuthController
+from pydotorg.domains.users.auth_controller import AuthController, AuthPageController
 from pydotorg.domains.work_groups import (
     WorkGroupController,
     WorkGroupsPageController,
@@ -198,6 +210,8 @@ def get_all_dependencies() -> dict:
     deps.update(get_nominations_dependencies())
     deps.update(get_successstories_dependencies())
     deps.update(get_work_groups_dependencies())
+    deps.update(get_search_dependencies())
+    deps.update(get_admin_dependencies())
     return deps
 
 
@@ -208,6 +222,12 @@ sqlalchemy_config = SQLAlchemyAsyncConfig(
 )
 
 sqlalchemy_plugin = SQLAlchemyPlugin(config=sqlalchemy_config)
+
+sqladmin_plugin = create_sqladmin_plugin(
+    engine=sqlalchemy_config.get_engine(),
+    session_maker=sqlalchemy_config.create_session_maker(),
+    secret_key=settings.session_secret_key,
+)
 
 templates_dir = Path(__file__).parent / "templates"
 static_dir = Path(__file__).parent.parent.parent / "static"
@@ -280,6 +300,7 @@ app = Litestar(
         MembershipController,
         UserGroupController,
         AuthController,
+        AuthPageController,
         PageController,
         PageRenderController,
         ImageController,
@@ -288,6 +309,8 @@ app = Litestar(
         ReleaseController,
         ReleaseFileController,
         DownloadsPageController,
+        DocsRenderController,
+        AboutRenderController,
         JobTypeController,
         JobCategoryController,
         JobController,
@@ -328,9 +351,12 @@ app = Litestar(
         SuccessStoriesPageController,
         WorkGroupController,
         WorkGroupsPageController,
+        SearchAPIController,
+        SearchRenderController,
+        AdminDashboardController,
     ],
     dependencies=get_all_dependencies(),
-    plugins=[sqlalchemy_plugin],
+    plugins=[sqlalchemy_plugin, sqladmin_plugin],
     middleware=[JWTAuthMiddleware],
     template_config=TemplateConfig(
         directory=templates_dir,
@@ -370,6 +396,8 @@ app = Litestar(
             Tag(name="Minutes", description="PSF meeting minutes"),
             Tag(name="Success Stories", description="Python success stories"),
             Tag(name="Work Groups", description="PSF work groups"),
+            Tag(name="Search", description="Site-wide search"),
+            Tag(name="Admin", description="Admin dashboard and management"),
         ],
     ),
     compression_config=CompressionConfig(backend="gzip", gzip_compress_level=6),
