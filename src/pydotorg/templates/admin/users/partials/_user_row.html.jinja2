@@ -1,0 +1,79 @@
+<tr class="hover">
+    <td>
+        <div class="flex items-center gap-3">
+            <div class="avatar placeholder">
+                <div class="bg-primary text-primary-content rounded-full w-10">
+                    <span class="text-xs">{{ user.username[:2].upper() }}</span>
+                </div>
+            </div>
+            <div>
+                <a href="/admin/users/{{ user.id }}" class="font-semibold python-link" hx-boost="true">
+                    {{ user.username }}
+                </a>
+            </div>
+        </div>
+    </td>
+    <td>
+        <span class="text-sm text-base-content/70">{{ user.email }}</span>
+    </td>
+    <td>
+        <span class="badge badge-sm {% if user.is_active %}badge-success{% else %}badge-error{% endif %}">
+            {{ 'Active' if user.is_active else 'Inactive' }}
+        </span>
+    </td>
+    <td>
+        <div class="flex gap-1">
+            {% if user.is_superuser %}
+            <span class="badge badge-error badge-sm">Superuser</span>
+            {% endif %}
+            {% if user.is_staff %}
+            <span class="badge badge-warning badge-sm">Staff</span>
+            {% endif %}
+            {% if not user.is_staff and not user.is_superuser %}
+            <span class="badge badge-ghost badge-sm">User</span>
+            {% endif %}
+        </div>
+    </td>
+    <td>
+        <span class="text-sm text-base-content/70">
+            {{ user.created_at.strftime('%b %d, %Y') if user.created_at else 'N/A' }}
+        </span>
+    </td>
+    <td>
+        <div class="dropdown dropdown-end">
+            <label tabindex="0" class="btn btn-ghost btn-xs">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                </svg>
+            </label>
+            <ul tabindex="0" class="dropdown-content menu menu-sm p-2 shadow bg-base-200 rounded-box w-44 z-10">
+                <li><a href="/admin/users/{{ user.id }}" hx-boost="true">View Details</a></li>
+                <li><a href="/admin/users/{{ user.id }}/edit" hx-boost="true">Edit</a></li>
+                {% if user.is_active %}
+                <li>
+                    <a
+                        hx-post="/admin/users/{{ user.id }}/deactivate"
+                        hx-confirm="Are you sure you want to deactivate this user?"
+                        hx-target="closest tr"
+                        hx-swap="outerHTML"
+                        class="text-error"
+                    >
+                        Deactivate
+                    </a>
+                </li>
+                {% else %}
+                <li>
+                    <a
+                        hx-post="/admin/users/{{ user.id }}/activate"
+                        hx-target="closest tr"
+                        hx-swap="outerHTML"
+                        class="text-success"
+                    >
+                        Activate
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </td>
+</tr>

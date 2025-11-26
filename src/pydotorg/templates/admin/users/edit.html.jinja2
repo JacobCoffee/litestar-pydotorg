@@ -1,0 +1,150 @@
+{% extends "admin/base.html.jinja2" %}
+
+{% block title %}Edit {{ user.username }} - Python.org Admin{% endblock %}
+
+{% block admin_content %}
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <div class="flex items-center gap-4">
+            <a href="/admin/users/{{ user.id }}" class="btn btn-ghost btn-sm" hx-boost="true">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+                Back
+            </a>
+            <div>
+                <h1 class="text-3xl font-bold text-python-blue">Edit {{ user.username }}</h1>
+                <p class="text-base-content/70 mt-1">User ID: {{ user.id }}</p>
+            </div>
+        </div>
+    </div>
+
+    <form action="/admin/users/{{ user.id }}/edit" method="post" class="space-y-6">
+        <div class="card bg-base-100 shadow-lg border border-base-300">
+            <div class="card-body">
+                <h2 class="card-title text-python-blue">Basic Information</h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-semibold">Username</span>
+                        </label>
+                        <input
+                            type="text"
+                            name="username"
+                            value="{{ user.username }}"
+                            class="input input-bordered"
+                            disabled
+                        />
+                        <label class="label">
+                            <span class="label-text-alt text-base-content/60">Username cannot be changed</span>
+                        </label>
+                    </div>
+
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-semibold">Email</span>
+                        </label>
+                        <input
+                            type="email"
+                            name="email"
+                            value="{{ user.email }}"
+                            class="input input-bordered"
+                            required
+                        />
+                    </div>
+
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-semibold">First Name</span>
+                        </label>
+                        <input
+                            type="text"
+                            name="first_name"
+                            value="{{ user.first_name }}"
+                            class="input input-bordered"
+                        />
+                    </div>
+
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-semibold">Last Name</span>
+                        </label>
+                        <input
+                            type="text"
+                            name="last_name"
+                            value="{{ user.last_name }}"
+                            class="input input-bordered"
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card bg-base-100 shadow-lg border border-base-300">
+            <div class="card-body">
+                <h2 class="card-title text-python-blue">Roles & Permissions</h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+                    <div class="form-control">
+                        <label class="label cursor-pointer justify-start gap-3">
+                            <input
+                                type="checkbox"
+                                name="is_active"
+                                class="checkbox checkbox-success"
+                                {% if user.is_active %}checked{% endif %}
+                            />
+                            <div>
+                                <span class="label-text font-semibold">Active</span>
+                                <p class="text-xs text-base-content/60">User can log in</p>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="form-control">
+                        <label class="label cursor-pointer justify-start gap-3">
+                            <input
+                                type="checkbox"
+                                name="is_staff"
+                                class="checkbox checkbox-warning"
+                                {% if user.is_staff %}checked{% endif %}
+                            />
+                            <div>
+                                <span class="label-text font-semibold">Staff</span>
+                                <p class="text-xs text-base-content/60">Can moderate content</p>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="form-control">
+                        <label class="label cursor-pointer justify-start gap-3">
+                            <input
+                                type="checkbox"
+                                name="is_superuser"
+                                class="checkbox checkbox-error"
+                                {% if user.is_superuser %}checked{% endif %}
+                            />
+                            <div>
+                                <span class="label-text font-semibold">Superuser</span>
+                                <p class="text-xs text-base-content/60">Full admin access</p>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex justify-end gap-4">
+            <a href="/admin/users/{{ user.id }}" class="btn btn-ghost" hx-boost="true">
+                Cancel
+            </a>
+            <button type="submit" class="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                Save Changes
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

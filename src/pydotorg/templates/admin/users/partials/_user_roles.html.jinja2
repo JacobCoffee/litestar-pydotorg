@@ -1,0 +1,58 @@
+<div class="space-y-3 mt-4" id="user-roles">
+    <div class="form-control">
+        <label class="label cursor-pointer justify-start gap-3">
+            <input
+                type="checkbox"
+                class="toggle toggle-primary"
+                {% if user.is_staff %}checked{% endif %}
+                hx-post="/admin/users/{{ user.id }}/toggle-staff"
+                hx-target="#user-roles"
+                hx-swap="outerHTML"
+            >
+            <div>
+                <span class="label-text font-semibold">Staff Status</span>
+                <p class="text-xs text-base-content/60">Can moderate jobs and events</p>
+            </div>
+        </label>
+    </div>
+
+    <div class="divider my-2"></div>
+
+    <div class="form-control">
+        <label class="label cursor-pointer justify-start gap-3">
+            <input
+                type="checkbox"
+                class="toggle toggle-error"
+                {% if user.is_superuser %}checked{% endif %}
+                hx-post="/admin/users/{{ user.id }}/toggle-superuser"
+                hx-target="#user-roles"
+                hx-swap="outerHTML"
+                hx-confirm="Are you sure you want to change superuser status?"
+            >
+            <div>
+                <span class="label-text font-semibold">Superuser Status</span>
+                <p class="text-xs text-base-content/60">Full admin access</p>
+            </div>
+        </label>
+    </div>
+
+    <div class="divider my-2"></div>
+
+    <div class="form-control">
+        <label class="label cursor-pointer justify-start gap-3">
+            <input
+                type="checkbox"
+                class="toggle {% if user.is_active %}toggle-success{% else %}toggle-error{% endif %}"
+                {% if user.is_active %}checked{% endif %}
+                hx-post="/admin/users/{{ user.id }}/toggle-active"
+                hx-target="#user-roles"
+                hx-swap="outerHTML"
+                hx-confirm="Are you sure you want to change active status?"
+            >
+            <div>
+                <span class="label-text font-semibold">Active Status</span>
+                <p class="text-xs text-base-content/60">User can log in and access site</p>
+            </div>
+        </label>
+    </div>
+</div>
