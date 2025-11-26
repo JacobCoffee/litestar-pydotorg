@@ -865,111 +865,101 @@
   flex-direction: column;
   align-items: center;
   margin-top: 2rem;
-  padding: 2rem 2rem 3rem;
+  padding: 0 2rem 3rem;
   z-index: 30;
   background: transparent;
 }
 
-/* No pseudo-elements needed - keep it clean */
-.timeline-terminus::after {
-  display: none;
-}
-
+.timeline-terminus::after,
 .timeline-terminus::before {
   display: none;
 }
 
 .terminus-logo-container {
   position: relative;
-  width: 120px;
-  height: 120px;
+  width: 100px;
+  height: 100px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(
-    135deg,
-    var(--python-blue) 0%,
-    #2c5f8a 40%,
-    var(--python-yellow) 100%
-  );
+  background: linear-gradient(145deg, #3776AB 0%, #306998 50%, #FFD43B 100%);
   border-radius: 50%;
   box-shadow:
     0 0 0 4px oklch(var(--b1)),
     0 0 0 6px var(--python-blue),
-    0 0 30px rgba(55, 118, 171, 0.4),
-    0 0 60px rgba(255, 212, 59, 0.2);
+    0 0 25px rgba(55, 118, 171, 0.3);
   animation: terminusPulse 3s ease-in-out infinite;
 }
 
 .terminus-logo {
-  width: 80px;
-  height: 80px;
-  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4));
-}
-
-.terminus-text {
-  margin-top: 1.5rem;
-  text-align: center;
-}
-
-.terminus-title {
-  font-size: 1.5rem;
-  font-weight: 800;
-  background: linear-gradient(135deg, var(--python-blue), var(--python-yellow));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  letter-spacing: -0.02em;
-}
-
-.terminus-subtitle {
-  font-size: 0.875rem;
-  color: oklch(var(--bc) / 0.6);
-  margin-top: 0.25rem;
+  width: 60px;
+  height: 60px;
 }
 
 .terminus-year {
+  position: relative;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
-  margin-top: 1rem;
-  padding: 0.5rem 1.5rem;
+  margin-top: 1.5rem;
+  padding: 0.625rem 2rem;
   background: var(--python-blue);
   color: white;
   border-radius: 9999px;
   font-weight: 700;
-  font-size: 1.125rem;
-  box-shadow: 0 4px 15px rgba(55, 118, 171, 0.4);
+  font-size: 1.25rem;
+  box-shadow:
+    0 4px 15px rgba(55, 118, 171, 0.4),
+    0 0 0 4px oklch(var(--b1)),
+    0 0 0 6px var(--python-yellow);
+  z-index: 40;
 }
 
 .terminus-year::before {
   content: "";
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   background: var(--python-yellow);
   border-radius: 50%;
   animation: terminusBlink 1.5s ease-in-out infinite;
 }
 
-@keyframes terminusPulse {
-  0%, 100% {
-    transform: scale(1);
-    box-shadow:
-      0 0 0 4px white,
-      0 0 0 8px var(--python-blue),
-      0 0 40px rgba(55, 118, 171, 0.5),
-      0 0 80px rgba(255, 212, 59, 0.3);
-  }
-  50% {
-    transform: scale(1.02);
-    box-shadow:
-      0 0 0 4px white,
-      0 0 0 8px var(--python-blue),
-      0 0 60px rgba(55, 118, 171, 0.6),
-      0 0 100px rgba(255, 212, 59, 0.4);
-  }
+.terminus-text {
+  margin-top: 1.5rem;
+  text-align: center;
+  position: relative;
+  z-index: 50;
 }
 
+.terminus-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--python-blue);
+  letter-spacing: -0.02em;
+}
+
+.terminus-subtitle {
+  font-size: 1rem;
+  color: oklch(var(--bc) / 0.5);
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+@keyframes terminusPulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 4px oklch(var(--b1)),
+      0 0 0 6px var(--python-blue),
+      0 0 25px rgba(55, 118, 171, 0.3);
+  }
+  50% {
+    box-shadow:
+      0 0 0 4px oklch(var(--b1)),
+      0 0 0 6px var(--python-blue),
+      0 0 40px rgba(55, 118, 171, 0.5);
+  }
+}
 
 @keyframes terminusBlink {
   0%, 100% {

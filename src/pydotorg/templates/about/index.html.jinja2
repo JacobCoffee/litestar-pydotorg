@@ -314,19 +314,23 @@
 
                 {# "We Are Here" Timeline Terminus #}
                 <div class="timeline-terminus" x-show="filteredEvents.length > 0 && activeFilter === 'all'">
+                    {# Python Logo #}
                     <div class="terminus-logo-container">
-                        {# Python Logo SVG #}
-                        <svg class="terminus-logo" viewBox="0 0 110 110" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M54.5 0C25 0 27 12.5 27 12.5V25.5H55V29H17S0 27 0 55s15 27 15 27h9V68s-.5-14 14-14h24s13 .5 13-12.5V16S77 0 54.5 0zM40 9.5a4.5 4.5 0 110 9 4.5 4.5 0 010-9z" fill="#3776AB"/>
-                            <path d="M55.5 110c29.5 0 27.5-12.5 27.5-12.5V84.5H55V81h38s17 2 17-26-15-27-15-27h-9v14s.5 14-14 14H48s-13-.5-13 12.5V94s-2 16 20.5 16zM70 100.5a4.5 4.5 0 110-9 4.5 4.5 0 010 9z" fill="#FFD43B"/>
+                        <svg class="terminus-logo" viewBox="0 0 110 110" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M54.8 0C24.5 0 26.1 13.1 26.1 13.1l.1 13.6h29.1v4.1H17.4S0 28.5 0 55.1c0 26.6 15.2 25.7 15.2 25.7h9v-12.4s-.5-15.2 14.9-15.2h25.7s14.5.2 14.5-14V15.9S81.5 0 54.8 0zM39.3 9.2c2.6 0 4.7 2.1 4.7 4.7 0 2.6-2.1 4.7-4.7 4.7-2.6 0-4.7-2.1-4.7-4.7 0-2.6 2.1-4.7 4.7-4.7z" fill="#3776AB"/>
+                            <path d="M55.2 110c30.3 0 28.7-13.1 28.7-13.1l-.1-13.6H54.7v-4.1h37.9S110 81.5 110 54.9c0-26.6-15.2-25.7-15.2-25.7h-9v12.4s.5 15.2-14.9 15.2H45.2s-14.5-.2-14.5 14v23.3S28.5 110 55.2 110zm15.5-9.2c-2.6 0-4.7-2.1-4.7-4.7 0-2.6 2.1-4.7 4.7-4.7 2.6 0 4.7 2.1 4.7 4.7 0 2.6-2.1 4.7-4.7 4.7z" fill="#FFD43B"/>
                         </svg>
                     </div>
+
+                    {# Year pill - timeline ends here #}
+                    <div class="terminus-year">
+                        <span x-text="new Date().getFullYear()"></span>
+                    </div>
+
+                    {# Text below #}
                     <div class="terminus-text">
                         <div class="terminus-title">We Are Here</div>
                         <div class="terminus-subtitle">The journey continues...</div>
-                        <div class="terminus-year">
-                            <span x-text="new Date().getFullYear()"></span>
-                        </div>
                     </div>
                 </div>
             </div>
