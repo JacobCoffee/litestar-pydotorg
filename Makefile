@@ -178,7 +178,26 @@ db-init: db-migrate db-seed ## Initialize database (migrate + seed)
 
 .PHONY: serve
 serve: ## Run development server
-	$(UV) run granian --interface asgi --reload pydotorg.main:app --host 0.0.0.0 --port 8000
+	$(UV) run granian --interface asgi --reload --reload-paths src pydotorg.main:app --host 0.0.0.0 --port 8000
+
+.PHONY: serve-log
+serve-log: ## Run dev server with rotating log file (logs/dev.log, max 5MB)
+	@mkdir -p logs
+	@> logs/dev.log
+	$(UV) run granian --interface asgi --reload --reload-paths src pydotorg.main:app --host 0.0.0.0 --port 8000 2>&1 | tee >(head -c 5242880 > logs/dev.log) &
+	@echo "Server running. Logs at logs/dev.log (max 5MB, truncated on restart)"
+	@echo "View logs: tail -f logs/dev.log"
+	@wait
+
+.PHONY: serve-debug
+serve-debug: ## Run dev server with debug logging to file
+	@mkdir -p logs
+	@if [ -f logs/dev.log ] && [ $$(stat -f%z logs/dev.log 2>/dev/null || stat -c%s logs/dev.log 2>/dev/null) -gt 5242880 ]; then \
+		mv logs/dev.log logs/dev.log.old; \
+		tail -c 1048576 logs/dev.log.old > logs/dev.log; \
+		rm logs/dev.log.old; \
+	fi
+	PYDOTORG_LOG_LEVEL=DEBUG $(UV) run granian --interface asgi --reload --reload-paths src pydotorg.main:app --host 0.0.0.0 --port 8000 2>&1 | tee -a logs/dev.log
 
 .PHONY: serve-prod
 serve-prod: ## Run production server

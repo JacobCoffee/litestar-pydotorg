@@ -4,16 +4,19 @@ from __future__ import annotations
 
 import sys
 
-import uvicorn
+from granian import Granian
 
 
 def main() -> int:
-    uvicorn.run(
+    server = Granian(
         "pydotorg.main:app",
-        host="0.0.0.0",  # noqa: S104
+        address="0.0.0.0",  # noqa: S104
         port=8000,
+        interface="asgi",
         reload=True,
+        reload_paths=["src"],
     )
+    server.serve()
     return 0
 
 

@@ -3,13 +3,12 @@
 from __future__ import annotations
 
 import logging
-import sys
 from typing import TYPE_CHECKING, Any
 
 import structlog
-from litestar.logging.config import StructLoggingConfig
+from litestar.logging.config import LoggingConfig, StructLoggingConfig
 from litestar.middleware.logging import LoggingMiddlewareConfig
-from litestar.plugins.structlog import StructlogConfig
+from litestar.plugins.structlog import StructlogConfig, StructlogPlugin
 
 if TYPE_CHECKING:
     from structlog.typing import Processor
@@ -19,7 +18,7 @@ def configure_structlog(
     log_level: str = "INFO",
     *,
     use_json: bool = False,
-) -> StructlogConfig:
+) -> StructlogPlugin:
     """Configure structlog for the application.
 
     Args:
@@ -27,11 +26,10 @@ def configure_structlog(
         use_json: If True, use JSON formatter for production. If False, use console formatter for development.
 
     Returns:
-        StructlogConfig: Configured structlog plugin config
+        StructlogPlugin: Configured structlog plugin
     """
     processors: list[Processor] = [
         structlog.contextvars.merge_contextvars,
-        structlog.stdlib.filter_by_level,
         structlog.stdlib.add_logger_name,
         structlog.stdlib.add_log_level,
         structlog.stdlib.PositionalArgumentsFormatter(),
@@ -51,11 +49,20 @@ def configure_structlog(
             )
         )
 
+    stdlib_logging_config = LoggingConfig(
+        root={"level": log_level, "handlers": ["queue_listener"]},
+        loggers={
+            "litestar": {"level": log_level, "handlers": ["queue_listener"], "propagate": False},
+            "sqlalchemy": {"level": "WARNING", "handlers": ["queue_listener"], "propagate": False},
+        },
+    )
+
     structlog_config = StructLoggingConfig(
         processors=processors,
         wrapper_class=structlog.make_filtering_bound_logger(logging.getLevelName(log_level.upper())),
-        logger_factory=structlog.PrintLoggerFactory(file=sys.stderr),
+        logger_factory=structlog.stdlib.LoggerFactory(),
         cache_logger_on_first_use=True,
+        standard_lib_logging_config=stdlib_logging_config,
     )
 
     middleware_config = LoggingMiddlewareConfig(
@@ -70,13 +77,15 @@ def configure_structlog(
             "status_code",
             "content_type",
         ),
+        logger_name="litestar",
     )
 
-    return StructlogConfig(
+    config = StructlogConfig(
         structlog_logging_config=structlog_config,
         middleware_logging_config=middleware_config,
         enable_middleware_logging=True,
     )
+    return StructlogPlugin(config=config)
 
 
 def get_logger(name: str | None = None) -> Any:

@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from litestar.di import Provide
+
 from pydotorg.config import settings
 from pydotorg.core.search import SearchService
 
@@ -36,5 +38,5 @@ def get_search_dependencies() -> dict:
         Dictionary of dependencies.
     """
     return {
-        "search_service": provide_search_service,
+        "search_service": Provide(provide_search_service, sync_to_thread=False),
     }

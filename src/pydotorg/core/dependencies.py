@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from litestar.di import Provide
+
 from pydotorg.config import settings
 from pydotorg.core.features import FeatureFlags
 
@@ -28,5 +30,5 @@ def get_core_dependencies() -> dict:
         Dictionary of dependency providers for core functionality
     """
     return {
-        "feature_flags": provide_feature_flags,
+        "feature_flags": Provide(provide_feature_flags, sync_to_thread=False),
     }
