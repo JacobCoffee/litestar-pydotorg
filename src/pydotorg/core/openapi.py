@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from typing import TYPE_CHECKING, Any
 
 from litestar.openapi.plugins import ScalarRenderPlugin, SwaggerRenderPlugin
@@ -50,7 +51,7 @@ class PythonOrgScalarPlugin(ScalarRenderPlugin):
         Returns:
             HTML string for the Scalar documentation page.
         """
-        schema_json = self._encode_json(openapi_schema)
+        schema_json = json.dumps(openapi_schema)
         title = self._custom_title or openapi_schema.get("info", {}).get("title", "API Documentation")
 
         return f"""<!DOCTYPE html>

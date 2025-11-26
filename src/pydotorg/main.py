@@ -326,6 +326,7 @@ app = Litestar(
         title=settings.site_name,
         version="0.1.0",
         description=settings.site_description,
+        path="/api",
         render_plugins=get_openapi_plugins(),
     ),
     compression_config=CompressionConfig(backend="gzip", gzip_compress_level=6),
