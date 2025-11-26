@@ -1,0 +1,199 @@
+{% extends "admin/base.html.jinja2" %}
+
+{% block title %}Event Management - Python.org Admin{% endblock %}
+
+{% block admin_content %}
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold text-python-blue">Event Management</h1>
+            <p class="text-base-content/70 mt-1">Manage events and calendars</p>
+        </div>
+        <div class="flex gap-2">
+            <a href="/admin/events/calendars" class="btn btn-outline btn-sm" hx-boost="true">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                View Calendars
+            </a>
+        </div>
+    </div>
+
+    {% if stats %}
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="stat bg-base-100 shadow rounded-lg p-4">
+            <div class="stat-title text-xs">Total Events</div>
+            <div class="stat-value text-2xl text-python-blue">{{ stats.total_events }}</div>
+        </div>
+        <div class="stat bg-base-100 shadow rounded-lg p-4">
+            <div class="stat-title text-xs">Calendars</div>
+            <div class="stat-value text-2xl">{{ stats.total_calendars }}</div>
+        </div>
+        <div class="stat bg-base-100 shadow rounded-lg p-4">
+            <div class="stat-title text-xs">Featured</div>
+            <div class="stat-value text-2xl text-warning">{{ stats.featured_events }}</div>
+        </div>
+        <div class="stat bg-base-100 shadow rounded-lg p-4">
+            <div class="stat-title text-xs">Upcoming</div>
+            <div class="stat-value text-2xl text-success">{{ stats.upcoming_events }}</div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="flex gap-2 flex-wrap">
+        <a
+            href="/admin/events"
+            class="btn btn-sm {% if not request.query_params.get('filter') %}btn-primary{% else %}btn-ghost{% endif %}"
+            hx-boost="true"
+        >
+            All
+            {% if stats %}
+            <span class="badge badge-sm">{{ stats.total_events }}</span>
+            {% endif %}
+        </a>
+        <a
+            href="/admin/events?filter=featured"
+            class="btn btn-sm {% if request.query_params.get('filter') == 'featured' %}btn-primary{% else %}btn-ghost{% endif %}"
+            hx-boost="true"
+        >
+            Featured
+            {% if stats and stats.featured_events %}
+            <span class="badge badge-warning badge-sm">{{ stats.featured_events }}</span>
+            {% endif %}
+        </a>
+        <a
+            href="/admin/events?filter=upcoming"
+            class="btn btn-sm {% if request.query_params.get('filter') == 'upcoming' %}btn-primary{% else %}btn-ghost{% endif %}"
+            hx-boost="true"
+        >
+            Upcoming
+            {% if stats and stats.upcoming_events %}
+            <span class="badge badge-success badge-sm">{{ stats.upcoming_events }}</span>
+            {% endif %}
+        </a>
+    </div>
+
+    {% if calendars %}
+    <div class="flex gap-2 items-center">
+        <label class="text-sm font-medium">Filter by Calendar:</label>
+        <div class="dropdown">
+            <div tabindex="0" role="button" class="btn btn-sm btn-ghost">
+                {% if request.query_params.get('calendar_id') %}
+                    {{ calendars|selectattr('id', 'eq', request.query_params.get('calendar_id')|int)|map(attribute='name')|first|default('All Calendars') }}
+                {% else %}
+                    All Calendars
+                {% endif %}
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+            </div>
+            <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52 max-h-60 overflow-y-auto">
+                <li><a href="/admin/events" hx-boost="true">All Calendars</a></li>
+                <li class="menu-title">
+                    <span>Calendars</span>
+                </li>
+                {% for calendar in calendars %}
+                <li>
+                    <a href="/admin/events?calendar_id={{ calendar.id }}" hx-boost="true">
+                        {{ calendar.name }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% endif %}
+
+    <div id="events-list">
+        {% if events %}
+        <div class="space-y-4">
+            {% for event in events %}
+            {% include 'admin/events/partials/event_row.html.jinja2' %}
+            {% endfor %}
+        </div>
+
+        {% if pagination and pagination.total > pagination.limit %}
+        <div class="flex justify-center mt-6">
+            <div class="join">
+                {% if pagination.offset > 0 %}
+                <button
+                    class="join-item btn btn-sm"
+                    hx-get="/admin/events?filter={{ request.query_params.get('filter', '') }}&calendar_id={{ request.query_params.get('calendar_id', '') }}&limit={{ pagination.limit }}&offset={{ [0, pagination.offset - pagination.limit]|max }}"
+                    hx-target="#events-list"
+                    hx-swap="outerHTML"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                    Previous
+                </button>
+                {% endif %}
+
+                {% set current_page = (pagination.offset // pagination.limit) + 1 %}
+                {% set total_pages = (pagination.total // pagination.limit) + (1 if pagination.total % pagination.limit else 0) %}
+
+                <button class="join-item btn btn-sm btn-active">
+                    Page {{ current_page }} of {{ total_pages }}
+                </button>
+
+                {% if pagination.offset + pagination.limit < pagination.total %}
+                <button
+                    class="join-item btn btn-sm"
+                    hx-get="/admin/events?filter={{ request.query_params.get('filter', '') }}&calendar_id={{ request.query_params.get('calendar_id', '') }}&limit={{ pagination.limit }}&offset={{ pagination.offset + pagination.limit }}"
+                    hx-target="#events-list"
+                    hx-swap="outerHTML"
+                >
+                    Next
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+        {% else %}
+        <div class="card bg-base-100 shadow-lg border border-base-300">
+            <div class="card-body text-center py-12">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-base-content/30 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <h3 class="text-xl font-bold mb-2">No Events Found</h3>
+                <p class="text-base-content/60 mb-4">
+                    {% if request.query_params.get('filter') == 'featured' %}
+                    No featured events found!
+                    {% elif request.query_params.get('filter') == 'upcoming' %}
+                    No upcoming events found!
+                    {% else %}
+                    There are no events matching your criteria
+                    {% endif %}
+                </p>
+                <a href="/admin/events" class="btn btn-primary btn-sm">
+                    View All Events
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<dialog id="event_preview_modal" class="modal">
+    <div class="modal-box max-w-4xl">
+        <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+        </form>
+        <div id="event_preview_content">
+        </div>
+    </div>
+</dialog>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.body.addEventListener('htmx:afterSwap', function(evt) {
+        if (evt.detail.target.id === 'event_preview_content') {
+            event_preview_modal.showModal();
+        }
+    });
+</script>
+{% endblock %}

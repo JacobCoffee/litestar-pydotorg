@@ -1,0 +1,123 @@
+{% extends "admin/base.html.jinja2" %}
+
+{% block title %}Calendar Management - Python.org Admin{% endblock %}
+
+{% block admin_content %}
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold text-python-blue">Calendar Management</h1>
+            <p class="text-base-content/70 mt-1">Manage event calendars</p>
+        </div>
+        <div class="flex gap-2">
+            <a href="/admin/events" class="btn btn-outline btn-sm" hx-boost="true">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                View All Events
+            </a>
+        </div>
+    </div>
+
+    {% if stats %}
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <div class="stat bg-base-100 shadow rounded-lg p-4">
+            <div class="stat-title text-xs">Total Calendars</div>
+            <div class="stat-value text-2xl text-python-blue">{{ stats.total_calendars }}</div>
+        </div>
+        <div class="stat bg-base-100 shadow rounded-lg p-4">
+            <div class="stat-title text-xs">Total Events</div>
+            <div class="stat-value text-2xl">{{ stats.total_events }}</div>
+        </div>
+        <div class="stat bg-base-100 shadow rounded-lg p-4">
+            <div class="stat-title text-xs">Avg Events/Calendar</div>
+            <div class="stat-value text-2xl text-success">{{ "%.1f"|format(stats.avg_events_per_calendar) if stats.avg_events_per_calendar else '0' }}</div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div id="calendars-list">
+        {% if calendars %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {% for calendar in calendars %}
+            <div class="card bg-base-100 shadow-lg border border-base-300 hover:shadow-xl transition-shadow">
+                <div class="card-body">
+                    <h3 class="card-title text-lg">{{ calendar.name }}</h3>
+
+                    {% if calendar.description %}
+                    <p class="text-sm text-base-content/70 line-clamp-2">{{ calendar.description }}</p>
+                    {% endif %}
+
+                    <div class="flex items-center gap-2 text-sm text-base-content/60 mt-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        <span>{{ calendar.events|length if calendar.events else 0 }} events</span>
+                    </div>
+
+                    <div class="card-actions justify-end mt-4">
+                        <a href="/admin/events/calendars/{{ calendar.id }}" class="btn btn-primary btn-sm" hx-boost="true">
+                            View Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if pagination and pagination.total > pagination.limit %}
+        <div class="flex justify-center mt-6">
+            <div class="join">
+                {% if pagination.offset > 0 %}
+                <button
+                    class="join-item btn btn-sm"
+                    hx-get="/admin/events/calendars?limit={{ pagination.limit }}&offset={{ [0, pagination.offset - pagination.limit]|max }}"
+                    hx-target="#calendars-list"
+                    hx-swap="outerHTML"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                    Previous
+                </button>
+                {% endif %}
+
+                {% set current_page = (pagination.offset // pagination.limit) + 1 %}
+                {% set total_pages = (pagination.total // pagination.limit) + (1 if pagination.total % pagination.limit else 0) %}
+
+                <button class="join-item btn btn-sm btn-active">
+                    Page {{ current_page }} of {{ total_pages }}
+                </button>
+
+                {% if pagination.offset + pagination.limit < pagination.total %}
+                <button
+                    class="join-item btn btn-sm"
+                    hx-get="/admin/events/calendars?limit={{ pagination.limit }}&offset={{ pagination.offset + pagination.limit }}"
+                    hx-target="#calendars-list"
+                    hx-swap="outerHTML"
+                >
+                    Next
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+        {% else %}
+        <div class="card bg-base-100 shadow-lg border border-base-300">
+            <div class="card-body text-center py-12">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-base-content/30 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <h3 class="text-xl font-bold mb-2">No Calendars Found</h3>
+                <p class="text-base-content/60 mb-4">
+                    There are no calendars configured yet
+                </p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

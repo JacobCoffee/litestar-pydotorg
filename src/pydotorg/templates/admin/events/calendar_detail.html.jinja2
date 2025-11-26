@@ -1,0 +1,121 @@
+{% extends "admin/base.html.jinja2" %}
+
+{% block title %}{{ calendar.name }} - Calendar Details{% endblock %}
+
+{% block admin_content %}
+<div class="space-y-6">
+    <div class="flex items-center gap-4">
+        <a href="/admin/events/calendars" class="btn btn-ghost btn-sm" hx-boost="true">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            Back to Calendars
+        </a>
+    </div>
+
+    <div class="card bg-base-100 shadow-lg border border-base-300">
+        <div class="card-body">
+            <div class="flex items-start gap-6">
+                <div class="avatar placeholder">
+                    <div class="bg-python-blue text-white rounded-lg w-24 h-24">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="flex-1">
+                    <h1 class="text-2xl font-bold">{{ calendar.name }}</h1>
+
+                    {% if calendar.description %}
+                    <p class="mt-4 text-base-content/70">{{ calendar.description }}</p>
+                    {% endif %}
+
+                    <div class="mt-4">
+                        <div class="stat">
+                            <div class="stat-title">Total Events</div>
+                            <div class="stat-value text-3xl">{{ calendar.events|length if calendar.events else 0 }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if calendar.events %}
+    <div class="card bg-base-100 shadow-lg border border-base-300">
+        <div class="card-body">
+            <h2 class="card-title text-lg mb-4">Events in this Calendar</h2>
+
+            <div class="space-y-4">
+                {% for event in calendar.events %}
+                <div class="border border-base-300 rounded-lg p-4 hover:bg-base-200 transition-colors">
+                    <div class="flex items-start justify-between gap-4">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2">
+                                <h3 class="font-bold">{{ event.title }}</h3>
+                                {% if event.featured %}
+                                <span class="badge badge-warning badge-sm">Featured</span>
+                                {% endif %}
+                            </div>
+
+                            {% if event.description %}
+                            <p class="text-sm text-base-content/70 mt-1 line-clamp-2">{{ event.description }}</p>
+                            {% endif %}
+
+                            <div class="flex items-center gap-4 text-sm text-base-content/60 mt-2">
+                                {% if event.venue %}
+                                <span class="flex items-center gap-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    </svg>
+                                    {{ event.venue.name }}
+                                </span>
+                                {% endif %}
+                                {% if event.occurrences %}
+                                <span>{{ event.occurrences|length }} occurrence{{ 's' if event.occurrences|length != 1 }}</span>
+                                {% endif %}
+                            </div>
+
+                            {% if event.occurrences and event.occurrences[0] %}
+                            <div class="text-xs text-base-content/50 mt-1">
+                                {% set occurrence = event.occurrences[0] %}
+                                Next: {% if occurrence.all_day %}
+                                {{ occurrence.dt_start.strftime('%b %d, %Y') }} - All Day
+                                {% else %}
+                                {{ occurrence.dt_start.strftime('%b %d, %Y at %I:%M %p') }}
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="flex gap-2">
+                            <a href="/admin/events/{{ event.id }}" class="btn btn-ghost btn-sm" hx-boost="true">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                View
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="card bg-base-100 shadow-lg border border-base-300">
+        <div class="card-body text-center py-12">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-base-content/30 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <h3 class="text-xl font-bold mb-2">No Events Yet</h3>
+            <p class="text-base-content/60 mb-4">
+                This calendar doesn't have any events yet
+            </p>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
