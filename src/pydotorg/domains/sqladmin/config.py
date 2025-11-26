@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 from litestar.plugins.base import InitPluginProtocol
@@ -39,6 +40,8 @@ if TYPE_CHECKING:
     from litestar.types.asgi_types import Receive, Scope, Send
     from sqlalchemy.ext.asyncio import AsyncEngine, async_sessionmaker
 
+TEMPLATES_DIR = Path(__file__).parent.parent.parent / "templates"
+
 
 class SQLAdminConfig(InitPluginProtocol):
     """Custom SQLAdmin plugin configuration."""
@@ -72,6 +75,7 @@ class SQLAdminConfig(InitPluginProtocol):
             title="Python.org Admin Panel",
             logo_url="/static/img/python-logo.png",
             authentication_backend=self.auth_backend,
+            templates_dir=str(TEMPLATES_DIR),
         )
 
         self.admin.add_view(UserAdmin)
