@@ -121,6 +121,15 @@
   color: #FFFFFF !important;
 }
 
+/* Header hover states - use yellow accent */
+.scalar-app header a:hover,
+.scalar-app header button:hover,
+.scalar-app .t-app__navigation a:hover,
+.scalar-app .t-app__navigation button:hover {
+  color: #FFD43B !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
 /* Search input in header */
 .scalar-app .t-app__navigation input,
 .scalar-app header input {
