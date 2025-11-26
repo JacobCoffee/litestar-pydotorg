@@ -1,0 +1,32 @@
+{% macro stats_card(title, value, icon='', trend='', trend_direction='', color='primary') %}
+<div class="stats shadow-lg bg-base-100 border border-base-300">
+    <div class="stat">
+        {% if icon %}
+        <div class="stat-figure text-{{ color }}">
+            {{ icon|safe }}
+        </div>
+        {% endif %}
+
+        <div class="stat-title text-base-content/70">{{ title }}</div>
+        <div class="stat-value text-{{ color }}">{{ value }}</div>
+
+        {% if trend %}
+        <div class="stat-desc flex items-center gap-1 mt-1">
+            {% if trend_direction == 'up' %}
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+            </svg>
+            <span class="text-success">{{ trend }}</span>
+            {% elif trend_direction == 'down' %}
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-error" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+            </svg>
+            <span class="text-error">{{ trend }}</span>
+            {% else %}
+            <span class="text-base-content/60">{{ trend }}</span>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endmacro %}

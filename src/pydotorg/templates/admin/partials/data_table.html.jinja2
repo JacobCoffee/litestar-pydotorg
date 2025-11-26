@@ -1,0 +1,119 @@
+{% macro data_table(
+    headers=[],
+    rows=[],
+    sortable=True,
+    searchable=True,
+    search_placeholder='Search...',
+    empty_message='No data available',
+    actions=[]
+) %}
+<div class="card bg-base-100 shadow-lg border border-base-300">
+    <div class="card-body p-0">
+        {% if searchable %}
+        <div class="p-4 border-b border-base-300">
+            <div class="flex items-center gap-4 flex-wrap">
+                <div class="form-control flex-1 min-w-[200px]">
+                    <input
+                        type="search"
+                        name="q"
+                        placeholder="{{ search_placeholder }}"
+                        class="input input-bordered input-sm w-full"
+                        hx-get="{{ request.url.path }}"
+                        hx-trigger="input changed delay:300ms"
+                        hx-target="closest .card"
+                        hx-swap="outerHTML"
+                    />
+                </div>
+                {% if actions %}
+                <div class="flex gap-2">
+                    {% for action in actions %}
+                    {{ action|safe }}
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="overflow-x-auto">
+            <table class="table table-zebra">
+                <thead>
+                    <tr>
+                        {% for header in headers %}
+                        <th class="{% if sortable %}cursor-pointer hover:bg-base-300{% endif %}">
+                            <div class="flex items-center gap-2">
+                                {{ header.label }}
+                                {% if sortable and header.sortable != False %}
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-base-content/30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                                </svg>
+                                {% endif %}
+                            </div>
+                        </th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if rows %}
+                        {{ caller() if caller else '' }}
+                    {% else %}
+                    <tr>
+                        <td colspan="{{ headers|length }}" class="text-center py-12">
+                            <div class="flex flex-col items-center gap-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-base-content/30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                                </svg>
+                                <p class="text-base-content/60">{{ empty_message }}</p>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro pagination(total, limit, offset, target='#table-results') %}
+{% if total > limit %}
+<div class="flex justify-center mt-6">
+    <div class="join">
+        {% if offset > 0 %}
+        <button
+            class="join-item btn btn-sm"
+            hx-get="{{ request.url.path }}?limit={{ limit }}&offset={{ [0, offset - limit]|max }}"
+            hx-target="{{ target }}"
+            hx-swap="outerHTML"
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            Previous
+        </button>
+        {% endif %}
+
+        {% set current_page = (offset // limit) + 1 %}
+        {% set total_pages = (total // limit) + (1 if total % limit else 0) %}
+
+        <button class="join-item btn btn-sm btn-active">
+            Page {{ current_page }} of {{ total_pages }}
+        </button>
+
+        {% if offset + limit < total %}
+        <button
+            class="join-item btn btn-sm"
+            hx-get="{{ request.url.path }}?limit={{ limit }}&offset={{ offset + limit }}"
+            hx-target="{{ target }}"
+            hx-swap="outerHTML"
+        >
+            Next
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+        </button>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+{% endmacro %}

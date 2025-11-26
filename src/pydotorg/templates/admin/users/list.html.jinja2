@@ -1,0 +1,195 @@
+{% extends "admin/base.html.jinja2" %}
+{% from "admin/partials/data_table.html.jinja2" import data_table, pagination %}
+
+{% block title %}User Management - Python.org Admin{% endblock %}
+
+{% block admin_content %}
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold text-python-blue">User Management</h1>
+            <p class="text-base-content/70 mt-1">Manage all users and permissions</p>
+        </div>
+    </div>
+
+    <div class="flex gap-2">
+        <a
+            href="/admin/users"
+            class="btn btn-sm {% if not request.query_params.get('filter') %}btn-primary{% else %}btn-ghost{% endif %}"
+            hx-boost="true"
+        >
+            All Users
+        </a>
+        <a
+            href="/admin/users?filter=staff"
+            class="btn btn-sm {% if request.query_params.get('filter') == 'staff' %}btn-primary{% else %}btn-ghost{% endif %}"
+            hx-boost="true"
+        >
+            Staff
+        </a>
+        <a
+            href="/admin/users?filter=superuser"
+            class="btn btn-sm {% if request.query_params.get('filter') == 'superuser' %}btn-primary{% else %}btn-ghost{% endif %}"
+            hx-boost="true"
+        >
+            Superusers
+        </a>
+        <a
+            href="/admin/users?filter=active"
+            class="btn btn-sm {% if request.query_params.get('filter') == 'active' %}btn-primary{% else %}btn-ghost{% endif %}"
+            hx-boost="true"
+        >
+            Active
+        </a>
+        <a
+            href="/admin/users?filter=inactive"
+            class="btn btn-sm {% if request.query_params.get('filter') == 'inactive' %}btn-primary{% else %}btn-ghost{% endif %}"
+            hx-boost="true"
+        >
+            Inactive
+        </a>
+    </div>
+
+    <div id="users-table">
+        <div class="card bg-base-100 shadow-lg border border-base-300">
+            <div class="card-body p-0">
+                <div class="p-4 border-b border-base-300">
+                    <div class="flex items-center gap-4 flex-wrap">
+                        <div class="form-control flex-1 min-w-[200px]">
+                            <input
+                                type="search"
+                                name="q"
+                                placeholder="Search by username or email..."
+                                value="{{ request.query_params.get('q', '') }}"
+                                class="input input-bordered input-sm w-full"
+                                hx-get="/admin/users"
+                                hx-trigger="input changed delay:300ms"
+                                hx-target="#users-table"
+                                hx-swap="outerHTML"
+                            />
+                        </div>
+                        <div class="text-sm text-base-content/70">
+                            Total: {{ pagination.total if pagination else users|length }} users
+                        </div>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="table table-zebra">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Status</th>
+                                <th>Roles</th>
+                                <th>Joined</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if users %}
+                                {% for user in users %}
+                                <tr class="hover">
+                                    <td>
+                                        <div class="flex items-center gap-3">
+                                            <div class="avatar placeholder">
+                                                <div class="bg-primary text-primary-content rounded-full w-10">
+                                                    <span class="text-xs">{{ user.username[:2].upper() }}</span>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <a href="/admin/users/{{ user.id }}" class="font-semibold python-link" hx-boost="true">
+                                                    {{ user.username }}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="text-sm text-base-content/70">{{ user.email }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-sm {% if user.is_active %}badge-success{% else %}badge-error{% endif %}">
+                                            {{ 'Active' if user.is_active else 'Inactive' }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="flex gap-1">
+                                            {% if user.is_superuser %}
+                                            <span class="badge badge-error badge-sm">Superuser</span>
+                                            {% endif %}
+                                            {% if user.is_staff %}
+                                            <span class="badge badge-warning badge-sm">Staff</span>
+                                            {% endif %}
+                                            {% if not user.is_staff and not user.is_superuser %}
+                                            <span class="badge badge-ghost badge-sm">User</span>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="text-sm text-base-content/70">
+                                            {{ user.created_at.strftime('%b %d, %Y') if user.created_at else 'N/A' }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="dropdown dropdown-end">
+                                            <label tabindex="0" class="btn btn-ghost btn-xs">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                                                </svg>
+                                            </label>
+                                            <ul tabindex="0" class="dropdown-content menu menu-sm p-2 shadow bg-base-200 rounded-box w-44 z-10">
+                                                <li><a href="/admin/users/{{ user.id }}" hx-boost="true">View Details</a></li>
+                                                <li><a href="/admin/users/{{ user.id }}/edit" hx-boost="true">Edit</a></li>
+                                                {% if user.is_active %}
+                                                <li>
+                                                    <a
+                                                        hx-post="/admin/users/{{ user.id }}/deactivate"
+                                                        hx-confirm="Are you sure you want to deactivate this user?"
+                                                        hx-target="closest tr"
+                                                        hx-swap="outerHTML"
+                                                        class="text-error"
+                                                    >
+                                                        Deactivate
+                                                    </a>
+                                                </li>
+                                                {% else %}
+                                                <li>
+                                                    <a
+                                                        hx-post="/admin/users/{{ user.id }}/activate"
+                                                        hx-target="closest tr"
+                                                        hx-swap="outerHTML"
+                                                        class="text-success"
+                                                    >
+                                                        Activate
+                                                    </a>
+                                                </li>
+                                                {% endif %}
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                            <tr>
+                                <td colspan="6" class="text-center py-12">
+                                    <div class="flex flex-col items-center gap-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-base-content/30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                        </svg>
+                                        <p class="text-base-content/60">No users found</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        {% if pagination and pagination.total > pagination.limit %}
+        {{ pagination(pagination.total, pagination.limit, pagination.offset, '#users-table') }}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

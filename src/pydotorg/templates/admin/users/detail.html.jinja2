@@ -1,0 +1,269 @@
+{% extends "admin/base.html.jinja2" %}
+{% from "macros/forms.html.jinja2" import csrf_token_field %}
+
+{% block title %}{{ user.username }} - User Details - Python.org Admin{% endblock %}
+
+{% block admin_content %}
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <div class="flex items-center gap-4">
+            <a href="/admin/users" class="btn btn-ghost btn-sm" hx-boost="true">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+                Back
+            </a>
+            <div>
+                <h1 class="text-3xl font-bold text-python-blue">{{ user.username }}</h1>
+                <p class="text-base-content/70 mt-1">User ID: {{ user.id }}</p>
+            </div>
+        </div>
+        <div class="flex gap-2">
+            <a href="/admin/users/{{ user.id }}/edit" class="btn btn-primary btn-sm" hx-boost="true">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+                Edit
+            </a>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2 space-y-6">
+            <div class="card bg-base-100 shadow-lg border border-base-300">
+                <div class="card-body">
+                    <h2 class="card-title text-python-blue">User Information</h2>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                        <div>
+                            <label class="label">
+                                <span class="label-text font-semibold">Username</span>
+                            </label>
+                            <p class="text-base-content/80">{{ user.username }}</p>
+                        </div>
+
+                        <div>
+                            <label class="label">
+                                <span class="label-text font-semibold">Email</span>
+                            </label>
+                            <p class="text-base-content/80">{{ user.email }}</p>
+                        </div>
+
+                        <div>
+                            <label class="label">
+                                <span class="label-text font-semibold">Status</span>
+                            </label>
+                            <span class="badge {% if user.is_active %}badge-success{% else %}badge-error{% endif %}">
+                                {{ 'Active' if user.is_active else 'Inactive' }}
+                            </span>
+                        </div>
+
+                        <div>
+                            <label class="label">
+                                <span class="label-text font-semibold">Email Verified</span>
+                            </label>
+                            <span class="badge {% if user.email_verified %}badge-success{% else %}badge-warning{% endif %}">
+                                {{ 'Verified' if user.email_verified else 'Not Verified' }}
+                            </span>
+                        </div>
+
+                        <div>
+                            <label class="label">
+                                <span class="label-text font-semibold">Joined</span>
+                            </label>
+                            <p class="text-base-content/80">
+                                {{ user.created_at.strftime('%B %d, %Y at %I:%M %p') if user.created_at else 'N/A' }}
+                            </p>
+                        </div>
+
+                        <div>
+                            <label class="label">
+                                <span class="label-text font-semibold">Last Login</span>
+                            </label>
+                            <p class="text-base-content/80">
+                                {{ user.last_login.strftime('%B %d, %Y at %I:%M %p') if user.last_login else 'Never' }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card bg-base-100 shadow-lg border border-base-300">
+                <div class="card-body">
+                    <h2 class="card-title text-python-blue">Activity Log</h2>
+
+                    <div class="space-y-3 mt-4">
+                        {% if user_activities %}
+                            {% for activity in user_activities %}
+                            <div class="flex items-start gap-3 p-3 rounded-lg bg-base-200">
+                                <div class="flex-shrink-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-python-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                    </svg>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-sm text-base-content/80">{{ activity.action }}</p>
+                                    <p class="text-xs text-base-content/60 mt-1">
+                                        {{ activity.timestamp.strftime('%B %d, %Y at %I:%M %p') }}
+                                    </p>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                        <div class="text-center py-8 text-base-content/60">
+                            <p>No activity recorded</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="space-y-6">
+            <div class="card bg-base-100 shadow-lg border border-base-300">
+                <div class="card-body">
+                    <h2 class="card-title text-python-blue">Roles & Permissions</h2>
+
+                    <div class="space-y-3 mt-4" id="user-roles">
+                        <div class="form-control">
+                            <label class="label cursor-pointer justify-start gap-3">
+                                <input
+                                    type="checkbox"
+                                    class="toggle toggle-primary"
+                                    {% if user.is_staff %}checked{% endif %}
+                                    hx-post="/admin/users/{{ user.id }}/toggle-staff"
+                                    hx-target="#user-roles"
+                                    hx-swap="outerHTML"
+                                >
+                                <div>
+                                    <span class="label-text font-semibold">Staff Status</span>
+                                    <p class="text-xs text-base-content/60">Can moderate jobs and events</p>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="divider my-2"></div>
+
+                        <div class="form-control">
+                            <label class="label cursor-pointer justify-start gap-3">
+                                <input
+                                    type="checkbox"
+                                    class="toggle toggle-error"
+                                    {% if user.is_superuser %}checked{% endif %}
+                                    hx-post="/admin/users/{{ user.id }}/toggle-superuser"
+                                    hx-target="#user-roles"
+                                    hx-swap="outerHTML"
+                                    hx-confirm="Are you sure you want to change superuser status?"
+                                >
+                                <div>
+                                    <span class="label-text font-semibold">Superuser Status</span>
+                                    <p class="text-xs text-base-content/60">Full admin access</p>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="divider my-2"></div>
+
+                        <div class="form-control">
+                            <label class="label cursor-pointer justify-start gap-3">
+                                <input
+                                    type="checkbox"
+                                    class="toggle {% if user.is_active %}toggle-success{% else %}toggle-error{% endif %}"
+                                    {% if user.is_active %}checked{% endif %}
+                                    hx-post="/admin/users/{{ user.id }}/toggle-active"
+                                    hx-target="#user-roles"
+                                    hx-swap="outerHTML"
+                                    hx-confirm="Are you sure you want to change active status?"
+                                >
+                                <div>
+                                    <span class="label-text font-semibold">Active Status</span>
+                                    <p class="text-xs text-base-content/60">User can log in and access site</p>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card bg-base-100 shadow-lg border border-base-300">
+                <div class="card-body">
+                    <h2 class="card-title text-python-blue">Quick Actions</h2>
+
+                    <div class="space-y-2 mt-4">
+                        <button
+                            class="btn btn-outline btn-block justify-start gap-2"
+                            onclick="reset_password_modal_{{ user.id }}.showModal()"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+                            </svg>
+                            Send Password Reset
+                        </button>
+
+                        {% if not user.email_verified %}
+                        <button
+                            class="btn btn-outline btn-block justify-start gap-2"
+                            hx-post="/admin/users/{{ user.id }}/resend-verification"
+                            hx-indicator=".htmx-indicator"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                            Resend Verification Email
+                        </button>
+                        {% endif %}
+
+                        <button
+                            class="btn btn-error btn-outline btn-block justify-start gap-2"
+                            onclick="delete_user_modal_{{ user.id }}.showModal()"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                            Delete User
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<dialog id="reset_password_modal_{{ user.id }}" class="modal">
+    <div class="modal-box">
+        <h3 class="font-bold text-lg text-python-blue">Send Password Reset</h3>
+        <p class="py-4">Send a password reset email to {{ user.email }}?</p>
+        <div class="modal-action">
+            <form method="dialog">
+                <button class="btn btn-ghost">Cancel</button>
+            </form>
+            <button
+                class="btn btn-primary"
+                hx-post="/admin/users/{{ user.id }}/reset-password"
+                hx-on::after-request="reset_password_modal_{{ user.id }}.close()"
+            >
+                Send Email
+            </button>
+        </div>
+    </div>
+</dialog>
+
+<dialog id="delete_user_modal_{{ user.id }}" class="modal">
+    <div class="modal-box">
+        <h3 class="font-bold text-lg text-error">Delete User</h3>
+        <p class="py-4">Are you sure you want to permanently delete this user? This action cannot be undone.</p>
+        <div class="modal-action">
+            <form method="dialog">
+                <button class="btn btn-ghost">Cancel</button>
+            </form>
+            <button
+                class="btn btn-error"
+                hx-delete="/admin/users/{{ user.id }}"
+                hx-on::after-request="window.location.href='/admin/users'"
+            >
+                Delete User
+            </button>
+        </div>
+    </div>
+</dialog>
+{% endblock %}
