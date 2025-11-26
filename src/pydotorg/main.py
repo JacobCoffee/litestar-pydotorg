@@ -17,8 +17,10 @@ from advanced_alchemy.extensions.litestar.plugins.init.config.asyncio import SQL
 from litestar import Litestar, get
 from litestar.config.compression import CompressionConfig
 from litestar.contrib.jinja import JinjaTemplateEngine
+from litestar.middleware.session.client_side import CookieBackendConfig
 from litestar.openapi import OpenAPIConfig
 from litestar.openapi.spec import Components, SecurityScheme, Tag
+from litestar.plugins.flash import FlashConfig, FlashPlugin
 from litestar.response import Template
 from litestar.static_files import create_static_files_router
 from litestar.status_codes import HTTP_200_OK, HTTP_503_SERVICE_UNAVAILABLE
@@ -229,6 +231,19 @@ sqladmin_plugin = create_sqladmin_plugin(
     secret_key=settings.session_secret_key,
 )
 
+
+def _derive_session_secret(key: str) -> bytes:
+    """Derive a 32-byte secret key for session encryption."""
+    import hashlib  # noqa: PLC0415
+
+    return hashlib.sha256(key.encode()).digest()
+
+
+session_config = CookieBackendConfig(
+    secret=_derive_session_secret(settings.session_secret_key),
+    max_age=settings.session_expire_minutes * 60,
+)
+
 templates_dir = Path(__file__).parent / "templates"
 static_dir = Path(__file__).parent.parent.parent / "static"
 
@@ -251,6 +266,15 @@ def configure_template_engine(engine: JinjaTemplateEngine) -> None:
             "now": datetime.now,
         }
     )
+
+
+template_config = TemplateConfig(
+    directory=templates_dir,
+    engine=JinjaTemplateEngine,
+    engine_callback=configure_template_engine,
+)
+
+flash_plugin = FlashPlugin(config=FlashConfig(template_config=template_config))
 
 
 def on_app_init(app_config: AppConfig) -> AppConfig:
@@ -356,13 +380,9 @@ app = Litestar(
         AdminDashboardController,
     ],
     dependencies=get_all_dependencies(),
-    plugins=[sqlalchemy_plugin, sqladmin_plugin],
-    middleware=[JWTAuthMiddleware],
-    template_config=TemplateConfig(
-        directory=templates_dir,
-        engine=JinjaTemplateEngine,
-        engine_callback=configure_template_engine,
-    ),
+    plugins=[sqlalchemy_plugin, sqladmin_plugin, flash_plugin],
+    middleware=[session_config.middleware, JWTAuthMiddleware],
+    template_config=template_config,
     openapi_config=OpenAPIConfig(
         title=settings.site_name,
         version="0.1.0",

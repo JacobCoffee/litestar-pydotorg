@@ -1,20 +1,29 @@
+{# Alert/Flash message component
+   Works with both:
+   - Custom messages: message.type, message.content, message.title
+   - Litestar flash plugin: message.category, message.message
+#}
+{% set msg_type = message.category if message.category is defined else message.type %}
+{% set msg_content = message.message if message.message is defined else message.content %}
+
 {% set alert_types = {
     'success': 'alert-success',
     'error': 'alert-error',
+    'danger': 'alert-error',
     'warning': 'alert-warning',
     'info': 'alert-info'
 } %}
 
-<div role="alert" class="alert {{ alert_types.get(message.type, 'alert-info') }} shadow-lg">
-    {% if message.type == 'success' %}
+<div role="alert" class="alert {{ alert_types.get(msg_type, 'alert-info') }} shadow-lg mb-2" x-data="{ show: true }" x-show="show" x-transition>
+    {% if msg_type == 'success' %}
         <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-    {% elif message.type == 'error' %}
+    {% elif msg_type in ['error', 'danger'] %}
         <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-    {% elif message.type == 'warning' %}
+    {% elif msg_type == 'warning' %}
         <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
         </svg>
@@ -23,10 +32,15 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
     {% endif %}
-    <div>
-        {% if message.title %}
+    <div class="flex-1">
+        {% if message.title is defined and message.title %}
             <h3 class="font-bold">{{ message.title }}</h3>
         {% endif %}
-        <div class="text-sm">{{ message.content }}</div>
+        <div class="text-sm">{{ msg_content }}</div>
     </div>
+    <button class="btn btn-ghost btn-sm" @click="show = false" aria-label="Dismiss">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+    </button>
 </div>
