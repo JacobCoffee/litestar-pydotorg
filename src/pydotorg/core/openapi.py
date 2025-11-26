@@ -20,6 +20,7 @@ def get_openapi_plugins() -> list[ScalarRenderPlugin | SwaggerRenderPlugin]:
         ScalarRenderPlugin(
             path="/",
             favicon='<link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">',
+            css_url="/static/css/scalar-theme.css",
         ),
         SwaggerRenderPlugin(
             path="/swagger",
