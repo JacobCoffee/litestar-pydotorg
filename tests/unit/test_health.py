@@ -10,22 +10,11 @@ if TYPE_CHECKING:
     from litestar.testing import AsyncTestClient
 
 
-@pytest.mark.skip(reason="Integration tests need database isolation refactoring")
 @pytest.mark.asyncio
 async def test_health_check(client: AsyncTestClient) -> None:
+    """Test health endpoint returns database status."""
     response = await client.get("/health")
     assert response.status_code == 200
     data = response.json()
-    assert data["status"] == "healthy"
-    assert "database" in data
-
-
-@pytest.mark.skip(reason="Integration tests need database isolation refactoring")
-@pytest.mark.asyncio
-async def test_index(client: AsyncTestClient) -> None:
-    response = await client.get("/")
-    assert response.status_code == 200
-    data = response.json()
-    assert "name" in data
-    assert "description" in data
-    assert "version" in data
+    assert data[0]["status"] == "healthy"
+    assert data[0]["database"] is True

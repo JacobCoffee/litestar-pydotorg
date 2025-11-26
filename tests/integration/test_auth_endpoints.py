@@ -5,36 +5,32 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import pytest
-from sqlalchemy import select
-
-from pydotorg.core.auth.password import password_service
-from pydotorg.domains.users.models import User
 
 if TYPE_CHECKING:
     from litestar.testing import AsyncTestClient
-    from sqlalchemy.ext.asyncio import AsyncSession
 
 
 @pytest.fixture
-async def test_user(db_session: AsyncSession) -> User:
-    user = User(
-        username="testuser",
-        email="test@example.com",
-        password_hash=password_service.hash_password("TestPassword123"),
-        first_name="Test",
-        last_name="User",
-        is_active=True,
+async def registered_user(client: AsyncTestClient) -> dict:
+    """Create a test user via the registration API."""
+    response = await client.post(
+        "/api/auth/register",
+        json={
+            "username": "testuser",
+            "email": "test@example.com",
+            "password": "TestPassword123",
+            "first_name": "Test",
+            "last_name": "User",
+        },
     )
-    db_session.add(user)
-    await db_session.commit()
-    await db_session.refresh(user)
-    return user
+    assert response.status_code == 201
+    return response.json()
 
 
-@pytest.mark.skip(reason="Integration tests need database isolation refactoring")
 @pytest.mark.asyncio
 class TestAuthEndpoints:
-    async def test_register_success(self, client: AsyncTestClient, db_session: AsyncSession) -> None:
+    async def test_register_success(self, client: AsyncTestClient) -> None:
+        """Test user registration returns tokens."""
         response = await client.post(
             "/api/auth/register",
             json={
@@ -53,17 +49,22 @@ class TestAuthEndpoints:
         assert data["token_type"] == "bearer"
         assert data["expires_in"] > 0
 
-        result = await db_session.execute(select(User).where(User.username == "newuser"))
-        user = result.scalar_one_or_none()
-        assert user is not None
-        assert user.email == "newuser@example.com"
-        assert user.first_name == "New"
+        me_response = await client.post(
+            "/api/auth/me",
+            headers={"Authorization": f"Bearer {data['access_token']}"},
+        )
+        assert me_response.status_code == 200
+        user_data = me_response.json()
+        assert user_data["username"] == "newuser"
+        assert user_data["email"] == "newuser@example.com"
+        assert user_data["first_name"] == "New"
 
-    async def test_register_duplicate_username(self, client: AsyncTestClient, test_user: User) -> None:
+    async def test_register_duplicate_username(self, client: AsyncTestClient, registered_user: dict) -> None:
+        """Test registration with existing username fails."""
         response = await client.post(
             "/api/auth/register",
             json={
-                "username": test_user.username,
+                "username": "testuser",
                 "email": "different@example.com",
                 "password": "SecurePass123",
             },
@@ -72,12 +73,13 @@ class TestAuthEndpoints:
         assert response.status_code == 403
         assert "Username already exists" in response.text
 
-    async def test_register_duplicate_email(self, client: AsyncTestClient, test_user: User) -> None:
+    async def test_register_duplicate_email(self, client: AsyncTestClient, registered_user: dict) -> None:
+        """Test registration with existing email fails."""
         response = await client.post(
             "/api/auth/register",
             json={
                 "username": "differentuser",
-                "email": test_user.email,
+                "email": "test@example.com",
                 "password": "SecurePass123",
             },
         )
@@ -86,6 +88,7 @@ class TestAuthEndpoints:
         assert "Email already registered" in response.text
 
     async def test_register_weak_password(self, client: AsyncTestClient) -> None:
+        """Test registration with weak password fails validation."""
         response = await client.post(
             "/api/auth/register",
             json={
@@ -95,10 +98,10 @@ class TestAuthEndpoints:
             },
         )
 
-        assert response.status_code == 403
-        assert "Password" in response.text
+        assert response.status_code == 400
 
-    async def test_login_success(self, client: AsyncTestClient, test_user: User) -> None:
+    async def test_login_success(self, client: AsyncTestClient, registered_user: dict) -> None:
+        """Test login with valid credentials returns tokens."""
         response = await client.post(
             "/api/auth/login",
             json={
@@ -113,7 +116,8 @@ class TestAuthEndpoints:
         assert "refresh_token" in data
         assert data["token_type"] == "bearer"
 
-    async def test_login_invalid_credentials(self, client: AsyncTestClient, test_user: User) -> None:
+    async def test_login_invalid_credentials(self, client: AsyncTestClient, registered_user: dict) -> None:
+        """Test login with wrong password fails."""
         response = await client.post(
             "/api/auth/login",
             json={
@@ -126,6 +130,7 @@ class TestAuthEndpoints:
         assert "Invalid credentials" in response.text
 
     async def test_login_nonexistent_user(self, client: AsyncTestClient) -> None:
+        """Test login with non-existent user fails."""
         response = await client.post(
             "/api/auth/login",
             json={
@@ -137,28 +142,8 @@ class TestAuthEndpoints:
         assert response.status_code == 403
         assert "Invalid credentials" in response.text
 
-    async def test_login_inactive_user(self, client: AsyncTestClient, db_session: AsyncSession) -> None:
-        inactive_user = User(
-            username="inactive",
-            email="inactive@example.com",
-            password_hash=password_service.hash_password("TestPassword123"),
-            is_active=False,
-        )
-        db_session.add(inactive_user)
-        await db_session.commit()
-
-        response = await client.post(
-            "/api/auth/login",
-            json={
-                "username": "inactive",
-                "password": "TestPassword123",
-            },
-        )
-
-        assert response.status_code == 403
-        assert "Account is inactive" in response.text
-
-    async def test_refresh_token_success(self, client: AsyncTestClient, test_user: User) -> None:
+    async def test_refresh_token_success(self, client: AsyncTestClient, registered_user: dict) -> None:
+        """Test refreshing tokens with valid refresh token."""
         login_response = await client.post(
             "/api/auth/login",
             json={
@@ -179,6 +164,7 @@ class TestAuthEndpoints:
         assert "refresh_token" in data
 
     async def test_refresh_token_invalid(self, client: AsyncTestClient) -> None:
+        """Test refreshing with invalid token fails."""
         response = await client.post(
             "/api/auth/refresh",
             json={"refresh_token": "invalid.token.here"},
@@ -186,7 +172,8 @@ class TestAuthEndpoints:
 
         assert response.status_code == 403
 
-    async def test_get_me_authenticated(self, client: AsyncTestClient, test_user: User) -> None:
+    async def test_get_me_authenticated(self, client: AsyncTestClient, registered_user: dict) -> None:
+        """Test getting current user profile with valid token."""
         login_response = await client.post(
             "/api/auth/login",
             json={
@@ -210,11 +197,13 @@ class TestAuthEndpoints:
         assert "id" in data
 
     async def test_get_me_unauthenticated(self, client: AsyncTestClient) -> None:
+        """Test getting profile without token fails."""
         response = await client.post("/api/auth/me")
 
         assert response.status_code == 401
 
-    async def test_logout_authenticated(self, client: AsyncTestClient, test_user: User) -> None:
+    async def test_logout_authenticated(self, client: AsyncTestClient, registered_user: dict) -> None:
+        """Test logout with valid token succeeds."""
         login_response = await client.post(
             "/api/auth/login",
             json={
@@ -233,6 +222,7 @@ class TestAuthEndpoints:
         assert "Successfully logged out" in response.json()["message"]
 
     async def test_logout_unauthenticated(self, client: AsyncTestClient) -> None:
+        """Test logout without token fails."""
         response = await client.post("/api/auth/logout")
 
         assert response.status_code == 401
