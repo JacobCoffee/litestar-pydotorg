@@ -10,7 +10,7 @@ from sqlalchemy import func, select
 from pydotorg.domains.admin.schemas import DashboardStats, PendingModeration, RecentActivity
 from pydotorg.domains.events.models import Event
 from pydotorg.domains.jobs.models import Job, JobStatus
-from pydotorg.domains.sponsors.models import Sponsor
+from pydotorg.domains.sponsors.models import Sponsor, Sponsorship, SponsorshipStatus
 from pydotorg.domains.users.models import User
 
 if TYPE_CHECKING:
@@ -162,12 +162,16 @@ class DashboardService:
         return result.scalar() or 0
 
     async def _count_active_sponsors(self) -> int:
-        """Count active sponsors."""
-        now = datetime.now(UTC)
+        """Count sponsors with active sponsorships (finalized and within date range)."""
+        today = datetime.now(UTC).date()
         stmt = (
-            select(func.count())
-            .select_from(Sponsor)
-            .where((Sponsor.start_date <= now) & ((Sponsor.end_date == None) | (Sponsor.end_date >= now)))  # noqa: E711
+            select(func.count(func.distinct(Sponsorship.sponsor_id)))
+            .select_from(Sponsorship)
+            .where(
+                (Sponsorship.status == SponsorshipStatus.FINALIZED)
+                & (Sponsorship.start_date <= today)
+                & ((Sponsorship.end_date == None) | (Sponsorship.end_date >= today))  # noqa: E711
+            )
         )
         result = await self.session.execute(stmt)
         return result.scalar() or 0
@@ -179,9 +183,12 @@ class DashboardService:
         return result.scalar() or 0
 
     async def _count_pending_sponsors(self) -> int:
-        """Count pending sponsors."""
-        now = datetime.now(UTC)
-        stmt = select(func.count()).select_from(Sponsor).where(Sponsor.start_date > now)
+        """Count sponsors with pending sponsorship applications (applied status)."""
+        stmt = (
+            select(func.count(func.distinct(Sponsorship.sponsor_id)))
+            .select_from(Sponsorship)
+            .where(Sponsorship.status == SponsorshipStatus.APPLIED)
+        )
         result = await self.session.execute(stmt)
         return result.scalar() or 0
 

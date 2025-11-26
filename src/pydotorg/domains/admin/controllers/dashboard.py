@@ -69,7 +69,7 @@ class AdminDashboardController(Controller):
         recent_activity = await dashboard_service.get_recent_activity(limit=10)
 
         return Template(
-            template_name="admin/dashboard.html.jinja2",
+            template_name="admin/dashboard/index.html.jinja2",
             context={
                 "title": "Admin Dashboard",
                 "description": "Administrative control panel",

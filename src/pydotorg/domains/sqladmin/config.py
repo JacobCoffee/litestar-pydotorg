@@ -59,7 +59,7 @@ class SQLAdminConfig(InitPluginProtocol):
         self.engine = engine
         self.session_maker = session_maker
         self.secret_key = secret_key
-        self.base_url = "/sqladmin"
+        self.base_url = "/admin/db"
 
         self.starlette_app = Starlette()
         self.auth_backend = AdminAuthBackend(secret_key=secret_key)
