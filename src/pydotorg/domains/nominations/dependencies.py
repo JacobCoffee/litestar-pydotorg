@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from pydotorg.domains.nominations.repositories import (
     ElectionRepository,
@@ -15,102 +15,39 @@ from pydotorg.domains.nominations.services import (
     NomineeService,
 )
 
-if TYPE_CHECKING:
-    from collections.abc import AsyncGenerator
 
-    from sqlalchemy.ext.asyncio import AsyncSession
-
-
-async def provide_election_repository(db_session: AsyncSession) -> AsyncGenerator[ElectionRepository, None]:
-    """Provide an ElectionRepository instance.
-
-    Args:
-        db_session: The database session.
-
-    Yields:
-        An ElectionRepository instance.
-    """
-    async with ElectionRepository(session=db_session) as repo:
-        yield repo
+async def provide_election_repository(db_session: AsyncSession) -> ElectionRepository:
+    """Provide an ElectionRepository instance."""
+    return ElectionRepository(session=db_session)
 
 
-async def provide_election_service(
-    election_repository: ElectionRepository,
-) -> AsyncGenerator[ElectionService, None]:
-    """Provide an ElectionService instance.
-
-    Args:
-        election_repository: The election repository.
-
-    Yields:
-        An ElectionService instance.
-    """
-    async with ElectionService(repository=election_repository) as service:
-        yield service
+async def provide_election_service(db_session: AsyncSession) -> ElectionService:
+    """Provide an ElectionService instance."""
+    return ElectionService(session=db_session)
 
 
-async def provide_nominee_repository(db_session: AsyncSession) -> AsyncGenerator[NomineeRepository, None]:
-    """Provide a NomineeRepository instance.
-
-    Args:
-        db_session: The database session.
-
-    Yields:
-        A NomineeRepository instance.
-    """
-    async with NomineeRepository(session=db_session) as repo:
-        yield repo
+async def provide_nominee_repository(db_session: AsyncSession) -> NomineeRepository:
+    """Provide a NomineeRepository instance."""
+    return NomineeRepository(session=db_session)
 
 
-async def provide_nominee_service(
-    nominee_repository: NomineeRepository,
-) -> AsyncGenerator[NomineeService, None]:
-    """Provide a NomineeService instance.
-
-    Args:
-        nominee_repository: The nominee repository.
-
-    Yields:
-        A NomineeService instance.
-    """
-    async with NomineeService(repository=nominee_repository) as service:
-        yield service
+async def provide_nominee_service(db_session: AsyncSession) -> NomineeService:
+    """Provide a NomineeService instance."""
+    return NomineeService(session=db_session)
 
 
-async def provide_nomination_repository(db_session: AsyncSession) -> AsyncGenerator[NominationRepository, None]:
-    """Provide a NominationRepository instance.
-
-    Args:
-        db_session: The database session.
-
-    Yields:
-        A NominationRepository instance.
-    """
-    async with NominationRepository(session=db_session) as repo:
-        yield repo
+async def provide_nomination_repository(db_session: AsyncSession) -> NominationRepository:
+    """Provide a NominationRepository instance."""
+    return NominationRepository(session=db_session)
 
 
-async def provide_nomination_service(
-    nomination_repository: NominationRepository,
-) -> AsyncGenerator[NominationService, None]:
-    """Provide a NominationService instance.
-
-    Args:
-        nomination_repository: The nomination repository.
-
-    Yields:
-        A NominationService instance.
-    """
-    async with NominationService(repository=nomination_repository) as service:
-        yield service
+async def provide_nomination_service(db_session: AsyncSession) -> NominationService:
+    """Provide a NominationService instance."""
+    return NominationService(session=db_session)
 
 
 def get_nominations_dependencies() -> dict:
-    """Get all nominations domain dependency providers.
-
-    Returns:
-        Dictionary of dependency providers for the nominations domain.
-    """
+    """Get all nominations domain dependency providers."""
     return {
         "election_repository": provide_election_repository,
         "election_service": provide_election_service,
