@@ -1,0 +1,91 @@
+{% extends "base.html.jinja2" %}
+
+{% block title %}Python Blogs{% endblock %}
+
+{% block content %}
+<section class="python-gradient text-white py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-5xl font-bold mb-6">Python Blogs</h1>
+            <p class="text-xl opacity-90">
+                Stay up to date with the latest Python news and community blogs
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2">
+                <h2 class="text-3xl font-bold text-python-blue mb-8">Recent Posts</h2>
+
+                {% if recent_entries %}
+                <div class="space-y-6">
+                    {% for entry in recent_entries %}
+                    <article class="card bg-base-200 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="card-body">
+                            <h3 class="card-title">
+                                <a href="{{ entry.url }}" target="_blank" rel="noopener noreferrer" class="python-link">
+                                    {{ entry.title }}
+                                </a>
+                            </h3>
+                            <div class="text-sm text-base-content/60">
+                                {% if entry.feed %}
+                                <span class="badge badge-ghost">{{ entry.feed.name }}</span>
+                                {% endif %}
+                                {% if entry.published_at %}
+                                <span class="ml-2">{{ entry.published_at.strftime('%B %d, %Y') }}</span>
+                                {% endif %}
+                            </div>
+                            {% if entry.summary %}
+                            <p class="text-base-content/80 line-clamp-3 mt-2">
+                                {{ entry.summary[:200] }}{% if entry.summary|length > 200 %}...{% endif %}
+                            </p>
+                            {% endif %}
+                        </div>
+                    </article>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="alert alert-info">
+                    <span>No blog posts available at this time.</span>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="lg:col-span-1">
+                {% if feeds %}
+                <div class="mb-8">
+                    <h3 class="text-xl font-bold text-python-blue mb-4">Feeds</h3>
+                    <ul class="menu bg-base-200 rounded-box">
+                        {% for feed in feeds %}
+                        <li>
+                            <a href="{{ feed.url }}" target="_blank" rel="noopener noreferrer">
+                                {{ feed.name }}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+
+                {% if related_blogs %}
+                <div>
+                    <h3 class="text-xl font-bold text-python-blue mb-4">Related Blogs</h3>
+                    <ul class="menu bg-base-200 rounded-box">
+                        {% for blog in related_blogs %}
+                        <li>
+                            <a href="{{ blog.url }}" target="_blank" rel="noopener noreferrer">
+                                {{ blog.name }}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,97 @@
+{% extends "base.html.jinja2" %}
+{% import "macros/cards.html.jinja2" as cards %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<section class="python-gradient text-white py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-5xl font-bold mb-6">Python Success Stories</h1>
+            <p class="text-xl opacity-90">
+                Discover how organizations around the world use Python to solve real problems
+            </p>
+        </div>
+    </div>
+</section>
+
+{% if featured_stories %}
+<section class="bg-base-200 py-16">
+    <div class="section-container">
+        <h2 class="text-3xl font-bold text-python-blue mb-8 text-center">Featured Stories</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for story in featured_stories %}
+            <div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow">
+                {% if story.image %}
+                <figure>
+                    <img src="{{ story.image }}" alt="{{ story.name }}" class="h-48 w-full object-cover" />
+                </figure>
+                {% endif %}
+                <div class="card-body">
+                    <h3 class="card-title">{{ story.name }}</h3>
+                    {% if story.company_name %}
+                    <p class="text-sm text-base-content/60">{{ story.company_name }}</p>
+                    {% endif %}
+                    <p class="text-base-content/80 line-clamp-3">
+                        {{ story.content[:150] }}{% if story.content|length > 150 %}...{% endif %}
+                    </p>
+                    <div class="card-actions justify-end">
+                        <a href="/success-stories/{{ story.slug }}/" class="btn btn-primary btn-sm">
+                            Read Story
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% if categories %}
+<section class="bg-base-100 py-12">
+    <div class="section-container">
+        <h2 class="text-2xl font-bold text-python-blue mb-6">Browse by Category</h2>
+        <div class="flex flex-wrap gap-3">
+            {% for category in categories %}
+            <a href="/success-stories/category/{{ category.slug }}/"
+               class="badge badge-lg badge-outline hover:badge-primary transition-colors">
+                {{ category.name }}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <h2 class="text-3xl font-bold text-python-blue mb-8">All Stories</h2>
+        {% if stories %}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {% for story in stories %}
+            <div class="card card-side bg-base-200 shadow-sm hover:shadow-md transition-shadow">
+                <div class="card-body">
+                    <h3 class="card-title">
+                        <a href="/success-stories/{{ story.slug }}/" class="python-link">
+                            {{ story.name }}
+                        </a>
+                    </h3>
+                    {% if story.company_name %}
+                    <p class="text-sm text-base-content/60">{{ story.company_name }}</p>
+                    {% endif %}
+                    <p class="text-base-content/80 line-clamp-2">
+                        {{ story.content[:100] }}{% if story.content|length > 100 %}...{% endif %}
+                    </p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="alert alert-info">
+            <span>No success stories available at this time.</span>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

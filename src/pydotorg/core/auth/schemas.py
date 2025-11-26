@@ -2,13 +2,10 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from datetime import datetime
+from uuid import UUID
 
 from pydantic import BaseModel, EmailStr, Field
-
-if TYPE_CHECKING:
-    from datetime import datetime
-    from uuid import UUID
 
 
 class LoginRequest(BaseModel):
@@ -44,9 +41,25 @@ class UserResponse(BaseModel):
     is_active: bool
     is_staff: bool
     is_superuser: bool
+    email_verified: bool
     date_joined: datetime
     last_login: datetime | None
     has_membership: bool
+    oauth_provider: str | None = None
+    oauth_id: str | None = None
 
     class Config:
         from_attributes = True
+
+
+class SendVerificationRequest(BaseModel):
+    email: EmailStr
+
+
+class VerifyEmailResponse(BaseModel):
+    message: str
+
+
+class OAuthCallbackRequest(BaseModel):
+    code: str = Field(..., min_length=1)
+    state: str = Field(..., min_length=1)

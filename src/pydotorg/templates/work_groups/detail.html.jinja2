@@ -1,0 +1,56 @@
+{% extends "base.html.jinja2" %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<section class="bg-base-100 py-12">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <nav class="breadcrumbs text-sm mb-6">
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/psf/">PSF</a></li>
+                    <li><a href="/psf/workgroups/">Work Groups</a></li>
+                    <li>{{ work_group.name }}</li>
+                </ul>
+            </nav>
+
+            <article class="prose prose-lg max-w-none">
+                <h1>{{ work_group.name }}</h1>
+
+                {% if work_group.description %}
+                <div class="lead text-xl text-base-content/80 mb-8">
+                    {{ work_group.description }}
+                </div>
+                {% endif %}
+
+                {% if work_group.purpose %}
+                <h2>Purpose</h2>
+                <div>{{ work_group.purpose | safe }}</div>
+                {% endif %}
+
+                {% if work_group.content %}
+                <div class="mt-8">
+                    {{ work_group.content | safe }}
+                </div>
+                {% endif %}
+
+                {% if work_group.url %}
+                <div class="mt-8 p-4 bg-base-200 rounded-lg not-prose">
+                    <p class="font-semibold">External Resources:</p>
+                    <a href="{{ work_group.url }}" target="_blank" rel="noopener noreferrer" class="python-link">
+                        {{ work_group.url }}
+                    </a>
+                </div>
+                {% endif %}
+            </article>
+
+            <div class="mt-12 pt-8 border-t border-base-300">
+                <a href="/psf/workgroups/" class="btn btn-outline">
+                    Back to Work Groups
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

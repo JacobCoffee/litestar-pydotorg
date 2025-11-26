@@ -1,0 +1,55 @@
+{% extends "base.html.jinja2" %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<section class="python-gradient text-white py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-5xl font-bold mb-6">Python Code Samples</h1>
+            <p class="text-xl opacity-90">
+                Explore practical examples demonstrating Python's capabilities
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        {% if samples %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for sample in samples %}
+            <div class="card bg-base-200 shadow-sm hover:shadow-md transition-shadow">
+                <div class="card-body">
+                    <h2 class="card-title">
+                        <a href="/code-samples/{{ sample.slug }}/" class="python-link">
+                            {{ sample.title }}
+                        </a>
+                    </h2>
+                    {% if sample.description %}
+                    <p class="text-base-content/70 line-clamp-3">
+                        {{ sample.description[:150] }}{% if sample.description|length > 150 %}...{% endif %}
+                    </p>
+                    {% endif %}
+                    {% if sample.copy %}
+                    <div class="bg-base-300 rounded p-3 mt-2">
+                        <pre class="text-xs overflow-x-auto"><code>{{ sample.copy[:100] }}{% if sample.copy|length > 100 %}...{% endif %}</code></pre>
+                    </div>
+                    {% endif %}
+                    <div class="card-actions justify-end mt-4">
+                        <a href="/code-samples/{{ sample.slug }}/" class="btn btn-primary btn-sm">
+                            View Sample
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="alert alert-info max-w-2xl mx-auto">
+            <span>No code samples available at this time.</span>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "base.html.jinja2" %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<section class="bg-base-100 py-12">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <nav class="breadcrumbs text-sm mb-6">
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/community/">Community</a></li>
+                    <li>{{ post.title }}</li>
+                </ul>
+            </nav>
+
+            <article class="prose prose-lg max-w-none">
+                <h1>{{ post.title }}</h1>
+
+                {% if post.created_at %}
+                <p class="text-base-content/60 -mt-4">
+                    Posted on {{ post.created_at.strftime('%B %d, %Y') }}
+                </p>
+                {% endif %}
+
+                {% if post.content %}
+                <div class="mt-8">
+                    {{ post.content | safe }}
+                </div>
+                {% endif %}
+
+                {% if post.media_url %}
+                <div class="mt-8">
+                    <figure>
+                        <img src="{{ post.media_url }}" alt="{{ post.title }}" class="rounded-lg" />
+                    </figure>
+                </div>
+                {% endif %}
+            </article>
+
+            <div class="mt-12 pt-8 border-t border-base-300">
+                <a href="/community/" class="btn btn-outline">
+                    Back to Community
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

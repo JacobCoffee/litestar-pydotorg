@@ -1,0 +1,70 @@
+{% extends "base.html.jinja2" %}
+
+{% block title %}{{ feed.name }} - Python Blogs{% endblock %}
+
+{% block content %}
+<section class="bg-base-100 py-12">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <nav class="breadcrumbs text-sm mb-6">
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/blogs/">Blogs</a></li>
+                    <li>{{ feed.name }}</li>
+                </ul>
+            </nav>
+
+            <h1 class="text-4xl font-bold text-python-blue mb-4">{{ feed.name }}</h1>
+
+            {% if feed.url %}
+            <p class="text-base-content/60 mb-8">
+                <a href="{{ feed.url }}" target="_blank" rel="noopener noreferrer" class="python-link">
+                    {{ feed.url }}
+                </a>
+            </p>
+            {% endif %}
+
+            {% if entries %}
+            <div class="space-y-6">
+                {% for entry in entries %}
+                <article class="card bg-base-200 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="card-body">
+                        <h2 class="card-title">
+                            <a href="{{ entry.url }}" target="_blank" rel="noopener noreferrer" class="python-link">
+                                {{ entry.title }}
+                            </a>
+                        </h2>
+                        {% if entry.published_at %}
+                        <p class="text-sm text-base-content/60">
+                            {{ entry.published_at.strftime('%B %d, %Y') }}
+                        </p>
+                        {% endif %}
+                        {% if entry.summary %}
+                        <p class="text-base-content/80 line-clamp-3">
+                            {{ entry.summary[:300] }}{% if entry.summary|length > 300 %}...{% endif %}
+                        </p>
+                        {% endif %}
+                        <div class="card-actions justify-end">
+                            <a href="{{ entry.url }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
+                                Read Article
+                            </a>
+                        </div>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="alert alert-info">
+                <span>No posts available from this feed.</span>
+            </div>
+            {% endif %}
+
+            <div class="mt-12 pt-8 border-t border-base-300">
+                <a href="/blogs/" class="btn btn-outline">
+                    Back to Blogs
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

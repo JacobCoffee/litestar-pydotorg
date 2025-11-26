@@ -1,0 +1,36 @@
+{% extends "base.html.jinja2" %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<section class="bg-base-100 py-12">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <nav class="breadcrumbs text-sm mb-6">
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/psf/">PSF</a></li>
+                    <li><a href="/psf/records/board/minutes/">Board Minutes</a></li>
+                    <li>{{ minutes.date.strftime('%B %d, %Y') }}</li>
+                </ul>
+            </nav>
+
+            <article class="prose prose-lg max-w-none">
+                <h1>Board Meeting Minutes - {{ minutes.date.strftime('%B %d, %Y') }}</h1>
+
+                {% if minutes.content %}
+                <div class="mt-8">
+                    {{ minutes.content | safe }}
+                </div>
+                {% endif %}
+            </article>
+
+            <div class="mt-12 pt-8 border-t border-base-300">
+                <a href="/psf/records/board/minutes/" class="btn btn-outline">
+                    Back to All Minutes
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

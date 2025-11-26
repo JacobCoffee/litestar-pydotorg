@@ -1,0 +1,57 @@
+{% extends "base.html.jinja2" %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<section class="bg-base-100 py-12">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <nav class="breadcrumbs text-sm mb-6">
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/success-stories/">Success Stories</a></li>
+                    <li>{{ category.name }}</li>
+                </ul>
+            </nav>
+
+            <h1 class="text-4xl font-bold text-python-blue mb-4">{{ category.name }}</h1>
+
+            {% if category.description %}
+            <p class="text-lg text-base-content/80 mb-8">{{ category.description }}</p>
+            {% endif %}
+
+            {% if stories %}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {% for story in stories %}
+                <div class="card bg-base-200 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="card-body">
+                        <h3 class="card-title">
+                            <a href="/success-stories/{{ story.slug }}/" class="python-link">
+                                {{ story.name }}
+                            </a>
+                        </h3>
+                        {% if story.company_name %}
+                        <p class="text-sm text-base-content/60">{{ story.company_name }}</p>
+                        {% endif %}
+                        <p class="text-base-content/80 line-clamp-2">
+                            {{ story.content[:100] }}{% if story.content|length > 100 %}...{% endif %}
+                        </p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="alert alert-info">
+                <span>No stories in this category yet.</span>
+            </div>
+            {% endif %}
+
+            <div class="mt-12 pt-8 border-t border-base-300">
+                <a href="/success-stories/" class="btn btn-outline">
+                    Back to All Stories
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

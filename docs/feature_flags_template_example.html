@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Feature Flags Template Example</title>
+</head>
+<body>
+    <h1>{{ site_name }}</h1>
+    <p>Environment: {{ environment }}</p>
+
+    <!-- Check if maintenance mode is enabled -->
+    {% if feature_flags.maintenance_mode %}
+    <div class="alert alert-warning">
+        <strong>Maintenance Mode:</strong> Some features may be temporarily unavailable.
+    </div>
+    {% endif %}
+
+    <!-- Conditionally show OAuth login -->
+    {% if feature_flags.enable_oauth %}
+    <div class="oauth-section">
+        <h2>OAuth Login</h2>
+        <a href="/oauth/github" class="btn btn-primary">Login with GitHub</a>
+        <a href="/oauth/google" class="btn btn-primary">Login with Google</a>
+    </div>
+    {% endif %}
+
+    <!-- Conditionally show jobs section -->
+    {% if feature_flags.enable_jobs %}
+    <div class="jobs-section">
+        <h2>Job Listings</h2>
+        <a href="/jobs" class="btn btn-info">Browse Jobs</a>
+    </div>
+    {% endif %}
+
+    <!-- Conditionally show sponsors section -->
+    {% if feature_flags.enable_sponsors %}
+    <div class="sponsors-section">
+        <h2>Our Sponsors</h2>
+        <p>Thank you to our generous sponsors!</p>
+        <a href="/sponsors" class="btn btn-success">View Sponsors</a>
+    </div>
+    {% endif %}
+
+    <!-- Conditionally show search box -->
+    {% if feature_flags.enable_search %}
+    <div class="search-section">
+        <form action="/search" method="get">
+            <input type="text" name="q" placeholder="Search..." />
+            <button type="submit">Search</button>
+        </form>
+    </div>
+    {% endif %}
+
+    <!-- Show feature status (for debugging in dev) -->
+    {% if environment == 'dev' %}
+    <details>
+        <summary>Feature Flags Status (Dev Only)</summary>
+        <ul>
+            <li>OAuth: {{ 'Enabled' if feature_flags.enable_oauth else 'Disabled' }}</li>
+            <li>Jobs: {{ 'Enabled' if feature_flags.enable_jobs else 'Disabled' }}</li>
+            <li>Sponsors: {{ 'Enabled' if feature_flags.enable_sponsors else 'Disabled' }}</li>
+            <li>Search: {{ 'Enabled' if feature_flags.enable_search else 'Disabled' }}</li>
+            <li>Maintenance Mode: {{ 'Yes' if feature_flags.maintenance_mode else 'No' }}</li>
+        </ul>
+    </details>
+    {% endif %}
+</body>
+</html>

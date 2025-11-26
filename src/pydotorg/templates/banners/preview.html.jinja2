@@ -1,0 +1,67 @@
+{% extends "base.html.jinja2" %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<section class="bg-base-100 py-12">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <nav class="breadcrumbs text-sm mb-6">
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/admin/banners/">Banners</a></li>
+                    <li>Preview: {{ banner.name }}</li>
+                </ul>
+            </nav>
+
+            <h1 class="text-4xl font-bold text-python-blue mb-8">Banner Preview</h1>
+
+            <div class="mb-8">
+                <h2 class="text-xl font-bold mb-4">Banner Details</h2>
+                <div class="grid grid-cols-2 gap-4 bg-base-200 p-6 rounded-lg">
+                    <div>
+                        <p class="font-semibold">Name:</p>
+                        <p>{{ banner.name }}</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold">Active:</p>
+                        <p>
+                            {% if banner.is_active %}
+                            <span class="badge badge-success">Yes</span>
+                            {% else %}
+                            <span class="badge badge-ghost">No</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div>
+                        <p class="font-semibold">Start Date:</p>
+                        <p>{{ banner.start_date.strftime('%Y-%m-%d') if banner.start_date else 'Not set' }}</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold">End Date:</p>
+                        <p>{{ banner.end_date.strftime('%Y-%m-%d') if banner.end_date else 'Not set' }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-8">
+                <h2 class="text-xl font-bold mb-4">Live Preview</h2>
+                <div class="border-2 border-dashed border-base-300 rounded-lg p-4">
+                    <div class="alert {{ banner.message_class if banner.message_class else 'alert-info' }}">
+                        <span>{{ banner.message }}</span>
+                        {% if banner.link %}
+                        <a href="{{ banner.link }}" class="btn btn-sm" target="_blank">Learn More</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-12 pt-8 border-t border-base-300">
+                <a href="/admin/banners/" class="btn btn-outline">
+                    Back to Banners
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

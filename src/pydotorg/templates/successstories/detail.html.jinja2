@@ -1,0 +1,60 @@
+{% extends "base.html.jinja2" %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<section class="bg-base-100 py-12">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <nav class="breadcrumbs text-sm mb-6">
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/success-stories/">Success Stories</a></li>
+                    <li>{{ story.name }}</li>
+                </ul>
+            </nav>
+
+            <article class="prose prose-lg max-w-none">
+                <h1>{{ story.name }}</h1>
+
+                {% if story.company_name %}
+                <p class="text-xl text-base-content/70 -mt-4">{{ story.company_name }}</p>
+                {% endif %}
+
+                {% if story.image %}
+                <figure class="my-8">
+                    <img src="{{ story.image }}" alt="{{ story.name }}" class="rounded-lg w-full max-h-96 object-cover" />
+                </figure>
+                {% endif %}
+
+                {% if story.category %}
+                <div class="not-prose mb-6">
+                    <a href="/success-stories/category/{{ story.category.slug }}/" class="badge badge-primary">
+                        {{ story.category.name }}
+                    </a>
+                </div>
+                {% endif %}
+
+                <div class="mt-8">
+                    {{ story.content | safe }}
+                </div>
+
+                {% if story.company_url %}
+                <div class="mt-8 p-4 bg-base-200 rounded-lg not-prose">
+                    <p class="font-semibold">Learn more:</p>
+                    <a href="{{ story.company_url }}" target="_blank" rel="noopener noreferrer" class="python-link">
+                        {{ story.company_url }}
+                    </a>
+                </div>
+                {% endif %}
+            </article>
+
+            <div class="mt-12 pt-8 border-t border-base-300">
+                <a href="/success-stories/" class="btn btn-outline">
+                    Back to Success Stories
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,90 @@
+{% extends "base.html.jinja2" %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<section class="python-gradient text-white py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-5xl font-bold mb-6">Python Community</h1>
+            <p class="text-xl opacity-90">
+                Join the vibrant Python community and connect with developers worldwide
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-python-blue mb-8">Community Posts</h2>
+
+            {% if posts %}
+            <div class="space-y-6">
+                {% for post in posts %}
+                <article class="card bg-base-200 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="card-body">
+                        <h3 class="card-title">
+                            <a href="/community/posts/{{ post.slug }}/" class="python-link">
+                                {{ post.title }}
+                            </a>
+                        </h3>
+                        {% if post.created_at %}
+                        <p class="text-sm text-base-content/60">
+                            Posted on {{ post.created_at.strftime('%B %d, %Y') }}
+                        </p>
+                        {% endif %}
+                        {% if post.content %}
+                        <p class="text-base-content/80 line-clamp-3">
+                            {{ post.content[:200] }}{% if post.content|length > 200 %}...{% endif %}
+                        </p>
+                        {% endif %}
+                        <div class="card-actions justify-end">
+                            <a href="/community/posts/{{ post.slug }}/" class="btn btn-primary btn-sm">
+                                Read More
+                            </a>
+                        </div>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="alert alert-info">
+                <span>No community posts available at this time.</span>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-200 py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-3xl font-bold text-python-blue mb-6">Get Involved</h2>
+            <p class="text-lg text-base-content/80 mb-8">
+                There are many ways to contribute to the Python community
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="card bg-base-100 shadow">
+                    <div class="card-body items-center text-center">
+                        <h3 class="card-title">Mailing Lists</h3>
+                        <p class="text-sm">Join discussions on python.org mailing lists</p>
+                    </div>
+                </div>
+                <div class="card bg-base-100 shadow">
+                    <div class="card-body items-center text-center">
+                        <h3 class="card-title">IRC & Discord</h3>
+                        <p class="text-sm">Chat with other Python developers in real-time</p>
+                    </div>
+                </div>
+                <div class="card bg-base-100 shadow">
+                    <div class="card-body items-center text-center">
+                        <h3 class="card-title">User Groups</h3>
+                        <p class="text-sm">Find local Python user groups near you</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

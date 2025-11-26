@@ -1,0 +1,45 @@
+/* Custom styles for litestar-pydotorg documentation */
+
+/* Code block styling */
+.highlight pre {
+    padding: 1rem;
+    border-radius: 0.5rem;
+}
+
+/* Table improvements */
+table.docutils {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Admonition styling */
+.admonition {
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+/* Improve code readability */
+code.literal {
+    padding: 0.2em 0.4em;
+    border-radius: 0.25rem;
+}
+
+/* API reference styling */
+dl.py.class > dt,
+dl.py.function > dt,
+dl.py.method > dt {
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Better spacing for parameter lists */
+dl.field-list > dt {
+    font-weight: 600;
+}
+
+dl.field-list > dd {
+    margin-left: 1rem;
+    margin-bottom: 0.5rem;
+}
