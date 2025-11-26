@@ -1,0 +1,190 @@
+{% extends "base.html.jinja2" %}
+
+{% block title %}{% if query %}Search: {{ query }}{% else %}Search Python.org{% endif %}{% endblock %}
+
+{% block content %}
+<section class="python-gradient text-white py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-5xl font-bold mb-6">Search Python.org</h1>
+            <p class="text-xl opacity-90 mb-8">
+                Find documentation, jobs, events, and more
+            </p>
+
+            <form id="search-form"
+                  action="/search"
+                  method="get"
+                  class="w-full max-w-2xl mx-auto">
+                <div class="join w-full">
+                    <input
+                        type="search"
+                        name="q"
+                        value="{{ query or '' }}"
+                        placeholder="Search for documentation, jobs, events..."
+                        class="input input-lg input-bordered join-item flex-1 text-base-content"
+                        autofocus
+                        required
+                    />
+                    <button type="submit" class="btn btn-primary btn-lg join-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                        Search
+                    </button>
+                </div>
+            </form>
+
+            {% if query %}
+            <div class="mt-4">
+                <a href="/search" class="text-white/70 hover:text-white text-sm">Clear search</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-12">
+    <div class="section-container">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <aside class="lg:col-span-1">
+                <div class="card bg-base-200 shadow-sm sticky top-4">
+                    <div class="card-body">
+                        <h2 class="card-title text-lg mb-4">Filter by Type</h2>
+
+                        <form id="filter-form"
+                              hx-get="/search"
+                              hx-target="#search-results"
+                              hx-trigger="change"
+                              hx-include="[name='q']"
+                              hx-indicator="#search-indicator">
+
+                            <input type="hidden" name="q" value="{{ query or '' }}" />
+
+                            <div class="space-y-2">
+                                <label class="label cursor-pointer justify-start gap-2 py-1">
+                                    <input
+                                        type="checkbox"
+                                        name="indexes"
+                                        value="jobs"
+                                        class="checkbox checkbox-sm checkbox-primary"
+                                        {% if 'jobs' in indexes %}checked{% endif %}
+                                    />
+                                    <span class="label-text">Jobs</span>
+                                </label>
+
+                                <label class="label cursor-pointer justify-start gap-2 py-1">
+                                    <input
+                                        type="checkbox"
+                                        name="indexes"
+                                        value="events"
+                                        class="checkbox checkbox-sm checkbox-primary"
+                                        {% if 'events' in indexes %}checked{% endif %}
+                                    />
+                                    <span class="label-text">Events</span>
+                                </label>
+
+                                <label class="label cursor-pointer justify-start gap-2 py-1">
+                                    <input
+                                        type="checkbox"
+                                        name="indexes"
+                                        value="blogs"
+                                        class="checkbox checkbox-sm checkbox-primary"
+                                        {% if 'blogs' in indexes %}checked{% endif %}
+                                    />
+                                    <span class="label-text">Blog Posts</span>
+                                </label>
+
+                                <label class="label cursor-pointer justify-start gap-2 py-1">
+                                    <input
+                                        type="checkbox"
+                                        name="indexes"
+                                        value="pages"
+                                        class="checkbox checkbox-sm checkbox-primary"
+                                        {% if 'pages' in indexes %}checked{% endif %}
+                                    />
+                                    <span class="label-text">Pages</span>
+                                </label>
+                            </div>
+                        </form>
+
+                        <div id="search-indicator" class="htmx-indicator mt-4">
+                            <div class="flex items-center justify-center gap-2">
+                                <span class="loading loading-spinner loading-sm"></span>
+                                <span class="text-sm">Searching...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <main class="lg:col-span-3">
+                <div id="search-results">
+                    {% if results %}
+                        {% include 'search/partials/results.html.jinja2' %}
+                    {% elif query %}
+                        <div class="card bg-base-200 shadow-sm">
+                            <div class="card-body text-center py-16">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 mx-auto text-base-content/30 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                                <h3 class="text-2xl font-bold mb-2">No results found</h3>
+                                <p class="text-base-content/70 mb-4">
+                                    No results found for "{{ query }}". Try different keywords or check your spelling.
+                                </p>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="card bg-base-200 shadow-sm">
+                            <div class="card-body text-center py-16">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 mx-auto text-base-content/30 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                                <h3 class="text-2xl font-bold mb-2">Start Searching</h3>
+                                <p class="text-base-content/70">
+                                    Enter a search term above to find content across Python.org
+                                </p>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </main>
+        </div>
+    </div>
+</section>
+
+{% if not query %}
+<section class="bg-base-200 py-12">
+    <div class="section-container">
+        <h2 class="text-3xl font-bold text-center mb-8">Popular Searches</h2>
+        <div class="flex flex-wrap justify-center gap-3">
+            <a href="/search?q=python+tutorial" class="badge badge-lg badge-outline hover:badge-primary">Python Tutorial</a>
+            <a href="/search?q=python+jobs" class="badge badge-lg badge-outline hover:badge-primary">Python Jobs</a>
+            <a href="/search?q=django" class="badge badge-lg badge-outline hover:badge-primary">Django</a>
+            <a href="/search?q=flask" class="badge badge-lg badge-outline hover:badge-primary">Flask</a>
+            <a href="/search?q=data+science" class="badge badge-lg badge-outline hover:badge-primary">Data Science</a>
+            <a href="/search?q=machine+learning" class="badge badge-lg badge-outline hover:badge-primary">Machine Learning</a>
+            <a href="/search?q=web+development" class="badge badge-lg badge-outline hover:badge-primary">Web Development</a>
+            <a href="/search?q=automation" class="badge badge-lg badge-outline hover:badge-primary">Automation</a>
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.querySelector('input[name="q"]');
+    const filterCheckboxes = document.querySelectorAll('input[name="indexes"]');
+
+    filterCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const hiddenInput = document.querySelector('#filter-form input[name="q"]');
+            if (hiddenInput && searchInput) {
+                hiddenInput.value = searchInput.value;
+            }
+        });
+    });
+});
+</script>
+{% endblock %}
