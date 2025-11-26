@@ -183,10 +183,11 @@ class AuthController(Controller):
         if not user.is_active:
             raise PermissionDeniedException("Account is inactive")
 
+        user_id = user.id  # Capture before commit to avoid lazy load
         user.last_login = datetime.now(UTC)
         await db_session.commit()
 
-        session_id = session_service.create_session(user.id)
+        session_id = session_service.create_session(user_id)
 
         response = Response(
             content={"message": "Successfully logged in"},
