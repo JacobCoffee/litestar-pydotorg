@@ -33,7 +33,9 @@ from pydotorg.core.admin import AdminController
 from pydotorg.core.auth.middleware import JWTAuthMiddleware
 from pydotorg.core.database.base import AuditBase
 from pydotorg.core.dependencies import get_core_dependencies
+from pydotorg.core.exceptions import get_exception_handlers
 from pydotorg.core.features import FeatureFlags
+from pydotorg.core.logging import configure_structlog
 from pydotorg.core.openapi import get_openapi_plugins
 from pydotorg.domains.about import AboutRenderController
 from pydotorg.domains.admin import (
@@ -276,6 +278,11 @@ template_config = TemplateConfig(
 
 flash_plugin = FlashPlugin(config=FlashConfig(template_config=template_config))
 
+structlog_plugin = configure_structlog(
+    log_level=settings.log_level,
+    use_json=not settings.is_debug,
+)
+
 
 def on_app_init(app_config: AppConfig) -> AppConfig:
     """Initialize application state with feature flags."""
@@ -380,7 +387,8 @@ app = Litestar(
         AdminDashboardController,
     ],
     dependencies=get_all_dependencies(),
-    plugins=[sqlalchemy_plugin, sqladmin_plugin, flash_plugin],
+    exception_handlers=get_exception_handlers(),
+    plugins=[sqlalchemy_plugin, sqladmin_plugin, flash_plugin, structlog_plugin],
     middleware=[session_config.middleware, JWTAuthMiddleware],
     template_config=template_config,
     openapi_config=OpenAPIConfig(
