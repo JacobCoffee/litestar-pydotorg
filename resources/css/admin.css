@@ -1,0 +1,92 @@
+/**
+ * Admin Panel CSS Entry Point
+ * Includes SQLAdmin dependencies and Tailwind
+ */
+
+@import "select2/dist/css/select2.min.css";
+@import "flatpickr/dist/flatpickr.min.css";
+@import "./input.css";
+
+/* Select2 DaisyUI Integration */
+.select2-container--default .select2-selection--single,
+.select2-container--default .select2-selection--multiple {
+  @apply border border-base-300 rounded-lg bg-base-100;
+  min-height: 38px;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+  @apply text-base-content;
+  line-height: 36px;
+}
+
+.select2-dropdown {
+  @apply border border-base-300 bg-base-100 shadow-lg rounded-lg;
+}
+
+.select2-results__option--highlighted[aria-selected] {
+  @apply bg-primary text-primary-content;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+  height: 36px;
+}
+
+.select2-container--default .select2-search--dropdown .select2-search__field {
+  @apply border border-base-300 rounded-lg bg-base-100 text-base-content;
+}
+
+/* Flatpickr DaisyUI Integration */
+.flatpickr-calendar {
+  @apply bg-base-100 border border-base-300 shadow-xl rounded-lg;
+}
+
+.flatpickr-day {
+  @apply text-base-content;
+}
+
+.flatpickr-day.selected {
+  @apply bg-primary text-primary-content;
+}
+
+.flatpickr-day:hover {
+  @apply bg-base-200;
+}
+
+.flatpickr-months .flatpickr-month {
+  @apply bg-base-200 text-base-content;
+}
+
+.flatpickr-current-month .flatpickr-monthDropdown-months {
+  @apply bg-base-100 text-base-content;
+}
+
+.flatpickr-weekdays {
+  @apply bg-base-200;
+}
+
+.flatpickr-weekday {
+  @apply text-base-content;
+}
+
+/* Admin scrollbar styles */
+.drawer-side {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(155, 155, 155, 0.5) transparent;
+}
+
+.drawer-side::-webkit-scrollbar {
+  width: 6px;
+}
+
+.drawer-side::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.drawer-side::-webkit-scrollbar-thumb {
+  background-color: rgba(155, 155, 155, 0.5);
+  border-radius: 20px;
+}
+
+[x-cloak] {
+  display: none !important;
+}
