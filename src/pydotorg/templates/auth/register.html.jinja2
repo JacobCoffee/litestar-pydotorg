@@ -15,13 +15,11 @@
                 <div id="register-messages" class="mb-4"></div>
 
                 <form
-                    hx-post="/api/auth/register"
-                    hx-target="#register-messages"
-                    hx-swap="innerHTML"
-                    hx-indicator="#register-spinner"
+                    id="register-form"
+                    method="POST"
+                    action="javascript:void(0)"
                     class="space-y-4"
                 >
-                    {{ csrf_input|safe }}
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {{ input_field(
@@ -194,12 +192,65 @@
         }));
     });
 
-    document.body.addEventListener('htmx:afterRequest', function(evt) {
-        if (evt.detail.successful && evt.detail.xhr.status === 201) {
-            const response = JSON.parse(evt.detail.xhr.responseText);
-            if (response.redirect) {
-                window.location.href = response.redirect;
+    document.getElementById('register-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const form = e.target;
+        const messagesDiv = document.getElementById('register-messages');
+        const spinner = document.getElementById('register-spinner');
+        const submitBtn = form.querySelector('button[type="submit"]');
+
+        // Client-side validation
+        const password = form.password.value;
+        const passwordConfirm = form.password_confirm.value;
+
+        if (password !== passwordConfirm) {
+            messagesDiv.innerHTML = '<div class="alert alert-error"><svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg><span>Passwords do not match.</span></div>';
+            return;
+        }
+
+        // Show loading state
+        spinner.classList.remove('htmx-indicator');
+        submitBtn.disabled = true;
+
+        // Gather form data as JSON
+        const formData = new FormData(form);
+        const data = {
+            first_name: formData.get('first_name'),
+            last_name: formData.get('last_name'),
+            username: formData.get('username'),
+            email: formData.get('email'),
+            password: formData.get('password'),
+            password_confirm: formData.get('password_confirm')
+        };
+
+        try {
+            const response = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                messagesDiv.innerHTML = '<div class="alert alert-success"><svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg><span>' + (result.message || 'Account created successfully!') + '</span></div>';
+                setTimeout(function() {
+                    window.location.href = result.redirect || '/auth/login';
+                }, 1000);
+            } else {
+                let errorMessage = result.detail || 'Registration failed. Please try again.';
+                messagesDiv.innerHTML = '<div class="alert alert-error"><svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg><span>' + errorMessage + '</span></div>';
             }
+        } catch (error) {
+            console.error('Registration error:', error);
+            messagesDiv.innerHTML = '<div class="alert alert-error"><svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg><span>An error occurred. Please try again.</span></div>';
+        } finally {
+            // Reset loading state
+            spinner.classList.add('htmx-indicator');
+            submitBtn.disabled = false;
         }
     });
 </script>
