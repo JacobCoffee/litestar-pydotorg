@@ -46,7 +46,8 @@ class JWTAuthMiddleware(AbstractAuthenticationMiddleware):
     async def _get_user(connection: ASGIConnection, user_id) -> User | None:
         """Retrieve active user from database."""
         plugin = connection.app.plugins.get(SQLAlchemyPlugin)
-        async with plugin.get_session() as db_session:
+        config = plugin.config[0] if isinstance(plugin.config, list) else plugin.config
+        async with config.get_session() as db_session:
             db_session: AsyncSession
             result = await db_session.execute(select(User).where(User.id == user_id, User.is_active.is_(True)))
             return result.scalar_one_or_none()
