@@ -8,10 +8,9 @@ from decimal import Decimal
 from typing import TYPE_CHECKING
 
 from polyfactory.factories.sqlalchemy_factory import SQLAlchemyFactory
-
-from pydotorg.core.auth.password import password_service
 from sqlalchemy import select
 
+from pydotorg.core.auth.password import password_service
 from pydotorg.core.database.session import async_session_factory
 from pydotorg.domains.banners.models import Banner
 from pydotorg.domains.blogs.models import BlogEntry, Feed, FeedAggregate, RelatedBlog

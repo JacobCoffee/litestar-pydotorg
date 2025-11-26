@@ -20,7 +20,7 @@ __all__ = [
     "WorkGroupRead",
     "WorkGroupRepository",
     "WorkGroupService",
-    "WorkGroupsPageController",
     "WorkGroupUpdate",
+    "WorkGroupsPageController",
     "get_work_groups_dependencies",
 ]

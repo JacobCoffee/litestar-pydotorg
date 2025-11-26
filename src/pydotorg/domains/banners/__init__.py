@@ -20,7 +20,7 @@ __all__ = [
     "BannerRead",
     "BannerRepository",
     "BannerService",
-    "BannersPageController",
     "BannerUpdate",
+    "BannersPageController",
     "get_banners_dependencies",
 ]

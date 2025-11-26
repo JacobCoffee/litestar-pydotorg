@@ -20,7 +20,7 @@ __all__ = [
     "CodeSampleRead",
     "CodeSampleRepository",
     "CodeSampleService",
-    "CodeSamplesPageController",
     "CodeSampleUpdate",
+    "CodeSamplesPageController",
     "get_codesamples_dependencies",
 ]
