@@ -9,13 +9,18 @@ from advanced_alchemy.extensions.litestar import SQLAlchemyPlugin
 from advanced_alchemy.extensions.litestar.plugins.init.config.asyncio import SQLAlchemyAsyncConfig
 from litestar import Litestar
 from litestar.testing import AsyncTestClient, TestClient
-from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.ext.asyncio import create_async_engine
 
 import pydotorg.domains  # noqa: F401 - ensure all models are loaded
+from pydotorg.core.auth.middleware import JWTAuthMiddleware
 from pydotorg.core.database.base import AuditBase
 
 if TYPE_CHECKING:
     from collections.abc import AsyncIterator
+
+    from pytest_databases.docker.postgres import PostgresService
+
+pytest_plugins = ["pytest_databases.docker.postgres"]
 
 
 @pytest.fixture(scope="session")
@@ -24,23 +29,12 @@ def anyio_backend() -> str:
 
 
 @pytest.fixture(scope="session")
-async def engine():
-    test_engine = create_async_engine(
-        "sqlite+aiosqlite:///:memory:",
-        echo=False,
+def postgres_uri(postgres_service: PostgresService) -> str:
+    """Build async PostgreSQL connection string from pytest-databases service."""
+    return (
+        f"postgresql+asyncpg://{postgres_service.user}:{postgres_service.password}"
+        f"@{postgres_service.host}:{postgres_service.port}/{postgres_service.database}"
     )
-    async with test_engine.begin() as conn:
-        await conn.run_sync(AuditBase.metadata.create_all)
-    yield test_engine
-    await test_engine.dispose()
-
-
-@pytest.fixture
-async def db_session(engine) -> AsyncIterator[AsyncSession]:
-    session_factory = async_sessionmaker(bind=engine, expire_on_commit=False)
-    async with session_factory() as session:
-        yield session
-        await session.rollback()
 
 
 @pytest.fixture
@@ -51,21 +45,34 @@ def test_client() -> TestClient:
 
 
 @pytest.fixture
-async def client(engine) -> AsyncIterator[AsyncTestClient]:
-    """Async test client with SQLite database for integration tests."""
+async def client(postgres_uri: str) -> AsyncIterator[AsyncTestClient]:
+    """Async test client with PostgreSQL database for integration tests.
+
+    Each test gets a fresh database with tables created. Tables are truncated
+    before each test to ensure isolation.
+    """
     from pydotorg.domains.users.auth_controller import AuthController
-    from pydotorg.main import health_check, index
+    from pydotorg.main import health_check
+
+    engine = create_async_engine(postgres_uri, echo=False)
+
+    async with engine.begin() as conn:
+        await conn.run_sync(AuditBase.metadata.drop_all)
+        await conn.run_sync(AuditBase.metadata.create_all)
+
+    await engine.dispose()
 
     sqlalchemy_config = SQLAlchemyAsyncConfig(
-        connection_string="sqlite+aiosqlite:///:memory:",
+        connection_string=postgres_uri,
         metadata=AuditBase.metadata,
-        create_all=True,
+        create_all=False,
     )
     sqlalchemy_plugin = SQLAlchemyPlugin(config=sqlalchemy_config)
 
     test_app = Litestar(
-        route_handlers=[index, health_check, AuthController],
+        route_handlers=[health_check, AuthController],
         plugins=[sqlalchemy_plugin],
+        middleware=[JWTAuthMiddleware],
         debug=True,
     )
 
