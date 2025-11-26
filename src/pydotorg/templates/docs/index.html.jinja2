@@ -1,0 +1,288 @@
+{% extends "base.html.jinja2" %}
+{% import "macros/cards.html.jinja2" as cards %}
+
+{% block title %}Python Documentation | Python.org{% endblock %}
+
+{% block meta_description %}Access comprehensive Python documentation, tutorials, and references. Find everything you need to learn and master Python.{% endblock %}
+
+{% block content %}
+<section class="python-gradient text-white">
+    <div class="section-container py-20">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-5xl md:text-6xl font-bold mb-6">
+                Python Documentation
+            </h1>
+            <p class="text-xl md:text-2xl mb-8 opacity-90">
+                Learn Python with official documentation, tutorials, and guides
+            </p>
+            <div class="max-w-2xl mx-auto">
+                <form action="/docs/search" method="get" class="join w-full">
+                    <input
+                        type="text"
+                        name="q"
+                        placeholder="Search Python documentation..."
+                        class="input input-bordered join-item w-full text-base-content"
+                        required
+                    />
+                    <button type="submit" class="btn btn-primary join-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </button>
+                </form>
+                <p class="text-sm mt-3 opacity-75">Search redirects to docs.python.org</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <div class="max-w-6xl mx-auto">
+            <div class="mb-12">
+                <h2 class="text-4xl font-bold text-python-blue mb-4">Quick Start</h2>
+                <p class="text-lg text-base-content/80">Essential documentation for Python developers</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {{ cards.feature_card(
+                    '<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>',
+                    'Tutorial',
+                    'New to Python? Start here with the official tutorial',
+                    'https://docs.python.org/' + version + '/tutorial/'
+                ) }}
+
+                {{ cards.feature_card(
+                    '<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>',
+                    'Library Reference',
+                    'Complete reference for Python standard library',
+                    'https://docs.python.org/' + version + '/library/'
+                ) }}
+
+                {{ cards.feature_card(
+                    '<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>',
+                    'Language Reference',
+                    'Detailed description of Python syntax and semantics',
+                    'https://docs.python.org/' + version + '/reference/'
+                ) }}
+
+                {{ cards.feature_card(
+                    '<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>',
+                    'What\'s New',
+                    'New features and changes in Python ' + version,
+                    'https://docs.python.org/' + version + '/whatsnew/'
+                ) }}
+
+                {{ cards.feature_card(
+                    '<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>',
+                    'HOWTOs',
+                    'Topic-focused guides on specific tasks',
+                    'https://docs.python.org/' + version + '/howto/'
+                ) }}
+
+                {{ cards.feature_card(
+                    '<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>',
+                    'FAQ',
+                    'Frequently asked questions about Python',
+                    'https://docs.python.org/' + version + '/faq/'
+                ) }}
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-200 py-16">
+    <div class="section-container">
+        <div class="max-w-6xl mx-auto">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-python-blue mb-4">Documentation by Version</h2>
+                <p class="text-base-content/80">Select your Python version</p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                {% for v in versions %}
+                <a
+                    href="?version={{ v }}"
+                    class="btn {% if v == version %}btn-primary{% else %}btn-outline{% endif %} btn-lg"
+                >
+                    Python {{ v }}
+                </a>
+                {% endfor %}
+            </div>
+
+            <div class="mt-8 text-center">
+                <a href="https://docs.python.org/" class="python-link text-lg">
+                    View all versions on docs.python.org →
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <div class="max-w-6xl mx-auto">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-python-blue mb-4">Additional Resources</h2>
+                <p class="text-base-content/80">Official Python development resources</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="card bg-base-200">
+                    <div class="card-body">
+                        <h3 class="card-title text-xl text-python-blue">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                            </svg>
+                            PyPI - Python Package Index
+                        </h3>
+                        <p class="text-base-content/80">
+                            Find and install third-party Python packages from the Python Package Index
+                        </p>
+                        <div class="card-actions justify-end mt-4">
+                            <a href="https://pypi.org/" class="btn btn-ghost btn-sm" target="_blank" rel="noopener">
+                                Visit PyPI →
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200">
+                    <div class="card-body">
+                        <h3 class="card-title text-xl text-python-blue">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            PEP Index
+                        </h3>
+                        <p class="text-base-content/80">
+                            Python Enhancement Proposals - design documents for new features
+                        </p>
+                        <div class="card-actions justify-end mt-4">
+                            <a href="https://peps.python.org/" class="btn btn-ghost btn-sm" target="_blank" rel="noopener">
+                                Browse PEPs →
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200">
+                    <div class="card-body">
+                        <h3 class="card-title text-xl text-python-blue">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                            </svg>
+                            Developer's Guide
+                        </h3>
+                        <p class="text-base-content/80">
+                            Learn how to contribute to Python development
+                        </p>
+                        <div class="card-actions justify-end mt-4">
+                            <a href="https://devguide.python.org/" class="btn btn-ghost btn-sm" target="_blank" rel="noopener">
+                                View Guide →
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200">
+                    <div class="card-body">
+                        <h3 class="card-title text-xl text-python-blue">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
+                            Educational Resources
+                        </h3>
+                        <p class="text-base-content/80">
+                            Free materials for teaching and learning Python
+                        </p>
+                        <div class="card-actions justify-end mt-4">
+                            <a href="/about/gettingstarted/" class="btn btn-ghost btn-sm">
+                                Get Started →
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-200 py-16">
+    <div class="section-container">
+        <div class="max-w-6xl mx-auto">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-python-blue mb-4">Community Documentation</h2>
+                <p class="text-base-content/80">Quality tutorials and resources from the Python community</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="card bg-base-100 shadow-lg">
+                    <div class="card-body">
+                        <h3 class="card-title text-lg">Real Python</h3>
+                        <p class="text-sm text-base-content/70">
+                            High-quality Python tutorials and articles
+                        </p>
+                        <div class="card-actions justify-end mt-4">
+                            <a href="https://realpython.com/" class="btn btn-ghost btn-sm" target="_blank" rel="noopener">
+                                Visit →
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card bg-base-100 shadow-lg">
+                    <div class="card-body">
+                        <h3 class="card-title text-lg">Talk Python</h3>
+                        <p class="text-sm text-base-content/70">
+                            Podcasts and courses about Python
+                        </p>
+                        <div class="card-actions justify-end mt-4">
+                            <a href="https://talkpython.fm/" class="btn btn-ghost btn-sm" target="_blank" rel="noopener">
+                                Listen →
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card bg-base-100 shadow-lg">
+                    <div class="card-body">
+                        <h3 class="card-title text-lg">Python Weekly</h3>
+                        <p class="text-sm text-base-content/70">
+                            Weekly newsletter featuring the best Python news
+                        </p>
+                        <div class="card-actions justify-end mt-4">
+                            <a href="https://www.pythonweekly.com/" class="btn btn-ghost btn-sm" target="_blank" rel="noopener">
+                                Subscribe →
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <div class="card bg-gradient-to-br from-python-blue to-python-blue-dark text-white">
+                <div class="card-body text-center py-12">
+                    <h2 class="text-3xl font-bold mb-4">Need Help?</h2>
+                    <p class="text-lg mb-6 opacity-90">
+                        Join the Python community and get support from developers worldwide
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <a href="/community/forums/" class="btn btn-outline text-white border-white hover:bg-white/10">
+                            Community Forums
+                        </a>
+                        <a href="https://docs.python.org/3/faq/" class="btn btn-outline text-white border-white hover:bg-white/10" target="_blank" rel="noopener">
+                            Python FAQ
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
