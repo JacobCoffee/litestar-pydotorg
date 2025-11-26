@@ -1,7 +1,11 @@
 """Admin domain - Dashboard, moderation, and system management."""
 
 from pydotorg.domains.admin import urls
-from pydotorg.domains.admin.controllers import AdminDashboardController
+from pydotorg.domains.admin.controllers import (
+    AdminDashboardController,
+    AdminJobsController,
+    AdminUsersController,
+)
 from pydotorg.domains.admin.dependencies import get_admin_dependencies
 from pydotorg.domains.admin.guards import AdminPermission, require_any_admin_access
 from pydotorg.domains.admin.schemas import (
@@ -10,15 +14,19 @@ from pydotorg.domains.admin.schemas import (
     PendingModeration,
     UserStaffUpdate,
 )
-from pydotorg.domains.admin.services import DashboardService
+from pydotorg.domains.admin.services import DashboardService, JobAdminService, UserAdminService
 
 __all__ = [
     "AdminDashboardController",
+    "AdminJobsController",
     "AdminPermission",
     "AdminUserRead",
+    "AdminUsersController",
     "DashboardService",
     "DashboardStats",
+    "JobAdminService",
     "PendingModeration",
+    "UserAdminService",
     "UserStaffUpdate",
     "get_admin_dependencies",
     "require_any_admin_access",

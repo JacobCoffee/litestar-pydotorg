@@ -106,3 +106,24 @@ class SystemInfo(BaseModel):
     uptime: str
 
     model_config = ConfigDict(from_attributes=True)
+
+
+def _rebuild_models() -> None:
+    """Rebuild models to resolve forward references."""
+    import datetime as _datetime  # noqa: PLC0415
+    from uuid import UUID as _UUID  # noqa: PLC0415
+
+    from pydotorg.domains.users.models import EmailPrivacy as _EmailPrivacy  # noqa: PLC0415
+    from pydotorg.domains.users.models import SearchVisibility as _SearchVisibility  # noqa: PLC0415
+
+    _types = {
+        "UUID": _UUID,
+        "datetime": _datetime,
+        "EmailPrivacy": _EmailPrivacy,
+        "SearchVisibility": _SearchVisibility,
+    }
+    RecentActivity.model_rebuild(_types_namespace=_types)
+    AdminUserRead.model_rebuild(_types_namespace=_types)
+
+
+_rebuild_models()

@@ -40,6 +40,8 @@ from pydotorg.core.openapi import get_openapi_plugins
 from pydotorg.domains.about import AboutRenderController
 from pydotorg.domains.admin import (
     AdminDashboardController,
+    AdminJobsController,
+    AdminUsersController,
     get_admin_dependencies,
 )
 from pydotorg.domains.banners import (
@@ -385,6 +387,8 @@ app = Litestar(
         SearchAPIController,
         SearchRenderController,
         AdminDashboardController,
+        AdminJobsController,
+        AdminUsersController,
     ],
     dependencies=get_all_dependencies(),
     exception_handlers=get_exception_handlers(),
