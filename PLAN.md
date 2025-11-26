@@ -814,9 +814,52 @@ src/pydotorg/tasks/
 
 ---
 
-## Phase 7: Testing
+## Phase 7: Admin Interface
+**Status**: ✅ COMPLETE (2025-11-26)
+**Agent**: `python-backend-engineer`
 
-### Task 7.1: Unit Tests
+### Completed Work
+
+**Admin Infrastructure**:
+- [x] SQLAdmin integration via `sqladmin-litestar-plugin`
+- [x] 22 ModelViews for all domains (users, pages, downloads, jobs, events, etc.)
+- [x] Custom AdminDashboardController with stats, pending moderation, recent activity
+- [x] Admin guards (`require_staff`, `require_superuser`, `require_any_admin_access`)
+- [x] Exception handlers for 401 (redirect to login) and 403 (access denied template)
+
+**Admin Templates**:
+- [x] `admin/base.html.jinja2` - Admin layout with sidebar navigation
+- [x] `admin/dashboard.html.jinja2` - Dashboard with stats cards and activity feed
+- [x] `admin/users.html.jinja2` - User management table
+- [x] `admin/jobs.html.jinja2` - Job moderation queue
+- [x] `errors/403.html.jinja2` - Access denied page
+
+**Auth Flow Improvements (2025-11-26)**:
+- [x] Flash messages integration with `FlashPlugin` + `CookieBackendConfig`
+- [x] Native JavaScript fetch for all auth forms (login, register, forgot-password, reset-password)
+- [x] Fixed SQLAlchemy greenlet error (capture user.id before commit)
+- [x] Fixed form GET submission (method="POST" + action="javascript:void(0)")
+- [x] Client-side password validation and error display
+
+**Unit Tests**:
+- [x] 28 tests for admin guards and config (`tests/unit/domains/admin/`)
+
+---
+
+## Phase 8: Testing
+
+### ⚠️ CRITICAL: Testing Improvements Needed
+
+**Current Issues Identified (2025-11-26)**:
+The following bugs were found in production but NOT caught by existing tests:
+1. JSON malformed errors on auth form submissions (htmx json-enc not working)
+2. SQLAlchemy greenlet errors from lazy loading after commit
+3. Form GET fallback exposing credentials in URLs
+4. Flash message configuration errors
+
+**Root Cause**: Tests only cover API endpoints, not the full frontend-to-backend flow.
+
+### Task 8.1: Unit Tests
 **Agent**: `Python Testing Expert`
 **Priority**: CRITICAL
 
@@ -827,7 +870,9 @@ src/pydotorg/tasks/
 - Controllers: 80%
 
 **Tasks**:
-- [ ] Create test fixtures with polyfactory
+- [x] Create test fixtures with polyfactory
+- [x] Write admin domain tests (28 tests)
+- [x] Write auth endpoint tests (13 tests)
 - [ ] Write User domain tests
 - [ ] Write Pages domain tests
 - [ ] Write Downloads domain tests
@@ -839,36 +884,52 @@ src/pydotorg/tasks/
 
 ---
 
-### Task 7.2: Integration Tests
+### Task 8.2: Integration Tests
 **Agent**: `Python Testing Expert`
 **Priority**: HIGH
 
 **Tasks**:
-- [ ] Set up test database (PostgreSQL)
-- [ ] Write API endpoint tests
+- [x] Set up test database (PostgreSQL via pytest-databases)
+- [x] Write API endpoint tests (auth endpoints)
 - [ ] Write database transaction tests
-- [ ] Write authentication flow tests
+- [ ] Write authentication flow tests (session creation, token validation)
 - [ ] Write file upload tests
+
+**New Requirements (2025-11-26)**:
+- [ ] Test session_login with actual database user
+- [ ] Test that user.id access after commit doesn't cause greenlet errors
+- [ ] Test flash message storage and retrieval
+- [ ] Test auth middleware exception handlers
 
 ---
 
-### Task 7.3: E2E Tests
+### Task 8.3: E2E Tests
 **Agent**: `ui-comprehensive-tester`
-**Priority**: MEDIUM
+**Priority**: **CRITICAL** (upgraded from MEDIUM)
+
+**Rationale**: Multiple frontend bugs were missed because we only tested API endpoints.
+E2E tests would have caught form submission issues immediately.
 
 **Tasks**:
-- [ ] Set up Playwright/Puppeteer
+- [ ] Set up Playwright
+- [ ] **Write auth form tests** (PRIORITY):
+  - [ ] Login form submits JSON correctly
+  - [ ] Login form shows error messages on failure
+  - [ ] Login form shows success and redirects
+  - [ ] Register form validates passwords match
+  - [ ] Register form shows validation errors
+  - [ ] Forgot password form submission
+  - [ ] Reset password form submission
 - [ ] Write homepage tests
 - [ ] Write download flow tests
 - [ ] Write job submission tests
-- [ ] Write auth flow tests
-- [ ] Write admin panel tests
+- [ ] Write admin panel tests (auth redirect, permission denied)
 
 ---
 
-## Phase 8: Documentation
+## Phase 9: Documentation
 
-### Task 8.1: API Documentation
+### Task 9.1: API Documentation
 **Agent**: `documentation-expert`
 **Priority**: HIGH
 
@@ -881,7 +942,7 @@ src/pydotorg/tasks/
 
 ---
 
-### Task 8.2: Developer Documentation
+### Task 9.2: Developer Documentation
 **Agent**: `documentation-expert`
 **Priority**: MEDIUM
 
@@ -894,9 +955,9 @@ src/pydotorg/tasks/
 
 ---
 
-## Phase 9: DevOps & Deployment
+## Phase 10: DevOps & Deployment
 
-### Task 9.1: Docker Setup
+### Task 10.1: Docker Setup
 **Agent**: `python-backend-engineer`
 **Priority**: HIGH
 
@@ -909,7 +970,7 @@ src/pydotorg/tasks/
 
 ---
 
-### Task 9.2: CI/CD Pipeline
+### Task 10.2: CI/CD Pipeline
 **Agent**: `github-git-expert`
 **Priority**: HIGH
 
@@ -1043,4 +1104,4 @@ tests/
 ---
 
 *Document generated for Python.org Litestar rebuild project*
-*Last updated: 2025-11-25*
+*Last updated: 2025-11-26*
