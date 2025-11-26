@@ -1,0 +1,207 @@
+{% extends "base.html.jinja2" %}
+
+{% block title %}Preview Job - {{ job_preview.job_title }}{% endblock %}
+
+{% block content %}
+<section class="bg-base-100 py-8">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <div class="alert alert-warning mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <div>
+                    <h3 class="font-bold">Preview Mode</h3>
+                    <div class="text-sm">This is how your job posting will appear to visitors. Review carefully before submitting.</div>
+                </div>
+            </div>
+
+            <div class="card bg-base-200 shadow-md">
+                <div class="card-body">
+                    <div class="mb-6">
+                        <h1 class="text-4xl font-bold text-python-blue mb-4">
+                            {{ job_preview.job_title }}
+                        </h1>
+
+                        <div class="flex flex-wrap items-center gap-4 text-base-content/70 mb-4">
+                            {% if job_preview.company_name %}
+                            <span class="flex items-center gap-2 text-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                </svg>
+                                <strong>{{ job_preview.company_name }}</strong>
+                            </span>
+                            {% endif %}
+
+                            {% if job_preview.city or job_preview.region or job_preview.country %}
+                            <span class="flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                                {% if job_preview.city %}{{ job_preview.city }}{% if job_preview.region or job_preview.country %}, {% endif %}{% endif %}
+                                {% if job_preview.region %}{{ job_preview.region }}{% if job_preview.country %}, {% endif %}{% endif %}
+                                {% if job_preview.country %}{{ job_preview.country }}{% endif %}
+                            </span>
+                            {% endif %}
+                        </div>
+
+                        <div class="flex flex-wrap gap-2">
+                            {% if job_preview.telecommuting %}
+                            <span class="badge badge-success badge-lg gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                Remote Work Available
+                            </span>
+                            {% endif %}
+
+                            {% if job_preview.job_type_ids %}
+                                {% for job_type_id in job_preview.job_type_ids %}
+                                <span class="badge badge-outline badge-lg">Job Type</span>
+                                {% endfor %}
+                            {% endif %}
+
+                            {% if job_preview.category_ids %}
+                                {% for category_id in job_preview.category_ids %}
+                                <span class="badge badge-ghost badge-lg">Category</span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    {% if job_preview.description %}
+                    <div class="prose max-w-none mb-8">
+                        <h2 class="text-2xl font-bold text-python-blue mb-4">Job Description</h2>
+                        <div class="text-base-content/90 leading-relaxed whitespace-pre-wrap">
+                            {{ job_preview.description }}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if job_preview.requirements %}
+                    <div class="prose max-w-none mb-8">
+                        <h2 class="text-2xl font-bold text-python-blue mb-4">Requirements</h2>
+                        <div class="text-base-content/90 leading-relaxed whitespace-pre-wrap">
+                            {{ job_preview.requirements }}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if job_preview.contact %}
+                    <div class="divider"></div>
+
+                    <div class="mb-8">
+                        <h2 class="text-2xl font-bold text-python-blue mb-4">How to Apply</h2>
+                        <div class="alert alert-info">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                            <div class="text-base-content/90 leading-relaxed whitespace-pre-wrap">
+                                {{ job_preview.contact }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if job_preview.contact_name or job_preview.contact_email %}
+                    <div class="card bg-base-100 shadow-sm mb-6">
+                        <div class="card-body">
+                            <h3 class="card-title text-lg mb-3">Contact Information</h3>
+                            <div class="space-y-2 text-sm">
+                                {% if job_preview.contact_name %}
+                                <div class="flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-base-content/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                    </svg>
+                                    <span>{{ job_preview.contact_name }}</span>
+                                </div>
+                                {% endif %}
+                                {% if job_preview.contact_email %}
+                                <div class="flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-base-content/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                    </svg>
+                                    <a href="mailto:{{ job_preview.contact_email }}" class="python-link">
+                                        {{ job_preview.contact_email }}
+                                    </a>
+                                </div>
+                                {% endif %}
+                                {% if job_preview.company_url %}
+                                <div class="flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-base-content/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                                    </svg>
+                                    <a href="{{ job_preview.company_url }}" target="_blank" rel="noopener noreferrer" class="python-link">
+                                        {{ job_preview.company_url }}
+                                    </a>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <div class="divider"></div>
+
+                    <div class="card-actions justify-between items-center pt-4">
+                        <div class="text-sm text-base-content/60">
+                            Preview generated on {{ now().strftime('%B %d, %Y at %H:%M') }}
+                        </div>
+
+                        <div class="flex gap-2">
+                            <button
+                                class="btn btn-ghost gap-2"
+                                onclick="window.history.back()"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5h12" />
+                                </svg>
+                                Edit Job
+                            </button>
+
+                            <form method="post" action="/api/v1/jobs" class="inline">
+                                <input type="hidden" name="job_title" value="{{ job_preview.job_title }}">
+                                <input type="hidden" name="company_name" value="{{ job_preview.company_name }}">
+                                <input type="hidden" name="company_url" value="{{ job_preview.company_url }}">
+                                <input type="hidden" name="description" value="{{ job_preview.description }}">
+                                <input type="hidden" name="requirements" value="{{ job_preview.requirements }}">
+                                <input type="hidden" name="contact" value="{{ job_preview.contact }}">
+                                <input type="hidden" name="contact_name" value="{{ job_preview.contact_name }}">
+                                <input type="hidden" name="contact_email" value="{{ job_preview.contact_email }}">
+                                <input type="hidden" name="city" value="{{ job_preview.city }}">
+                                <input type="hidden" name="region" value="{{ job_preview.region }}">
+                                <input type="hidden" name="country" value="{{ job_preview.country }}">
+                                <input type="hidden" name="telecommuting" value="{{ job_preview.telecommuting }}">
+                                {% if job_preview.job_type_ids %}
+                                    {% for job_type_id in job_preview.job_type_ids %}
+                                    <input type="hidden" name="job_type_ids" value="{{ job_type_id }}">
+                                    {% endfor %}
+                                {% endif %}
+                                {% if job_preview.category_ids %}
+                                    {% for category_id in job_preview.category_ids %}
+                                    <input type="hidden" name="category_ids" value="{{ category_id }}">
+                                    {% endfor %}
+                                {% endif %}
+
+                                <button
+                                    type="submit"
+                                    class="btn btn-primary gap-2"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    Submit Job
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

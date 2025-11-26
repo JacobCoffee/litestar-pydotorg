@@ -1,0 +1,244 @@
+{% extends "base.html.jinja2" %}
+{% import "macros/buttons.html.jinja2" as buttons %}
+
+{% block title %}Download Python for macOS | Python.org{% endblock %}
+
+{% block meta_description %}Download the latest Python release for macOS. Official Python installers for macOS 10.9 and later, both Intel and Apple Silicon.{% endblock %}
+
+{% block breadcrumbs %}
+<div class="bg-base-200 py-4">
+    <div class="section-container">
+        <div class="text-sm breadcrumbs">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/downloads/">Downloads</a></li>
+                <li>macOS</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex items-start gap-8 mb-12">
+                <div class="flex-1">
+                    <h1 class="text-5xl font-bold text-python-blue mb-6">
+                        Python for macOS
+                    </h1>
+                    {% if latest_release %}
+                    <p class="text-xl text-base-content/70 mb-6">
+                        Latest version: Python {{ latest_release.version }}
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        {{ buttons.download_button('Download Python ' + latest_release.version, '/downloads/release/' + latest_release.slug + '/', 'lg', 'Universal installer') }}
+                        <a href="/downloads/" class="btn btn-outline btn-lg">
+                            View All Releases
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="hidden lg:block">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-32 w-32 text-python-blue" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="card bg-base-200 mb-8">
+                <div class="card-body">
+                    <h2 class="card-title text-2xl text-python-blue mb-4">Installation Notes</h2>
+                    <div class="prose max-w-none">
+                        <p class="text-base-content/80">
+                            The official Python installer for macOS is a universal binary supporting both Intel and Apple Silicon Macs.
+                            It includes IDLE, pip, and documentation.
+                        </p>
+
+                        <div class="alert alert-info mt-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <div>
+                                <h3 class="font-bold">macOS Ships with Python 2.7</h3>
+                                <div class="text-sm">
+                                    macOS includes an older version of Python for system use.
+                                    Installing from Python.org gives you the latest Python 3 without affecting system Python.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-python-blue mb-6">Installer Options</h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="card bg-base-100 shadow-lg border-2 border-python-blue">
+                        <div class="card-body">
+                            <h3 class="card-title text-xl text-python-blue">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                Recommended
+                            </h3>
+                            <div class="badge badge-primary mb-2">Universal Binary</div>
+                            <p class="text-base-content/80">
+                                Works on both Intel and Apple Silicon Macs (M1, M2, M3).
+                                Optimized performance for your Mac architecture.
+                            </p>
+                            {% if latest_release %}
+                            <div class="card-actions justify-end mt-4">
+                                <a href="/downloads/release/{{ latest_release.slug }}/" class="btn btn-primary gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                    </svg>
+                                    Download Universal
+                                </a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="card bg-base-100 shadow-lg">
+                        <div class="card-body">
+                            <h3 class="card-title text-xl text-python-blue">
+                                Package Managers
+                            </h3>
+                            <div class="badge badge-outline mb-2">Alternative</div>
+                            <p class="text-base-content/80">
+                                Install Python using Homebrew or other package managers.
+                                Great for developers who prefer command-line installation.
+                            </p>
+                            <div class="card-actions justify-end mt-4">
+                                <a href="https://brew.sh/" class="btn btn-outline gap-2" target="_blank">
+                                    Learn About Homebrew
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-python-blue mb-6">Installation Steps</h2>
+
+                <div class="card bg-base-200">
+                    <div class="card-body">
+                        <h3 class="text-lg font-semibold text-python-blue mb-3">Standard Installation</h3>
+                        <ol class="list-decimal list-inside space-y-3 text-base-content/80">
+                            <li>Download the installer using the button above</li>
+                            <li>Open the downloaded .pkg file</li>
+                            <li>Follow the installation wizard</li>
+                            <li>Enter your password when prompted</li>
+                            <li>Click "Install" to complete the installation</li>
+                        </ol>
+
+                        <div class="divider"></div>
+
+                        <h3 class="text-lg font-semibold text-python-blue mb-3">Using Homebrew</h3>
+                        <p class="text-base-content/80 mb-2">
+                            If you have Homebrew installed, you can install Python with:
+                        </p>
+                        <div class="mockup-code">
+                            <pre data-prefix="$"><code>brew install python@3</code></pre>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <h3 class="text-lg font-semibold text-python-blue mb-2">Verify Installation</h3>
+                        <p class="text-base-content/80 mb-2">
+                            Open Terminal and type:
+                        </p>
+                        <div class="mockup-code">
+                            <pre data-prefix="$"><code>python3 --version</code></pre>
+                        </div>
+                        <p class="text-base-content/80 text-sm mt-2">
+                            You should see the Python version number displayed.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                <div class="card bg-base-200">
+                    <div class="card-body">
+                        <h2 class="card-title text-xl text-python-blue mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
+                            Documentation
+                        </h2>
+                        <div class="prose max-w-none">
+                            <ul class="text-base-content/80 text-sm">
+                                <li><a href="https://docs.python.org/3/using/mac.html" class="python-link">Using Python on macOS</a></li>
+                                <li><a href="https://docs.python.org/3/tutorial/" class="python-link">Python Tutorial</a></li>
+                                <li><a href="https://docs.python.org/3/" class="python-link">Full Documentation</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200">
+                    <div class="card-body">
+                        <h2 class="card-title text-xl text-python-blue mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                            </svg>
+                            Important Notes
+                        </h2>
+                        <div class="prose max-w-none">
+                            <ul class="text-base-content/80 text-sm">
+                                <li>macOS command is <code>python3</code>, not <code>python</code></li>
+                                <li>Use <code>pip3</code> for package installation</li>
+                                <li>Xcode Command Line Tools may be required for some packages</li>
+                                <li>SSL certificates are included in the installer</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-warning mb-8">
+                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                <div>
+                    <h3 class="font-bold">System Requirements</h3>
+                    <div class="text-sm">
+                        macOS 10.9 or later is required for Python 3.9+.
+                        The universal binary requires macOS 10.9 or later for Intel and macOS 11 or later for Apple Silicon.
+                    </div>
+                </div>
+            </div>
+
+            <div class="card bg-gradient-to-r from-python-blue to-python-blue-dark text-white mb-8">
+                <div class="card-body">
+                    <h2 class="card-title text-2xl mb-4">Apple Silicon Support</h2>
+                    <p class="opacity-90">
+                        Python {{ latest_release.version if latest_release else '3.12' }} includes full native support for Apple Silicon Macs (M1, M2, M3).
+                        The universal installer automatically uses the native ARM64 version on Apple Silicon,
+                        providing optimal performance and compatibility.
+                    </p>
+                    <div class="card-actions justify-end mt-4">
+                        <a href="https://docs.python.org/3/using/mac.html#apple-silicon-support" class="btn btn-secondary">
+                            Learn More
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8">
+                <a href="/downloads/" class="btn btn-outline">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                    Back to Downloads
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,358 @@
+{% extends "base.html.jinja2" %}
+
+{% block title %}Submit an Event - Python Events{% endblock %}
+
+{% block breadcrumbs %}
+<div class="bg-base-200 py-4">
+    <div class="section-container">
+        <div class="breadcrumbs text-sm">
+            <ul>
+                <li><a href="/" class="python-link">Home</a></li>
+                <li><a href="/events/" class="python-link">Events</a></li>
+                <li>Submit Event</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<section class="python-gradient text-white py-16">
+    <div class="section-container">
+        <div class="max-w-3xl mx-auto text-center">
+            <h1 class="text-4xl font-bold mb-4">Submit a Python Event</h1>
+            <p class="text-xl opacity-90">
+                Share your Python conference, meetup, sprint, or workshop with the global community
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-12">
+    <div class="section-container">
+        <div class="max-w-3xl mx-auto">
+            <div class="card bg-base-200 shadow-xl">
+                <div class="card-body">
+                    <div class="alert alert-info mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <div>
+                            <p class="font-semibold">Event Submission Guidelines</p>
+                            <p class="text-sm">All events are reviewed before being published. Please ensure your event is Python-related and provides value to the community.</p>
+                        </div>
+                    </div>
+
+                    <form hx-post="/api/v1/events/"
+                          hx-target="#form-response"
+                          hx-swap="innerHTML"
+                          class="space-y-6">
+
+                        <div class="form-control">
+                            <label class="label" for="event-title">
+                                <span class="label-text font-semibold">Event Title</span>
+                                <span class="label-text-alt text-error">*</span>
+                            </label>
+                            <input type="text"
+                                   id="event-title"
+                                   name="title"
+                                   placeholder="PyCon 2025"
+                                   class="input input-bordered w-full"
+                                   required>
+                            <label class="label">
+                                <span class="label-text-alt">Give your event a clear, descriptive title</span>
+                            </label>
+                        </div>
+
+                        {% if categories %}
+                        <div class="form-control">
+                            <label class="label" for="event-category">
+                                <span class="label-text font-semibold">Event Category</span>
+                                <span class="label-text-alt text-error">*</span>
+                            </label>
+                            <select id="event-category"
+                                    name="category_ids"
+                                    class="select select-bordered w-full"
+                                    required>
+                                <option value="">Select a category</option>
+                                {% for category in categories %}
+                                <option value="{{ category.id }}">{{ category.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        {% endif %}
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="form-control">
+                                <label class="label" for="event-start-date">
+                                    <span class="label-text font-semibold">Start Date</span>
+                                    <span class="label-text-alt text-error">*</span>
+                                </label>
+                                <input type="date"
+                                       id="event-start-date"
+                                       name="start_date"
+                                       class="input input-bordered w-full"
+                                       required>
+                            </div>
+
+                            <div class="form-control">
+                                <label class="label" for="event-start-time">
+                                    <span class="label-text font-semibold">Start Time</span>
+                                    <span class="label-text-alt text-error">*</span>
+                                </label>
+                                <input type="time"
+                                       id="event-start-time"
+                                       name="start_time"
+                                       class="input input-bordered w-full"
+                                       required>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="form-control">
+                                <label class="label" for="event-end-date">
+                                    <span class="label-text font-semibold">End Date</span>
+                                </label>
+                                <input type="date"
+                                       id="event-end-date"
+                                       name="end_date"
+                                       class="input input-bordered w-full">
+                            </div>
+
+                            <div class="form-control">
+                                <label class="label" for="event-end-time">
+                                    <span class="label-text font-semibold">End Time</span>
+                                </label>
+                                <input type="time"
+                                       id="event-end-time"
+                                       name="end_time"
+                                       class="input input-bordered w-full">
+                            </div>
+                        </div>
+
+                        <div class="form-control">
+                            <label class="label cursor-pointer justify-start gap-4">
+                                <input type="checkbox" name="all_day" class="checkbox checkbox-primary">
+                                <span class="label-text font-semibold">All-day event</span>
+                            </label>
+                        </div>
+
+                        <div class="divider">Location Details</div>
+
+                        <div class="form-control">
+                            <label class="label" for="venue-name">
+                                <span class="label-text font-semibold">Venue Name</span>
+                                <span class="label-text-alt text-error">*</span>
+                            </label>
+                            <input type="text"
+                                   id="venue-name"
+                                   name="venue_name"
+                                   placeholder="Convention Center or Online"
+                                   class="input input-bordered w-full"
+                                   required>
+                        </div>
+
+                        <div class="form-control">
+                            <label class="label" for="venue-address">
+                                <span class="label-text font-semibold">Street Address</span>
+                            </label>
+                            <input type="text"
+                                   id="venue-address"
+                                   name="venue_address"
+                                   placeholder="123 Main Street"
+                                   class="input input-bordered w-full">
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="form-control">
+                                <label class="label" for="venue-city">
+                                    <span class="label-text font-semibold">City</span>
+                                </label>
+                                <input type="text"
+                                       id="venue-city"
+                                       name="venue_city"
+                                       placeholder="San Francisco"
+                                       class="input input-bordered w-full">
+                            </div>
+
+                            <div class="form-control">
+                                <label class="label" for="venue-state">
+                                    <span class="label-text font-semibold">State/Province</span>
+                                </label>
+                                <input type="text"
+                                       id="venue-state"
+                                       name="venue_state"
+                                       placeholder="CA"
+                                       class="input input-bordered w-full">
+                            </div>
+
+                            <div class="form-control">
+                                <label class="label" for="venue-country">
+                                    <span class="label-text font-semibold">Country</span>
+                                </label>
+                                <input type="text"
+                                       id="venue-country"
+                                       name="venue_country"
+                                       placeholder="USA"
+                                       class="input input-bordered w-full">
+                            </div>
+                        </div>
+
+                        <div class="divider">Event Information</div>
+
+                        <div class="form-control">
+                            <label class="label" for="event-description">
+                                <span class="label-text font-semibold">Event Description</span>
+                                <span class="label-text-alt text-error">*</span>
+                            </label>
+                            <textarea id="event-description"
+                                      name="description"
+                                      placeholder="Provide a detailed description of your event..."
+                                      class="textarea textarea-bordered h-32"
+                                      required></textarea>
+                            <label class="label">
+                                <span class="label-text-alt">Markdown formatting supported</span>
+                            </label>
+                        </div>
+
+                        <div class="form-control">
+                            <label class="label" for="event-url">
+                                <span class="label-text font-semibold">Event Website URL</span>
+                            </label>
+                            <input type="url"
+                                   id="event-url"
+                                   name="url"
+                                   placeholder="https://example.com/event"
+                                   class="input input-bordered w-full">
+                            <label class="label">
+                                <span class="label-text-alt">Link to registration or more information</span>
+                            </label>
+                        </div>
+
+                        <div class="form-control">
+                            <label class="label" for="registration-url">
+                                <span class="label-text font-semibold">Registration URL</span>
+                            </label>
+                            <input type="url"
+                                   id="registration-url"
+                                   name="registration_url"
+                                   placeholder="https://example.com/register"
+                                   class="input input-bordered w-full">
+                        </div>
+
+                        <div class="divider">Recurring Event (Optional)</div>
+
+                        <div class="form-control">
+                            <label class="label cursor-pointer justify-start gap-4">
+                                <input type="checkbox"
+                                       name="is_recurring"
+                                       class="checkbox checkbox-primary"
+                                       x-data
+                                       @change="document.getElementById('recurrence-options').classList.toggle('hidden')">
+                                <span class="label-text font-semibold">This is a recurring event</span>
+                            </label>
+                        </div>
+
+                        <div id="recurrence-options" class="hidden space-y-4 pl-8">
+                            <div class="form-control">
+                                <label class="label" for="recurrence-type">
+                                    <span class="label-text font-semibold">Repeat</span>
+                                </label>
+                                <select id="recurrence-type" name="recurrence_type" class="select select-bordered w-full">
+                                    <option value="daily">Daily</option>
+                                    <option value="weekly">Weekly</option>
+                                    <option value="monthly">Monthly</option>
+                                </select>
+                            </div>
+
+                            <div class="form-control">
+                                <label class="label" for="recurrence-end">
+                                    <span class="label-text font-semibold">Ends On</span>
+                                </label>
+                                <input type="date" id="recurrence-end" name="recurrence_end" class="input input-bordered w-full">
+                            </div>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <div class="form-control">
+                            <label class="label cursor-pointer justify-start gap-4">
+                                <input type="checkbox" name="terms_accepted" class="checkbox checkbox-primary" required>
+                                <span class="label-text">I agree that this event is Python-related and follows the <a href="/about/code-of-conduct/" class="python-link">Python Community Code of Conduct</a></span>
+                            </label>
+                        </div>
+
+                        <div id="form-response" class="mt-4"></div>
+
+                        <div class="card-actions justify-end">
+                            <button type="reset" class="btn btn-ghost">Reset Form</button>
+                            <button type="submit" class="btn btn-primary gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                Submit Event for Review
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="mt-8 space-y-4">
+                <div class="alert alert-warning">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    <div>
+                        <p class="font-semibold">Review Process</p>
+                        <p class="text-sm">Event submissions are typically reviewed within 3-5 business days. You'll receive an email notification once your event is approved or if any changes are needed.</p>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200">
+                    <div class="card-body">
+                        <h3 class="card-title text-lg">Need Help?</h3>
+                        <p class="text-sm text-base-content/80">
+                            If you have questions about submitting an event or need assistance, please contact us at
+                            <a href="mailto:events@python.org" class="python-link">events@python.org</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+
+        form.addEventListener('htmx:afterRequest', function(event) {
+            if (event.detail.successful) {
+                const response = document.getElementById('form-response');
+                response.innerHTML = `
+                    <div class="alert alert-success">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>Thank you! Your event has been submitted for review.</span>
+                    </div>
+                `;
+                form.reset();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                const response = document.getElementById('form-response');
+                response.innerHTML = `
+                    <div class="alert alert-error">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>There was an error submitting your event. Please try again.</span>
+                    </div>
+                `;
+            }
+        });
+    });
+</script>
+{% endblock %}

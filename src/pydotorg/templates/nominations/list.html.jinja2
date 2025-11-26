@@ -1,0 +1,172 @@
+{% extends "base.html.jinja2" %}
+
+{% block title %}{{ title }} - Python.org{% endblock %}
+
+{% block meta_description %}{{ description }}{% endblock %}
+
+{% block content %}
+<section class="python-gradient text-white py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-5xl font-bold mb-6">{{ title }}</h1>
+            <p class="text-xl opacity-90 mb-8">
+                {{ description }}
+            </p>
+            <div class="flex justify-center gap-4">
+                <a href="/about/governance" class="btn btn-lg btn-secondary gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    About PSF Governance
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <div class="max-w-5xl mx-auto">
+            {% if elections %}
+            <div class="space-y-8">
+                {% for election in elections %}
+                <article class="card bg-base-200 shadow-lg hover:shadow-xl transition-shadow">
+                    <div class="card-body">
+                        <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 mb-4">
+                            <div class="flex-1">
+                                <h2 class="card-title text-2xl text-python-blue mb-2">
+                                    <a href="/nominations/{{ election.slug }}" class="python-link">
+                                        {{ election.name }}
+                                    </a>
+                                </h2>
+
+                                {% if election.description %}
+                                <p class="text-base-content/80 mb-4">
+                                    {{ election.description[:200] }}{% if election.description|length > 200 %}...{% endif %}
+                                </p>
+                                {% endif %}
+                            </div>
+
+                            <div class="flex-shrink-0">
+                                {% if election.status == 'nominations_open' %}
+                                <span class="badge badge-success badge-lg gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    Nominations Open
+                                </span>
+                                {% elif election.status == 'voting_open' %}
+                                <span class="badge badge-info badge-lg gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                    </svg>
+                                    Voting Open
+                                </span>
+                                {% elif election.status == 'upcoming' %}
+                                <span class="badge badge-warning badge-lg gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    Upcoming
+                                </span>
+                                {% else %}
+                                <span class="badge badge-ghost badge-lg">
+                                    Closed
+                                </span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="divider my-2"></div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div class="space-y-3">
+                                <div class="flex items-start gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-python-blue flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                    </svg>
+                                    <div>
+                                        <p class="text-sm font-semibold text-base-content/70">Nominations</p>
+                                        <p class="text-sm text-base-content/90">
+                                            {{ election.nominations_open.strftime('%B %d, %Y') }} - {{ election.nominations_close.strftime('%B %d, %Y') }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="space-y-3">
+                                <div class="flex items-start gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-python-blue flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                                    </svg>
+                                    <div>
+                                        <p class="text-sm font-semibold text-base-content/70">Voting Period</p>
+                                        <p class="text-sm text-base-content/90">
+                                            {{ election.voting_open.strftime('%B %d, %Y') }} - {{ election.voting_close.strftime('%B %d, %Y') }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-actions justify-end">
+                            <a href="/nominations/{{ election.slug }}" class="btn btn-primary gap-2">
+                                View Election Details
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="alert alert-info shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>No active elections at this time. Check back later for upcoming PSF Board elections.</span>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-200 py-16">
+    <div class="section-container">
+        <div class="max-w-3xl mx-auto">
+            <div class="card bg-base-100 shadow-lg">
+                <div class="card-body">
+                    <h2 class="card-title text-2xl text-python-blue mb-4">About PSF Board Elections</h2>
+                    <div class="prose max-w-none">
+                        <p class="text-base-content/80 leading-relaxed">
+                            The Python Software Foundation (PSF) Board of Directors is elected annually by voting members.
+                            The board oversees the business and affairs of the PSF, working to advance the mission of the
+                            Python Software Foundation.
+                        </p>
+                        <p class="text-base-content/80 leading-relaxed mt-4">
+                            Elections typically consist of two phases: a nomination period where candidates can be nominated
+                            and accept their nominations, followed by a voting period where PSF voting members cast their ballots.
+                        </p>
+                    </div>
+                    <div class="card-actions justify-start mt-6">
+                        <a href="/about/membership" class="btn btn-outline gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                            Learn About PSF Membership
+                        </a>
+                        <a href="/about/governance" class="btn btn-outline gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            View Governance Documents
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,214 @@
+{% extends "base.html.jinja2" %}
+
+{% block title %}{{ sponsor.name }} - Python Sponsor{% endblock %}
+
+{% block meta_description %}{{ sponsor.description if sponsor.description else sponsor.name + ' is a proud sponsor of the Python Software Foundation' }}{% endblock %}
+
+{% block content %}
+<section class="bg-base-100 py-8">
+    <div class="section-container">
+        <div class="breadcrumbs text-sm mb-4">
+            <ul>
+                <li><a href="/" class="python-link">Home</a></li>
+                <li><a href="/sponsors" class="python-link">Sponsors</a></li>
+                <li>{{ sponsor.name }}</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-8">
+    <div class="section-container">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <main class="lg:col-span-2">
+                <article class="card bg-base-200 shadow-md">
+                    <div class="card-body">
+                        <div class="mb-6">
+                            {% if sponsor.web_logo %}
+                            <div class="flex justify-center mb-6 bg-white p-8 rounded-lg">
+                                <img src="{{ sponsor.web_logo }}"
+                                     alt="{{ sponsor.name }}"
+                                     class="max-w-full h-auto max-h-32"
+                                     loading="lazy" />
+                            </div>
+                            {% endif %}
+
+                            <h1 class="text-4xl font-bold text-python-blue mb-4 text-center">
+                                {{ sponsor.name }}
+                            </h1>
+
+                            {% if sponsor.description %}
+                            <div class="prose max-w-none mb-6">
+                                <p class="text-lg text-base-content/90 text-center">
+                                    {{ sponsor.description }}
+                                </p>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            {% if sponsor.landing_page_url %}
+                            <div class="flex items-start gap-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-python-blue flex-shrink-0 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <div>
+                                    <p class="text-sm font-semibold text-base-content/70">Website</p>
+                                    <a href="{{ sponsor.landing_page_url }}"
+                                       target="_blank"
+                                       rel="noopener noreferrer"
+                                       class="python-link text-lg">
+                                        {{ sponsor.landing_page_url | replace('https://', '') | replace('http://', '') | truncate(40) }}
+                                    </a>
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            {% if sponsor.twitter_handle %}
+                            <div class="flex items-start gap-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-python-blue flex-shrink-0 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                                </svg>
+                                <div>
+                                    <p class="text-sm font-semibold text-base-content/70">Twitter</p>
+                                    <a href="https://twitter.com/{{ sponsor.twitter_handle | replace('@', '') }}"
+                                       target="_blank"
+                                       rel="noopener noreferrer"
+                                       class="python-link text-lg">
+                                        @{{ sponsor.twitter_handle | replace('@', '') }}
+                                    </a>
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            {% if sponsor.linked_in_page_url %}
+                            <div class="flex items-start gap-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-python-blue flex-shrink-0 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                                <div>
+                                    <p class="text-sm font-semibold text-base-content/70">LinkedIn</p>
+                                    <a href="{{ sponsor.linked_in_page_url }}"
+                                       target="_blank"
+                                       rel="noopener noreferrer"
+                                       class="python-link text-lg">
+                                        View on LinkedIn
+                                    </a>
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            {% if sponsor.city or sponsor.state or sponsor.country %}
+                            <div class="flex items-start gap-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-python-blue flex-shrink-0 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                                <div>
+                                    <p class="text-sm font-semibold text-base-content/70">Location</p>
+                                    <p class="text-lg text-base-content/90">
+                                        {% if sponsor.city %}{{ sponsor.city }}{% if sponsor.state or sponsor.country %}, {% endif %}{% endif %}
+                                        {% if sponsor.state %}{{ sponsor.state }}{% if sponsor.country %}, {% endif %}{% endif %}
+                                        {% if sponsor.country %}{{ sponsor.country }}{% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        {% if sponsorships %}
+                        <div class="divider"></div>
+
+                        <div class="mb-6">
+                            <h2 class="text-2xl font-bold text-python-blue mb-4">Sponsorship History</h2>
+                            <div class="space-y-4">
+                                {% for sponsorship in sponsorships %}
+                                <div class="flex items-center justify-between p-4 bg-base-300 rounded-lg">
+                                    <div class="flex-1">
+                                        <div class="flex items-center gap-2">
+                                            <span class="badge badge-primary">{{ sponsorship.level.name if sponsorship.level else 'Standard' }}</span>
+                                            {% if sponsorship.status %}
+                                            <span class="badge {% if sponsorship.status.value == 'active' %}badge-success{% elif sponsorship.status.value == 'finalized' %}badge-info{% else %}badge-ghost{% endif %}">
+                                                {{ sponsorship.status.value | title }}
+                                            </span>
+                                            {% endif %}
+                                        </div>
+                                        <div class="mt-2 text-sm text-base-content/70">
+                                            {% if sponsorship.start_date and sponsorship.end_date %}
+                                            <span class="flex items-center gap-1">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                </svg>
+                                                {{ sponsorship.start_date.strftime('%B %d, %Y') }} - {{ sponsorship.end_date.strftime('%B %d, %Y') }}
+                                            </span>
+                                            {% elif sponsorship.year %}
+                                            <span>Year: {{ sponsorship.year }}</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <div class="card-actions justify-between items-center pt-4 border-t border-base-300">
+                            <div class="flex gap-2">
+                                <button class="btn btn-ghost btn-sm gap-2" onclick="window.history.back()">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                                    </svg>
+                                    Back to Sponsors
+                                </button>
+
+                                {% if sponsor.landing_page_url %}
+                                <a href="{{ sponsor.landing_page_url }}"
+                                   target="_blank"
+                                   rel="noopener noreferrer"
+                                   class="btn btn-primary btn-sm gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                    </svg>
+                                    Visit Website
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </main>
+
+            <aside class="lg:col-span-1">
+                <div class="card bg-gradient-to-br from-python-blue to-python-yellow text-white shadow-sm mb-6">
+                    <div class="card-body">
+                        <h3 class="card-title text-lg mb-2">Become a Sponsor</h3>
+                        <p class="text-sm opacity-90 mb-4">
+                            Join {{ sponsor.name }} in supporting Python
+                        </p>
+                        <a href="/sponsors/apply" class="btn btn-primary btn-sm btn-block">
+                            Apply Now
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200 shadow-sm">
+                    <div class="card-body">
+                        <h3 class="card-title text-lg mb-4">About Sponsorship</h3>
+                        <div class="space-y-4 text-sm">
+                            <p class="text-base-content/80">
+                                Sponsors like {{ sponsor.name }} help us maintain and improve Python infrastructure, fund development, and support the global Python community.
+                            </p>
+                            <div class="divider my-2"></div>
+                            <a href="/sponsors" class="btn btn-outline btn-sm btn-block">
+                                View All Sponsors
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+</section>
+{% endblock %}

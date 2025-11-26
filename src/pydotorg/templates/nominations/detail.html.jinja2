@@ -1,0 +1,410 @@
+{% extends "base.html.jinja2" %}
+
+{% block title %}{{ title }} - Python.org{% endblock %}
+
+{% block meta_description %}{{ description }}{% endblock %}
+
+{% block breadcrumbs %}
+<div class="bg-base-200 py-4">
+    <div class="section-container">
+        <div class="breadcrumbs text-sm">
+            <ul>
+                <li><a href="/" class="python-link">Home</a></li>
+                <li><a href="/nominations" class="python-link">Elections</a></li>
+                <li>{{ election.name }}</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<section class="bg-base-100 py-12">
+    <div class="section-container">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2">
+                <article class="space-y-6">
+                    <div class="flex flex-wrap gap-3 items-center">
+                        <h1 class="text-4xl font-bold text-python-blue">{{ election.name }}</h1>
+                        {% if election.status == 'nominations_open' %}
+                        <span class="badge badge-success badge-lg gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Nominations Open
+                        </span>
+                        {% elif election.status == 'voting_open' %}
+                        <span class="badge badge-info badge-lg gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                            </svg>
+                            Voting Open
+                        </span>
+                        {% elif election.status == 'upcoming' %}
+                        <span class="badge badge-warning badge-lg gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Upcoming
+                        </span>
+                        {% else %}
+                        <span class="badge badge-ghost badge-lg">Closed</span>
+                        {% endif %}
+                    </div>
+
+                    {% if election.description %}
+                    <div class="prose max-w-none">
+                        <p class="text-lg text-base-content/80 leading-relaxed">
+                            {{ election.description }}
+                        </p>
+                    </div>
+                    {% endif %}
+
+                    <div class="card bg-base-200">
+                        <div class="card-body">
+                            <h2 class="card-title text-xl mb-4">Election Timeline</h2>
+                            <ul class="timeline timeline-vertical">
+                                <li>
+                                    <div class="timeline-start timeline-box {% if election.status in ['nominations_open', 'voting_open', 'closed'] %}bg-success text-success-content{% endif %}">
+                                        <p class="font-semibold">Nominations Open</p>
+                                        <p class="text-sm">{{ election.nominations_open.strftime('%B %d, %Y') }}</p>
+                                    </div>
+                                    <div class="timeline-middle">
+                                        {% if election.status in ['nominations_open', 'voting_open', 'closed'] %}
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-success" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                        </svg>
+                                        {% else %}
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-base-content/30" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16z" clip-rule="evenodd" />
+                                        </svg>
+                                        {% endif %}
+                                    </div>
+                                    <hr class="{% if election.status in ['nominations_open', 'voting_open', 'closed'] %}bg-success{% else %}bg-base-content/30{% endif %}" />
+                                </li>
+                                <li>
+                                    <hr class="{% if election.status in ['voting_open', 'closed'] %}bg-success{% else %}bg-base-content/30{% endif %}" />
+                                    <div class="timeline-start timeline-box {% if election.status in ['voting_open', 'closed'] %}bg-success text-success-content{% endif %}">
+                                        <p class="font-semibold">Nominations Close</p>
+                                        <p class="text-sm">{{ election.nominations_close.strftime('%B %d, %Y') }}</p>
+                                    </div>
+                                    <div class="timeline-middle">
+                                        {% if election.status in ['voting_open', 'closed'] %}
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-success" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                        </svg>
+                                        {% else %}
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-base-content/30" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16z" clip-rule="evenodd" />
+                                        </svg>
+                                        {% endif %}
+                                    </div>
+                                    <hr class="{% if election.status in ['voting_open', 'closed'] %}bg-success{% else %}bg-base-content/30{% endif %}" />
+                                </li>
+                                <li>
+                                    <hr class="{% if election.status in ['voting_open', 'closed'] %}bg-success{% else %}bg-base-content/30{% endif %}" />
+                                    <div class="timeline-start timeline-box {% if election.status in ['voting_open', 'closed'] %}bg-success text-success-content{% endif %}">
+                                        <p class="font-semibold">Voting Opens</p>
+                                        <p class="text-sm">{{ election.voting_open.strftime('%B %d, %Y') }}</p>
+                                    </div>
+                                    <div class="timeline-middle">
+                                        {% if election.status in ['voting_open', 'closed'] %}
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-success" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                        </svg>
+                                        {% else %}
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-base-content/30" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16z" clip-rule="evenodd" />
+                                        </svg>
+                                        {% endif %}
+                                    </div>
+                                    <hr class="{% if election.status == 'closed' %}bg-success{% else %}bg-base-content/30{% endif %}" />
+                                </li>
+                                <li>
+                                    <hr class="{% if election.status == 'closed' %}bg-success{% else %}bg-base-content/30{% endif %}" />
+                                    <div class="timeline-start timeline-box {% if election.status == 'closed' %}bg-success text-success-content{% endif %}">
+                                        <p class="font-semibold">Voting Closes</p>
+                                        <p class="text-sm">{{ election.voting_close.strftime('%B %d, %Y') }}</p>
+                                    </div>
+                                    <div class="timeline-middle">
+                                        {% if election.status == 'closed' %}
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-success" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                        </svg>
+                                        {% else %}
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-base-content/30" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16z" clip-rule="evenodd" />
+                                        </svg>
+                                        {% endif %}
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    {% if election.status == 'nominations_open' %}
+                    <div class="card bg-gradient-to-br from-python-blue to-python-yellow text-white shadow-lg">
+                        <div class="card-body">
+                            <h2 class="card-title text-2xl mb-2">Submit Your Nomination</h2>
+                            <p class="mb-4 opacity-90">
+                                Nominations are currently open for this election. If you are a PSF voting member,
+                                you may nominate candidates or accept a nomination.
+                            </p>
+                            <div class="card-actions">
+                                <button class="btn btn-secondary btn-lg gap-2" onclick="document.getElementById('nomination-form').scrollIntoView({behavior: 'smooth'})">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                    </svg>
+                                    Nominate a Candidate
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <div class="divider"></div>
+
+                    <div id="nominees-section">
+                        <h2 class="text-3xl font-bold text-python-blue mb-6">
+                            {% if election.status == 'nominations_open' %}
+                            Accepted Nominees
+                            {% else %}
+                            Candidates
+                            {% endif %}
+                        </h2>
+
+                        {% if nominees %}
+                        <div class="grid grid-cols-1 gap-4">
+                            {% for nominee in nominees %}
+                            <article class="card bg-base-200 shadow-sm hover:shadow-md transition-shadow">
+                                <div class="card-body">
+                                    <div class="flex items-start gap-4">
+                                        <div class="avatar placeholder">
+                                            <div class="bg-python-blue text-white rounded-full w-12 h-12">
+                                                <span class="text-xl">{{ nominee.user.username[0]|upper }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex-1">
+                                            <h3 class="text-xl font-bold text-python-blue">
+                                                {{ nominee.user.username }}
+                                            </h3>
+                                            {% if nominee.user.email %}
+                                            <p class="text-sm text-base-content/60">{{ nominee.user.email }}</p>
+                                            {% endif %}
+
+                                            {% if nominee.nominations and nominee.nominations|length > 0 %}
+                                            <div class="mt-4">
+                                                <p class="text-sm font-semibold text-base-content/70 mb-2">
+                                                    Nominations: {{ nominee.nominations|length }}
+                                                </p>
+                                                <div class="space-y-2">
+                                                    {% for nomination in nominee.nominations[:3] %}
+                                                    {% if nomination.endorsement %}
+                                                    <div class="pl-4 border-l-2 border-python-blue">
+                                                        <p class="text-sm text-base-content/80 italic">
+                                                            "{{ nomination.endorsement[:200] }}{% if nomination.endorsement|length > 200 %}...{% endif %}"
+                                                        </p>
+                                                        <p class="text-xs text-base-content/60 mt-1">
+                                                            - {{ nomination.nominator.username }}
+                                                        </p>
+                                                    </div>
+                                                    {% endif %}
+                                                    {% endfor %}
+                                                    {% if nominee.nominations|length > 3 %}
+                                                    <p class="text-xs text-base-content/60">
+                                                        + {{ nominee.nominations|length - 3 }} more nomination(s)
+                                                    </p>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                        <div class="badge badge-success">Accepted</div>
+                                    </div>
+                                </div>
+                            </article>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <div class="alert alert-info">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span>No accepted nominations yet for this election.</span>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    {% if election.status == 'nominations_open' %}
+                    <div class="divider"></div>
+
+                    <div id="nomination-form" class="card bg-base-200">
+                        <div class="card-body">
+                            <h2 class="card-title text-2xl text-python-blue mb-4">Nominate a Candidate</h2>
+                            <div class="alert alert-warning mb-6">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                </svg>
+                                <span>You must be a PSF voting member to submit nominations. Please log in to continue.</span>
+                            </div>
+
+                            <form
+                                hx-post="/api/nominations/{{ election.slug }}/nominate"
+                                hx-ext="loading-states"
+                                hx-target="#nomination-response"
+                                hx-swap="innerHTML"
+                                class="space-y-4"
+                            >
+                                <div class="form-control">
+                                    <label class="label">
+                                        <span class="label-text font-semibold">Nominee Username</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="nominee_username"
+                                        class="input input-bordered w-full"
+                                        placeholder="Enter the nominee's username"
+                                        required
+                                    />
+                                    <label class="label">
+                                        <span class="label-text-alt">The username of the person you are nominating</span>
+                                    </label>
+                                </div>
+
+                                <div class="form-control">
+                                    <label class="label">
+                                        <span class="label-text font-semibold">Endorsement (Optional)</span>
+                                    </label>
+                                    <textarea
+                                        name="endorsement"
+                                        class="textarea textarea-bordered h-32"
+                                        placeholder="Why do you think this person would be a great board member?"
+                                    ></textarea>
+                                    <label class="label">
+                                        <span class="label-text-alt">Your endorsement will be publicly visible</span>
+                                    </label>
+                                </div>
+
+                                <div id="nomination-response" class="min-h-4"></div>
+
+                                <div class="card-actions justify-end">
+                                    <button type="submit" class="btn btn-primary gap-2" data-loading-disable>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                        </svg>
+                                        Submit Nomination
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    {% endif %}
+                </article>
+            </div>
+
+            <aside class="lg:col-span-1">
+                <div class="space-y-6 sticky top-4">
+                    <div class="card bg-base-200 shadow-sm">
+                        <div class="card-body">
+                            <h3 class="card-title text-lg mb-4">Election Details</h3>
+
+                            <div class="space-y-4">
+                                <div>
+                                    <div class="flex items-center gap-2 text-sm font-semibold mb-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-python-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        Current Status
+                                    </div>
+                                    <p class="text-base-content/80">
+                                        {% if election.status == 'nominations_open' %}
+                                        Accepting nominations
+                                        {% elif election.status == 'voting_open' %}
+                                        Voting in progress
+                                        {% elif election.status == 'upcoming' %}
+                                        Not yet started
+                                        {% else %}
+                                        Election closed
+                                        {% endif %}
+                                    </p>
+                                </div>
+
+                                {% if nominees %}
+                                <div>
+                                    <div class="flex items-center gap-2 text-sm font-semibold mb-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-python-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                        </svg>
+                                        Accepted Nominees
+                                    </div>
+                                    <p class="text-base-content/80">{{ nominees|length }} candidate{{ 's' if nominees|length != 1 else '' }}</p>
+                                </div>
+                                {% endif %}
+
+                                <div class="divider my-2"></div>
+
+                                <div>
+                                    <h4 class="text-sm font-semibold mb-3">Key Dates</h4>
+                                    <div class="space-y-2 text-sm">
+                                        <div class="flex justify-between">
+                                            <span class="text-base-content/70">Nominations:</span>
+                                            <span class="font-medium">{{ election.nominations_open.strftime('%b %d') }} - {{ election.nominations_close.strftime('%b %d') }}</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-base-content/70">Voting:</span>
+                                            <span class="font-medium">{{ election.voting_open.strftime('%b %d') }} - {{ election.voting_close.strftime('%b %d') }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card bg-base-200 shadow-sm">
+                        <div class="card-body">
+                            <h3 class="card-title text-lg mb-4">Resources</h3>
+                            <div class="space-y-2">
+                                <a href="/about/governance" class="btn btn-sm btn-outline btn-block justify-start gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
+                                    Governance Docs
+                                </a>
+                                <a href="/about/membership" class="btn btn-sm btn-outline btn-block justify-start gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                    </svg>
+                                    PSF Membership
+                                </a>
+                                <a href="/nominations" class="btn btn-sm btn-outline btn-block justify-start gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                                    </svg>
+                                    All Elections
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if election.status == 'voting_open' %}
+                    <div class="card bg-gradient-to-br from-python-blue to-python-yellow text-white shadow-lg">
+                        <div class="card-body">
+                            <h3 class="card-title text-lg mb-2">Cast Your Vote</h3>
+                            <p class="text-sm opacity-90 mb-4">
+                                Voting is now open for PSF voting members.
+                            </p>
+                            <a href="/nominations/{{ election.slug }}/vote" class="btn btn-secondary btn-sm gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                                </svg>
+                                Vote Now
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </aside>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,171 @@
+{% extends "base.html.jinja2" %}
+
+{% block title %}Python {{ release.version }} Release | Python.org{% endblock %}
+
+{% block meta_description %}Download Python {{ release.version }}. Released on {{ release.release_date.strftime('%B %d, %Y') if release.release_date else 'TBD' }}.{% endblock %}
+
+{% block breadcrumbs %}
+<div class="bg-base-200 py-4">
+    <div class="section-container">
+        <div class="text-sm breadcrumbs">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/downloads/">Downloads</a></li>
+                <li>Python {{ release.version }}</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <div class="max-w-6xl mx-auto">
+            <div class="mb-8">
+                <div class="flex items-center gap-4 mb-4">
+                    <h1 class="text-5xl font-bold text-python-blue">
+                        Python {{ release.version }}
+                    </h1>
+                    {% if release.pre_release %}
+                        <span class="badge badge-warning">Pre-release</span>
+                    {% else %}
+                        <span class="badge badge-success">Stable</span>
+                    {% endif %}
+                </div>
+
+                {% if release.release_date %}
+                <p class="text-lg text-base-content/70">
+                    Released on {{ release.release_date.strftime('%B %d, %Y') }}
+                </p>
+                {% endif %}
+            </div>
+
+            {% if release.content %}
+            <div class="card bg-base-200 mb-8">
+                <div class="card-body">
+                    <h2 class="card-title text-2xl text-python-blue mb-4">Release Notes</h2>
+                    <div class="prose max-w-none">
+                        {{ release.content|safe }}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-python-blue mb-6">Download Files</h2>
+
+                {% if files_by_os %}
+                <div role="tablist" class="tabs tabs-lifted tabs-lg">
+                    {% set os_list = files_by_os.keys()|list %}
+                    {% for os_name in os_list %}
+                    <input
+                        type="radio"
+                        name="os_tabs"
+                        role="tab"
+                        class="tab"
+                        aria-label="{{ os_name }}"
+                        {% if loop.first %}checked{% endif %}
+                    />
+                    <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
+                        <h3 class="text-xl font-semibold text-python-blue mb-4">{{ os_name }}</h3>
+
+                        {% set files = files_by_os[os_name] %}
+                        {% if files %}
+                        <div class="overflow-x-auto">
+                            <table class="table w-full">
+                                <thead>
+                                    <tr>
+                                        <th>File</th>
+                                        <th>Size</th>
+                                        <th>MD5</th>
+                                        <th>Download</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for file in files %}
+                                    <tr class="hover">
+                                        <td class="font-mono text-sm">
+                                            {{ file.name }}
+                                        </td>
+                                        <td>
+                                            {% if file.filesize %}
+                                                {{ (file.filesize / 1024 / 1024)|round(2) }} MB
+                                            {% else %}
+                                                -
+                                            {% endif %}
+                                        </td>
+                                        <td class="font-mono text-xs">
+                                            {% if file.md5_digest %}
+                                                <code class="bg-base-200 px-2 py-1 rounded">{{ file.md5_digest[:8] }}...</code>
+                                            {% else %}
+                                                -
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <a href="{{ file.url }}" class="btn btn-primary btn-sm gap-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                                </svg>
+                                                {{ file.download_button_text or 'Download' }}
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% else %}
+                        <div class="alert alert-info">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span>No files available for {{ os_name }}.</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="alert alert-warning">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    <span>No download files are currently available for this release.</span>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="card bg-base-200">
+                <div class="card-body">
+                    <h2 class="card-title text-xl text-python-blue mb-4">Installation Help</h2>
+                    <div class="prose max-w-none">
+                        <p class="text-base-content/80">
+                            Need help installing Python? Check out our
+                            <a href="https://docs.python.org/3/using/index.html" class="python-link">installation guides</a>
+                            for your operating system.
+                        </p>
+                        <ul class="text-base-content/80">
+                            <li><a href="https://docs.python.org/3/using/windows.html" class="python-link">Windows Installation Guide</a></li>
+                            <li><a href="https://docs.python.org/3/using/mac.html" class="python-link">macOS Installation Guide</a></li>
+                            <li><a href="https://docs.python.org/3/using/unix.html" class="python-link">Unix/Linux Installation Guide</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 flex gap-4">
+                <a href="/downloads/" class="btn btn-outline">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                    Back to Downloads
+                </a>
+                <a href="https://docs.python.org/{{ release.version.split('.')[0] }}/" class="btn btn-primary">
+                    View Documentation
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

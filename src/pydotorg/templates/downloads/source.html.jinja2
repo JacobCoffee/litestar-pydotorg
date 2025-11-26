@@ -1,0 +1,186 @@
+{% extends "base.html.jinja2" %}
+
+{% block title %}Download Python Source Code | Python.org{% endblock %}
+
+{% block meta_description %}Download Python source code for compilation on any platform. Build Python from source for maximum flexibility.{% endblock %}
+
+{% block breadcrumbs %}
+<div class="bg-base-200 py-4">
+    <div class="section-container">
+        <div class="text-sm breadcrumbs">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/downloads/">Downloads</a></li>
+                <li>Source Releases</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <div class="max-w-6xl mx-auto">
+            <div class="mb-12">
+                <h1 class="text-5xl font-bold text-python-blue mb-6">
+                    Python Source Releases
+                </h1>
+
+                <div class="card bg-base-200 mb-8">
+                    <div class="card-body">
+                        <h2 class="card-title text-2xl text-python-blue mb-4">About Source Releases</h2>
+                        <div class="prose max-w-none">
+                            <p class="text-base-content/80">
+                                For most Unix systems, you must download and compile the source code.
+                                The same source code archive can also be used to build the Windows and Mac versions,
+                                and is the starting point for ports to all other platforms.
+                            </p>
+                            <p class="text-base-content/80">
+                                Download the latest Python 3 and Python 2 source. Read more about the
+                                <a href="https://devguide.python.org/" class="python-link">Python development process</a>
+                                or consult the
+                                <a href="https://docs.python.org/devguide/" class="python-link">Developer's Guide</a>
+                                for contributing to Python.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-info mb-8">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <div>
+                        <h3 class="font-bold">Building from Source</h3>
+                        <div class="text-sm">
+                            Before building, make sure you have the necessary dependencies installed.
+                            See the <a href="https://devguide.python.org/getting-started/setup-building/" class="python-link">setup guide</a>
+                            for your platform.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-python-blue mb-6">Available Source Releases</h2>
+
+                {% if releases %}
+                <div class="overflow-x-auto bg-base-100 rounded-lg shadow-lg">
+                    <table class="table w-full">
+                        <thead>
+                            <tr>
+                                <th>Version</th>
+                                <th>Release Date</th>
+                                <th>Type</th>
+                                <th>Download</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for release in releases %}
+                            <tr class="hover">
+                                <td>
+                                    <a href="/downloads/release/{{ release.slug }}/" class="font-semibold text-python-blue hover:underline">
+                                        Python {{ release.version }}
+                                    </a>
+                                </td>
+                                <td>
+                                    {% if release.release_date %}
+                                        {{ release.release_date.strftime('%B %d, %Y') }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="flex gap-2">
+                                        {% if release.pre_release %}
+                                            <span class="badge badge-warning badge-sm">Pre-release</span>
+                                        {% else %}
+                                            <span class="badge badge-success badge-sm">Stable</span>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="flex gap-2">
+                                        <a href="/downloads/release/{{ release.slug }}/" class="btn btn-primary btn-sm gap-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                            </svg>
+                                            Source
+                                        </a>
+                                        <a href="/downloads/release/{{ release.slug }}/" class="btn btn-ghost btn-sm">
+                                            Details
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="alert alert-info">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span>No source releases are currently available.</span>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
+                <div class="card bg-base-200">
+                    <div class="card-body">
+                        <h2 class="card-title text-xl text-python-blue mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            Building Documentation
+                        </h2>
+                        <div class="prose max-w-none">
+                            <p class="text-base-content/80 text-sm">
+                                Learn how to build Python from source on your platform:
+                            </p>
+                            <ul class="text-base-content/80 text-sm">
+                                <li><a href="https://devguide.python.org/getting-started/setup-building/" class="python-link">Setup and Building</a></li>
+                                <li><a href="https://github.com/python/cpython" class="python-link">CPython on GitHub</a></li>
+                                <li><a href="https://devguide.python.org/" class="python-link">Developer Guide</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200">
+                    <div class="card-body">
+                        <h2 class="card-title text-xl text-python-blue mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                            GPG Verification
+                        </h2>
+                        <div class="prose max-w-none">
+                            <p class="text-base-content/80 text-sm">
+                                All downloads should be verified using GPG signatures:
+                            </p>
+                            <ul class="text-base-content/80 text-sm">
+                                <li><a href="https://www.python.org/downloads/metadata/pubkeys/" class="python-link">Public Keys</a></li>
+                                <li><a href="https://www.python.org/downloads/#pubkeys" class="python-link">How to Verify</a></li>
+                                <li>Check SHA256 checksums in release files</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8">
+                <a href="/downloads/" class="btn btn-outline">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                    Back to Downloads
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

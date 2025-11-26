@@ -1,0 +1,201 @@
+{% extends "base.html.jinja2" %}
+
+{% block title %}{{ event.title }} - Python Events{% endblock %}
+
+{% block meta_description %}{{ event.description[:155] if event.description else 'Join us for ' + event.title }}{% endblock %}
+
+{% block breadcrumbs %}
+<div class="bg-base-200 py-4">
+    <div class="section-container">
+        <div class="breadcrumbs text-sm">
+            <ul>
+                <li><a href="/" class="python-link">Home</a></li>
+                <li><a href="/events/" class="python-link">Events</a></li>
+                {% if calendar %}
+                <li><a href="/events/calendar/{{ calendar.slug }}/" class="python-link">{{ calendar.name }}</a></li>
+                {% endif %}
+                <li>{{ event.title }}</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<section class="bg-base-100 py-12">
+    <div class="section-container">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2">
+                <article class="space-y-6">
+                    {% if event.featured %}
+                    <div class="badge badge-primary badge-lg">Featured Event</div>
+                    {% endif %}
+
+                    <div class="flex flex-wrap gap-2">
+                        {% for category in event.categories %}
+                        <span class="badge badge-ghost">{{ category.name }}</span>
+                        {% endfor %}
+                    </div>
+
+                    <h1 class="text-4xl font-bold text-python-blue">{{ event.title }}</h1>
+
+                    {% if event.description %}
+                    <div class="prose max-w-none">
+                        {{ event.description }}
+                    </div>
+                    {% endif %}
+
+                    {% if event.url %}
+                    <div class="card bg-base-200">
+                        <div class="card-body">
+                            <h3 class="card-title text-lg">Event Website</h3>
+                            <a href="{{ event.url }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                </svg>
+                                Visit Event Website
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if event.occurrences and event.occurrences|length > 1 %}
+                    <div class="card bg-base-200">
+                        <div class="card-body">
+                            <h3 class="card-title text-lg">All Occurrences</h3>
+                            <div class="space-y-3">
+                                {% for occurrence in event.occurrences %}
+                                <div class="flex items-center gap-3 text-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-python-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                    <time datetime="{{ occurrence.dt_start.isoformat() }}">
+                                        {{ occurrence.dt_start.strftime('%A, %B %d, %Y at %I:%M %p') }}
+                                        {% if occurrence.dt_end %}
+                                        - {{ occurrence.dt_end.strftime('%I:%M %p') }}
+                                        {% endif %}
+                                    </time>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </article>
+            </div>
+
+            <div class="lg:col-span-1">
+                <div class="space-y-6">
+                    <div class="card bg-base-200 shadow-md sticky top-4">
+                        <div class="card-body">
+                            <h2 class="card-title text-lg mb-4">Event Details</h2>
+
+                            {% if event.occurrences and event.occurrences|length > 0 %}
+                            <div class="space-y-4">
+                                <div>
+                                    <div class="flex items-center gap-2 text-sm font-semibold mb-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-python-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        </svg>
+                                        Date & Time
+                                    </div>
+                                    <time datetime="{{ event.occurrences[0].dt_start.isoformat() }}" class="text-base-content/80">
+                                        {{ event.occurrences[0].dt_start.strftime('%A, %B %d, %Y') }}<br>
+                                        {{ event.occurrences[0].dt_start.strftime('%I:%M %p') }}
+                                        {% if event.occurrences[0].dt_end %}
+                                        - {{ event.occurrences[0].dt_end.strftime('%I:%M %p') }}
+                                        {% endif %}
+                                    </time>
+                                </div>
+
+                                {% if event.venue %}
+                                <div>
+                                    <div class="flex items-center gap-2 text-sm font-semibold mb-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-python-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        </svg>
+                                        Location
+                                    </div>
+                                    <div class="text-base-content/80">
+                                        <p class="font-medium">{{ event.venue.name }}</p>
+                                        {% if event.venue.address %}
+                                        <p class="text-sm">{{ event.venue.address }}</p>
+                                        {% endif %}
+                                        {% if event.venue.city and event.venue.state %}
+                                        <p class="text-sm">{{ event.venue.city }}, {{ event.venue.state }}</p>
+                                        {% endif %}
+                                        {% if event.venue.country %}
+                                        <p class="text-sm">{{ event.venue.country }}</p>
+                                        {% endif %}
+                                    </div>
+                                    {% if event.venue.latitude and event.venue.longitude %}
+                                    <a href="https://www.google.com/maps/search/?api=1&query={{ event.venue.latitude }},{{ event.venue.longitude }}"
+                                       target="_blank"
+                                       rel="noopener noreferrer"
+                                       class="btn btn-sm btn-outline btn-primary mt-2 gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                                        </svg>
+                                        View Map
+                                    </a>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+
+                                <div class="divider my-4"></div>
+
+                                <div>
+                                    <h3 class="text-sm font-semibold mb-3">Add to Calendar</h3>
+                                    <div class="flex flex-col gap-2">
+                                        <a href="/events/{{ event.slug }}/ical/"
+                                           class="btn btn-sm btn-outline gap-2"
+                                           download="{{ event.slug }}.ics">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                            </svg>
+                                            iCalendar
+                                        </a>
+                                        <a href="https://www.google.com/calendar/render?action=TEMPLATE&text={{ event.title|urlencode }}&dates={{ event.occurrences[0].dt_start.strftime('%Y%m%dT%H%M%SZ') }}{% if event.occurrences[0].dt_end %}/{{ event.occurrences[0].dt_end.strftime('%Y%m%dT%H%M%SZ') }}{% endif %}&details={{ event.description|urlencode if event.description else '' }}&location={{ event.venue.name|urlencode if event.venue else '' }}"
+                                           target="_blank"
+                                           rel="noopener noreferrer"
+                                           class="btn btn-sm btn-outline gap-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                            </svg>
+                                            Google Calendar
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    {% if related_events %}
+                    <div class="card bg-base-200">
+                        <div class="card-body">
+                            <h3 class="card-title text-lg">Related Events</h3>
+                            <div class="space-y-3">
+                                {% for related in related_events[:5] %}
+                                {% if related.id != event.id %}
+                                <a href="/events/{{ related.slug }}/" class="block hover:bg-base-300 p-2 rounded transition-colors">
+                                    <h4 class="font-semibold text-sm python-link">{{ related.title }}</h4>
+                                    {% if related.occurrences and related.occurrences|length > 0 %}
+                                    <p class="text-xs text-base-content/60 mt-1">
+                                        {{ related.occurrences[0].dt_start.strftime('%B %d, %Y') }}
+                                    </p>
+                                    {% endif %}
+                                </a>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

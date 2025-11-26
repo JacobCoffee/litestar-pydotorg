@@ -1,0 +1,187 @@
+{% extends "base.html.jinja2" %}
+{% import "macros/buttons.html.jinja2" as buttons %}
+{% import "macros/cards.html.jinja2" as cards %}
+
+{% block title %}Download Python | Python.org{% endblock %}
+
+{% block meta_description %}Download the latest version of Python. Official Python downloads for Windows, macOS, and Linux.{% endblock %}
+
+{% block content %}
+<section class="python-gradient text-white">
+    <div class="section-container py-20">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-5xl md:text-6xl font-bold mb-6">
+                Download Python
+            </h1>
+            {% if latest_python3 %}
+            <p class="text-xl md:text-2xl mb-8 opacity-90">
+                The latest stable release is Python {{ latest_python3.version }}
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                {{ buttons.download_button('Download Python ' + latest_python3.version, '/downloads/release/' + latest_python3.slug + '/', 'lg', 'Latest stable release') }}
+                <a href="/downloads/source/" class="btn btn-outline btn-lg text-white border-white hover:bg-white/10">
+                    Download Source
+                </a>
+            </div>
+            {% else %}
+            <p class="text-xl md:text-2xl mb-8 opacity-90">
+                Get the latest version of Python
+            </p>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold text-python-blue mb-4">Quick Downloads</h2>
+            <p class="text-lg text-base-content/80">Choose your operating system</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {{ cards.download_card(
+                'Windows',
+                latest_python3.version if latest_python3 else '3.12',
+                '',
+                '/downloads/windows/',
+                '<svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-python-blue" fill="currentColor" viewBox="0 0 24 24"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/></svg>'
+            ) }}
+
+            {{ cards.download_card(
+                'macOS',
+                latest_python3.version if latest_python3 else '3.12',
+                '',
+                '/downloads/macos/',
+                '<svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-python-blue" fill="currentColor" viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>'
+            ) }}
+
+            {{ cards.download_card(
+                'Linux/Unix',
+                latest_python3.version if latest_python3 else '3.12',
+                '',
+                '/downloads/source/',
+                '<svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-python-blue" fill="currentColor" viewBox="0 0 24 24"><path d="M12.504 0c-.155 0-.315.008-.48.021-4.226.333-3.105 4.807-3.17 6.298-.076 1.092-.3 1.953-1.05 3.02-.885 1.051-2.127 2.75-2.716 4.521-.278.84-.41 1.691-.348 2.501.18 2.329 1.624 3.79 3.717 4.47.34.12.681.215 1.023.286.682.14 1.364.205 2.034.205 1.23 0 2.38-.205 3.301-.615.882-.39 1.485-.99 1.737-1.737.253-.747.18-1.531-.09-2.227-.285-.73-.825-1.336-1.486-1.71-.66-.375-1.455-.57-2.264-.57-.375 0-.75.045-1.11.135-.36.09-.69.24-.975.435a2.715 2.715 0 0 0-.645.63c-.18.255-.3.555-.36.87-.06.315-.045.645.045.96.09.315.255.6.495.825.24.225.54.375.87.45.33.075.675.06.99-.045.09-.03.165-.075.225-.135.06-.06.105-.135.135-.225.03-.09.03-.195 0-.285-.03-.09-.09-.18-.18-.24-.09-.06-.21-.09-.33-.09-.09 0-.18.03-.255.075-.075.045-.135.12-.165.21-.03.09-.015.195.03.285.045.09.12.15.21.18.045.015.09.015.135 0 .045-.015.075-.045.09-.09.015-.045.015-.09 0-.135-.015-.045-.045-.075-.09-.09-.045-.015-.09-.015-.135 0-.045.015-.075.045-.09.09-.015.045-.015.09 0 .135.015.045.045.075.09.09.045.015.09.015.135 0 .12-.03.225-.105.285-.21.06-.105.075-.225.045-.33-.03-.105-.105-.195-.21-.255-.105-.06-.225-.075-.33-.045-.105.03-.195.105-.255.21-.06.105-.075.225-.045.33.03.105.105.195.21.255.105.06.225.075.33.045.24-.06.45-.21.6-.42.15-.21.225-.465.225-.72 0-.255-.075-.51-.225-.72-.15-.21-.36-.36-.6-.42-.24-.06-.51-.045-.735.045-.225.09-.42.255-.54.465-.12.21-.18.45-.18.69 0 .24.06.48.18.69.12.21.315.375.54.465.225.09.495.105.735.045.72-.18 1.26-.72 1.41-1.41.075-.345.06-.705-.045-1.05-.105-.345-.3-.66-.57-.9-.27-.24-.615-.39-.99-.45-.375-.06-.765-.03-1.125.09-.36.12-.69.33-.945.615-.255.285-.435.63-.525 1.005-.09.375-.075.765.045 1.125.12.36.33.69.615.945.285.255.63.435 1.005.525.375.09.765.075 1.125-.045.36-.12.69-.33.945-.615.255-.285.435-.63.525-1.005.09-.375.075-.765-.045-1.125-.12-.36-.33-.69-.615-.945z"/></svg>'
+            ) }}
+        </div>
+
+        <div class="text-center mt-8">
+            <p class="text-base-content/60">
+                Looking for a specific version? See <a href="#all-releases" class="python-link">all releases</a> below.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-200 py-16" id="all-releases">
+    <div class="section-container">
+        <div class="max-w-6xl mx-auto">
+            <div class="mb-8">
+                <h2 class="text-4xl font-bold text-python-blue mb-4">All Releases</h2>
+                <p class="text-lg text-base-content/80">Browse all Python releases</p>
+            </div>
+
+            {% if releases %}
+            <div class="overflow-x-auto bg-base-100 rounded-lg shadow-lg">
+                <table class="table w-full">
+                    <thead>
+                        <tr>
+                            <th>Version</th>
+                            <th>Release Date</th>
+                            <th>Type</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for release in releases %}
+                        <tr class="hover">
+                            <td>
+                                <a href="/downloads/release/{{ release.slug }}/" class="font-semibold text-python-blue hover:underline">
+                                    Python {{ release.version }}
+                                </a>
+                            </td>
+                            <td>
+                                {% if release.release_date %}
+                                    {{ release.release_date.strftime('%B %d, %Y') }}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if release.pre_release %}
+                                    <span class="badge badge-warning badge-sm">Pre-release</span>
+                                {% else %}
+                                    <span class="badge badge-success badge-sm">Stable</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="/downloads/release/{{ release.slug }}/" class="btn btn-primary btn-sm gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                    </svg>
+                                    Download
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="alert alert-info">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <span>No releases are currently available.</span>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <div class="card bg-base-200">
+                <div class="card-body">
+                    <h2 class="card-title text-2xl text-python-blue mb-4">Alternative Implementations</h2>
+                    <div class="prose max-w-none">
+                        <p class="text-base-content/80">
+                            This site hosts the "traditional" implementation of Python (nicknamed CPython).
+                            A number of alternative implementations are available as well:
+                        </p>
+                        <ul class="text-base-content/80">
+                            <li><a href="https://www.jython.org/" class="python-link">Jython</a> - Python implemented in Java</li>
+                            <li><a href="https://ironpython.net/" class="python-link">IronPython</a> - Python implemented in .NET</li>
+                            <li><a href="https://pypy.org/" class="python-link">PyPy</a> - Python implemented in Python with JIT compiler</li>
+                            <li><a href="https://github.com/RustPython/RustPython" class="python-link">RustPython</a> - Python implemented in Rust</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% if latest_python2 %}
+<section class="bg-base-200 py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <div class="alert alert-warning">
+                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                <div>
+                    <h3 class="font-bold">Python 2.7.x End of Life</h3>
+                    <div class="text-sm">
+                        Python 2.7 reached end of life on January 1st, 2020. The last version is {{ latest_python2.version }}.
+                        Please upgrade to Python 3.
+                        <a href="/downloads/release/{{ latest_python2.slug }}/" class="python-link ml-2">Download Python {{ latest_python2.version }}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %}
