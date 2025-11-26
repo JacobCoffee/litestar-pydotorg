@@ -1,0 +1,143 @@
+{% extends "base.html.jinja2" %}
+{% from "macros/forms.html.jinja2" import input_field, checkbox_field %}
+
+{% block title %}Log In - Python.org{% endblock %}
+
+{% block content %}
+<div class="section-container py-16">
+    <div class="max-w-md mx-auto">
+        <div class="card bg-base-200 shadow-xl">
+            <div class="card-body">
+                <h1 class="card-title text-3xl font-bold text-center justify-center mb-6">
+                    Log In to Python.org
+                </h1>
+
+                <div id="auth-messages" class="mb-4"></div>
+
+                <form
+                    id="login-form"
+                    hx-post="/api/auth/session/login"
+                    hx-target="#auth-messages"
+                    hx-swap="innerHTML"
+                    hx-indicator="#login-spinner"
+                    hx-ext="json-enc"
+                    class="space-y-4"
+                >
+                    {{ csrf_input|safe }}
+
+                    {{ input_field(
+                        name='username',
+                        label='Username',
+                        type='text',
+                        placeholder='Enter your username',
+                        required=true
+                    ) }}
+
+                    {{ input_field(
+                        name='password',
+                        label='Password',
+                        type='password',
+                        placeholder='Enter your password',
+                        required=true
+                    ) }}
+
+                    <div class="flex items-center justify-between">
+                        {{ checkbox_field(
+                            name='remember_me',
+                            label='Remember me'
+                        ) }}
+                        <a href="/auth/forgot-password" class="link link-primary text-sm">
+                            Forgot password?
+                        </a>
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary w-full"
+                    >
+                        <span id="login-spinner" class="loading loading-spinner loading-sm htmx-indicator"></span>
+                        Log In
+                    </button>
+                </form>
+
+                <div class="divider">OR</div>
+
+                <div class="space-y-3">
+                    <button
+                        hx-post="/api/auth/oauth/github"
+                        hx-target="#auth-messages"
+                        class="btn btn-outline w-full gap-2"
+                    >
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" />
+                        </svg>
+                        Continue with GitHub
+                    </button>
+                </div>
+
+                <div class="divider"></div>
+
+                <p class="text-center text-sm">
+                    Don't have an account?
+                    <a href="/auth/register" class="link link-primary font-semibold">
+                        Create one now
+                    </a>
+                </p>
+            </div>
+        </div>
+
+        <div class="text-center mt-6 text-sm opacity-70">
+            <p>
+                By logging in, you agree to our
+                <a href="/about/legal/terms" class="link">Terms of Service</a>
+                and
+                <a href="/about/legal/privacy" class="link">Privacy Policy</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://unpkg.com/htmx-ext-json-enc@2.0.1/json-enc.js"></script>
+<script>
+    document.body.addEventListener('htmx:afterRequest', function(evt) {
+        const messagesDiv = document.getElementById('auth-messages');
+
+        if (evt.detail.successful && evt.detail.xhr.status === 200) {
+            try {
+                const response = JSON.parse(evt.detail.xhr.responseText);
+                if (response.message) {
+                    messagesDiv.innerHTML = '<div class="alert alert-success"><svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg><span>' + response.message + '</span></div>';
+                    setTimeout(function() {
+                        const nextUrl = new URLSearchParams(window.location.search).get('next');
+                        window.location.href = nextUrl || '/';
+                    }, 500);
+                }
+            } catch (e) {
+                console.error('Parse error:', e);
+            }
+        }
+    });
+
+    document.body.addEventListener('htmx:responseError', function(evt) {
+        const messagesDiv = document.getElementById('auth-messages');
+        let errorMessage = 'Login failed. Please try again.';
+
+        try {
+            const response = JSON.parse(evt.detail.xhr.responseText);
+            if (response.detail) {
+                errorMessage = response.detail;
+            }
+        } catch (e) {
+            if (evt.detail.xhr.status === 401) {
+                errorMessage = 'Invalid username or password.';
+            } else if (evt.detail.xhr.status === 403) {
+                errorMessage = 'Access denied. Please check your credentials.';
+            }
+        }
+
+        messagesDiv.innerHTML = '<div class="alert alert-error"><svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg><span>' + errorMessage + '</span></div>';
+    });
+</script>
+{% endblock %}
