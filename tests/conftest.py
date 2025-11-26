@@ -5,13 +5,14 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import pytest
-from advanced_alchemy.extensions.litestar import async_autocommit_before_send_handler
-from litestar.testing import AsyncTestClient
+from advanced_alchemy.extensions.litestar import SQLAlchemyPlugin
+from advanced_alchemy.extensions.litestar.plugins.init.config.asyncio import SQLAlchemyAsyncConfig
+from litestar import Litestar
+from litestar.testing import AsyncTestClient, TestClient
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 import pydotorg.domains  # noqa: F401 - ensure all models are loaded
 from pydotorg.core.database.base import AuditBase
-from pydotorg.main import app
 
 if TYPE_CHECKING:
     from collections.abc import AsyncIterator
@@ -43,15 +44,33 @@ async def db_session(engine) -> AsyncIterator[AsyncSession]:
 
 
 @pytest.fixture
-async def client(db_session: AsyncSession) -> AsyncIterator[AsyncTestClient]:
-    async def get_db_session_override() -> AsyncSession:
-        return db_session
+def test_client() -> TestClient:
+    """Simple test client for unit tests that don't need database."""
+    app = Litestar(route_handlers=[])
+    return TestClient(app=app)
 
-    app.state.db_session = db_session
+
+@pytest.fixture
+async def client(engine) -> AsyncIterator[AsyncTestClient]:
+    """Async test client with SQLite database for integration tests."""
+    from pydotorg.domains.users.auth_controller import AuthController
+    from pydotorg.main import health_check, index
+
+    sqlalchemy_config = SQLAlchemyAsyncConfig(
+        connection_string="sqlite+aiosqlite:///:memory:",
+        metadata=AuditBase.metadata,
+        create_all=True,
+    )
+    sqlalchemy_plugin = SQLAlchemyPlugin(config=sqlalchemy_config)
+
+    test_app = Litestar(
+        route_handlers=[index, health_check, AuthController],
+        plugins=[sqlalchemy_plugin],
+        debug=True,
+    )
 
     async with AsyncTestClient(
-        app=app,
-        base_url="http://testserver",
-        before_send_handler=async_autocommit_before_send_handler,
-    ) as client:
-        yield client
+        app=test_app,
+        base_url="http://testserver.local",
+    ) as test_client:
+        yield test_client

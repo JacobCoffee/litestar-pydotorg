@@ -20,7 +20,7 @@ class TestUserModel:
         user = User(
             username="testuser",
             email="test@example.com",
-            password_hash="hash",  # noqa: S106
+            password_hash="hash",
             first_name="John",
             last_name="Doe",
         )
@@ -30,7 +30,7 @@ class TestUserModel:
         user = User(
             username="testuser",
             email="test@example.com",
-            password_hash="hash",  # noqa: S106
+            password_hash="hash",
             first_name="John",
             last_name="",
         )
@@ -40,7 +40,7 @@ class TestUserModel:
         user = User(
             username="testuser",
             email="test@example.com",
-            password_hash="hash",  # noqa: S106
+            password_hash="hash",
         )
         assert user.has_membership is False
 
@@ -48,7 +48,7 @@ class TestUserModel:
         user = User(
             username="testuser",
             email="test@example.com",
-            password_hash="hash",  # noqa: S106
+            password_hash="hash",
             search_visibility=SearchVisibility.PUBLIC,
         )
         assert user.search_visibility == SearchVisibility.PUBLIC
@@ -57,7 +57,7 @@ class TestUserModel:
         user = User(
             username="testuser",
             email="test@example.com",
-            password_hash="hash",  # noqa: S106
+            password_hash="hash",
             email_privacy=EmailPrivacy.PRIVATE,
         )
         assert user.email_privacy == EmailPrivacy.PRIVATE
