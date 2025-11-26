@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="python">
+<html lang="en" data-theme="python" x-data="{ darkMode: false }" :data-theme="darkMode ? 'pythondark' : 'python'">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,19 +22,32 @@
     <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
     <link rel="apple-touch-icon" sizes="180x180" href="/static/images/apple-touch-icon.png">
 
+    {# TailwindCSS + DaisyUI #}
     <link rel="stylesheet" href="/static/css/tailwind.css">
+
+    {# HTMX Configuration #}
+    <meta name="htmx-config" content='{"defaultSwapStyle":"innerHTML","historyCacheSize":10}'>
 
     {% block extra_css %}{% endblock %}
 </head>
-<body class="min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col bg-base-100" hx-boost="true">
+    {# Skip to content link for accessibility #}
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-4 focus:bg-primary focus:text-primary-content">
+        Skip to main content
+    </a>
+
+    {# Navigation #}
     {% include 'partials/navbar.html.jinja2' %}
 
-    <main class="flex-grow">
+    {# Main Content #}
+    <main id="main-content" class="flex-grow">
+        {# Breadcrumbs #}
         {% block breadcrumbs %}{% endblock %}
 
+        {# Flash Messages / Alerts #}
         {% block messages %}
             {% if messages %}
-                <div class="section-container mt-4">
+                <div class="section-container mt-4" id="flash-messages">
                     {% for message in messages %}
                         {% include 'partials/alert.html.jinja2' %}
                     {% endfor %}
@@ -42,22 +55,130 @@
             {% endif %}
         {% endblock %}
 
-        {% block content %}{% endblock %}
+        {# Page Content #}
+        <div id="page-content">
+            {% block content %}{% endblock %}
+        </div>
     </main>
 
+    {# Footer #}
     {% include 'partials/footer.html.jinja2' %}
 
+    {# Scroll to Top Button #}
     <button
         id="scroll-to-top"
-        class="hidden fixed bottom-8 right-8 btn btn-circle btn-primary shadow-lg z-50"
+        class="hidden fixed bottom-8 right-8 btn btn-circle btn-primary shadow-lg z-50 transition-all duration-300"
         aria-label="Scroll to top"
+        @click="window.scrollTo({ top: 0, behavior: 'smooth' })"
+        x-show="$store.scroll.showButton"
+        x-transition
     >
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
         </svg>
     </button>
 
-    <script src="/static/js/main.js"></script>
+    {# Toast Container for notifications #}
+    <div
+        id="toast-container"
+        class="toast toast-end toast-bottom z-50"
+        x-data="toast"
+    >
+        <template x-for="t in toasts" :key="t.id">
+            <div
+                class="alert"
+                :class="{
+                    'alert-info': t.type === 'info',
+                    'alert-success': t.type === 'success',
+                    'alert-warning': t.type === 'warning',
+                    'alert-error': t.type === 'error'
+                }"
+                x-transition
+            >
+                <span x-text="t.message"></span>
+                <button class="btn btn-ghost btn-xs" @click="remove(t.id)">✕</button>
+            </div>
+        </template>
+    </div>
+
+    {# HTMX Loading Indicator #}
+    <div
+        id="htmx-indicator"
+        class="htmx-indicator fixed top-0 left-0 right-0 h-1 bg-primary z-50"
+    >
+        <div class="h-full bg-secondary animate-pulse"></div>
+    </div>
+
+    {# Scripts #}
+    {# Alpine.js - loaded before HTMX for x-data availability #}
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    {# HTMX #}
+    <script src="https://unpkg.com/htmx.org@2.0.0" integrity="sha384-wS5l5IKJBvK6sPTKa2WZ1js3d947pvWXbPJ1OmWfEuxLgeHcEbjUUA5i9V5ZkpCw" crossorigin="anonymous"></script>
+
+    {# HTMX Extensions #}
+    <script src="https://unpkg.com/htmx.org@2.0.0/dist/ext/loading-states.js"></script>
+    <script src="https://unpkg.com/htmx.org@2.0.0/dist/ext/response-targets.js"></script>
+
+    {# Alpine.js Global Store #}
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.store('scroll', {
+                showButton: false,
+                init() {
+                    window.addEventListener('scroll', () => {
+                        this.showButton = window.scrollY > 300;
+                    });
+                }
+            });
+
+            Alpine.store('theme', {
+                dark: localStorage.getItem('theme') === 'pythondark',
+                toggle() {
+                    this.dark = !this.dark;
+                    localStorage.setItem('theme', this.dark ? 'pythondark' : 'python');
+                    document.documentElement.setAttribute('data-theme', this.dark ? 'pythondark' : 'python');
+                }
+            });
+        });
+    </script>
+
+    {# HTMX Event Handlers #}
+    <script>
+        // Show loading indicator during HTMX requests
+        document.body.addEventListener('htmx:beforeRequest', function(evt) {
+            document.getElementById('htmx-indicator').style.display = 'block';
+        });
+
+        document.body.addEventListener('htmx:afterRequest', function(evt) {
+            document.getElementById('htmx-indicator').style.display = 'none';
+        });
+
+        // Handle HTMX errors
+        document.body.addEventListener('htmx:responseError', function(evt) {
+            console.error('HTMX Error:', evt.detail);
+            // Could show a toast notification here
+        });
+
+        // Initialize scroll to top button (non-Alpine fallback)
+        const scrollBtn = document.getElementById('scroll-to-top');
+        if (scrollBtn && !window.Alpine) {
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 300) {
+                    scrollBtn.classList.remove('hidden');
+                } else {
+                    scrollBtn.classList.add('hidden');
+                }
+            });
+            scrollBtn.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
+    </script>
+
+    {# Custom JS from static #}
+    <script src="/static/js/main.js" defer></script>
+
     {% block extra_js %}{% endblock %}
 </body>
 </html>

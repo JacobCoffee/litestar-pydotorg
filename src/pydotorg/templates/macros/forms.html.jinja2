@@ -1,3 +1,24 @@
+{% macro csrf_token_field() %}
+{{ csrf_input|safe }}
+{% endmacro %}
+
+{% macro form_start(action='', method='post', enctype='', class='', id='') %}
+<form
+    {% if action %}action="{{ action }}"{% endif %}
+    method="{{ method }}"
+    {% if enctype %}enctype="{{ enctype }}"{% endif %}
+    {% if class %}class="{{ class }}"{% endif %}
+    {% if id %}id="{{ id }}"{% endif %}
+>
+    {% if method.lower() in ['post', 'put', 'patch', 'delete'] %}
+        {{ csrf_input|safe }}
+    {% endif %}
+{% endmacro %}
+
+{% macro form_end() %}
+</form>
+{% endmacro %}
+
 {% macro input_field(name, label, type='text', placeholder='', value='', required=false, error='', help_text='') %}
 <div class="form-control w-full">
     <label class="label" for="{{ name }}">

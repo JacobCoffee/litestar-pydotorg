@@ -2,7 +2,7 @@
 {% import "macros/buttons.html.jinja2" as buttons %}
 {% import "macros/cards.html.jinja2" as cards %}
 
-{% block title %}Welcome to Python.org{% endblock %}
+{% block title %}{{ page_title }}{% endblock %}
 
 {% block content %}
 <section class="python-gradient text-white">
@@ -15,7 +15,11 @@
                 plays well with others; runs everywhere; is friendly & easy to learn; is Open.
             </p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                {{ buttons.download_button('Download Python', '/downloads', 'lg', 'Latest: Python 3.12.0') }}
+                {% if latest_release %}
+                {{ buttons.download_button('Download Python', '/downloads', 'lg', 'Latest: Python ' + latest_release.version) }}
+                {% else %}
+                {{ buttons.download_button('Download Python', '/downloads', 'lg', 'Latest: Python 3.12') }}
+                {% endif %}
                 {{ buttons.outline_button('Learn More', '/about', 'button', 'lg', false, 'text-white border-white hover:bg-white/10') }}
             </div>
         </div>
@@ -35,7 +39,7 @@
             {{ cards.feature_card(
                 '<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>',
                 'Download',
-                'Download the latest version of Python. Python 3.12.0 is the latest stable release.',
+                'Download the latest version of Python.' + (' Python ' + latest_release.version + ' is the latest stable release.' if latest_release else ''),
                 '/downloads'
             ) }}
 
@@ -58,33 +62,29 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {{ cards.news_card(
-                    'Python 3.12.0 is now available',
-                    'The latest version of Python is now available for download with exciting new features and improvements.',
-                    '2024-10-02',
-                    '/downloads/release/python-3120',
-                    'Python Release Team'
-                ) }}
-
-                {{ cards.news_card(
-                    'PyCon US 2024 Announced',
-                    'Join us for the largest annual gathering for the community using and developing Python.',
-                    '2024-09-15',
-                    '/events/pycon-us-2024',
-                    'PSF Events'
-                ) }}
-
-                {{ cards.news_card(
-                    'Python Enhancement Proposal Updates',
-                    'Several new PEPs have been accepted and are now part of the Python development process.',
-                    '2024-09-01',
-                    '/dev/peps',
-                    'Python Core Team'
-                ) }}
+                {% if recent_blog_entries %}
+                    {% for entry in recent_blog_entries %}
+                    {{ cards.news_card(
+                        entry.title,
+                        entry.summary[:150] + '...' if entry.summary and entry.summary|length > 150 else (entry.summary or ''),
+                        entry.published_at.strftime('%Y-%m-%d') if entry.published_at else '',
+                        entry.url or '#',
+                        entry.feed.name if entry.feed else 'Python.org'
+                    ) }}
+                    {% endfor %}
+                {% else %}
+                    {{ cards.news_card(
+                        'Welcome to Python.org',
+                        'Check back soon for the latest Python news and updates.',
+                        '',
+                        '/blogs',
+                        'Python.org'
+                    ) }}
+                {% endif %}
             </div>
 
             <div class="text-center mt-12">
-                <a href="/news" class="btn btn-outline btn-primary">View All News</a>
+                <a href="/blogs" class="btn btn-outline btn-primary">View All News</a>
             </div>
         </div>
     </div>
@@ -109,7 +109,7 @@
                     </p>
                     <div class="mt-6">
                         <a href="/about" class="python-link font-semibold text-lg">
-                            Learn more about Python →
+                            Learn more about Python &rarr;
                         </a>
                     </div>
                 </div>
@@ -145,9 +145,23 @@ message = <span class="text-green-500">greet</span>(<span class="text-yellow-500
             </div>
 
             <div class="bg-white rounded-lg shadow-2xl p-8 md:p-12">
+                {% if featured_story %}
+                <blockquote class="text-xl text-gray-700 italic mb-6">
+                    "{{ featured_story.content[:300] }}{% if featured_story.content|length > 300 %}...{% endif %}"
+                </blockquote>
+                <div class="flex items-center gap-4">
+                    <div class="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center text-2xl font-bold text-python-blue">
+                        {{ featured_story.company_name[0] if featured_story.company_name else 'P' }}
+                    </div>
+                    <div>
+                        <p class="font-semibold text-gray-900">{{ featured_story.company_name or featured_story.name }}</p>
+                        <p class="text-sm text-gray-600">{{ featured_story.category.name if featured_story.category else '' }}</p>
+                    </div>
+                </div>
+                {% else %}
                 <blockquote class="text-xl text-gray-700 italic mb-6">
                     "Python has been an important part of our development infrastructure for over a decade.
-                    It's flexibility and ease of use have made it instrumental in our data analysis and
+                    Its flexibility and ease of use have made it instrumental in our data analysis and
                     machine learning workflows."
                 </blockquote>
                 <div class="flex items-center gap-4">
@@ -159,6 +173,7 @@ message = <span class="text-green-500">greet</span>(<span class="text-yellow-500
                         <p class="text-sm text-gray-600">Technology Company</p>
                     </div>
                 </div>
+                {% endif %}
             </div>
 
             <div class="text-center mt-8">
@@ -177,29 +192,39 @@ message = <span class="text-green-500">greet</span>(<span class="text-yellow-500
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% if upcoming_events %}
+                    {% for event in upcoming_events %}
+                    {{ cards.event_card(
+                        event.title,
+                        event.occurrences[0].dt_start.strftime('%B %d, %Y') if event.occurrences else 'TBD',
+                        event.venue or 'Online',
+                        '/events/' + event.slug if event.slug else '#',
+                        event.calendar.name if event.calendar else ''
+                    ) }}
+                    {% endfor %}
+                {% else %}
                 {{ cards.event_card(
-                    'PyCon US 2024',
-                    'May 15-23, 2024',
+                    'PyCon US 2025',
+                    'Coming Soon',
                     'Pittsburgh, PA',
-                    '/events/pycon-us-2024',
+                    '/events',
                     'Conference'
                 ) }}
-
                 {{ cards.event_card(
-                    'EuroPython 2024',
-                    'July 8-14, 2024',
-                    'Prague, Czech Republic',
-                    '/events/europython-2024',
+                    'EuroPython 2025',
+                    'Coming Soon',
+                    'Europe',
+                    '/events',
                     'Conference'
                 ) }}
-
                 {{ cards.event_card(
-                    'Python Web Conf 2024',
-                    'March 13-17, 2024',
-                    'Online',
-                    '/events/python-web-conf-2024',
-                    'Virtual'
+                    'Local Python Meetups',
+                    'Ongoing',
+                    'Worldwide',
+                    '/events',
+                    'Meetup'
                 ) }}
+                {% endif %}
             </div>
 
             <div class="text-center mt-12">
@@ -233,7 +258,7 @@ message = <span class="text-green-500">greet</span>(<span class="text-yellow-500
     <div class="section-container">
         <div class="stats stats-vertical lg:stats-horizontal shadow w-full">
             {{ cards.stats_card(
-                '3.12',
+                latest_release.version if latest_release else '3.12',
                 'Latest Version',
                 '',
                 '<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>'
@@ -247,7 +272,7 @@ message = <span class="text-green-500">greet</span>(<span class="text-yellow-500
             ) }}
 
             {{ cards.stats_card(
-                '400K+',
+                '500K+',
                 'PyPI Packages',
                 'Growing daily',
                 '<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>'

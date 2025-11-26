@@ -2,7 +2,15 @@
 
 from __future__ import annotations
 
+import logging
+from contextlib import asynccontextmanager
 from pathlib import Path
+from typing import TYPE_CHECKING
+
+from litestar.datastructures import State
+
+if TYPE_CHECKING:
+    from litestar.config.app import AppConfig
 
 from advanced_alchemy.extensions.litestar import SQLAlchemyPlugin
 from advanced_alchemy.extensions.litestar.plugins.init.config.asyncio import SQLAlchemyAsyncConfig
@@ -10,14 +18,23 @@ from litestar import Litestar, get
 from litestar.config.compression import CompressionConfig
 from litestar.contrib.jinja import JinjaTemplateEngine
 from litestar.openapi import OpenAPIConfig
+from litestar.response import Template
 from litestar.static_files import create_static_files_router
 from litestar.status_codes import HTTP_200_OK, HTTP_503_SERVICE_UNAVAILABLE
 from litestar.template.config import TemplateConfig
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from pydotorg.config import settings
+from pydotorg.config import log_startup_banner, settings, validate_production_settings
+from pydotorg.core.admin import AdminController
 from pydotorg.core.database.base import AuditBase
+from pydotorg.core.dependencies import get_core_dependencies
+from pydotorg.core.features import FeatureFlags
+from pydotorg.domains.banners import (
+    BannerController,
+    BannersPageController,
+    get_banners_dependencies,
+)
 from pydotorg.domains.blogs import (
     BlogEntryController,
     BlogsPageController,
@@ -26,6 +43,20 @@ from pydotorg.domains.blogs import (
     RelatedBlogController,
     get_blogs_dependencies,
 )
+from pydotorg.domains.blogs.services import BlogEntryService
+from pydotorg.domains.codesamples import (
+    CodeSampleController,
+    CodeSamplesPageController,
+    get_codesamples_dependencies,
+)
+from pydotorg.domains.community import (
+    CommunityPageController,
+    LinkController,
+    PhotoController,
+    PostController,
+    VideoController,
+    get_community_dependencies,
+)
 from pydotorg.domains.downloads import (
     DownloadsPageController,
     OSController,
@@ -33,6 +64,7 @@ from pydotorg.domains.downloads import (
     ReleaseFileController,
     get_downloads_dependencies,
 )
+from pydotorg.domains.downloads.services import ReleaseService
 from pydotorg.domains.events import (
     CalendarController,
     EventCategoryController,
@@ -42,6 +74,7 @@ from pydotorg.domains.events import (
     EventsPageController,
     get_events_dependencies,
 )
+from pydotorg.domains.events.services import EventService
 from pydotorg.domains.jobs import (
     JobCategoryController,
     JobController,
@@ -49,6 +82,11 @@ from pydotorg.domains.jobs import (
     JobReviewCommentController,
     JobTypeController,
     get_jobs_dependencies,
+)
+from pydotorg.domains.minutes import (
+    MinutesController,
+    MinutesPageController,
+    get_minutes_dependencies,
 )
 from pydotorg.domains.pages import (
     DocumentFileController,
@@ -63,22 +101,56 @@ from pydotorg.domains.sponsors import (
     SponsorshipController,
     SponsorshipLevelController,
 )
+from pydotorg.domains.successstories import (
+    StoryCategoryController,
+    StoryController,
+    SuccessStoriesPageController,
+    get_successstories_dependencies,
+)
+from pydotorg.domains.successstories.services import StoryService
 from pydotorg.domains.users import (
-    AuthController,
     MembershipController,
     UserController,
     UserGroupController,
     get_user_dependencies,
 )
+from pydotorg.domains.users.auth_controller import AuthController
+from pydotorg.domains.work_groups import (
+    WorkGroupController,
+    WorkGroupsPageController,
+    get_work_groups_dependencies,
+)
+
+if TYPE_CHECKING:
+    from collections.abc import AsyncGenerator
+
+logger = logging.getLogger(__name__)
 
 
-@get("/", sync_to_thread=False)
-def index() -> dict[str, str]:
-    return {
-        "name": settings.site_name,
-        "description": settings.site_description,
-        "version": "0.1.0",
-    }
+@get("/")
+async def index(
+    blog_entry_service: BlogEntryService,
+    story_service: StoryService,
+    event_service: EventService,
+    release_service: ReleaseService,
+) -> Template:
+    """Render the home page with dynamic content."""
+
+    recent_blog_entries = await blog_entry_service.get_recent_entries(limit=3)
+    featured_stories = await story_service.get_featured_stories(limit=1)
+    upcoming_events = await event_service.get_upcoming(limit=3)
+    latest_release = await release_service.get_latest()
+
+    return Template(
+        template_name="pages/index.html.jinja2",
+        context={
+            "recent_blog_entries": recent_blog_entries,
+            "featured_story": featured_stories[0] if featured_stories else None,
+            "upcoming_events": upcoming_events,
+            "latest_release": latest_release,
+            "page_title": "Welcome to Python.org",
+        },
+    )
 
 
 @get("/health")
@@ -102,19 +174,26 @@ async def health_check(db_session: AsyncSession) -> tuple[dict[str, str | bool],
 def get_all_dependencies() -> dict:
     """Aggregate all domain dependencies."""
     deps = {}
+    deps.update(get_core_dependencies())
     deps.update(get_user_dependencies())
     deps.update(get_page_dependencies())
     deps.update(get_downloads_dependencies())
     deps.update(get_jobs_dependencies())
     deps.update(get_events_dependencies())
     deps.update(get_blogs_dependencies())
+    deps.update(get_banners_dependencies())
+    deps.update(get_codesamples_dependencies())
+    deps.update(get_community_dependencies())
+    deps.update(get_minutes_dependencies())
+    deps.update(get_successstories_dependencies())
+    deps.update(get_work_groups_dependencies())
     return deps
 
 
 sqlalchemy_config = SQLAlchemyAsyncConfig(
     connection_string=str(settings.database_url),
     metadata=AuditBase.metadata,
-    create_all=settings.debug,
+    create_all=settings.create_all,
 )
 
 sqlalchemy_plugin = SQLAlchemyPlugin(config=sqlalchemy_config)
@@ -123,10 +202,64 @@ templates_dir = Path(__file__).parent / "templates"
 static_dir = Path(__file__).parent.parent.parent / "static"
 
 
+def configure_template_engine(engine: JinjaTemplateEngine) -> None:
+    """Configure the Jinja2 template engine with global context."""
+    from datetime import datetime
+
+    feature_flags = FeatureFlags(
+        enable_oauth=settings.features.enable_oauth,
+        enable_jobs=settings.features.enable_jobs,
+        enable_sponsors=settings.features.enable_sponsors,
+        enable_search=settings.features.enable_search,
+        maintenance_mode=settings.features.maintenance_mode,
+    )
+    engine.engine.globals.update(
+        {
+            "feature_flags": feature_flags.to_dict(),
+            "site_name": settings.site_name,
+            "now": datetime.now,
+        }
+    )
+
+
+def on_app_init(app_config: AppConfig) -> AppConfig:
+    """Initialize application state with feature flags."""
+    if app_config.state is None:
+        app_config.state = State()
+    app_config.state["feature_flags"] = FeatureFlags(
+        enable_oauth=settings.features.enable_oauth,
+        enable_jobs=settings.features.enable_jobs,
+        enable_sponsors=settings.features.enable_sponsors,
+        enable_search=settings.features.enable_search,
+        maintenance_mode=settings.features.maintenance_mode,
+    )
+    return app_config
+
+
+@asynccontextmanager
+async def lifespan(app: Litestar) -> AsyncGenerator[None]:
+    """Application lifespan hook for startup and shutdown tasks."""
+    logger.info("Application startup initiated")
+
+    try:
+        validate_production_settings()
+        logger.info("Configuration validated successfully")
+    except Exception:
+        logger.exception("Configuration validation failed")
+        raise
+
+    log_startup_banner()
+
+    yield
+
+    logger.info("Application shutdown initiated")
+
+
 app = Litestar(
     route_handlers=[
         index,
         health_check,
+        AdminController,
         create_static_files_router(
             path="/static",
             directories=[static_dir] if static_dir.exists() else [],
@@ -164,12 +297,29 @@ app = Litestar(
         SponsorController,
         SponsorshipController,
         SponsorRenderController,
+        BannerController,
+        BannersPageController,
+        CodeSampleController,
+        CodeSamplesPageController,
+        PostController,
+        PhotoController,
+        VideoController,
+        LinkController,
+        CommunityPageController,
+        MinutesController,
+        MinutesPageController,
+        StoryCategoryController,
+        StoryController,
+        SuccessStoriesPageController,
+        WorkGroupController,
+        WorkGroupsPageController,
     ],
     dependencies=get_all_dependencies(),
     plugins=[sqlalchemy_plugin],
     template_config=TemplateConfig(
         directory=templates_dir,
         engine=JinjaTemplateEngine,
+        engine_callback=configure_template_engine,
     ),
     openapi_config=OpenAPIConfig(
         title=settings.site_name,
@@ -177,5 +327,7 @@ app = Litestar(
         description=settings.site_description,
     ),
     compression_config=CompressionConfig(backend="gzip", gzip_compress_level=6),
-    debug=settings.debug,
+    debug=settings.is_debug,
+    on_app_init=[on_app_init],
+    lifespan=[lifespan],
 )
