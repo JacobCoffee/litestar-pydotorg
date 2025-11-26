@@ -1,0 +1,10 @@
+"""Admin domain URL constants."""
+
+ADMIN = "/admin"
+ADMIN_DASHBOARD = f"{ADMIN}/"
+ADMIN_USERS = f"{ADMIN}/users"
+ADMIN_JOBS = f"{ADMIN}/jobs"
+ADMIN_EVENTS = f"{ADMIN}/events"
+ADMIN_CONTENT = f"{ADMIN}/content"
+ADMIN_SPONSORS = f"{ADMIN}/sponsors"
+ADMIN_SYSTEM = f"{ADMIN}/system"
