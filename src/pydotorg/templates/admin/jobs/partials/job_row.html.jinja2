@@ -11,12 +11,18 @@
                             <h3 class="card-title text-xl text-python-blue">
                                 {{ job.job_title }}
                             </h3>
-                            {% if job.status == 'pending' %}
-                            <span class="badge badge-warning">Pending</span>
-                            {% elif job.status == 'approved' %}
+                            {% if job.status.value == 'review' %}
+                            <span class="badge badge-warning">Pending Review</span>
+                            {% elif job.status.value == 'approved' %}
                             <span class="badge badge-success">Approved</span>
-                            {% elif job.status == 'rejected' %}
+                            {% elif job.status.value == 'rejected' %}
                             <span class="badge badge-error">Rejected</span>
+                            {% elif job.status.value == 'draft' %}
+                            <span class="badge badge-ghost">Draft</span>
+                            {% elif job.status.value == 'archived' %}
+                            <span class="badge badge-neutral">Archived</span>
+                            {% elif job.status.value == 'expired' %}
+                            <span class="badge badge-neutral">Expired</span>
                             {% endif %}
                         </div>
 
@@ -96,7 +102,7 @@
                     Preview
                 </button>
 
-                {% if job.status == 'pending' %}
+                {% if job.status.value == 'review' %}
                 <button
                     class="btn btn-success btn-sm gap-1"
                     hx-post="/admin/jobs/{{ job.id }}/approve"
@@ -122,10 +128,10 @@
                     </svg>
                     Reject
                 </button>
-                {% elif job.status == 'approved' %}
+                {% elif job.status.value == 'approved' %}
                 <button
                     class="btn btn-warning btn-sm gap-1"
-                    hx-post="/admin/jobs/{{ job.id }}/revoke"
+                    hx-post="/admin/jobs/{{ job.id }}/reject"
                     hx-target="#job-{{ job.id }}"
                     hx-swap="outerHTML"
                     hx-confirm="Revoke approval for this job?"
@@ -135,7 +141,7 @@
                     </svg>
                     Revoke
                 </button>
-                {% elif job.status == 'rejected' %}
+                {% elif job.status.value == 'rejected' %}
                 <button
                     class="btn btn-success btn-sm gap-1"
                     hx-post="/admin/jobs/{{ job.id }}/approve"

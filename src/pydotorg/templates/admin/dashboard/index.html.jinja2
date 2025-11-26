@@ -184,14 +184,14 @@
                         </a>
                         {% endif %}
 
-                        {% if stats.pending_sponsors > 0 %}
+                        {% if pending and pending.pending_sponsors_count > 0 %}
                         <a href="/admin/sponsors/pending" class="flex items-center justify-between p-3 rounded-lg hover:bg-base-200 transition-colors">
                             <span class="text-sm">Pending Sponsors</span>
-                            <span class="badge badge-warning">{{ stats.pending_sponsors }}</span>
+                            <span class="badge badge-warning">{{ pending.pending_sponsors_count }}</span>
                         </a>
                         {% endif %}
 
-                        {% if stats.pending_jobs == 0 and stats.pending_sponsors == 0 %}
+                        {% if stats.pending_jobs == 0 and (not pending or pending.pending_sponsors_count == 0) %}
                         <div class="text-center py-4 text-base-content/60 text-sm">
                             All caught up!
                         </div>
