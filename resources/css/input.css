@@ -144,9 +144,9 @@
     @apply absolute inset-0 flex items-center justify-center;
   }
 
-  /* Loading spinner */
-  .loading-spinner {
-    @apply loading loading-spinner loading-md;
+  /* Loading spinner - using direct styles to avoid @apply circular dependency with DaisyUI */
+  .loading-spinner-custom {
+    @apply inline-block w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin;
   }
 
   /* Gradient text */
