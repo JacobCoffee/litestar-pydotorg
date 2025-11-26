@@ -18,6 +18,7 @@ from litestar import Litestar, get
 from litestar.config.compression import CompressionConfig
 from litestar.contrib.jinja import JinjaTemplateEngine
 from litestar.openapi import OpenAPIConfig
+from litestar.openapi.spec import Components, SecurityScheme, Tag
 from litestar.response import Template
 from litestar.static_files import create_static_files_router
 from litestar.status_codes import HTTP_200_OK, HTTP_503_SERVICE_UNAVAILABLE
@@ -27,6 +28,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from pydotorg.config import log_startup_banner, settings, validate_production_settings
 from pydotorg.core.admin import AdminController
+from pydotorg.core.auth.middleware import JWTAuthMiddleware
 from pydotorg.core.database.base import AuditBase
 from pydotorg.core.dependencies import get_core_dependencies
 from pydotorg.core.features import FeatureFlags
@@ -44,7 +46,7 @@ from pydotorg.domains.blogs import (
     RelatedBlogController,
     get_blogs_dependencies,
 )
-from pydotorg.domains.blogs.services import BlogEntryService
+from pydotorg.domains.blogs.services import BlogEntryService  # noqa: TC001
 from pydotorg.domains.codesamples import (
     CodeSampleController,
     CodeSamplesPageController,
@@ -65,7 +67,7 @@ from pydotorg.domains.downloads import (
     ReleaseFileController,
     get_downloads_dependencies,
 )
-from pydotorg.domains.downloads.services import ReleaseService
+from pydotorg.domains.downloads.services import ReleaseService  # noqa: TC001
 from pydotorg.domains.events import (
     CalendarController,
     EventCategoryController,
@@ -75,7 +77,7 @@ from pydotorg.domains.events import (
     EventsPageController,
     get_events_dependencies,
 )
-from pydotorg.domains.events.services import EventService
+from pydotorg.domains.events.services import EventService  # noqa: TC001
 from pydotorg.domains.jobs import (
     JobCategoryController,
     JobController,
@@ -88,6 +90,13 @@ from pydotorg.domains.minutes import (
     MinutesController,
     MinutesPageController,
     get_minutes_dependencies,
+)
+from pydotorg.domains.nominations import (
+    ElectionController,
+    NominationController,
+    NominationsRenderController,
+    NomineeController,
+    get_nominations_dependencies,
 )
 from pydotorg.domains.pages import (
     DocumentFileController,
@@ -108,7 +117,7 @@ from pydotorg.domains.successstories import (
     SuccessStoriesPageController,
     get_successstories_dependencies,
 )
-from pydotorg.domains.successstories.services import StoryService
+from pydotorg.domains.successstories.services import StoryService  # noqa: TC001
 from pydotorg.domains.users import (
     MembershipController,
     UserController,
@@ -128,7 +137,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-@get("/")
+@get("/", tags=["Application"], exclude_from_auth=True)
 async def index(
     blog_entry_service: BlogEntryService,
     story_service: StoryService,
@@ -154,7 +163,7 @@ async def index(
     )
 
 
-@get("/health")
+@get("/health", tags=["Application"], exclude_from_auth=True)
 async def health_check(db_session: AsyncSession) -> tuple[dict[str, str | bool], int]:
     """Health check endpoint with database connectivity verification."""
     health_status = {
@@ -186,6 +195,7 @@ def get_all_dependencies() -> dict:
     deps.update(get_codesamples_dependencies())
     deps.update(get_community_dependencies())
     deps.update(get_minutes_dependencies())
+    deps.update(get_nominations_dependencies())
     deps.update(get_successstories_dependencies())
     deps.update(get_work_groups_dependencies())
     return deps
@@ -205,7 +215,7 @@ static_dir = Path(__file__).parent.parent.parent / "static"
 
 def configure_template_engine(engine: JinjaTemplateEngine) -> None:
     """Configure the Jinja2 template engine with global context."""
-    from datetime import datetime
+    from datetime import datetime  # noqa: PLC0415
 
     feature_flags = FeatureFlags(
         enable_oauth=settings.features.enable_oauth,
@@ -309,6 +319,10 @@ app = Litestar(
         CommunityPageController,
         MinutesController,
         MinutesPageController,
+        ElectionController,
+        NomineeController,
+        NominationController,
+        NominationsRenderController,
         StoryCategoryController,
         StoryController,
         SuccessStoriesPageController,
@@ -317,6 +331,7 @@ app = Litestar(
     ],
     dependencies=get_all_dependencies(),
     plugins=[sqlalchemy_plugin],
+    middleware=[JWTAuthMiddleware],
     template_config=TemplateConfig(
         directory=templates_dir,
         engine=JinjaTemplateEngine,
@@ -328,6 +343,34 @@ app = Litestar(
         description=settings.site_description,
         path="/api",
         render_plugins=get_openapi_plugins(),
+        components=Components(
+            security_schemes={
+                "BearerAuth": SecurityScheme(
+                    type="http",
+                    scheme="bearer",
+                    bearer_format="JWT",
+                    description="JWT token from /api/auth/login or OAuth (/api/auth/oauth/github)",
+                ),
+            }
+        ),
+        security=[{"BearerAuth": []}],
+        tags=[
+            Tag(name="Application", description="Core application endpoints"),
+            Tag(name="Authentication", description="User authentication and registration"),
+            Tag(name="Users", description="User management"),
+            Tag(name="Pages", description="CMS pages and content"),
+            Tag(name="Downloads", description="Python releases and downloads"),
+            Tag(name="Jobs", description="Job board"),
+            Tag(name="Events", description="Community events and calendar"),
+            Tag(name="Blogs", description="Blog posts and feeds"),
+            Tag(name="Sponsors", description="PSF sponsors"),
+            Tag(name="Banners", description="Site banners"),
+            Tag(name="Code Samples", description="Python code examples"),
+            Tag(name="Community", description="Community content"),
+            Tag(name="Minutes", description="PSF meeting minutes"),
+            Tag(name="Success Stories", description="Python success stories"),
+            Tag(name="Work Groups", description="PSF work groups"),
+        ],
     ),
     compression_config=CompressionConfig(backend="gzip", gzip_compress_level=6),
     debug=settings.is_debug,
