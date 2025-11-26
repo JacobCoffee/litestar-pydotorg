@@ -1,0 +1,275 @@
+{% extends "base.html.jinja2" %}
+
+{% block title %}Python Governance{% endblock %}
+
+{% block meta_description %}Learn about how Python is developed and governed through the Steering Council, PEP process, and community-driven decision making.{% endblock %}
+
+{% block content %}
+<section class="python-gradient text-white py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-5xl font-bold mb-6">Python Governance</h1>
+            <p class="text-xl opacity-90">
+                How decisions are made in the Python community
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-python-blue mb-6">Python Governance Model</h2>
+            <div class="prose max-w-none">
+                <p class="text-lg text-base-content/80 mb-4">
+                    Python's development is guided by a Steering Council elected by the core development team.
+                    This governance model was adopted in 2019 following Guido van Rossum stepping down from his
+                    role as Benevolent Dictator For Life (BDFL).
+                </p>
+                <p class="text-lg text-base-content/80 mb-4">
+                    The governance model is designed to be transparent, inclusive, and effective at moving Python
+                    forward while respecting the community that has grown around it.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-200 py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-python-blue mb-6">The Steering Council</h2>
+            <div class="prose max-w-none mb-6">
+                <p class="text-lg text-base-content/80 mb-4">
+                    The Steering Council is a five-person committee elected by the core developers. The Council
+                    has broad authority to make decisions about the language, including:
+                </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="card bg-base-100 shadow-sm">
+                    <div class="card-body">
+                        <h3 class="card-title text-base">Accepting or Rejecting PEPs</h3>
+                        <p class="text-sm text-base-content/80">
+                            Final decision authority on Python Enhancement Proposals
+                        </p>
+                    </div>
+                </div>
+                <div class="card bg-base-100 shadow-sm">
+                    <div class="card-body">
+                        <h3 class="card-title text-base">Enforcing Code of Conduct</h3>
+                        <p class="text-sm text-base-content/80">
+                            Ensuring a welcoming and inclusive community
+                        </p>
+                    </div>
+                </div>
+                <div class="card bg-base-100 shadow-sm">
+                    <div class="card-body">
+                        <h3 class="card-title text-base">Managing Core Team</h3>
+                        <p class="text-sm text-base-content/80">
+                            Granting or removing commit privileges
+                        </p>
+                    </div>
+                </div>
+                <div class="card bg-base-100 shadow-sm">
+                    <div class="card-body">
+                        <h3 class="card-title text-base">Establishing Processes</h3>
+                        <p class="text-sm text-base-content/80">
+                            Creating and updating development workflows
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-python-blue mb-6">Python Enhancement Proposals (PEPs)</h2>
+            <div class="prose max-w-none">
+                <p class="text-lg text-base-content/80 mb-4">
+                    PEPs are the primary mechanism for proposing major new features, collecting community input
+                    on an issue, and documenting design decisions. Anyone can submit a PEP, though they must
+                    follow a specific format and go through a review process.
+                </p>
+            </div>
+            <div class="mt-8 space-y-4">
+                <div class="collapse collapse-arrow bg-base-200">
+                    <input type="checkbox" />
+                    <div class="collapse-title text-xl font-medium">
+                        PEP Process Overview
+                    </div>
+                    <div class="collapse-content">
+                        <ol class="list-decimal list-inside space-y-2 text-base-content/80">
+                            <li>Author writes a PEP and submits it for review</li>
+                            <li>Community discusses the proposal on mailing lists</li>
+                            <li>PEP is revised based on feedback</li>
+                            <li>Steering Council or designated delegate reviews</li>
+                            <li>PEP is accepted, rejected, or deferred</li>
+                            <li>If accepted, implementation begins</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="collapse collapse-arrow bg-base-200">
+                    <input type="checkbox" />
+                    <div class="collapse-title text-xl font-medium">
+                        Types of PEPs
+                    </div>
+                    <div class="collapse-content">
+                        <ul class="list-disc list-inside space-y-2 text-base-content/80">
+                            <li><strong>Standards Track:</strong> New features or implementations</li>
+                            <li><strong>Informational:</strong> General guidelines or information</li>
+                            <li><strong>Process:</strong> Changes to Python's development process</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-200 py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-python-blue mb-6">Core Developers</h2>
+            <div class="prose max-w-none">
+                <p class="text-lg text-base-content/80 mb-4">
+                    Python core developers are trusted contributors who have demonstrated sustained commitment
+                    to Python's development. They have commit privileges to the main Python repository and
+                    vote for the Steering Council.
+                </p>
+            </div>
+            <div class="card bg-base-100 shadow mt-6">
+                <div class="card-body">
+                    <h3 class="card-title text-python-blue">Becoming a Core Developer</h3>
+                    <p class="text-base-content/80 mb-4">
+                        Core developer status is granted to contributors who have:
+                    </p>
+                    <ul class="list-disc list-inside space-y-2 text-base-content/80">
+                        <li>Made sustained, quality contributions to Python</li>
+                        <li>Demonstrated good judgment and collaboration</li>
+                        <li>Shown commitment to Python's values and community</li>
+                        <li>Been nominated and approved by existing core developers</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-python-blue mb-8 text-center">Key Governance PEPs</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="card bg-base-200 shadow">
+                    <div class="card-body">
+                        <h3 class="card-title">PEP 1</h3>
+                        <p class="text-base-content/80 mb-2">
+                            PEP Purpose and Guidelines
+                        </p>
+                        <p class="text-sm text-base-content/60">
+                            Defines what a PEP is and how to write one
+                        </p>
+                    </div>
+                </div>
+                <div class="card bg-base-200 shadow">
+                    <div class="card-body">
+                        <h3 class="card-title">PEP 13</h3>
+                        <p class="text-base-content/80 mb-2">
+                            Python Language Governance
+                        </p>
+                        <p class="text-sm text-base-content/60">
+                            Establishes the Steering Council model
+                        </p>
+                    </div>
+                </div>
+                <div class="card bg-base-200 shadow">
+                    <div class="card-body">
+                        <h3 class="card-title">PEP 8</h3>
+                        <p class="text-base-content/80 mb-2">
+                            Style Guide for Python Code
+                        </p>
+                        <p class="text-sm text-base-content/60">
+                            Coding conventions for Python's standard library
+                        </p>
+                    </div>
+                </div>
+                <div class="card bg-base-200 shadow">
+                    <div class="card-body">
+                        <h3 class="card-title">PEP 20</h3>
+                        <p class="text-base-content/80 mb-2">
+                            The Zen of Python
+                        </p>
+                        <p class="text-sm text-base-content/60">
+                            Guiding principles for Python's design
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-200 py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-python-blue mb-6">Community Participation</h2>
+            <div class="prose max-w-none mb-6">
+                <p class="text-lg text-base-content/80 mb-4">
+                    Python's governance is designed to be inclusive and transparent. Community members can
+                    participate in various ways:
+                </p>
+            </div>
+            <div class="space-y-4">
+                <div class="card bg-base-100 shadow-sm">
+                    <div class="card-body">
+                        <h3 class="card-title text-base">Discuss PEPs</h3>
+                        <p class="text-sm text-base-content/80">
+                            Anyone can participate in PEP discussions on python-dev and discourse.python.org
+                        </p>
+                    </div>
+                </div>
+                <div class="card bg-base-100 shadow-sm">
+                    <div class="card-body">
+                        <h3 class="card-title text-base">Submit Bug Reports</h3>
+                        <p class="text-sm text-base-content/80">
+                            Report issues and suggest improvements on bugs.python.org
+                        </p>
+                    </div>
+                </div>
+                <div class="card bg-base-100 shadow-sm">
+                    <div class="card-body">
+                        <h3 class="card-title text-base">Contribute Code</h3>
+                        <p class="text-sm text-base-content/80">
+                            Submit patches and improvements through GitHub pull requests
+                        </p>
+                    </div>
+                </div>
+                <div class="card bg-base-100 shadow-sm">
+                    <div class="card-body">
+                        <h3 class="card-title text-base">Write Documentation</h3>
+                        <p class="text-sm text-base-content/80">
+                            Help improve Python's documentation for all users
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-3xl font-bold text-python-blue mb-6">Learn More</h2>
+            <div class="flex flex-wrap gap-4 justify-center">
+                <a href="/about/" class="btn btn-primary">About Python</a>
+                <a href="/about/psf/" class="btn btn-outline btn-primary">Python Software Foundation</a>
+                <a href="/community/" class="btn btn-outline btn-primary">Join the Community</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
