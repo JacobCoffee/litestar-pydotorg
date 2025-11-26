@@ -101,10 +101,37 @@
   --scalar-search-color: #E5E7EB;
 }
 
-/* Custom Header Styling */
+/* Custom Header/Navbar Styling */
 .scalar-app header,
-.scalar-api-reference header {
-  background: linear-gradient(135deg, var(--python-blue) 0%, var(--python-blue-dark) 100%);
+.scalar-api-reference header,
+.scalar-app .t-app__navigation,
+.t-app__navigation {
+  background: linear-gradient(135deg, var(--python-blue) 0%, var(--python-blue-dark) 100%) !important;
+}
+
+/* Header text should be white */
+.scalar-app header *,
+.scalar-api-reference header *,
+.scalar-app .t-app__navigation *,
+.t-app__navigation *,
+.scalar-app .t-app__navigation a,
+.scalar-app .t-app__navigation button,
+.scalar-app .t-app__navigation span,
+.scalar-app .t-app__navigation input {
+  color: #FFFFFF !important;
+}
+
+/* Search input in header */
+.scalar-app .t-app__navigation input,
+.scalar-app header input {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  color: #FFFFFF !important;
+}
+
+.scalar-app .t-app__navigation input::placeholder,
+.scalar-app header input::placeholder {
+  color: rgba(255, 255, 255, 0.7) !important;
 }
 
 /* HTTP Method Badge Colors - Python themed */
