@@ -76,13 +76,14 @@ def not_found_exception_handler(request: Request, exc: NotFoundException) -> Res
         HTMX toast response or rendered error template
     """
     path = request.url.path
-    detail = exc.detail if exc.detail else f"The page '{path}' was not found."
+    friendly_name = path.strip("/").replace("/", " → ").replace("-", " ").title() or "Home"
+    detail = f"'{friendly_name}' is not available yet. This feature is coming soon."
     logger.info("404 Not Found: %s", path)
 
     if _is_htmx_request(request):
         return _create_toast_response(
             message=detail,
-            toast_type="warning",
+            toast_type="info",
             status_code=HTTP_404_NOT_FOUND,
         )
 
