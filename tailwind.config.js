@@ -3,6 +3,7 @@ module.exports = {
   content: [
     "./src/pydotorg/templates/**/*.jinja2",
     "./src/pydotorg/templates/**/*.html",
+    "./resources/js/**/*.{js,ts}",
   ],
   theme: {
     extend: {

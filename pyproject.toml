@@ -58,28 +58,53 @@ module-name = "pydotorg"
 
 [dependency-groups]
 dev = [
+    { include-group = "lint" },
+    { include-group = "test" },
+    { include-group = "docs" },
+]
+lint = [
+    "prek>=0.2.18",
+    "ruff>=0.8.0",
+    "codespell>=2.3.0",
+    "ty>=0.0.1a7",
+    "git-cliff>=2.0.0",
+]
+test = [
+    "aiosqlite>=0.20.0",
     "dirty-equals>=0.8.0",
     "hypothesis>=6.118.0",
     "polyfactory>=2.18.0",
-    "prek>=0.2.0",
+    "pytest>=8.3.0",
     "pytest-asyncio>=0.24.0",
     "pytest-cov>=6.0.0",
     "pytest-sugar>=1.1.1",
+    "pytest-timeout>=2.3.0",
     "pytest-xdist>=3.5.0",
-    "pytest>=8.3.0",
     "respx>=0.22.0",
-    "ruff>=0.8.0",
-    "sphinx-autodoc-typehints>=2.5.0",
-    "shibuya>=2024.0.0",
-    "sphinx>=8.1.0",
     "time-machine>=2.16.0",
-    "ty",
+]
+docs = [
+    "sphinx>=8.1.0",
+    "shibuya>=2024.0.0",
+    "sphinx-copybutton>=0.5.0",
+    "sphinx-design>=0.6.0",
+    "sphinx-autodoc-typehints>=2.5.0",
+    "sphinx-autobuild>=2024.0.0",
+    "myst-parser>=4.0.0",
+    "linkify-it-py>=2.0.0",
 ]
 
 [tool.ruff]
-target-version = "py312"
+target-version = "py313"
 line-length = 120
 src = ["src", "tests"]
+fix = true
+
+[tool.ruff.format]
+docstring-code-format = true
+docstring-code-line-length = 88
+indent-style = "space"
+quote-style = "double"
 
 [tool.ruff.lint]
 select = [
@@ -131,23 +156,99 @@ ignore = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/**/*" = ["S101", "PLR2004", "B011", "FBT001"]
-"src/pydotorg/db/migrations/**/*" = ["ERA001"]
+"tests/**/*" = [
+    "A",
+    "ANN",
+    "ARG",
+    "B",
+    "BLE",
+    "C901",
+    "D",
+    "DTZ",
+    "EM",
+    "ERA001",
+    "F841",
+    "FBT",
+    "G",
+    "N",
+    "PGH",
+    "PIE",
+    "PLC0415",
+    "PLR",
+    "PLW",
+    "PT011",
+    "PT012",
+    "PTH",
+    "RSE",
+    "S",
+    "SIM",
+    "SLF001",
+    "TCH",
+    "TRY",
+]
+"src/pydotorg/db/migrations/**/*" = ["ERA001", "INP001"]
+"src/pydotorg/main.py" = ["BLE001", "TRY300", "TC002"]
+"src/pydotorg/domains/users/auth_controller.py" = ["TRY301"]
+"src/pydotorg/domains/**/models.py" = ["TC003"]
+"src/pydotorg/domains/**/controllers.py" = ["TC001", "TC002", "TC003"]
+"docs/conf.py" = ["A001", "INP001", "PTH", "DTZ"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["pydotorg"]
 
+[tool.ruff.lint.mccabe]
+max-complexity = 12
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
 [tool.pytest.ini_options]
-addopts = "-ra -q --strict-markers --strict-config"
-testpaths = ["tests"]
+addopts = [
+    "-v",
+    "--strict-markers",
+    "--strict-config",
+    "--tb=short",
+    "-p", "no:pastebin",
+    "-p", "no:nose",
+    "-p", "no:doctest",
+    "-ra",
+]
 asyncio_mode = "auto"
-asyncio_default_fixture_loop_scope = "function"
+asyncio_default_fixture_loop_scope = "session"
+norecursedirs = [
+    ".*",
+    "build",
+    "dist",
+    "*.egg",
+    "venv",
+    ".venv",
+    "node_modules",
+    "_build",
+    "docs",
+]
 filterwarnings = [
     "ignore::DeprecationWarning",
+    "ignore::PendingDeprecationWarning",
+    "ignore::pytest.PytestUnraisableExceptionWarning",
 ]
+markers = [
+    "unit: Unit tests (fast, isolated)",
+    "integration: Integration tests (may use mocked external services)",
+    "e2e: End-to-end tests (full application workflow)",
+    "slow: Tests that take more than 1 second",
+]
+minversion = "8.0"
+python_classes = ["Test*"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+testpaths = ["tests"]
+timeout = 60
+timeout_method = "thread"
 
 [tool.coverage.run]
 branch = true
+concurrency = ["multiprocessing", "thread"]
+parallel = true
 source = ["src/pydotorg"]
 omit = [
     "*/migrations/*",
@@ -157,11 +258,111 @@ omit = [
 [tool.coverage.report]
 exclude_lines = [
     "pragma: no cover",
+    "def __repr__",
+    "def __str__",
     "if TYPE_CHECKING:",
+    "if typing.TYPE_CHECKING:",
+    "raise AssertionError",
     "raise NotImplementedError",
     "@abstractmethod",
+    "@abc.abstractmethod",
+    "@overload",
+    "if __name__ == .__main__.:",
+    "\\.\\.\\.",
 ]
 fail_under = 75
+precision = 2
+show_missing = true
+
+[tool.coverage.html]
+directory = "htmlcov"
+
+[tool.coverage.xml]
+output = "coverage.xml"
+
+[tool.ty]
 
 [tool.ty.environment]
-python-version = "3.12"
+python = ".venv"
+
+[tool.ty.rules]
+deprecated = "warn"
+invalid-context-manager = "ignore"
+missing-argument = "ignore"
+invalid-argument-type = "ignore"
+unresolved-attribute = "ignore"
+unresolved-import = "ignore"
+unknown-argument = "ignore"
+invalid-return-type = "ignore"
+parameter-already-assigned = "ignore"
+
+[tool.ty.src]
+exclude = [
+    "docs/conf.py",
+    "tests/",
+    "src/pydotorg/db/seed.py",
+]
+
+[tool.codespell]
+skip = "uv.lock,*.svg,docs/_build/*"
+quiet-level = 3
+
+[tool.git-cliff.changelog]
+header = """
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+"""
+body = """
+---
+{% if version %}\
+    {% if previous.version %}\
+        ## [{{ version | trim_start_matches(pat="v") }}]($REPO/compare/{{ previous.version }}..{{ version }}) - {{ timestamp | date(format="%Y-%m-%d") }}
+    {% else %}\
+        ## [{{ version | trim_start_matches(pat="v") }}] - {{ timestamp | date(format="%Y-%m-%d") }}
+    {% endif %}\
+{% else %}\
+    ## [unreleased]
+{% endif %}\
+{% for group, commits in commits | group_by(attribute="group") %}
+    ### {{ group | striptags | trim | upper_first }}
+    {% for commit in commits | filter(attribute="scope") | sort(attribute="scope") %}
+        - **({{commit.scope}})**{% if commit.breaking %} [**breaking**]{% endif %} {{ commit.message }} - ([{{ commit.id | truncate(length=7, end="") }}]($REPO/commit/{{ commit.id }})) - {{ commit.author.name }}
+    {%- endfor -%}
+    {% raw %}\n{% endraw %}\
+    {%- for commit in commits %}
+        {%- if commit.scope -%}
+        {% else -%}
+            - {% if commit.breaking %} [**breaking**]{% endif %} {{ commit.message }} - ([{{ commit.id | truncate(length=7, end="") }}]($REPO/commit/{{ commit.id }})) - {{ commit.author.name }}
+        {% endif -%}
+    {% endfor -%}
+{% endfor %}\n
+"""
+footer = "``litestar-pydotorg`` Changelog"
+output = "docs/changelog.md"
+postprocessors = [
+    { pattern = '\$REPO', replace = "https://github.com/JacobCoffee/litestar-pydotorg" },
+]
+trim = true
+
+[tool.git-cliff.git]
+commit_parsers = [
+    { message = "^feat", group = "Features" },
+    { message = "^fix", group = "Bug Fixes" },
+    { message = "^doc", group = "Documentation" },
+    { message = "^perf", group = "Performance" },
+    { message = "^refactor", group = "Refactoring" },
+    { message = "^style", group = "Style" },
+    { message = "^revert", group = "Revert" },
+    { message = "^test", group = "Tests" },
+    { message = "^chore\\(version\\):", skip = true },
+    { message = "^chore", group = "Miscellaneous Chores" },
+    { body = ".*security", group = "Security" },
+]
+conventional_commits = true
+filter_commits = false
+filter_unconventional = true
+protect_breaking_commits = false
+sort_commits = "oldest"
+tag_pattern = "v[0-9].*"

@@ -38,8 +38,8 @@ clean: ## Clean build artifacts and caches
 	find . -type f -name "*.pyc" -delete 2>/dev/null || true
 
 .PHONY: install-frontend
-install-frontend: ## Install frontend dependencies (Node.js packages)
-	npm install
+install-frontend: ## Install frontend dependencies using bun
+	bunx --bun install
 
 # ============================================================================
 # Code Quality
@@ -91,6 +91,29 @@ test-cov: ## Run tests with coverage
 .PHONY: test-watch
 test-watch: ## Run tests in watch mode
 	$(UV) run pytest-watch -- $(TESTS_DIR) -v
+
+# ============================================================================
+# Infrastructure
+# ============================================================================
+
+##@ Infrastructure
+
+.PHONY: infra-up
+infra-up: ## Start PostgreSQL and Redis containers
+	docker compose up -d postgres redis
+
+.PHONY: infra-down
+infra-down: ## Stop infrastructure containers
+	docker compose down
+
+.PHONY: infra-logs
+infra-logs: ## Follow infrastructure container logs
+	docker compose logs -f postgres redis
+
+.PHONY: infra-reset
+infra-reset: infra-down ## Reset infrastructure (stop and remove volumes)
+	docker compose down -v
+	docker compose up -d postgres redis
 
 # ============================================================================
 # Database
@@ -184,16 +207,50 @@ endif
 
 ##@ Frontend
 
+.PHONY: frontend-install
+frontend-install: ## Install frontend dependencies using bun
+	bunx --bun install
+
+.PHONY: frontend-dev
+frontend-dev: ## Run Vite dev server with HMR
+	bunx --bun vite
+
+.PHONY: frontend-build
+frontend-build: ## Build frontend assets for production
+	bunx --bun vite build
+
+.PHONY: frontend-preview
+frontend-preview: ## Preview production build
+	bunx --bun vite preview
+
+.PHONY: frontend-lint
+frontend-lint: ## Lint frontend code with biome
+	bunx --bun biome check .
+
+.PHONY: frontend-lint-fix
+frontend-lint-fix: ## Fix frontend code with biome
+	bunx --bun biome check --write .
+
+.PHONY: frontend-format
+frontend-format: ## Format frontend code with biome
+	bunx --bun biome format --write .
+
 .PHONY: css
 css: ## Build TailwindCSS (production)
-	npm run build
+	bunx --bun tailwindcss -i ./resources/css/input.css -o ./static/css/tailwind.css --minify
 
 .PHONY: css-watch
 css-watch: ## Build TailwindCSS in watch mode (development)
-	npm run watch
+	bunx --bun tailwindcss -i ./resources/css/input.css -o ./static/css/tailwind.css --watch
 
 .PHONY: css-dev
 css-dev: css-watch ## Alias for css-watch
+
+.PHONY: dev
+dev: ## Run both backend server and CSS watcher (use with tmux/separate terminals)
+	@echo "Run in separate terminals:"
+	@echo "  Terminal 1: make serve"
+	@echo "  Terminal 2: make css-watch"
 
 # ============================================================================
 # Documentation
@@ -201,13 +258,27 @@ css-dev: css-watch ## Alias for css-watch
 
 ##@ Documentation
 
+DOCS_DIR := docs
+
 .PHONY: docs
 docs: ## Build documentation
-	$(UV) run sphinx-build -b html docs docs/_build/html
+	$(UV) run sphinx-build -b html $(DOCS_DIR) $(DOCS_DIR)/_build/html
 
 .PHONY: docs-serve
-docs-serve: ## Serve documentation locally
-	$(UV) run python -m http.server -d docs/_build/html 8080
+docs-serve: ## Serve documentation locally (with auto-rebuild)
+	$(UV) run sphinx-autobuild $(DOCS_DIR) $(DOCS_DIR)/_build/html --open-browser --port 8080
+
+.PHONY: docs-clean
+docs-clean: ## Clean documentation build
+	rm -rf $(DOCS_DIR)/_build
+
+.PHONY: docs-linkcheck
+docs-linkcheck: ## Check documentation links
+	$(UV) run sphinx-build -b linkcheck $(DOCS_DIR) $(DOCS_DIR)/_build/linkcheck
+
+.PHONY: changelog
+changelog: ## Generate changelog with git-cliff
+	$(UV) run git-cliff -o $(DOCS_DIR)/changelog.md
 
 # ============================================================================
 # Utilities
