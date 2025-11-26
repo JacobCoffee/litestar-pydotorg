@@ -294,16 +294,22 @@ class JobRenderController(Controller):
     async def list_jobs_html(
         self,
         job_service: JobService,
+        job_type_service: JobTypeService,
+        job_category_service: JobCategoryService,
         limit: Annotated[int, Parameter(ge=1, le=1000)] = 50,
         offset: Annotated[int, Parameter(ge=0)] = 0,
     ) -> Template:
         """Render jobs listing page."""
         jobs = await job_service.list_by_status(JobStatus.APPROVED, limit=limit, offset=offset)
+        job_types, _ = await job_type_service.list_and_count()
+        job_categories, _ = await job_category_service.list_and_count()
 
         return Template(
-            template_name="jobs/list.html",
+            template_name="jobs/index.html.jinja2",
             context={
                 "jobs": jobs,
+                "job_types": job_types,
+                "job_categories": job_categories,
                 "title": "Job Board",
                 "description": "Browse available Python jobs",
             },
@@ -322,21 +328,33 @@ class JobRenderController(Controller):
             msg = "Job not found"
             raise NotFoundException(msg)
 
+        related_jobs = await job_service.list_by_status(JobStatus.APPROVED, limit=5, offset=0)
+
         return Template(
-            template_name="jobs/detail.html",
+            template_name="jobs/detail.html.jinja2",
             context={
                 "job": job,
+                "related_jobs": [j for j in related_jobs if j.id != job.id][:5],
                 "title": f"{job.job_title} at {job.company_name}",
                 "description": job.description[:200] if job.description else "",
             },
         )
 
     @get("/submit")
-    async def submit_job_form(self) -> Template:
+    async def submit_job_form(
+        self,
+        job_type_service: JobTypeService,
+        job_category_service: JobCategoryService,
+    ) -> Template:
         """Render job submission form."""
+        job_types, _ = await job_type_service.list_and_count()
+        job_categories, _ = await job_category_service.list_and_count()
+
         return Template(
-            template_name="jobs/submit.html",
+            template_name="jobs/submit.html.jinja2",
             context={
+                "job_types": job_types,
+                "job_categories": job_categories,
                 "title": "Submit a Job",
                 "description": "Post a Python job opportunity",
             },

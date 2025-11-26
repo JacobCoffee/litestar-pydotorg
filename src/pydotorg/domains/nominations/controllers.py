@@ -258,7 +258,7 @@ class NominationsRenderController(Controller):
         elections = await election_service.get_active_elections(limit=limit, offset=offset)
 
         return Template(
-            template_name="nominations/list.html",
+            template_name="nominations/list.html.jinja2",
             context={
                 "elections": elections,
                 "title": "PSF Board Elections",
@@ -284,7 +284,7 @@ class NominationsRenderController(Controller):
         nominees = await nominee_service.get_accepted_nominees(election.id, limit=limit)
 
         return Template(
-            template_name="nominations/detail.html",
+            template_name="nominations/detail.html.jinja2",
             context={
                 "election": election,
                 "nominees": nominees,

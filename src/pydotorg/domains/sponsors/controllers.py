@@ -384,7 +384,7 @@ class SponsorRenderController(Controller):
         active_sponsorships = await sponsorship_service.list_active(limit=100)
 
         return Template(
-            template_name="sponsors/list.html",
+            template_name="sponsors/list.html.jinja2",
             context={
                 "sponsors": sponsors,
                 "active_sponsorships": active_sponsorships,
@@ -409,7 +409,7 @@ class SponsorRenderController(Controller):
         sponsorships = await sponsorship_service.list_by_sponsor_id(sponsor.id, limit=100)
 
         return Template(
-            template_name="sponsors/detail.html",
+            template_name="sponsors/detail.html.jinja2",
             context={
                 "sponsor": sponsor,
                 "sponsorships": sponsorships,
@@ -422,7 +422,7 @@ class SponsorRenderController(Controller):
     async def render_apply_form(self) -> Template:
         """Render sponsor application form."""
         return Template(
-            template_name="sponsors/apply.html",
+            template_name="sponsors/apply.html.jinja2",
             context={
                 "title": "Become a Sponsor",
                 "description": "Support the Python community by becoming a sponsor",
