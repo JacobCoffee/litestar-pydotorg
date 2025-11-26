@@ -10,7 +10,7 @@ help: ## Show this help message
 	@echo 'Usage:'
 	@echo '  make <target>'
 	@echo ''
-	@awk 'BEGIN {FS = ":.*##"; printf ""} /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) }' $(MAKEFILE_LIST)
+	@awk 'BEGIN {FS = ":.*##"; printf ""} /^[a-zA-Z0-9_-]+:.*?##/ { printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) }' $(MAKEFILE_LIST)
 
 # ============================================================================
 # Development Environment
@@ -91,6 +91,26 @@ test-cov: ## Run tests with coverage
 .PHONY: test-watch
 test-watch: ## Run tests in watch mode
 	$(UV) run pytest-watch -- $(TESTS_DIR) -v
+
+.PHONY: test-unit
+test-unit: ## Run unit tests only (no Docker required)
+	$(UV) run pytest $(TESTS_DIR)/unit -v
+
+.PHONY: test-integration
+test-integration: ## Run integration tests (requires Docker: make infra-up)
+	$(UV) run pytest $(TESTS_DIR)/integration -v
+
+.PHONY: test-e2e
+test-e2e: ## Run E2E Playwright tests (requires: uv run playwright install chromium)
+	$(UV) run pytest $(TESTS_DIR)/e2e -v
+
+.PHONY: test-full
+test-full: ## Run all tests (unit + integration + e2e)
+	$(UV) run pytest $(TESTS_DIR) -v
+
+.PHONY: playwright-install
+playwright-install: ## Install Playwright browsers for E2E testing
+	$(UV) run playwright install chromium
 
 # ============================================================================
 # Infrastructure
