@@ -1,28 +1,28 @@
 {% extends "admin/base.html.jinja2" %}
 
-{% block title %}Job {{ job.job_id }} - Python.org Admin{% endblock %}
+{% block title %}Job {{ job.key }} - Python.org Admin{% endblock %}
 
 {% block admin_content %}
 <div class="space-y-6">
     <div class="flex items-center gap-4">
-        <a href="/admin/tasks/queues/{{ job.queue or 'default' }}" class="btn btn-ghost btn-sm gap-2" hx-boost="true">
+        <a href="/admin/tasks/jobs" class="btn btn-ghost btn-sm gap-2" hx-boost="true">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
             </svg>
-            Back to Queue
+            Back to Jobs
         </a>
     </div>
 
     <div class="flex items-center justify-between">
         <div>
             <h1 class="text-3xl font-bold text-python-blue">Job Details</h1>
-            <p class="text-base-content/70 mt-1">{{ job.job_id }}</p>
+            <p class="text-base-content/70 mt-1 font-mono text-sm">{{ job.key }}</p>
         </div>
         <div class="flex gap-2">
             {% if job.status == 'failed' %}
             <button
                 class="btn btn-success btn-sm gap-2"
-                hx-post="/admin/tasks/jobs/{{ job.job_id }}/retry"
+                hx-post="/admin/tasks/jobs/{{ job.key }}/retry"
                 hx-swap="none"
                 hx-confirm="Retry this failed job?"
             >
@@ -36,7 +36,7 @@
             {% if job.status == 'active' %}
             <button
                 class="btn btn-error btn-sm gap-2"
-                hx-post="/admin/tasks/jobs/{{ job.job_id }}/abort"
+                hx-post="/admin/tasks/jobs/{{ job.key }}/abort"
                 hx-swap="none"
                 hx-confirm="Abort this running job?"
             >
@@ -61,8 +61,8 @@
 
                 <div class="space-y-4 mt-4">
                     <div class="flex justify-between items-center py-2 border-b border-base-300">
-                        <span class="text-base-content/70">Job ID</span>
-                        <code class="text-sm bg-base-200 px-2 py-1 rounded">{{ job.job_id }}</code>
+                        <span class="text-base-content/70">Job Key</span>
+                        <code class="text-sm bg-base-200 px-2 py-1 rounded">{{ job.key }}</code>
                     </div>
 
                     <div class="flex justify-between items-center py-2 border-b border-base-300">
@@ -72,12 +72,19 @@
 
                     <div class="flex justify-between items-center py-2 border-b border-base-300">
                         <span class="text-base-content/70">Queue</span>
-                        <span class="font-mono text-sm">{{ job.queue or 'default' }}</span>
+                        <span class="font-mono text-sm">default</span>
                     </div>
 
                     <div class="flex justify-between items-center py-2 border-b border-base-300">
                         <span class="text-base-content/70">Status</span>
-                        {% if job.status == 'queued' %}
+                        {% if job.status == 'scheduled' %}
+                        <span class="badge badge-primary gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Scheduled
+                        </span>
+                        {% elif job.status == 'queued' %}
                         <span class="badge badge-info">Queued</span>
                         {% elif job.status == 'active' %}
                         <span class="badge badge-warning">Active</span>
@@ -89,6 +96,18 @@
                         <span class="badge">{{ job.status }}</span>
                         {% endif %}
                     </div>
+
+                    {% if job.is_cron %}
+                    <div class="flex justify-between items-center py-2 border-b border-base-300">
+                        <span class="text-base-content/70">Job Type</span>
+                        <span class="badge badge-outline gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Cron Job
+                        </span>
+                    </div>
+                    {% endif %}
 
                     <div class="flex justify-between items-center py-2 border-b border-base-300">
                         <span class="text-base-content/70">Attempts</span>
@@ -108,36 +127,31 @@
                 </h2>
 
                 <div class="space-y-4 mt-4">
+                    {% if job.queued %}
+                    <div class="flex justify-between items-center py-2 border-b border-base-300">
+                        <span class="text-base-content/70">Queued</span>
+                        <span class="text-sm">{{ job.queued | friendly_date }}</span>
+                    </div>
+                    {% endif %}
+
                     {% if job.started %}
                     <div class="flex justify-between items-center py-2 border-b border-base-300">
                         <span class="text-base-content/70">Started</span>
-                        <span class="text-sm">{{ job.started.strftime('%b %d, %Y at %I:%M:%S %p') if job.started is not string else job.started }}</span>
+                        <span class="text-sm">{{ job.started | friendly_date }}</span>
                     </div>
                     {% endif %}
 
                     {% if job.completed %}
                     <div class="flex justify-between items-center py-2 border-b border-base-300">
                         <span class="text-base-content/70">Completed</span>
-                        <span class="text-sm">{{ job.completed.strftime('%b %d, %Y at %I:%M:%S %p') if job.completed is not string else job.completed }}</span>
-                    </div>
-                    {% endif %}
-
-                    {% if job.started and job.completed %}
-                    <div class="flex justify-between items-center py-2 border-b border-base-300">
-                        <span class="text-base-content/70">Duration</span>
-                        {% set duration = job.completed - job.started if job.started is not string and job.completed is not string else None %}
-                        {% if duration %}
-                        <span class="font-semibold">{{ "%.2f"|format(duration.total_seconds()) }}s</span>
-                        {% else %}
-                        <span class="text-base-content/60">N/A</span>
-                        {% endif %}
+                        <span class="text-sm">{{ job.completed | friendly_date }}</span>
                     </div>
                     {% endif %}
 
                     {% if job.scheduled %}
                     <div class="flex justify-between items-center py-2 border-b border-base-300">
                         <span class="text-base-content/70">Scheduled For</span>
-                        <span class="text-sm">{{ job.scheduled.strftime('%b %d, %Y at %I:%M:%S %p') if job.scheduled is not string else job.scheduled }}</span>
+                        <span class="text-sm">{{ job.scheduled | friendly_date }}</span>
                     </div>
                     {% endif %}
                 </div>
@@ -155,8 +169,8 @@
                 Result
             </h2>
 
-            <div class="mockup-code mt-4">
-                <pre><code>{{ job.result }}</code></pre>
+            <div class="mockup-code mt-4 overflow-x-auto">
+                <pre class="whitespace-pre-wrap break-words"><code>{{ job.result | pretty_json }}</code></pre>
             </div>
         </div>
     </div>
@@ -182,8 +196,8 @@
             {% if job.traceback %}
             <div class="mt-4">
                 <h3 class="font-semibold mb-2">Traceback:</h3>
-                <div class="mockup-code">
-                    <pre><code>{{ job.traceback }}</code></pre>
+                <div class="mockup-code overflow-x-auto max-h-[600px]">
+                    <pre class="whitespace-pre-wrap break-words text-sm p-4"><code>{{ job.traceback | format_traceback }}</code></pre>
                 </div>
             </div>
             {% endif %}
