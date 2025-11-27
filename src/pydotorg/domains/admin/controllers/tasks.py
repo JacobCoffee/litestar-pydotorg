@@ -62,21 +62,28 @@ class AdminTasksController(Controller):
         Returns:
             Task dashboard template
         """
-        stats = await task_admin_service.get_stats()
         queue_info = await task_admin_service.get_queue_info()
-        available_tasks = await task_admin_service.get_available_tasks()
         jobs = await task_admin_service.get_all_jobs(status=status, limit=50)
 
+        queues = [
+            {
+                "name": queue_info.get("name", "default"),
+                "workers": queue_info.get("workers", 0),
+                "queued": queue_info.get("queued", 0),
+                "active": queue_info.get("active", 0),
+                "scheduled": queue_info.get("scheduled", 0),
+                "complete": sum(1 for j in jobs if j.get("status") == "complete"),
+                "failed": sum(1 for j in jobs if j.get("status") == "failed"),
+                "jobs": jobs,
+            }
+        ]
+
         return Template(
-            template_name="admin/tasks/dashboard.html.jinja2",
+            template_name="admin/tasks/index.html.jinja2",
             context={
                 "title": "Task Queue Dashboard",
                 "description": "Monitor and manage background tasks",
-                "stats": stats,
-                "queue_info": queue_info,
-                "available_tasks": available_tasks,
-                "jobs": jobs,
-                "current_status": status,
+                "queues": queues,
             },
         )
 
@@ -85,25 +92,35 @@ class AdminTasksController(Controller):
         self,
         task_admin_service: TaskAdminService,
         status: Annotated[str | None, Parameter(description="Filter by status")] = None,
+        sort: Annotated[str | None, Parameter(description="Sort field")] = None,
+        order: Annotated[str, Parameter(description="Sort order (asc/desc)")] = "desc",
         limit: Annotated[int, Parameter(ge=1, le=200, description="Page size")] = 50,
     ) -> Template:
-        """Render job list with optional filtering.
+        """Render job list page with optional filtering and sorting.
 
         Args:
             task_admin_service: Task admin service
             status: Filter by job status
+            sort: Sort field (function, status, started, attempts)
+            order: Sort order (asc or desc)
             limit: Maximum jobs to return
 
         Returns:
-            Job list template or partial
+            Job list full page template
         """
-        jobs = await task_admin_service.get_all_jobs(status=status, limit=limit)
+        jobs = await task_admin_service.get_all_jobs(
+            status=status, limit=limit, sort_by=sort, sort_order=order
+        )
 
         return Template(
-            template_name="admin/tasks/partials/job_list.html.jinja2",
+            template_name="admin/tasks/jobs.html.jinja2",
             context={
+                "title": "All Jobs - Task Monitoring",
+                "description": "View and manage all background task jobs",
                 "jobs": jobs,
                 "status_filter": status,
+                "sort_field": sort,
+                "sort_order": order,
             },
         )
 
@@ -227,12 +244,20 @@ class AdminTasksController(Controller):
         job_key = await task_admin_service.enqueue_task("refresh_all_feeds")
 
         if not job_key:
-            return Response(content="Failed to enqueue task", status_code=400)
+            return Response(
+                content="Failed to enqueue task",
+                status_code=400,
+                headers={
+                    "HX-Trigger": '{"showToast": {"message": "Failed to enqueue feed refresh task", "type": "error"}}'
+                },
+            )
 
         return Response(
             content=f"Feed refresh task enqueued (Job: {job_key})",
             status_code=200,
-            headers={"HX-Trigger": "taskEnqueued"},
+            headers={
+                "HX-Trigger": '{"showToast": {"message": "Feed refresh task queued successfully!", "type": "success"}}'
+            },
         )
 
     @post("/enqueue/rebuild-indexes")
@@ -251,12 +276,20 @@ class AdminTasksController(Controller):
         job_key = await task_admin_service.enqueue_task("rebuild_search_index")
 
         if not job_key:
-            return Response(content="Failed to enqueue task", status_code=400)
+            return Response(
+                content="Failed to enqueue task",
+                status_code=400,
+                headers={
+                    "HX-Trigger": '{"showToast": {"message": "Failed to enqueue search index rebuild", "type": "error"}}'
+                },
+            )
 
         return Response(
             content=f"Search index rebuild task enqueued (Job: {job_key})",
             status_code=200,
-            headers={"HX-Trigger": "taskEnqueued"},
+            headers={
+                "HX-Trigger": '{"showToast": {"message": "Search index rebuild queued successfully!", "type": "success"}}'
+            },
         )
 
     @get("/stats")
@@ -280,5 +313,37 @@ class AdminTasksController(Controller):
             context={
                 "stats": stats,
                 "queue_info": queue_info,
+            },
+        )
+
+    @post("/enqueue/test-failure")
+    async def enqueue_test_failure(
+        self,
+        task_admin_service: TaskAdminService,
+    ) -> Response:
+        """Manually trigger a test task that will fail (for debugging tracebacks).
+
+        Args:
+            task_admin_service: Task admin service
+
+        Returns:
+            Success or error response with HX-Trigger
+        """
+        job_key = await task_admin_service.enqueue_task("test_failing_task")
+
+        if not job_key:
+            return Response(
+                content="Failed to enqueue task",
+                status_code=400,
+                headers={
+                    "HX-Trigger": '{"showToast": {"message": "Failed to enqueue test task", "type": "error"}}'
+                },
+            )
+
+        return Response(
+            content=f"Test failure task enqueued (Job: {job_key})",
+            status_code=200,
+            headers={
+                "HX-Trigger": '{"showToast": {"message": "Test failure task queued - it will fail!", "type": "warning"}}'
             },
         )
