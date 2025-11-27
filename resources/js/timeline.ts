@@ -100,8 +100,7 @@ document.addEventListener('alpine:init', () => {
           type: 'pep',
           pepNumber: 1,
           details: 'The PEP process was inspired by RFCs and provides a consistent way to propose and track changes to Python. It has become a model for other programming languages.',
-          highlights: ['Formalized development', 'Community input', 'Transparency'],
-          links: [{ label: 'PEP 1', url: 'https://peps.python.org/pep-0001/' }]
+          highlights: ['Formalized development', 'Community input', 'Transparency']
         },
         {
           id: 'python-2',
@@ -135,8 +134,7 @@ document.addEventListener('alpine:init', () => {
           type: 'pep',
           pepNumber: 8,
           details: 'PEP 8 codified "Pythonic" style and remains the most referenced PEP. It emphasizes readability and consistency across Python codebases worldwide.',
-          highlights: ['Code style', 'Readability first', 'Industry standard'],
-          links: [{ label: 'PEP 8', url: 'https://peps.python.org/pep-0008/' }]
+          highlights: ['Code style', 'Readability first', 'Industry standard']
         },
         {
           id: 'pep-20',
@@ -147,8 +145,7 @@ document.addEventListener('alpine:init', () => {
           type: 'pep',
           pepNumber: 20,
           details: '"Beautiful is better than ugly. Explicit is better than implicit." These 19 aphorisms guide Python development philosophy.',
-          highlights: ['Design philosophy', 'import this', '19 aphorisms'],
-          links: [{ label: 'PEP 20', url: 'https://peps.python.org/pep-0020/' }]
+          highlights: ['Design philosophy', 'import this', '19 aphorisms']
         },
         {
           id: 'pep-318',
@@ -159,8 +156,7 @@ document.addEventListener('alpine:init', () => {
           type: 'pep',
           pepNumber: 318,
           details: 'Decorators provide a clean syntax for modifying functions and methods, enabling frameworks like Flask and FastAPI.',
-          highlights: ['@ syntax', 'Metaprogramming', 'Framework enabler'],
-          links: [{ label: 'PEP 318', url: 'https://peps.python.org/pep-0318/' }]
+          highlights: ['@ syntax', 'Metaprogramming', 'Framework enabler']
         },
         {
           id: 'django',
@@ -191,8 +187,7 @@ document.addEventListener('alpine:init', () => {
           type: 'pep',
           pepNumber: 3000,
           details: 'This PEP outlined the goals for Python 3: removing cruft, improving Unicode handling, and making the language more consistent.',
-          highlights: ['Breaking changes', 'Unicode default', 'Language cleanup'],
-          links: [{ label: 'PEP 3000', url: 'https://peps.python.org/pep-3000/' }]
+          highlights: ['Breaking changes', 'Unicode default', 'Language cleanup']
         },
 
         // Python 3 Era (2008-2015)
@@ -226,8 +221,7 @@ document.addEventListener('alpine:init', () => {
           type: 'pep',
           pepNumber: 405,
           details: 'The venv module made creating isolated Python environments a first-class feature, simplifying dependency management.',
-          highlights: ['Built-in venvs', 'Isolation', 'No third-party needed'],
-          links: [{ label: 'PEP 405', url: 'https://peps.python.org/pep-0405/' }]
+          highlights: ['Built-in venvs', 'Isolation', 'No third-party needed']
         },
         {
           id: 'pep-484',
@@ -238,8 +232,7 @@ document.addEventListener('alpine:init', () => {
           type: 'pep',
           pepNumber: 484,
           details: 'Type hints allow developers to annotate types without affecting runtime behavior, enabling tools like mypy for static analysis.',
-          highlights: ['Static typing', 'Optional annotations', 'Tool support'],
-          links: [{ label: 'PEP 484', url: 'https://peps.python.org/pep-0484/' }]
+          highlights: ['Static typing', 'Optional annotations', 'Tool support']
         },
         {
           id: 'python-3.5',
@@ -263,8 +256,7 @@ document.addEventListener('alpine:init', () => {
           type: 'pep',
           pepNumber: 557,
           details: 'Data classes automatically generate __init__, __repr__, and comparison methods, reducing boilerplate code significantly.',
-          highlights: ['@dataclass', 'Auto-generated methods', 'Less boilerplate'],
-          links: [{ label: 'PEP 557', url: 'https://peps.python.org/pep-0557/' }]
+          highlights: ['@dataclass', 'Auto-generated methods', 'Less boilerplate']
         },
         {
           id: 'python-3.7',
@@ -295,8 +287,7 @@ document.addEventListener('alpine:init', () => {
           type: 'pep',
           pepNumber: 8016,
           details: 'The Steering Council consists of five elected members who make final decisions on PEPs and language direction.',
-          highlights: ['5-member council', 'Democratic election', 'Community governance'],
-          links: [{ label: 'PEP 8016', url: 'https://peps.python.org/pep-8016/' }]
+          highlights: ['5-member council', 'Democratic election', 'Community governance']
         },
         {
           id: 'python-3.8',
@@ -362,8 +353,7 @@ document.addEventListener('alpine:init', () => {
           type: 'pep',
           pepNumber: 703,
           details: 'The Steering Council accepted this historic PEP on October 24, 2023 with a gradual rollout plan. Introduces --disable-gil build flag for CPython to run without the GIL.',
-          highlights: ['--disable-gil flag', 'Gradual rollout', 'Py_GIL_DISABLED macro'],
-          links: [{ label: 'PEP 703', url: 'https://peps.python.org/pep-0703/' }]
+          highlights: ['--disable-gil flag', 'Gradual rollout', 'Py_GIL_DISABLED macro']
         },
         {
           id: 'python-3.11',
@@ -429,8 +419,7 @@ document.addEventListener('alpine:init', () => {
           type: 'pep',
           pepNumber: 649,
           details: 'Annotations are now evaluated lazily via __annotate__ descriptor when accessed, not at binding time. This became the default in Python 3.14.',
-          highlights: ['__annotate__ descriptor', 'Lazy evaluation', 'Supersedes PEP 563'],
-          links: [{ label: 'PEP 649', url: 'https://peps.python.org/pep-0649/' }]
+          highlights: ['__annotate__ descriptor', 'Lazy evaluation', 'Supersedes PEP 563']
         },
         {
           id: 'pep-723-final',
@@ -441,19 +430,20 @@ document.addEventListener('alpine:init', () => {
           type: 'pep',
           pepNumber: 723,
           details: 'Enables tools like uv and pip to automatically install dependencies for standalone scripts. Canonical spec maintained by PyPA.',
-          highlights: ['Script dependencies', 'uv/pip support', 'PyPA standard'],
-          links: [{ label: 'PEP 723', url: 'https://peps.python.org/pep-0723/' }]
+          highlights: ['Script dependencies', 'uv/pip support', 'PyPA standard']
         },
         {
           id: 'python-3.14',
           year: 2025,
           month: 'Oct',
           title: 'Python 3.14 Released',
-          description: 'Free-threaded Python official, PEP 649 default, template strings, and major performance gains.',
+          description: 'Free-threaded Python official, PEP 649 default, template strings, colorful REPL, and major performance gains.',
           type: 'release',
           version: '3.14',
-          details: 'Historic release: free-threaded Python (PEP 779) officially supported, deferred annotations default (PEP 649), t-strings (PEP 750), multiple interpreters (PEP 734), and 3-5% faster via tail-call interpreter.',
-          highlights: ['Free-threaded official', 'PEP 649 default', 'T-strings (PEP 750)', 'Zstd compression', 'Tail-call interpreter']
+          details: 'Historic release: free-threaded Python (PEP 779) officially supported, deferred annotations default (PEP 649), t-strings (PEP 750), multiple interpreters (PEP 734), and 3-5% faster via tail-call interpreter. The REPL now features syntax highlighting with beautiful colors!',
+          highlights: ['Free-threaded official', 'PEP 649 default', 'T-strings (PEP 750)', 'Zstd compression', 'Tail-call interpreter', '🌈 Colorful REPL'],
+          specialHighlight: '🌈 Colorful REPL',
+          links: [{ label: 'What\'s New', url: 'https://docs.python.org/3.14/whatsnew/3.14.html' }]
         },
         {
           id: 'python-3.9-eol',

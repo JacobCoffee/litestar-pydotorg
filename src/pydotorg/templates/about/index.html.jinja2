@@ -205,7 +205,7 @@
             <div class="timeline-river">
                 {# SVG Flowing River Path #}
                 <div class="river-svg-container">
-                    <svg class="river-svg" preserveAspectRatio="xMidYMin slice" xmlns="http://www.w3.org/2000/svg">
+                    <svg class="river-svg" xmlns="http://www.w3.org/2000/svg">
                         <defs>
                             {# Animated gradient for flowing water #}
                             <linearGradient id="riverGradient" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -232,17 +232,17 @@
                             </linearGradient>
                         </defs>
 
-                        {# Glowing outer path #}
-                        <path class="river-glow-path" d="M100,0 Q120,100 100,200 Q80,300 100,400 Q120,500 100,600 Q80,700 100,800 Q120,900 100,1000 Q80,1100 100,1200 Q120,1300 100,1400 Q80,1500 100,1600 Q120,1700 100,1800 Q80,1900 100,2000 Q120,2100 100,2200 Q80,2300 100,2400 Q120,2500 100,2600 Q80,2700 100,2800 Q120,2900 100,3000 Q80,3100 100,3200 Q120,3300 100,3400 Q80,3500 100,3600 Q120,3700 100,3800 Q80,3900 100,4000 L100,5000" />
+                        {# Glowing outer path - vertical line #}
+                        <line class="river-glow-path" x1="50%" y1="0" x2="50%" y2="100%" />
 
                         {# Main river path - blue base #}
-                        <path class="river-path" d="M100,0 Q120,100 100,200 Q80,300 100,400 Q120,500 100,600 Q80,700 100,800 Q120,900 100,1000 Q80,1100 100,1200 Q120,1300 100,1400 Q80,1500 100,1600 Q120,1700 100,1800 Q80,1900 100,2000 Q120,2100 100,2200 Q80,2300 100,2400 Q120,2500 100,2600 Q80,2700 100,2800 Q120,2900 100,3000 Q80,3100 100,3200 Q120,3300 100,3400 Q80,3500 100,3600 Q120,3700 100,3800 Q80,3900 100,4000 L100,5000" />
+                        <line class="river-path" x1="50%" y1="0" x2="50%" y2="100%" />
 
                         {# Animated flow overlay - yellow waves #}
-                        <path class="river-flow-path" d="M100,0 Q120,100 100,200 Q80,300 100,400 Q120,500 100,600 Q80,700 100,800 Q120,900 100,1000 Q80,1100 100,1200 Q120,1300 100,1400 Q80,1500 100,1600 Q120,1700 100,1800 Q80,1900 100,2000 Q120,2100 100,2200 Q80,2300 100,2400 Q120,2500 100,2600 Q80,2700 100,2800 Q120,2900 100,3000 Q80,3100 100,3200 Q120,3300 100,3400 Q80,3500 100,3600 Q120,3700 100,3800 Q80,3900 100,4000 L100,5000" />
+                        <line class="river-flow-path" x1="50%" y1="0" x2="50%" y2="100%" />
 
                         {# Inner highlight - white shimmer #}
-                        <path class="river-highlight-path" d="M100,0 Q120,100 100,200 Q80,300 100,400 Q120,500 100,600 Q80,700 100,800 Q120,900 100,1000 Q80,1100 100,1200 Q120,1300 100,1400 Q80,1500 100,1600 Q120,1700 100,1800 Q80,1900 100,2000 Q120,2100 100,2200 Q80,2300 100,2400 Q120,2500 100,2600 Q80,2700 100,2800 Q120,2900 100,3000 Q80,3100 100,3200 Q120,3300 100,3400 Q80,3500 100,3600 Q120,3700 100,3800 Q80,3900 100,4000 L100,5000" />
+                        <line class="river-highlight-path" x1="50%" y1="0" x2="50%" y2="100%" />
                     </svg>
                 </div>
 
@@ -330,11 +330,35 @@
                                         </a>
                                     </template>
 
+                                    {# External Links #}
+                                    <template x-if="event.links && event.links.length > 0">
+                                        <div class="timeline-links mb-3">
+                                            <template x-for="link in event.links" :key="link.url">
+                                                <a
+                                                    :href="link.url"
+                                                    target="_blank"
+                                                    rel="noopener"
+                                                    class="timeline-external-link"
+                                                    @click.stop
+                                                >
+                                                    <span x-text="link.label"></span>
+                                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                                                    </svg>
+                                                </a>
+                                            </template>
+                                        </div>
+                                    </template>
+
                                     {# Highlights #}
                                     <template x-if="event.highlights && event.highlights.length > 0">
                                         <div class="timeline-highlights">
                                             <template x-for="highlight in event.highlights" :key="highlight">
-                                                <span class="timeline-highlight" x-text="highlight"></span>
+                                                <span
+                                                    class="timeline-highlight"
+                                                    :class="{ 'timeline-highlight-rainbow': highlight.includes('REPL') }"
+                                                    x-html="highlight.includes('REPL') ? highlight.replace('REPL', '<span class=\'repl-rainbow\'>R</span><span class=\'repl-rainbow\'>E</span><span class=\'repl-rainbow\'>P</span><span class=\'repl-rainbow\'>L</span>') : highlight"
+                                                ></span>
                                             </template>
                                         </div>
                                     </template>
