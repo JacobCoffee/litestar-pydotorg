@@ -1,0 +1,126 @@
+{% extends "admin/base.html.jinja2" %}
+
+{% block title %}{{ entry.title }} - Entry Details - Python.org Admin{% endblock %}
+
+{% block admin_content %}
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold text-python-blue">Entry Details</h1>
+            <p class="text-base-content/70 mt-1">{{ entry.title }}</p>
+        </div>
+        <div class="flex gap-2">
+            <a href="/admin/blogs/entries" class="btn btn-ghost btn-sm" hx-boost="true">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Back to Entries
+            </a>
+            {% if entry.url %}
+            <a href="{{ entry.url }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+                View Original
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="card bg-base-100 shadow-lg border border-base-300">
+        <div class="card-body">
+            <div class="flex items-start gap-4">
+                <div class="avatar placeholder">
+                    <div class="bg-python-blue text-white rounded-lg w-16 h-16">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="flex-1">
+                    <h2 class="text-2xl font-bold">{{ entry.title }}</h2>
+
+                    <div class="flex items-center gap-4 text-sm text-base-content/60 mt-2">
+                        <span class="flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 5c7.18 0 13 5.82 13 13M6 11a7 7 0 017 7m-6 0a1 1 0 11-2 0 1 1 0 012 0z" />
+                            </svg>
+                            <a href="/admin/blogs/{{ entry.feed.id }}" class="link link-hover" hx-boost="true">
+                                {{ entry.feed.name }}
+                            </a>
+                        </span>
+                        {% if entry.pub_date %}
+                        <span class="flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            {{ entry.pub_date.strftime('%b %d, %Y at %I:%M %p') }}
+                        </span>
+                        {% endif %}
+                    </div>
+
+                    {% if entry.url %}
+                    <div class="mt-4">
+                        <h4 class="font-medium text-sm text-base-content/60">URL</h4>
+                        <a href="{{ entry.url }}" target="_blank" rel="noopener noreferrer" class="link link-primary text-sm break-all">
+                            {{ entry.url }}
+                        </a>
+                    </div>
+                    {% endif %}
+
+                    {% if entry.summary %}
+                    <div class="mt-4">
+                        <h4 class="font-medium text-sm text-base-content/60 mb-2">Summary</h4>
+                        <div class="prose max-w-none text-base-content/80">
+                            {{ entry.summary }}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if entry.content %}
+                    <div class="mt-4">
+                        <h4 class="font-medium text-sm text-base-content/60 mb-2">Content</h4>
+                        <div class="prose max-w-none bg-base-200 p-4 rounded-lg">
+                            {{ entry.content|safe }}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card bg-base-100 shadow-lg border border-base-300">
+        <div class="card-body">
+            <h3 class="text-xl font-bold mb-4">Metadata</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <h4 class="font-medium text-sm text-base-content/60">Feed</h4>
+                    <a href="/admin/blogs/{{ entry.feed.id }}" class="link link-primary" hx-boost="true">
+                        {{ entry.feed.name }}
+                    </a>
+                </div>
+                {% if entry.pub_date %}
+                <div>
+                    <h4 class="font-medium text-sm text-base-content/60">Published Date</h4>
+                    <p>{{ entry.pub_date.strftime('%B %d, %Y at %I:%M %p') }}</p>
+                </div>
+                {% endif %}
+                {% if entry.created %}
+                <div>
+                    <h4 class="font-medium text-sm text-base-content/60">Created</h4>
+                    <p>{{ entry.created.strftime('%B %d, %Y at %I:%M %p') }}</p>
+                </div>
+                {% endif %}
+                {% if entry.updated %}
+                <div>
+                    <h4 class="font-medium text-sm text-base-content/60">Updated</h4>
+                    <p>{{ entry.updated.strftime('%B %d, %Y at %I:%M %p') }}</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,100 @@
+<div class="space-y-4">
+    <div class="flex items-start gap-4">
+        <div class="avatar placeholder">
+            <div class="{% if feed.is_active %}bg-success{% else %}bg-warning{% endif %} text-white rounded-lg w-20 h-20">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 5c7.18 0 13 5.82 13 13M6 11a7 7 0 017 7m-6 0a1 1 0 11-2 0 1 1 0 012 0z" />
+                </svg>
+            </div>
+        </div>
+
+        <div class="flex-1">
+            <h3 class="text-xl font-bold">{{ feed.name }}</h3>
+            <div class="flex items-center gap-2 mt-1">
+                {% if feed.is_active %}
+                <span class="badge badge-success">Active</span>
+                {% else %}
+                <span class="badge badge-warning">Inactive</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 gap-4">
+        <div>
+            <h4 class="font-medium text-sm text-base-content/60">Website URL</h4>
+            <a href="{{ feed.website_url }}" target="_blank" rel="noopener noreferrer" class="link link-primary text-sm break-all">
+                {{ feed.website_url }}
+            </a>
+        </div>
+
+        <div>
+            <h4 class="font-medium text-sm text-base-content/60">Feed URL</h4>
+            <a href="{{ feed.feed_url }}" target="_blank" rel="noopener noreferrer" class="link link-primary text-xs break-all">
+                {{ feed.feed_url }}
+            </a>
+        </div>
+
+        {% if feed.last_fetched %}
+        <div>
+            <h4 class="font-medium text-sm text-base-content/60">Last Fetched</h4>
+            <p class="text-sm">{{ feed.last_fetched.strftime('%B %d, %Y at %I:%M %p') }}</p>
+        </div>
+        {% endif %}
+    </div>
+
+    {% if entries %}
+    <div class="bg-base-200 rounded-lg p-3">
+        <h4 class="font-medium text-sm text-base-content/60 mb-2">Recent Entries ({{ entries|length }})</h4>
+        <div class="space-y-2 max-h-48 overflow-y-auto">
+            {% for entry in entries[:5] %}
+            <div class="text-sm p-2 bg-base-100 rounded">
+                <div class="flex flex-col gap-1">
+                    <p class="font-medium line-clamp-1">{{ entry.title }}</p>
+                    {% if entry.pub_date %}
+                    <p class="text-xs text-base-content/60">{{ entry.pub_date.strftime('%b %d, %Y at %I:%M %p') }}</p>
+                    {% endif %}
+                    {% if entry.summary %}
+                    <p class="text-xs text-base-content/70 line-clamp-2">{{ entry.summary[:150] }}...</p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+            {% if entries|length > 5 %}
+            <p class="text-xs text-center text-base-content/60">+ {{ entries|length - 5 }} more entries</p>
+            {% endif %}
+        </div>
+    </div>
+    {% else %}
+    <div class="bg-base-200 rounded-lg p-3 text-center">
+        <p class="text-sm text-base-content/60">No entries found for this feed</p>
+    </div>
+    {% endif %}
+
+    <div class="flex gap-2 pt-4 border-t border-base-300">
+        <a href="/admin/blogs/{{ feed.id }}" class="btn btn-primary btn-sm flex-1" hx-boost="true">
+            View Full Details
+        </a>
+        {% if feed.is_active %}
+        <button
+            class="btn btn-warning btn-sm"
+            hx-post="/admin/blogs/{{ feed.id }}/deactivate"
+            hx-swap="none"
+            hx-confirm="Are you sure you want to deactivate this feed?"
+            onclick="feed_preview_modal.close()"
+        >
+            Deactivate
+        </button>
+        {% else %}
+        <button
+            class="btn btn-success btn-sm"
+            hx-post="/admin/blogs/{{ feed.id }}/activate"
+            hx-swap="none"
+            hx-confirm="Are you sure you want to activate this feed?"
+            onclick="feed_preview_modal.close()"
+        >
+            Activate
+        </button>
+        {% endif %}
+    </div>
+</div>

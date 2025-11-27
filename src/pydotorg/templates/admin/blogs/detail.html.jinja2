@@ -1,0 +1,154 @@
+{% extends "admin/base.html.jinja2" %}
+
+{% block title %}{{ feed.name }} - Feed Details - Python.org Admin{% endblock %}
+
+{% block admin_content %}
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold text-python-blue">Feed Details</h1>
+            <p class="text-base-content/70 mt-1">{{ feed.name }}</p>
+        </div>
+        <div class="flex gap-2">
+            <a href="/admin/blogs" class="btn btn-ghost btn-sm" hx-boost="true">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Back to Feeds
+            </a>
+        </div>
+    </div>
+
+    <div class="card bg-base-100 shadow-lg border border-base-300">
+        <div class="card-body">
+            <div class="flex items-start gap-4">
+                <div class="avatar placeholder">
+                    <div class="{% if feed.is_active %}bg-success{% else %}bg-warning{% endif %} text-white rounded-lg w-16 h-16">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 5c7.18 0 13 5.82 13 13M6 11a7 7 0 017 7m-6 0a1 1 0 11-2 0 1 1 0 012 0z" />
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="flex-1">
+                    <div class="flex items-center gap-2">
+                        <h2 class="text-2xl font-bold">{{ feed.name }}</h2>
+                        {% if feed.is_active %}
+                        <span class="badge badge-success">Active</span>
+                        {% else %}
+                        <span class="badge badge-warning">Inactive</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        <div>
+                            <h4 class="font-medium text-sm text-base-content/60">Website URL</h4>
+                            <a href="{{ feed.website_url }}" target="_blank" rel="noopener noreferrer" class="link link-primary">
+                                {{ feed.website_url }}
+                            </a>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-sm text-base-content/60">Feed URL</h4>
+                            <a href="{{ feed.feed_url }}" target="_blank" rel="noopener noreferrer" class="link link-primary text-sm break-all">
+                                {{ feed.feed_url }}
+                            </a>
+                        </div>
+                        {% if feed.last_fetched %}
+                        <div>
+                            <h4 class="font-medium text-sm text-base-content/60">Last Fetched</h4>
+                            <p>{{ feed.last_fetched.strftime('%b %d, %Y at %I:%M %p') }}</p>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="flex gap-2 mt-4">
+                        {% if feed.is_active %}
+                        <button
+                            class="btn btn-warning btn-sm"
+                            hx-post="/admin/blogs/{{ feed.id }}/deactivate"
+                            hx-swap="none"
+                            hx-confirm="Are you sure you want to deactivate this feed?"
+                        >
+                            Deactivate
+                        </button>
+                        {% else %}
+                        <button
+                            class="btn btn-success btn-sm"
+                            hx-post="/admin/blogs/{{ feed.id }}/activate"
+                            hx-swap="none"
+                            hx-confirm="Are you sure you want to activate this feed?"
+                        >
+                            Activate
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card bg-base-100 shadow-lg border border-base-300">
+        <div class="card-body">
+            <h3 class="text-xl font-bold mb-4">Recent Entries</h3>
+
+            {% if entries %}
+            <div class="overflow-x-auto">
+                <table class="table table-zebra">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Published Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for entry in entries %}
+                        <tr class="hover">
+                            <td>
+                                <div>
+                                    <div class="font-bold">{{ entry.title }}</div>
+                                    {% if entry.summary %}
+                                    <div class="text-xs text-base-content/60 line-clamp-1">{{ entry.summary[:100] }}...</div>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td>
+                                <span class="text-sm">
+                                    {% if entry.pub_date %}
+                                    {{ entry.pub_date.strftime('%b %d, %Y') }}
+                                    {% else %}
+                                    N/A
+                                    {% endif %}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="flex gap-2">
+                                    <a href="/admin/blogs/entries/{{ entry.id }}" class="btn btn-ghost btn-xs" title="View Details" hx-boost="true">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                        </svg>
+                                    </a>
+                                    {% if entry.url %}
+                                    <a href="{{ entry.url }}" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-xs" title="View Original">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                        </svg>
+                                    </a>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center py-8">
+                <p class="text-base-content/60">No entries found for this feed</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

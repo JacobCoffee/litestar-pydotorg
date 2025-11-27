@@ -1,0 +1,197 @@
+{% extends "admin/base.html.jinja2" %}
+
+{% block title %}Blog Feed Management - Python.org Admin{% endblock %}
+
+{% block admin_content %}
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold text-python-blue">Blog Feed Management</h1>
+            <p class="text-base-content/70 mt-1">Manage RSS/Atom feeds and blog entries</p>
+        </div>
+        <div class="flex gap-2">
+            <a href="/admin/blogs/entries" class="btn btn-outline btn-sm" hx-boost="true">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                </svg>
+                View Entries
+            </a>
+        </div>
+    </div>
+
+    {% if stats %}
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <div class="stat bg-base-100 shadow rounded-lg p-4">
+            <div class="stat-title text-xs">Total Feeds</div>
+            <div class="stat-value text-2xl text-python-blue">{{ stats.total_feeds }}</div>
+        </div>
+        <div class="stat bg-base-100 shadow rounded-lg p-4">
+            <div class="stat-title text-xs">Active Feeds</div>
+            <div class="stat-value text-2xl text-success">{{ stats.active_feeds }}</div>
+        </div>
+        <div class="stat bg-base-100 shadow rounded-lg p-4">
+            <div class="stat-title text-xs">Inactive</div>
+            <div class="stat-value text-2xl text-warning">{{ stats.inactive_feeds }}</div>
+        </div>
+        <div class="stat bg-base-100 shadow rounded-lg p-4">
+            <div class="stat-title text-xs">Total Entries</div>
+            <div class="stat-value text-2xl">{{ stats.total_entries }}</div>
+        </div>
+        <div class="stat bg-base-100 shadow rounded-lg p-4">
+            <div class="stat-title text-xs">Entries Today</div>
+            <div class="stat-value text-2xl text-info">{{ stats.entries_today }}</div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="flex gap-2 flex-wrap">
+        <a
+            href="/admin/blogs"
+            class="btn btn-sm {% if not request.query_params.get('is_active') %}btn-primary{% else %}btn-ghost{% endif %}"
+            hx-boost="true"
+        >
+            All
+            {% if stats %}
+            <span class="badge badge-sm">{{ stats.total_feeds }}</span>
+            {% endif %}
+        </a>
+        <a
+            href="/admin/blogs?is_active=true"
+            class="btn btn-sm {% if request.query_params.get('is_active') == 'true' %}btn-primary{% else %}btn-ghost{% endif %}"
+            hx-boost="true"
+        >
+            Active
+            {% if stats and stats.active_feeds %}
+            <span class="badge badge-success badge-sm">{{ stats.active_feeds }}</span>
+            {% endif %}
+        </a>
+        <a
+            href="/admin/blogs?is_active=false"
+            class="btn btn-sm {% if request.query_params.get('is_active') == 'false' %}btn-primary{% else %}btn-ghost{% endif %}"
+            hx-boost="true"
+        >
+            Inactive
+            {% if stats and stats.inactive_feeds %}
+            <span class="badge badge-warning badge-sm">{{ stats.inactive_feeds }}</span>
+            {% endif %}
+        </a>
+    </div>
+
+    <div class="flex gap-2 items-center">
+        <div class="form-control flex-1 max-w-md">
+            <div class="input-group">
+                <input
+                    type="text"
+                    placeholder="Search feeds by name..."
+                    class="input input-bordered input-sm w-full"
+                    name="search"
+                    value="{{ request.query_params.get('search', '') }}"
+                    hx-get="/admin/blogs"
+                    hx-trigger="keyup changed delay:500ms"
+                    hx-target="#feeds-list"
+                    hx-include="[name='is_active']"
+                />
+                <button class="btn btn-sm btn-square" type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="feeds-list">
+        {% if feeds %}
+        <div class="space-y-4">
+            {% for feed in feeds %}
+            {% include 'admin/blogs/partials/feed_row.html.jinja2' %}
+            {% endfor %}
+        </div>
+
+        {% if pagination and pagination.total > pagination.limit %}
+        <div class="flex justify-center mt-6">
+            <div class="join">
+                {% if pagination.offset > 0 %}
+                <button
+                    class="join-item btn btn-sm"
+                    hx-get="/admin/blogs?is_active={{ request.query_params.get('is_active', '') }}&search={{ request.query_params.get('search', '') }}&limit={{ pagination.limit }}&offset={{ [0, pagination.offset - pagination.limit]|max }}"
+                    hx-target="#feeds-list"
+                    hx-swap="outerHTML"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                    Previous
+                </button>
+                {% endif %}
+
+                {% set current_page = (pagination.offset // pagination.limit) + 1 %}
+                {% set total_pages = (pagination.total // pagination.limit) + (1 if pagination.total % pagination.limit else 0) %}
+
+                <button class="join-item btn btn-sm btn-active">
+                    Page {{ current_page }} of {{ total_pages }}
+                </button>
+
+                {% if pagination.offset + pagination.limit < pagination.total %}
+                <button
+                    class="join-item btn btn-sm"
+                    hx-get="/admin/blogs?is_active={{ request.query_params.get('is_active', '') }}&search={{ request.query_params.get('search', '') }}&limit={{ pagination.limit }}&offset={{ pagination.offset + pagination.limit }}"
+                    hx-target="#feeds-list"
+                    hx-swap="outerHTML"
+                >
+                    Next
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+        {% else %}
+        <div class="card bg-base-100 shadow-lg border border-base-300">
+            <div class="card-body text-center py-12">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-base-content/30 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 5c7.18 0 13 5.82 13 13M6 11a7 7 0 017 7m-6 0a1 1 0 11-2 0 1 1 0 012 0z" />
+                </svg>
+                <h3 class="text-xl font-bold mb-2">No Feeds Found</h3>
+                <p class="text-base-content/60 mb-4">
+                    {% if request.query_params.get('search') %}
+                    No feeds matching your search criteria
+                    {% elif request.query_params.get('is_active') == 'false' %}
+                    No inactive feeds found!
+                    {% elif request.query_params.get('is_active') == 'true' %}
+                    No active feeds found!
+                    {% else %}
+                    There are no feeds configured
+                    {% endif %}
+                </p>
+                <a href="/admin/blogs" class="btn btn-primary btn-sm">
+                    View All Feeds
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<dialog id="feed_preview_modal" class="modal">
+    <div class="modal-box max-w-4xl">
+        <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+        </form>
+        <div id="feed_preview_content">
+        </div>
+    </div>
+</dialog>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.body.addEventListener('htmx:afterSwap', function(evt) {
+        if (evt.detail.target.id === 'feed_preview_content') {
+            feed_preview_modal.showModal();
+        }
+    });
+</script>
+{% endblock %}
