@@ -1,0 +1,363 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/**"
+      - "tests/**"
+      - "pyproject.toml"
+      - "uv.lock"
+      - ".github/workflows/**"
+  pull_request:
+    branches: [main]
+    paths:
+      - "src/**"
+      - "tests/**"
+      - "pyproject.toml"
+      - "uv.lock"
+      - ".github/workflows/**"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ==================================================================================== #
+  # SECURITY SCAN (workflow security with zizmor)
+  # ==================================================================================== #
+  security:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
+      - name: Run zizmor
+        uses: zizmorcore/zizmor-action@e639db99335bc9038abc0e066dfcd72e23d26fb4 # v0.3.0
+        with:
+          inputs: .github/workflows/
+
+  # ==================================================================================== #
+  # VALIDATE (lint, format, type-check in one job)
+  # ==================================================================================== #
+  validate:
+    name: Validate
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@f0ec1fc3b38f5e7cd731bb6ce540c5af426746bb # v6.1.0
+        with:
+          enable-cache: true
+
+      - name: Create virtual environment
+        run: uv sync --all-extras --group dev
+
+      - name: Run ruff check
+        run: uv run ruff check src/pydotorg tests
+
+      - name: Run ruff format check
+        run: uv run ruff format --check src/pydotorg tests
+
+      - name: Run codespell
+        run: uv run codespell
+
+      - name: Run ty type checker
+        uses: JacobCoffee/ty-action@53e9dd1d07f0793d33756a9230c6fc39c23089a3 # v0.0.1
+        with:
+          args: check src/pydotorg
+
+  # ==================================================================================== #
+  # FRONTEND BUILD
+  # ==================================================================================== #
+  frontend:
+    name: Frontend Build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@4bc047ad259df6fc24a6c9b0f9a0cb08cf17fbe5 # v2.0.2
+
+      - name: Install frontend dependencies
+        run: bunx --bun install
+
+      - name: Lint frontend
+        run: bunx --bun biome check . || true
+
+      - name: Build Vite assets
+        run: bunx --bun vite build
+
+      - name: Build TailwindCSS
+        run: bunx --bun tailwindcss -i ./resources/css/input.css -o ./static/css/tailwind.css --minify
+
+  # ==================================================================================== #
+  # UNIT TESTS (fast, no external services)
+  # ==================================================================================== #
+  test-unit:
+    name: Unit Tests
+    needs: [validate]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@f0ec1fc3b38f5e7cd731bb6ce540c5af426746bb # v6.1.0
+        with:
+          enable-cache: true
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: uv sync --all-extras --group test
+
+      - name: Run unit tests
+        run: uv run pytest tests/unit -v --tb=short
+
+  # ==================================================================================== #
+  # INTEGRATION TESTS (with PostgreSQL and Redis)
+  # ==================================================================================== #
+  test-integration:
+    name: Integration Tests
+    needs: [validate]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: pydotorg_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@f0ec1fc3b38f5e7cd731bb6ce540c5af426746bb # v6.1.0
+        with:
+          enable-cache: true
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: uv sync --all-extras --group test
+
+      - name: Run integration tests
+        env:
+          DATABASE_URL: postgresql+asyncpg://postgres:postgres@localhost:5432/pydotorg_test
+          REDIS_URL: redis://localhost:6379
+        run: uv run pytest tests/integration -v --tb=short
+
+  # ==================================================================================== #
+  # E2E TESTS (Playwright)
+  # ==================================================================================== #
+  test-e2e:
+    name: E2E Tests
+    needs: [test-unit, test-integration]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: pydotorg_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@f0ec1fc3b38f5e7cd731bb6ce540c5af426746bb # v6.1.0
+        with:
+          enable-cache: true
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: uv sync --all-extras --group test
+
+      - name: Install Playwright browsers
+        run: uv run playwright install chromium --with-deps
+
+      - name: Run E2E tests
+        env:
+          DATABASE_URL: postgresql+asyncpg://postgres:postgres@localhost:5432/pydotorg_test
+          REDIS_URL: redis://localhost:6379
+        run: uv run pytest tests/e2e -v --tb=short
+
+  # ==================================================================================== #
+  # COVERAGE (runs after tests pass)
+  # ==================================================================================== #
+  coverage:
+    name: Test Coverage
+    needs: [test-unit, test-integration]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: pydotorg_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@f0ec1fc3b38f5e7cd731bb6ce540c5af426746bb # v6.1.0
+        with:
+          enable-cache: true
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: uv sync --all-extras --group test
+
+      - name: Run tests with coverage
+        env:
+          DATABASE_URL: postgresql+asyncpg://postgres:postgres@localhost:5432/pydotorg_test
+          REDIS_URL: redis://localhost:6379
+        run: |
+          uv run pytest tests \
+            --cov=src/pydotorg \
+            --cov-report=term-missing \
+            --cov-report=xml \
+            -v
+
+      - name: Upload coverage to Codecov
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
+        with:
+          file: ./coverage.xml
+          fail_ci_if_error: false
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+  # ==================================================================================== #
+  # CI SUCCESS (gate for branch protection)
+  # ==================================================================================== #
+  ci-success:
+    name: CI Success
+    runs-on: ubuntu-latest
+    needs: [security, validate, frontend, test-unit, test-integration, test-e2e, coverage]
+    if: always()
+    permissions:
+      contents: read
+    steps:
+      - name: Check CI results
+        env:
+          SECURITY_RESULT: ${{ needs.security.result }}
+          VALIDATE_RESULT: ${{ needs.validate.result }}
+          FRONTEND_RESULT: ${{ needs.frontend.result }}
+          UNIT_RESULT: ${{ needs.test-unit.result }}
+          INTEGRATION_RESULT: ${{ needs.test-integration.result }}
+          E2E_RESULT: ${{ needs.test-e2e.result }}
+          COVERAGE_RESULT: ${{ needs.coverage.result }}
+        run: |
+          for result in "${SECURITY_RESULT}" "${VALIDATE_RESULT}" "${FRONTEND_RESULT}" "${UNIT_RESULT}" "${INTEGRATION_RESULT}" "${E2E_RESULT}" "${COVERAGE_RESULT}"; do
+            if [[ "${result}" != "success" ]]; then
+              echo "CI failed! Result: ${result}"
+              exit 1
+            fi
+          done
+
+          echo "CI passed!"
