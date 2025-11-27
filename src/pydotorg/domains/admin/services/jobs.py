@@ -127,9 +127,7 @@ class JobAdminService:
         await self.session.refresh(job)
         return job
 
-    async def add_review_comment(
-        self, job_id: UUID, comment: str, reviewer_id: UUID
-    ) -> JobReviewComment | None:
+    async def add_review_comment(self, job_id: UUID, comment: str, reviewer_id: UUID) -> JobReviewComment | None:
         """Add a review comment to a job.
 
         Args:

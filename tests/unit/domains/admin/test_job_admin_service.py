@@ -8,7 +8,7 @@ from uuid import uuid4
 import pytest
 
 from pydotorg.domains.admin.services.jobs import JobAdminService
-from pydotorg.domains.jobs.models import Job, JobReviewComment, JobStatus
+from pydotorg.domains.jobs.models import Job, JobStatus
 
 
 @pytest.fixture

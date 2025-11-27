@@ -34,9 +34,7 @@ class AdminAuthBackend(AuthenticationBackend):
     def __init__(self, secret_key: str) -> None:
         super().__init__(secret_key)
         self._engine = create_async_engine(str(settings.database_url))
-        self._session_maker: async_sessionmaker[AsyncSession] = async_sessionmaker(
-            self._engine, expire_on_commit=False
-        )
+        self._session_maker: async_sessionmaker[AsyncSession] = async_sessionmaker(self._engine, expire_on_commit=False)
         self._litestar_session_service = SessionService()
 
     async def login(self, request: Request) -> bool:

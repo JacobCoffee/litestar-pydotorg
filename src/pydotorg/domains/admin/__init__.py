@@ -2,10 +2,13 @@
 
 from pydotorg.domains.admin import urls
 from pydotorg.domains.admin.controllers import (
+    AdminBlogsController,
     AdminDashboardController,
+    AdminEventsController,
     AdminJobsController,
     AdminLogsController,
     AdminPagesController,
+    AdminSettingsController,
     AdminSponsorsController,
     AdminUsersController,
 )
@@ -18,24 +21,33 @@ from pydotorg.domains.admin.schemas import (
     UserStaffUpdate,
 )
 from pydotorg.domains.admin.services import (
+    BlogAdminService,
     DashboardService,
+    EventAdminService,
     JobAdminService,
+    PageAdminService,
     SponsorAdminService,
     UserAdminService,
 )
 
 __all__ = [
+    "AdminBlogsController",
     "AdminDashboardController",
+    "AdminEventsController",
     "AdminJobsController",
     "AdminLogsController",
     "AdminPagesController",
     "AdminPermission",
+    "AdminSettingsController",
     "AdminSponsorsController",
     "AdminUserRead",
     "AdminUsersController",
+    "BlogAdminService",
     "DashboardService",
     "DashboardStats",
+    "EventAdminService",
     "JobAdminService",
+    "PageAdminService",
     "PendingModeration",
     "SponsorAdminService",
     "UserAdminService",
