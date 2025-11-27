@@ -139,7 +139,7 @@ class Settings(BaseSettings):
 
     fastly_api_key: str | None = None
 
-    meilisearch_url: str = "http://localhost:7700"
+    meilisearch_url: str = "http://127.0.0.1:7700"
     meilisearch_api_key: str | None = None
     meilisearch_index_prefix: str = "pydotorg_"
 
