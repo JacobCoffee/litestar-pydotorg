@@ -94,7 +94,7 @@
 <div x-data="modelSearch()" class="space-y-8">
     <div class="relative max-w-md">
         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <i data-lucide="search" class="h-5 w-5 text-base-content/40"></i>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-base-content/40"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
         </div>
         <input
             type="text"
@@ -105,7 +105,7 @@
         />
         <div x-show="query.length > 0" class="absolute inset-y-0 right-0 pr-3 flex items-center">
             <button @click="clear()" class="btn btn-ghost btn-xs btn-circle">
-                <i data-lucide="x" class="h-4 w-4"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
             </button>
         </div>
     </div>
@@ -135,7 +135,7 @@
     </div>
 
     <div x-show="query.length > 0 && filteredItems.length === 0" x-cloak class="text-center py-8">
-        <i data-lucide="search-x" class="h-12 w-12 text-base-content/30 mx-auto mb-3"></i>
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-base-content/30 mx-auto mb-3"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path><path d="m8 8 6 6"></path><path d="m14 8-6 6"></path></svg>
         <p class="text-base-content/50">No models found matching "<span x-text="query"></span>"</p>
     </div>
 
