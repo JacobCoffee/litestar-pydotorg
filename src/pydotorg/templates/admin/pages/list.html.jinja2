@@ -1,0 +1,210 @@
+{% extends "admin/base.html.jinja2" %}
+
+{% block title %}Page Management - Python.org Admin{% endblock %}
+
+{% block admin_content %}
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold text-python-blue">Page Management</h1>
+            <p class="text-base-content/70 mt-1">Manage content pages across the site</p>
+        </div>
+        <div class="flex gap-2">
+            <a href="/admin/pages/new" class="btn btn-primary btn-sm" hx-boost="true">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+                New Page
+            </a>
+        </div>
+    </div>
+
+    {% if stats %}
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+        <div class="stat bg-base-100 shadow rounded-lg p-4">
+            <div class="stat-title text-xs">Total Pages</div>
+            <div class="stat-value text-2xl text-python-blue">{{ stats.total_pages }}</div>
+        </div>
+        <div class="stat bg-base-100 shadow rounded-lg p-4">
+            <div class="stat-title text-xs">Published</div>
+            <div class="stat-value text-2xl text-success">{{ stats.published_pages }}</div>
+        </div>
+        <div class="stat bg-base-100 shadow rounded-lg p-4">
+            <div class="stat-title text-xs">Unpublished</div>
+            <div class="stat-value text-2xl text-warning">{{ stats.unpublished_pages }}</div>
+        </div>
+        <div class="stat bg-base-100 shadow rounded-lg p-4">
+            <div class="stat-title text-xs">Markdown</div>
+            <div class="stat-value text-2xl">{{ stats.markdown_pages }}</div>
+        </div>
+        <div class="stat bg-base-100 shadow rounded-lg p-4">
+            <div class="stat-title text-xs">HTML/RST</div>
+            <div class="stat-value text-2xl">{{ stats.html_pages + stats.rst_pages }}</div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="flex gap-2 flex-wrap">
+        <a
+            href="/admin/pages"
+            class="btn btn-sm {% if not request.query_params.get('published') %}btn-primary{% else %}btn-ghost{% endif %}"
+            hx-boost="true"
+        >
+            All
+            {% if stats %}
+            <span class="badge badge-sm">{{ stats.total_pages }}</span>
+            {% endif %}
+        </a>
+        <a
+            href="/admin/pages?published=true"
+            class="btn btn-sm {% if request.query_params.get('published') == 'true' %}btn-primary{% else %}btn-ghost{% endif %}"
+            hx-boost="true"
+        >
+            Published
+            {% if stats and stats.published_pages %}
+            <span class="badge badge-success badge-sm">{{ stats.published_pages }}</span>
+            {% endif %}
+        </a>
+        <a
+            href="/admin/pages?published=false"
+            class="btn btn-sm {% if request.query_params.get('published') == 'false' %}btn-primary{% else %}btn-ghost{% endif %}"
+            hx-boost="true"
+        >
+            Unpublished
+            {% if stats and stats.unpublished_pages %}
+            <span class="badge badge-warning badge-sm">{{ stats.unpublished_pages }}</span>
+            {% endif %}
+        </a>
+    </div>
+
+    <div class="flex gap-2 flex-wrap">
+        <a
+            href="/admin/pages{% if request.query_params.get('published') %}?published={{ request.query_params.get('published') }}{% endif %}"
+            class="btn btn-sm {% if not request.query_params.get('content_type') %}btn-primary{% else %}btn-ghost{% endif %}"
+            hx-boost="true"
+        >
+            All Types
+        </a>
+        <a
+            href="/admin/pages?content_type=markdown{% if request.query_params.get('published') %}&published={{ request.query_params.get('published') }}{% endif %}"
+            class="btn btn-sm {% if request.query_params.get('content_type') == 'markdown' %}btn-primary{% else %}btn-ghost{% endif %}"
+            hx-boost="true"
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            Markdown
+        </a>
+        <a
+            href="/admin/pages?content_type=html{% if request.query_params.get('published') %}&published={{ request.query_params.get('published') }}{% endif %}"
+            class="btn btn-sm {% if request.query_params.get('content_type') == 'html' %}btn-primary{% else %}btn-ghost{% endif %}"
+            hx-boost="true"
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+            </svg>
+            HTML
+        </a>
+        <a
+            href="/admin/pages?content_type=restructuredtext{% if request.query_params.get('published') %}&published={{ request.query_params.get('published') }}{% endif %}"
+            class="btn btn-sm {% if request.query_params.get('content_type') == 'restructuredtext' %}btn-primary{% else %}btn-ghost{% endif %}"
+            hx-boost="true"
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
+            </svg>
+            reStructuredText
+        </a>
+    </div>
+
+    <div id="pages-list">
+        {% if pages %}
+        <div class="space-y-4">
+            {% for page in pages %}
+            {% include 'admin/pages/partials/page_row.html.jinja2' %}
+            {% endfor %}
+        </div>
+
+        {% if pagination and pagination.total > pagination.limit %}
+        <div class="flex justify-center mt-6">
+            <div class="join">
+                {% if pagination.offset > 0 %}
+                <button
+                    class="join-item btn btn-sm"
+                    hx-get="/admin/pages?published={{ request.query_params.get('published', '') }}&content_type={{ request.query_params.get('content_type', '') }}&limit={{ pagination.limit }}&offset={{ [0, pagination.offset - pagination.limit]|max }}"
+                    hx-target="#pages-list"
+                    hx-swap="outerHTML"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                    Previous
+                </button>
+                {% endif %}
+
+                {% set current_page = (pagination.offset // pagination.limit) + 1 %}
+                {% set total_pages = (pagination.total // pagination.limit) + (1 if pagination.total % pagination.limit else 0) %}
+
+                <button class="join-item btn btn-sm btn-active">
+                    Page {{ current_page }} of {{ total_pages }}
+                </button>
+
+                {% if pagination.offset + pagination.limit < pagination.total %}
+                <button
+                    class="join-item btn btn-sm"
+                    hx-get="/admin/pages?published={{ request.query_params.get('published', '') }}&content_type={{ request.query_params.get('content_type', '') }}&limit={{ pagination.limit }}&offset={{ pagination.offset + pagination.limit }}"
+                    hx-target="#pages-list"
+                    hx-swap="outerHTML"
+                >
+                    Next
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+        {% else %}
+        <div class="card bg-base-100 shadow-lg border border-base-300">
+            <div class="card-body text-center py-12">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-base-content/30 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <h3 class="text-xl font-bold mb-2">No Pages Found</h3>
+                <p class="text-base-content/60 mb-4">
+                    {% if request.query_params.get('published') == 'false' %}
+                    No unpublished pages found!
+                    {% else %}
+                    There are no pages matching your criteria
+                    {% endif %}
+                </p>
+                <a href="/admin/pages" class="btn btn-primary btn-sm">
+                    View All Pages
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<dialog id="page_preview_modal" class="modal">
+    <div class="modal-box max-w-4xl">
+        <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+        </form>
+        <div id="page_preview_content">
+        </div>
+    </div>
+</dialog>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.body.addEventListener('htmx:afterSwap', function(evt) {
+        if (evt.detail.target.id === 'page_preview_content') {
+            page_preview_modal.showModal();
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,98 @@
+<div class="space-y-4">
+    <div class="flex items-start justify-between">
+        <div>
+            <h3 class="text-xl font-bold">{{ page.title }}</h3>
+            <div class="flex items-center gap-2 mt-2">
+                {% if page.is_published %}
+                <span class="badge badge-success badge-sm">Published</span>
+                {% else %}
+                <span class="badge badge-warning badge-sm">Unpublished</span>
+                {% endif %}
+                {% if page.content_type.value == 'markdown' %}
+                <span class="badge badge-outline badge-sm">Markdown</span>
+                {% elif page.content_type.value == 'html' %}
+                <span class="badge badge-outline badge-sm">HTML</span>
+                {% else %}
+                <span class="badge badge-outline badge-sm">reStructuredText</span>
+                {% endif %}
+            </div>
+        </div>
+        <a href="/admin/pages/{{ page.id }}" class="btn btn-sm btn-primary" hx-boost="true">
+            View Full Details
+        </a>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="grid grid-cols-2 gap-4">
+        <div>
+            <label class="text-sm font-medium text-base-content/60">Path</label>
+            <p class="text-sm flex items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                </svg>
+                {{ page.path }}
+            </p>
+        </div>
+
+        <div>
+            <label class="text-sm font-medium text-base-content/60">Template</label>
+            <p class="text-sm">{{ page.template_name }}</p>
+        </div>
+
+        {% if page.images|length > 0 %}
+        <div>
+            <label class="text-sm font-medium text-base-content/60">Images</label>
+            <p class="text-sm">{{ page.images|length }} attached</p>
+        </div>
+        {% endif %}
+
+        {% if page.documents|length > 0 %}
+        <div>
+            <label class="text-sm font-medium text-base-content/60">Documents</label>
+            <p class="text-sm">{{ page.documents|length }} attached</p>
+        </div>
+        {% endif %}
+    </div>
+
+    {% if page.description %}
+    <div>
+        <label class="text-sm font-medium text-base-content/60">Description</label>
+        <p class="text-sm mt-1">{{ page.description }}</p>
+    </div>
+    {% endif %}
+
+    {% if page.keywords %}
+    <div>
+        <label class="text-sm font-medium text-base-content/60">Keywords</label>
+        <div class="flex flex-wrap gap-2 mt-2">
+            {% for keyword in page.keywords.split(',') if keyword.strip() %}
+            <span class="badge badge-sm">{{ keyword.strip() }}</span>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <div>
+        <label class="text-sm font-medium text-base-content/60">Content Preview</label>
+        <div class="mockup-code bg-base-200 max-h-64 overflow-auto mt-2">
+            <pre><code>{{ page.content[:500] }}{% if page.content|length > 500 %}...{% endif %}</code></pre>
+        </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="flex justify-between items-center text-xs text-base-content/50">
+        <div>
+            {% if page.created %}
+            Created {{ page.created.strftime('%b %d, %Y') }}
+            {% endif %}
+            {% if page.updated and page.updated != page.created %}
+            · Updated {{ page.updated.strftime('%b %d, %Y') }}
+            {% endif %}
+        </div>
+        <div>
+            {{ page.content|length }} characters
+        </div>
+    </div>
+</div>
