@@ -84,11 +84,16 @@ media/
 
 # Frontend / Node.js
 node_modules/
-static/css/tailwind.css
 npm-debug.log
 yarn-error.log
 package-lock.json
 yarn.lock
+
+# Vite build artifacts (hashed CSS files)
+static/css/styles-*.css
+static/css/admin-styles-*.css
+static/css/tailwind.css
+static/css/admin.css
 
 # Claude Flow generated files
 .claude/settings.local.json
