@@ -21,9 +21,9 @@ def _get_queue() -> Queue:
 
 def _get_task_functions() -> list[Any]:
     """Get task functions lazily to avoid circular imports."""
-    from pydotorg.tasks.worker import TASK_FUNCTIONS  # noqa: PLC0415
+    from pydotorg.tasks.worker import get_task_functions  # noqa: PLC0415
 
-    return TASK_FUNCTIONS
+    return get_task_functions()
 
 
 class TaskAdminService:
@@ -47,9 +47,11 @@ class TaskAdminService:
         """
         try:
             info = await self.queue.info(jobs=True)
+            workers_info = info.get("workers", {})
+            worker_count = len(workers_info) if isinstance(workers_info, dict) else int(workers_info or 0)
             return {
                 "name": self.queue.name or "default",
-                "workers": info.get("workers", 0),
+                "workers": worker_count,
                 "queued": info.get("queued", 0),
                 "active": info.get("active", 0),
                 "scheduled": info.get("scheduled", 0),
@@ -67,31 +69,46 @@ class TaskAdminService:
                 "error": "Failed to retrieve queue information",
             }
 
-    async def get_all_jobs(self, status: str | None = None, limit: int = 100) -> list[dict[str, Any]]:
-        """Get all jobs from the queue with optional status filter.
+    async def get_all_jobs(
+        self,
+        status: str | None = None,
+        limit: int = 100,
+        sort_by: str | None = None,
+        sort_order: str = "desc",
+    ) -> list[dict[str, Any]]:
+        """Get all jobs from the queue with optional status filter and sorting.
 
         Args:
-            status: Optional status filter (queued, active, complete, failed)
+            status: Optional status filter (queued, active, complete, failed, scheduled)
             limit: Maximum number of jobs to return
+            sort_by: Field to sort by (function, status, started, attempts)
+            sort_order: Sort order (asc or desc)
 
         Returns:
             List of job dictionaries with details
         """
         try:
-            jobs: list[Job] = []
             job_dicts: list[dict[str, Any]] = []
+            count = 0
 
-            if status == "queued" or status is None:
-                jobs.extend(await self.queue.queued(limit=limit))
-
-            if status == "active" or status is None:
-                active_jobs = await self.queue.active(limit=limit)
-                jobs.extend(active_jobs)
-
-            for job in jobs[:limit]:
+            async for job in self.queue.iter_jobs():
+                if count >= limit:
+                    break
                 job_dict = await self._job_to_dict(job)
                 if status is None or job_dict.get("status") == status:
                     job_dicts.append(job_dict)
+                    count += 1
+
+            if sort_by:
+                reverse = sort_order == "desc"
+                if sort_by == "function":
+                    job_dicts.sort(key=lambda x: x.get("function", ""), reverse=reverse)
+                elif sort_by == "status":
+                    job_dicts.sort(key=lambda x: x.get("status", ""), reverse=reverse)
+                elif sort_by == "started":
+                    job_dicts.sort(key=lambda x: x.get("started") or "", reverse=reverse)
+                elif sort_by == "attempts":
+                    job_dicts.sort(key=lambda x: x.get("attempts") or 0, reverse=reverse)
         except Exception:
             logger.exception("Failed to get jobs")
             return []
@@ -131,7 +148,7 @@ class TaskAdminService:
                 logger.warning(f"Job {job_key} not found for retry")
                 return False
 
-            await job.retry()
+            await job.retry("Manual retry from admin")
             logger.info(f"Job {job_key} enqueued for retry")
         except Exception:
             logger.exception(f"Failed to retry job {job_key}")
@@ -260,22 +277,55 @@ class TaskAdminService:
         Returns:
             Job data as dictionary
         """
+        from datetime import UTC, datetime  # noqa: PLC0415
+
+        ms_threshold = 1e12
+
+        def _format_timestamp(ts: int | float | None) -> str | None:
+            """Convert Unix timestamp (seconds or milliseconds) to ISO format string."""
+            if ts is None or ts == 0:
+                return None
+            try:
+                if isinstance(ts, (int, float)):
+                    ts_float = float(ts)
+                    if ts_float > ms_threshold:
+                        ts_float = ts_float / 1000
+                    return datetime.fromtimestamp(ts_float, tz=UTC).isoformat()
+                return str(ts)
+            except (OSError, ValueError):
+                return str(ts)
+
+        status = job.status
+        scheduled_ts = getattr(job, "scheduled", None)
+        if status == "queued" and scheduled_ts and scheduled_ts > datetime.now(tz=UTC).timestamp():
+            status = "scheduled"
+
         job_dict = {
             "key": job.key,
             "function": job.function,
-            "status": job.status,
-            "queued": job.queued.isoformat() if job.queued else None,
-            "started": job.started.isoformat() if job.started else None,
-            "completed": job.completed.isoformat() if job.completed else None,
+            "status": status,
+            "queued": _format_timestamp(job.queued),
+            "started": _format_timestamp(job.started),
+            "completed": _format_timestamp(job.completed),
+            "scheduled": _format_timestamp(scheduled_ts) if scheduled_ts else None,
             "attempts": job.attempts,
+            "is_cron": job.key.startswith("cron:"),
         }
 
         if include_details:
+            error_str = job.error
+            traceback_str = None
+            if error_str and "Traceback" in error_str:
+                parts = error_str.split("Traceback", 1)
+                error_str = parts[0].strip() if parts[0].strip() else "Task failed"
+                traceback_str = "Traceback" + parts[1]
+
             job_dict.update(
                 {
                     "kwargs": job.kwargs,
                     "result": job.result,
-                    "error": job.error,
+                    "error": error_str,
+                    "traceback": traceback_str,
                     "stuck": job.stuck,
                     "timeout": job.timeout,
                     "heartbeat": job.heartbeat,
