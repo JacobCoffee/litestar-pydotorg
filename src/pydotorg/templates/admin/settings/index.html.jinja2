@@ -1,0 +1,146 @@
+{% extends "admin/base.html.jinja2" %}
+
+{% block title %}Site Settings - Python.org Admin{% endblock %}
+
+{% block admin_content %}
+<div class="space-y-6">
+    <div class="flex justify-between items-center">
+        <div>
+            <h1 class="text-3xl font-bold text-python-blue">{{ title }}</h1>
+            <p class="text-base-content/70 mt-1">{{ description }}</p>
+        </div>
+    </div>
+
+    <div class="alert alert-info shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <div>
+            <h3 class="font-bold">Settings Under Development</h3>
+            <div class="text-sm">Site settings functionality is currently in development. Check back soon!</div>
+        </div>
+    </div>
+
+    <div class="grid gap-6 md:grid-cols-2">
+        <div class="card bg-base-100 shadow-lg border border-base-300">
+            <div class="card-body">
+                <div class="flex items-start justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-primary/10 p-3 rounded-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="card-title text-lg">General Settings</h2>
+                            <p class="text-sm text-base-content/70">Site name, description, and metadata</p>
+                        </div>
+                    </div>
+                    <span class="badge badge-warning badge-sm">Coming Soon</span>
+                </div>
+                <div class="divider my-2"></div>
+                <p class="text-sm text-base-content/60">
+                    Configure basic site information including site title, tagline, contact email, and meta descriptions.
+                </p>
+            </div>
+        </div>
+
+        <div class="card bg-base-100 shadow-lg border border-base-300">
+            <div class="card-body">
+                <div class="flex items-start justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-success/10 p-3 rounded-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="card-title text-lg">Cache Management</h2>
+                            <p class="text-sm text-base-content/70">Clear and manage application cache</p>
+                        </div>
+                    </div>
+                    <span class="badge badge-warning badge-sm">Coming Soon</span>
+                </div>
+                <div class="divider my-2"></div>
+                <p class="text-sm text-base-content/60">
+                    Manage cache settings and clear cached data to improve performance and troubleshoot issues.
+                </p>
+            </div>
+        </div>
+
+        <div class="card bg-base-100 shadow-lg border border-base-300">
+            <div class="card-body">
+                <div class="flex items-start justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-warning/10 p-3 rounded-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-warning" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="card-title text-lg">Feature Flags</h2>
+                            <p class="text-sm text-base-content/70">Toggle features on and off</p>
+                        </div>
+                    </div>
+                    <span class="badge badge-warning badge-sm">Coming Soon</span>
+                </div>
+                <div class="divider my-2"></div>
+                <p class="text-sm text-base-content/60">
+                    Enable or disable site features dynamically without code changes. Control A/B testing and gradual rollouts.
+                </p>
+            </div>
+        </div>
+
+        <div class="card bg-base-100 shadow-lg border border-base-300">
+            <div class="card-body">
+                <div class="flex items-start justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-error/10 p-3 rounded-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-error" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="card-title text-lg">Email Configuration</h2>
+                            <p class="text-sm text-base-content/70">SMTP and email template settings</p>
+                        </div>
+                    </div>
+                    <span class="badge badge-warning badge-sm">Coming Soon</span>
+                </div>
+                <div class="divider my-2"></div>
+                <p class="text-sm text-base-content/60">
+                    Configure email server settings, sender addresses, and manage email templates for notifications.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="card bg-base-100 shadow-lg border border-base-300">
+        <div class="card-body">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="bg-info/10 p-3 rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-info" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="card-title text-lg">About Settings</h2>
+                    <p class="text-sm text-base-content/70">More configuration options coming soon</p>
+                </div>
+            </div>
+            <div class="text-sm text-base-content/60 space-y-2">
+                <p>Additional settings categories in development:</p>
+                <ul class="list-disc list-inside space-y-1 ml-4">
+                    <li>Security & Authentication</li>
+                    <li>API Rate Limiting</li>
+                    <li>Search Configuration</li>
+                    <li>Analytics & Tracking</li>
+                    <li>Social Media Integration</li>
+                    <li>Backup & Maintenance</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

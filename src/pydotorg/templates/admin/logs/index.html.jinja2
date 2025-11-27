@@ -1,0 +1,269 @@
+{% extends "admin/base.html.jinja2" %}
+
+{% block title %}Activity Logs - Python.org Admin{% endblock %}
+
+{% block admin_content %}
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold text-python-blue">{{ title }}</h1>
+            <p class="text-base-content/70 mt-1">{{ description }}</p>
+        </div>
+    </div>
+
+    <div class="alert alert-info">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <div>
+            <h3 class="font-bold">Feature Under Development</h3>
+            <div class="text-sm">Activity logging and audit trail functionality is currently being implemented. Check back soon!</div>
+        </div>
+    </div>
+
+    <div class="grid gap-6 md:grid-cols-2">
+        <div class="card bg-base-100 shadow-lg border border-base-300">
+            <div class="card-body">
+                <h2 class="card-title text-python-blue flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                    Recent Activity
+                    <span class="badge badge-ghost badge-sm">Coming Soon</span>
+                </h2>
+                <p class="text-base-content/70 text-sm">
+                    Timeline of recent system activities, user actions, and content changes.
+                </p>
+                <div class="divider"></div>
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3 text-base-content/50">
+                        <div class="avatar placeholder">
+                            <div class="bg-base-300 rounded-full w-10 h-10 flex items-center justify-center">
+                                <span class="text-xs">--</span>
+                            </div>
+                        </div>
+                        <div class="flex-1">
+                            <div class="h-3 bg-base-300 rounded w-3/4 mb-2"></div>
+                            <div class="h-2 bg-base-300 rounded w-1/2"></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 text-base-content/50">
+                        <div class="avatar placeholder">
+                            <div class="bg-base-300 rounded-full w-10 h-10 flex items-center justify-center">
+                                <span class="text-xs">--</span>
+                            </div>
+                        </div>
+                        <div class="flex-1">
+                            <div class="h-3 bg-base-300 rounded w-3/4 mb-2"></div>
+                            <div class="h-2 bg-base-300 rounded w-1/2"></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 text-base-content/50">
+                        <div class="avatar placeholder">
+                            <div class="bg-base-300 rounded-full w-10 h-10 flex items-center justify-center">
+                                <span class="text-xs">--</span>
+                            </div>
+                        </div>
+                        <div class="flex-1">
+                            <div class="h-3 bg-base-300 rounded w-3/4 mb-2"></div>
+                            <div class="h-2 bg-base-300 rounded w-1/2"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card bg-base-100 shadow-lg border border-base-300">
+            <div class="card-body">
+                <h2 class="card-title text-python-blue flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    User Login History
+                    <span class="badge badge-ghost badge-sm">Coming Soon</span>
+                </h2>
+                <p class="text-base-content/70 text-sm">
+                    Track user authentication events, login attempts, and session history.
+                </p>
+                <div class="divider"></div>
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between text-base-content/50">
+                        <div class="flex items-center gap-2">
+                            <div class="h-2 w-2 rounded-full bg-base-300"></div>
+                            <div class="h-3 bg-base-300 rounded w-32"></div>
+                        </div>
+                        <div class="h-3 bg-base-300 rounded w-20"></div>
+                    </div>
+                    <div class="flex items-center justify-between text-base-content/50">
+                        <div class="flex items-center gap-2">
+                            <div class="h-2 w-2 rounded-full bg-base-300"></div>
+                            <div class="h-3 bg-base-300 rounded w-32"></div>
+                        </div>
+                        <div class="h-3 bg-base-300 rounded w-20"></div>
+                    </div>
+                    <div class="flex items-center justify-between text-base-content/50">
+                        <div class="flex items-center gap-2">
+                            <div class="h-2 w-2 rounded-full bg-base-300"></div>
+                            <div class="h-3 bg-base-300 rounded w-32"></div>
+                        </div>
+                        <div class="h-3 bg-base-300 rounded w-20"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card bg-base-100 shadow-lg border border-base-300">
+            <div class="card-body">
+                <h2 class="card-title text-python-blue flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    Admin Actions
+                    <span class="badge badge-ghost badge-sm">Coming Soon</span>
+                </h2>
+                <p class="text-base-content/70 text-sm">
+                    Monitor administrative actions, permission changes, and configuration updates.
+                </p>
+                <div class="divider"></div>
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between text-base-content/50">
+                        <div class="flex items-center gap-2">
+                            <span class="badge badge-ghost badge-sm">--</span>
+                            <div class="h-3 bg-base-300 rounded w-40"></div>
+                        </div>
+                        <div class="h-3 bg-base-300 rounded w-16"></div>
+                    </div>
+                    <div class="flex items-center justify-between text-base-content/50">
+                        <div class="flex items-center gap-2">
+                            <span class="badge badge-ghost badge-sm">--</span>
+                            <div class="h-3 bg-base-300 rounded w-40"></div>
+                        </div>
+                        <div class="h-3 bg-base-300 rounded w-16"></div>
+                    </div>
+                    <div class="flex items-center justify-between text-base-content/50">
+                        <div class="flex items-center gap-2">
+                            <span class="badge badge-ghost badge-sm">--</span>
+                            <div class="h-3 bg-base-300 rounded w-40"></div>
+                        </div>
+                        <div class="h-3 bg-base-300 rounded w-16"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card bg-base-100 shadow-lg border border-base-300">
+            <div class="card-body">
+                <h2 class="card-title text-python-blue flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    System Events
+                    <span class="badge badge-ghost badge-sm">Coming Soon</span>
+                </h2>
+                <p class="text-base-content/70 text-sm">
+                    View system-level events, errors, and automated processes.
+                </p>
+                <div class="divider"></div>
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between text-base-content/50">
+                        <div class="flex items-center gap-2">
+                            <div class="h-2 w-2 rounded-full bg-base-300"></div>
+                            <div class="h-3 bg-base-300 rounded w-48"></div>
+                        </div>
+                        <div class="h-3 bg-base-300 rounded w-24"></div>
+                    </div>
+                    <div class="flex items-center justify-between text-base-content/50">
+                        <div class="flex items-center gap-2">
+                            <div class="h-2 w-2 rounded-full bg-base-300"></div>
+                            <div class="h-3 bg-base-300 rounded w-48"></div>
+                        </div>
+                        <div class="h-3 bg-base-300 rounded w-24"></div>
+                    </div>
+                    <div class="flex items-center justify-between text-base-content/50">
+                        <div class="flex items-center gap-2">
+                            <div class="h-2 w-2 rounded-full bg-base-300"></div>
+                            <div class="h-3 bg-base-300 rounded w-48"></div>
+                        </div>
+                        <div class="h-3 bg-base-300 rounded w-24"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card bg-base-100 shadow-lg border border-base-300">
+        <div class="card-body">
+            <h2 class="card-title text-python-blue">Planned Features</h2>
+            <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3 mt-4">
+                <div class="flex items-start gap-3">
+                    <div class="text-success">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-sm">Real-time Activity Feed</h3>
+                        <p class="text-xs text-base-content/70">Live updates using HTMX</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3">
+                    <div class="text-success">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-sm">Advanced Filtering</h3>
+                        <p class="text-xs text-base-content/70">By user, action type, date range</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3">
+                    <div class="text-success">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-sm">Export Capabilities</h3>
+                        <p class="text-xs text-base-content/70">CSV, JSON export formats</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3">
+                    <div class="text-success">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-sm">Audit Trail</h3>
+                        <p class="text-xs text-base-content/70">Complete change history</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3">
+                    <div class="text-success">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-sm">Security Alerts</h3>
+                        <p class="text-xs text-base-content/70">Failed login attempts, suspicious activity</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3">
+                    <div class="text-success">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-sm">Analytics Dashboard</h3>
+                        <p class="text-xs text-base-content/70">Usage patterns and trends</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
