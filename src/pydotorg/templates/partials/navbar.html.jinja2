@@ -1,47 +1,13 @@
 <nav class="navbar bg-base-100 shadow-md sticky top-0 z-50" x-data="{ mobileMenuOpen: false }">
     <div class="section-container">
         <div class="navbar-start">
-            {# Mobile menu toggle #}
-            <div class="dropdown lg:hidden">
-                <label
-                    tabindex="0"
-                    class="btn btn-ghost"
-                    @click="mobileMenuOpen = !mobileMenuOpen"
-                    aria-label="Toggle mobile menu"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                </label>
-                <ul
-                    class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
-                    x-show="mobileMenuOpen"
-                    x-transition:enter="transition ease-out duration-200"
-                    x-transition:enter-start="opacity-0 scale-95"
-                    x-transition:enter-end="opacity-100 scale-100"
-                    x-transition:leave="transition ease-in duration-150"
-                    x-transition:leave-start="opacity-100 scale-100"
-                    x-transition:leave-end="opacity-0 scale-95"
-                    @click.outside="mobileMenuOpen = false"
-                >
-                    <li><a href="/about" hx-boost="true">About</a></li>
-                    <li><a href="/downloads" hx-boost="true">Downloads</a></li>
-                    <li><a href="https://docs.python.org" target="_blank" rel="noopener">Documentation</a></li>
-                    <li><a href="/community" hx-boost="true">Community</a></li>
-                    <li><a href="/success-stories" hx-boost="true">Success Stories</a></li>
-                    <li><a href="/blogs" hx-boost="true">News</a></li>
-                    <li><a href="/events" hx-boost="true">Events</a></li>
-                    <li><a href="/jobs" hx-boost="true">Jobs</a></li>
-                </ul>
-            </div>
-
             {# Logo #}
             <a href="/" class="flex items-center gap-2 hover:opacity-80 transition-opacity" hx-boost="true">
-                <svg class="w-10 h-10 md:w-12 md:h-12" viewBox="0 0 110 110" xmlns="http://www.w3.org/2000/svg">
+                <svg class="w-10 h-10" viewBox="0 0 110 110" xmlns="http://www.w3.org/2000/svg">
                     <path d="M54.8 0C24.5 0 26.1 13.1 26.1 13.1l.1 13.6h29.1v4.1H17.4S0 28.5 0 55.1c0 26.6 15.2 25.7 15.2 25.7h9v-12.4s-.5-15.2 14.9-15.2h25.7s14.5.2 14.5-14V15.9S81.5 0 54.8 0zM39.3 9.2c2.6 0 4.7 2.1 4.7 4.7 0 2.6-2.1 4.7-4.7 4.7-2.6 0-4.7-2.1-4.7-4.7 0-2.6 2.1-4.7 4.7-4.7z" fill="#3776AB"/>
                     <path d="M55.2 110c30.3 0 28.7-13.1 28.7-13.1l-.1-13.6H54.7v-4.1h37.9S110 81.5 110 54.9c0-26.6-15.2-25.7-15.2-25.7h-9v12.4s.5 15.2-14.9 15.2H45.2s-14.5-.2-14.5 14v23.3S28.5 110 55.2 110zm15.5-9.2c-2.6 0-4.7-2.1-4.7-4.7 0-2.6 2.1-4.7 4.7-4.7 2.6 0 4.7 2.1 4.7 4.7 0 2.6-2.1 4.7-4.7 4.7z" fill="#FFD43B"/>
                 </svg>
-                <span class="text-xl md:text-2xl font-bold text-base-content">Python</span>
+                <span class="text-xl font-bold text-base-content hidden sm:inline">Python</span>
             </a>
         </div>
 
@@ -122,7 +88,7 @@
             {# Admin Button - Only shown when user is staff/superuser #}
             {% set current_user = request.scope.get('user') %}
             {% if current_user and (current_user.is_staff or current_user.is_superuser) %}
-            <a href="/admin" class="btn btn-ghost btn-sm gap-2 hidden lg:inline-flex">
+            <a href="/admin" hx-boost="false" class="btn btn-ghost btn-sm gap-2 hidden lg:inline-flex">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -130,6 +96,40 @@
                 Admin
             </a>
             {% endif %}
+
+            {# Mobile menu toggle - far right #}
+            <div class="dropdown dropdown-end lg:hidden">
+                <label
+                    tabindex="0"
+                    class="btn btn-ghost btn-circle"
+                    @click="mobileMenuOpen = !mobileMenuOpen"
+                    aria-label="Toggle mobile menu"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </label>
+                <ul
+                    class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+                    x-show="mobileMenuOpen"
+                    x-transition:enter="transition ease-out duration-200"
+                    x-transition:enter-start="opacity-0 scale-95"
+                    x-transition:enter-end="opacity-100 scale-100"
+                    x-transition:leave="transition ease-in duration-150"
+                    x-transition:leave-start="opacity-100 scale-100"
+                    x-transition:leave-end="opacity-0 scale-95"
+                    @click.outside="mobileMenuOpen = false"
+                >
+                    <li><a href="/about" hx-boost="true">About</a></li>
+                    <li><a href="/downloads" hx-boost="true">Downloads</a></li>
+                    <li><a href="https://docs.python.org" target="_blank" rel="noopener">Documentation</a></li>
+                    <li><a href="/community" hx-boost="true">Community</a></li>
+                    <li><a href="/success-stories" hx-boost="true">Success Stories</a></li>
+                    <li><a href="/blogs" hx-boost="true">News</a></li>
+                    <li><a href="/events" hx-boost="true">Events</a></li>
+                    <li><a href="/jobs" hx-boost="true">Jobs</a></li>
+                </ul>
+            </div>
         </div>
     </div>
 </nav>
