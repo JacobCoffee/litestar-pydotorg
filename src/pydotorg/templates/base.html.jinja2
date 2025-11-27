@@ -125,9 +125,12 @@
         });
     </script>
 
-    {# HTMX Event Handlers #}
+    {# HTMX Event Handlers - guard against re-execution from hx-boost #}
     <script>
-        // Show loading indicator during HTMX requests
+    (function() {
+        if (window._pydotorgInitialized) return;
+        window._pydotorgInitialized = true;
+
         document.body.addEventListener('htmx:beforeRequest', function(evt) {
             document.getElementById('htmx-indicator').style.display = 'block';
         });
@@ -136,30 +139,20 @@
             document.getElementById('htmx-indicator').style.display = 'none';
         });
 
-        // Toast deduplication - track recent messages to prevent duplicates
         const _recentToasts = new Set();
 
-        // Handle custom toast events from HX-Trigger headers
         document.body.addEventListener('showToast', function(evt) {
             const detail = evt.detail || {};
             const message = detail.message || 'An error occurred';
-            // Mark this path as handled to prevent htmx:responseError duplicate
             window._htmxToastHandled = true;
             setTimeout(() => { window._htmxToastHandled = false; }, 100);
-            showToast(message, detail.type || 'error');
+            window.showToast(message, detail.type || 'error');
         });
 
-        // Handle HTMX errors - only as fallback when server doesn't send HX-Trigger
         document.body.addEventListener('htmx:responseError', function(evt) {
-            // Skip if showToast event already handled this
-            if (window._htmxToastHandled) {
-                return;
-            }
+            if (window._htmxToastHandled) return;
             const xhr = evt.detail.xhr;
-            // Skip if server sent a showToast trigger
-            if (xhr?.getResponseHeader('HX-Trigger')?.includes('showToast')) {
-                return;
-            }
+            if (xhr?.getResponseHeader('HX-Trigger')?.includes('showToast')) return;
 
             const status = xhr?.status || 0;
             const path = evt.detail.pathInfo?.requestPath || 'this page';
@@ -179,20 +172,15 @@
                 message = 'Unable to complete the request.';
                 type = 'warning';
             }
-
-            showToast(message, type);
+            window.showToast(message, type);
         });
 
-        // Toast notification function with deduplication
-        function showToast(message, type = 'info', duration = 5000) {
+        window.showToast = function(message, type = 'info', duration = 5000) {
             const container = document.getElementById('toast-container');
             if (!container) return;
 
-            // Deduplicate: skip if same message shown in last 2 seconds
             const toastKey = `${type}:${message}`;
-            if (_recentToasts.has(toastKey)) {
-                return;
-            }
+            if (_recentToasts.has(toastKey)) return;
             _recentToasts.add(toastKey);
             setTimeout(() => _recentToasts.delete(toastKey), 2000);
 
@@ -211,7 +199,6 @@
             `;
             container.appendChild(toast);
 
-            // Auto-remove after duration
             setTimeout(() => {
                 if (toast.parentElement) {
                     toast.style.opacity = '0';
@@ -219,25 +206,18 @@
                     setTimeout(() => toast.remove(), 300);
                 }
             }, duration);
-        }
+        };
 
-        // Expose showToast globally for Alpine.js integration
-        window.showToast = showToast;
-
-        // Initialize scroll to top button (non-Alpine fallback)
         const scrollBtn = document.getElementById('scroll-to-top');
         if (scrollBtn && !window.Alpine) {
             window.addEventListener('scroll', () => {
-                if (window.scrollY > 300) {
-                    scrollBtn.classList.remove('hidden');
-                } else {
-                    scrollBtn.classList.add('hidden');
-                }
+                scrollBtn.classList.toggle('hidden', window.scrollY <= 300);
             });
             scrollBtn.addEventListener('click', () => {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             });
         }
+    })();
     </script>
 
     {# Custom JS from static #}
