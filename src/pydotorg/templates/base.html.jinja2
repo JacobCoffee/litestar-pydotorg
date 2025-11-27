@@ -37,7 +37,9 @@
     </a>
 
     {# Navigation #}
+    {% block navbar %}
     {% include 'partials/navbar.html.jinja2' %}
+    {% endblock %}
 
     {# Main Content #}
     <main id="main-content" class="flex-grow">
