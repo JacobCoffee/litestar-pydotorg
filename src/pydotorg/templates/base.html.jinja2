@@ -84,21 +84,21 @@
     {% set current_user = request.scope.get('user') %}
     {% if current_user and (current_user.is_staff or current_user.is_superuser) and not request.url.path.startswith('/admin') %}
     <div
-        class="fixed bottom-6 left-6 z-[60]"
+        class="fixed bottom-8 right-28 z-[100] flex flex-col-reverse items-start gap-3"
         x-data="{ open: false }"
         @click.outside="open = false"
     >
-        {# Flyout Menu - positioned above button #}
+        {# Flyout Menu - flies up and right from button #}
         <div
             x-show="open"
             x-cloak
             x-transition:enter="transition ease-out duration-200"
-            x-transition:enter-start="opacity-0 translate-y-4"
-            x-transition:enter-end="opacity-100 translate-y-0"
+            x-transition:enter-start="opacity-0 scale-95 origin-bottom-left"
+            x-transition:enter-end="opacity-100 scale-100 origin-bottom-left"
             x-transition:leave="transition ease-in duration-150"
-            x-transition:leave-start="opacity-100 translate-y-0"
-            x-transition:leave-end="opacity-0 translate-y-4"
-            class="absolute bottom-14 left-0 bg-base-200 rounded-box shadow-2xl border border-base-300 p-2 w-52"
+            x-transition:leave-start="opacity-100 scale-100 origin-bottom-left"
+            x-transition:leave-end="opacity-0 scale-95 origin-bottom-left"
+            class="bg-base-200 rounded-box shadow-2xl border border-base-300 p-2 w-56 mb-1"
         >
             <ul class="menu menu-sm">
                 <li class="menu-title text-xs">Quick Admin</li>
@@ -171,16 +171,16 @@
             </ul>
         </div>
 
-        {# FAB Button #}
+        {# FAB Button - Large #}
         <button
             @click="open = !open"
-            class="btn btn-circle btn-primary shadow-lg"
+            class="btn btn-circle btn-lg btn-primary shadow-xl"
             :class="{ 'btn-secondary': open }"
             aria-label="Admin menu"
         >
             <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6 transition-transform duration-200"
+                class="h-8 w-8 transition-transform duration-200"
                 :class="{ 'rotate-45': open }"
                 fill="none"
                 viewBox="0 0 24 24"
