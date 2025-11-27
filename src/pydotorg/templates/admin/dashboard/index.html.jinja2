@@ -1,5 +1,6 @@
 {% extends "admin/base.html.jinja2" %}
 {% from "admin/partials/stats_card.html.jinja2" import stats_card %}
+{% set current_user = request.scope.get('user') %}
 
 {% block title %}Admin Dashboard - Python.org{% endblock %}
 
@@ -8,10 +9,10 @@
     <div class="flex items-center justify-between">
         <div>
             <h1 class="text-3xl font-bold text-python-blue">Dashboard</h1>
-            <p class="text-base-content/70 mt-1">Welcome back, {{ request.user.username }}</p>
+            <p class="text-base-content/70 mt-1">Welcome back, {{ current_user.username if current_user else 'Admin' }}</p>
         </div>
         <div class="text-sm text-base-content/60">
-            Last login: {{ request.user.last_login.strftime('%B %d, %Y at %I:%M %p') if request.user.last_login else 'Never' }}
+            Last login: {{ current_user.last_login.strftime('%B %d, %Y at %I:%M %p') if current_user and current_user.last_login else 'Never' }}
         </div>
     </div>
 
@@ -112,7 +113,7 @@
                     </h2>
 
                     <div class="space-y-2 mt-4">
-                        {% if request.user.is_staff or request.user.is_superuser %}
+                        {% if current_user and (current_user.is_staff or current_user.is_superuser) %}
                         <a
                             href="/admin/jobs"
                             class="btn btn-outline btn-block justify-start gap-3"
@@ -139,7 +140,7 @@
                         </a>
                         {% endif %}
 
-                        {% if request.user.is_superuser %}
+                        {% if current_user and current_user.is_superuser %}
                         <a
                             href="/admin/users"
                             class="btn btn-outline btn-block justify-start gap-3"
