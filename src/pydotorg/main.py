@@ -30,7 +30,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from pydotorg.config import log_startup_banner, settings, validate_production_settings
 from pydotorg.core.admin import AdminController
-from pydotorg.core.auth.middleware import JWTAuthMiddleware
+from pydotorg.core.auth.middleware import JWTAuthMiddleware, UserPopulationMiddleware
 from pydotorg.core.database.base import AuditBase
 from pydotorg.core.dependencies import get_core_dependencies
 from pydotorg.core.exceptions import get_exception_handlers
@@ -405,7 +405,7 @@ app = Litestar(
     dependencies=get_all_dependencies(),
     exception_handlers=get_exception_handlers(),
     plugins=[sqlalchemy_plugin, sqladmin_plugin, flash_plugin, structlog_plugin],
-    middleware=[session_config.middleware, JWTAuthMiddleware],
+    middleware=[session_config.middleware, UserPopulationMiddleware, JWTAuthMiddleware],
     template_config=template_config,
     openapi_config=OpenAPIConfig(
         title=settings.site_name,
