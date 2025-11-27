@@ -36,11 +36,11 @@ def configure_structlog(
         structlog.stdlib.PositionalArgumentsFormatter(),
         structlog.processors.TimeStamper(fmt="iso"),
         structlog.processors.StackInfoRenderer(),
-        structlog.processors.format_exc_info,
         structlog.processors.UnicodeDecoder(),
     ]
 
     if use_json:
+        processors.append(structlog.processors.format_exc_info)
         processors.append(structlog.processors.dict_tracebacks)
         processors.append(structlog.processors.JSONRenderer())
     else:
