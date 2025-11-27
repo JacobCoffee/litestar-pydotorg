@@ -77,35 +77,39 @@ ci: lint fmt-check type-check test ## Run all CI checks (lint + fmt + type-check
 ##@ Testing
 
 .PHONY: test
-test: ## Run tests
+test: ## Run unit tests only (fast, no external deps)
+	$(UV) run pytest $(TESTS_DIR)/unit $(TESTS_DIR)/core -v
+
+.PHONY: test-all
+test-all: ## Run all tests (unit + integration, skips E2E if no server)
 	$(UV) run pytest $(TESTS_DIR) -v
 
 .PHONY: test-fast
-test-fast: ## Run tests in parallel
-	$(UV) run pytest $(TESTS_DIR) -v -n auto
+test-fast: ## Run unit tests in parallel
+	$(UV) run pytest $(TESTS_DIR)/unit $(TESTS_DIR)/core -v -n auto
 
 .PHONY: test-cov
-test-cov: ## Run tests with coverage
+test-cov: ## Run all tests with coverage
 	$(UV) run pytest $(TESTS_DIR) --cov=$(PROJECT_DIR) --cov-report=term-missing --cov-report=html
 
 .PHONY: test-watch
-test-watch: ## Run tests in watch mode
-	$(UV) run pytest-watch -- $(TESTS_DIR) -v
+test-watch: ## Run unit tests in watch mode
+	$(UV) run pytest-watch -- $(TESTS_DIR)/unit $(TESTS_DIR)/core -v
 
 .PHONY: test-unit
-test-unit: ## Run unit tests only (no Docker required)
-	$(UV) run pytest $(TESTS_DIR)/unit -v
+test-unit: ## Run unit tests only (alias for 'make test')
+	$(UV) run pytest $(TESTS_DIR)/unit $(TESTS_DIR)/core -v
 
 .PHONY: test-integration
-test-integration: ## Run integration tests (requires Docker: make infra-up)
+test-integration: ## Run integration tests (requires: make infra-up)
 	$(UV) run pytest $(TESTS_DIR)/integration -v
 
 .PHONY: test-e2e
-test-e2e: ## Run E2E Playwright tests (requires: uv run playwright install chromium)
+test-e2e: ## Run E2E Playwright tests (requires: make serve + playwright)
 	$(UV) run pytest $(TESTS_DIR)/e2e -v
 
 .PHONY: test-full
-test-full: ## Run all tests (unit + integration + e2e)
+test-full: ## Run all tests including E2E (requires server running)
 	$(UV) run pytest $(TESTS_DIR) -v
 
 .PHONY: playwright-install
