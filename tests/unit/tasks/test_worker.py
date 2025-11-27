@@ -11,23 +11,23 @@ import pytest
 class TestWorkerSettings:
     """Test suite for worker settings configuration."""
 
-    def test_settings_dict_structure(self) -> None:
-        """Test that settings_dict has correct structure."""
-        from pydotorg.tasks.worker import settings_dict
+    def test_saq_settings_structure(self) -> None:
+        """Test that saq_settings has correct structure."""
+        from pydotorg.tasks.worker import saq_settings
 
-        assert "queue" in settings_dict
-        assert "functions" in settings_dict
-        assert "concurrency" in settings_dict
-        assert "cron_jobs" in settings_dict
-        assert "startup" in settings_dict
-        assert "shutdown" in settings_dict
+        assert "queue" in saq_settings
+        assert "functions" in saq_settings
+        assert "concurrency" in saq_settings
+        assert "cron_jobs" in saq_settings
+        assert "startup" in saq_settings
+        assert "shutdown" in saq_settings
 
     def test_worker_has_required_concurrency(self) -> None:
         """Test that worker has appropriate concurrency settings."""
-        from pydotorg.tasks.worker import settings_dict
+        from pydotorg.tasks.worker import saq_settings
 
-        assert settings_dict["concurrency"] > 0
-        assert settings_dict["concurrency"] <= 20
+        assert saq_settings["concurrency"] > 0
+        assert saq_settings["concurrency"] <= 20
 
     def test_worker_uses_redis_queue(self) -> None:
         """Test that worker uses Redis for queue."""
