@@ -1,0 +1,148 @@
+services:
+  postgres:
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set}
+      POSTGRES_DB: ${POSTGRES_DB:-pydotorg}
+    ports: []
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  redis:
+    ports: []
+    restart: unless-stopped
+    command: ["redis-server", "--save", "60", "1", "--loglevel", "warning"]
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      cache_from:
+        - type=registry,ref=ghcr.io/jacobcoffee/litestar-pydotorg:latest
+    image: ghcr.io/jacobcoffee/litestar-pydotorg:${VERSION:-latest}
+    ports:
+      - "8000:8000"
+    environment:
+      APP_ENV: prod
+      DEBUG: "false"
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set}@postgres:5432/${POSTGRES_DB:-pydotorg}
+      REDIS_URL: redis://redis:6379/0
+      SECRET_KEY: ${SECRET_KEY:?SECRET_KEY must be set}
+      SESSION_SECRET_KEY: ${SESSION_SECRET_KEY:?SESSION_SECRET_KEY must be set}
+      CSRF_SECRET: ${CSRF_SECRET:?CSRF_SECRET must be set}
+      JWT_ALGORITHM: ${JWT_ALGORITHM:-HS256}
+      DATABASE_POOL_SIZE: ${DATABASE_POOL_SIZE:-40}
+      DATABASE_MAX_OVERFLOW: ${DATABASE_MAX_OVERFLOW:-20}
+      SMTP_HOST: ${SMTP_HOST:-localhost}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
+      SMTP_FROM_EMAIL: ${SMTP_FROM_EMAIL:-noreply@python.org}
+      SMTP_USE_TLS: ${SMTP_USE_TLS:-true}
+      GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID}
+      GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      OAUTH_REDIRECT_BASE_URL: ${OAUTH_REDIRECT_BASE_URL:?OAUTH_REDIRECT_BASE_URL must be set}
+      FASTLY_API_KEY: ${FASTLY_API_KEY}
+      PYTHON_BLOG_FEED_URL: ${PYTHON_BLOG_FEED_URL:-https://blog.python.org/feeds/posts/default?alt=rss}
+    volumes: []
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8000/health', timeout=2)"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 40s
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 2G
+        reservations:
+          cpus: "0.5"
+          memory: 512M
+      update_config:
+        parallelism: 1
+        delay: 10s
+        failure_action: rollback
+        order: start-first
+      rollback_config:
+        parallelism: 1
+        delay: 5s
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      cache_from:
+        - type=registry,ref=ghcr.io/jacobcoffee/litestar-pydotorg:latest
+    image: ghcr.io/jacobcoffee/litestar-pydotorg:${VERSION:-latest}
+    command: ["saq", "pydotorg.tasks.worker:settings"]
+    environment:
+      APP_ENV: prod
+      DEBUG: "false"
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set}@postgres:5432/${POSTGRES_DB:-pydotorg}
+      REDIS_URL: redis://redis:6379/0
+      SECRET_KEY: ${SECRET_KEY:?SECRET_KEY must be set}
+    volumes: []
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 1G
+        reservations:
+          cpus: "0.25"
+          memory: 256M
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+
+  meilisearch:
+    environment:
+      MEILI_ENV: production
+      MEILI_MASTER_KEY: ${MEILI_MASTER_KEY:?MEILI_MASTER_KEY must be set}
+      MEILI_NO_ANALYTICS: "true"
+      MEILI_HTTP_ADDR: 0.0.0.0:7700
+    ports: []
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 1G
+        reservations:
+          cpus: "0.25"
+          memory: 256M

@@ -15,6 +15,9 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    profiles:
+      - dev
+      - full
 
   redis:
     image: redis:7-alpine
@@ -28,7 +31,85 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    profiles:
+      - dev
+      - full
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: pydotorg-app
+    ports:
+      - "8000:8000"
+    environment:
+      APP_ENV: dev
+      DEBUG: "true"
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@postgres:5432/pydotorg
+      REDIS_URL: redis://redis:6379/0
+      SECRET_KEY: dev-secret-key-change-in-prod
+      SESSION_SECRET_KEY: dev-session-secret-key
+      CSRF_SECRET: dev-csrf-secret
+    volumes:
+      - ./src:/app/src:ro
+      - ./src/pydotorg/templates:/app/src/pydotorg/templates:ro
+      - ./static:/app/static:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    profiles:
+      - dev
+      - full
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: pydotorg-worker
+    command: ["uv", "run", "saq", "pydotorg.tasks.worker:settings"]
+    environment:
+      APP_ENV: dev
+      DEBUG: "true"
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@postgres:5432/pydotorg
+      REDIS_URL: redis://redis:6379/0
+      SECRET_KEY: dev-secret-key-change-in-prod
+    volumes:
+      - ./src:/app/src:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    profiles:
+      - dev
+      - full
+
+  meilisearch:
+    image: getmeili/meilisearch:v1.11
+    container_name: pydotorg-meilisearch
+    ports:
+      - "7700:7700"
+    environment:
+      MEILI_ENV: development
+      MEILI_NO_ANALYTICS: "true"
+    volumes:
+      - meilisearch_data:/meili_data
+    profiles:
+      - full
+
+  maildev:
+    image: maildev/maildev:2.2.1
+    container_name: pydotorg-maildev
+    ports:
+      - "1080:1080"  # Web UI
+      - "1025:1025"  # SMTP
+    profiles:
+      - dev
+      - full
 
 volumes:
   postgres_data:
   redis_data:
+  meilisearch_data:
