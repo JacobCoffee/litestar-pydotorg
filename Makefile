@@ -135,6 +135,92 @@ infra-reset: infra-down ## Reset infrastructure (stop and remove volumes)
 	docker compose down -v
 	docker compose up -d postgres redis
 
+.PHONY: docker-up
+docker-up: ## Start all services (app + worker + postgres + redis) with dev profile
+	docker compose --profile dev up -d
+
+.PHONY: docker-down
+docker-down: ## Stop all Docker services
+	docker compose --profile dev down
+
+.PHONY: docker-logs
+docker-logs: ## Follow logs for all services
+	docker compose --profile dev logs -f
+
+.PHONY: docker-build
+docker-build: ## Build Docker images
+	docker compose --profile dev build
+
+.PHONY: docker-rebuild
+docker-rebuild: ## Rebuild Docker images without cache
+	docker compose --profile dev build --no-cache
+
+.PHONY: docker-full
+docker-full: ## Start all services including Meilisearch (full profile)
+	docker compose --profile full up -d
+
+.PHONY: docker-reset
+docker-reset: ## Stop and remove all containers, volumes, and images
+	docker compose --profile full down -v --rmi local
+
+.PHONY: docker-shell
+docker-shell: ## Open shell in running app container
+	docker exec -it pydotorg-app /bin/bash
+
+.PHONY: docker-prod-up
+docker-prod-up: ## Start production stack (requires .env.prod)
+	docker compose -f docker-compose.yml -f docker-compose.prod.yml --profile dev up -d
+
+.PHONY: docker-prod-down
+docker-prod-down: ## Stop production stack
+	docker compose -f docker-compose.yml -f docker-compose.prod.yml --profile dev down
+
+# ============================================================================
+# Docker
+# ============================================================================
+
+##@ Docker
+
+.PHONY: docker-build
+docker-build: ## Build Docker image
+	docker build -t pydotorg:latest .
+
+.PHONY: docker-build-nc
+docker-build-nc: ## Build Docker image (no cache)
+	docker build --no-cache -t pydotorg:latest .
+
+.PHONY: docker-up
+docker-up: ## Start all services (app + infra) in development mode
+	docker compose up -d
+
+.PHONY: docker-up-build
+docker-up-build: ## Build and start all services
+	docker compose up -d --build
+
+.PHONY: docker-down
+docker-down: ## Stop all Docker services
+	docker compose down
+
+.PHONY: docker-logs
+docker-logs: ## Follow all Docker logs
+	docker compose logs -f
+
+.PHONY: docker-logs-app
+docker-logs-app: ## Follow app container logs only
+	docker compose logs -f app
+
+.PHONY: docker-shell
+docker-shell: ## Open shell in app container
+	docker compose exec app /bin/bash
+
+.PHONY: docker-prod
+docker-prod: ## Start production stack
+	docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+
+.PHONY: docker-clean
+docker-clean: ## Remove all containers, volumes, and images
+	docker compose down -v --rmi local
+
 # ============================================================================
 # Database
 # ============================================================================
