@@ -123,8 +123,8 @@ playwright-install: ## Install Playwright browsers for E2E testing
 ##@ Infrastructure
 
 .PHONY: infra-up
-infra-up: ## Start PostgreSQL and Redis containers
-	docker compose up -d postgres redis
+infra-up: ## Start PostgreSQL, Redis, and Meilisearch containers
+	docker compose up -d postgres redis meilisearch
 
 .PHONY: infra-down
 infra-down: ## Stop infrastructure containers
@@ -262,8 +262,8 @@ serve-prod: ## Run production server
 	$(UV) run granian --interface asgi pydotorg.main:app --host 0.0.0.0 --port 8000 --workers 4
 
 .PHONY: worker
-worker: ## Run SAQ worker
-	$(UV) run saq pydotorg.tasks.worker:settings
+worker: ## Run SAQ background task worker
+	$(UV) run saq pydotorg.tasks.worker.saq_settings
 
 .PHONY: shell
 shell: ## Run Python shell with app context
@@ -344,10 +344,49 @@ css-watch: ## Build TailwindCSS in watch mode (development)
 css-dev: css-watch ## Alias for css-watch
 
 .PHONY: dev
-dev: ## Run both backend server and CSS watcher (use with tmux/separate terminals)
+dev: infra-up ## Full development environment: infra + worker + server (requires tmux or separate terminals)
+	@echo "Starting development environment..."
+	@echo ""
+	@echo "Infrastructure started (postgres, redis, meilisearch)"
+	@echo ""
 	@echo "Run in separate terminals:"
-	@echo "  Terminal 1: make serve"
-	@echo "  Terminal 2: make css-watch"
+	@echo "  Terminal 1: make serve        # Litestar web server"
+	@echo "  Terminal 2: make worker       # SAQ background worker"
+	@echo "  Terminal 3: make css-watch    # TailwindCSS (optional)"
+	@echo ""
+	@echo "Or use 'make dev-all' to run server + worker in one terminal (logs interleaved)"
+
+.PHONY: dev-all
+dev-all: infra-up ## Start infra + server + worker in background (logs to files)
+	@echo "Starting full development stack..."
+	@mkdir -p logs
+	@echo "[DEV] Starting SAQ worker in background..."
+	$(UV) run saq pydotorg.tasks.worker.saq_settings > logs/worker.log 2>&1 &
+	@echo "[DEV] Worker PID: $$!"
+	@echo "[DEV] Worker logs: logs/worker.log"
+	@echo "[DEV] Starting Litestar server..."
+	@echo ""
+	$(UV) run granian --interface asgi --reload --reload-paths src pydotorg.main:app --host 0.0.0.0 --port 8000 2>&1 | sed 's/^/[SERVER] /'
+
+.PHONY: dev-tmux
+dev-tmux: infra-up ## Start dev environment in tmux session (recommended)
+	@command -v tmux >/dev/null 2>&1 || { echo "tmux not installed. Use 'make dev' instead."; exit 1; }
+	@tmux new-session -d -s pydotorg -n server '$(UV) run granian --interface asgi --reload --reload-paths src pydotorg.main:app --host 0.0.0.0 --port 8000'
+	@tmux new-window -t pydotorg -n worker '$(UV) run saq pydotorg.tasks.worker.saq_settings'
+	@tmux new-window -t pydotorg -n css 'bunx --bun tailwindcss -i ./resources/css/input.css -o ./static/css/tailwind.css --watch'
+	@echo "tmux session 'pydotorg' started with 3 windows:"
+	@echo "  - server: Litestar web server"
+	@echo "  - worker: SAQ background worker"
+	@echo "  - css: TailwindCSS watcher"
+	@echo ""
+	@echo "Attach with: tmux attach -t pydotorg"
+
+.PHONY: dev-stop
+dev-stop: ## Stop background worker and any dev processes
+	@echo "Stopping background processes..."
+	@pkill -f "saq pydotorg.tasks.worker" 2>/dev/null || true
+	@pkill -f "granian.*pydotorg.main" 2>/dev/null || true
+	@echo "Done. Use 'make infra-down' to stop containers."
 
 # ============================================================================
 # Documentation
