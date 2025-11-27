@@ -28,6 +28,7 @@ dependencies = [
     "passlib[bcrypt]>=1.7.4",
     "python-jose[cryptography]>=3.3.0",
     "saq[hiredis]>=0.22.0",
+    "litestar-saq>=0.5.3",
     "pillow>=11.0.0",
     "cmarkgfm>=2024.11.20",
     "docutils>=0.21.0",
@@ -194,6 +195,7 @@ ignore = [
 ]
 "src/pydotorg/db/migrations/**/*" = ["ERA001", "INP001"]
 "src/pydotorg/main.py" = ["BLE001", "TRY300", "TC002"]
+"src/pydotorg/tasks/**/*" = ["TRY300"]
 "src/pydotorg/domains/users/auth_controller.py" = ["TRY301"]
 "src/pydotorg/domains/**/models.py" = ["TC003"]
 "src/pydotorg/domains/**/controllers.py" = ["TC001", "TC002", "TC003"]

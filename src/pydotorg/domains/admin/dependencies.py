@@ -11,6 +11,7 @@ from pydotorg.domains.admin.services import (
     JobAdminService,
     PageAdminService,
     SponsorAdminService,
+    TaskAdminService,
     UserAdminService,
 )
 
@@ -102,6 +103,15 @@ async def provide_blog_admin_service(db_session: AsyncSession) -> BlogAdminServi
     return BlogAdminService(session=db_session)
 
 
+async def provide_task_admin_service() -> TaskAdminService:
+    """Provide a TaskAdminService instance.
+
+    Returns:
+        TaskAdminService instance
+    """
+    return TaskAdminService()
+
+
 def get_admin_dependencies() -> dict:
     """Get all admin domain dependency providers.
 
@@ -116,4 +126,5 @@ def get_admin_dependencies() -> dict:
         "event_admin_service": provide_event_admin_service,
         "page_admin_service": provide_page_admin_service,
         "blog_admin_service": provide_blog_admin_service,
+        "task_admin_service": provide_task_admin_service,
     }

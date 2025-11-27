@@ -76,6 +76,22 @@ class Settings(BaseSettings):
     database_max_overflow: int = 10
 
     redis_url: str = "redis://localhost:6379/0"
+    worker_concurrency: int = Field(
+        default=10,
+        ge=1,
+        le=100,
+        description="Number of concurrent SAQ workers",
+    )
+    saq_worker_concurrency: int = Field(
+        default=10,
+        ge=1,
+        le=100,
+        description="Number of concurrent SAQ workers for litestar-saq plugin",
+    )
+    saq_web_enabled: bool = Field(
+        default=False,
+        description="Enable SAQ built-in web UI (disabled - using custom admin UI)",
+    )
 
     log_format: str = Field(
         default="console",

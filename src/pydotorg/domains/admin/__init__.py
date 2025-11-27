@@ -10,6 +10,7 @@ from pydotorg.domains.admin.controllers import (
     AdminPagesController,
     AdminSettingsController,
     AdminSponsorsController,
+    AdminTasksController,
     AdminUsersController,
 )
 from pydotorg.domains.admin.dependencies import get_admin_dependencies
@@ -27,6 +28,7 @@ from pydotorg.domains.admin.services import (
     JobAdminService,
     PageAdminService,
     SponsorAdminService,
+    TaskAdminService,
     UserAdminService,
 )
 
@@ -40,6 +42,7 @@ __all__ = [
     "AdminPermission",
     "AdminSettingsController",
     "AdminSponsorsController",
+    "AdminTasksController",
     "AdminUserRead",
     "AdminUsersController",
     "BlogAdminService",
@@ -50,6 +53,7 @@ __all__ = [
     "PageAdminService",
     "PendingModeration",
     "SponsorAdminService",
+    "TaskAdminService",
     "UserAdminService",
     "UserStaffUpdate",
     "get_admin_dependencies",

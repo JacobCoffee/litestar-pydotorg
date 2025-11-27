@@ -1,0 +1,101 @@
+<tr id="job-{{ job.job_id }}" class="hover">
+    <td>
+        <a
+            href="/admin/tasks/jobs/{{ job.job_id }}"
+            class="link link-primary font-mono text-xs"
+            hx-boost="true"
+        >
+            {{ job.job_id[:8] }}...
+        </a>
+    </td>
+    <td>
+        <code class="text-xs bg-base-200 px-2 py-1 rounded">{{ job.function }}</code>
+    </td>
+    <td>
+        {% if job.status == 'queued' %}
+        <span class="badge badge-info badge-sm">Queued</span>
+        {% elif job.status == 'active' %}
+        <span class="badge badge-warning badge-sm gap-1">
+            <span class="loading loading-spinner loading-xs"></span>
+            Active
+        </span>
+        {% elif job.status == 'complete' %}
+        <span class="badge badge-success badge-sm">Complete</span>
+        {% elif job.status == 'failed' %}
+        <span class="badge badge-error badge-sm">Failed</span>
+        {% else %}
+        <span class="badge badge-sm">{{ job.status }}</span>
+        {% endif %}
+    </td>
+    <td>
+        {% if job.started %}
+        <span class="text-xs" title="{{ job.started.strftime('%b %d, %Y at %I:%M:%S %p') if job.started is not string else job.started }}">
+            {{ job.started.strftime('%I:%M %p') if job.started is not string else job.started }}
+        </span>
+        {% else %}
+        <span class="text-base-content/50 text-xs">Not started</span>
+        {% endif %}
+    </td>
+    <td>
+        {% if job.started and job.completed %}
+            {% set duration = job.completed - job.started if job.started is not string and job.completed is not string else None %}
+            {% if duration %}
+            <span class="text-xs font-mono">{{ "%.2f"|format(duration.total_seconds()) }}s</span>
+            {% else %}
+            <span class="text-base-content/50 text-xs">-</span>
+            {% endif %}
+        {% elif job.status == 'active' and job.started %}
+            <span class="text-warning text-xs">Running...</span>
+        {% else %}
+        <span class="text-base-content/50 text-xs">-</span>
+        {% endif %}
+    </td>
+    <td>
+        <span class="badge badge-ghost badge-sm">{{ job.attempts or 0 }}</span>
+    </td>
+    <td class="text-right">
+        <div class="join">
+            <a
+                href="/admin/tasks/jobs/{{ job.job_id }}"
+                class="btn btn-ghost btn-xs join-item"
+                hx-boost="true"
+                title="View Details"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+            </a>
+
+            {% if job.status == 'failed' %}
+            <button
+                class="btn btn-success btn-xs join-item"
+                hx-post="/admin/tasks/jobs/{{ job.job_id }}/retry"
+                hx-target="#job-{{ job.job_id }}"
+                hx-swap="outerHTML"
+                hx-confirm="Retry this job?"
+                title="Retry Job"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+            </button>
+            {% endif %}
+
+            {% if job.status == 'active' %}
+            <button
+                class="btn btn-error btn-xs join-item"
+                hx-post="/admin/tasks/jobs/{{ job.job_id }}/abort"
+                hx-target="#job-{{ job.job_id }}"
+                hx-swap="outerHTML"
+                hx-confirm="Abort this running job?"
+                title="Abort Job"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            {% endif %}
+        </div>
+    </td>
+</tr>

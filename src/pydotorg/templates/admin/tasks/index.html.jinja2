@@ -1,0 +1,131 @@
+{% extends "admin/base.html.jinja2" %}
+{% from "admin/partials/stats_card.html.jinja2" import stats_card %}
+
+{% block title %}Task Monitoring - Python.org Admin{% endblock %}
+
+{% block admin_content %}
+<div class="space-y-6"
+     hx-get="/admin/tasks"
+     hx-trigger="every 10s"
+     hx-select="#task-dashboard"
+     hx-swap="outerHTML"
+     hx-indicator="#refresh-indicator">
+    <div id="task-dashboard">
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-3xl font-bold text-python-blue">Task Monitoring</h1>
+                <p class="text-base-content/70 mt-1">Monitor SAQ background jobs and queues</p>
+            </div>
+            <div class="flex gap-2">
+                <div id="refresh-indicator" class="htmx-indicator loading loading-spinner loading-md text-primary"></div>
+                <button
+                    class="btn btn-sm btn-outline gap-2"
+                    hx-post="/admin/tasks/refresh-feeds"
+                    hx-swap="none"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                    Refresh Feeds
+                </button>
+                <button
+                    class="btn btn-sm btn-outline gap-2"
+                    hx-post="/admin/tasks/rebuild-search"
+                    hx-swap="none"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                    Rebuild Search Index
+                </button>
+            </div>
+        </div>
+
+        {% set total_queues = queues|length if queues else 0 %}
+        {% set total_workers = queues|sum(attribute='workers') if queues else 0 %}
+        {% set total_queued = queues|sum(attribute='queued') if queues else 0 %}
+        {% set total_active = queues|sum(attribute='active') if queues else 0 %}
+        {% set total_failed = queues|sum(attribute='failed') if queues else 0 %}
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+            {{ stats_card(
+                title='Total Queues',
+                value=total_queues,
+                icon='<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>',
+                color='primary'
+            ) }}
+
+            {{ stats_card(
+                title='Active Workers',
+                value=total_workers,
+                icon='<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>',
+                trend='{% if total_workers > 0 %}Running{% else %}Offline{% endif %}',
+                color='{% if total_workers > 0 %}success{% else %}warning{% endif %}'
+            ) }}
+
+            {{ stats_card(
+                title='Queued Jobs',
+                value=total_queued,
+                icon='<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>',
+                trend='Waiting',
+                color='info'
+            ) }}
+
+            {{ stats_card(
+                title='Active Jobs',
+                value=total_active,
+                icon='<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>',
+                trend='Processing',
+                color='warning'
+            ) }}
+
+            {{ stats_card(
+                title='Failed Jobs',
+                value=total_failed,
+                icon='<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>',
+                trend='Last hour',
+                color='{% if total_failed > 0 %}error{% else %}success{% endif %}'
+            ) }}
+        </div>
+
+        {% if queues %}
+        <div class="space-y-4">
+            <div class="flex items-center justify-between">
+                <h2 class="text-2xl font-bold text-python-blue">Queue Status</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for queue in queues %}
+                {% include 'admin/tasks/partials/queue_card.html.jinja2' %}
+                {% endfor %}
+            </div>
+        </div>
+        {% else %}
+        <div class="card bg-base-100 shadow-lg border border-base-300">
+            <div class="card-body text-center py-12">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-base-content/30 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                </svg>
+                <h3 class="text-xl font-bold mb-2">No Queues Found</h3>
+                <p class="text-base-content/60">SAQ queues are not configured or no workers are running</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .htmx-indicator {
+        opacity: 0;
+        transition: opacity 200ms ease-in;
+    }
+    .htmx-request .htmx-indicator {
+        opacity: 1;
+    }
+    .htmx-request.htmx-indicator {
+        opacity: 1;
+    }
+</style>
+{% endblock %}

@@ -861,6 +861,7 @@ dependencies = [
     { name = "icalendar" },
     { name = "itsdangerous" },
     { name = "litestar", extra = ["jinja", "standard", "structlog"] },
+    { name = "litestar-saq" },
     { name = "lxml" },
     { name = "meilisearch-python-sdk" },
     { name = "passlib", extra = ["bcrypt"] },
@@ -957,6 +958,7 @@ requires-dist = [
     { name = "icalendar", specifier = ">=6.1.0" },
     { name = "itsdangerous", specifier = ">=2.2.0" },
     { name = "litestar", extras = ["standard", "jinja", "structlog"], specifier = ">=2.14.0" },
+    { name = "litestar-saq", specifier = ">=0.5.3" },
     { name = "lxml", specifier = ">=5.3.0" },
     { name = "meilisearch-python-sdk", specifier = ">=5.5.0" },
     { name = "passlib", extras = ["bcrypt"], specifier = ">=1.7.4" },
@@ -1036,6 +1038,19 @@ test = [
     { name = "pytest-xdist", specifier = ">=3.5.0" },
     { name = "respx", specifier = ">=0.22.0" },
     { name = "time-machine", specifier = ">=2.16.0" },
+]
+
+[[package]]
+name = "litestar-saq"
+version = "0.5.3"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "litestar" },
+    { name = "saq" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/26/54/e48f1f656524a7ad8debda010ff87122428a326ed0332faeb322a592aa55/litestar_saq-0.5.3.tar.gz", hash = "sha256:f2e7bcf04443ecc703c2067c0539418c5553251f4a63d02c847601738ddeffcd", size = 149224, upload-time = "2025-05-05T14:54:31.538Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/6d/a2/2fa625897b593edc7d20a55ddfb6890ce02f983d1815fe20c790fb3ad2b2/litestar_saq-0.5.3-py3-none-any.whl", hash = "sha256:9b943867e1359a6d347ea1276788de58cb5cbb19216ae4655dde8e6d6a2770d9", size = 16107, upload-time = "2025-05-05T14:54:30.185Z" },
 ]
 
 [[package]]

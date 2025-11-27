@@ -38,6 +38,7 @@ from pydotorg.core.features import FeatureFlags
 from pydotorg.core.logging import configure_structlog
 from pydotorg.core.openapi import get_openapi_plugins
 from pydotorg.core.security.csrf import create_csrf_config
+from pydotorg.core.worker import saq_plugin
 from pydotorg.domains.about import AboutRenderController
 from pydotorg.domains.admin import (
     AdminBlogsController,
@@ -48,6 +49,7 @@ from pydotorg.domains.admin import (
     AdminPagesController,
     AdminSettingsController,
     AdminSponsorsController,
+    AdminTasksController,
     AdminUsersController,
     get_admin_dependencies,
 )
@@ -403,11 +405,12 @@ app = Litestar(
         AdminPagesController,
         AdminSettingsController,
         AdminSponsorsController,
+        AdminTasksController,
         AdminUsersController,
     ],
     dependencies=get_all_dependencies(),
     exception_handlers=get_exception_handlers(),
-    plugins=[sqlalchemy_plugin, sqladmin_plugin, flash_plugin, structlog_plugin],
+    plugins=[sqlalchemy_plugin, sqladmin_plugin, flash_plugin, structlog_plugin, saq_plugin],
     middleware=[session_config.middleware, UserPopulationMiddleware, JWTAuthMiddleware],
     template_config=template_config,
     openapi_config=OpenAPIConfig(

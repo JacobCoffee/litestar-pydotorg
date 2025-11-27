@@ -1,0 +1,227 @@
+{% extends "admin/base.html.jinja2" %}
+
+{% block title %}Job {{ job.job_id }} - Python.org Admin{% endblock %}
+
+{% block admin_content %}
+<div class="space-y-6">
+    <div class="flex items-center gap-4">
+        <a href="/admin/tasks/queues/{{ job.queue or 'default' }}" class="btn btn-ghost btn-sm gap-2" hx-boost="true">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            Back to Queue
+        </a>
+    </div>
+
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold text-python-blue">Job Details</h1>
+            <p class="text-base-content/70 mt-1">{{ job.job_id }}</p>
+        </div>
+        <div class="flex gap-2">
+            {% if job.status == 'failed' %}
+            <button
+                class="btn btn-success btn-sm gap-2"
+                hx-post="/admin/tasks/jobs/{{ job.job_id }}/retry"
+                hx-swap="none"
+                hx-confirm="Retry this failed job?"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                Retry Job
+            </button>
+            {% endif %}
+
+            {% if job.status == 'active' %}
+            <button
+                class="btn btn-error btn-sm gap-2"
+                hx-post="/admin/tasks/jobs/{{ job.job_id }}/abort"
+                hx-swap="none"
+                hx-confirm="Abort this running job?"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                Abort Job
+            </button>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="card bg-base-100 shadow-lg border border-base-300">
+            <div class="card-body">
+                <h2 class="card-title text-python-blue flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Job Information
+                </h2>
+
+                <div class="space-y-4 mt-4">
+                    <div class="flex justify-between items-center py-2 border-b border-base-300">
+                        <span class="text-base-content/70">Job ID</span>
+                        <code class="text-sm bg-base-200 px-2 py-1 rounded">{{ job.job_id }}</code>
+                    </div>
+
+                    <div class="flex justify-between items-center py-2 border-b border-base-300">
+                        <span class="text-base-content/70">Function</span>
+                        <code class="text-sm bg-base-200 px-2 py-1 rounded">{{ job.function }}</code>
+                    </div>
+
+                    <div class="flex justify-between items-center py-2 border-b border-base-300">
+                        <span class="text-base-content/70">Queue</span>
+                        <span class="font-mono text-sm">{{ job.queue or 'default' }}</span>
+                    </div>
+
+                    <div class="flex justify-between items-center py-2 border-b border-base-300">
+                        <span class="text-base-content/70">Status</span>
+                        {% if job.status == 'queued' %}
+                        <span class="badge badge-info">Queued</span>
+                        {% elif job.status == 'active' %}
+                        <span class="badge badge-warning">Active</span>
+                        {% elif job.status == 'complete' %}
+                        <span class="badge badge-success">Complete</span>
+                        {% elif job.status == 'failed' %}
+                        <span class="badge badge-error">Failed</span>
+                        {% else %}
+                        <span class="badge">{{ job.status }}</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="flex justify-between items-center py-2 border-b border-base-300">
+                        <span class="text-base-content/70">Attempts</span>
+                        <span class="font-semibold">{{ job.attempts or 0 }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card bg-base-100 shadow-lg border border-base-300">
+            <div class="card-body">
+                <h2 class="card-title text-python-blue flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Timing Information
+                </h2>
+
+                <div class="space-y-4 mt-4">
+                    {% if job.started %}
+                    <div class="flex justify-between items-center py-2 border-b border-base-300">
+                        <span class="text-base-content/70">Started</span>
+                        <span class="text-sm">{{ job.started.strftime('%b %d, %Y at %I:%M:%S %p') if job.started is not string else job.started }}</span>
+                    </div>
+                    {% endif %}
+
+                    {% if job.completed %}
+                    <div class="flex justify-between items-center py-2 border-b border-base-300">
+                        <span class="text-base-content/70">Completed</span>
+                        <span class="text-sm">{{ job.completed.strftime('%b %d, %Y at %I:%M:%S %p') if job.completed is not string else job.completed }}</span>
+                    </div>
+                    {% endif %}
+
+                    {% if job.started and job.completed %}
+                    <div class="flex justify-between items-center py-2 border-b border-base-300">
+                        <span class="text-base-content/70">Duration</span>
+                        {% set duration = job.completed - job.started if job.started is not string and job.completed is not string else None %}
+                        {% if duration %}
+                        <span class="font-semibold">{{ "%.2f"|format(duration.total_seconds()) }}s</span>
+                        {% else %}
+                        <span class="text-base-content/60">N/A</span>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+
+                    {% if job.scheduled %}
+                    <div class="flex justify-between items-center py-2 border-b border-base-300">
+                        <span class="text-base-content/70">Scheduled For</span>
+                        <span class="text-sm">{{ job.scheduled.strftime('%b %d, %Y at %I:%M:%S %p') if job.scheduled is not string else job.scheduled }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if job.result and job.status == 'complete' %}
+    <div class="card bg-base-100 shadow-lg border border-base-300">
+        <div class="card-body">
+            <h2 class="card-title text-python-blue flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                Result
+            </h2>
+
+            <div class="mockup-code mt-4">
+                <pre><code>{{ job.result }}</code></pre>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if job.error and job.status == 'failed' %}
+    <div class="card bg-base-100 shadow-lg border border-error">
+        <div class="card-body">
+            <h2 class="card-title text-error flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                Error Details
+            </h2>
+
+            <div class="alert alert-error mt-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>{{ job.error }}</span>
+            </div>
+
+            {% if job.traceback %}
+            <div class="mt-4">
+                <h3 class="font-semibold mb-2">Traceback:</h3>
+                <div class="mockup-code">
+                    <pre><code>{{ job.traceback }}</code></pre>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if job.args or job.kwargs %}
+    <div class="card bg-base-100 shadow-lg border border-base-300">
+        <div class="card-body">
+            <h2 class="card-title text-python-blue flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                </svg>
+                Arguments
+            </h2>
+
+            <div class="space-y-4 mt-4">
+                {% if job.args %}
+                <div>
+                    <h3 class="font-semibold mb-2">Positional Arguments:</h3>
+                    <div class="mockup-code">
+                        <pre><code>{{ job.args }}</code></pre>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if job.kwargs %}
+                <div>
+                    <h3 class="font-semibold mb-2">Keyword Arguments:</h3>
+                    <div class="mockup-code">
+                        <pre><code>{{ job.kwargs }}</code></pre>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

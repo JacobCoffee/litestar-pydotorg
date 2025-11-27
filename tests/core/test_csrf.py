@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import pytest
 from litestar.config.csrf import CSRFConfig
 
 from pydotorg.config import settings
