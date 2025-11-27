@@ -1104,27 +1104,105 @@ async def _check_litestar_session(self, request: Request) -> User | None:
 ### Task 10.3: Docker Setup
 **Agent**: `python-backend-engineer`
 **Priority**: MEDIUM
+**Status**: ✅ COMPLETE (2025-11-27)
 
-**Tasks**:
-- [ ] Create Dockerfile (multi-stage)
-- [ ] Create docker-compose.yml (dev)
-- [ ] Create docker-compose.prod.yml
-- [ ] Add health checks
-- [ ] Configure volume mounts
+**Completed**:
+- [x] Create Dockerfile (multi-stage with uv, Granian, non-root user)
+- [x] Create Dockerfile.dev (development with hot-reload)
+- [x] Create docker-compose.yml (dev profiles)
+- [x] Create docker-compose.prod.yml
+- [x] Add health checks to all services
+- [x] Configure volume mounts for hot-reload
+- [x] Add maildev service for email testing (port 1080 UI, 1025 SMTP)
+- [x] Add meilisearch service (optional, full profile)
+- [x] Add .dockerignore
+- [x] Add .env.docker.example
+
+**Files Created**:
+```
+Dockerfile                    # Production multi-stage build
+Dockerfile.dev                # Development with hot-reload
+docker-compose.yml            # Enhanced with app, worker, maildev, meilisearch
+docker-compose.prod.yml       # Production overrides
+.dockerignore                 # Build context optimization
+.env.docker.example           # Environment template
+```
+
+**Docker Services**:
+| Service     | Port(s)        | Profile | Description                    |
+|-------------|----------------|---------|--------------------------------|
+| postgres    | 5432           | dev/full| PostgreSQL 16 Alpine          |
+| redis       | 6379           | dev/full| Redis 7 Alpine                |
+| app         | 8000           | dev/full| Litestar app (Granian)        |
+| worker      | -              | dev/full| SAQ background worker         |
+| maildev     | 1080, 1025     | dev/full| Email testing (UI + SMTP)     |
+| meilisearch | 7700           | full    | Search engine (optional)      |
+
+**Usage**:
+```bash
+# Development (default profile)
+make docker-up              # Start postgres, redis, app, worker, maildev
+
+# Full stack (includes meilisearch)
+docker compose --profile full up -d
+
+# Production
+docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+```
+
+**Email Testing with MailDev**:
+- Web UI: http://localhost:1080 (view all sent emails)
+- SMTP: localhost:1025 (configure in app)
+- Set `SMTP_HOST=maildev` and `SMTP_PORT=1025` in development
 
 ---
 
 ### Task 10.4: CI/CD Pipeline
 **Agent**: `github-git-expert`
 **Priority**: MEDIUM
+**Status**: ✅ COMPLETE (2025-11-27)
 
-**Tasks**:
-- [ ] Create GitHub Actions workflow
-- [ ] Add lint/format/type-check jobs
-- [ ] Add test job with coverage
-- [ ] Add security scanning
-- [ ] Create release workflow
-- [ ] Add deployment workflow
+**Completed**:
+- [x] Create GitHub Actions CI workflow (ci.yml)
+- [x] Add lint/format/type-check in unified validate job
+- [x] Add unit test job (no containers needed)
+- [x] Add integration test job (PostgreSQL + Redis service containers)
+- [x] Add E2E test job (Playwright)
+- [x] Add coverage job with Codecov upload
+- [x] Add frontend build job (Bun/Vite/TailwindCSS)
+- [x] Add security scanning (zizmor workflow security)
+- [x] Add CI success gate job
+- [x] Create release workflow (release.yml) - GitHub Release + Docker image
+- [x] Create changelog workflow (cd.yml)
+- [x] Create PR title linting (pr-title.yml)
+- [x] Create docs workflow (docs.yml) - Sphinx + GitHub Pages
+- [x] Update dependabot.yml (grouped updates)
+- [x] Add release.yml for GitHub Release categories
+
+**Files Created**:
+```
+.github/
+├── workflows/
+│   ├── ci.yml              # Main CI: validate, tests, coverage, frontend
+│   ├── cd.yml              # Changelog generation on tags
+│   ├── release.yml         # GitHub Release + Docker image on tags
+│   ├── pr-title.yml        # Semantic PR title enforcement
+│   └── docs.yml            # Documentation build + Pages deploy
+├── dependabot.yml          # Grouped dependency updates
+└── release.yml             # Release notes categories
+```
+
+**CI Workflow Structure** (matching litestar-workflows style):
+1. **security** - zizmor workflow security scan
+2. **validate** - ruff check, ruff format, codespell, ty type-check
+3. **frontend** - Bun install, biome lint, Vite build, TailwindCSS
+4. **test-unit** - Fast unit tests (no containers)
+5. **test-integration** - PostgreSQL + Redis service containers
+6. **test-e2e** - Playwright browser tests (after unit+integration pass)
+7. **coverage** - Full coverage with Codecov upload
+8. **ci-success** - Gate job for branch protection
+
+**Note**: No PyPI publishing (this is an application, not a library)
 
 ---
 
