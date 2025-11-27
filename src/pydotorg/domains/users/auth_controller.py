@@ -20,18 +20,20 @@ from pydotorg.core.auth.jwt import jwt_service
 from pydotorg.core.auth.oauth import get_oauth_service
 from pydotorg.core.auth.password import password_service
 from pydotorg.core.auth.schemas import (
+    ForgotPasswordRequest,
     LoginRequest,
     RefreshTokenRequest,
     RegisterRequest,
+    ResetPasswordRequest,
     SendVerificationRequest,
     TokenResponse,
     UserResponse,
     VerifyEmailResponse,
 )
 from pydotorg.core.auth.session import session_service
-from pydotorg.core.email import email_service
 from pydotorg.core.logging import get_logger
 from pydotorg.domains.users.models import User
+from pydotorg.lib.tasks import enqueue_task
 
 if TYPE_CHECKING:
     from sqlalchemy.ext.asyncio import AsyncSession
@@ -87,7 +89,12 @@ class AuthController(Controller):
         verification_token = jwt_service.create_verification_token(user.id, user.email)
         verification_link = f"{settings.oauth_redirect_base_url}/verify-email/{verification_token}"
 
-        email_service.send_verification_email(user.email, user.username, verification_link)
+        await enqueue_task(
+            "send_verification_email",
+            to_email=user.email,
+            username=user.username,
+            verification_link=verification_link,
+        )
 
         access_token = jwt_service.create_access_token(user.id)
         refresh_token = jwt_service.create_refresh_token(user.id)
@@ -361,7 +368,12 @@ class AuthController(Controller):
         verification_token = jwt_service.create_verification_token(user.id, user.email)
         verification_link = f"{settings.oauth_redirect_base_url}/verify-email/{verification_token}"
 
-        email_service.send_verification_email(user.email, user.username, verification_link)
+        await enqueue_task(
+            "send_verification_email",
+            to_email=user.email,
+            username=user.username,
+            verification_link=verification_link,
+        )
 
         return VerifyEmailResponse(message="Verification email sent")
 
@@ -411,9 +423,86 @@ class AuthController(Controller):
         verification_token = jwt_service.create_verification_token(current_user.id, current_user.email)
         verification_link = f"{settings.oauth_redirect_base_url}/verify-email/{verification_token}"
 
-        email_service.send_verification_email(current_user.email, current_user.username, verification_link)
+        await enqueue_task(
+            "send_verification_email",
+            to_email=current_user.email,
+            username=current_user.username,
+            verification_link=verification_link,
+        )
 
         return VerifyEmailResponse(message="Verification email sent")
+
+    @post("/forgot-password")
+    async def forgot_password(
+        self,
+        data: ForgotPasswordRequest,
+        db_session: AsyncSession,
+    ) -> VerifyEmailResponse:
+        result = await db_session.execute(select(User).where(User.email == data.email))
+        user = result.scalar_one_or_none()
+
+        if not user:
+            return VerifyEmailResponse(
+                message="If an account exists with this email, you will receive a password reset link"
+            )
+
+        if user.oauth_provider:
+            return VerifyEmailResponse(
+                message="If an account exists with this email, you will receive a password reset link"
+            )
+
+        reset_token = jwt_service.create_password_reset_token(user.id, user.email)
+        reset_link = f"{settings.oauth_redirect_base_url}/auth/reset-password/{reset_token}"
+
+        await enqueue_task(
+            "send_password_reset_email",
+            to_email=user.email,
+            username=user.username,
+            reset_link=reset_link,
+        )
+
+        return VerifyEmailResponse(
+            message="If an account exists with this email, you will receive a password reset link"
+        )
+
+    @post("/reset-password")
+    async def reset_password(
+        self,
+        data: ResetPasswordRequest,
+        db_session: AsyncSession,
+    ) -> VerifyEmailResponse:
+        try:
+            payload = jwt_service.decode_token(data.token)
+            jwt_service.verify_token_type(payload, "password_reset")
+
+            user_id_str = payload.get("sub")
+            email = payload.get("email")
+
+            if not user_id_str or not email:
+                raise PermissionDeniedException("Invalid reset token")
+
+            user_id = UUID(user_id_str)
+
+        except ValueError as e:
+            raise PermissionDeniedException("Invalid or expired reset token") from e
+
+        result = await db_session.execute(select(User).where(User.id == user_id, User.email == email))
+        user = result.scalar_one_or_none()
+
+        if not user:
+            raise NotFoundException("User not found")
+
+        if user.oauth_provider:
+            raise PermissionDeniedException(f"This account uses {user.oauth_provider} login. Password cannot be reset.")
+
+        is_valid, error_message = password_service.validate_password_strength(data.new_password)
+        if not is_valid:
+            raise PermissionDeniedException(error_message or "Password does not meet requirements")
+
+        user.password_hash = password_service.hash_password(data.new_password)
+        await db_session.commit()
+
+        return VerifyEmailResponse(message="Password reset successfully")
 
 
 class AuthPageController(Controller):

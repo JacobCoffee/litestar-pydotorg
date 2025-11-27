@@ -56,6 +56,19 @@ class JWTService:
         return jwt.encode(to_encode, settings.secret_key, algorithm=settings.jwt_algorithm)
 
     @staticmethod
+    def create_password_reset_token(user_id: UUID, email: str) -> str:
+        expires_delta = timedelta(hours=1)
+        expire = datetime.now(UTC) + expires_delta
+        to_encode = {
+            "sub": str(user_id),
+            "email": email,
+            "exp": expire,
+            "iat": datetime.now(UTC),
+            "type": "password_reset",
+        }
+        return jwt.encode(to_encode, settings.secret_key, algorithm=settings.jwt_algorithm)
+
+    @staticmethod
     def decode_token(token: str) -> dict[str, Any]:
         try:
             return jwt.decode(token, settings.secret_key, algorithms=[settings.jwt_algorithm])
