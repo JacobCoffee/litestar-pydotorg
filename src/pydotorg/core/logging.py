@@ -9,6 +9,7 @@ import structlog
 from litestar.logging.config import LoggingConfig, StructLoggingConfig
 from litestar.middleware.logging import LoggingMiddlewareConfig
 from litestar.plugins.structlog import StructlogConfig, StructlogPlugin
+from structlog.dev import RichTracebackFormatter
 
 if TYPE_CHECKING:
     from structlog.typing import Processor
@@ -23,7 +24,7 @@ def configure_structlog(
 
     Args:
         log_level: Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
-        use_json: If True, use JSON formatter for production. If False, use console formatter for development.
+        use_json: If True, use JSON formatter for production. If False, use rich console for development.
 
     Returns:
         StructlogPlugin: Configured structlog plugin
@@ -40,12 +41,17 @@ def configure_structlog(
     ]
 
     if use_json:
+        processors.append(structlog.processors.dict_tracebacks)
         processors.append(structlog.processors.JSONRenderer())
     else:
         processors.append(
             structlog.dev.ConsoleRenderer(
                 colors=True,
-                exception_formatter=structlog.dev.plain_traceback,
+                exception_formatter=RichTracebackFormatter(
+                    width=120,
+                    show_locals=True,
+                    max_frames=20,
+                ),
             )
         )
 
