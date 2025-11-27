@@ -39,8 +39,13 @@ from pydotorg.core.logging import configure_structlog
 from pydotorg.core.openapi import get_openapi_plugins
 from pydotorg.domains.about import AboutRenderController
 from pydotorg.domains.admin import (
+    AdminBlogsController,
     AdminDashboardController,
+    AdminEventsController,
     AdminJobsController,
+    AdminLogsController,
+    AdminPagesController,
+    AdminSettingsController,
     AdminSponsorsController,
     AdminUsersController,
     get_admin_dependencies,
@@ -387,8 +392,13 @@ app = Litestar(
         WorkGroupsPageController,
         SearchAPIController,
         SearchRenderController,
+        AdminBlogsController,
         AdminDashboardController,
+        AdminEventsController,
         AdminJobsController,
+        AdminLogsController,
+        AdminPagesController,
+        AdminSettingsController,
         AdminSponsorsController,
         AdminUsersController,
     ],

@@ -5,8 +5,11 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from pydotorg.domains.admin.services import (
+    BlogAdminService,
     DashboardService,
+    EventAdminService,
     JobAdminService,
+    PageAdminService,
     SponsorAdminService,
     UserAdminService,
 )
@@ -63,6 +66,42 @@ async def provide_sponsor_admin_service(db_session: AsyncSession) -> SponsorAdmi
     return SponsorAdminService(session=db_session)
 
 
+async def provide_event_admin_service(db_session: AsyncSession) -> EventAdminService:
+    """Provide an EventAdminService instance.
+
+    Args:
+        db_session: Database session
+
+    Returns:
+        EventAdminService instance
+    """
+    return EventAdminService(session=db_session)
+
+
+async def provide_page_admin_service(db_session: AsyncSession) -> PageAdminService:
+    """Provide a PageAdminService instance.
+
+    Args:
+        db_session: Database session
+
+    Returns:
+        PageAdminService instance
+    """
+    return PageAdminService(session=db_session)
+
+
+async def provide_blog_admin_service(db_session: AsyncSession) -> BlogAdminService:
+    """Provide a BlogAdminService instance.
+
+    Args:
+        db_session: Database session
+
+    Returns:
+        BlogAdminService instance
+    """
+    return BlogAdminService(session=db_session)
+
+
 def get_admin_dependencies() -> dict:
     """Get all admin domain dependency providers.
 
@@ -74,4 +113,7 @@ def get_admin_dependencies() -> dict:
         "user_admin_service": provide_user_admin_service,
         "job_admin_service": provide_job_admin_service,
         "sponsor_admin_service": provide_sponsor_admin_service,
+        "event_admin_service": provide_event_admin_service,
+        "page_admin_service": provide_page_admin_service,
+        "blog_admin_service": provide_blog_admin_service,
     }

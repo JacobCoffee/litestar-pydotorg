@@ -4,6 +4,8 @@ from pydotorg.domains.admin import urls
 from pydotorg.domains.admin.controllers import (
     AdminDashboardController,
     AdminJobsController,
+    AdminLogsController,
+    AdminPagesController,
     AdminSponsorsController,
     AdminUsersController,
 )
@@ -25,6 +27,8 @@ from pydotorg.domains.admin.services import (
 __all__ = [
     "AdminDashboardController",
     "AdminJobsController",
+    "AdminLogsController",
+    "AdminPagesController",
     "AdminPermission",
     "AdminSponsorsController",
     "AdminUserRead",
