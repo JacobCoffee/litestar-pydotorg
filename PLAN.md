@@ -591,6 +591,18 @@ src/pydotorg/domains/admin/
 - Fixed timestamp conversion in `_job_to_dict()` - SAQ returns Unix timestamps as int, not datetime
 - Fixed admin task button URLs: `/admin/tasks/enqueue/refresh-feeds`, `/admin/tasks/enqueue/rebuild-indexes`
 - Added CSRF token injection for HTMX requests in `base.html.jinja2`
+- Fixed Meilisearch IPv6/IPv4 connection issue (localhost → 127.0.0.1)
+- Fixed "not found" warnings in search tasks - changed to DEBUG level, auto-cleanup stale entries
+
+**Admin Task UI Enhancements** (2025-11-27):
+- Sortable job table columns (function, status, time, attempts) with direction indicators
+- Scheduled job detection - shows "Scheduled" status instead of "Queued" for future jobs
+- Cron job indicators - SVG clock icon for jobs with `cron:` key prefix
+- Pretty JSON display for job results
+- Traceback formatting with separate display section
+- Added "Scheduled" tab to status filter
+- Test Failure button for debugging traceback display
+- Extended `time_ago` filter to handle future dates ("in X mins", "tomorrow", etc.)
 
 **Commands**:
 ```bash
