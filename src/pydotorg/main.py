@@ -37,6 +37,7 @@ from pydotorg.core.exceptions import get_exception_handlers
 from pydotorg.core.features import FeatureFlags
 from pydotorg.core.logging import configure_structlog
 from pydotorg.core.openapi import get_openapi_plugins
+from pydotorg.core.security.csrf import create_csrf_config
 from pydotorg.domains.about import AboutRenderController
 from pydotorg.domains.admin import (
     AdminBlogsController,
@@ -291,6 +292,8 @@ structlog_plugin = configure_structlog(
     use_json=not settings.is_debug,
 )
 
+csrf_config = create_csrf_config()
+
 
 def on_app_init(app_config: AppConfig) -> AppConfig:
     """Initialize application state with feature flags."""
@@ -445,6 +448,7 @@ app = Litestar(
         ],
     ),
     compression_config=CompressionConfig(backend="gzip", gzip_compress_level=6),
+    csrf_config=csrf_config,
     debug=settings.is_debug,
     on_app_init=[on_app_init],
     lifespan=[lifespan],
