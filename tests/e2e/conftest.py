@@ -1,7 +1,13 @@
-"""Playwright E2E testing configuration and fixtures."""
+"""Playwright E2E testing configuration and fixtures.
+
+E2E tests require a running server. They will be automatically skipped
+if no server is available at the configured URL.
+"""
 
 from __future__ import annotations
 
+import os
+import socket
 from collections.abc import AsyncIterator
 from typing import TYPE_CHECKING
 
@@ -21,9 +27,37 @@ if TYPE_CHECKING:
     from playwright.async_api import Playwright
 
 
+def _is_server_running(host: str = "localhost", port: int = 8000, timeout: float = 1.0) -> bool:
+    """Check if the test server is running."""
+    try:
+        with socket.create_connection((host, port), timeout=timeout):
+            return True
+    except (ConnectionRefusedError, TimeoutError, OSError):
+        return False
+
+
 @pytest.fixture(scope="session")
-async def playwright_instance() -> AsyncIterator[Playwright]:
+def e2e_server_url() -> str:
+    """Get the E2E test server URL from environment or use default."""
+    return os.environ.get("E2E_SERVER_URL", "http://localhost:8000")
+
+
+@pytest.fixture(scope="session")
+def e2e_server_available(e2e_server_url: str) -> bool:
+    """Check if the E2E test server is available."""
+    from urllib.parse import urlparse
+
+    parsed = urlparse(e2e_server_url)
+    host = parsed.hostname or "localhost"
+    port = parsed.port or 8000
+    return _is_server_running(host, port)
+
+
+@pytest.fixture(scope="session")
+async def playwright_instance(e2e_server_available: bool) -> AsyncIterator[Playwright]:
     """Create a Playwright instance for the test session."""
+    if not e2e_server_available:
+        pytest.skip("E2E tests require a running server")
     async with async_playwright() as p:
         yield p
 
@@ -84,9 +118,11 @@ async def test_app(postgres_uri: str) -> AsyncIterator[Litestar]:
 
 
 @pytest.fixture
-async def test_server_url(test_app: Litestar) -> str:
-    """Start test server and return base URL."""
-    return "http://localhost:8000"
+async def test_server_url(e2e_server_url: str, e2e_server_available: bool) -> str:
+    """Return the test server URL, skipping if server is not available."""
+    if not e2e_server_available:
+        pytest.skip("E2E tests require a running server. Start with 'make serve' or set E2E_SERVER_URL.")
+    return e2e_server_url
 
 
 @pytest.fixture
