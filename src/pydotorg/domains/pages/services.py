@@ -8,6 +8,7 @@ from advanced_alchemy.service import SQLAlchemyAsyncRepositoryService
 
 from pydotorg.domains.pages.models import ContentType, DocumentFile, Image, Page
 from pydotorg.domains.pages.repositories import DocumentFileRepository, ImageRepository, PageRepository
+from pydotorg.lib.tasks import enqueue_task
 
 if TYPE_CHECKING:
     from uuid import UUID
@@ -41,6 +42,39 @@ class PageService(SQLAlchemyAsyncRepositoryService[Page]):
 
     repository_type = PageRepository
     match_fields = ["path"]
+
+    async def create(self, data: dict) -> Page:
+        """Create a new page.
+
+        Args:
+            data: Page creation data.
+
+        Returns:
+            The created page instance.
+        """
+        page = await super().create(data)
+        await self.session.commit()
+
+        await enqueue_task("index_page", page_id=str(page.id))
+
+        return page
+
+    async def update(self, item_id: UUID, data: dict) -> Page:
+        """Update a page.
+
+        Args:
+            item_id: The page ID.
+            data: Update data.
+
+        Returns:
+            The updated page instance.
+        """
+        page = await super().update(item_id, data)
+        await self.session.commit()
+
+        await enqueue_task("index_page", page_id=str(page.id))
+
+        return page
 
     async def create_page(self, data: PageCreate) -> Page:
         """Create a new page.

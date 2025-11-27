@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 from typing import TYPE_CHECKING
 
 from advanced_alchemy.service import SQLAlchemyAsyncRepositoryService
@@ -14,10 +15,13 @@ from pydotorg.domains.events.repositories import (
     EventOccurrenceRepository,
     EventRepository,
 )
+from pydotorg.lib.tasks import enqueue_task
 
 if TYPE_CHECKING:
     import datetime
     from uuid import UUID
+
+logger = logging.getLogger(__name__)
 
 
 class CalendarService(SQLAlchemyAsyncRepositoryService[Calendar]):
@@ -90,6 +94,49 @@ class EventService(SQLAlchemyAsyncRepositoryService[Event]):
 
     repository_type = EventRepository
     match_fields = ["slug"]
+
+    async def create(self, data: dict | Event) -> Event:
+        """Create an event and enqueue search indexing.
+
+        Args:
+            data: Event data dictionary or Event instance
+
+        Returns:
+            Created event
+        """
+        event = await super().create(data)
+        await self.repository.session.commit()
+
+        index_key = await enqueue_task("index_event", event_id=str(event.id))
+        if not index_key:
+            logger.warning(f"Failed to enqueue search indexing for event {event.id}")
+
+        return event
+
+    async def update(
+        self,
+        data: dict | Event,
+        item_id: UUID | None = None,
+        **kwargs,
+    ) -> Event:
+        """Update an event and enqueue search indexing.
+
+        Args:
+            data: Event data dictionary or Event instance
+            item_id: Event ID to update
+            **kwargs: Additional keyword arguments
+
+        Returns:
+            Updated event
+        """
+        event = await super().update(data, item_id=item_id, **kwargs)
+        await self.repository.session.commit()
+
+        index_key = await enqueue_task("index_event", event_id=str(event.id))
+        if not index_key:
+            logger.warning(f"Failed to enqueue search indexing for event {event.id}")
+
+        return event
 
     async def get_by_slug(self, slug: str) -> Event | None:
         """Get an event by slug.

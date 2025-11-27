@@ -16,6 +16,7 @@ from pydotorg.domains.blogs.repositories import (
     FeedRepository,
     RelatedBlogRepository,
 )
+from pydotorg.lib.tasks import enqueue_task
 
 if TYPE_CHECKING:
     from uuid import UUID
@@ -116,6 +117,12 @@ class FeedService(SQLAlchemyAsyncRepositoryService[Feed]):
             feed.last_fetched = datetime.now(UTC)
             await self.repository.update(feed)
             await self.repository.session.commit()
+
+            for entry in entries:
+                index_key = await enqueue_task("index_blog_entry", entry_id=str(entry.id))
+                if not index_key:
+                    logger.warning(f"Failed to enqueue search indexing for blog entry {entry.id}")
+
         except Exception:
             logger.exception(f"Error fetching feed {feed.name}")
             return []
