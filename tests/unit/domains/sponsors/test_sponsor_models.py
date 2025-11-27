@@ -2,8 +2,11 @@
 
 from __future__ import annotations
 
+import datetime
 from datetime import date, timedelta
 from uuid import uuid4
+
+import time_machine
 
 from pydotorg.domains.sponsors.models import Sponsor, Sponsorship, SponsorshipLevel, SponsorshipStatus
 
@@ -255,9 +258,11 @@ class TestSponsorshipModel:
         )
         assert sponsorship.is_active is True
 
+    @time_machine.travel(datetime.datetime(2024, 6, 15, 12, 0, 0, tzinfo=datetime.UTC))
     def test_is_active_on_end_date(self) -> None:
-        start_date = date.today() - timedelta(days=30)
-        end_date = date.today()
+        today = datetime.datetime.now(tz=datetime.UTC).date()
+        start_date = today - timedelta(days=30)
+        end_date = today
         sponsorship = Sponsorship(
             sponsor_id=uuid4(),
             level_id=uuid4(),

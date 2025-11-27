@@ -2,8 +2,11 @@
 
 from __future__ import annotations
 
+import datetime
 from datetime import date, timedelta
 from uuid import uuid4
+
+import time_machine
 
 from pydotorg.domains.users.models import VOTE_AFFIRMATION_DAYS, Membership, MembershipType
 
@@ -114,8 +117,10 @@ class TestMembershipModel:
         )
         assert membership.needs_vote_affirmation is True
 
+    @time_machine.travel(datetime.datetime(2024, 6, 15, 12, 0, 0, tzinfo=datetime.UTC))
     def test_needs_vote_affirmation_exactly_at_threshold(self) -> None:
-        threshold_date = date.today() - timedelta(days=VOTE_AFFIRMATION_DAYS)
+        today = datetime.datetime.now(tz=datetime.UTC).date()
+        threshold_date = today - timedelta(days=VOTE_AFFIRMATION_DAYS)
         membership = Membership(
             user_id=uuid4(),
             membership_type=MembershipType.BASIC,

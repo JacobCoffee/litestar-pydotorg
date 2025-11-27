@@ -2,8 +2,11 @@
 
 from __future__ import annotations
 
+import datetime
 from datetime import date, timedelta
 from uuid import uuid4
+
+import time_machine
 
 from pydotorg.domains.jobs.models import Job, JobCategory, JobReviewComment, JobStatus, JobType
 
@@ -146,8 +149,9 @@ class TestJobModel:
         )
         assert job.is_expired is False
 
+    @time_machine.travel(datetime.datetime(2024, 6, 15, 12, 0, 0, tzinfo=datetime.UTC))
     def test_is_expired_today(self) -> None:
-        today = date.today()
+        today = datetime.datetime.now(tz=datetime.UTC).date()
         job = Job(
             slug="test-job",
             creator_id=uuid4(),

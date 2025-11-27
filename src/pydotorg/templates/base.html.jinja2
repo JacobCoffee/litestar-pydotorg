@@ -80,28 +80,8 @@
         </svg>
     </button>
 
-    {# Toast Container for notifications #}
-    <div
-        id="toast-container"
-        class="toast toast-end toast-bottom z-50"
-        x-data="toast"
-    >
-        <template x-for="t in toasts" :key="t.id">
-            <div
-                class="alert"
-                :class="{
-                    'alert-info': t.type === 'info',
-                    'alert-success': t.type === 'success',
-                    'alert-warning': t.type === 'warning',
-                    'alert-error': t.type === 'error'
-                }"
-                x-transition
-            >
-                <span x-text="t.message"></span>
-                <button class="btn btn-ghost btn-xs" @click="remove(t.id)">✕</button>
-            </div>
-        </template>
-    </div>
+    {# Toast Container for notifications - uses vanilla JS showToast() function #}
+    <div id="toast-container" class="toast toast-end toast-bottom z-50"></div>
 
     {# HTMX Loading Indicator #}
     <div
@@ -118,9 +98,9 @@
     {# HTMX #}
     <script src="https://unpkg.com/htmx.org@2.0.0" integrity="sha384-wS5l5IKJBvK6sPTKa2WZ1js3d947pvWXbPJ1OmWfEuxLgeHcEbjUUA5i9V5ZkpCw" crossorigin="anonymous"></script>
 
-    {# HTMX Extensions #}
-    <script src="https://unpkg.com/htmx.org@2.0.0/dist/ext/loading-states.js"></script>
-    <script src="https://unpkg.com/htmx.org@2.0.0/dist/ext/response-targets.js"></script>
+    {# HTMX Extensions - using jsDelivr for proper MIME types #}
+    <script src="https://cdn.jsdelivr.net/npm/htmx-ext-loading-states@2.0.0/loading-states.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/htmx-ext-response-targets@2.0.0/response-targets.js"></script>
 
     {# Alpine.js Global Store #}
     <script>
