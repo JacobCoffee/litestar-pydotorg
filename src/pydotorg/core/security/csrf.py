@@ -35,6 +35,7 @@ Excluded Routes:
     - /api/v1/* (API endpoints)
     - /health (health check endpoint)
     - /static/* (static files)
+    - /admin/tasks/* (admin task operations, protected by admin auth guards)
 """
 
 from __future__ import annotations
@@ -65,7 +66,7 @@ def create_csrf_config() -> CSRFConfig:
         cookie_name=settings.csrf_cookie_name,
         header_name=settings.csrf_header_name,
         cookie_secure=not settings.debug,
-        cookie_httponly=True,
+        cookie_httponly=False,
         cookie_samesite="lax",
         cookie_path="/",
         exclude=[
@@ -73,6 +74,7 @@ def create_csrf_config() -> CSRFConfig:
             "/api/v1/*",
             "/health",
             "/static/*",
+            "/admin/tasks/*",
         ],
     )
 

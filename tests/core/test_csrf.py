@@ -31,10 +31,10 @@ class TestCreateCSRFConfig:
         config = create_csrf_config()
         assert config.header_name == settings.csrf_header_name
 
-    def test_cookie_httponly_enabled(self) -> None:
-        """Test that CSRF cookie is httponly."""
+    def test_cookie_httponly_disabled_for_js_access(self) -> None:
+        """Test that CSRF cookie is NOT httponly so JavaScript can access it for HTMX."""
         config = create_csrf_config()
-        assert config.cookie_httponly is True
+        assert config.cookie_httponly is False
 
     def test_cookie_samesite_is_lax(self) -> None:
         """Test that CSRF cookie has samesite=lax."""
@@ -70,10 +70,15 @@ class TestCSRFExclusions:
         config = create_csrf_config()
         assert "/static/*" in config.exclude
 
+    def test_excludes_admin_tasks_routes(self) -> None:
+        """Test that /admin/tasks/* routes are excluded from CSRF."""
+        config = create_csrf_config()
+        assert "/admin/tasks/*" in config.exclude
+
     def test_exclusion_list_has_expected_length(self) -> None:
         """Test that exclusion list has expected number of entries."""
         config = create_csrf_config()
-        assert len(config.exclude) == 4
+        assert len(config.exclude) == 5
 
 
 class TestCSRFSecuritySettings:
