@@ -219,7 +219,7 @@ class PageRenderController(Controller):
         page_path: str,
     ) -> Template:
         """Render a page template by path."""
-        path = f"/{page_path}" if page_path else "/"
+        path = f"/{page_path.lstrip('/')}" if page_path else "/"
         page = await page_service.get_one_or_none(path=path, is_published=True)
         if page is None:
             raise NotFoundException(f"Page not found: {path}")
