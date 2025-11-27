@@ -16,9 +16,12 @@
     {% block head %}{% endblock %}
     <title>{% block title %}{{ admin.title }}{% endblock %}</title>
 </head>
-<body class="min-h-screen bg-base-200 font-sans antialiased">
+<body class="min-h-screen bg-base-200 font-sans antialiased flex flex-col">
+    {# Main Site Navigation - consistent across all admin routes #}
+    {% include 'partials/navbar.html.jinja2' %}
+
     {% block body %}
-    <main>
+    <main class="flex-1">
         {% block main %}{% endblock %}
     </main>
     {% endblock %}
