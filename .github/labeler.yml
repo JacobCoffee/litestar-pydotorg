@@ -1,0 +1,65 @@
+# Pull Request Auto-Labeler Configuration
+
+# Backend changes
+backend:
+  - changed-files:
+    - any-glob-to-any-file: 'src/pydotorg/**/*.py'
+
+# Frontend changes
+frontend:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'resources/**/*'
+      - 'static/**/*'
+      - '*.config.{js,ts,cjs}'
+      - 'package.json'
+      - 'bun.lockb'
+
+# Database changes
+database:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'src/pydotorg/db/**/*'
+      - 'alembic/**/*'
+      - 'alembic.ini'
+
+# Tests
+tests:
+  - changed-files:
+    - any-glob-to-any-file: 'tests/**/*'
+
+# Documentation
+documentation:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'docs/**/*'
+      - '*.md'
+      - 'README*'
+
+# CI/CD
+ci:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '.github/**/*'
+      - 'Dockerfile'
+      - 'docker-compose.yml'
+
+# Dependencies
+dependencies:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'pyproject.toml'
+      - 'uv.lock'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'bun.lockb'
+
+# Configuration
+config:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '*.toml'
+      - '*.yaml'
+      - '*.yml'
+      - '*.ini'
+      - '.env*'
