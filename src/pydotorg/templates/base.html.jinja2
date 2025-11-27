@@ -19,6 +19,9 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@ThePSF">
 
+    {# CSRF token for HTMX requests - use server-generated token, not cookie #}
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
     <link rel="apple-touch-icon" sizes="180x180" href="/static/images/apple-touch-icon.png">
 
@@ -187,6 +190,16 @@
 
         document.body.addEventListener('htmx:beforeRequest', function(evt) {
             document.getElementById('htmx-indicator').style.display = 'block';
+        });
+
+        // Add CSRF token to all HTMX requests
+        document.body.addEventListener('htmx:configRequest', function(evt) {
+            // Get CSRF token from meta tag (server-generated, always valid)
+            const csrfMeta = document.querySelector('meta[name="csrf-token"]');
+            const csrfToken = csrfMeta ? csrfMeta.getAttribute('content') : null;
+            if (csrfToken) {
+                evt.detail.headers['x-csrftoken'] = csrfToken;
+            }
         });
 
         document.body.addEventListener('htmx:afterRequest', function(evt) {
