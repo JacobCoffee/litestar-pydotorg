@@ -8,6 +8,10 @@ module.exports = {
   safelist: [
     'lg:drawer-open',
     'drawer-open',
+    'lg:hidden',
+    'lg:flex',
+    'lg:inline-flex',
+    'lg:block',
   ],
   theme: {
     extend: {

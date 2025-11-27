@@ -8,6 +8,54 @@
 {% endblock %}
 
 {% block content %}
+{# Map model names to Lucide icons #}
+{% set icon_map = {
+    'Users': 'users',
+    'User': 'user',
+    'Memberships': 'id-card',
+    'Membership': 'id-card',
+    'User Groups': 'users-round',
+    'User Group': 'users-round',
+    'Jobs': 'briefcase',
+    'Job': 'briefcase',
+    'Job Types': 'tag',
+    'Job Type': 'tag',
+    'Job Categories': 'tags',
+    'Job Category': 'tags',
+    'Job Review Comments': 'message-square',
+    'Job Review Comment': 'message-square',
+    'Events': 'calendar',
+    'Event': 'calendar',
+    'Calendars': 'calendar-days',
+    'Calendar': 'calendar-days',
+    'Event Categories': 'list',
+    'Event Category': 'list',
+    'Event Locations': 'map-pin',
+    'Event Location': 'map-pin',
+    'Event Occurrences': 'calendar-check',
+    'Event Occurrence': 'calendar-check',
+    'Sponsors': 'handshake',
+    'Sponsor': 'handshake',
+    'Sponsorships': 'file-text',
+    'Sponsorship': 'file-text',
+    'Sponsorship Levels': 'layers',
+    'Sponsorship Level': 'layers',
+    'Pages': 'file',
+    'Page': 'file',
+    'Page Images': 'image',
+    'Page Image': 'image',
+    'Page Documents': 'file-text',
+    'Page Document': 'file-text',
+    'Blog Entries': 'pen-square',
+    'Blog Entry': 'pen-square',
+    'Feeds': 'rss',
+    'Feed': 'rss',
+    'Feed Aggregates': 'layers',
+    'Feed Aggregate': 'layers',
+    'Related Blogs': 'link',
+    'Related Blog': 'link',
+} %}
+
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     {% for item in admin._menu.items %}
     {% if item.is_visible(request) and item.is_accessible(request) %}
@@ -16,13 +64,7 @@
         <div class="card-body">
             <div class="flex items-center gap-4">
                 <div class="w-12 h-12 bg-python-blue/10 text-python-blue rounded-lg flex items-center justify-center group-hover:bg-python-blue group-hover:text-white transition-colors">
-                    {% if item.icon %}
-                    <i class="{{ item.icon }} text-xl"></i>
-                    {% else %}
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" />
-                    </svg>
-                    {% endif %}
+                    <i data-lucide="{{ icon_map.get(item.display_name, 'database') }}" class="h-6 w-6"></i>
                 </div>
                 <div>
                     <h3 class="font-bold text-lg">{{ item.display_name }}</h3>
@@ -35,7 +77,7 @@
     <div class="card bg-base-100 shadow-lg border border-base-300">
         <div class="card-body">
             <h3 class="card-title text-python-blue">
-                {% if item.icon %}<i class="{{ item.icon }}"></i>{% endif %}
+                <i data-lucide="{{ icon_map.get(item.display_name, 'folder') }}" class="h-5 w-5"></i>
                 {{ item.display_name }}
             </h3>
             <div class="divider my-1"></div>
@@ -44,7 +86,7 @@
                 {% if sub_menu.is_visible(request) and sub_menu.is_accessible(request) %}
                 <li>
                     <a href="{{ sub_menu.url(request) }}" class="py-2">
-                        {% if sub_menu.icon %}<i class="{{ sub_menu.icon }}"></i>{% endif %}
+                        <i data-lucide="{{ icon_map.get(sub_menu.display_name, 'database') }}" class="h-4 w-4"></i>
                         {{ sub_menu.display_name }}
                     </a>
                 </li>
@@ -57,4 +99,12 @@
     {% endif %}
     {% endfor %}
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.lucide) {
+        lucide.createIcons();
+    }
+});
+</script>
 {% endblock %}
