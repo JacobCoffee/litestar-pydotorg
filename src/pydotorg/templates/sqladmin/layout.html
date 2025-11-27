@@ -68,9 +68,10 @@
                     {% if admin.logo_url %}
                     <img src="{{ admin.logo_url }}" alt="{{ admin.title }}" class="w-10 h-10" />
                     {% else %}
-                    <div class="w-10 h-10 bg-python-blue text-white rounded-lg flex items-center justify-center">
-                        <i data-lucide="database" class="h-6 w-6"></i>
-                    </div>
+                    <svg class="w-10 h-10" viewBox="0 0 110 110" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M54.8 0C24.5 0 26.1 13.1 26.1 13.1l.1 13.6h29.1v4.1H17.4S0 28.5 0 55.1c0 26.6 15.2 25.7 15.2 25.7h9v-12.4s-.5-15.2 14.9-15.2h25.7s14.5.2 14.5-14V15.9S81.5 0 54.8 0zM39.3 9.2c2.6 0 4.7 2.1 4.7 4.7 0 2.6-2.1 4.7-4.7 4.7-2.6 0-4.7-2.1-4.7-4.7 0-2.6 2.1-4.7 4.7-4.7z" fill="#3776AB"/>
+                        <path d="M55.2 110c30.3 0 28.7-13.1 28.7-13.1l-.1-13.6H54.7v-4.1h37.9S110 81.5 110 54.9c0-26.6-15.2-25.7-15.2-25.7h-9v12.4s.5 15.2-14.9 15.2H45.2s-14.5-.2-14.5 14v23.3S28.5 110 55.2 110zm15.5-9.2c-2.6 0-4.7-2.1-4.7-4.7 0-2.6 2.1-4.7 4.7-4.7 2.6 0 4.7 2.1 4.7 4.7 0 2.6-2.1 4.7-4.7 4.7z" fill="#FFD43B"/>
+                    </svg>
                     {% endif %}
                     <div>
                         <span class="text-lg font-bold text-python-blue">Database</span>
