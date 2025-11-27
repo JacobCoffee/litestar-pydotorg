@@ -124,8 +124,9 @@ async def index_job(ctx: dict[str, Any], *, job_id: str) -> dict[str, Any]:
             job = result.scalar_one_or_none()
 
             if not job:
-                logger.warning(f"Job {job_id} not found")
-                return {"indexed": 0, "reason": "not_found"}
+                logger.debug(f"Job {job_id} not found, removing from index if exists")
+                await search_service.delete_documents("jobs", [job_id])
+                return {"indexed": 0, "reason": "not_found", "action": "removed"}
 
             if job.status != JobStatus.APPROVED:
                 logger.info(f"Job {job_id} is not approved (status: {job.status}), removing from index if exists")
@@ -295,8 +296,9 @@ async def index_event(ctx: dict[str, Any], *, event_id: str) -> dict[str, Any]:
             event = result.scalar_one_or_none()
 
             if not event:
-                logger.warning(f"Event {event_id} not found")
-                return {"indexed": 0, "reason": "not_found"}
+                logger.debug(f"Event {event_id} not found, removing from index if exists")
+                await search_service.delete_documents("events", [event_id])
+                return {"indexed": 0, "reason": "not_found", "action": "removed"}
 
             next_occurrence = event.occurrences[0] if event.occurrences else None
             venue_obj = event.venue
@@ -426,8 +428,9 @@ async def index_page(ctx: dict[str, Any], *, page_id: str) -> dict[str, Any]:
             page = result.scalar_one_or_none()
 
             if not page:
-                logger.warning(f"Page {page_id} not found")
-                return {"indexed": 0, "reason": "not_found"}
+                logger.debug(f"Page {page_id} not found, removing from index if exists")
+                await search_service.delete_documents("pages", [page_id])
+                return {"indexed": 0, "reason": "not_found", "action": "removed"}
 
             if not page.is_published:
                 logger.info(f"Page {page_id} is not published, removing from index if exists")
@@ -555,8 +558,9 @@ async def index_blog_entry(ctx: dict[str, Any], *, entry_id: str) -> dict[str, A
             entry = result.scalar_one_or_none()
 
             if not entry:
-                logger.warning(f"Blog entry {entry_id} not found")
-                return {"indexed": 0, "reason": "not_found"}
+                logger.debug(f"Blog entry {entry_id} not found, removing from index if exists")
+                await search_service.delete_documents("blogs", [entry_id])
+                return {"indexed": 0, "reason": "not_found", "action": "removed"}
 
             doc = BlogDocument(
                 id=str(entry.id),
