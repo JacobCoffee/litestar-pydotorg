@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 from datetime import UTC, datetime
 from typing import TYPE_CHECKING
 
@@ -9,11 +10,14 @@ from sqlalchemy import func, or_, select
 from sqlalchemy.orm import selectinload
 
 from pydotorg.domains.events.models import Calendar, Event, EventOccurrence
+from pydotorg.lib.tasks import enqueue_task
 
 if TYPE_CHECKING:
     from uuid import UUID
 
     from sqlalchemy.ext.asyncio import AsyncSession
+
+logger = logging.getLogger(__name__)
 
 
 class EventAdminService:
@@ -146,6 +150,9 @@ class EventAdminService:
     async def feature_event(self, event_id: UUID) -> Event | None:
         """Feature an event.
 
+        Features the event and triggers search indexing to update
+        the featured status in search results.
+
         Args:
             event_id: Event ID
 
@@ -159,10 +166,18 @@ class EventAdminService:
         event.featured = True
         await self.session.commit()
         await self.session.refresh(event)
+
+        index_key = await enqueue_task("index_event", event_id=str(event.id))
+        if not index_key:
+            logger.warning(f"Failed to enqueue search indexing for event {event.id}")
+
         return event
 
     async def unfeature_event(self, event_id: UUID) -> Event | None:
         """Unfeature an event.
+
+        Unfeatures the event and triggers search indexing to update
+        the featured status in search results.
 
         Args:
             event_id: Event ID
@@ -177,6 +192,11 @@ class EventAdminService:
         event.featured = False
         await self.session.commit()
         await self.session.refresh(event)
+
+        index_key = await enqueue_task("index_event", event_id=str(event.id))
+        if not index_key:
+            logger.warning(f"Failed to enqueue search indexing for event {event.id}")
+
         return event
 
     async def get_stats(self) -> dict:

@@ -23,7 +23,17 @@ def mock_session() -> AsyncMock:
 
 
 @pytest.fixture
-def mock_job() -> Mock:
+def mock_creator() -> Mock:
+    """Create a mock user for job creator."""
+    creator = Mock()
+    creator.id = uuid4()
+    creator.email = "creator@example.com"
+    creator.username = "jobcreator"
+    return creator
+
+
+@pytest.fixture
+def mock_job(mock_creator: Mock) -> Mock:
     """Create a mock job."""
     job = Mock(spec=Job)
     job.id = uuid4()
@@ -35,8 +45,9 @@ def mock_job() -> Mock:
     job.country = "USA"
     job.telecommuting = True
     job.contact_email = "jobs@example.com"
+    job.slug = "python-developer-test-company"
     job.created_at = None
-    job.creator = None
+    job.creator = mock_creator
     job.category = None
     job.job_types = []
     job.review_comments = []

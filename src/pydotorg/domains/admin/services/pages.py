@@ -8,6 +8,7 @@ from sqlalchemy import func, or_, select
 from sqlalchemy.orm import selectinload
 
 from pydotorg.domains.pages.models import ContentType, Page
+from pydotorg.lib.tasks import enqueue_task
 
 if TYPE_CHECKING:
     from uuid import UUID
@@ -130,6 +131,9 @@ class PageAdminService:
         page.is_published = True
         await self.session.commit()
         await self.session.refresh(page)
+
+        await enqueue_task("index_page", page_id=str(page.id))
+
         return page
 
     async def unpublish_page(self, page_id: UUID) -> Page | None:
@@ -148,6 +152,9 @@ class PageAdminService:
         page.is_published = False
         await self.session.commit()
         await self.session.refresh(page)
+
+        await enqueue_task("index_page", page_id=str(page.id))
+
         return page
 
     async def get_stats(self) -> dict:

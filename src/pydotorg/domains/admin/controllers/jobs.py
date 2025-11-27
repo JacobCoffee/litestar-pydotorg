@@ -195,7 +195,10 @@ class AdminJobsController(Controller):
         Returns:
             Updated job row partial or error response
         """
-        job = await job_admin_service.reject_job(job_id)
+        form_data = await request.form()
+        reason = form_data.get("reason", "Your job posting did not meet our guidelines.")
+
+        job = await job_admin_service.reject_job(job_id, reason=str(reason))
         if not job:
             return Response(content="Job not found", status_code=404)
 

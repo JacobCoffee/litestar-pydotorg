@@ -2,17 +2,22 @@
 
 from __future__ import annotations
 
+import logging
 from typing import TYPE_CHECKING
 
 from sqlalchemy import func, or_, select
 from sqlalchemy.orm import selectinload
 
+from pydotorg.config import settings
 from pydotorg.domains.jobs.models import Job, JobReviewComment, JobStatus
+from pydotorg.lib.tasks import enqueue_task
 
 if TYPE_CHECKING:
     from uuid import UUID
 
     from sqlalchemy.ext.asyncio import AsyncSession
+
+logger = logging.getLogger(__name__)
 
 
 class JobAdminService:
@@ -94,6 +99,9 @@ class JobAdminService:
     async def approve_job(self, job_id: UUID) -> Job | None:
         """Approve a job.
 
+        Approves the job, enqueues email notification to creator, and
+        triggers search indexing.
+
         Args:
             job_id: Job ID
 
@@ -107,13 +115,37 @@ class JobAdminService:
         job.status = JobStatus.APPROVED
         await self.session.commit()
         await self.session.refresh(job)
+
+        job_url = f"{settings.oauth_redirect_base_url}/jobs/{job.slug}/"
+        email_key = await enqueue_task(
+            "send_job_approved_email",
+            to_email=job.creator.email,
+            job_title=job.job_title,
+            company_name=job.company_name,
+            job_url=job_url,
+        )
+        if not email_key:
+            logger.warning(f"Failed to enqueue approval email for job {job.id}")
+
+        index_key = await enqueue_task("index_job", job_id=str(job.id))
+        if not index_key:
+            logger.warning(f"Failed to enqueue search indexing for job {job.id}")
+
         return job
 
-    async def reject_job(self, job_id: UUID) -> Job | None:
+    async def reject_job(
+        self,
+        job_id: UUID,
+        reason: str = "Your job posting did not meet our guidelines.",
+    ) -> Job | None:
         """Reject a job.
+
+        Rejects the job and enqueues email notification to creator with
+        the rejection reason.
 
         Args:
             job_id: Job ID
+            reason: Rejection reason to send to job creator
 
         Returns:
             Updated job if found, None otherwise
@@ -125,6 +157,17 @@ class JobAdminService:
         job.status = JobStatus.REJECTED
         await self.session.commit()
         await self.session.refresh(job)
+
+        email_key = await enqueue_task(
+            "send_job_rejected_email",
+            to_email=job.creator.email,
+            job_title=job.job_title,
+            company_name=job.company_name,
+            reason=reason,
+        )
+        if not email_key:
+            logger.warning(f"Failed to enqueue rejection email for job {job.id}")
+
         return job
 
     async def add_review_comment(self, job_id: UUID, comment: str, reviewer_id: UUID) -> JobReviewComment | None:
