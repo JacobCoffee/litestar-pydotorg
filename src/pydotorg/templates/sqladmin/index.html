@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block content %}
-{# Map model names to Lucide icons #}
+{# Icon mapping for models #}
 {% set icon_map = {
     'Users': 'users',
     'User': 'user',
@@ -56,48 +56,128 @@
     'Related Blog': 'link',
 } %}
 
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    {% for item in admin._menu.items %}
-    {% if item.is_visible(request) and item.is_accessible(request) %}
-    {% if item.type_ == "View" %}
-    <a href="{{ item.url(request) }}" class="card bg-base-100 shadow-lg border border-base-300 hover:shadow-xl transition-shadow cursor-pointer group">
-        <div class="card-body">
-            <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-python-blue/10 text-python-blue rounded-lg flex items-center justify-center group-hover:bg-python-blue group-hover:text-white transition-colors">
-                    <i data-lucide="{{ icon_map.get(item.display_name, 'database') }}" class="h-6 w-6"></i>
-                </div>
-                <div>
-                    <h3 class="font-bold text-lg">{{ item.display_name }}</h3>
-                    <p class="text-sm text-base-content/60">Manage {{ item.display_name|lower }}</p>
-                </div>
-            </div>
+{# Section mapping for models #}
+{% set section_map = {
+    'Users': 'users',
+    'Memberships': 'users',
+    'User Groups': 'users',
+    'Jobs': 'jobs',
+    'Job Types': 'jobs',
+    'Job Categories': 'jobs',
+    'Job Review Comments': 'jobs',
+    'Events': 'events',
+    'Calendars': 'events',
+    'Event Categories': 'events',
+    'Event Locations': 'events',
+    'Event Occurrences': 'events',
+    'Sponsors': 'sponsors',
+    'Sponsorships': 'sponsors',
+    'Sponsorship Levels': 'sponsors',
+    'Pages': 'content',
+    'Page Images': 'content',
+    'Page Documents': 'content',
+    'Blog Entries': 'blogs',
+    'Feeds': 'blogs',
+    'Feed Aggregates': 'blogs',
+    'Related Blogs': 'blogs',
+} %}
+
+{% set sections = {
+    'users': {'title': 'Users & Authentication', 'icon': 'users', 'description': 'Manage users, memberships, and groups'},
+    'jobs': {'title': 'Job Board', 'icon': 'briefcase', 'description': 'Job listings, categories, and reviews'},
+    'events': {'title': 'Events & Calendar', 'icon': 'calendar', 'description': 'Events, calendars, and locations'},
+    'sponsors': {'title': 'Sponsors', 'icon': 'handshake', 'description': 'Sponsors and sponsorship management'},
+    'content': {'title': 'Pages & Content', 'icon': 'file-text', 'description': 'CMS pages, images, and documents'},
+    'blogs': {'title': 'Blogs & Feeds', 'icon': 'rss', 'description': 'Blog entries and RSS feeds'},
+} %}
+
+<div x-data="modelSearch()" class="space-y-8">
+    <div class="relative max-w-md">
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <i data-lucide="search" class="h-5 w-5 text-base-content/40"></i>
         </div>
-    </a>
-    {% elif item.type_ == "Category" %}
-    <div class="card bg-base-100 shadow-lg border border-base-300">
-        <div class="card-body">
-            <h3 class="card-title text-python-blue">
-                <i data-lucide="{{ icon_map.get(item.display_name, 'folder') }}" class="h-5 w-5"></i>
-                {{ item.display_name }}
-            </h3>
-            <div class="divider my-1"></div>
-            <ul class="menu menu-sm p-0">
-                {% for sub_menu in item.children %}
-                {% if sub_menu.is_visible(request) and sub_menu.is_accessible(request) %}
-                <li>
-                    <a href="{{ sub_menu.url(request) }}" class="py-2">
-                        <i data-lucide="{{ icon_map.get(sub_menu.display_name, 'database') }}" class="h-4 w-4"></i>
-                        {{ sub_menu.display_name }}
-                    </a>
-                </li>
-                {% endif %}
-                {% endfor %}
-            </ul>
+        <input
+            type="text"
+            x-model="query"
+            @input="search()"
+            placeholder="Search models..."
+            class="input input-bordered w-full pl-10 bg-base-100 focus:border-python-blue focus:ring-python-blue"
+        />
+        <div x-show="query.length > 0" class="absolute inset-y-0 right-0 pr-3 flex items-center">
+            <button @click="clear()" class="btn btn-ghost btn-xs btn-circle">
+                <i data-lucide="x" class="h-4 w-4"></i>
+            </button>
         </div>
     </div>
-    {% endif %}
-    {% endif %}
-    {% endfor %}
+
+    <div x-show="query.length > 0 && filteredItems.length > 0" x-cloak class="space-y-4">
+        <h2 class="text-lg font-semibold text-base-content/70">
+            Search Results
+            <span class="badge badge-sm badge-ghost ml-2" x-text="filteredItems.length + ' found'"></span>
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <template x-for="item in filteredItems" :key="item.name">
+                <a :href="item.url" class="card bg-base-100 shadow border border-base-300 hover:shadow-lg hover:border-python-blue/30 transition-all cursor-pointer group">
+                    <div class="card-body p-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-python-blue/10 text-python-blue rounded-lg flex items-center justify-center group-hover:bg-python-blue group-hover:text-white transition-colors">
+                                <i :data-lucide="item.icon" class="h-5 w-5"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold" x-text="item.name"></h3>
+                                <p class="text-xs text-base-content/50" x-text="'Manage ' + item.name.toLowerCase()"></p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </template>
+        </div>
+    </div>
+
+    <div x-show="query.length > 0 && filteredItems.length === 0" x-cloak class="text-center py-8">
+        <i data-lucide="search-x" class="h-12 w-12 text-base-content/30 mx-auto mb-3"></i>
+        <p class="text-base-content/50">No models found matching "<span x-text="query"></span>"</p>
+    </div>
+
+    <div x-show="query.length === 0" class="space-y-8">
+        {% for section_key, section in sections.items() %}
+        <section class="space-y-4">
+            <div class="flex items-center gap-3 border-b border-base-300 pb-3">
+                <div class="w-10 h-10 bg-python-blue/10 text-python-blue rounded-lg flex items-center justify-center">
+                    <i data-lucide="{{ section.icon }}" class="h-5 w-5"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold text-python-blue">{{ section.title }}</h2>
+                    <p class="text-sm text-base-content/60">{{ section.description }}</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                {% for item in admin._menu.items %}
+                {% if item.is_visible(request) and item.is_accessible(request) and item.type_ == "View" %}
+                {% if section_map.get(item.display_name) == section_key %}
+                <a href="{{ item.url(request) }}"
+                   class="card bg-base-100 shadow border border-base-300 hover:shadow-lg hover:border-python-blue/30 transition-all cursor-pointer group"
+                   data-model-name="{{ item.display_name|lower }}">
+                    <div class="card-body p-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-python-blue/10 text-python-blue rounded-lg flex items-center justify-center group-hover:bg-python-blue group-hover:text-white transition-colors">
+                                <i data-lucide="{{ icon_map.get(item.display_name, 'database') }}" class="h-5 w-5"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold">{{ item.display_name }}</h3>
+                                <p class="text-xs text-base-content/50">Manage {{ item.display_name|lower }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                {% endif %}
+                {% endif %}
+                {% endfor %}
+            </div>
+        </section>
+        {% endfor %}
+    </div>
 </div>
 
 <script>
@@ -106,5 +186,46 @@ document.addEventListener('DOMContentLoaded', function() {
         lucide.createIcons();
     }
 });
+
+function modelSearch() {
+    const items = [
+        {% for item in admin._menu.items %}
+        {% if item.is_visible(request) and item.is_accessible(request) and item.type_ == "View" %}
+        {
+            name: "{{ item.display_name }}",
+            url: "{{ item.url(request) }}",
+            icon: "{{ icon_map.get(item.display_name, 'database') }}"
+        },
+        {% endif %}
+        {% endfor %}
+    ];
+
+    return {
+        query: '',
+        items: items,
+        filteredItems: [],
+
+        search() {
+            const q = this.query.toLowerCase().trim();
+            if (q.length === 0) {
+                this.filteredItems = [];
+                return;
+            }
+            this.filteredItems = this.items.filter(item =>
+                item.name.toLowerCase().includes(q)
+            );
+            this.$nextTick(() => {
+                if (window.lucide) {
+                    lucide.createIcons();
+                }
+            });
+        },
+
+        clear() {
+            this.query = '';
+            this.filteredItems = [];
+        }
+    };
+}
 </script>
 {% endblock %}
