@@ -62,33 +62,7 @@
 
     <div class="drawer-side z-40">
         <label for="sqladmin-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
-        <aside class="w-64 min-h-screen bg-base-200 border-r border-base-300 flex flex-col">
-            <div class="sticky top-0 z-20 bg-base-200 border-b border-base-300 px-4 py-4">
-                <a href="{{ url_for('admin:index') }}" class="flex items-center gap-3">
-                    <svg class="w-10 h-10 flex-shrink-0" viewBox="0 0 110 110" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M54.8 0C24.5 0 26.1 13.1 26.1 13.1l.1 13.6h29.1v4.1H17.4S0 28.5 0 55.1c0 26.6 15.2 25.7 15.2 25.7h9v-12.4s-.5-15.2 14.9-15.2h25.7s14.5.2 14.5-14V15.9S81.5 0 54.8 0zM39.3 9.2c2.6 0 4.7 2.1 4.7 4.7 0 2.6-2.1 4.7-4.7 4.7-2.6 0-4.7-2.1-4.7-4.7 0-2.6 2.1-4.7 4.7-4.7z" fill="#3776AB"/>
-                        <path d="M55.2 110c30.3 0 28.7-13.1 28.7-13.1l-.1-13.6H54.7v-4.1h37.9S110 81.5 110 54.9c0-26.6-15.2-25.7-15.2-25.7h-9v12.4s.5 15.2-14.9 15.2H45.2s-14.5-.2-14.5 14v23.3S28.5 110 55.2 110zm15.5-9.2c-2.6 0-4.7-2.1-4.7-4.7 0-2.6 2.1-4.7 4.7-4.7 2.6 0 4.7 2.1 4.7 4.7 0 2.6-2.1 4.7-4.7 4.7z" fill="#FFD43B"/>
-                    </svg>
-                    <div class="flex flex-col">
-                        <span class="text-lg font-bold text-python-blue leading-tight">Database</span>
-                        <span class="text-xs text-base-content/60">SQLAdmin Panel</span>
-                    </div>
-                </a>
-            </div>
-
-            <div class="flex-1 overflow-y-auto py-4 px-2">
-                <div class="mb-4 px-2">
-                    <a href="/admin" class="btn btn-ghost btn-sm w-full justify-start gap-2">
-                        <i data-lucide="arrow-left" class="h-4 w-4"></i>
-                        Back to Admin
-                    </a>
-                </div>
-
-                <div class="divider my-2 px-2">Models</div>
-
-                {{ display_menu(admin._menu, request) }}
-            </div>
-        </aside>
+        {% include 'admin/partials/sidebar.html.jinja2' %}
     </div>
 </div>
 {% endblock %}
