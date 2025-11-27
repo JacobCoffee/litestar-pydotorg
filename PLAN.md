@@ -90,6 +90,7 @@ src/pydotorg/
 ### Task 2.2: Authentication & Authorization System
 **Agent**: `python-backend-architect`
 **Priority**: CRITICAL
+**Status**: ✅ COMPLETE (2025-11-27)
 
 **Design Guide**:
 ```python
@@ -104,29 +105,49 @@ class JWTAuthMiddleware(AbstractAuthenticationMiddleware):
 ```
 
 **Tasks**:
-- [ ] Implement JWT authentication middleware
-- [ ] Create session-based authentication (fallback)
-- [ ] Implement password hashing service (passlib/bcrypt)
-- [ ] Create user registration flow
-- [ ] Implement email verification
-- [ ] Add OAuth2 social login (GitHub, Google)
-- [ ] Create role-based permission guards
-- [ ] Implement CSRF protection for forms
+- [x] Implement JWT authentication middleware (`core/auth/middleware.py`)
+- [x] Create session-based authentication (fallback) (`core/auth/session.py`)
+- [x] Implement password hashing service (bcrypt) (`domains/users/security.py`)
+- [x] Create user registration flow (`domains/users/auth_controller.py`)
+- [x] Implement email verification (JWT verification tokens)
+- [x] Add OAuth2 social login (GitHub, Google) (`core/auth/oauth.py`)
+- [x] Create role-based permission guards (`core/auth/guards.py`)
+- [x] Implement CSRF protection for forms (`core/security/csrf.py`)
 
-**Files to Create**:
+**Implementation Details** (2025-11-27):
+- **JWT Service**: `JWTService` class with access/refresh/verification token support
+  - Access tokens: configurable expiration (default 7 days)
+  - Refresh tokens: 30 days expiration
+  - Verification tokens: configurable (default 24 hours)
+- **Middleware**: `JWTAuthMiddleware` + `UserPopulationMiddleware` for template context
+- **Session Auth**: Redis-backed session service with configurable TTL
+- **CSRF Config**: Litestar built-in CSRFConfig with exclusions for API routes
+  - Excluded: `/api/auth/*`, `/api/v1/*`, `/health`, `/static/*`
+- **Guards**: `require_authenticated`, `require_staff`, `require_superuser`, `require_any_admin_access`
+
+**Tests Added** (38 tests):
+- `tests/core/test_jwt.py` - 26 tests for JWTService
+- `tests/core/test_csrf.py` - 12 tests for CSRF configuration
+
+**Files Created/Modified**:
 ```
 src/pydotorg/
 ├── core/
 │   ├── auth/
 │   │   ├── __init__.py
-│   │   ├── middleware.py      # JWTAuthMiddleware
+│   │   ├── middleware.py      # JWTAuthMiddleware + UserPopulationMiddleware
 │   │   ├── guards.py          # Permission guards
-│   │   ├── jwt.py             # JWT utilities
-│   │   ├── password.py        # Password hashing
-│   │   └── oauth.py           # OAuth2 providers
+│   │   ├── jwt.py             # JWT utilities (JWTService)
+│   │   ├── password.py        # Password validation
+│   │   ├── session.py         # Redis session service
+│   │   ├── schemas.py         # Auth DTOs
+│   │   └── oauth.py           # OAuth2 providers (GitHub, Google)
 │   └── security/
 │       ├── __init__.py
-│       └── csrf.py
+│       └── csrf.py            # CSRFConfig factory
+├── domains/users/
+│   ├── security.py            # Password hashing (bcrypt)
+│   └── auth_controller.py     # Auth endpoints (JWT + session)
 ```
 
 ---
@@ -847,18 +868,28 @@ src/pydotorg/tasks/
 ---
 
 ## Phase 8: Testing
-**Status**: ✅ COMPLETE (2025-11-26)
+**Status**: ✅ COMPLETE (2025-11-27)
 
 ### Testing Infrastructure Added
 
-**New Make Targets**:
+**New Make Targets** (Updated 2025-11-27):
 ```bash
-make test-unit           # Run unit tests only (no Docker)
-make test-integration    # Run integration tests (requires Docker)
-make test-e2e            # Run E2E Playwright tests
-make test-full           # Run all tests
+make test                # Run unit tests only (fast, no external deps) - ~5s
+make test-fast           # Run unit tests in parallel - ~3s
+make test-unit           # Alias for 'make test'
+make test-integration    # Run integration tests (requires: make infra-up) - ~40s
+make test-e2e            # Run E2E Playwright tests (requires: make serve)
+make test-all            # Run all tests (unit + integration, skips E2E if no server)
+make test-full           # Run all tests including E2E (requires server running)
+make test-cov            # Run all tests with coverage
+make test-watch          # Run unit tests in watch mode
 make playwright-install  # Install Playwright browsers
 ```
+
+**Test Suite Fixes** (2025-11-27):
+- [x] Fixed E2E tests hanging - added server availability check, auto-skip when no server
+- [x] Fixed Litestar sync callable warnings - added `sync_to_thread=False` to test handlers
+- [x] Updated `make test` to run unit tests only (fast CI)
 
 ### Task 8.1: Unit Tests
 **Agent**: `Python Testing Expert`
@@ -1331,11 +1362,12 @@ tests/
 
 | Task | Phase | Priority | Effort | Description |
 |------|-------|----------|--------|-------------|
-| **JWT Authentication Middleware** | 2.2 | CRITICAL | High | Implement proper JWT auth for API endpoints |
-| **Session-based Auth (Fallback)** | 2.2 | CRITICAL | Medium | Already partially done, needs completion |
+| **JWT Authentication Middleware** | 2.2 | CRITICAL | High | ✅ Done (JWTAuthMiddleware + JWTService) |
+| **Session-based Auth (Fallback)** | 2.2 | CRITICAL | Medium | ✅ Done (SessionService with Redis) |
 | **Password Hashing Service** | 2.2 | CRITICAL | Low | ✅ Done (bcrypt in security.py) |
-| **CSRF Protection** | 2.2 | HIGH | Medium | Required for all forms |
-| **Docker Setup** | 10.3 | HIGH | Medium | Dockerfile + docker-compose for deployment |
+| **CSRF Protection** | 2.2 | HIGH | Medium | ✅ Done (CSRFConfig enabled in main.py) |
+| **Docker Setup** | 10.3 | HIGH | Medium | ✅ Done |
+| **CI/CD Pipeline** | 10.4 | HIGH | Medium | ✅ Done |
 
 ### Tier 2: HIGH PRIORITY (Core Functionality)
 
@@ -1345,8 +1377,8 @@ tests/
 | ~~**Admin Pages (CMS)**~~ | 10.2 | ✅ DONE | High | `/admin/pages` - CMS page editing interface |
 | **SAQ Task Queue** | 6.1 | HIGH | High | Background job processing (feed refresh, email) |
 | **Email System** | 6.2 | HIGH | Medium | SMTP config + email templates |
-| **User Registration Flow** | 2.2 | HIGH | Medium | Email verification, activation |
-| **CI/CD Pipeline** | 10.4 | HIGH | Medium | GitHub Actions for lint/test/deploy |
+| **User Registration Flow** | 2.2 | HIGH | Medium | ✅ Done (email verification tokens implemented) |
+| ~~**CI/CD Pipeline**~~ | 10.4 | ✅ DONE | Medium | GitHub Actions for lint/test/deploy |
 
 ### Tier 3: MEDIUM PRIORITY (Enhanced Features)
 
@@ -1401,4 +1433,4 @@ tests/
 ---
 
 *Document generated for Python.org Litestar rebuild project*
-*Last updated: 2025-11-26*
+*Last updated: 2025-11-27*
