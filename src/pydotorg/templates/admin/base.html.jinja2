@@ -4,11 +4,7 @@
 <div class="drawer lg:drawer-open">
     <input id="admin-drawer" type="checkbox" class="drawer-toggle" />
 
-    <div class="drawer-side z-40">
-        <label for="admin-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
-        {% include 'admin/partials/sidebar.html.jinja2' %}
-    </div>
-
+    <!-- Main content area -->
     <div class="drawer-content flex flex-col bg-base-100 min-h-screen">
         <div class="sticky top-0 z-30 flex h-16 w-full justify-between items-center bg-base-200 border-b border-base-300 px-6">
             <div class="flex items-center gap-4">
@@ -65,6 +61,12 @@
         <main class="flex-1 p-6">
             {% block admin_content %}{% endblock %}
         </main>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="drawer-side z-40">
+        <label for="admin-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+        {% include 'admin/partials/sidebar.html.jinja2' %}
     </div>
 </div>
 {% endblock %}

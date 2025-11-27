@@ -2,6 +2,35 @@
 @tailwind components;
 @tailwind utilities;
 
+/* DaisyUI lg:drawer-open responsive class - required for admin sidebar */
+@media (min-width: 1024px) {
+  .lg\:drawer-open > .drawer-toggle {
+    display: none;
+  }
+  .lg\:drawer-open > .drawer-toggle ~ .drawer-side {
+    pointer-events: auto;
+    visibility: visible;
+    position: sticky;
+    display: block;
+    width: auto;
+    overscroll-behavior: auto;
+  }
+  .lg\:drawer-open > .drawer-toggle ~ .drawer-side > *:not(.drawer-overlay) {
+    transform: translateX(0);
+  }
+  .lg\:drawer-open > .drawer-toggle:checked ~ .drawer-side {
+    pointer-events: auto;
+    visibility: visible;
+  }
+  .lg\:drawer-open > .drawer-side {
+    overflow-y: auto;
+  }
+  .lg\:drawer-open > .drawer-toggle ~ .drawer-side > .drawer-overlay {
+    cursor: default;
+    background-color: transparent;
+  }
+}
+
 /* Python.org Custom Theme Colors */
 :root {
   --python-blue: #3776ab;

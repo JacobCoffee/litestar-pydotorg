@@ -5,6 +5,10 @@ module.exports = {
     "./src/pydotorg/templates/**/*.html",
     "./resources/js/**/*.{js,ts}",
   ],
+  safelist: [
+    'lg:drawer-open',
+    'drawer-open',
+  ],
   theme: {
     extend: {
       colors: {
