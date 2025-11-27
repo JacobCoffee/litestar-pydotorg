@@ -79,7 +79,7 @@ class TestRequireFeatureGuard:
         from litestar.config.app import AppConfig
         from litestar.datastructures import State
 
-        @get("/test", guards=[require_feature("enable_oauth")])
+        @get("/test", guards=[require_feature("enable_oauth")], sync_to_thread=False)
         def test_handler() -> dict:
             return {"status": "ok"}
 
@@ -103,7 +103,7 @@ class TestRequireFeatureGuard:
         from litestar.config.app import AppConfig
         from litestar.datastructures import State
 
-        @get("/test", guards=[require_feature("enable_oauth")])
+        @get("/test", guards=[require_feature("enable_oauth")], sync_to_thread=False)
         def test_handler() -> dict:
             return {"status": "ok"}
 
@@ -126,7 +126,7 @@ class TestRequireFeatureGuard:
         from litestar.config.app import AppConfig
         from litestar.datastructures import State
 
-        @get("/test", guards=[require_feature("enable_oauth")])
+        @get("/test", guards=[require_feature("enable_oauth")], sync_to_thread=False)
         def test_handler() -> dict:
             return {"status": "ok"}
 
