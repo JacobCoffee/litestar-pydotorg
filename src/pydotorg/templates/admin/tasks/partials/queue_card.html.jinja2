@@ -1,73 +1,95 @@
 <div class="card bg-base-100 shadow-lg border border-base-300 hover:shadow-xl transition-all">
-    <div class="card-body">
-        <div class="flex items-start justify-between">
-            <div class="flex-1">
-                <h3 class="card-title text-python-blue flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                    </svg>
-                    {{ queue.name }}
-                </h3>
-
-                <div class="stats stats-vertical shadow mt-4 bg-base-200">
-                    <div class="stat py-3">
-                        <div class="stat-title text-xs">Workers</div>
-                        <div class="stat-value text-lg {% if queue.workers > 0 %}text-success{% else %}text-warning{% endif %}">
-                            {{ queue.workers }}
-                        </div>
-                        <div class="stat-desc text-xs">
-                            {% if queue.workers > 0 %}
-                            <span class="text-success">Active</span>
-                            {% else %}
-                            <span class="text-warning">Offline</span>
-                            {% endif %}
-                        </div>
-                    </div>
-
-                    <div class="stat py-3">
-                        <div class="stat-title text-xs">Queued</div>
-                        <div class="stat-value text-lg text-info">{{ queue.queued }}</div>
-                        <div class="stat-desc text-xs">Waiting to process</div>
-                    </div>
-
-                    <div class="stat py-3">
-                        <div class="stat-title text-xs">Active</div>
-                        <div class="stat-value text-lg text-warning">{{ queue.active }}</div>
-                        <div class="stat-desc text-xs">Currently running</div>
-                    </div>
-
-                    <div class="stat py-3">
-                        <div class="stat-title text-xs">Scheduled</div>
-                        <div class="stat-value text-lg text-primary">{{ queue.scheduled }}</div>
-                        <div class="stat-desc text-xs">Future jobs</div>
-                    </div>
-                </div>
-
-                <div class="mt-4 flex gap-4 text-sm">
-                    <div class="flex items-center gap-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span class="text-base-content/70">{{ queue.complete }} completed</span>
-                    </div>
-                    <div class="flex items-center gap-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-error" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                        <span class="text-base-content/70">{{ queue.failed }} failed</span>
-                    </div>
-                </div>
+    <div class="card-body p-6">
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="text-2xl font-bold text-python-blue flex items-center gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                </svg>
+                {{ queue.name }}
+            </h3>
+            <div class="badge badge-lg {% if queue.workers > 0 %}badge-success{% else %}badge-warning{% endif %} gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                {% if queue.workers > 0 %}
+                    {{ queue.workers }} Worker{{ 's' if queue.workers != 1 else '' }} Active
+                {% else %}
+                    Offline
+                {% endif %}
             </div>
         </div>
 
-        <div class="card-actions justify-end mt-4">
+        <div class="stats stats-horizontal shadow w-full bg-base-200">
+            <div class="stat place-items-center">
+                <div class="stat-title text-sm font-medium">Queued</div>
+                <div class="stat-value text-3xl text-info">{{ queue.queued }}</div>
+                <div class="stat-desc text-xs mt-1">Waiting to process</div>
+            </div>
+
+            <div class="stat place-items-center">
+                <div class="stat-title text-sm font-medium">Active</div>
+                <div class="stat-value text-3xl text-warning">{{ queue.active }}</div>
+                <div class="stat-desc text-xs mt-1">Currently running</div>
+            </div>
+
+            <div class="stat place-items-center">
+                <div class="stat-title text-sm font-medium">Scheduled</div>
+                <div class="stat-value text-3xl text-primary">{{ queue.scheduled }}</div>
+                <div class="stat-desc text-xs mt-1">Future jobs</div>
+            </div>
+
+            <div class="stat place-items-center">
+                <div class="stat-title text-sm font-medium">Completed</div>
+                <div class="stat-value text-3xl text-success">{{ queue.complete }}</div>
+                <div class="stat-desc text-xs mt-1">Successfully finished</div>
+            </div>
+
+            <div class="stat place-items-center">
+                <div class="stat-title text-sm font-medium">Failed</div>
+                <div class="stat-value text-3xl {% if queue.failed > 0 %}text-error{% else %}text-base-content/30{% endif %}">
+                    {{ queue.failed }}
+                </div>
+                <div class="stat-desc text-xs mt-1">Errors encountered</div>
+            </div>
+        </div>
+
+        <div class="flex items-center justify-between mt-6 pt-4 border-t border-base-300">
+            <div class="flex gap-6 text-sm">
+                <div class="flex items-center gap-2">
+                    <div class="radial-progress text-success" style="--value:{{ (queue.complete / (queue.complete + queue.failed + 1)) * 100 if (queue.complete + queue.failed) > 0 else 100 }}; --size:2.5rem; --thickness:3px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="font-semibold text-base-content">Success Rate</div>
+                        <div class="text-xs text-base-content/70">
+                            {{ "%.1f"|format((queue.complete / (queue.complete + queue.failed) * 100) if (queue.complete + queue.failed) > 0 else 100) }}%
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="font-semibold text-base-content">Total Jobs</div>
+                        <div class="text-xs text-base-content/70">
+                            {{ queue.complete + queue.failed + queue.queued + queue.active + queue.scheduled }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <a
-                href="/admin/tasks/queues/{{ queue.name }}"
-                class="btn btn-primary btn-sm gap-2"
-                hx-boost="true"
+                href="/admin/tasks/jobs"
+                class="btn btn-primary gap-2"
+                hx-boost="false"
             >
-                View Details
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                View All Jobs
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                 </svg>
             </a>
