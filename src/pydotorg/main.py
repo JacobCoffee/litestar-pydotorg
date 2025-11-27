@@ -261,9 +261,91 @@ templates_dir = Path(__file__).parent / "templates"
 static_dir = Path(__file__).parent.parent.parent / "static"
 
 
-def configure_template_engine(engine: JinjaTemplateEngine) -> None:
+def configure_template_engine(engine: JinjaTemplateEngine) -> None:  # noqa: PLR0915
     """Configure the Jinja2 template engine with global context."""
-    from datetime import datetime  # noqa: PLC0415
+    from datetime import UTC, datetime  # noqa: PLC0415
+
+    ms_threshold = 1e12
+    minute = 60
+    hour = 3600
+    day = 86400
+    week_days = 7
+
+    def _parse_timestamp(value: str | datetime | int | float | None) -> datetime | None:  # noqa: PLR0911
+        """Parse various timestamp formats into a datetime object.
+
+        Handles ISO strings, datetime objects, and Unix timestamps (seconds or milliseconds).
+        """
+        if value is None or value == 0:
+            return None
+        try:
+            if isinstance(value, str):
+                if "T" in value:
+                    return datetime.fromisoformat(value.replace("Z", "+00:00"))  # noqa: FURB162
+                return None
+            if isinstance(value, (int, float)):
+                if value == 0:
+                    return None
+                ts = float(value)
+                if ts > ms_threshold:
+                    ts = ts / 1000
+                return datetime.fromtimestamp(ts, tz=UTC)
+            if isinstance(value, datetime):
+                return value if value.tzinfo else value.replace(tzinfo=UTC)
+            return None
+        except (ValueError, TypeError, OSError):
+            return None
+
+    def friendly_date(value: str | datetime | int | float | None, fmt: str = "%b %d, %Y at %I:%M %p") -> str:
+        """Format a date/timestamp as a friendly string.
+
+        Handles ISO strings, datetime objects, and Unix timestamps.
+        """
+        dt = _parse_timestamp(value)
+        if dt is None:
+            return "N/A" if value is None or value == 0 else str(value)
+        return dt.strftime(fmt)
+
+    def time_ago(value: str | datetime | int | float | None) -> str:  # noqa: PLR0911
+        """Format a date/timestamp as relative time (e.g., '5 minutes ago' or 'in 2 hours')."""
+        dt = _parse_timestamp(value)
+        if dt is None:
+            return "N/A" if value is None or value == 0 else str(value)
+
+        now = datetime.now(tz=UTC)
+        diff = now - dt
+        seconds = diff.total_seconds()
+
+        if seconds < 0:
+            future_seconds = -seconds
+            if future_seconds < minute:
+                return "in a moment"
+            if future_seconds < hour:
+                mins = int(future_seconds / minute)
+                return f"in {mins} min{'s' if mins != 1 else ''}"
+            if future_seconds < day:
+                hours = int(future_seconds / hour)
+                return f"in {hours} hour{'s' if hours != 1 else ''}"
+            days = int(future_seconds / day)
+            if days == 1:
+                return "tomorrow"
+            if days < week_days:
+                return f"in {days} days"
+            return dt.strftime("%b %d, %Y")
+        if seconds < minute:
+            return "just now"
+        if seconds < hour:
+            mins = int(seconds / minute)
+            return f"{mins} min{'s' if mins != 1 else ''} ago"
+        if seconds < day:
+            hours = int(seconds / hour)
+            return f"{hours} hour{'s' if hours != 1 else ''} ago"
+        days = int(seconds / day)
+        if days == 1:
+            return "yesterday"
+        if days < week_days:
+            return f"{days} days ago"
+        return dt.strftime("%b %d, %Y")
 
     feature_flags = FeatureFlags(
         enable_oauth=settings.features.enable_oauth,
@@ -279,6 +361,32 @@ def configure_template_engine(engine: JinjaTemplateEngine) -> None:
             "now": datetime.now,
         }
     )
+    def pretty_json(value: dict | list | str | None) -> str:
+        """Format a value as pretty-printed JSON."""
+        import json  # noqa: PLC0415
+
+        if value is None:
+            return "null"
+        if isinstance(value, str):
+            try:
+                parsed = json.loads(value)
+                return json.dumps(parsed, indent=2)
+            except (json.JSONDecodeError, TypeError):
+                return value
+        if isinstance(value, (dict, list)):
+            return json.dumps(value, indent=2, default=str)
+        return str(value)
+
+    def format_traceback(value: str | None) -> str:
+        """Format a traceback string for better readability with proper line breaks."""
+        if not value:
+            return ""
+        return value.replace("\\n", "\n")
+
+    engine.engine.filters["friendly_date"] = friendly_date
+    engine.engine.filters["time_ago"] = time_ago
+    engine.engine.filters["pretty_json"] = pretty_json
+    engine.engine.filters["format_traceback"] = format_traceback
 
 
 template_config = TemplateConfig(
