@@ -120,7 +120,8 @@
             </a>
 
             {# Admin Dropdown - Only shown when user is staff/superuser #}
-            {% if request.user and (request.user.is_staff or request.user.is_superuser) %}
+            {% set current_user = request.scope.get('user') %}
+            {% if current_user and (current_user.is_staff or current_user.is_superuser) %}
             <div class="dropdown dropdown-end" x-data="{ open: false }">
                 <label
                     tabindex="0"
