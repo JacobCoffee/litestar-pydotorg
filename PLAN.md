@@ -978,7 +978,7 @@ tests/e2e/
 ---
 
 ## Phase 10: Admin Sub-Pages & Integration
-**Status**: 🔄 IN PROGRESS (2025-11-26)
+**Status**: ✅ COMPLETE (2025-11-26)
 
 ### Task 10.0: Admin Fixes & Improvements (COMPLETED)
 **Date**: 2025-11-26
@@ -1053,11 +1053,11 @@ async def _check_litestar_session(self, request: Request) -> User | None:
 | /admin/jobs     | ✅ Done     | Job moderation queue with approve/reject/comment   |
 | /admin/sponsors | ✅ Done     | Sponsor application management with workflow       |
 | /admin/db       | ✅ Done     | Database Admin (SQLAdmin) with DaisyUI restyling   |
-| /admin/events   | ⏳ Pending  | Event moderation                                   |
-| /admin/pages    | ⏳ Pending  | CMS page editing                                   |
-| /admin/blogs    | ⏳ Pending  | Blog post management                               |
-| /admin/settings | ⏳ Pending  | Site settings                                      |
-| /admin/logs     | ⏳ Pending  | Activity audit log                                 |
+| /admin/events   | ✅ Done     | Event management with calendar, feature/unfeature  |
+| /admin/pages    | ✅ Done     | CMS page management with publish/unpublish         |
+| /admin/blogs    | ✅ Done     | Blog/feed management with activate/deactivate      |
+| /admin/settings | ✅ Done     | Site settings (placeholder)                        |
+| /admin/logs     | ✅ Done     | Activity audit log (placeholder)                   |
 
 **Completed for /admin/jobs** (2025-11-26):
 - [x] Registered `AdminJobsController` in `main.py` route_handlers
@@ -1263,8 +1263,8 @@ tests/
 
 | Task | Phase | Priority | Effort | Description |
 |------|-------|----------|--------|-------------|
-| **Admin Events Page** | 10.2 | HIGH | Medium | `/admin/events` - Event moderation queue |
-| **Admin Pages (CMS)** | 10.2 | HIGH | High | `/admin/pages` - CMS page editing interface |
+| ~~**Admin Events Page**~~ | 10.2 | ✅ DONE | Medium | `/admin/events` - Event moderation queue |
+| ~~**Admin Pages (CMS)**~~ | 10.2 | ✅ DONE | High | `/admin/pages` - CMS page editing interface |
 | **SAQ Task Queue** | 6.1 | HIGH | High | Background job processing (feed refresh, email) |
 | **Email System** | 6.2 | HIGH | Medium | SMTP config + email templates |
 | **User Registration Flow** | 2.2 | HIGH | Medium | Email verification, activation |
@@ -1274,9 +1274,9 @@ tests/
 
 | Task | Phase | Priority | Effort | Description |
 |------|-------|----------|--------|-------------|
-| **Admin Blogs Page** | 10.2 | MEDIUM | Medium | `/admin/blogs` - Blog post management |
-| **Admin Settings** | 10.2 | MEDIUM | Low | `/admin/settings` - Site settings |
-| **Admin Logs/Audit** | 10.2 | MEDIUM | Medium | `/admin/logs` - Activity audit log |
+| ~~**Admin Blogs Page**~~ | 10.2 | ✅ DONE | Medium | `/admin/blogs` - Blog/feed management |
+| ~~**Admin Settings**~~ | 10.2 | ✅ DONE | Low | `/admin/settings` - Site settings (placeholder) |
+| ~~**Admin Logs/Audit**~~ | 10.2 | ✅ DONE | Medium | `/admin/logs` - Activity audit log (placeholder) |
 | **Search (Meilisearch)** | 6.3 | MEDIUM | High | Full-text search for pages, jobs, events |
 | **OAuth2 Social Login** | 2.2 | MEDIUM | Medium | GitHub, Google authentication |
 | **API Rate Limiting** | 5.1 | MEDIUM | Low | Prevent API abuse |
@@ -1301,9 +1301,8 @@ tests/
 
 ### Recommended Next Actions (In Order)
 
-1. **Complete Admin Sub-Pages** (Tier 2 - /admin/events, /admin/pages)
-   - Already have patterns from jobs/users/sponsors
-   - Quick wins that complete the admin interface
+1. ~~**Complete Admin Sub-Pages**~~ ✅ DONE (2025-11-26)
+   - All admin pages complete: users, jobs, sponsors, events, pages, blogs, settings, logs
 
 2. **Docker Setup** (Tier 1)
    - Required for deployment
