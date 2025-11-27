@@ -122,6 +122,51 @@ async def after_process(ctx: dict[str, Any]) -> None:
         )
 
 
+async def test_failing_task(ctx: dict[str, Any]) -> dict[str, Any]:
+    """A test task that always fails with a traceback for debugging purposes.
+
+    Args:
+        ctx: SAQ worker context.
+
+    Returns:
+        Never returns - always raises.
+
+    Raises:
+        RuntimeError: Always raises to test error handling.
+    """
+
+    def level_5_deepest(data: dict[str, Any]) -> None:
+        """Deepest level - raises the actual error."""
+        value = data.get("key", "default")
+        msg = f"Test failure in level_5_deepest: Processing failed for value '{value}'"
+        raise RuntimeError(msg)
+
+    def level_4_processor(items: list[str]) -> None:
+        """Level 4 - processes items."""
+        for i, item in enumerate(items):
+            if i == 2:
+                level_5_deepest({"key": item, "index": i})
+
+    def level_3_validator(config: dict[str, Any]) -> None:
+        """Level 3 - validates configuration."""
+        items = config.get("items", [])
+        level_4_processor(items)
+
+    def level_2_handler(request_data: dict[str, Any]) -> None:
+        """Level 2 - handles the request."""
+        config = {"items": ["alpha", "beta", "gamma", "delta"], "timeout": 30}
+        config.update(request_data)
+        level_3_validator(config)
+
+    def level_1_entry(ctx: dict[str, Any]) -> None:
+        """Level 1 - entry point."""
+        request_data = {"source": "test_failing_task", "timestamp": "2024-01-01T00:00:00Z"}
+        level_2_handler(request_data)
+
+    level_1_entry(ctx)
+    return {"status": "should never reach here"}
+
+
 def get_task_functions() -> list[Callable[..., Any]]:
     """Get all task functions dynamically to avoid circular imports."""
     from pydotorg.tasks.cache import (  # noqa: PLC0415
@@ -141,6 +186,7 @@ def get_task_functions() -> list[Callable[..., Any]]:
         send_password_reset_email,
         send_verification_email,
     )
+    from pydotorg.tasks.events import check_event_reminders, cleanup_past_occurrences  # noqa: PLC0415
     from pydotorg.tasks.feeds import (  # noqa: PLC0415
         refresh_all_feeds,
         refresh_single_feed,
@@ -163,7 +209,9 @@ def get_task_functions() -> list[Callable[..., Any]]:
 
     return [
         archive_old_jobs,
+        check_event_reminders,
         cleanup_draft_jobs,
+        cleanup_past_occurrences,
         clear_cache,
         expire_jobs,
         get_cache_stats,
@@ -187,6 +235,7 @@ def get_task_functions() -> list[Callable[..., Any]]:
         send_job_rejected_email,
         send_password_reset_email,
         send_verification_email,
+        test_failing_task,
         warm_blogs_cache,
         warm_events_cache,
         warm_homepage_cache,
@@ -201,6 +250,10 @@ def get_cron_jobs() -> list[Any]:
         cron_warm_homepage_cache,
         cron_warm_releases_cache,
     )
+    from pydotorg.tasks.events import (  # noqa: PLC0415
+        cron_cleanup_past_occurrences,
+        cron_event_reminders,
+    )
     from pydotorg.tasks.feeds import cron_refresh_feeds  # noqa: PLC0415
     from pydotorg.tasks.jobs import (  # noqa: PLC0415
         cron_archive_old_jobs,
@@ -212,6 +265,8 @@ def get_cron_jobs() -> list[Any]:
     return [
         cron_archive_old_jobs,
         cron_cleanup_draft_jobs,
+        cron_cleanup_past_occurrences,
+        cron_event_reminders,
         cron_expire_jobs,
         cron_rebuild_indexes,
         cron_refresh_feeds,
@@ -223,11 +278,12 @@ def get_cron_jobs() -> list[Any]:
 TASK_FUNCTIONS: list[Callable[..., Any]] = []
 CRON_JOBS: list[Any] = []
 
-settings_dict = {
+# SAQ worker settings - use with: uv run saq pydotorg.tasks.worker.saq_settings
+saq_settings = {
     "queue": queue,
-    "functions": get_task_functions,
+    "functions": get_task_functions(),
     "concurrency": settings.worker_concurrency,
-    "cron_jobs": get_cron_jobs,
+    "cron_jobs": get_cron_jobs(),
     "startup": startup,
     "shutdown": shutdown,
     "before_process": before_process,
