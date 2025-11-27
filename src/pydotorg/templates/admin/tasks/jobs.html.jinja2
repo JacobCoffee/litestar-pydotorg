@@ -1,0 +1,49 @@
+{% extends "admin/base.html.jinja2" %}
+
+{% block title %}All Jobs - Task Monitoring - Python.org Admin{% endblock %}
+
+{% block admin_content %}
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <div>
+            <div class="breadcrumbs text-sm mb-2">
+                <ul>
+                    <li><a href="/admin">Admin</a></li>
+                    <li><a href="/admin/tasks">Task Monitoring</a></li>
+                    <li>All Jobs</li>
+                </ul>
+            </div>
+            <h1 class="text-3xl font-bold text-python-blue">All Jobs</h1>
+            <p class="text-base-content/70 mt-1">View and manage all background task jobs</p>
+        </div>
+        <a href="/admin/tasks" class="btn btn-outline gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to Dashboard
+        </a>
+    </div>
+
+    <div class="card bg-base-100 shadow-lg border border-base-300">
+        <div class="card-body">
+            <div class="flex items-center justify-between mb-4">
+                <div class="tabs tabs-boxed">
+                    <a href="/admin/tasks/jobs{% if sort_field %}?sort={{ sort_field }}&order={{ sort_order }}{% endif %}" class="tab {% if not status_filter %}tab-active{% endif %}">All</a>
+                    <a href="/admin/tasks/jobs?status=queued{% if sort_field %}&sort={{ sort_field }}&order={{ sort_order }}{% endif %}" class="tab {% if status_filter == 'queued' %}tab-active{% endif %}">Queued</a>
+                    <a href="/admin/tasks/jobs?status=active{% if sort_field %}&sort={{ sort_field }}&order={{ sort_order }}{% endif %}" class="tab {% if status_filter == 'active' %}tab-active{% endif %}">Active</a>
+                    <a href="/admin/tasks/jobs?status=complete{% if sort_field %}&sort={{ sort_field }}&order={{ sort_order }}{% endif %}" class="tab {% if status_filter == 'complete' %}tab-active{% endif %}">Complete</a>
+                    <a href="/admin/tasks/jobs?status=failed{% if sort_field %}&sort={{ sort_field }}&order={{ sort_order }}{% endif %}" class="tab {% if status_filter == 'failed' %}tab-active{% endif %}">Failed</a>
+                    <a href="/admin/tasks/jobs?status=scheduled{% if sort_field %}&sort={{ sort_field }}&order={{ sort_order }}{% endif %}" class="tab {% if status_filter == 'scheduled' %}tab-active{% endif %}">Scheduled</a>
+                </div>
+                <div class="text-sm text-base-content/70">
+                    {{ jobs|length }} job{{ 's' if jobs|length != 1 else '' }}
+                </div>
+            </div>
+
+            {% with sort_field=sort_field, sort_order=sort_order, status_filter=status_filter %}
+            {% include "admin/tasks/partials/job_list.html.jinja2" %}
+            {% endwith %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,173 @@
+{% macro sort_link(field, label, current_sort, current_order, status_filter) %}
+{% set is_active = current_sort == field %}
+{% set next_order = 'asc' if is_active and current_order == 'desc' else 'desc' %}
+{% set base_url = '/admin/tasks/jobs' %}
+{% set params = [] %}
+{% if status_filter %}{% set params = params + ['status=' ~ status_filter] %}{% endif %}
+{% set params = params + ['sort=' ~ field, 'order=' ~ next_order] %}
+<a href="{{ base_url }}?{{ params | join('&') }}"
+   class="flex items-center gap-1 hover:text-primary {% if is_active %}text-primary font-semibold{% endif %}"
+   hx-boost="true">
+    {{ label }}
+    {% if is_active %}
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        {% if current_order == 'asc' %}
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+        {% else %}
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        {% endif %}
+    </svg>
+    {% else %}
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+    </svg>
+    {% endif %}
+</a>
+{% endmacro %}
+
+<div class="overflow-x-auto">
+    <table class="table table-zebra">
+        <thead>
+            <tr>
+                <th>Job ID</th>
+                <th>{{ sort_link('function', 'Function', sort_field, sort_order, status_filter) }}</th>
+                <th>{{ sort_link('status', 'Status', sort_field, sort_order, status_filter) }}</th>
+                <th>{{ sort_link('started', 'Time', sort_field, sort_order, status_filter) }}</th>
+                <th>{{ sort_link('attempts', 'Attempts', sort_field, sort_order, status_filter) }}</th>
+                <th class="text-right">Actions</th>
+            </tr>
+        </thead>
+        <tbody id="jobs-list">
+            {% if jobs %}
+                {% for job in jobs %}
+                <tr id="job-{{ job.key }}" class="hover">
+                    <td>
+                        <div class="flex items-center gap-2">
+                            {% if job.is_cron %}
+                            <span class="badge badge-outline badge-xs gap-1" title="Cron Job">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </span>
+                            {% endif %}
+                            <a
+                                href="/admin/tasks/jobs/{{ job.key }}"
+                                class="link link-primary font-mono text-xs"
+                                hx-boost="true"
+                            >
+                                {% if job.is_cron %}
+                                {{ job.key[5:] }}
+                                {% else %}
+                                {{ job.key[:12] }}...
+                                {% endif %}
+                            </a>
+                        </div>
+                    </td>
+                    <td>
+                        <code class="text-xs bg-base-200 px-2 py-1 rounded">{{ job.function }}</code>
+                    </td>
+                    <td>
+                        {% if job.status == 'scheduled' %}
+                        <span class="badge badge-primary badge-sm gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Scheduled
+                        </span>
+                        {% elif job.status == 'queued' %}
+                        <span class="badge badge-info badge-sm">Queued</span>
+                        {% elif job.status == 'active' %}
+                        <span class="badge badge-warning badge-sm gap-1">
+                            <span class="loading loading-spinner loading-xs"></span>
+                            Active
+                        </span>
+                        {% elif job.status == 'complete' %}
+                        <span class="badge badge-success badge-sm">Complete</span>
+                        {% elif job.status == 'failed' %}
+                        <span class="badge badge-error badge-sm">Failed</span>
+                        {% elif job.status == 'aborted' %}
+                        <span class="badge badge-ghost badge-sm">Aborted</span>
+                        {% else %}
+                        <span class="badge badge-sm">{{ job.status }}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if job.status == 'scheduled' and job.scheduled %}
+                        <div class="flex flex-col">
+                            <span class="text-xs text-primary font-medium" title="{{ job.scheduled | friendly_date }}">
+                                Runs {{ job.scheduled | time_ago }}
+                            </span>
+                        </div>
+                        {% elif job.started %}
+                        <span class="text-xs" title="{{ job.started | friendly_date }}">
+                            {{ job.started | time_ago }}
+                        </span>
+                        {% elif job.status == 'queued' %}
+                        <span class="text-base-content/50 text-xs">Waiting...</span>
+                        {% else %}
+                        <span class="text-base-content/50 text-xs">-</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <span class="badge badge-ghost badge-sm">{{ job.attempts or 0 }}</span>
+                    </td>
+                    <td class="text-right">
+                        <div class="join">
+                            <a
+                                href="/admin/tasks/jobs/{{ job.key }}"
+                                class="btn btn-ghost btn-xs join-item"
+                                hx-boost="true"
+                                title="View Details"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                            </a>
+
+                            {% if job.status == 'failed' %}
+                            <button
+                                class="btn btn-success btn-xs join-item"
+                                hx-post="/admin/tasks/jobs/{{ job.key }}/retry"
+                                hx-swap="none"
+                                hx-confirm="Retry this job?"
+                                title="Retry Job"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                </svg>
+                            </button>
+                            {% endif %}
+
+                            {% if job.status == 'active' %}
+                            <button
+                                class="btn btn-error btn-xs join-item"
+                                hx-post="/admin/tasks/jobs/{{ job.key }}/abort"
+                                hx-swap="none"
+                                hx-confirm="Abort this running job?"
+                                title="Abort Job"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="6" class="text-center py-8">
+                    <div class="text-base-content/50">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-2 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                        </svg>
+                        <p>No jobs found{% if status_filter %} with status "{{ status_filter }}"{% endif %}</p>
+                    </div>
+                </td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
