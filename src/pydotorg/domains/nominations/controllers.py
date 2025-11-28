@@ -32,7 +32,7 @@ class ElectionController(Controller):
     """Controller for Election CRUD operations."""
 
     path = "/api/v1/elections"
-    tags = ["elections"]
+    tags = ["Nominations"]
 
     @get("/")
     async def list_elections(
@@ -108,7 +108,7 @@ class NomineeController(Controller):
     """Controller for Nominee CRUD operations."""
 
     path = "/api/v1/nominees"
-    tags = ["nominees"]
+    tags = ["Nominations"]
 
     @get("/")
     async def list_nominees(
@@ -192,7 +192,7 @@ class NominationController(Controller):
     """Controller for Nomination CRUD operations."""
 
     path = "/api/v1/nominations"
-    tags = ["nominations"]
+    tags = ["Nominations"]
 
     @get("/")
     async def list_nominations(
@@ -245,7 +245,7 @@ class NominationsRenderController(Controller):
     """Controller for rendering nominations as HTML."""
 
     path = "/nominations"
-    tags = ["nominations-render"]
+    include_in_schema = False
 
     @get("/")
     async def list_elections_html(

@@ -24,7 +24,7 @@ class CodeSampleController(Controller):
     """Controller for CodeSample CRUD operations."""
 
     path = "/api/v1/code-samples"
-    tags = ["code-samples"]
+    tags = ["Code Samples"]
 
     @get("/")
     async def list_code_samples(
@@ -105,6 +105,7 @@ class CodeSamplesPageController(Controller):
     """Controller for code samples HTML pages."""
 
     path = "/code-samples"
+    include_in_schema = False
 
     @get("/")
     async def code_samples_index(

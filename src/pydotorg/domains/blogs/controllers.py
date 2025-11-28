@@ -36,7 +36,7 @@ class FeedController(Controller):
     """Controller for Feed CRUD operations."""
 
     path = "/api/v1/feeds"
-    tags = ["feeds"]
+    tags = ["Blogs"]
 
     @get("/")
     async def list_feeds(
@@ -118,7 +118,7 @@ class BlogEntryController(Controller):
     """Controller for BlogEntry CRUD operations."""
 
     path = "/api/v1/blog-entries"
-    tags = ["blog-entries"]
+    tags = ["Blogs"]
 
     @get("/")
     async def list_entries(
@@ -199,7 +199,7 @@ class FeedAggregateController(Controller):
     """Controller for FeedAggregate CRUD operations."""
 
     path = "/api/v1/feed-aggregates"
-    tags = ["feed-aggregates"]
+    tags = ["Blogs"]
 
     @get("/")
     async def list_aggregates(
@@ -269,7 +269,7 @@ class RelatedBlogController(Controller):
     """Controller for RelatedBlog CRUD operations."""
 
     path = "/api/v1/related-blogs"
-    tags = ["related-blogs"]
+    tags = ["Blogs"]
 
     @get("/")
     async def list_related_blogs(
@@ -327,6 +327,7 @@ class BlogsPageController(Controller):
     """Controller for blogs HTML pages."""
 
     path = "/blogs"
+    include_in_schema = False
 
     @get("/")
     async def blogs_index(

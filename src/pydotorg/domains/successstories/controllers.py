@@ -28,7 +28,7 @@ class StoryCategoryController(Controller):
     """Controller for StoryCategory CRUD operations."""
 
     path = "/api/v1/success-stories/categories"
-    tags = ["success-stories-categories"]
+    tags = ["Success Stories"]
 
     @get("/")
     async def list_categories(
@@ -98,7 +98,7 @@ class StoryController(Controller):
     """Controller for Story CRUD operations."""
 
     path = "/api/v1/success-stories"
-    tags = ["success-stories"]
+    tags = ["Success Stories"]
 
     @get("/")
     async def list_stories(
@@ -201,6 +201,7 @@ class SuccessStoriesPageController(Controller):
     """Controller for success stories HTML pages."""
 
     path = "/success-stories"
+    include_in_schema = False
 
     @get("/")
     async def stories_index(

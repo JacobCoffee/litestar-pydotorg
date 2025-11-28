@@ -39,7 +39,7 @@ class JobTypeController(Controller):
     """Controller for JobType CRUD operations."""
 
     path = "/api/v1/job-types"
-    tags = ["job-types"]
+    tags = ["Jobs"]
 
     @get("/")
     async def list_job_types(
@@ -97,7 +97,7 @@ class JobCategoryController(Controller):
     """Controller for JobCategory CRUD operations."""
 
     path = "/api/v1/job-categories"
-    tags = ["job-categories"]
+    tags = ["Jobs"]
 
     @get("/")
     async def list_job_categories(
@@ -155,7 +155,7 @@ class JobController(Controller):
     """Controller for Job CRUD operations."""
 
     path = "/api/v1/jobs"
-    tags = ["jobs"]
+    tags = ["Jobs"]
 
     @post("/search")
     async def search_jobs(
@@ -288,7 +288,7 @@ class JobRenderController(Controller):
     """Controller for rendering jobs as HTML."""
 
     path = "/jobs"
-    tags = ["jobs-render"]
+    include_in_schema = False
 
     @get("/")
     async def list_jobs_html(
@@ -371,7 +371,7 @@ class JobReviewCommentController(Controller):
     """Controller for JobReviewComment CRUD operations."""
 
     path = "/api/v1"
-    tags = ["job-review-comments"]
+    tags = ["Jobs"]
 
     @get("/jobs/{job_id:uuid}/review-comments")
     async def list_job_review_comments(

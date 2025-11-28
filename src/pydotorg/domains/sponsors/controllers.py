@@ -36,7 +36,7 @@ class SponsorshipLevelController(Controller):
     """Controller for SponsorshipLevel CRUD operations."""
 
     path = "/api/v1/sponsorship-levels"
-    tags = ["sponsorship-levels"]
+    tags = ["Sponsors"]
 
     @get("/")
     async def list_levels(
@@ -118,7 +118,7 @@ class SponsorController(Controller):
     """Controller for Sponsor CRUD operations."""
 
     path = "/api/v1/sponsors"
-    tags = ["sponsors"]
+    tags = ["Sponsors"]
 
     @get("/")
     async def list_sponsors(
@@ -200,7 +200,7 @@ class SponsorshipController(Controller):
     """Controller for Sponsorship CRUD operations."""
 
     path = "/api/v1/sponsorships"
-    tags = ["sponsorships"]
+    tags = ["Sponsors"]
 
     @get("/")
     async def list_sponsorships(
@@ -371,7 +371,7 @@ class SponsorRenderController(Controller):
     """Controller for rendering sponsor pages as HTML."""
 
     path = "/sponsors"
-    tags = ["sponsors-render"]
+    include_in_schema = False
 
     @get("/")
     async def render_sponsors_list(

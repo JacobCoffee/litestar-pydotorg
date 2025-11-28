@@ -34,7 +34,7 @@ class PostController(Controller):
     """Controller for Post CRUD operations."""
 
     path = "/api/v1/community/posts"
-    tags = ["community-posts"]
+    tags = ["Community"]
 
     @get("/")
     async def list_posts(
@@ -113,7 +113,7 @@ class PhotoController(Controller):
     """Controller for Photo CRUD operations."""
 
     path = "/api/v1/community/photos"
-    tags = ["community-photos"]
+    tags = ["Community"]
 
     @get("/")
     async def list_photos(
@@ -171,7 +171,7 @@ class VideoController(Controller):
     """Controller for Video CRUD operations."""
 
     path = "/api/v1/community/videos"
-    tags = ["community-videos"]
+    tags = ["Community"]
 
     @get("/")
     async def list_videos(
@@ -229,7 +229,7 @@ class LinkController(Controller):
     """Controller for Link CRUD operations."""
 
     path = "/api/v1/community/links"
-    tags = ["community-links"]
+    tags = ["Community"]
 
     @get("/")
     async def list_links(
@@ -287,6 +287,7 @@ class CommunityPageController(Controller):
     """Controller for community HTML pages."""
 
     path = "/community"
+    include_in_schema = False
 
     @get("/")
     async def community_index(

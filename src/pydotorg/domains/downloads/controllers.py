@@ -29,7 +29,7 @@ class OSController(Controller):
     """Controller for OS CRUD operations."""
 
     path = "/api/v1/os"
-    tags = ["os"]
+    tags = ["Downloads"]
 
     @get("/")
     async def list_os(
@@ -87,7 +87,7 @@ class ReleaseController(Controller):
     """Controller for Release CRUD operations."""
 
     path = "/api/v1/releases"
-    tags = ["releases"]
+    tags = ["Downloads"]
 
     @get("/")
     async def list_releases(
@@ -207,7 +207,7 @@ class ReleaseFileController(Controller):
     """Controller for ReleaseFile CRUD operations."""
 
     path = "/api/v1/files"
-    tags = ["release-files"]
+    tags = ["Downloads"]
 
     @get("/{file_id:uuid}")
     async def get_file(
@@ -276,6 +276,7 @@ class DownloadsPageController(Controller):
     """Controller for download HTML pages."""
 
     path = "/downloads"
+    include_in_schema = False
 
     @get("/")
     async def downloads_index(self, release_service: ReleaseService) -> Template:

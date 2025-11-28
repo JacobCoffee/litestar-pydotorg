@@ -24,7 +24,7 @@ class WorkGroupController(Controller):
     """Controller for WorkGroup CRUD operations."""
 
     path = "/api/v1/work-groups"
-    tags = ["work-groups"]
+    tags = ["Work Groups"]
 
     @get("/")
     async def list_work_groups(
@@ -105,6 +105,7 @@ class WorkGroupsPageController(Controller):
     """Controller for work groups HTML pages."""
 
     path = "/psf/workgroups"
+    include_in_schema = False
 
     @get("/")
     async def work_groups_index(

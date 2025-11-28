@@ -25,7 +25,7 @@ class MinutesController(Controller):
     """Controller for Minutes CRUD operations."""
 
     path = "/api/v1/minutes"
-    tags = ["minutes"]
+    tags = ["Minutes"]
 
     @get("/")
     async def list_minutes(
@@ -118,6 +118,7 @@ class MinutesPageController(Controller):
     """Controller for minutes HTML pages."""
 
     path = "/psf/records/board/minutes"
+    include_in_schema = False
 
     @get("/")
     async def minutes_index(

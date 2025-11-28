@@ -43,7 +43,7 @@ class CalendarController(Controller):
     """Controller for Calendar CRUD operations."""
 
     path = "/api/v1/calendars"
-    tags = ["calendars"]
+    tags = ["Events"]
 
     @get("/")
     async def list_calendars(
@@ -113,7 +113,7 @@ class EventCategoryController(Controller):
     """Controller for EventCategory CRUD operations."""
 
     path = "/api/v1/event-categories"
-    tags = ["event-categories"]
+    tags = ["Events"]
 
     @get("/")
     async def list_categories(
@@ -181,7 +181,7 @@ class EventLocationController(Controller):
     """Controller for EventLocation CRUD operations."""
 
     path = "/api/v1/event-locations"
-    tags = ["event-locations"]
+    tags = ["Events"]
 
     @get("/")
     async def list_locations(
@@ -251,7 +251,7 @@ class EventController(Controller):
     """Controller for Event CRUD operations."""
 
     path = "/api/v1/events"
-    tags = ["events"]
+    tags = ["Events"]
 
     @get("/")
     async def list_events(
@@ -387,7 +387,7 @@ class EventOccurrenceController(Controller):
     """Controller for EventOccurrence CRUD operations."""
 
     path = "/api/v1/event-occurrences"
-    tags = ["event-occurrences"]
+    tags = ["Events"]
 
     @get("/")
     async def list_occurrences(
@@ -471,6 +471,7 @@ class EventsPageController(Controller):
     """Controller for events HTML pages."""
 
     path = "/events"
+    include_in_schema = False
 
     @get("/")
     async def events_index(

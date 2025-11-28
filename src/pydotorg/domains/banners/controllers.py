@@ -25,7 +25,7 @@ class BannerController(Controller):
     """Controller for Banner CRUD operations."""
 
     path = "/api/v1/banners"
-    tags = ["banners"]
+    tags = ["Banners"]
 
     @get("/")
     async def list_banners(
@@ -107,6 +107,7 @@ class BannersPageController(Controller):
     """Controller for banners HTML pages (admin preview)."""
 
     path = "/admin/banners"
+    include_in_schema = False
 
     @get("/")
     async def banners_index(

@@ -509,6 +509,7 @@ class AuthPageController(Controller):
     """Controller for authentication HTML pages."""
 
     path = "/auth"
+    include_in_schema = False
 
     @get("/login")
     async def login_page(self) -> Template:

@@ -13,6 +13,7 @@ class DocsRenderController(Controller):
     """Controller for documentation HTML pages."""
 
     path = "/docs"
+    include_in_schema = False
 
     @get("/")
     async def docs_index(

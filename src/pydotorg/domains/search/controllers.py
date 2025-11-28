@@ -15,7 +15,7 @@ class SearchAPIController(Controller):
     """API controller for search operations."""
 
     path = "/api/v1/search"
-    tags = ["search"]
+    tags = ["Search"]
 
     @post("/")
     async def search_content(
@@ -74,7 +74,7 @@ class SearchRenderController(Controller):
     """Controller for rendering search pages."""
 
     path = "/search"
-    tags = ["search-render"]
+    include_in_schema = False
 
     @get("/")
     async def search_page(

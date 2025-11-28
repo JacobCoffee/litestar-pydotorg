@@ -28,7 +28,7 @@ class PageController(Controller):
     """Controller for Page CRUD operations."""
 
     path = "/api/v1/pages"
-    tags = ["pages"]
+    tags = ["Pages"]
 
     @get("/")
     async def list_pages(
@@ -117,7 +117,7 @@ class ImageController(Controller):
     """Controller for Image CRUD operations."""
 
     path = "/api/v1/images"
-    tags = ["images"]
+    tags = ["Pages"]
 
     @get("/")
     async def list_images(
@@ -163,7 +163,7 @@ class DocumentFileController(Controller):
     """Controller for Document File CRUD operations."""
 
     path = "/api/v1/documents"
-    tags = ["documents"]
+    tags = ["Pages"]
 
     @get("/")
     async def list_documents(
@@ -209,7 +209,6 @@ class PageRenderController(Controller):
     """Controller for rendering page templates."""
 
     path = "/{page_path:path}"
-    tags = ["page-render"]
     include_in_schema = False
 
     @get("/")

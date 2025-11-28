@@ -10,6 +10,7 @@ class AboutRenderController(Controller):
     """Controller for rendering about page templates."""
 
     path = "/about"
+    include_in_schema = False
 
     @get("/")
     async def about_index(self) -> Template:
