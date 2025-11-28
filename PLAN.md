@@ -199,7 +199,7 @@ src/pydotorg/
 13. codesamples (depends on: users)           ✅ DONE (models, repos, services, controllers)
 14. minutes (depends on: users)               ✅ DONE (models, repos, services, controllers)
 15. banners (depends on: users)               ✅ DONE (models, repos, services, controllers)
-16. mailing (depends on: users)               ⏳ PENDING
+16. mailing (depends on: users)               ✅ DONE (models, repos, services, controllers)
 17. work_groups (depends on: users)           ✅ DONE (models, repos, services, controllers)
 ```
 
@@ -377,7 +377,7 @@ src/pydotorg/templates/
 ### Task 3.9-3.17: Remaining Domains
 **Agent**: `python-backend-engineer`
 **Priority**: NORMAL
-**Status**: ✅ COMPLETE (except mailing)
+**Status**: ✅ COMPLETE
 
 | Domain | Status | Files |
 |--------|--------|-------|
@@ -388,8 +388,87 @@ src/pydotorg/templates/
 | codesamples | ✅ DONE | models, repos, services, controllers, schemas, dependencies |
 | minutes | ✅ DONE | models, repos, services, controllers, schemas, dependencies |
 | banners | ✅ DONE | models, repos, services, controllers, schemas, dependencies |
-| mailing | ⏳ PENDING | Only `__init__.py` exists |
+| mailing | ✅ DONE | models, repos, services, controllers, schemas, dependencies |
 | work_groups | ✅ DONE | models, repos, services, controllers, schemas, dependencies |
+
+---
+
+### Task 3.18: Mailing Domain
+**Agent**: `python-backend-engineer`
+**Priority**: MEDIUM
+**Status**: ✅ COMPLETE (2025-11-27)
+
+**Overview**: Database-driven email template system with SMTP delivery and logging.
+
+**Tasks**:
+- [x] Create EmailTemplate model (internal_name, subject, content_text, content_html, Jinja2 rendering)
+- [x] Create EmailLog model (tracks sent/failed emails with timestamps)
+- [x] Create EmailTemplateRepository and EmailLogRepository
+- [x] Create EmailTemplateService with template validation, preview, CRUD
+- [x] Create EmailLogService with recipient/template filtering
+- [x] Create MailingService (SMTP delivery with template rendering)
+- [x] Create admin API controllers (EmailTemplateController, EmailLogController)
+- [x] Create Pydantic schemas for all request/response types
+- [x] Add database migration (003_add_mailing_domain.py)
+- [x] Create 46 route/controller integration tests
+
+**Files Created**:
+```
+src/pydotorg/domains/mailing/
+├── __init__.py
+├── models.py          # EmailTemplate, EmailLog models
+├── schemas.py         # Pydantic schemas (Create, Update, Read, Preview, etc.)
+├── repositories.py    # EmailTemplateRepository, EmailLogRepository
+├── services.py        # EmailTemplateService, EmailLogService, MailingService
+├── controllers.py     # EmailTemplateController, EmailLogController
+└── dependencies.py    # DI providers
+
+src/pydotorg/db/migrations/versions/
+└── 003_add_mailing_domain.py
+
+tests/integration/
+└── test_mailing.py    # 46 integration tests
+```
+
+**API Endpoints**:
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/admin/email-templates/` | List all templates |
+| GET | `/api/admin/email-templates/{id}` | Get template by ID |
+| GET | `/api/admin/email-templates/by-name/{name}` | Get template by internal name |
+| POST | `/api/admin/email-templates/` | Create template (admin only) |
+| PATCH | `/api/admin/email-templates/{id}` | Update template (admin only) |
+| DELETE | `/api/admin/email-templates/{id}` | Delete template (admin only) |
+| POST | `/api/admin/email-templates/{id}/validate` | Validate Jinja2 syntax |
+| POST | `/api/admin/email-templates/{id}/preview` | Preview rendered template |
+| POST | `/api/admin/email-templates/send` | Send email via template |
+| POST | `/api/admin/email-templates/send-bulk` | Bulk send (admin only) |
+| GET | `/api/admin/email-logs/` | List email logs with filters |
+| GET | `/api/admin/email-logs/{id}` | Get log entry |
+
+**Key Features**:
+- **Jinja2 Template Rendering**: Subject, text, and HTML content support Jinja2 variables
+- **Template Validation**: Checks for syntax errors before saving
+- **Template Preview**: Render with sample context before sending
+- **Email Logging**: All emails logged with status (pending/sent/failed), timestamps
+- **SMTP Configuration**: Uses settings.smtp_* for server configuration
+- **Staff/Admin Guards**: Staff can view, admins can create/update/delete
+
+**Email Testing with MailDev**:
+```bash
+# Start infrastructure (includes MailDev)
+make infra-up
+
+# MailDev Web UI: http://localhost:1080
+# SMTP already configured in .env: SMTP_PORT=1025, SMTP_USE_TLS=false
+```
+
+**Configuration** (already set in `.env`):
+```bash
+SMTP_HOST=localhost
+SMTP_PORT=1025
+SMTP_USE_TLS=false
+```
 
 ---
 
@@ -878,6 +957,101 @@ tests/integration/
 
 ---
 
+### Task 8.2b: Route/Controller Integration Tests (App-Wide)
+**Agent**: `Python Testing Expert`
+**Priority**: HIGH
+**Status**: 🔄 IN PROGRESS
+
+**Objective**: Add comprehensive route/controller integration tests for all domains to ensure:
+1. API routes are reachable and return expected status codes
+2. Authentication/authorization guards work correctly
+3. Request/response payloads validate properly
+4. Database operations (CRUD) work end-to-end through the HTTP layer
+5. Catch runtime import errors (like TYPE_CHECKING issues) before deployment
+
+**Test Pattern** (established in Mailing domain):
+```python
+@pytest.fixture
+async def domain_fixtures(postgres_uri: str) -> AsyncIterator[DomainTestFixtures]:
+    """Creates schema, test users, and client in correct order."""
+    # 1. Drop/recreate schema
+    # 2. Create test users (staff, regular, admin)
+    # 3. Configure SQLAlchemyAsyncConfig with before_send_handler="autocommit"
+    # 4. Create test app with domain controllers
+    # 5. Yield fixtures with client and user references
+
+class TestDomainControllerRoutes:
+    """Route-level integration tests."""
+
+    async def test_list_requires_auth(self, fixtures):
+        response = await fixtures.client.get("/api/domain/")
+        assert response.status_code == 401
+
+    async def test_create_success(self, fixtures):
+        token = jwt_service.create_access_token(fixtures.admin_user.id)
+        response = await fixtures.client.post(
+            "/api/domain/",
+            headers={"Authorization": f"Bearer {token}"},
+            json={...},
+        )
+        assert response.status_code == 201
+```
+
+**Domains to Cover**:
+
+| Domain | Controller | Routes | Status |
+|--------|------------|--------|--------|
+| mailing | `EmailTemplateController`, `EmailLogController` | `/api/admin/email-templates/*`, `/api/admin/email-logs/*` | ✅ Done (46 tests) |
+| users | `UserController`, `AuthController` | `/api/users/*`, `/api/auth/*` | ⏳ Pending |
+| pages | `PageController` | `/api/pages/*` | ⏳ Pending |
+| downloads | `DownloadController`, `ReleaseController` | `/api/downloads/*`, `/api/releases/*` | ⏳ Pending |
+| jobs | `JobController` | `/api/jobs/*` | ⏳ Pending |
+| events | `EventController` | `/api/events/*` | ⏳ Pending |
+| sponsors | `SponsorController` | `/api/sponsors/*` | ⏳ Pending |
+| blogs | `BlogController` | `/api/blogs/*` | ⏳ Pending |
+| community | `CommunityController` | `/api/community/*` | ⏳ Pending |
+| successstories | `SuccessStoryController` | `/api/success-stories/*` | ⏳ Pending |
+| nominations | `NominationController` | `/api/nominations/*` | ⏳ Pending |
+| codesamples | `CodeSampleController` | `/api/code-samples/*` | ⏳ Pending |
+| minutes | `MinutesController` | `/api/minutes/*` | ⏳ Pending |
+| banners | `BannerController` | `/api/banners/*` | ⏳ Pending |
+| work_groups | `WorkGroupController` | `/api/work-groups/*` | ⏳ Pending |
+| search | `SearchController` | `/api/search/*` | ⏳ Pending |
+| admin/* | All admin controllers | `/admin/*`, `/api/admin/*` | ⏳ Pending |
+
+**Test Categories per Domain**:
+1. **Authentication Tests**: Verify 401 for unauthenticated requests
+2. **Authorization Tests**: Verify 403 for insufficient permissions (staff vs admin)
+3. **CRUD Tests**: Create, Read, Update, Delete operations
+4. **Validation Tests**: Invalid payloads return 400/422
+5. **Not Found Tests**: Non-existent resources return 404
+6. **Filter/Search Tests**: Query parameters work correctly
+
+**Key Learnings from Mailing Domain Tests**:
+- Use `before_send_handler="autocommit"` in SQLAlchemyAsyncConfig for session commits
+- Services should use `await service.update(model)` instead of `await session.commit()`
+- Pydantic models need `UUID` and `datetime` imports at runtime (not in TYPE_CHECKING)
+- Use `patch.object(Service, "method")` for mocking within request context
+- Create test fixtures that properly order: schema creation → user creation → client setup
+
+**Files to Create**:
+```
+tests/integration/
+├── test_mailing.py          ✅ Done (46 tests)
+├── test_users_routes.py     ⏳ Pending
+├── test_pages_routes.py     ⏳ Pending
+├── test_downloads_routes.py ⏳ Pending
+├── test_jobs_routes.py      ⏳ Pending
+├── test_events_routes.py    ⏳ Pending
+├── test_sponsors_routes.py  ⏳ Pending
+├── test_blogs_routes.py     ⏳ Pending
+├── test_community_routes.py ⏳ Pending
+├── test_admin_routes.py     ⏳ Pending
+└── ...
+```
+
+---
+
 ### Task 8.3: E2E Tests
 **Agent**: `ui-comprehensive-tester`
 **Status**: ✅ COMPLETE (2025-11-26)
@@ -1015,6 +1189,7 @@ async def _check_litestar_session(self, request: Request) -> User | None:
 | /admin/events   | ✅ Done     | Event management with calendar, feature/unfeature  |
 | /admin/pages    | ✅ Done     | CMS page management with publish/unpublish         |
 | /admin/blogs    | ✅ Done     | Blog/feed management with activate/deactivate      |
+| /admin/email    | ⏳ Pending  | Email template management + logs viewer            |
 | /admin/settings | ✅ Done     | Site settings (placeholder)                        |
 | /admin/logs     | ✅ Done     | Activity audit log (placeholder)                   |
 
@@ -1057,6 +1232,73 @@ async def _check_litestar_session(self, request: Request) -> User | None:
 - [x] Updated SQLAdmin config to use custom templates directory
 - [x] Added Vite bundling for admin JS/CSS (jQuery, Select2, Flatpickr, Lucide icons)
 - [x] Converted all SQLAdmin templates to use Lucide icons site-wide
+
+---
+
+### Task 10.2b: Admin Email UI
+**Agent**: `python-backend-engineer`
+**Priority**: HIGH
+**Status**: ⏳ PENDING
+
+**Objective**: Create admin UI for email template management and email log viewing.
+
+**Routes to Implement**:
+| Route | Description |
+|-------|-------------|
+| `/admin/email` | Dashboard with template count, recent sends, failed count |
+| `/admin/email/templates` | List all email templates with search/filter |
+| `/admin/email/templates/new` | Create new email template form |
+| `/admin/email/templates/{id}` | View/edit template with preview |
+| `/admin/email/templates/{id}/preview` | HTMX preview with sample context |
+| `/admin/email/templates/{id}/send-test` | Send test email modal |
+| `/admin/email/logs` | Email log viewer with filters |
+| `/admin/email/logs/{id}` | View individual log entry |
+
+**Tasks**:
+- [ ] Create `AdminEmailController` with HTML template routes
+- [ ] Create `EmailAdminService` for admin-specific queries (stats, recent, etc.)
+- [ ] Create templates:
+  - [ ] `admin/email/index.html.jinja2` - Dashboard overview
+  - [ ] `admin/email/templates/list.html.jinja2` - Template list
+  - [ ] `admin/email/templates/form.html.jinja2` - Create/edit form
+  - [ ] `admin/email/templates/detail.html.jinja2` - View with preview
+  - [ ] `admin/email/logs/list.html.jinja2` - Log viewer
+  - [ ] `admin/email/logs/detail.html.jinja2` - Log entry detail
+  - [ ] `admin/email/partials/template_row.html.jinja2` - HTMX row
+  - [ ] `admin/email/partials/log_row.html.jinja2` - HTMX row
+  - [ ] `admin/email/partials/preview.html.jinja2` - Rendered preview
+- [ ] Add sidebar link under admin navigation
+- [ ] Register controller in `main.py`
+- [ ] Add dependency provider
+
+**Features**:
+- **Template Editor**: Monaco/CodeMirror for Jinja2 syntax highlighting
+- **Live Preview**: HTMX-powered preview with sample context variables
+- **Validation**: Check Jinja2 syntax before saving
+- **Send Test**: Modal to send test email to any address
+- **Log Filtering**: By recipient, template, status, date range
+- **Retry Failed**: Button to retry failed emails
+
+**Files to Create**:
+```
+src/pydotorg/
+├── domains/admin/
+│   ├── controllers/email.py    # AdminEmailController
+│   └── services/email.py       # EmailAdminService (optional, may reuse mailing services)
+└── templates/admin/email/
+    ├── index.html.jinja2
+    ├── templates/
+    │   ├── list.html.jinja2
+    │   ├── form.html.jinja2
+    │   └── detail.html.jinja2
+    ├── logs/
+    │   ├── list.html.jinja2
+    │   └── detail.html.jinja2
+    └── partials/
+        ├── template_row.html.jinja2
+        ├── log_row.html.jinja2
+        └── preview.html.jinja2
+```
 
 ---
 
@@ -1284,6 +1526,38 @@ tests/
 
 ---
 
+## TODO: API Route Audit
+
+**Issue Identified** (2025-11-28): Some API routes are returning raw HTML instead of structured JSON data. For example, hitting `/api/v1/users` might return HTML which is useless for API consumers expecting structured data.
+
+**Tasks**:
+- [x] Audit ALL routes under `/api/` paths ✅ (2025-11-28)
+- [x] Identify routes that incorrectly return HTML (Template responses) ✅ None found - all API controllers return Pydantic schemas
+- [x] Review OpenAPI tags for consistency:
+  - [x] Ensure all API tags use Title Case
+  - [x] Consolidate fragmented tags (e.g., `users`, `memberships`, `user-groups` → `Users`)
+  - [x] Remove render controllers from API schema
+- [x] Make API docs actually useful for consumers
+
+**Research: Internal/Admin API Architecture** (TODO):
+- [ ] Research Litestar patterns for internal API namespacing:
+  - Option A: `/api/admin/*` (current mailing approach) - auth-gated admin APIs
+  - Option B: `/api/_internal/*` - internal service endpoints
+  - Option C: Separate OpenAPI specs for public vs admin APIs
+- [ ] Evaluate authentication requirements for API docs visibility:
+  - Should admin API docs require authentication to view?
+  - API key requirements for programmatic access?
+- [ ] Review Litestar's `OpenAPIConfig` for multiple spec generation
+- [ ] Consider `include_in_schema` per security level vs per route
+
+**Related Work Completed** (2025-11-28):
+- Added `include_in_schema=False` to 26+ frontend render controllers
+- Consolidated OpenAPI tags from ~40 fragmented to 13 logical groups
+- Updated admin page controllers to exclude from API schema
+- Mailing API controllers now under unified "Admin" tag
+
+---
+
 ## Next Steps - Tiered Priority List
 
 ### Tier 1: CRITICAL (Must Complete for MVP) - ✅ ALL COMPLETE
@@ -1315,9 +1589,10 @@ tests/
 | Task | Phase | Priority | Effort | Description |
 |------|-------|----------|--------|-------------|
 | ~~**SAQ Event-Driven Wiring**~~ | 6.1b | ✅ DONE | Medium | 31 tasks wired to app events |
-| **API Rate Limiting** | 5.1 | MEDIUM | Low | Prevent API abuse |
+| ~~**API Rate Limiting**~~ | 5.1 | ✅ DONE | Low | Redis-backed rate limiting with tiered limits |
+| **Admin Email UI** | 10.2b | HIGH | Medium | `/admin/email` - Template management + logs viewer |
 | **API Documentation** | 9.1 | MEDIUM | Medium | OpenAPI/Swagger UI setup (basic exists) |
-| **Mailing Domain** | 3.x | MEDIUM | Low | Last remaining domain (models/services) |
+| ~~**Mailing Domain**~~ | 3.x | ✅ DONE | Low | Email templates + logs domain with SMTP delivery |
 | **OAuth2 Providers** | 2.2 | MEDIUM | Medium | GitHub/Google providers exist, need testing |
 | **Page Caching** | 3.3 | MEDIUM | Medium | Redis cache for pages |
 | **Download Statistics** | 3.4 | MEDIUM | Medium | Track download counts |
@@ -1352,19 +1627,41 @@ tests/
    - ✅ Add event reminder cron job
    - **Impact**: 31 tasks now wired to application events
 
-2. **API Rate Limiting** (Tier 3)
-   - Protect public endpoints from abuse
-   - Use Litestar's built-in rate limiting middleware
+2. ~~**API Rate Limiting**~~ (Task 5.1 - ✅ COMPLETE 2025-11-27)
+   - ✅ Redis-backed rate limiting with Litestar's built-in RateLimitConfig
+   - ✅ 4-tier system: CRITICAL (5/min), HIGH (20/min), MEDIUM (60/min), LOW (120/min)
+   - ✅ User-aware identifier (anonymous, authenticated 4x, staff 20x)
+   - ✅ Custom 429 handler with HTMX/API/browser support
+   - ✅ Retry-After headers for RFC compliance
+   - ✅ 48 unit tests + 20 integration tests (100% coverage on ratelimit module)
+   - **Files created**: `core/ratelimit/` (config.py, identifier.py, middleware.py, exceptions.py)
+   - **Files created**: `templates/errors/429.html.jinja2` (countdown timer, retry button)
+   - **Files created**: `tests/integration/test_ratelimit.py` (20 integration tests)
+   - **Files modified**: `main.py` (stores, middleware, exception handlers)
 
-3. **Mailing Domain** (Tier 3)
-   - Complete domain coverage
-   - EmailTemplate model for newsletter/notifications
+3. ~~**Mailing Domain**~~ (Tier 3 - ✅ COMPLETE 2025-11-27)
+   - ✅ EmailTemplate model with Jinja2 rendering
+   - ✅ EmailLog model for tracking sent/failed emails
+   - ✅ MailingService with SMTP delivery
+   - ✅ Admin API endpoints (12 routes)
+   - ✅ 46 integration tests
+   - **Files**: `domains/mailing/` (models, repos, services, controllers, schemas)
 
-4. **OAuth2 Testing** (Tier 3)
+4. **Admin Email UI** (Task 10.2b - ⏳ UP NEXT)
+   - Create `/admin/email` dashboard with template count, recent sends, failed count
+   - Create `/admin/email/templates` list with CRUD operations
+   - Create `/admin/email/logs` viewer with filters
+   - Add template editor with Jinja2 syntax highlighting
+   - Add live preview with HTMX
+   - Add "Send Test Email" modal
+   - Add sidebar link
+   - **Files**: `domains/admin/controllers/email.py`, `templates/admin/email/*`
+
+5. **OAuth2 Testing** (Tier 3)
    - Test GitHub/Google OAuth flows end-to-end
    - Add integration tests for OAuth callback handlers
 
-5. **Page Caching** (Tier 3)
+6. **Page Caching** (Tier 3)
    - Redis cache for rendered pages
    - Cache invalidation on content updates
 
@@ -1419,4 +1716,4 @@ make ci                      # Full CI: lint + fmt + type-check + test
 ---
 
 *Document generated for Python.org Litestar rebuild project*
-*Last updated: 2025-11-27 (SAQ fixes, CSRF fixes, HTMX navigation, dev workflow)*
+*Last updated: 2025-11-27 (Mailing Domain + MailDev Integration + Startup Banner Fixes)*
