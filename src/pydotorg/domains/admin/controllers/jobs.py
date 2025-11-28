@@ -43,7 +43,7 @@ class AdminJobsController(Controller):
     """Controller for admin job moderation."""
 
     path = urls.ADMIN_JOBS
-    tags = ["Admin"]
+    include_in_schema = False
     guards = [require_staff]
     exception_handlers = {
         NotAuthorizedException: _admin_auth_exception_handler,

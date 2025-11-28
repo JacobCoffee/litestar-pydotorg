@@ -41,7 +41,7 @@ class AdminPagesController(Controller):
     """Controller for admin content page management."""
 
     path = urls.ADMIN_PAGES
-    tags = ["Admin"]
+    include_in_schema = False
     guards = [require_staff]
     exception_handlers = {
         NotAuthorizedException: _admin_auth_exception_handler,

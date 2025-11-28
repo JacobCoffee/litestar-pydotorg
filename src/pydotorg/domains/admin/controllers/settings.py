@@ -38,7 +38,7 @@ class AdminSettingsController(Controller):
     """Controller for admin site settings management."""
 
     path = urls.ADMIN_SETTINGS
-    tags = ["Admin"]
+    include_in_schema = False
     guards = [require_staff]
     exception_handlers = {
         NotAuthorizedException: _admin_auth_exception_handler,

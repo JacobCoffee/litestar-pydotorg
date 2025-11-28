@@ -41,7 +41,7 @@ class AdminEventsController(Controller):
     """Controller for admin event management."""
 
     path = urls.ADMIN_EVENTS
-    tags = ["Admin"]
+    include_in_schema = False
     guards = [require_staff]
     exception_handlers = {
         NotAuthorizedException: _admin_auth_exception_handler,

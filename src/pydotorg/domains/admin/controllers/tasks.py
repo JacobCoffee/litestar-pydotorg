@@ -40,7 +40,7 @@ class AdminTasksController(Controller):
     """Controller for admin task queue monitoring."""
 
     path = f"{urls.ADMIN}/tasks"
-    tags = ["Admin"]
+    include_in_schema = False
     guards = [require_admin]
     exception_handlers = {
         NotAuthorizedException: _admin_auth_exception_handler,
@@ -108,9 +108,7 @@ class AdminTasksController(Controller):
         Returns:
             Job list full page template
         """
-        jobs = await task_admin_service.get_all_jobs(
-            status=status, limit=limit, sort_by=sort, sort_order=order
-        )
+        jobs = await task_admin_service.get_all_jobs(status=status, limit=limit, sort_by=sort, sort_order=order)
 
         return Template(
             template_name="admin/tasks/jobs.html.jinja2",
@@ -335,9 +333,7 @@ class AdminTasksController(Controller):
             return Response(
                 content="Failed to enqueue task",
                 status_code=400,
-                headers={
-                    "HX-Trigger": '{"showToast": {"message": "Failed to enqueue test task", "type": "error"}}'
-                },
+                headers={"HX-Trigger": '{"showToast": {"message": "Failed to enqueue test task", "type": "error"}}'},
             )
 
         return Response(

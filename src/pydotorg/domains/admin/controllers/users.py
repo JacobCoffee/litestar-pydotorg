@@ -41,7 +41,7 @@ class AdminUsersController(Controller):
     """Controller for admin user management."""
 
     path = urls.ADMIN_USERS
-    tags = ["Admin"]
+    include_in_schema = False
     guards = [require_admin]
     exception_handlers = {
         NotAuthorizedException: _admin_auth_exception_handler,
