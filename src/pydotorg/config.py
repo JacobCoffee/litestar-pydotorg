@@ -280,69 +280,109 @@ def get_settings() -> Settings:
 settings = get_settings()
 
 
-def validate_production_settings() -> None:
-    """Validate production settings and warn about optional configurations."""
+def get_config_warnings() -> list[str]:
+    """Get list of configuration warnings."""
     cfg = get_settings()
-
     warnings: list[str] = []
 
     if not cfg.fastly_api_key:
-        warnings.append("FASTLY_API_KEY not configured - CDN features disabled")
+        warnings.append("CDN disabled (no FASTLY_API_KEY)")
 
-    if not cfg.smtp_host or cfg.smtp_host == "localhost":
-        warnings.append("SMTP settings not configured - email features disabled")
+    if not cfg.smtp_host:
+        warnings.append("Email disabled (no SMTP_HOST configured)")
 
     if cfg.redis_url == "redis://localhost:6379/0" and cfg.environment == Environment.PROD:
-        warnings.append("Using default Redis URL in production - ensure this is intentional")
+        warnings.append("Default Redis URL in production")
 
     if not cfg.github_client_id or not cfg.github_client_secret:
-        warnings.append("GitHub OAuth not configured - GitHub login disabled")
+        warnings.append("GitHub OAuth disabled")
 
     if not cfg.google_client_id or not cfg.google_client_secret:
-        warnings.append("Google OAuth not configured - Google login disabled")
+        warnings.append("Google OAuth disabled")
 
-    if warnings:
-        logger.warning("Configuration warnings:")
-        for warning in warnings:
-            logger.warning(f"  - {warning}")
+    return warnings
+
+
+def validate_production_settings() -> None:
+    """Validate production settings (raises in prod if critical settings missing)."""
+    cfg = get_settings()
+
+    if cfg.environment == Environment.PROD:
+        if cfg.secret_key in UNSAFE_DEFAULT_SECRETS:
+            msg = "Production deployment with unsafe default SECRET_KEY"
+            raise ValueError(msg)
+        if cfg.session_secret_key in UNSAFE_DEFAULT_SECRETS:
+            msg = "Production deployment with unsafe default SESSION_SECRET_KEY"
+            raise ValueError(msg)
 
 
 def log_startup_banner() -> None:
-    """Log application startup information."""
+    """Print application startup information directly to stdout."""
+    import os  # noqa: PLC0415
+    import sys  # noqa: PLC0415
+
     cfg = get_settings()
+    warnings = get_config_warnings()
 
     db_hosts = cfg.database_url.hosts()
     db_info = db_hosts[0] if db_hosts else {}
     db_host = db_info.get("host", "unknown")
     db_port = db_info.get("port", 5432)
     db_name = cfg.database_url.path.lstrip("/") if cfg.database_url.path else "unknown"
+    redis_display = cfg.redis_url.split("@")[-1] if "@" in cfg.redis_url else cfg.redis_url
+
+    # Show MailDev UI URL in dev mode when using local SMTP on port 1025
+    if cfg.environment == Environment.DEV and cfg.smtp_port == 1025:
+        email_display = "http://localhost:1080 (MailDev)"
+    else:
+        email_display = f"{cfg.smtp_host}:{cfg.smtp_port}"
+
+    def _bool_icon(*, val: bool) -> str:
+        return "\033[92m✓\033[0m" if val else "\033[91m✗\033[0m"
+
+    warnings_section = ""
+    if warnings:
+        warnings_list = "\n".join(f"  \033[93m⚠\033[0m {w}" for w in warnings)
+        warnings_section = f"\n\033[1mWarnings:\033[0m\n{warnings_list}\n"
 
     banner = f"""
-╔══════════════════════════════════════════════════════════════╗
-║                  {cfg.site_name:^40}  ║
-╚══════════════════════════════════════════════════════════════╝
+\033[94m╔══════════════════════════════════════════════════════════════╗
+║                 \033[93m🐍  {cfg.site_name:^20}  🐍\033[94m                 ║
+╚══════════════════════════════════════════════════════════════╝\033[0m
 
-Environment:        {cfg.environment.value.upper()}
-Debug Mode:         {cfg.is_debug}
-Log Level:          {cfg.log_level}
-Database:           postgresql://{db_host}:{db_port}/{db_name}
-Redis:              {cfg.redis_url.split("@")[-1] if "@" in cfg.redis_url else cfg.redis_url}
-Create Tables:      {cfg.create_all}
-CORS Allow All:     {cfg.cors_allow_all}
-Error Details:      {cfg.show_error_details}
+\033[1mServer:\033[0m
+  URL:              http://localhost:8000
+  API Docs:         http://localhost:8000/api/docs
+  Admin:            http://localhost:8000/admin
+  PID:              {os.getpid()}
+  Environment:      {cfg.environment.value.upper()}
+  Debug Mode:       {_bool_icon(val=cfg.is_debug)} {cfg.is_debug}
+  Log Level:        {cfg.log_level}
 
-Features:
-  CDN:              {bool(cfg.fastly_api_key)}
-  Email:            {bool(cfg.smtp_host and cfg.smtp_host != "localhost")}
-  GitHub OAuth:     {bool(cfg.github_client_id)}
-  Google OAuth:     {bool(cfg.google_client_id)}
-  Meilisearch:      {cfg.meilisearch_url}
-  Jobs:             {cfg.features.enable_jobs}
-  Sponsors:         {cfg.features.enable_sponsors}
-  Search:           {cfg.features.enable_search}
-  Maintenance:      {cfg.features.maintenance_mode}
+\033[1mConnections:\033[0m
+  Database:         postgresql://{db_host}:{db_port}/{db_name}
+  Redis:            {redis_display}
+
+\033[1mSecurity:\033[0m
+  Create Tables:    {_bool_icon(val=cfg.create_all)} {cfg.create_all}
+  CORS Allow All:   {_bool_icon(val=cfg.cors_allow_all)} {cfg.cors_allow_all}
+  Error Details:    {_bool_icon(val=cfg.show_error_details)} {cfg.show_error_details}
+
+\033[1mFeatures:\033[0m
+  CDN:              {_bool_icon(val=bool(cfg.fastly_api_key))}
+  Email:            {_bool_icon(val=bool(cfg.smtp_host))} {email_display}
+  GitHub OAuth:     {_bool_icon(val=bool(cfg.github_client_id))}
+  Google OAuth:     {_bool_icon(val=bool(cfg.google_client_id))}
+  Meilisearch:      {_bool_icon(val=bool(cfg.meilisearch_url))} {cfg.meilisearch_url}
+  Jobs:             {_bool_icon(val=cfg.features.enable_jobs)}
+  Sponsors:         {_bool_icon(val=cfg.features.enable_sponsors)}
+  Search:           {_bool_icon(val=cfg.features.enable_search)}
+  Maintenance:      {_bool_icon(val=cfg.features.maintenance_mode)}
+{warnings_section}
+\033[92m✓ Application ready\033[0m
 """
-    logger.info(banner)
+    sys.stdout.write(banner)
+    sys.stdout.flush()
 
 
 def get_config_summary() -> dict[str, str | bool | int]:
@@ -361,7 +401,7 @@ def get_config_summary() -> dict[str, str | bool | int]:
         "database_name": cfg.database_url.path.lstrip("/") if cfg.database_url.path else "unknown",
         "redis_configured": bool(cfg.redis_url and cfg.redis_url != "redis://localhost:6379/0"),
         "cdn_enabled": bool(cfg.fastly_api_key),
-        "email_enabled": bool(cfg.smtp_host and cfg.smtp_host != "localhost"),
+        "email_enabled": bool(cfg.smtp_host),
         "github_oauth_enabled": bool(cfg.github_client_id),
         "google_oauth_enabled": bool(cfg.google_client_id),
         "create_tables_on_startup": cfg.create_all,
