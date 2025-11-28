@@ -8,6 +8,8 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 from litestar.datastructures import State
+from litestar.exceptions import TooManyRequestsException
+from litestar.stores.redis import RedisStore
 
 if TYPE_CHECKING:
     from litestar.config.app import AppConfig
@@ -37,6 +39,7 @@ from pydotorg.core.exceptions import get_exception_handlers
 from pydotorg.core.features import FeatureFlags
 from pydotorg.core.logging import configure_structlog
 from pydotorg.core.openapi import get_openapi_plugins
+from pydotorg.core.ratelimit import create_rate_limit_config, rate_limit_exception_handler
 from pydotorg.core.security.csrf import create_csrf_config
 from pydotorg.core.worker import saq_plugin
 from pydotorg.domains.about import AboutRenderController
@@ -106,6 +109,10 @@ from pydotorg.domains.jobs import (
     JobReviewCommentController,
     JobTypeController,
     get_jobs_dependencies,
+)
+from pydotorg.domains.mailing import (
+    EmailLogController,
+    EmailTemplateController,
 )
 from pydotorg.domains.minutes import (
     MinutesController,
@@ -361,6 +368,7 @@ def configure_template_engine(engine: JinjaTemplateEngine) -> None:  # noqa: PLR
             "now": datetime.now,
         }
     )
+
     def pretty_json(value: dict | list | str | None) -> str:
         """Format a value as pretty-printed JSON."""
         import json  # noqa: PLC0415
@@ -403,6 +411,14 @@ structlog_plugin = configure_structlog(
 )
 
 csrf_config = create_csrf_config()
+rate_limit_config = create_rate_limit_config(settings)
+
+
+def get_exception_handlers_with_rate_limit() -> dict:
+    """Get exception handlers including rate limit handler."""
+    handlers = get_exception_handlers()
+    handlers[TooManyRequestsException] = rate_limit_exception_handler
+    return handlers
 
 
 def on_app_init(app_config: AppConfig) -> AppConfig:
@@ -422,11 +438,10 @@ def on_app_init(app_config: AppConfig) -> AppConfig:
 @asynccontextmanager
 async def lifespan(app: Litestar) -> AsyncGenerator[None]:
     """Application lifespan hook for startup and shutdown tasks."""
-    logger.info("Application startup initiated")
+    import sys  # noqa: PLC0415
 
     try:
         validate_production_settings()
-        logger.info("Configuration validated successfully")
     except Exception:
         logger.exception("Configuration validation failed")
         raise
@@ -435,7 +450,8 @@ async def lifespan(app: Litestar) -> AsyncGenerator[None]:
 
     yield
 
-    logger.info("Application shutdown initiated")
+    sys.stdout.write("\n\033[93m⏹ Shutting down application...\033[0m\n")
+    sys.stdout.flush()
 
 
 app = Litestar(
@@ -515,11 +531,19 @@ app = Litestar(
         AdminSponsorsController,
         AdminTasksController,
         AdminUsersController,
+        EmailTemplateController,
+        EmailLogController,
     ],
     dependencies=get_all_dependencies(),
-    exception_handlers=get_exception_handlers(),
+    exception_handlers=get_exception_handlers_with_rate_limit(),
     plugins=[sqlalchemy_plugin, sqladmin_plugin, flash_plugin, structlog_plugin, saq_plugin],
-    middleware=[session_config.middleware, UserPopulationMiddleware, JWTAuthMiddleware],
+    middleware=[
+        session_config.middleware,
+        UserPopulationMiddleware,
+        JWTAuthMiddleware,
+        rate_limit_config.middleware,
+    ],
+    stores={"rate_limit": RedisStore.with_client(url=settings.redis_url)},
     template_config=template_config,
     openapi_config=OpenAPIConfig(
         title=settings.site_name,
@@ -552,6 +576,7 @@ app = Litestar(
             Tag(name="Code Samples", description="Python code examples"),
             Tag(name="Community", description="Community content"),
             Tag(name="Minutes", description="PSF meeting minutes"),
+            Tag(name="Nominations", description="PSF board elections and nominations"),
             Tag(name="Success Stories", description="Python success stories"),
             Tag(name="Work Groups", description="PSF work groups"),
             Tag(name="Search", description="Site-wide search"),

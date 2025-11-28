@@ -29,7 +29,7 @@ class UserController(Controller):
     """Controller for User CRUD operations."""
 
     path = urls.USERS
-    tags = ["users"]
+    tags = ["Users"]
 
     @get("/")
     async def list_users(
@@ -133,7 +133,7 @@ class MembershipController(Controller):
     """Controller for Membership CRUD operations."""
 
     path = urls.MEMBERSHIPS
-    tags = ["memberships"]
+    tags = ["Users"]
 
     @get("/")
     async def list_memberships(
@@ -206,7 +206,7 @@ class UserGroupController(Controller):
     """Controller for UserGroup CRUD operations."""
 
     path = urls.USER_GROUPS
-    tags = ["user-groups"]
+    tags = ["Users"]
 
     @get("/")
     async def list_user_groups(
