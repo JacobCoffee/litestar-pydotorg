@@ -123,8 +123,8 @@ playwright-install: ## Install Playwright browsers for E2E testing
 ##@ Infrastructure
 
 .PHONY: infra-up
-infra-up: ## Start PostgreSQL, Redis, and Meilisearch containers
-	docker compose up -d postgres redis meilisearch
+infra-up: ## Start PostgreSQL, Redis, Meilisearch, and MailDev containers
+	docker compose up -d postgres redis meilisearch maildev
 
 .PHONY: infra-down
 infra-down: ## Stop infrastructure containers
@@ -275,28 +275,30 @@ shell: ## Run Python shell with app context
 
 ##@ Git Worktree Things
 
-WORKTREE_DIR := ../.worktrees/litestar-pydotorg
+.PHONY: wt worktree wt-ls worktree-list wt-rm worktree-remove worktree-prune
 
-.PHONY: worktree
+wt: worktree ## Alias for worktree
 worktree: ## Create a new worktree for a feature branch (NAME=feature-name)
 ifndef NAME
-	$(error NAME is required. Usage: make worktree NAME=feature-name)
+	$(error NAME is required. Usage: make wt NAME=feature-name)
 endif
-	@mkdir -p $(WORKTREE_DIR)
-	git worktree add $(WORKTREE_DIR)/$(NAME) -b $(NAME)
-	@echo "Worktree created at $(WORKTREE_DIR)/$(NAME)"
-	@echo "cd $(WORKTREE_DIR)/$(NAME) && make install"
+	@mkdir -p .worktrees
+	@git worktree add .worktrees/$(NAME) -b $(NAME)
+	@echo "Worktree created at .worktrees/$(NAME)"
 
-.PHONY: worktree-list
+wt-ls: worktree-list ## Alias for worktree-list
 worktree-list: ## List all worktrees
-	git worktree list
+	@git worktree list
 
-.PHONY: worktree-remove
+wt-rm: worktree-remove ## Alias for worktree-remove
 worktree-remove: ## Remove a worktree (NAME=feature-name)
 ifndef NAME
-	$(error NAME is required. Usage: make worktree-remove NAME=feature-name)
+	$(error NAME is required. Usage: make wt-rm NAME=feature-name)
 endif
-	git worktree remove $(WORKTREE_DIR)/$(NAME)
+	@git worktree remove .worktrees/$(NAME)
+
+worktree-prune: ## Clean up stale git worktrees
+	@git worktree prune -v
 
 # ============================================================================
 # Frontend Assets
