@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import logging
+import os
+import sys
 from typing import TYPE_CHECKING, Any
 
 from advanced_alchemy.extensions.litestar.plugins.init.config.asyncio import SQLAlchemyAsyncConfig
@@ -21,6 +23,47 @@ logger = logging.getLogger(__name__)
 queue = Queue.from_url(settings.redis_url)
 
 
+def _mask_url(url: str) -> str:
+    """Mask sensitive parts of URLs for display."""
+    if "@" in url:
+        protocol, rest = url.split("://", 1) if "://" in url else ("", url)
+        if "@" in rest:
+            _, host_part = rest.rsplit("@", 1)
+            return f"{protocol}://*****@{host_part}" if protocol else f"*****@{host_part}"
+    return url
+
+
+def _print_startup_banner(task_count: int, cron_count: int) -> None:
+    """Print a nice startup banner for the worker."""
+    db_display = _mask_url(str(settings.database_url))
+    redis_display = _mask_url(settings.redis_url)
+
+    banner = f"""
+\033[94m╔══════════════════════════════════════════════════════════════╗
+║                \033[93m⚡ Python.org Task Worker ⚡\033[94m                  ║
+╚══════════════════════════════════════════════════════════════╝\033[0m
+
+\033[1mWorker Configuration:\033[0m
+  PID:              {os.getpid()}
+  Concurrency:      {settings.worker_concurrency} workers
+  Tasks:            {task_count} registered
+  Cron Jobs:        {cron_count} scheduled
+
+\033[1mConnections:\033[0m
+  Database:         {db_display}
+  Redis:            {redis_display}
+
+\033[1mEnvironment:\033[0m
+  Mode:             {settings.environment.upper()}
+  Debug:            {settings.debug}
+  Log Level:        {settings.log_level}
+
+\033[92m✓ Worker ready and listening for tasks...\033[0m
+"""
+    sys.stdout.write(banner)
+    sys.stdout.flush()
+
+
 async def startup(ctx: dict[str, Any]) -> None:
     """Initialize worker resources on startup.
 
@@ -30,8 +73,6 @@ async def startup(ctx: dict[str, Any]) -> None:
     Args:
         ctx: SAQ worker context dictionary for storing shared resources
     """
-    logger.info("SAQ worker starting up...")
-
     sqlalchemy_config = SQLAlchemyAsyncConfig(
         connection_string=str(settings.database_url),
         metadata=AuditBase.metadata,
@@ -49,7 +90,11 @@ async def startup(ctx: dict[str, Any]) -> None:
     redis_client = Redis.from_url(settings.redis_url, decode_responses=False)
     ctx["redis"] = redis_client
 
-    logger.info(
+    task_count = len(get_task_functions())
+    cron_count = len(get_cron_jobs())
+    _print_startup_banner(task_count, cron_count)
+
+    logger.debug(
         "SAQ worker initialized",
         extra={
             "database_url": str(settings.database_url).split("@")[-1],
@@ -68,19 +113,21 @@ async def shutdown(ctx: dict[str, Any]) -> None:
     Args:
         ctx: SAQ worker context dictionary
     """
-    logger.info("SAQ worker shutting down...")
+    sys.stdout.write("\n\033[93m⏹ Shutting down worker...\033[0m\n")
+    sys.stdout.flush()
 
     engine: AsyncEngine | None = ctx.get("engine")
     if engine:
         await engine.dispose()
-        logger.info("Database engine disposed")
+        logger.debug("Database engine disposed")
 
     redis = ctx.get("redis")
     if redis:
         await redis.aclose()
-        logger.info("Redis connection closed")
+        logger.debug("Redis connection closed")
 
-    logger.info("SAQ worker shutdown complete")
+    sys.stdout.write("\033[92m✓ Worker shutdown complete\033[0m\n")
+    sys.stdout.flush()
 
 
 async def before_process(ctx: dict[str, Any]) -> None:
@@ -143,8 +190,9 @@ async def test_failing_task(ctx: dict[str, Any]) -> dict[str, Any]:
 
     def level_4_processor(items: list[str]) -> None:
         """Level 4 - processes items."""
+        target_index = 2
         for i, item in enumerate(items):
-            if i == 2:
+            if i == target_index:
                 level_5_deepest({"key": item, "index": i})
 
     def level_3_validator(config: dict[str, Any]) -> None:
