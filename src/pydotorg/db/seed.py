@@ -634,7 +634,7 @@ async def seed_events(session: AsyncSession, users: list[User]) -> list[Event]:
             title=title,
             description=description,
             calendar_id=calendar.id,
-            venue_id=location.id if i == 2 else None,  # noqa: PLR2004
+            venue_id=location.id if i == 2 else None,
             featured=i == 0,
             creator_id=users[0].id,
         )
@@ -743,7 +743,7 @@ async def seed_elections(session: AsyncSession, users: list[User]) -> list[Elect
         nominee = Nominee(
             election_id=election.id,
             user_id=user.id,
-            accepted=i < 2,  # noqa: PLR2004
+            accepted=i < 2,
         )
         session.add(nominee)
         await session.flush()
