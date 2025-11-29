@@ -19,8 +19,8 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@ThePSF">
 
-    {# CSRF token for HTMX requests - use server-generated token, not cookie #}
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    {# CSRF token cookie name for HTMX requests #}
+    <meta name="csrf-cookie-name" content="csrftoken">
 
     <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
     <link rel="apple-touch-icon" sizes="180x180" href="/static/images/apple-touch-icon.png">
@@ -194,9 +194,14 @@
 
         // Add CSRF token to all HTMX requests
         document.body.addEventListener('htmx:configRequest', function(evt) {
-            // Get CSRF token from meta tag (server-generated, always valid)
-            const csrfMeta = document.querySelector('meta[name="csrf-token"]');
-            const csrfToken = csrfMeta ? csrfMeta.getAttribute('content') : null;
+            // Get CSRF token from cookie (cookie_httponly=False allows JS access)
+            function getCookie(name) {
+                const value = `; ${document.cookie}`;
+                const parts = value.split(`; ${name}=`);
+                if (parts.length === 2) return parts.pop().split(';').shift();
+                return null;
+            }
+            const csrfToken = getCookie('csrftoken');
             if (csrfToken) {
                 evt.detail.headers['x-csrftoken'] = csrfToken;
             }

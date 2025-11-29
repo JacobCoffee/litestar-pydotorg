@@ -161,18 +161,29 @@
   }
 }
 
+/* HTMX loading states - outside @layer to prevent incorrect merging */
+.htmx-indicator {
+  display: none !important;
+}
+.htmx-request .htmx-indicator,
+.htmx-request.htmx-indicator {
+  display: inline-block !important;
+}
+.htmx-hide-on-request {
+  display: inline !important;
+}
+.htmx-request .htmx-hide-on-request {
+  display: none !important;
+}
+.htmx-show-on-request {
+  display: none !important;
+}
+.htmx-request .htmx-show-on-request {
+  display: inline-block !important;
+}
+
 /* Utility Layer */
 @layer utilities {
-  /* HTMX loading states */
-  .htmx-request {
-    @apply opacity-50 pointer-events-none;
-  }
-
-  .htmx-request::after {
-    content: "";
-    @apply absolute inset-0 flex items-center justify-center;
-  }
-
   /* Loading spinner - using direct styles to avoid @apply circular dependency with DaisyUI */
   .loading-spinner-custom {
     @apply inline-block w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin;
