@@ -1673,10 +1673,13 @@ tests/
    - ✅ Created `/admin/email/templates` list with CRUD operations
    - ✅ Created `/admin/email/logs` viewer with filters
    - ✅ Added template editor with form fields and sample context display
-   - ✅ Added live preview with HTMX
+   - ✅ Added live preview with HTMX (always shows Plain Text, HTML Source, Rendered tabs)
    - ✅ Added "Send Test Email" inline form with loading states
    - ✅ Added sidebar link
    - ✅ Fixed "None" content bug in email body
+   - ✅ Added Plain Text vs HTML guidance with info alerts
+   - ✅ Added best practice status alerts (success/warning based on content)
+   - ✅ Improved Jinja2 syntax reference with badge chips
    - ✅ Created 54 integration tests
    - **Files**: `domains/admin/controllers/email.py`, `templates/admin/email/*`
 
