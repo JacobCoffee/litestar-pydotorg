@@ -1,0 +1,231 @@
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                      PYDOTORG RATE LIMITING ARCHITECTURE                        │
+└─────────────────────────────────────────────────────────────────────────────────┘
+
+┌──────────────┐
+│   Request    │
+│  (HTMX/API)  │
+└──────┬───────┘
+       │
+       ▼
+┌──────────────────────────────────────────────────────────────────┐
+│                 RateLimitMiddleware (Litestar)                   │
+│                                                                  │
+│  1. Identify User → get_rate_limit_identifier()                 │
+│     ├─ Authenticated: user:{user_id}                            │
+│     ├─ Staff: staff:{user_id} (5x multiplier)                   │
+│     └─ Anonymous: ip:{ip_address}                               │
+│                                                                  │
+│  2. Determine Tier → get_endpoint_tier(path, method)            │
+│     ├─ CRITICAL:  Auth, Search         (5→20 req/min)           │
+│     ├─ HIGH:      Forms, Submissions   (20→60 req/min)          │
+│     ├─ MEDIUM:    Community, Blogs     (60→180 req/min)         │
+│     ├─ LOW:       Read-only            (120→300 req/min)        │
+│     └─ UNLIMITED: Health, Static       (∞ req/min)              │
+│                                                                  │
+│  3. Check Limit → should_check_rate_limit()                     │
+│     └─ Query Redis with key: {namespace}:{identifier}:{tier}    │
+└──────────────────────────┬───────────────────────────────────────┘
+                           │
+                           ▼
+                  ┌────────────────────┐
+                  │   Rate Exceeded?   │
+                  └────────┬───────────┘
+                           │
+           ┌───────────────┴───────────────┐
+           │                               │
+          NO                              YES
+           │                               │
+           ▼                               ▼
+    ┌─────────────┐              ┌────────────────────┐
+    │   Process   │              │ TooManyRequests    │
+    │   Request   │              │   Exception        │
+    └─────────────┘              └─────────┬──────────┘
+                                           │
+                                           ▼
+                           ┌───────────────────────────────┐
+                           │  429 Exception Handler        │
+                           │                               │
+                           │  • Add Retry-After header     │
+                           │  • HTMX? → Toast notification │
+                           │  • API? → JSON error          │
+                           │  • Web? → 429.html template   │
+                           └───────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                              REDIS STORAGE                                      │
+└─────────────────────────────────────────────────────────────────────────────────┘
+
+  Namespace: "ratelimit"
+
+  Keys:
+    ratelimit:ip:192.168.1.100:critical    → Counter + TTL (60s)
+    ratelimit:user:uuid-1234:high          → Counter + TTL (60s)
+    ratelimit:staff:uuid-5678:medium       → Counter + TTL (60s)
+
+  Operations:
+    • INCR on each request
+    • EXPIRE to set TTL
+    • GET to check current count
+    • Atomic operations (no race conditions)
+
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                        CONFIGURATION (Environment-Based)                        │
+└─────────────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────┬─────────────┬─────────────┬─────────────┐
+│     Tier       │     DEV     │   STAGING   │    PROD     │
+├────────────────┼─────────────┼─────────────┼─────────────┤
+│ Critical       │  100/60s    │   10/60s    │   5/60s     │
+│ (Anonymous)    │             │             │             │
+├────────────────┼─────────────┼─────────────┼─────────────┤
+│ High           │  200/60s    │   30/60s    │   20/60s    │
+│ (Anonymous)    │             │             │             │
+├────────────────┼─────────────┼─────────────┼─────────────┤
+│ Medium         │  300/60s    │   90/60s    │   60/60s    │
+│ (Anonymous)    │             │             │             │
+├────────────────┼─────────────┼─────────────┼─────────────┤
+│ Low            │  500/60s    │  180/60s    │  120/60s    │
+│ (Anonymous)    │             │             │             │
+└────────────────┴─────────────┴─────────────┴─────────────┘
+
+Authenticated users: 4x higher limits
+Staff users: 5x multiplier on top of authenticated
+
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                           FILE STRUCTURE                                        │
+└─────────────────────────────────────────────────────────────────────────────────┘
+
+src/pydotorg/
+├── core/
+│   └── ratelimit/
+│       ├── __init__.py          # Public API
+│       ├── config.py            # RateLimitConfig, TierLimits
+│       ├── tiers.py             # Endpoint classifications
+│       ├── identifier.py        # User-aware identifier
+│       ├── store.py             # Redis store factory
+│       ├── middleware.py        # Middleware config
+│       └── exceptions.py        # 429 handler
+├── config.py                    # Settings (rate_limit_enabled)
+└── main.py                      # App integration
+
+templates/errors/429.html.jinja2 # Error page
+
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                         ENDPOINT TIER EXAMPLES                                  │
+└─────────────────────────────────────────────────────────────────────────────────┘
+
+CRITICAL (5 req/min → 20 req/min auth):
+  • /api/auth/login              - Brute force protection
+  • /api/auth/register           - Account creation spam
+  • /api/v1/search/              - Expensive queries
+  • /api/auth/reset-password     - Enumeration attacks
+
+HIGH (20 req/min → 60 req/min auth):
+  • /api/jobs                    - Job posting spam
+  • /api/events                  - Event submission abuse
+  • /api/sponsors/inquiry        - Inquiry spam
+  • /api/feeds/aggregate         - Feed parsing overhead
+
+MEDIUM (60 req/min → 180 req/min auth):
+  • /api/community/posts         - Community content
+  • /api/blogs/entries           - Blog submissions
+  • /api/pages/*/images          - File uploads
+
+LOW (120 req/min → 300 req/min auth):
+  • GET /api/*                   - Read-only operations
+  • /downloads                   - Public pages
+  • /docs/*                      - Documentation
+
+UNLIMITED:
+  • /health                      - Monitoring
+  • /static/*                    - Assets
+  • /media/*                     - Media files
+
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                           MONITORING & METRICS                                  │
+└─────────────────────────────────────────────────────────────────────────────────┘
+
+Prometheus Metrics:
+  • pydotorg_rate_limit_hits_total{tier, endpoint, user_type}
+  • pydotorg_rate_limit_check_seconds{tier}
+
+Logs (Structured):
+  {
+    "event": "rate_limit_exceeded",
+    "path": "/api/auth/login",
+    "method": "POST",
+    "user_id": "anonymous",
+    "ip": "192.168.1.100",
+    "tier": "critical",
+    "retry_after": 60
+  }
+
+Admin Dashboard:
+  • Rate limit hits by tier (chart)
+  • Top rate-limited endpoints (table)
+  • Top rate-limited IPs/users (table)
+  • Current configuration (summary)
+
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                            SECURITY FEATURES                                    │
+└─────────────────────────────────────────────────────────────────────────────────┘
+
+1. Brute Force Protection
+   └─ /api/auth/login: 5 attempts/min (anonymous)
+
+2. Account Enumeration Prevention
+   └─ /api/auth/register: 5 attempts/min (anonymous)
+
+3. Scraping Prevention
+   └─ Read endpoints: 120 req/min (anonymous)
+
+4. DoS Mitigation
+   └─ All endpoints have limits
+
+5. User Rewards
+   └─ Authenticated users: 4x higher limits
+
+6. Staff Privileges
+   └─ Staff users: 5x multiplier (20x anonymous)
+
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                        IMPLEMENTATION PHASES                                    │
+└─────────────────────────────────────────────────────────────────────────────────┘
+
+Phase 1: Core Infrastructure (Week 1)
+  ☐ Create ratelimit module structure
+  ☐ Implement config.py with RateLimitConfig
+  ☐ Implement store.py with Redis
+  ☐ Add settings to config.py
+  ☐ Unit tests
+
+Phase 2: Tier Classification (Week 1)
+  ☐ Implement tiers.py
+  ☐ Audit all 383 endpoints
+  ☐ Assign tier to each endpoint
+  ☐ Tests for tier logic
+  ☐ Documentation
+
+Phase 3: Middleware & Handlers (Week 2)
+  ☐ Implement identifier.py
+  ☐ Implement middleware.py
+  ☐ Implement exceptions.py
+  ☐ Create 429 template
+  ☐ Integration tests
+
+Phase 4: Application Integration (Week 2)
+  ☐ Modify main.py
+  ☐ Register store and middleware
+  ☐ Add exception handler
+  ☐ Test with controllers
+  ☐ Performance testing
+
+Phase 5: Monitoring & Tuning (Week 3)
+  ☐ Add Prometheus metrics
+  ☐ Admin dashboard
+  ☐ Alerts setup
+  ☐ Tune limits
+  ☐ Operational docs
+
+TOTAL EFFORT: ~3 weeks (1 engineer)
