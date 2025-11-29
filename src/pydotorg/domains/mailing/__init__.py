@@ -21,6 +21,7 @@ Usage:
 """
 
 from pydotorg.domains.mailing.controllers import EmailLogController, EmailTemplateController
+from pydotorg.domains.mailing.dependencies import get_mailing_dependencies
 from pydotorg.domains.mailing.models import EmailLog, EmailTemplate, EmailTemplateType
 from pydotorg.domains.mailing.repositories import EmailLogRepository, EmailTemplateRepository
 from pydotorg.domains.mailing.schemas import (
@@ -60,4 +61,5 @@ __all__ = [
     "MailingService",
     "SendEmailRequest",
     "SendEmailResponse",
+    "get_mailing_dependencies",
 ]
