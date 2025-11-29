@@ -40,14 +40,9 @@ Excluded Routes:
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 from litestar.config.csrf import CSRFConfig
 
 from pydotorg.config import settings
-
-if TYPE_CHECKING:
-    from litestar.connection import Request
 
 
 def create_csrf_config() -> CSRFConfig:
@@ -77,19 +72,3 @@ def create_csrf_config() -> CSRFConfig:
             "/admin/tasks/*",
         ],
     )
-
-
-async def csrf_token_injector(request: Request) -> dict[str, str]:
-    """Inject CSRF token into template context.
-
-    Litestar provides the csrf_input automatically via the request state,
-    but we can also provide the raw token for custom implementations.
-
-    Args:
-        request: The current request object
-
-    Returns:
-        dict: Dictionary containing the CSRF token
-    """
-    csrf_token = request.cookies.get(settings.csrf_cookie_name, "")
-    return {"csrf_token": csrf_token}
