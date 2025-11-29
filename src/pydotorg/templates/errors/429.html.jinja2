@@ -1,0 +1,71 @@
+{% extends 'base.html.jinja2' %}
+
+{% block title %}{{ title | default('Too Many Requests') }} - {{ site_name }}{% endblock %}
+
+{% block content %}
+<div class="min-h-[60vh] flex items-center justify-center">
+  <div class="text-center max-w-md mx-auto px-4">
+    <div class="text-9xl font-bold text-warning opacity-20 mb-4">429</div>
+    <h1 class="text-3xl font-bold mb-4">{{ title | default('Too Many Requests') }}</h1>
+    <p class="text-base-content/70 mb-4">
+      {{ message | default("You've made too many requests. Please slow down and try again.") }}
+    </p>
+    {% if retry_minutes and retry_minutes > 0 %}
+    <div class="alert alert-warning mb-8">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+      </svg>
+      <span>You can try again in <strong id="countdown">{{ retry_minutes }}</strong> minute{{ 's' if retry_minutes != 1 else '' }}.</span>
+    </div>
+    {% elif retry_after %}
+    <div class="alert alert-warning mb-8">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+      </svg>
+      <span>Please wait <strong id="countdown">{{ retry_after }}</strong> seconds before trying again.</span>
+    </div>
+    {% endif %}
+    <div class="flex gap-4 justify-center">
+      <a href="/" class="btn btn-primary">Go Home</a>
+      <button onclick="location.reload()" class="btn btn-outline" id="retry-btn" disabled>
+        <span class="loading loading-spinner loading-sm mr-2" id="retry-spinner"></span>
+        Wait...
+      </button>
+    </div>
+  </div>
+</div>
+
+{% if retry_after %}
+<script>
+  (function() {
+    var seconds = parseInt('{{ retry_after }}', 10) || 60;
+    var countdownEl = document.getElementById('countdown');
+    var retryBtn = document.getElementById('retry-btn');
+    var retrySpinner = document.getElementById('retry-spinner');
+
+    function updateCountdown() {
+      if (seconds <= 0) {
+        if (countdownEl) countdownEl.textContent = '0';
+        if (retryBtn) {
+          retryBtn.disabled = false;
+          retryBtn.innerHTML = 'Try Again';
+        }
+        return;
+      }
+
+      if (seconds >= 60) {
+        var mins = Math.ceil(seconds / 60);
+        if (countdownEl) countdownEl.textContent = mins + ' minute' + (mins !== 1 ? 's' : '');
+      } else {
+        if (countdownEl) countdownEl.textContent = seconds + ' second' + (seconds !== 1 ? 's' : '');
+      }
+
+      seconds--;
+      setTimeout(updateCountdown, 1000);
+    }
+
+    updateCountdown();
+  })();
+</script>
+{% endif %}
+{% endblock %}
