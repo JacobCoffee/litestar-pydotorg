@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING
 from pydotorg.domains.admin.services import (
     BlogAdminService,
     DashboardService,
+    EmailAdminService,
     EventAdminService,
     JobAdminService,
     PageAdminService,
@@ -112,6 +113,18 @@ async def provide_task_admin_service() -> TaskAdminService:
     return TaskAdminService()
 
 
+async def provide_email_admin_service(db_session: AsyncSession) -> EmailAdminService:
+    """Provide an EmailAdminService instance.
+
+    Args:
+        db_session: Database session
+
+    Returns:
+        EmailAdminService instance
+    """
+    return EmailAdminService(session=db_session)
+
+
 def get_admin_dependencies() -> dict:
     """Get all admin domain dependency providers.
 
@@ -127,4 +140,5 @@ def get_admin_dependencies() -> dict:
         "page_admin_service": provide_page_admin_service,
         "blog_admin_service": provide_blog_admin_service,
         "task_admin_service": provide_task_admin_service,
+        "email_admin_service": provide_email_admin_service,
     }

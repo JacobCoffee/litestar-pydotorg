@@ -1,0 +1,148 @@
+{% extends "admin/base.html.jinja2" %}
+
+{% block title %}Email Templates - Python.org Admin{% endblock %}
+
+{% block admin_content %}
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold text-python-blue">Email Templates</h1>
+            <p class="text-base-content/70 mt-1">Create and manage email templates</p>
+        </div>
+        <a href="/admin/email/templates/new" class="btn btn-primary gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            New Template
+        </a>
+    </div>
+
+    <div class="flex gap-2">
+        <a
+            href="/admin/email/templates"
+            class="btn btn-sm {% if not request.query_params.get('status') %}btn-primary{% else %}btn-ghost{% endif %}"
+            hx-boost="true"
+        >
+            All Templates
+            {% if stats and stats.total_templates %}
+            <span class="badge badge-sm">{{ stats.total_templates }}</span>
+            {% endif %}
+        </a>
+        <a
+            href="/admin/email/templates?status=active"
+            class="btn btn-sm {% if request.query_params.get('status') == 'active' %}btn-primary{% else %}btn-ghost{% endif %}"
+            hx-boost="true"
+        >
+            Active
+            {% if stats and stats.active_templates %}
+            <span class="badge badge-success badge-sm">{{ stats.active_templates }}</span>
+            {% endif %}
+        </a>
+        <a
+            href="/admin/email/templates?status=inactive"
+            class="btn btn-sm {% if request.query_params.get('status') == 'inactive' %}btn-primary{% else %}btn-ghost{% endif %}"
+            hx-boost="true"
+        >
+            Inactive
+        </a>
+        <div class="divider divider-horizontal"></div>
+        {% for type in template_types %}
+        <a
+            href="/admin/email/templates?type={{ type }}"
+            class="btn btn-sm {% if request.query_params.get('type') == type %}btn-primary{% else %}btn-ghost{% endif %}"
+            hx-boost="true"
+        >
+            {{ type|title }}
+        </a>
+        {% endfor %}
+    </div>
+
+    <div id="templates-list">
+        {% if templates %}
+        <div class="space-y-4">
+            {% for template in templates %}
+            {% include 'admin/email/partials/template_row.html.jinja2' %}
+            {% endfor %}
+        </div>
+
+        {% if pagination and pagination.total > pagination.limit %}
+        <div class="flex justify-center mt-6">
+            <div class="join">
+                {% if pagination.offset > 0 %}
+                <button
+                    class="join-item btn btn-sm"
+                    hx-get="/admin/email/templates?status={{ request.query_params.get('status', '') }}&type={{ request.query_params.get('type', '') }}&limit={{ pagination.limit }}&offset={{ [0, pagination.offset - pagination.limit]|max }}"
+                    hx-target="#templates-list"
+                    hx-swap="outerHTML"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                    Previous
+                </button>
+                {% endif %}
+
+                {% set current_page = (pagination.offset // pagination.limit) + 1 %}
+                {% set total_pages = (pagination.total // pagination.limit) + (1 if pagination.total % pagination.limit else 0) %}
+
+                <button class="join-item btn btn-sm btn-active">
+                    Page {{ current_page }} of {{ total_pages }}
+                </button>
+
+                {% if pagination.offset + pagination.limit < pagination.total %}
+                <button
+                    class="join-item btn btn-sm"
+                    hx-get="/admin/email/templates?status={{ request.query_params.get('status', '') }}&type={{ request.query_params.get('type', '') }}&limit={{ pagination.limit }}&offset={{ pagination.offset + pagination.limit }}"
+                    hx-target="#templates-list"
+                    hx-swap="outerHTML"
+                >
+                    Next
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+        {% else %}
+        <div class="card bg-base-100 shadow-lg border border-base-300">
+            <div class="card-body text-center py-12">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-base-content/30 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <h3 class="text-xl font-bold mb-2">No Templates Found</h3>
+                <p class="text-base-content/60 mb-4">
+                    {% if request.query_params.get('status') or request.query_params.get('type') %}
+                    No templates match your filters
+                    {% else %}
+                    Get started by creating your first email template
+                    {% endif %}
+                </p>
+                <a href="/admin/email/templates/new" class="btn btn-primary btn-sm">
+                    Create Template
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<dialog id="template_preview_modal" class="modal" hx-disable>
+    <div class="modal-box max-w-4xl">
+        <button type="button" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onclick="template_preview_modal.close()">✕</button>
+        <div id="template_preview_content"></div>
+    </div>
+    <div class="modal-backdrop" onclick="template_preview_modal.close()"></div>
+</dialog>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.body.addEventListener('htmx:afterSwap', function(evt) {
+        if (evt.detail.target.id === 'template_preview_content') {
+            template_preview_modal.showModal();
+        }
+    });
+</script>
+{% endblock %}

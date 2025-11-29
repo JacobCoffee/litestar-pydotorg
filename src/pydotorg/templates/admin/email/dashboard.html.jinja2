@@ -1,0 +1,153 @@
+{% extends "admin/base.html.jinja2" %}
+
+{% block title %}Email Management - Python.org Admin{% endblock %}
+
+{% block admin_content %}
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold text-python-blue">Email Management</h1>
+            <p class="text-base-content/70 mt-1">Manage email templates and view delivery logs</p>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="stats shadow-lg border border-base-300">
+            <div class="stat">
+                <div class="stat-figure text-python-blue">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                </div>
+                <div class="stat-title">Total Templates</div>
+                <div class="stat-value text-python-blue">{{ stats.template_count if stats else 0 }}</div>
+                <div class="stat-desc">
+                    Email templates available
+                </div>
+            </div>
+        </div>
+
+        <div class="stats shadow-lg border border-base-300">
+            <div class="stat">
+                <div class="stat-figure text-success">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 19v-8.93a2 2 0 01.89-1.664l7-4.666a2 2 0 012.22 0l7 4.666A2 2 0 0121 10.07V19M3 19a2 2 0 002 2h14a2 2 0 002-2M3 19l6.75-4.5M21 19l-6.75-4.5M3 10l6.75 4.5M21 10l-6.75 4.5m0 0l-1.14.76a2 2 0 01-2.22 0l-1.14-.76" />
+                    </svg>
+                </div>
+                <div class="stat-title">Sent (24h)</div>
+                <div class="stat-value text-success">{{ stats.recent_sends_count if stats else 0 }}</div>
+                <div class="stat-desc">Successfully delivered</div>
+            </div>
+        </div>
+
+        <div class="stats shadow-lg border border-base-300">
+            <div class="stat">
+                <div class="stat-figure text-error">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                </div>
+                <div class="stat-title">Failed (24h)</div>
+                <div class="stat-value text-error">{{ stats.failed_count if stats else 0 }}</div>
+                <div class="stat-desc">
+                    {% if stats and stats.failed_count > 0 %}
+                    Needs attention
+                    {% else %}
+                    All good
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="card bg-base-100 shadow-lg border border-base-300">
+            <div class="card-body">
+                <h2 class="card-title text-python-blue">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    Email Templates
+                </h2>
+                <p class="text-base-content/70">
+                    Create and manage reusable email templates for newsletters, notifications, and transactional emails.
+                </p>
+                <div class="card-actions justify-end mt-4">
+                    <a href="/admin/email/templates" class="btn btn-primary btn-sm">
+                        Manage Templates
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card bg-base-100 shadow-lg border border-base-300">
+            <div class="card-body">
+                <h2 class="card-title text-python-blue">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                    </svg>
+                    Delivery Logs
+                </h2>
+                <p class="text-base-content/70">
+                    View email delivery status, track sent emails, and troubleshoot failed deliveries.
+                </p>
+                <div class="card-actions justify-end mt-4">
+                    <a href="/admin/email/logs" class="btn btn-primary btn-sm">
+                        View Logs
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if recent_activity %}
+    <div class="card bg-base-100 shadow-lg border border-base-300">
+        <div class="card-body">
+            <h2 class="card-title text-python-blue">Recent Activity</h2>
+            <div class="overflow-x-auto">
+                <table class="table table-zebra">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Template</th>
+                            <th>Recipient</th>
+                            <th>Subject</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for log in recent_activity %}
+                        <tr>
+                            <td>
+                                <div class="text-sm">
+                                    {{ log.created_at.strftime('%b %d, %H:%M') }}
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge badge-outline badge-sm">
+                                    {{ log.template_name }}
+                                </span>
+                            </td>
+                            <td>{{ log.recipient_email }}</td>
+                            <td>{{ log.subject[:50] }}{% if log.subject|length > 50 %}...{% endif %}</td>
+                            <td>
+                                {% if log.status == 'sent' %}
+                                <span class="badge badge-success badge-sm">Sent</span>
+                                {% elif log.status == 'failed' %}
+                                <span class="badge badge-error badge-sm">Failed</span>
+                                {% elif log.status == 'bounced' %}
+                                <span class="badge badge-warning badge-sm">Bounced</span>
+                                {% else %}
+                                <span class="badge badge-ghost badge-sm">{{ log.status }}</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

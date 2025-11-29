@@ -1,0 +1,182 @@
+{% extends "admin/base.html.jinja2" %}
+
+{% block title %}Email Log - Python.org Admin{% endblock %}
+
+{% block admin_content %}
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold text-python-blue">Email Log Details</h1>
+            <p class="text-base-content/70 mt-1">
+                Sent {{ log.created.strftime('%B %d, %Y at %H:%M') }}
+            </p>
+        </div>
+        <a href="/admin/email/logs" class="btn btn-ghost gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to Logs
+        </a>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2 space-y-6">
+            <div class="card bg-base-100 shadow-lg border border-base-300">
+                <div class="card-body">
+                    <h2 class="card-title text-python-blue">Email Details</h2>
+
+                    <div class="space-y-4">
+                        <div>
+                            <div class="text-sm font-semibold text-base-content/70">Subject</div>
+                            <div class="mt-1 text-lg font-semibold">{{ log.subject }}</div>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <div class="text-sm font-semibold text-base-content/70">Recipient</div>
+                                <div class="mt-1">{{ log.recipient_email }}</div>
+                            </div>
+
+                            <div>
+                                <div class="text-sm font-semibold text-base-content/70">Template</div>
+                                <div class="mt-1">
+                                    <span class="badge badge-outline">{{ log.template_name }}</span>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="text-sm font-semibold text-base-content/70">Status</div>
+                                <div class="mt-1">
+                                    {% if log.status == 'sent' %}
+                                    <span class="badge badge-success">Sent</span>
+                                    {% elif log.status == 'failed' %}
+                                    <span class="badge badge-error">Failed</span>
+                                    {% elif log.status == 'bounced' %}
+                                    <span class="badge badge-warning">Bounced</span>
+                                    {% else %}
+                                    <span class="badge badge-ghost">{{ log.status|title }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="text-sm font-semibold text-base-content/70">Sent At</div>
+                                <div class="mt-1 text-sm">
+                                    {{ log.created.strftime('%B %d, %Y') }}<br>
+                                    {{ log.created.strftime('%H:%M:%S') }}
+                                </div>
+                            </div>
+                        </div>
+
+                        {% if log.error_message %}
+                        <div class="divider"></div>
+
+                        <div class="alert alert-error">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                            </svg>
+                            <div>
+                                <h3 class="font-bold">Error Details</h3>
+                                <div class="text-sm font-mono mt-1">{{ log.error_message }}</div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="space-y-6">
+            <div class="card bg-base-100 shadow-lg border border-base-300">
+                <div class="card-body">
+                    <h2 class="card-title text-python-blue">Timeline</h2>
+
+                    <ul class="timeline timeline-vertical">
+                        <li>
+                            <div class="timeline-start timeline-box">
+                                <div class="text-sm font-semibold">Created</div>
+                                <div class="text-xs text-base-content/70">
+                                    {{ log.created.strftime('%H:%M:%S') }}
+                                </div>
+                            </div>
+                            <div class="timeline-middle">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <hr class="bg-primary" />
+                        </li>
+                        <li>
+                            <hr class="bg-primary" />
+                            <div class="timeline-middle">
+                                {% if log.status == 'sent' %}
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-success" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                                {% elif log.status == 'failed' %}
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-error" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                                </svg>
+                                {% else %}
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+                                </svg>
+                                {% endif %}
+                            </div>
+                            <div class="timeline-end timeline-box">
+                                <div class="text-sm font-semibold">{{ log.status|title }}</div>
+                                <div class="text-xs text-base-content/70">
+                                    {{ log.updated.strftime('%H:%M:%S') }}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card bg-base-100 shadow-lg border border-base-300">
+                <div class="card-body">
+                    <h2 class="card-title text-python-blue">Actions</h2>
+
+                    <div class="space-y-2">
+                        {% if log.status == 'failed' %}
+                        <button
+                            class="btn btn-outline btn-block justify-start gap-2"
+                            hx-post="/admin/email/logs/{{ log.id }}/retry"
+                            hx-confirm="Retry sending this email?"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                            </svg>
+                            Retry Send
+                        </button>
+                        {% endif %}
+
+                        <a
+                            href="/admin/email/templates?search={{ log.template_name }}"
+                            class="btn btn-outline btn-block justify-start gap-2"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            View Template
+                        </a>
+
+                        <a
+                            href="/admin/email/logs?recipient={{ log.recipient_email }}"
+                            class="btn btn-outline btn-block justify-start gap-2"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                            Other Emails to Recipient
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

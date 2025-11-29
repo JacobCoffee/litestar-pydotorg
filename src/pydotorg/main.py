@@ -46,6 +46,7 @@ from pydotorg.domains.about import AboutRenderController
 from pydotorg.domains.admin import (
     AdminBlogsController,
     AdminDashboardController,
+    AdminEmailController,
     AdminEventsController,
     AdminJobsController,
     AdminLogsController,
@@ -113,6 +114,7 @@ from pydotorg.domains.jobs import (
 from pydotorg.domains.mailing import (
     EmailLogController,
     EmailTemplateController,
+    get_mailing_dependencies,
 )
 from pydotorg.domains.minutes import (
     MinutesController,
@@ -233,6 +235,7 @@ def get_all_dependencies() -> dict:
     deps.update(get_successstories_dependencies())
     deps.update(get_work_groups_dependencies())
     deps.update(get_search_dependencies())
+    deps.update(get_mailing_dependencies())
     deps.update(get_admin_dependencies())
     return deps
 
@@ -448,6 +451,37 @@ async def lifespan(app: Litestar) -> AsyncGenerator[None]:
 
     log_startup_banner()
 
+    async with sqlalchemy_config.get_engine().connect() as conn:
+        try:
+            await conn.execute(text("SELECT 1"))
+        except Exception as e:
+            error_msg = str(e)
+            sys.stderr.write("\n")
+            sys.stderr.write("\033[91m" + "=" * 60 + "\033[0m\n")
+            sys.stderr.write("\033[91m❌ DATABASE CONNECTION FAILED\033[0m\n")
+            sys.stderr.write("\033[91m" + "=" * 60 + "\033[0m\n\n")
+
+            if "Connection refused" in error_msg:
+                sys.stderr.write("\033[93mPostgreSQL is not running.\033[0m\n\n")
+                sys.stderr.write("To start the database, run:\n")
+                sys.stderr.write("\033[96m  make infra-up\033[0m\n\n")
+            elif "password authentication failed" in error_msg:
+                sys.stderr.write("\033[93mDatabase authentication failed.\033[0m\n\n")
+                sys.stderr.write("Check your DATABASE_URL environment variable.\n")
+            elif "does not exist" in error_msg:
+                sys.stderr.write("\033[93mDatabase does not exist.\033[0m\n\n")
+                sys.stderr.write("Run migrations or create the database:\n")
+                sys.stderr.write("\033[96m  make db-migrate\033[0m\n\n")
+            else:
+                sys.stderr.write(f"\033[93m{error_msg}\033[0m\n\n")
+
+            db_url_str = str(settings.database_url)
+            obscured = db_url_str.replace(db_url_str.split("@")[0].split(":")[-1], "***") if "@" in db_url_str else db_url_str
+            sys.stderr.write(f"Connection string: {obscured}\n")
+            sys.stderr.write("\033[91m" + "=" * 60 + "\033[0m\n\n")
+            sys.stderr.flush()
+            raise
+
     yield
 
     sys.stdout.write("\n\033[93m⏹ Shutting down application...\033[0m\n")
@@ -523,6 +557,7 @@ app = Litestar(
         SearchRenderController,
         AdminBlogsController,
         AdminDashboardController,
+        AdminEmailController,
         AdminEventsController,
         AdminJobsController,
         AdminLogsController,

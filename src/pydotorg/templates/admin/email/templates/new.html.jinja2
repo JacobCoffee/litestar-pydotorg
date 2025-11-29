@@ -1,0 +1,246 @@
+{% extends "admin/base.html.jinja2" %}
+
+{% block title %}{% if template %}Edit{% else %}New{% endif %} Email Template - Python.org Admin{% endblock %}
+
+{% block admin_content %}
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold text-python-blue">
+                {% if template %}Edit{% else %}New{% endif %} Email Template
+            </h1>
+            <p class="text-base-content/70 mt-1">
+                {% if template %}
+                Update template: {{ template.display_name }}
+                {% else %}
+                Create a new email template
+                {% endif %}
+            </p>
+        </div>
+        <a href="/admin/email/templates" class="btn btn-ghost gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to Templates
+        </a>
+    </div>
+
+    <form
+        method="post"
+        action="{% if template %}/admin/email/templates/{{ template.id }}{% else %}/admin/email/templates{% endif %}"
+        class="space-y-6"
+    >
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="card bg-base-100 shadow-lg border border-base-300">
+                <div class="card-body">
+                    <h2 class="card-title text-python-blue">Template Information</h2>
+
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-semibold">Internal Name</span>
+                            <span class="label-text-alt text-error">Required</span>
+                        </label>
+                        <input
+                            type="text"
+                            name="internal_name"
+                            value="{{ template.internal_name if template else '' }}"
+                            class="input input-bordered"
+                            placeholder="job_approved"
+                            pattern="[a-z_]+"
+                            required
+                            {% if template %}readonly{% endif %}
+                        />
+                        <label class="label">
+                            <span class="label-text-alt">Lowercase letters and underscores only. Used in code.</span>
+                        </label>
+                    </div>
+
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-semibold">Display Name</span>
+                            <span class="label-text-alt text-error">Required</span>
+                        </label>
+                        <input
+                            type="text"
+                            name="display_name"
+                            value="{{ template.display_name if template else '' }}"
+                            class="input input-bordered"
+                            placeholder="Job Approved Notification"
+                            required
+                        />
+                        <label class="label">
+                            <span class="label-text-alt">Human-readable name for admin interface</span>
+                        </label>
+                    </div>
+
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-semibold">Description</span>
+                        </label>
+                        <textarea
+                            name="description"
+                            class="textarea textarea-bordered h-24"
+                            placeholder="Sent when a job posting is approved by an admin"
+                        >{{ template.description if template else '' }}</textarea>
+                        <label class="label">
+                            <span class="label-text-alt">When and how this template is used</span>
+                        </label>
+                    </div>
+
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-semibold">Template Type</span>
+                            <span class="label-text-alt text-error">Required</span>
+                        </label>
+                        <select name="template_type" class="select select-bordered" required>
+                            <option value="transactional" {% if template and template.template_type.value == 'transactional' %}selected{% endif %}>Transactional</option>
+                            <option value="notification" {% if template and template.template_type.value == 'notification' %}selected{% endif %}>Notification</option>
+                            <option value="newsletter" {% if template and template.template_type.value == 'newsletter' %}selected{% endif %}>Newsletter</option>
+                            <option value="marketing" {% if template and template.template_type.value == 'marketing' %}selected{% endif %}>Marketing</option>
+                            <option value="system" {% if template and template.template_type.value == 'system' %}selected{% endif %}>System</option>
+                        </select>
+                    </div>
+
+                    <div class="form-control">
+                        <label class="label cursor-pointer">
+                            <span class="label-text font-semibold">Active</span>
+                            <input
+                                type="checkbox"
+                                name="is_active"
+                                class="toggle toggle-success"
+                                {% if not template or template.is_active %}checked{% endif %}
+                            />
+                        </label>
+                        <label class="label">
+                            <span class="label-text-alt">Only active templates can be used to send emails</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card bg-base-100 shadow-lg border border-base-300">
+                <div class="card-body">
+                    <h2 class="card-title text-python-blue">Template Variables</h2>
+                    <div class="alert alert-info">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <div class="text-sm">
+                            <p class="font-semibold mb-1">Jinja2 Template Syntax</p>
+                            <p>Use {{ "{{ variable }}" }} for variables</p>
+                            <p>Use {{ "{% if condition %}" }}...{{ "{% endif %}" }} for logic</p>
+                            <p>Use {{ "{% for item in items %}" }}...{{ "{% endfor %}" }} for loops</p>
+                        </div>
+                    </div>
+                    <div class="text-sm text-base-content/70 space-y-2">
+                        <p><strong>Common variables:</strong></p>
+                        <ul class="list-disc list-inside ml-2 space-y-1">
+                            <li><code>{{ "{{ user.username }}" }}</code> - User name</li>
+                            <li><code>{{ "{{ user.email }}" }}</code> - User email</li>
+                            <li><code>{{ "{{ site_name }}" }}</code> - Site name</li>
+                            <li><code>{{ "{{ site_url }}" }}</code> - Site URL</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card bg-base-100 shadow-lg border border-base-300">
+            <div class="card-body">
+                <h2 class="card-title text-python-blue">Email Content</h2>
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text font-semibold">Subject Line</span>
+                        <span class="label-text-alt text-error">Required</span>
+                    </label>
+                    <input
+                        type="text"
+                        name="subject"
+                        value="{{ template.subject if template else '' }}"
+                        class="input input-bordered font-mono"
+                        placeholder="Your job '{{ "{{ job.title }}" }}' has been approved!"
+                        required
+                    />
+                    <label class="label">
+                        <span class="label-text-alt">Supports Jinja2 variables</span>
+                    </label>
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text font-semibold">Plain Text Content</span>
+                        <span class="label-text-alt text-error">Required</span>
+                    </label>
+                    <textarea
+                        name="content_text"
+                        class="textarea textarea-bordered h-64 font-mono text-sm"
+                        placeholder="Hello {{ '{{ user.username }}' }},&#10;&#10;Your job posting has been approved!&#10;&#10;Best regards,&#10;The Python.org Team"
+                        required
+                    >{{ template.content_text if template else '' }}</textarea>
+                    <label class="label">
+                        <span class="label-text-alt">Fallback for email clients that don't support HTML</span>
+                    </label>
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text font-semibold">HTML Content</span>
+                        <span class="label-text-alt">Optional</span>
+                    </label>
+                    <textarea
+                        name="content_html"
+                        class="textarea textarea-bordered h-64 font-mono text-sm"
+                        placeholder="<p>Hello <strong>{{ '{{ user.username }}' }}</strong>,</p>&#10;<p>Your job posting has been approved!</p>"
+                    >{{ template.content_html if template else '' }}</textarea>
+                    <label class="label">
+                        <span class="label-text-alt">Rich HTML email content (optional)</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex gap-4 justify-end">
+            <button
+                type="button"
+                class="btn btn-ghost gap-2"
+                hx-post="{% if template %}/admin/email/templates/{{ template.id }}/preview{% else %}/admin/email/templates/preview{% endif %}"
+                hx-target="#template_preview_content"
+                hx-swap="innerHTML"
+                hx-include="[name='subject'],[name='content_text'],[name='content_html']"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                Preview
+            </button>
+            <button type="submit" class="btn btn-primary gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                {% if template %}Update{% else %}Create{% endif %} Template
+            </button>
+        </div>
+    </form>
+</div>
+
+<dialog id="template_preview_modal" class="modal">
+    <div class="modal-box max-w-4xl">
+        <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+        </form>
+        <div id="template_preview_content"></div>
+    </div>
+</dialog>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.body.addEventListener('htmx:afterSwap', function(evt) {
+        if (evt.detail.target.id === 'template_preview_content') {
+            template_preview_modal.showModal();
+        }
+    });
+</script>
+{% endblock %}

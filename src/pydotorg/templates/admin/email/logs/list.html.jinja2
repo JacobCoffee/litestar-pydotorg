@@ -1,0 +1,190 @@
+{% extends "admin/base.html.jinja2" %}
+
+{% block title %}Email Logs - Python.org Admin{% endblock %}
+
+{% block admin_content %}
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold text-python-blue">Email Delivery Logs</h1>
+            <p class="text-base-content/70 mt-1">Track email delivery status and troubleshoot issues</p>
+        </div>
+        <a href="/admin/email" class="btn btn-ghost gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to Email
+        </a>
+    </div>
+
+    <div class="card bg-base-100 shadow-lg border border-base-300">
+        <div class="card-body">
+            <h2 class="card-title text-python-blue">Filters</h2>
+            <form
+                hx-get="/admin/email/logs"
+                hx-target="#logs-list"
+                hx-trigger="change, submit"
+                class="grid grid-cols-1 md:grid-cols-4 gap-4"
+            >
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text font-semibold">Status</span>
+                    </label>
+                    <select name="status" class="select select-bordered select-sm">
+                        <option value="">All Statuses</option>
+                        <option value="sent" {% if request.query_params.get('status') == 'sent' %}selected{% endif %}>Sent</option>
+                        <option value="failed" {% if request.query_params.get('status') == 'failed' %}selected{% endif %}>Failed</option>
+                        <option value="bounced" {% if request.query_params.get('status') == 'bounced' %}selected{% endif %}>Bounced</option>
+                        <option value="pending" {% if request.query_params.get('status') == 'pending' %}selected{% endif %}>Pending</option>
+                    </select>
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text font-semibold">Template</span>
+                    </label>
+                    <select name="template" class="select select-bordered select-sm">
+                        <option value="">All Templates</option>
+                        {% for template in available_templates %}
+                        <option value="{{ template.internal_name }}" {% if request.query_params.get('template') == template.internal_name %}selected{% endif %}>
+                            {{ template.display_name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text font-semibold">Recipient</span>
+                    </label>
+                    <input
+                        type="text"
+                        name="recipient"
+                        value="{{ request.query_params.get('recipient', '') }}"
+                        class="input input-bordered input-sm"
+                        placeholder="user@example.com"
+                    />
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text font-semibold">Time Range</span>
+                    </label>
+                    <select name="time_range" class="select select-bordered select-sm">
+                        <option value="24h" {% if request.query_params.get('time_range', '24h') == '24h' %}selected{% endif %}>Last 24 hours</option>
+                        <option value="7d" {% if request.query_params.get('time_range') == '7d' %}selected{% endif %}>Last 7 days</option>
+                        <option value="30d" {% if request.query_params.get('time_range') == '30d' %}selected{% endif %}>Last 30 days</option>
+                        <option value="all" {% if request.query_params.get('time_range') == 'all' %}selected{% endif %}>All time</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="flex gap-2">
+        <a
+            href="/admin/email/logs"
+            class="btn btn-sm {% if not request.query_params.get('status') %}btn-primary{% else %}btn-ghost{% endif %}"
+        >
+            All
+            {% if stats and stats.total_logs %}
+            <span class="badge badge-sm">{{ stats.total_logs }}</span>
+            {% endif %}
+        </a>
+        <a
+            href="/admin/email/logs?status=sent"
+            class="btn btn-sm {% if request.query_params.get('status') == 'sent' %}btn-primary{% else %}btn-ghost{% endif %}"
+        >
+            Sent
+            {% if stats and stats.sent_logs %}
+            <span class="badge badge-success badge-sm">{{ stats.sent_logs }}</span>
+            {% endif %}
+        </a>
+        <a
+            href="/admin/email/logs?status=failed"
+            class="btn btn-sm {% if request.query_params.get('status') == 'failed' %}btn-primary{% else %}btn-ghost{% endif %}"
+        >
+            Failed
+            {% if stats and stats.failed_logs %}
+            <span class="badge badge-error badge-sm">{{ stats.failed_logs }}</span>
+            {% endif %}
+        </a>
+        <a
+            href="/admin/email/logs?status=bounced"
+            class="btn btn-sm {% if request.query_params.get('status') == 'bounced' %}btn-primary{% else %}btn-ghost{% endif %}"
+        >
+            Bounced
+        </a>
+    </div>
+
+    <div id="logs-list">
+        {% if logs %}
+        <div class="space-y-4">
+            {% for log in logs %}
+            {% include 'admin/email/partials/log_row.html.jinja2' %}
+            {% endfor %}
+        </div>
+
+        {% if pagination and pagination.total > pagination.limit %}
+        <div class="flex justify-center mt-6">
+            <div class="join">
+                {% if pagination.offset > 0 %}
+                <button
+                    class="join-item btn btn-sm"
+                    hx-get="/admin/email/logs?status={{ request.query_params.get('status', '') }}&template={{ request.query_params.get('template', '') }}&recipient={{ request.query_params.get('recipient', '') }}&time_range={{ request.query_params.get('time_range', '24h') }}&limit={{ pagination.limit }}&offset={{ [0, pagination.offset - pagination.limit]|max }}"
+                    hx-target="#logs-list"
+                    hx-swap="outerHTML"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                    Previous
+                </button>
+                {% endif %}
+
+                {% set current_page = (pagination.offset // pagination.limit) + 1 %}
+                {% set total_pages = (pagination.total // pagination.limit) + (1 if pagination.total % pagination.limit else 0) %}
+
+                <button class="join-item btn btn-sm btn-active">
+                    Page {{ current_page }} of {{ total_pages }}
+                </button>
+
+                {% if pagination.offset + pagination.limit < pagination.total %}
+                <button
+                    class="join-item btn btn-sm"
+                    hx-get="/admin/email/logs?status={{ request.query_params.get('status', '') }}&template={{ request.query_params.get('template', '') }}&recipient={{ request.query_params.get('recipient', '') }}&time_range={{ request.query_params.get('time_range', '24h') }}&limit={{ pagination.limit }}&offset={{ pagination.offset + pagination.limit }}"
+                    hx-target="#logs-list"
+                    hx-swap="outerHTML"
+                >
+                    Next
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+        {% else %}
+        <div class="card bg-base-100 shadow-lg border border-base-300">
+            <div class="card-body text-center py-12">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-base-content/30 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 19v-8.93a2 2 0 01.89-1.664l7-4.666a2 2 0 012.22 0l7 4.666A2 2 0 0121 10.07V19M3 19a2 2 0 002 2h14a2 2 0 002-2M3 19l6.75-4.5M21 19l-6.75-4.5M3 10l6.75 4.5M21 10l-6.75 4.5m0 0l-1.14.76a2 2 0 01-2.22 0l-1.14-.76" />
+                </svg>
+                <h3 class="text-xl font-bold mb-2">No Email Logs Found</h3>
+                <p class="text-base-content/60 mb-4">
+                    {% if request.query_params.get('status') or request.query_params.get('template') or request.query_params.get('recipient') %}
+                    No emails match your filters
+                    {% else %}
+                    No emails have been sent yet
+                    {% endif %}
+                </p>
+                <a href="/admin/email/logs" class="btn btn-primary btn-sm">
+                    Clear Filters
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -2,6 +2,7 @@
 
 from pydotorg.domains.admin.controllers.blogs import AdminBlogsController
 from pydotorg.domains.admin.controllers.dashboard import AdminDashboardController
+from pydotorg.domains.admin.controllers.email import AdminEmailController
 from pydotorg.domains.admin.controllers.events import AdminEventsController
 from pydotorg.domains.admin.controllers.jobs import AdminJobsController
 from pydotorg.domains.admin.controllers.logs import AdminLogsController
@@ -14,6 +15,7 @@ from pydotorg.domains.admin.controllers.users import AdminUsersController
 __all__ = [
     "AdminBlogsController",
     "AdminDashboardController",
+    "AdminEmailController",
     "AdminEventsController",
     "AdminJobsController",
     "AdminLogsController",

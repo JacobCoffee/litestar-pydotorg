@@ -1,0 +1,292 @@
+{% extends "admin/base.html.jinja2" %}
+
+{% block title %}{{ template.display_name }} - Python.org Admin{% endblock %}
+
+{% block admin_content %}
+<div class="space-y-6">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div class="flex-1 min-w-0">
+            <h1 class="text-2xl sm:text-3xl font-bold text-python-blue truncate">{{ template.display_name }}</h1>
+            <p class="text-base-content/70 mt-1">
+                <code class="text-xs sm:text-sm break-all">{{ template.internal_name }}</code>
+            </p>
+        </div>
+        <div class="flex gap-2 flex-shrink-0">
+            <a href="/admin/email/templates" class="btn btn-ghost btn-sm sm:btn-md gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                <span class="hidden sm:inline">Back</span>
+            </a>
+            <a href="/admin/email/templates/{{ template.id }}/edit" class="btn btn-primary btn-sm sm:btn-md gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+                <span class="hidden sm:inline">Edit</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
+        <div class="lg:col-span-2 space-y-4 lg:space-y-6">
+            <div class="card bg-base-100 shadow-lg border border-base-300">
+                <div class="card-body p-4 sm:p-6">
+                    <h2 class="card-title text-python-blue text-lg sm:text-xl mb-4">Template Preview</h2>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="label px-0 py-1">
+                                <span class="label-text font-semibold text-sm">Subject</span>
+                            </label>
+                            <div class="bg-base-200 p-3 rounded-lg font-mono text-xs sm:text-sm break-words">
+                                {{ template.subject }}
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="label px-0 py-1">
+                                <span class="label-text font-semibold text-sm">Content</span>
+                            </label>
+                            <div role="tablist" class="tabs tabs-bordered tabs-sm sm:tabs-md w-full">
+                                <input type="radio" name="content_tabs" role="tab" class="tab" aria-label="Plain Text" checked />
+                                <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-4 mt-2">
+                                    {% if template.content_text and template.content_text != 'None' %}
+                                    <div class="bg-base-200 p-3 sm:p-4 rounded-lg font-mono text-xs sm:text-sm whitespace-pre-wrap max-h-96 overflow-y-auto">{{ template.content_text }}</div>
+                                    {% else %}
+                                    <div class="alert alert-warning">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                                        <span class="text-sm">No plain text content. <a href="/admin/email/templates/{{ template.id }}/edit" class="link">Edit template</a> to add content.</span>
+                                    </div>
+                                    {% endif %}
+                                </div>
+
+                                {% if template.content_html and template.content_html != 'None' %}
+                                <input type="radio" name="content_tabs" role="tab" class="tab" aria-label="HTML Source" />
+                                <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-4 mt-2">
+                                    <div class="bg-base-200 p-3 sm:p-4 rounded-lg font-mono text-xs sm:text-sm whitespace-pre-wrap max-h-96 overflow-y-auto">{{ template.content_html|e }}</div>
+                                </div>
+
+                                <input type="radio" name="content_tabs" role="tab" class="tab" aria-label="Rendered HTML" />
+                                <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-4 mt-2">
+                                    <div class="bg-white p-3 sm:p-4 rounded-lg max-h-96 overflow-y-auto border border-base-300 shadow-inner">
+                                        {{ template.content_html|safe }}
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% if usage_stats %}
+            <div class="card bg-base-100 shadow-lg border border-base-300">
+                <div class="card-body p-4 sm:p-6">
+                    <h2 class="card-title text-python-blue text-lg sm:text-xl mb-3">Usage Statistics</h2>
+                    <div class="stats stats-vertical sm:stats-horizontal shadow w-full">
+                        <div class="stat px-4 py-3">
+                            <div class="stat-title text-xs">Total Sent</div>
+                            <div class="stat-value text-primary text-2xl sm:text-3xl">{{ usage_stats.total_sent }}</div>
+                        </div>
+                        <div class="stat px-4 py-3">
+                            <div class="stat-title text-xs">Success Rate</div>
+                            <div class="stat-value text-success text-2xl sm:text-3xl">{{ usage_stats.success_rate }}%</div>
+                        </div>
+                        <div class="stat px-4 py-3">
+                            <div class="stat-title text-xs">Last Used</div>
+                            <div class="stat-value text-xs sm:text-sm">
+                                {% if usage_stats.last_sent %}
+                                {{ usage_stats.last_sent.strftime('%b %d, %Y') }}
+                                {% else %}
+                                Never
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="space-y-4 lg:space-y-6">
+            <div class="card bg-gradient-to-br from-primary/5 to-primary/10 shadow-lg border-2 border-primary/20">
+                <div class="card-body p-4 sm:p-5">
+                    <h2 class="card-title text-primary text-base sm:text-lg gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                        <span>Send Test Email</span>
+                    </h2>
+                    <p class="text-xs sm:text-sm text-base-content/70 mb-4">Send a test email to verify the template renders correctly.</p>
+
+                    <form
+                        id="send-test-form"
+                        hx-post="/admin/email/templates/{{ template.id }}/send-test"
+                        hx-target="#send-test-result"
+                        hx-swap="innerHTML"
+                    >
+                        <div class="form-control mb-3">
+                            <label class="label px-0 py-1">
+                                <span class="label-text font-semibold text-sm">Recipient Email</span>
+                            </label>
+                            <input
+                                type="email"
+                                name="test_email"
+                                class="input input-bordered input-sm w-full"
+                                placeholder="test@example.com"
+                                required
+                            />
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-sm w-full gap-2" id="send-test-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" id="send-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                            </svg>
+                            <span class="loading loading-spinner loading-sm hidden" id="send-spinner"></span>
+                            <span id="send-text">Send Test Email</span>
+                            <span class="hidden" id="sending-text">Sending...</span>
+                        </button>
+                    </form>
+
+                    <div id="send-test-result" class="mt-3 empty:hidden"></div>
+
+                    <div class="divider my-3 text-xs">MailDev</div>
+                    <a href="http://localhost:1080" target="_blank" class="btn btn-ghost btn-xs sm:btn-sm w-full gap-2 normal-case">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                        Open MailDev Inbox
+                    </a>
+                </div>
+            </div>
+
+            <div class="card bg-base-100 shadow-lg border border-base-300">
+                <div class="card-body p-4 sm:p-5">
+                    <h2 class="card-title text-python-blue text-base sm:text-lg mb-3">Details</h2>
+
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between py-1">
+                            <div class="text-xs sm:text-sm font-semibold text-base-content/70">Status</div>
+                            <div>
+                                {% if template.is_active %}
+                                <span class="badge badge-success badge-sm">Active</span>
+                                {% else %}
+                                <span class="badge badge-ghost badge-sm">Inactive</span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between py-1">
+                            <div class="text-xs sm:text-sm font-semibold text-base-content/70">Type</div>
+                            <div>
+                                <span class="badge badge-outline badge-sm">{{ template.template_type.value|title }}</span>
+                            </div>
+                        </div>
+
+                        {% if template.description %}
+                        <div class="py-1">
+                            <div class="text-xs sm:text-sm font-semibold text-base-content/70 mb-1">Description</div>
+                            <div class="text-xs sm:text-sm text-base-content/80">{{ template.description }}</div>
+                        </div>
+                        {% endif %}
+
+                        <div class="divider my-2"></div>
+
+                        <div class="flex items-center justify-between py-1">
+                            <div class="text-xs sm:text-sm font-semibold text-base-content/70">Created</div>
+                            <div class="text-xs text-right">{{ template.created_at.strftime('%b %d, %Y') }}</div>
+                        </div>
+
+                        <div class="flex items-center justify-between py-1">
+                            <div class="text-xs sm:text-sm font-semibold text-base-content/70">Updated</div>
+                            <div class="text-xs text-right">{{ template.updated_at.strftime('%b %d, %Y') }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card bg-base-100 shadow-lg border border-base-300">
+                <div class="card-body p-4 sm:p-5">
+                    <h2 class="card-title text-python-blue text-base sm:text-lg mb-3">Quick Actions</h2>
+
+                    <div class="space-y-2">
+                        <button
+                            class="btn btn-outline btn-sm w-full justify-start gap-2 h-auto py-2"
+                            hx-get="/admin/email/templates/{{ template.id }}/preview"
+                            hx-target="#template_preview_content"
+                            hx-swap="innerHTML"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                            <span class="text-xs sm:text-sm">Preview with Data</span>
+                        </button>
+
+                        <button
+                            class="btn btn-outline btn-sm w-full justify-start gap-2 h-auto py-2"
+                            hx-post="/admin/email/templates/{{ template.id }}/duplicate"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                            </svg>
+                            <span class="text-xs sm:text-sm">Duplicate Template</span>
+                        </button>
+
+                        <div class="divider my-2 text-xs">Danger Zone</div>
+
+                        <button
+                            class="btn btn-error btn-outline btn-sm w-full justify-start gap-2 h-auto py-2"
+                            hx-delete="/admin/email/templates/{{ template.id }}"
+                            hx-confirm="Are you sure you want to delete this template? This action cannot be undone."
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                            <span class="text-xs sm:text-sm">Delete Template</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<dialog id="template_preview_modal" class="modal" hx-disable>
+    <div class="modal-box max-w-4xl">
+        <button type="button" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onclick="template_preview_modal.close()">✕</button>
+        <div id="template_preview_content"></div>
+    </div>
+    <div class="modal-backdrop" onclick="template_preview_modal.close()"></div>
+</dialog>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.body.addEventListener('htmx:afterSwap', function(evt) {
+        if (evt.detail.target.id === 'template_preview_content') {
+            template_preview_modal.showModal();
+        }
+    });
+
+    // Send test email loading states
+    const sendForm = document.getElementById('send-test-form');
+    if (sendForm) {
+        sendForm.addEventListener('htmx:beforeRequest', function() {
+            document.getElementById('send-icon').classList.add('hidden');
+            document.getElementById('send-spinner').classList.remove('hidden');
+            document.getElementById('send-text').classList.add('hidden');
+            document.getElementById('sending-text').classList.remove('hidden');
+            document.getElementById('send-test-btn').disabled = true;
+        });
+
+        sendForm.addEventListener('htmx:afterRequest', function() {
+            document.getElementById('send-icon').classList.remove('hidden');
+            document.getElementById('send-spinner').classList.add('hidden');
+            document.getElementById('send-text').classList.remove('hidden');
+            document.getElementById('sending-text').classList.add('hidden');
+            document.getElementById('send-test-btn').disabled = false;
+        });
+    }
+</script>
+{% endblock %}

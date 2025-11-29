@@ -4,6 +4,7 @@ from pydotorg.domains.admin import urls
 from pydotorg.domains.admin.controllers import (
     AdminBlogsController,
     AdminDashboardController,
+    AdminEmailController,
     AdminEventsController,
     AdminJobsController,
     AdminLogsController,
@@ -24,6 +25,7 @@ from pydotorg.domains.admin.schemas import (
 from pydotorg.domains.admin.services import (
     BlogAdminService,
     DashboardService,
+    EmailAdminService,
     EventAdminService,
     JobAdminService,
     PageAdminService,
@@ -35,6 +37,7 @@ from pydotorg.domains.admin.services import (
 __all__ = [
     "AdminBlogsController",
     "AdminDashboardController",
+    "AdminEmailController",
     "AdminEventsController",
     "AdminJobsController",
     "AdminLogsController",
@@ -48,6 +51,7 @@ __all__ = [
     "BlogAdminService",
     "DashboardService",
     "DashboardStats",
+    "EmailAdminService",
     "EventAdminService",
     "JobAdminService",
     "PageAdminService",
