@@ -1189,7 +1189,7 @@ async def _check_litestar_session(self, request: Request) -> User | None:
 | /admin/events   | ✅ Done     | Event management with calendar, feature/unfeature  |
 | /admin/pages    | ✅ Done     | CMS page management with publish/unpublish         |
 | /admin/blogs    | ✅ Done     | Blog/feed management with activate/deactivate      |
-| /admin/email    | ⏳ Pending  | Email template management + logs viewer            |
+| /admin/email    | ✅ Done     | Email template management + logs viewer + send test|
 | /admin/settings | ✅ Done     | Site settings (placeholder)                        |
 | /admin/logs     | ✅ Done     | Activity audit log (placeholder)                   |
 
@@ -1238,57 +1238,70 @@ async def _check_litestar_session(self, request: Request) -> User | None:
 ### Task 10.2b: Admin Email UI
 **Agent**: `python-backend-engineer`
 **Priority**: HIGH
-**Status**: ⏳ PENDING
+**Status**: ✅ COMPLETE (2025-11-29)
 
 **Objective**: Create admin UI for email template management and email log viewing.
 
-**Routes to Implement**:
-| Route | Description |
-|-------|-------------|
-| `/admin/email` | Dashboard with template count, recent sends, failed count |
-| `/admin/email/templates` | List all email templates with search/filter |
-| `/admin/email/templates/new` | Create new email template form |
-| `/admin/email/templates/{id}` | View/edit template with preview |
-| `/admin/email/templates/{id}/preview` | HTMX preview with sample context |
-| `/admin/email/templates/{id}/send-test` | Send test email modal |
-| `/admin/email/logs` | Email log viewer with filters |
-| `/admin/email/logs/{id}` | View individual log entry |
+**Routes Implemented**:
+| Route | Description | Status |
+|-------|-------------|--------|
+| `/admin/email` | Dashboard with template count, recent sends, failed count | ✅ Done |
+| `/admin/email/templates` | List all email templates with search/filter | ✅ Done |
+| `/admin/email/templates/new` | Create new email template form | ✅ Done |
+| `/admin/email/templates/{id}` | View/edit template with preview | ✅ Done |
+| `/admin/email/templates/{id}/preview` | HTMX preview with sample context | ✅ Done |
+| `/admin/email/templates/{id}/send-test` | Send test email modal | ✅ Done |
+| `/admin/email/logs` | Email log viewer with filters | ✅ Done |
+| `/admin/email/logs/{id}` | View individual log entry | ✅ Done |
 
-**Tasks**:
-- [ ] Create `AdminEmailController` with HTML template routes
-- [ ] Create `EmailAdminService` for admin-specific queries (stats, recent, etc.)
-- [ ] Create templates:
-  - [ ] `admin/email/index.html.jinja2` - Dashboard overview
-  - [ ] `admin/email/templates/list.html.jinja2` - Template list
-  - [ ] `admin/email/templates/form.html.jinja2` - Create/edit form
-  - [ ] `admin/email/templates/detail.html.jinja2` - View with preview
-  - [ ] `admin/email/logs/list.html.jinja2` - Log viewer
-  - [ ] `admin/email/logs/detail.html.jinja2` - Log entry detail
-  - [ ] `admin/email/partials/template_row.html.jinja2` - HTMX row
-  - [ ] `admin/email/partials/log_row.html.jinja2` - HTMX row
-  - [ ] `admin/email/partials/preview.html.jinja2` - Rendered preview
-- [ ] Add sidebar link under admin navigation
-- [ ] Register controller in `main.py`
-- [ ] Add dependency provider
+**Tasks Completed**:
+- [x] Create `AdminEmailController` with HTML template routes
+- [x] Create `EmailAdminService` for admin-specific queries (stats, recent, etc.)
+- [x] Create templates:
+  - [x] `admin/email/dashboard.html.jinja2` - Dashboard overview
+  - [x] `admin/email/templates/list.html.jinja2` - Template list
+  - [x] `admin/email/templates/new.html.jinja2` - New template form
+  - [x] `admin/email/templates/form.html.jinja2` - Edit form
+  - [x] `admin/email/templates/detail.html.jinja2` - View with preview
+  - [x] `admin/email/logs/list.html.jinja2` - Log viewer
+  - [x] `admin/email/logs/detail.html.jinja2` - Log entry detail
+  - [x] `admin/email/partials/template_row.html.jinja2` - HTMX row
+  - [x] `admin/email/partials/log_row.html.jinja2` - HTMX row
+  - [x] `admin/email/partials/preview.html.jinja2` - Rendered preview
+- [x] Add sidebar link under admin navigation
+- [x] Register controller in `main.py`
+- [x] Add dependency provider
+- [x] Create 54 integration tests for admin email routes
 
-**Features**:
-- **Template Editor**: Monaco/CodeMirror for Jinja2 syntax highlighting
+**Features Implemented**:
+- **Template Editor**: DaisyUI textarea with syntax-aware form fields
 - **Live Preview**: HTMX-powered preview with sample context variables
-- **Validation**: Check Jinja2 syntax before saving
-- **Send Test**: Modal to send test email to any address
-- **Log Filtering**: By recipient, template, status, date range
+- **Validation**: Check Jinja2 syntax before saving with error display
+- **Send Test**: Inline form to send test email to any address with loading states
+- **Log Filtering**: By recipient, template, status
 - **Retry Failed**: Button to retry failed emails
+- **HTMX Loading States**: CSS + JavaScript for smooth button state transitions
+- **Defensive 'None' Handling**: Fixed template creation storing literal "None" string
 
-**Files to Create**:
+**Bug Fixes Applied** (2025-11-29):
+- Fixed form data handling: `str(form_data.get("field") or "")` prevents `None` → `"None"` conversion
+- Fixed model render methods to handle `"None"` string values defensively
+- Fixed mailing service to fallback to empty string if rendered content is None
+- Updated templates to show warning message when content is missing/invalid
+- Added JavaScript loading states for Send Test Email button (replaced CSS-only approach)
+- Fixed HTMX CSS classes being merged by minifier (moved outside `@layer utilities`)
+
+**Files Created**:
 ```
 src/pydotorg/
 ├── domains/admin/
-│   ├── controllers/email.py    # AdminEmailController
-│   └── services/email.py       # EmailAdminService (optional, may reuse mailing services)
+│   ├── controllers/email.py    # AdminEmailController (800+ lines)
+│   └── services/email.py       # EmailAdminService
 └── templates/admin/email/
-    ├── index.html.jinja2
+    ├── dashboard.html.jinja2
     ├── templates/
     │   ├── list.html.jinja2
+    │   ├── new.html.jinja2
     │   ├── form.html.jinja2
     │   └── detail.html.jinja2
     ├── logs/
@@ -1298,7 +1311,15 @@ src/pydotorg/
         ├── template_row.html.jinja2
         ├── log_row.html.jinja2
         └── preview.html.jinja2
+
+tests/integration/
+└── test_admin_email.py         # 54 integration tests
 ```
+
+**Integration with MailDev**:
+- Send Test Email button sends to MailDev (SMTP localhost:1025)
+- Link to MailDev UI (localhost:1080) shown after successful send
+- Full email content visible in MailDev including HTML rendering
 
 ---
 
@@ -1590,7 +1611,7 @@ tests/
 |------|-------|----------|--------|-------------|
 | ~~**SAQ Event-Driven Wiring**~~ | 6.1b | ✅ DONE | Medium | 31 tasks wired to app events |
 | ~~**API Rate Limiting**~~ | 5.1 | ✅ DONE | Low | Redis-backed rate limiting with tiered limits |
-| **Admin Email UI** | 10.2b | HIGH | Medium | `/admin/email` - Template management + logs viewer |
+| ~~**Admin Email UI**~~ | 10.2b | ✅ DONE | Medium | `/admin/email` - Template management + logs viewer |
 | **API Documentation** | 9.1 | MEDIUM | Medium | OpenAPI/Swagger UI setup (basic exists) |
 | ~~**Mailing Domain**~~ | 3.x | ✅ DONE | Low | Email templates + logs domain with SMTP delivery |
 | **OAuth2 Providers** | 2.2 | MEDIUM | Medium | GitHub/Google providers exist, need testing |
@@ -1647,14 +1668,16 @@ tests/
    - ✅ 46 integration tests
    - **Files**: `domains/mailing/` (models, repos, services, controllers, schemas)
 
-4. **Admin Email UI** (Task 10.2b - ⏳ UP NEXT)
-   - Create `/admin/email` dashboard with template count, recent sends, failed count
-   - Create `/admin/email/templates` list with CRUD operations
-   - Create `/admin/email/logs` viewer with filters
-   - Add template editor with Jinja2 syntax highlighting
-   - Add live preview with HTMX
-   - Add "Send Test Email" modal
-   - Add sidebar link
+4. ~~**Admin Email UI**~~ (Task 10.2b - ✅ COMPLETE 2025-11-29)
+   - ✅ Created `/admin/email` dashboard with template count, recent sends, failed count
+   - ✅ Created `/admin/email/templates` list with CRUD operations
+   - ✅ Created `/admin/email/logs` viewer with filters
+   - ✅ Added template editor with form fields and sample context display
+   - ✅ Added live preview with HTMX
+   - ✅ Added "Send Test Email" inline form with loading states
+   - ✅ Added sidebar link
+   - ✅ Fixed "None" content bug in email body
+   - ✅ Created 54 integration tests
    - **Files**: `domains/admin/controllers/email.py`, `templates/admin/email/*`
 
 5. **OAuth2 Testing** (Tier 3)
@@ -1664,6 +1687,12 @@ tests/
 6. **Page Caching** (Tier 3)
    - Redis cache for rendered pages
    - Cache invalidation on content updates
+
+### Known Issues / Bugs
+
+| Issue | Location | Priority | Description |
+|-------|----------|----------|-------------|
+| **Jobs progress not tracking** | `/admin/tasks/jobs` | HIGH | Job run counts and completion progress show all 0s even for jobs scheduled every 5 minutes. Statistics not being updated properly. |
 
 ---
 
@@ -1716,4 +1745,4 @@ make ci                      # Full CI: lint + fmt + type-check + test
 ---
 
 *Document generated for Python.org Litestar rebuild project*
-*Last updated: 2025-11-27 (Mailing Domain + MailDev Integration + Startup Banner Fixes)*
+*Last updated: 2025-11-29 (Admin Email UI + MailDev Integration + None Content Bug Fix)*
