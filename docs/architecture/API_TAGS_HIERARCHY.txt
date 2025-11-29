@@ -1,0 +1,231 @@
+API DOCUMENTATION TAG HIERARCHY
+================================
+
+PYTHON.ORG API - Optimized Tag Structure for Scalar UI
+(50 Public Tags, organized by developer journey and logical grouping)
+
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ CORE API LAYER - Foundation (6 tags)                                │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                       │
+│  01. Authentication ──────────────────────────────────────────────┐  │
+│      └─ Login, Register, Token, Password Reset                   │  │
+│                                                                   │  │
+│  02. Users ───────────────────────────────────────────────────┐  │  │
+│      └─ List, Get, Create, Update, Deactivate                │  │  │
+│         ├─ 03. User Memberships ──────────────────────────┐  │  │  │
+│         │    └─ Membership Status & Types                │  │  │  │
+│         └─ 04. User Groups ────────────────────────────┐  │  │  │  │
+│              └─ Groups, Approval, Trust Status         │  │  │  │  │
+│                                                         │  │  │  │  │
+│  38. Mailing Lists ───────────────────────────────────────  │  │  │  │
+│      └─ Subscribe, Preferences                            │  │  │  │
+│                                                           │  │  │  │
+│  37. Search ──────────────────────────────────────────────  │  │  │  │
+│      └─ Full-text, Faceted, Autocomplete                 │  │  │  │
+│                                                           │  │  │  │
+└───────────────────────────────────────────────────────────────────────┘
+
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ CONTENT MANAGEMENT LAYER (9 tags)                                    │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                       │
+│  05. Pages ────────────────────────────────────────────────────────┐ │
+│      └─ Static Pages, Slugs, Publishing                          │ │
+│         ├─ 06. Documents ──────────────────────────────────────┐ │ │
+│         │    └─ Documentation Files, Upload                   │ │ │
+│         ├─ 07. Images ─────────────────────────────────────┐  │ │ │
+│         │    └─ Image Assets                               │  │ │ │
+│         ├─ 08. Banners ─────────────────────────────────┐  │  │ │ │
+│         │    └─ Promotional Content                      │  │  │ │ │
+│         └─ 09. Code Samples ───────────────────────────┐ │  │  │ │ │
+│              └─ Code Examples, Snippets                │ │  │  │ │ │
+│                                                        │ │  │  │ │ │
+└────────────────────────────────────────────────────────────────────┘
+
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ DOWNLOADS & RELEASES LAYER (3 tags)                                  │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                       │
+│  10. Operating Systems ─────────────────────────────────────────┐   │
+│       └─ Supported Platforms                                   │   │
+│          ├─ 11. Python Releases ──────────────────────────┐   │   │
+│          │     └─ Versions, Release Info, Latest         │   │   │
+│          └─ 12. Release Files ───────────────────────────┐ │   │   │
+│               └─ Downloads, Installers, Checksums       │ │   │   │
+│                                                          │ │   │   │
+└──────────────────────────────────────────────────────────────────────┘
+
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ EVENTS & COMMUNITY LAYER (10 tags)                                   │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                       │
+│  13. Events ────────────────────────────────────────────────────┐   │
+│      └─ Event Listings, Details                               │   │
+│         ├─ 14. Event Calendars ──────────────────────────┐    │   │
+│         │     └─ Calendars, Schedules                   │    │   │
+│         ├─ 15. Event Categories ──────────────────────┐ │    │   │
+│         │     └─ Event Types                          │ │    │   │
+│         ├─ 16. Event Locations ──────────────────────┐ │ │   │   │
+│         │     └─ Venues, Address Info                │ │ │   │   │
+│         └─ 17. Event Occurrences ───────────────────┐ │ │ │  │   │
+│              └─ Specific Instances, Scheduling      │ │ │ │  │   │
+│                                                      │ │ │ │  │   │
+│  18. User Groups & Communities ─────────────────────│ │ │ │  │   │
+│      └─ Community Groups, Discovery                │ │ │ │  │   │
+│         └─ 19. Community Content ───────────────┐  │ │ │ │  │   │
+│              └─ Posts, Photos, Videos, Links    │  │ │ │ │  │   │
+│                                                  │  │ │ │ │  │   │
+└────────────────────────────────────────────────────────────────────┘
+
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ CONTENT DISCOVERY LAYER (4 tags)                                     │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                       │
+│  20. Blogs ──────────────────────────────────────────────────────┐  │
+│      └─ Blog Entries                                           │  │
+│         ├─ 21. Blog Feeds ────────────────────────────────┐   │  │
+│         │     └─ RSS, Feed Management                    │   │  │
+│         └─ 22. Success Stories ──────────────────────┐   │   │  │
+│              └─ Testimonials, Use Cases              │   │   │  │
+│                 └─ 23. Success Story Categories ─┐  │   │   │  │
+│                     └─ Story Classifications     │  │   │   │  │
+│                                                   │  │   │   │  │
+└─────────────────────────────────────────────────────────────────────┘
+
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ JOBS LAYER (4 tags)                                                  │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                       │
+│  24. Jobs ──────────────────────────────────────────────────────┐   │
+│      └─ Job Listings                                          │   │
+│         ├─ 25. Job Types ──────────────────────────────────┐  │   │
+│         │    └─ Employment Types                          │  │   │
+│         ├─ 26. Job Categories ──────────────────────────┐ │  │   │
+│         │     └─ Industry Categories                    │ │  │   │
+│         └─ 27. Job Review Comments ────────────────────┐│ │  │   │
+│              └─ Reviews, Moderation                    ││ │  │   │
+│                                                         ││ │  │   │
+└─────────────────────────────────────────────────────────────────────┘
+
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ BUSINESS & SPONSORSHIP LAYER (4 tags)                                │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                       │
+│  28. Sponsors ──────────────────────────────────────────────────┐   │
+│      └─ Sponsor Organizations                                 │   │
+│         ├─ 29. Sponsorship Levels ────────────────────────┐   │   │
+│         │     └─ Tier Definitions                        │   │   │
+│         ├─ 30. Sponsorships ────────────────────────────┐│   │   │
+│         │     └─ Active Relationships                   ││   │   │
+│         └─ 31. Companies ──────────────────────────────┐││   │   │
+│              └─ Company Profiles                       │││   │   │
+│                                                        │││   │   │
+└────────────────────────────────────────────────────────────────────┘
+
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ GOVERNANCE LAYER (5 tags)                                            │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                       │
+│  32. Work Groups ────────────────────────────────────────────────┐  │
+│      └─ PEP Work Groups                                        │  │
+│         ├─ 33. Meeting Minutes ──────────────────────────┐    │  │
+│         │     └─ Minutes, Archives                      │    │  │
+│         ├─ 34. Nominations ────────────────────────────┐│    │  │
+│         │     └─ Award Nominations                     ││    │  │
+│         │        └─ 35. Nominees ────────────────────┐││    │  │
+│         │             └─ Candidate Information       │││    │  │
+│         └─ 36. Elections ────────────────────────────┐│││    │  │
+│              └─ Election Info, Voting               ││││    │  │
+│                                                      ││││    │  │
+└──────────────────────────────────────────────────────────────────────┘
+
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ ADMINISTRATION LAYER (12 tags) - Grouped under "Admin" prefix        │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                       │
+│  39. Admin Dashboard ────────────────────────────────────────────┐   │
+│      └─ Stats, Health, Overview                               │   │
+│                                                                │   │
+│  40. Admin Users ────────────────────────────────────────────┐│   │
+│      └─ User Management, Permissions                        ││   │
+│                                                              ││   │
+│  41. Admin Pages ────────────────────────────────────────┐  ││   │
+│      └─ Page Management, Bulk Ops                       │  ││   │
+│                                                          │  ││   │
+│  42. Admin Events ────────────────────────────────────┐ │  ││   │
+│      └─ Event Moderation, Approval                  │ │  ││   │
+│                                                      │ │  ││   │
+│  43. Admin Jobs ──────────────────────────────────┐ │ │  ││   │
+│      └─ Job Moderation, Posting Control          │ │ │  ││   │
+│                                                   │ │ │  ││   │
+│  44. Admin Sponsors ──────────────────────────┐  │ │ │  ││   │
+│      └─ Sponsor Management                   │  │ │ │  ││   │
+│                                               │  │ │ │  ││   │
+│  45. Admin Blogs ──────────────────────────┐ │  │ │ │  ││   │
+│      └─ Blog Management, Comments         │ │  │ │ │  ││   │
+│                                            │ │  │ │ │  ││   │
+│  46. Admin Logs ──────────────────────────│ │  │ │ │  ││   │
+│      └─ Audit Trails, Activity History   │ │  │ │ │  ││   │
+│                                           │ │  │ │ │  ││   │
+│  47. Admin Email Templates ────────────┐ │ │  │ │ │  ││   │
+│      └─ Template Management            │ │ │  │ │ │  ││   │
+│                                         │ │ │  │ │ │  ││   │
+│  48. Admin Email Logs ────────────────┐│ │ │  │ │ │  ││   │
+│      └─ Delivery Logs, Status         ││ │ │  │ │ │  ││   │
+│                                        ││ │ │  │ │ │  ││   │
+│  49. Admin Tasks ──────────────────┐  ││ │ │  │ │ │  ││   │
+│      └─ Background Task Management │  ││ │ │  │ │ │  ││   │
+│                                    │  ││ │ │  │ │ │  ││   │
+│  50. Admin Settings ──────────────┐│  ││ │ │  │ │ │  ││   │
+│      └─ System Configuration      ││  ││ │ │  │ │ │  ││   │
+│                                    ││  ││ │ │  │ │ │  ││   │
+└────────────────────────────────────────────────────────────────────┘
+
+
+EXCLUDED FROM PUBLIC API DOCS
+==============================
+
+These controllers serve HTML rendering and should NOT appear in
+the public API documentation (marked as "internal" tag):
+
+  - jobs/controllers.py:JobRenderController
+  - nominations/controllers.py:NominationRenderController
+  - pages/controllers.py:PageRenderController
+  - search/controllers.py:SearchRenderController
+  - sponsors/controllers.py:SponsorRenderController
+
+
+BENEFITS OF THIS STRUCTURE
+===========================
+
+✓ Reduced cognitive load (50 grouped tags vs 100+ fragmented)
+✓ Logical developer journey (auth → users → content → features)
+✓ Related resources adjacent (Event → Calendar → Category)
+✓ Admin isolated and deprioritized
+✓ Internal render controllers hidden
+✓ Title Case spaces (readable in Scalar UI)
+✓ Follows REST resource hierarchy
+✓ Scalable for future growth
+✓ Better API discovery
+
+
+STATISTICS
+==========
+
+Total Public Tags:  50
+Total Admin Tags:   12 (grouped under "Admin" prefix)
+Total Core Tags:    6  (auth + users + search)
+Render Excluded:    5
+
+Before: 100+ fragmented tags
+After:  50 logical, discoverable tags (-50% cognitive load)
