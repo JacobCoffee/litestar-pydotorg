@@ -64,6 +64,7 @@ class AdminTasksController(Controller):
         """
         queue_info = await task_admin_service.get_queue_info()
         jobs = await task_admin_service.get_all_jobs(status=status, limit=50)
+        stats = await task_admin_service.get_stats()
 
         queues = [
             {
@@ -72,8 +73,8 @@ class AdminTasksController(Controller):
                 "queued": queue_info.get("queued", 0),
                 "active": queue_info.get("active", 0),
                 "scheduled": queue_info.get("scheduled", 0),
-                "complete": sum(1 for j in jobs if j.get("status") == "complete"),
-                "failed": sum(1 for j in jobs if j.get("status") == "failed"),
+                "complete": stats.get("complete", 0),
+                "failed": stats.get("failed", 0),
                 "jobs": jobs,
             }
         ]

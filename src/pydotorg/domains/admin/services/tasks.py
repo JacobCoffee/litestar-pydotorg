@@ -232,23 +232,24 @@ class TaskAdminService:
         """Get overall queue statistics.
 
         Returns:
-            Dict with comprehensive queue stats
+            Dict with comprehensive queue stats including persistent counters
         """
         try:
             info = await self.get_queue_info()
             jobs = await self.get_all_jobs(limit=1000)
 
-            failed = sum(1 for j in jobs if j.get("status") == "failed")
-            complete = sum(1 for j in jobs if j.get("status") == "complete")
             queued = info.get("queued", 0)
             active = info.get("active", 0)
+
+            persistent_stats = await self._get_persistent_stats()
 
             return {
                 "total_jobs": len(jobs),
                 "queued": queued,
                 "active": active,
-                "complete": complete,
-                "failed": failed,
+                "complete": persistent_stats.get("complete", 0),
+                "failed": persistent_stats.get("failed", 0),
+                "retried": persistent_stats.get("retried", 0),
                 "workers": info.get("workers", 0),
                 "latency_ms": info.get("latency_ms", 0),
                 "available_tasks": len(_get_task_functions()),
@@ -261,11 +262,35 @@ class TaskAdminService:
                 "active": 0,
                 "complete": 0,
                 "failed": 0,
+                "retried": 0,
                 "workers": 0,
                 "latency_ms": 0,
                 "available_tasks": len(_get_task_functions()),
                 "error": "Failed to retrieve statistics",
             }
+
+    async def _get_persistent_stats(self) -> dict[str, int]:
+        """Get persistent statistics from Redis.
+
+        Returns:
+            Dict with complete, failed, retried counts
+        """
+        try:
+            from redis.asyncio import Redis  # noqa: PLC0415
+
+            from pydotorg.config import settings  # noqa: PLC0415
+            from pydotorg.tasks.stats import TaskStatsService  # noqa: PLC0415
+
+            redis = Redis.from_url(settings.redis_url, decode_responses=True)
+            try:
+                namespace = getattr(settings, "redis_stats_namespace", "pydotorg")
+                stats_service = TaskStatsService(redis, namespace=namespace)
+                return await stats_service.get_stats()
+            finally:
+                await redis.aclose()
+        except Exception:
+            logger.exception("Failed to get persistent stats")
+            return {"complete": 0, "failed": 0, "retried": 0}
 
     async def _job_to_dict(self, job: Job, *, include_details: bool = False) -> dict[str, Any]:
         """Convert a SAQ Job to a dictionary.

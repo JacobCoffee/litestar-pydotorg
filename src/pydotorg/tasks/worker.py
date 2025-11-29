@@ -153,13 +153,31 @@ async def before_process(ctx: dict[str, Any]) -> None:
 async def after_process(ctx: dict[str, Any]) -> None:
     """Hook called after processing each task.
 
-    Logs task completion and can be used for cleanup.
+    Logs task completion, tracks persistent statistics, and can be used for cleanup.
 
     Args:
         ctx: SAQ worker context dictionary
     """
     job = ctx.get("job")
-    if job:
+    if not job:
+        return
+
+    from pydotorg.tasks.stats import get_stats_service  # noqa: PLC0415
+
+    stats_service = await get_stats_service(ctx)
+
+    if job.error:
+        logger.info(
+            "Task failed",
+            extra={
+                "task_name": job.function,
+                "task_id": job.key,
+                "error": str(job.error)[:200],
+            },
+        )
+        if stats_service:
+            await stats_service.increment_failed(job.function)
+    else:
         logger.info(
             "Task completed",
             extra={
@@ -167,6 +185,8 @@ async def after_process(ctx: dict[str, Any]) -> None:
                 "task_id": job.key,
             },
         )
+        if stats_service:
+            await stats_service.increment_complete(job.function)
 
 
 async def test_failing_task(ctx: dict[str, Any]) -> dict[str, Any]:
