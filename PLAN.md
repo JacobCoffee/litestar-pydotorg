@@ -1695,7 +1695,13 @@ tests/
 
 | Issue | Location | Priority | Description |
 |-------|----------|----------|-------------|
-| **Jobs progress not tracking** | `/admin/tasks/jobs` | HIGH | Job run counts and completion progress show all 0s even for jobs scheduled every 5 minutes. Statistics not being updated properly. |
+| ~~**Jobs progress not tracking**~~ | `/admin/tasks/jobs` | ~~HIGH~~ FIXED | ~~Job run counts and completion progress show all 0s even for jobs scheduled every 5 minutes. Statistics not being updated properly.~~ **Fixed (2025-11-29)**: SAQ deletes completed jobs after TTL (600s default), so counts were always 0. Implemented persistent Redis counters (`pydotorg:tasks:stats:*`) updated via `after_process` hook. See `src/pydotorg/tasks/stats.py`. |
+
+### Planned Enhancements
+
+| Enhancement | Location | Priority | Description |
+|-------------|----------|----------|-------------|
+| **Cron Jobs Dashboard** | `/admin/tasks/cron` | MEDIUM | Dedicated view for cron job monitoring. Should show: each cron job's schedule (parsed cron expression), last run time, next scheduled run, run count (24h/7d), success rate per job, and recent execution logs. Use existing per-function stats from `TaskStatsService.get_function_stats()`. Requires: new route/template, cron expression parser (e.g., `croniter`), and UI showing table of all registered cron jobs with their metrics. |
 
 ---
 
