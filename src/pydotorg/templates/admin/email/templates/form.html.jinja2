@@ -278,6 +278,20 @@
             <div class="card-body">
                 <h2 class="card-title text-python-blue">Email Content</h2>
 
+                <div class="alert alert-info mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <div class="text-sm">
+                        <p class="font-semibold mb-1">Plain Text vs HTML</p>
+                        <ul class="list-disc list-inside text-xs space-y-0.5">
+                            <li><strong>Plain Text</strong> (required) — Fallback for old email clients, screen readers, and users who disable HTML</li>
+                            <li><strong>HTML</strong> (optional) — Rich formatting with colors, bold, links. Most recipients see this version</li>
+                            <li>Both are sent together — the recipient's email client chooses which to display</li>
+                        </ul>
+                    </div>
+                </div>
+
                 <div class="form-control">
                     <label class="label">
                         <span class="label-text font-semibold">Subject Line</span>
@@ -315,16 +329,42 @@
                 <div class="form-control">
                     <label class="label">
                         <span class="label-text font-semibold">HTML Content</span>
-                        <span class="label-text-alt">Optional</span>
+                        <span class="label-text-alt">Optional but recommended</span>
                     </label>
                     <textarea
                         name="content_html"
+                        id="content_html"
                         class="textarea textarea-bordered h-64 font-mono text-sm"
                         placeholder="<p>Hello <strong>{{ '{{ user.username }}' }}</strong>,</p>&#10;<p>Your job posting has been approved!</p>"
-                    >{{ template.content_html if template else '' }}</textarea>
+                    >{{ template.content_html if template and template.content_html != 'None' else '' }}</textarea>
                     <label class="label">
-                        <span class="label-text-alt">Rich HTML email content (optional)</span>
+                        <span class="label-text-alt">Rich HTML email content — most recipients will see this version</span>
                     </label>
+                </div>
+
+                <div id="content-status" class="mt-2">
+                    {% if template and template.content_html and template.content_html != 'None' %}
+                    <div class="alert alert-success py-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span class="text-sm">This template has both plain text and HTML — best practice for email delivery.</span>
+                    </div>
+                    {% elif template %}
+                    <div class="alert alert-warning py-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                        <span class="text-sm">Consider adding HTML content for better formatting in modern email clients.</span>
+                    </div>
+                    {% else %}
+                    <div class="alert py-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span class="text-sm">Tip: Add HTML content for rich formatting, or leave empty for plain text only.</span>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
