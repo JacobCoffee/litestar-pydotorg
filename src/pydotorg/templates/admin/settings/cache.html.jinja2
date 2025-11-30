@@ -279,21 +279,27 @@ function showToast(message, type = 'success') {
     setTimeout(() => toast.remove(), 4000);
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+function checkToastParam() {
     const params = new URLSearchParams(window.location.search);
-    const toast = params.get('toast');
-    if (toast) {
+    const toastType = params.get('toast');
+    if (toastType) {
         const messages = {
             'pages_cleared': { text: 'Page cache clear task queued successfully.', type: 'success' },
             'all_cleared': { text: 'All cache clear tasks queued successfully.', type: 'success' },
             'cache_warmed': { text: 'Cache warming tasks queued successfully.', type: 'success' },
             'warm_failed': { text: 'Failed to queue cache warming tasks.', type: 'error' }
         };
-        if (messages[toast]) {
-            showToast(messages[toast].text, messages[toast].type);
+        if (messages[toastType]) {
+            showToast(messages[toastType].text, messages[toastType].type);
             window.history.replaceState({}, '', window.location.pathname);
         }
     }
-});
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', checkToastParam);
+} else {
+    checkToastParam();
+}
 </script>
 {% endblock %}
