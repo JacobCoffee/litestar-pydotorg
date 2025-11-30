@@ -1140,19 +1140,26 @@ tests/e2e/
 - [x] Document authentication flows (JWT, Session, OAuth)
 - [x] Added docstrings to all AuthController endpoints
 - [x] Add examples to remaining domain schemas (Jobs, Events, Downloads, Sponsors, Pages, Users)
-- [ ] Write comprehensive API usage guide (markdown)
+- [x] Write comprehensive API usage guide (markdown)
+- [x] Add Postman collection for API testing
 - [ ] Generate SDK documentation
 
 **Files Modified (2025-11-30)**:
-- `src/pydotorg/main.py` - Enhanced 18 API tag descriptions
+- `src/pydotorg/main.py` - Enhanced OpenAPI config with contact, license, servers, tag descriptions
 - `src/pydotorg/core/auth/schemas.py` - Added examples to all auth schemas
+- `src/pydotorg/core/exceptions.py` - Added JSON error responses for API requests
+- `src/pydotorg/core/dependencies.py` - Added limit_offset pagination dependency
 - `src/pydotorg/domains/users/auth_controller.py` - Added comprehensive docstrings
-- `src/pydotorg/domains/jobs/schemas.py` - Added examples to all job schemas
-- `src/pydotorg/domains/events/schemas.py` - Added examples to all event schemas
-- `src/pydotorg/domains/downloads/schemas.py` - Added examples to all download schemas
-- `src/pydotorg/domains/sponsors/schemas.py` - Added examples to sponsor schemas
-- `src/pydotorg/domains/pages/schemas.py` - Added examples to page schemas
-- `src/pydotorg/domains/users/schemas.py` - Already had examples
+- `src/pydotorg/domains/*/schemas.py` - Added examples to all domain schemas
+- `src/pydotorg/domains/*/controllers.py` - Added comprehensive docstrings to all endpoints
+
+**Files Created (2025-11-30)**:
+- `docs/api-getting-started.md` - Comprehensive API usage guide (706 lines)
+- `docs/api-authentication.md` - Authentication flows documentation (1037 lines)
+- `docs/POSTMAN_GUIDE.md` - Postman collection import guide
+- `docs/postman-collection.json` - Full Postman collection with all endpoints
+- `tests/unit/core/test_exceptions.py` - Exception handler unit tests
+- `tests/integration/test_api_validation_errors.py` - API validation error tests
 
 ---
 
@@ -1744,11 +1751,14 @@ tests/
 
 5. ~~**API Documentation**~~ (Task 9.1 - ✅ COMPLETE 2025-11-30)
    - ✅ Enhanced 18 OpenAPI tag descriptions with detailed context
-   - ✅ Added docstrings to all 13 AuthController endpoints
+   - ✅ Added docstrings to all controller endpoints (17 controllers)
    - ✅ Added request/response examples to all auth schemas
    - ✅ Added examples to all domain schemas (Jobs, Events, Downloads, Sponsors, Pages, Users)
-   - [ ] Write comprehensive API usage guide (markdown)
-   - **Files modified**: `main.py`, `auth_controller.py`, `auth/schemas.py`, `jobs/schemas.py`, `events/schemas.py`, `downloads/schemas.py`, `sponsors/schemas.py`, `pages/schemas.py`
+   - ✅ Written comprehensive API usage guides (`docs/api-getting-started.md`, `docs/api-authentication.md`)
+   - ✅ Added Postman collection (`docs/postman-collection.json`)
+   - ✅ Fixed missing limit_offset pagination dependency
+   - ✅ Added JSON error responses for API exception handlers
+   - **Files created**: `docs/api-getting-started.md`, `docs/api-authentication.md`, `docs/POSTMAN_GUIDE.md`, `docs/postman-collection.json`
 
 6. **OAuth2 Testing** (Tier 3)
    - Test GitHub/Google OAuth flows end-to-end
@@ -1778,6 +1788,9 @@ tests/
 |-------------|----------|------|-------------|
 | **Cron Jobs Dashboard** | `/admin/tasks/cron` | 2025-11-30 | Dedicated view for cron job monitoring showing: each cron job's schedule (parsed cron expression via `croniter`), last/next run times, run count, success rate per job. Uses `TaskStatsService.get_function_stats()` for persistent stats. Routes: `/admin/tasks/cron` (dashboard), `/admin/tasks/cron/{function_name}` (detail). Files: `domains/admin/services/cron.py`, `templates/admin/tasks/cron*.html.jinja2`. 15 integration tests in `test_tasks_admin.py`. |
 | **iCalendar Export** | `/events/calendar.ics` | 2025-11-30 | RFC 5545 compliant iCalendar feed for events. Routes: `/events/calendar.ics` (all upcoming events), `/events/calendar/{slug}/calendar.ics` (calendar-specific), `/events/{slug}/ical/` (single event). `ICalendarService` handles text escaping, line folding, multi-occurrence support, timezone conversion. Returns proper `text/calendar` Content-Type with attachment headers. Files: `core/ical/service.py`, `domains/events/controllers.py`. 29 unit tests in `tests/unit/core/test_ical.py`. |
+| **API Pagination Fix** | `/api/*` | 2025-11-30 | Fixed missing `limit_offset` pagination dependency that caused 400 errors on all list endpoints. Added `provide_limit_offset()` to `core/dependencies.py` that converts `currentPage`/`pageSize` query params to `LimitOffset` filter. |
+| **API JSON Errors** | `/api/*` | 2025-11-30 | Exception handlers now detect API requests (via path prefix `/api/` or `Accept: application/json` header) and return proper JSON error responses instead of HTML templates. Added `_is_api_request()` and `_create_json_error_response()` helpers. |
+| **API Documentation** | `docs/api-*` | 2025-11-30 | Comprehensive API documentation: `api-getting-started.md` (706 lines) covers quickstart, authentication, pagination, error handling; `api-authentication.md` (1037 lines) covers JWT, session, OAuth2 flows with code examples in Python/JS/cURL; `postman-collection.json` provides full Postman collection with all endpoints pre-configured. |
 
 ### Planned Enhancements
 
@@ -1834,4 +1847,4 @@ make ci                      # Full CI: lint + fmt + type-check + test
 ---
 
 *Document generated for Python.org Litestar rebuild project*
-*Last updated: 2025-11-30 (API validation error tests + limit_offset dependency fix)*
+*Last updated: 2025-11-30 (API documentation complete - guides, Postman collection, JSON errors, pagination fix)*
