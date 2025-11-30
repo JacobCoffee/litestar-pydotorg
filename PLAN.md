@@ -1760,9 +1760,12 @@ tests/
    - ✅ Added JSON error responses for API exception handlers
    - **Files created**: `docs/api-getting-started.md`, `docs/api-authentication.md`, `docs/POSTMAN_GUIDE.md`, `docs/postman-collection.json`
 
-6. **OAuth2 Testing** (Tier 3)
-   - Test GitHub/Google OAuth flows end-to-end
-   - Add integration tests for OAuth callback handlers
+6. ~~**OAuth2 Testing** (Tier 3)~~ ✅ DONE (2025-11-30)
+   - ~~Test GitHub/Google OAuth flows end-to-end~~
+   - ~~Add integration tests for OAuth callback handlers~~
+   - **Tests created**: 64 tests total (42 unit + 22 integration)
+   - **Files**: `tests/unit/core/test_oauth.py`, `tests/integration/test_oauth_routes.py`
+   - **Coverage**: OAuthUserInfo, GitHubOAuthProvider, GoogleOAuthProvider, OAuthService, token exchange, login initiation, callback success/errors, session state management, CSRF protection
 
 7. ~~**iCalendar Export** (Tier 3 - Low Effort)~~ ✅ DONE (2025-11-30)
    - ~~Events iCal feed at `/events/calendar.ics`~~
