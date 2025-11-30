@@ -32,6 +32,43 @@ def _is_htmx_request(request: Request) -> bool:
     return request.headers.get("HX-Request") == "true"
 
 
+def _is_api_request(request: Request) -> bool:
+    """Check if the request is an API request.
+
+    Returns True if:
+    - Path starts with /api/
+    - Accept header includes application/json
+    """
+    path = request.url.path
+    accept = request.headers.get("Accept", "")
+    return path.startswith("/api/") or "application/json" in accept
+
+
+def _create_json_error_response(
+    detail: str,
+    status_code: int,
+    extra: dict | None = None,
+) -> Response:
+    """Create a JSON error response for API requests.
+
+    Args:
+        detail: Error message
+        status_code: HTTP status code
+        extra: Additional error details
+
+    Returns:
+        JSON response with error information
+    """
+    content = {"detail": detail, "status_code": status_code}
+    if extra:
+        content["extra"] = extra
+    return Response(
+        content=content,
+        status_code=status_code,
+        media_type="application/json",
+    )
+
+
 def _create_toast_response(
     message: str,
     toast_type: str = "error",
@@ -65,6 +102,7 @@ def _create_toast_response(
 def not_found_exception_handler(request: Request, exc: NotFoundException) -> Response | Template:
     """Handle 404 Not Found exceptions site-wide.
 
+    For API requests: Returns JSON error response.
     For HTMX requests: Returns empty response with HX-Trigger for toast notification.
     For regular requests: Renders the 404 error template.
 
@@ -73,16 +111,21 @@ def not_found_exception_handler(request: Request, exc: NotFoundException) -> Res
         exc: The NotFoundException that was raised
 
     Returns:
-        HTMX toast response or rendered error template
+        JSON response, HTMX toast response, or rendered error template
     """
     path = request.url.path
-    friendly_name = path.strip("/").replace("/", " → ").replace("-", " ").title() or "Home"
-    detail = f"'{friendly_name}' is not available yet. This feature is coming soon."
+    detail = exc.detail if exc.detail else "Resource not found"
     logger.info("404 Not Found: %s", path)
+
+    if _is_api_request(request):
+        return _create_json_error_response(detail=detail, status_code=HTTP_404_NOT_FOUND)
+
+    friendly_name = path.strip("/").replace("/", " → ").replace("-", " ").title() or "Home"
+    friendly_detail = f"'{friendly_name}' is not available yet. This feature is coming soon."
 
     if _is_htmx_request(request):
         return _create_toast_response(
-            message=detail,
+            message=friendly_detail,
             toast_type="info",
             status_code=HTTP_404_NOT_FOUND,
         )
@@ -91,7 +134,7 @@ def not_found_exception_handler(request: Request, exc: NotFoundException) -> Res
         template_name="errors/404.html.jinja2",
         context={
             "title": "Page Not Found",
-            "message": detail,
+            "message": friendly_detail,
             "path": path,
         },
         status_code=HTTP_404_NOT_FOUND,
@@ -100,6 +143,10 @@ def not_found_exception_handler(request: Request, exc: NotFoundException) -> Res
 
 def http_exception_handler(request: Request, exc: HTTPException) -> Response | Template | Redirect:
     """Handle generic HTTP exceptions site-wide.
+
+    For API requests: Returns JSON error response.
+    For HTMX requests: Returns toast notification.
+    For browser requests: Returns HTML template or redirect.
 
     Args:
         request: The incoming request
@@ -110,7 +157,11 @@ def http_exception_handler(request: Request, exc: HTTPException) -> Response | T
     """
     status_code = exc.status_code
     detail = exc.detail if exc.detail else f"An error occurred (HTTP {status_code})"
+    extra = getattr(exc, "extra", None)
     logger.warning("HTTP %d on %s: %s", status_code, request.url.path, detail)
+
+    if _is_api_request(request):
+        return _create_json_error_response(detail=detail, status_code=status_code, extra=extra)
 
     if _is_htmx_request(request):
         toast_type = "warning" if status_code < HTTP_500_INTERNAL_SERVER_ERROR else "error"
@@ -148,15 +199,22 @@ def http_exception_handler(request: Request, exc: HTTPException) -> Response | T
 def permission_denied_handler(request: Request, exc: PermissionDeniedException) -> Response | Template:
     """Handle permission denied exceptions.
 
+    For API requests: Returns JSON error response.
+    For HTMX requests: Returns toast notification.
+    For browser requests: Returns 403 template.
+
     Args:
         request: The incoming request
         exc: The PermissionDeniedException that was raised
 
     Returns:
-        HTMX toast response or rendered 403 template
+        JSON response, HTMX toast response, or rendered 403 template
     """
     detail = exc.detail if exc.detail else "You do not have permission to access this resource."
     logger.warning("403 Forbidden on %s", request.url.path)
+
+    if _is_api_request(request):
+        return _create_json_error_response(detail=detail, status_code=HTTP_403_FORBIDDEN)
 
     if _is_htmx_request(request):
         return _create_toast_response(
@@ -178,16 +236,23 @@ def permission_denied_handler(request: Request, exc: PermissionDeniedException) 
 def internal_server_error_handler(request: Request, exc: InternalServerException) -> Response | Template:
     """Handle internal server errors.
 
+    For API requests: Returns JSON error response.
+    For HTMX requests: Returns toast notification.
+    For browser requests: Returns 500 template.
+
     Args:
         request: The incoming request
         exc: The InternalServerException that was raised
 
     Returns:
-        HTMX toast response or rendered 500 template
+        JSON response, HTMX toast response, or rendered 500 template
     """
     logger.exception("500 Internal Server Error on %s", request.url.path)
 
     message = "An unexpected error occurred. Please try again later."
+
+    if _is_api_request(request):
+        return _create_json_error_response(detail=message, status_code=HTTP_500_INTERNAL_SERVER_ERROR)
 
     if _is_htmx_request(request):
         return _create_toast_response(
