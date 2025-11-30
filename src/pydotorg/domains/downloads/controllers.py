@@ -603,14 +603,14 @@ class DownloadsPageController(Controller):
         """Render the main downloads page."""
         latest_python3 = await release_service.get_latest(PythonVersion.PYTHON3)
         latest_python2 = await release_service.get_latest(PythonVersion.PYTHON2)
-        releases = await release_service.get_for_download_page()
+        grouped_releases = await release_service.get_releases_grouped_by_minor_version()
 
         return Template(
             template_name="downloads/index.html.jinja2",
             context={
                 "latest_python3": latest_python3,
                 "latest_python2": latest_python2,
-                "releases": releases,
+                "grouped_releases": grouped_releases,
             },
         )
 

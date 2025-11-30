@@ -139,6 +139,38 @@ class TestReleaseModel:
         )
         assert release.show_on_download_page is False
 
+    def test_minor_version_standard(self) -> None:
+        release = Release(name="3.12.1", slug="3-12-1", version=PythonVersion.PYTHON3)
+        assert release.minor_version == "3.12"
+
+    def test_minor_version_python2(self) -> None:
+        release = Release(name="2.7.18", slug="2-7-18", version=PythonVersion.PYTHON2)
+        assert release.minor_version == "2.7"
+
+    def test_minor_version_prerelease(self) -> None:
+        release = Release(name="3.14.0a1", slug="3-14-0a1", version=PythonVersion.PYTHON3)
+        assert release.minor_version == "3.14"
+
+    def test_minor_version_invalid(self) -> None:
+        release = Release(name="invalid", slug="invalid", version=PythonVersion.PYTHON3)
+        assert release.minor_version == "invalid"
+
+    def test_minor_version_single_part(self) -> None:
+        release = Release(name="3", slug="3", version=PythonVersion.PYTHON3)
+        assert release.minor_version == "3"
+
+    def test_major_version_standard(self) -> None:
+        release = Release(name="3.12.1", slug="3-12-1", version=PythonVersion.PYTHON3)
+        assert release.major_version == "3"
+
+    def test_major_version_python2(self) -> None:
+        release = Release(name="2.7.18", slug="2-7-18", version=PythonVersion.PYTHON2)
+        assert release.major_version == "2"
+
+    def test_major_version_invalid(self) -> None:
+        release = Release(name="invalid", slug="invalid", version=PythonVersion.PYTHON3)
+        assert release.major_version == "invalid"
+
 
 class TestReleaseFileModel:
     def test_create_release_file(self) -> None:

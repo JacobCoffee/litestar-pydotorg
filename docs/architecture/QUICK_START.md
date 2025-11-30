@@ -453,9 +453,8 @@ saq worker pydotorg.tasks.base.worker
 
 1. Read the [Architecture Document](./ARCHITECTURE.md)
 2. Review [Database Schema](./DATABASE_SCHEMA.md)
-3. Check out [Development Guidelines](./DEVELOPMENT.md)
-4. Look at example implementations in `src/pydotorg/domains/`
-5. Start with a small feature or bug fix
+3. Look at example implementations in `src/pydotorg/domains/`
+4. Start with a small feature or bug fix
 
 ---
 

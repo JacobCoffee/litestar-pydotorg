@@ -81,6 +81,41 @@ class Release(AuditBase, ContentManageableMixin, NameSlugMixin):
     def is_version_at_least_3_14(self) -> bool:
         return self.is_version_at_least((3, 14))
 
+    @property
+    def minor_version(self) -> str:
+        """Extract minor version string (e.g., '3.12' from '3.12.1').
+
+        Returns:
+            Minor version string or full name if parsing fails.
+        """
+        try:
+            parts = self.name.split(".")
+            if len(parts) >= 2:
+                major = parts[0].lstrip("Python ").strip()
+                minor = parts[1]
+                if major.isdigit() and minor.isdigit():
+                    return f"{major}.{minor}"
+        except (ValueError, IndexError):
+            pass
+        return self.name
+
+    @property
+    def major_version(self) -> str:
+        """Extract major version string (e.g., '3' from '3.12.1').
+
+        Returns:
+            Major version string or full name if parsing fails.
+        """
+        try:
+            parts = self.name.split(".")
+            if len(parts) >= 1:
+                major = parts[0].lstrip("Python ").strip()
+                if major.isdigit():
+                    return major
+        except (ValueError, IndexError):
+            pass
+        return self.name
+
     def files_for_os(self, os_slug: str) -> list[ReleaseFile]:
         return [f for f in self.files if f.os.slug == os_slug]
 

@@ -44,7 +44,7 @@ export FEATURES__ENABLE_JOBS=false
 
 Or in your `.env` file:
 
-```env
+```shell
 FEATURES__ENABLE_OAUTH=false
 FEATURES__MAINTENANCE_MODE=true
 ```

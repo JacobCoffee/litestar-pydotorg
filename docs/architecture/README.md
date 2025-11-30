@@ -7,7 +7,7 @@ Welcome to the Litestar Python.org architecture documentation. This directory co
 - [Main Architecture Document](./ARCHITECTURE.md) - Comprehensive architecture overview
 - [Quick Start Guide](./QUICK_START.md) - Get started developing quickly
 - [Database Schema](./DATABASE_SCHEMA.md) - Detailed database design
-- [Architecture Decision Records](./adr/) - ADRs documenting key decisions
+- Architecture Decision Records - See ADRs below documenting key decisions
 
 ## Document Index
 

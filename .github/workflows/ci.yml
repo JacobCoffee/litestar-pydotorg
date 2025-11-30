@@ -97,7 +97,7 @@ jobs:
         uses: oven-sh/setup-bun@4bc047ad259df6fc24a6c9b0f9a0cb08cf17fbe5 # v2.0.2
 
       - name: Install frontend dependencies
-        run: bunx --bun install
+        run: bun install
 
       - name: Lint frontend
         run: bunx --bun biome check . || true

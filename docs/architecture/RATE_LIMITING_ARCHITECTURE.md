@@ -815,7 +815,7 @@ app = Litestar(
 
 ### 7. Error Template
 
-```jinja2
+```html+jinja
 {# templates/errors/429.html.jinja2 #}
 
 {% extends "base.html.jinja2" %}

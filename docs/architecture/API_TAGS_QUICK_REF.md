@@ -112,30 +112,29 @@ Admin Dashboard, Admin Users, Admin Pages, Admin Events, Admin Jobs, Admin Spons
 
 ## Common Migration Examples
 
-```python
-# Before → After
-
-tags = ["users"]                  → tags = ["Users"]
-tags = ["memberships"]            → tags = ["User Memberships"]
-tags = ["user-groups"]            → tags = ["User Groups"]
-tags = ["releases"]               → tags = ["Python Releases"]
-tags = ["release-files"]          → tags = ["Release Files"]
-tags = ["job-types"]              → tags = ["Job Types"]
-tags = ["job-categories"]         → tags = ["Job Categories"]
-tags = ["job-review-comments"]    → tags = ["Job Review Comments"]
-tags = ["event-categories"]       → tags = ["Event Categories"]
-tags = ["event-locations"]        → tags = ["Event Locations"]
-tags = ["event-occurrences"]      → tags = ["Event Occurrences"]
-tags = ["blog-entries"]           → tags = ["Blogs"]
-tags = ["feed-aggregates"]        → tags = ["Blog Feeds"]
-tags = ["community-posts"]        → tags = ["Community Content"]
-tags = ["community-photos"]       → tags = ["Community Content"]
-tags = ["success-stories"]        → tags = ["Success Stories"]
-tags = ["sponsorship-levels"]     → tags = ["Sponsorship Levels"]
-tags = ["code-samples"]           → tags = ["Code Samples"]
-tags = ["jobs-render"]            → tags = ["internal"] (exclude)
-tags = ["page-render"]            → tags = ["internal"] (exclude)
-tags = ["search-render"]          → tags = ["internal"] (exclude)
+```text
+# Before                           After
+tags = ["users"]                   tags = ["Users"]
+tags = ["memberships"]             tags = ["User Memberships"]
+tags = ["user-groups"]             tags = ["User Groups"]
+tags = ["releases"]                tags = ["Python Releases"]
+tags = ["release-files"]           tags = ["Release Files"]
+tags = ["job-types"]               tags = ["Job Types"]
+tags = ["job-categories"]          tags = ["Job Categories"]
+tags = ["job-review-comments"]     tags = ["Job Review Comments"]
+tags = ["event-categories"]        tags = ["Event Categories"]
+tags = ["event-locations"]         tags = ["Event Locations"]
+tags = ["event-occurrences"]       tags = ["Event Occurrences"]
+tags = ["blog-entries"]            tags = ["Blogs"]
+tags = ["feed-aggregates"]         tags = ["Blog Feeds"]
+tags = ["community-posts"]         tags = ["Community Content"]
+tags = ["community-photos"]        tags = ["Community Content"]
+tags = ["success-stories"]         tags = ["Success Stories"]
+tags = ["sponsorship-levels"]      tags = ["Sponsorship Levels"]
+tags = ["code-samples"]            tags = ["Code Samples"]
+tags = ["jobs-render"]             tags = ["internal"] (exclude)
+tags = ["page-render"]             tags = ["internal"] (exclude)
+tags = ["search-render"]           tags = ["internal"] (exclude)
 ```
 
 ## Notes
