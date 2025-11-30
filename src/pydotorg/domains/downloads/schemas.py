@@ -21,15 +21,35 @@ class OSBase(BaseModel):
 class OSCreate(OSBase):
     """Schema for creating a new OS."""
 
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "name": "macOS",
+                "slug": "macos",
+            }
+        }
+    )
+
 
 class OSRead(OSBase):
     """Schema for reading OS data."""
 
+    model_config = ConfigDict(
+        from_attributes=True,
+        json_schema_extra={
+            "example": {
+                "id": "550e8400-e29b-41d4-a716-446655440001",
+                "name": "macOS",
+                "slug": "macos",
+                "created_at": "2025-01-01T00:00:00Z",
+                "updated_at": "2025-01-01T00:00:00Z",
+            }
+        },
+    )
+
     id: UUID
     created_at: datetime.datetime
     updated_at: datetime.datetime
-
-    model_config = ConfigDict(from_attributes=True)
 
 
 class ReleaseBase(BaseModel):
@@ -50,11 +70,39 @@ class ReleaseBase(BaseModel):
 class ReleaseCreate(ReleaseBase):
     """Schema for creating a new release."""
 
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "name": "Python 3.13.1",
+                "slug": "python-3131",
+                "version": "python3",
+                "is_latest": True,
+                "is_published": True,
+                "pre_release": False,
+                "show_on_download_page": True,
+                "release_date": "2025-01-15",
+                "release_notes_url": "https://docs.python.org/release/3.13.1/whatsnew/changelog.html",
+                "content": "Python 3.13.1 is the first maintenance release of Python 3.13...",
+                "release_page_id": "550e8400-e29b-41d4-a716-446655440100",
+            }
+        }
+    )
+
     release_page_id: UUID | None = None
 
 
 class ReleaseUpdate(BaseModel):
     """Schema for updating a release."""
+
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "is_latest": True,
+                "is_published": True,
+                "content": "Updated release notes for Python 3.13.1...",
+            }
+        }
+    )
 
     name: Annotated[str, Field(min_length=1, max_length=255)] | None = None
     is_latest: bool | None = None
@@ -70,16 +118,52 @@ class ReleaseUpdate(BaseModel):
 class ReleaseRead(ReleaseBase):
     """Schema for reading release data."""
 
+    model_config = ConfigDict(
+        from_attributes=True,
+        json_schema_extra={
+            "example": {
+                "id": "550e8400-e29b-41d4-a716-446655440010",
+                "name": "Python 3.13.1",
+                "slug": "python-3131",
+                "version": "python3",
+                "is_latest": True,
+                "is_published": True,
+                "pre_release": False,
+                "show_on_download_page": True,
+                "release_date": "2025-01-15",
+                "release_notes_url": "https://docs.python.org/release/3.13.1/whatsnew/changelog.html",
+                "content": "Python 3.13.1 is the first maintenance release...",
+                "release_page_id": "550e8400-e29b-41d4-a716-446655440100",
+                "created_at": "2025-01-15T00:00:00Z",
+                "updated_at": "2025-01-15T00:00:00Z",
+            }
+        },
+    )
+
     id: UUID
     release_page_id: UUID | None
     created_at: datetime.datetime
     updated_at: datetime.datetime
 
-    model_config = ConfigDict(from_attributes=True)
-
 
 class ReleaseList(BaseModel):
     """Schema for release list items."""
+
+    model_config = ConfigDict(
+        from_attributes=True,
+        json_schema_extra={
+            "example": {
+                "id": "550e8400-e29b-41d4-a716-446655440010",
+                "name": "Python 3.13.1",
+                "slug": "python-3131",
+                "version": "python3",
+                "is_latest": True,
+                "is_published": True,
+                "pre_release": False,
+                "release_date": "2025-01-15",
+            }
+        },
+    )
 
     id: UUID
     name: str
@@ -89,8 +173,6 @@ class ReleaseList(BaseModel):
     is_published: bool
     pre_release: bool
     release_date: datetime.date | None
-
-    model_config = ConfigDict(from_attributes=True)
 
 
 class ReleaseFileBase(BaseModel):
@@ -114,6 +196,23 @@ class ReleaseFileBase(BaseModel):
 class ReleaseFileCreate(ReleaseFileBase):
     """Schema for creating a new release file."""
 
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "name": "python-3.13.1-macos11.pkg",
+                "slug": "python-3131-macos11-pkg",
+                "description": "macOS 64-bit universal2 installer",
+                "is_source": False,
+                "url": "https://www.python.org/ftp/python/3.13.1/python-3.13.1-macos11.pkg",
+                "md5_sum": "abc123def456...",
+                "filesize": 45678901,
+                "download_button": True,
+                "release_id": "550e8400-e29b-41d4-a716-446655440010",
+                "os_id": "550e8400-e29b-41d4-a716-446655440001",
+            }
+        }
+    )
+
     release_id: UUID
     os_id: UUID
 
@@ -121,21 +220,71 @@ class ReleaseFileCreate(ReleaseFileBase):
 class ReleaseFileRead(ReleaseFileBase):
     """Schema for reading release file data."""
 
+    model_config = ConfigDict(
+        from_attributes=True,
+        json_schema_extra={
+            "example": {
+                "id": "550e8400-e29b-41d4-a716-446655440020",
+                "name": "python-3.13.1-macos11.pkg",
+                "slug": "python-3131-macos11-pkg",
+                "description": "macOS 64-bit universal2 installer",
+                "is_source": False,
+                "url": "https://www.python.org/ftp/python/3.13.1/python-3.13.1-macos11.pkg",
+                "gpg_signature_file": "",
+                "sigstore_signature_file": "",
+                "sigstore_cert_file": "",
+                "sigstore_bundle_file": "",
+                "sbom_spdx2_file": "",
+                "md5_sum": "abc123def456...",
+                "filesize": 45678901,
+                "download_button": True,
+                "release_id": "550e8400-e29b-41d4-a716-446655440010",
+                "os_id": "550e8400-e29b-41d4-a716-446655440001",
+                "created_at": "2025-01-15T00:00:00Z",
+                "updated_at": "2025-01-15T00:00:00Z",
+            }
+        },
+    )
+
     id: UUID
     release_id: UUID
     os_id: UUID
     created_at: datetime.datetime
     updated_at: datetime.datetime
 
-    model_config = ConfigDict(from_attributes=True)
-
 
 class ReleaseFileWithOS(ReleaseFileRead):
     """Schema for release file with OS information."""
 
-    os: OSRead
+    model_config = ConfigDict(
+        from_attributes=True,
+        json_schema_extra={
+            "example": {
+                "id": "550e8400-e29b-41d4-a716-446655440020",
+                "name": "python-3.13.1-macos11.pkg",
+                "slug": "python-3131-macos11-pkg",
+                "description": "macOS 64-bit universal2 installer",
+                "is_source": False,
+                "url": "https://www.python.org/ftp/python/3.13.1/python-3.13.1-macos11.pkg",
+                "md5_sum": "abc123def456...",
+                "filesize": 45678901,
+                "download_button": True,
+                "release_id": "550e8400-e29b-41d4-a716-446655440010",
+                "os_id": "550e8400-e29b-41d4-a716-446655440001",
+                "created_at": "2025-01-15T00:00:00Z",
+                "updated_at": "2025-01-15T00:00:00Z",
+                "os": {
+                    "id": "550e8400-e29b-41d4-a716-446655440001",
+                    "name": "macOS",
+                    "slug": "macos",
+                    "created_at": "2025-01-01T00:00:00Z",
+                    "updated_at": "2025-01-01T00:00:00Z",
+                },
+            }
+        },
+    )
 
-    model_config = ConfigDict(from_attributes=True)
+    os: OSRead
 
 
 class DownloadPageData(BaseModel):

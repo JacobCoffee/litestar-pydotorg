@@ -24,6 +24,18 @@ class SponsorshipLevelBase(BaseModel):
 class SponsorshipLevelCreate(BaseModel):
     """Schema for creating a new sponsorship level."""
 
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "name": "Visionary",
+                "slug": "visionary",
+                "order": 1,
+                "sponsorship_amount": 150000,
+                "logo_dimension": 200,
+            }
+        }
+    )
+
     name: Annotated[str, Field(min_length=1, max_length=200)]
     slug: Annotated[str, Field(min_length=1, max_length=200)] | None = None
     order: int = 0
@@ -33,6 +45,15 @@ class SponsorshipLevelCreate(BaseModel):
 
 class SponsorshipLevelUpdate(BaseModel):
     """Schema for updating a sponsorship level."""
+
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "sponsorship_amount": 175000,
+                "logo_dimension": 250,
+            }
+        }
+    )
 
     name: Annotated[str, Field(min_length=1, max_length=200)] | None = None
     slug: Annotated[str, Field(min_length=1, max_length=200)] | None = None
@@ -44,11 +65,25 @@ class SponsorshipLevelUpdate(BaseModel):
 class SponsorshipLevelRead(SponsorshipLevelBase):
     """Schema for reading sponsorship level data."""
 
+    model_config = ConfigDict(
+        from_attributes=True,
+        json_schema_extra={
+            "example": {
+                "id": "550e8400-e29b-41d4-a716-446655440001",
+                "name": "Visionary",
+                "slug": "visionary",
+                "order": 1,
+                "sponsorship_amount": 150000,
+                "logo_dimension": 200,
+                "created_at": "2025-01-01T00:00:00Z",
+                "updated_at": "2025-01-01T00:00:00Z",
+            }
+        },
+    )
+
     id: UUID
     created_at: datetime.datetime
     updated_at: datetime.datetime
-
-    model_config = ConfigDict(from_attributes=True)
 
 
 class SponsorBase(BaseModel):
@@ -75,6 +110,24 @@ class SponsorBase(BaseModel):
 
 class SponsorCreate(BaseModel):
     """Schema for creating a new sponsor."""
+
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "name": "Microsoft",
+                "slug": "microsoft",
+                "description": "Microsoft is a Visionary sponsor of the PSF",
+                "landing_page_url": "https://microsoft.com",
+                "twitter_handle": "Microsoft",
+                "linked_in_page_url": "https://linkedin.com/company/microsoft",
+                "web_logo": "/media/sponsors/microsoft-logo.png",
+                "city": "Redmond",
+                "state": "Washington",
+                "postal_code": "98052",
+                "country": "USA",
+            }
+        }
+    )
 
     name: Annotated[str, Field(min_length=1, max_length=200)]
     slug: Annotated[str, Field(min_length=1, max_length=200)] | None = None
@@ -122,13 +175,41 @@ class SponsorUpdate(BaseModel):
 class SponsorRead(SponsorBase):
     """Schema for reading sponsor data."""
 
+    model_config = ConfigDict(
+        from_attributes=True,
+        json_schema_extra={
+            "example": {
+                "id": "550e8400-e29b-41d4-a716-446655440010",
+                "name": "Microsoft",
+                "slug": "microsoft",
+                "description": "Microsoft is a Visionary sponsor of the PSF",
+                "landing_page_url": "https://microsoft.com",
+                "twitter_handle": "Microsoft",
+                "linked_in_page_url": "https://linkedin.com/company/microsoft",
+                "web_logo": "/media/sponsors/microsoft-logo.png",
+                "print_logo": "",
+                "primary_phone": "",
+                "mailing_address_line_1": "",
+                "mailing_address_line_2": "",
+                "city": "Redmond",
+                "state": "Washington",
+                "postal_code": "98052",
+                "country": "USA",
+                "country_of_incorporation": "",
+                "state_of_incorporation": "",
+                "created": "2025-01-01T00:00:00Z",
+                "updated": "2025-01-01T00:00:00Z",
+                "creator_id": "550e8400-e29b-41d4-a716-446655440000",
+                "last_modified_by_id": None,
+            }
+        },
+    )
+
     id: UUID
     created: datetime.datetime
     updated: datetime.datetime
     creator_id: UUID | None
     last_modified_by_id: UUID | None
-
-    model_config = ConfigDict(from_attributes=True)
 
 
 class SponsorPublic(BaseModel):

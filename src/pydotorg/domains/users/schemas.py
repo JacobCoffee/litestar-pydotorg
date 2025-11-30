@@ -29,6 +29,22 @@ class UserBase(BaseModel):
 class UserCreate(UserBase):
     """Schema for creating a new user."""
 
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "username": "guido_van_rossum",
+                "email": "guido@python.org",
+                "password": "SecurePass123!",
+                "first_name": "Guido",
+                "last_name": "van Rossum",
+                "bio": "Python creator and BDFL",
+                "search_visibility": "public",
+                "email_privacy": "private",
+                "public_profile": True,
+            }
+        }
+    )
+
     password: Annotated[str, Field(min_length=8, max_length=255)]
 
     @field_validator("password")
@@ -43,6 +59,18 @@ class UserCreate(UserBase):
 class UserUpdate(BaseModel):
     """Schema for updating an existing user."""
 
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "first_name": "Guido",
+                "last_name": "van Rossum",
+                "bio": "Python creator, former BDFL, now retired from leadership but still contributing to Python development",
+                "search_visibility": "public",
+                "email_privacy": "private",
+            }
+        }
+    )
+
     email: EmailStr | None = None
     first_name: Annotated[str, Field(max_length=150)] | None = None
     last_name: Annotated[str, Field(max_length=150)] | None = None
@@ -55,6 +83,30 @@ class UserUpdate(BaseModel):
 class UserRead(UserBase):
     """Schema for reading user data."""
 
+    model_config = ConfigDict(
+        from_attributes=True,
+        json_schema_extra={
+            "example": {
+                "id": "550e8400-e29b-41d4-a716-446655440000",
+                "username": "guido_van_rossum",
+                "email": "guido@python.org",
+                "first_name": "Guido",
+                "last_name": "van Rossum",
+                "bio": "Python creator and BDFL",
+                "search_visibility": "public",
+                "email_privacy": "private",
+                "public_profile": True,
+                "is_active": True,
+                "is_staff": False,
+                "is_superuser": False,
+                "date_joined": "2025-01-15T10:30:00Z",
+                "last_login": "2025-11-29T08:45:00Z",
+                "created_at": "2025-01-15T10:30:00Z",
+                "updated_at": "2025-11-20T14:22:00Z",
+            }
+        },
+    )
+
     id: UUID
     is_active: bool
     is_staff: bool
@@ -63,8 +115,6 @@ class UserRead(UserBase):
     last_login: datetime.datetime | None
     created_at: datetime.datetime
     updated_at: datetime.datetime
-
-    model_config = ConfigDict(from_attributes=True)
 
     @property
     def full_name(self) -> str:

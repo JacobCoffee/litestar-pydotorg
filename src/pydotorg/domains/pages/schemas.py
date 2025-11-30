@@ -27,11 +27,35 @@ class PageBase(BaseModel):
 class PageCreate(PageBase):
     """Schema for creating a new page."""
 
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "title": "About Python",
+                "path": "/about/",
+                "content": "# About Python\n\nPython is a programming language...",
+                "content_type": "markdown",
+                "keywords": "python, programming, language",
+                "description": "Learn about the Python programming language",
+                "is_published": True,
+                "template_name": "pages/default.html",
+            }
+        }
+    )
+
     creator_id: UUID | None = None
 
 
 class PageUpdate(BaseModel):
     """Schema for updating an existing page."""
+
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "content": "# About Python\n\nUpdated content about Python...",
+                "is_published": True,
+            }
+        }
+    )
 
     title: Annotated[str, Field(min_length=1, max_length=500)] | None = None
     path: Annotated[str, Field(min_length=1, max_length=500)] | None = None
@@ -47,13 +71,32 @@ class PageUpdate(BaseModel):
 class PageRead(PageBase):
     """Schema for reading page data."""
 
+    model_config = ConfigDict(
+        from_attributes=True,
+        json_schema_extra={
+            "example": {
+                "id": "550e8400-e29b-41d4-a716-446655440001",
+                "title": "About Python",
+                "path": "/about/",
+                "content": "# About Python\n\nPython is a programming language...",
+                "content_type": "markdown",
+                "keywords": "python, programming, language",
+                "description": "Learn about the Python programming language",
+                "is_published": True,
+                "template_name": "pages/default.html",
+                "created": "2025-01-01T00:00:00Z",
+                "updated": "2025-01-15T10:00:00Z",
+                "creator_id": "550e8400-e29b-41d4-a716-446655440000",
+                "last_modified_by_id": None,
+            }
+        },
+    )
+
     id: UUID
     created: datetime.datetime
     updated: datetime.datetime
     creator_id: UUID | None
     last_modified_by_id: UUID | None
-
-    model_config = ConfigDict(from_attributes=True)
 
 
 class PagePublic(BaseModel):
