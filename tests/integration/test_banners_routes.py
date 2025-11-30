@@ -49,7 +49,7 @@ async def _create_banner_via_db(
 
 
 @pytest.fixture
-async def test_app(postgres_uri: str) -> AsyncGenerator[Litestar, None]:
+async def test_app(postgres_uri: str) -> AsyncGenerator[Litestar]:
     """Create a test Litestar application with the banners controller."""
     engine = create_async_engine(postgres_uri, echo=False)
     async with engine.begin() as conn:
@@ -71,7 +71,7 @@ async def test_app(postgres_uri: str) -> AsyncGenerator[Litestar, None]:
 
 
 @pytest.fixture
-async def client(test_app: Litestar) -> AsyncGenerator[AsyncTestClient, None]:
+async def client(test_app: Litestar) -> AsyncGenerator[AsyncTestClient]:
     """Create an async test client."""
     async with AsyncTestClient(app=test_app) as client:
         yield client
@@ -80,18 +80,14 @@ async def client(test_app: Litestar) -> AsyncGenerator[AsyncTestClient, None]:
 class TestBannerControllerRoutes:
     """Tests for BannerController endpoints."""
 
-    async def test_list_banners(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_list_banners(self, client: AsyncTestClient, postgres_uri: str) -> None:
         await _create_banner_via_db(postgres_uri)
         response = await client.get("/api/v1/banners/")
         assert response.status_code in (200, 400, 500)
         if response.status_code == 200:
             assert isinstance(response.json(), list)
 
-    async def test_list_banners_with_pagination(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_list_banners_with_pagination(self, client: AsyncTestClient, postgres_uri: str) -> None:
         for i in range(3):
             await _create_banner_via_db(postgres_uri, name=f"Banner {i}")
         response = await client.get("/api/v1/banners/?currentPage=1&pageSize=2")
@@ -100,9 +96,7 @@ class TestBannerControllerRoutes:
             result = response.json()
             assert isinstance(result, list)
 
-    async def test_list_active_banners(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_list_active_banners(self, client: AsyncTestClient, postgres_uri: str) -> None:
         today = datetime.date.today()
         await _create_banner_via_db(
             postgres_uri,
@@ -115,9 +109,7 @@ class TestBannerControllerRoutes:
         if response.status_code == 200:
             assert isinstance(response.json(), list)
 
-    async def test_list_active_banners_without_date_check(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_list_active_banners_without_date_check(self, client: AsyncTestClient, postgres_uri: str) -> None:
         await _create_banner_via_db(postgres_uri, is_active=True)
         response = await client.get("/api/v1/banners/active?check_dates=false")
         assert response.status_code in (200, 500)
@@ -138,9 +130,7 @@ class TestBannerControllerRoutes:
             result = response.json()
             assert result["name"] == "new-test-banner"
 
-    async def test_get_banner_by_id(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_get_banner_by_id(self, client: AsyncTestClient, postgres_uri: str) -> None:
         banner = await _create_banner_via_db(postgres_uri)
         response = await client.get(f"/api/v1/banners/{banner.id}")
         assert response.status_code in (200, 500)
@@ -153,9 +143,7 @@ class TestBannerControllerRoutes:
         response = await client.get(f"/api/v1/banners/{fake_id}")
         assert response.status_code in (404, 500)
 
-    async def test_get_banner_by_name(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_get_banner_by_name(self, client: AsyncTestClient, postgres_uri: str) -> None:
         banner = await _create_banner_via_db(postgres_uri, name="unique-banner-name")
         response = await client.get(f"/api/v1/banners/name/{banner.name}")
         assert response.status_code in (200, 500)
@@ -167,9 +155,7 @@ class TestBannerControllerRoutes:
         response = await client.get("/api/v1/banners/name/non-existent-banner")
         assert response.status_code in (404, 500)
 
-    async def test_update_banner(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_update_banner(self, client: AsyncTestClient, postgres_uri: str) -> None:
         banner = await _create_banner_via_db(postgres_uri)
         data = {"title": "Updated Banner Title"}
         response = await client.put(f"/api/v1/banners/{banner.id}", json=data)
@@ -178,9 +164,7 @@ class TestBannerControllerRoutes:
             result = response.json()
             assert result["title"] == "Updated Banner Title"
 
-    async def test_delete_banner(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_delete_banner(self, client: AsyncTestClient, postgres_uri: str) -> None:
         banner = await _create_banner_via_db(postgres_uri)
         response = await client.delete(f"/api/v1/banners/{banner.id}")
         assert response.status_code in (200, 204, 500)

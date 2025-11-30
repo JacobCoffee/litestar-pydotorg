@@ -63,7 +63,7 @@ async def _create_work_group_via_db(
 
 
 @pytest.fixture
-async def test_app(postgres_uri: str) -> AsyncGenerator[Litestar, None]:
+async def test_app(postgres_uri: str) -> AsyncGenerator[Litestar]:
     """Create a test Litestar application with the work groups controller."""
     engine = create_async_engine(postgres_uri, echo=False)
     async with engine.begin() as conn:
@@ -85,7 +85,7 @@ async def test_app(postgres_uri: str) -> AsyncGenerator[Litestar, None]:
 
 
 @pytest.fixture
-async def client(test_app: Litestar) -> AsyncGenerator[AsyncTestClient, None]:
+async def client(test_app: Litestar) -> AsyncGenerator[AsyncTestClient]:
     """Create an async test client."""
     async with AsyncTestClient(app=test_app) as client:
         yield client
@@ -94,9 +94,7 @@ async def client(test_app: Litestar) -> AsyncGenerator[AsyncTestClient, None]:
 class TestWorkGroupControllerRoutes:
     """Tests for WorkGroupController endpoints."""
 
-    async def test_list_work_groups(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_list_work_groups(self, client: AsyncTestClient, postgres_uri: str) -> None:
         user = await _create_user_via_db(postgres_uri)
         await _create_work_group_via_db(postgres_uri, str(user.id))
         response = await client.get("/api/v1/work-groups/")
@@ -104,9 +102,7 @@ class TestWorkGroupControllerRoutes:
         if response.status_code == 200:
             assert isinstance(response.json(), list)
 
-    async def test_list_work_groups_with_pagination(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_list_work_groups_with_pagination(self, client: AsyncTestClient, postgres_uri: str) -> None:
         user = await _create_user_via_db(postgres_uri)
         for i in range(3):
             await _create_work_group_via_db(postgres_uri, str(user.id), name=f"Group {i}")
@@ -116,9 +112,7 @@ class TestWorkGroupControllerRoutes:
             result = response.json()
             assert isinstance(result, list)
 
-    async def test_list_active_work_groups(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_list_active_work_groups(self, client: AsyncTestClient, postgres_uri: str) -> None:
         user = await _create_user_via_db(postgres_uri)
         await _create_work_group_via_db(postgres_uri, str(user.id), active=True)
         response = await client.get("/api/v1/work-groups/active")
@@ -126,9 +120,7 @@ class TestWorkGroupControllerRoutes:
         if response.status_code == 200:
             assert isinstance(response.json(), list)
 
-    async def test_create_work_group(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_create_work_group(self, client: AsyncTestClient, postgres_uri: str) -> None:
         user = await _create_user_via_db(postgres_uri)
         data = {
             "name": "New Test Work Group",
@@ -143,9 +135,7 @@ class TestWorkGroupControllerRoutes:
             result = response.json()
             assert result["name"] == "New Test Work Group"
 
-    async def test_get_work_group_by_id(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_get_work_group_by_id(self, client: AsyncTestClient, postgres_uri: str) -> None:
         user = await _create_user_via_db(postgres_uri)
         work_group = await _create_work_group_via_db(postgres_uri, str(user.id))
         response = await client.get(f"/api/v1/work-groups/{work_group.id}")
@@ -159,9 +149,7 @@ class TestWorkGroupControllerRoutes:
         response = await client.get(f"/api/v1/work-groups/{fake_id}")
         assert response.status_code in (404, 500)
 
-    async def test_get_work_group_by_slug(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_get_work_group_by_slug(self, client: AsyncTestClient, postgres_uri: str) -> None:
         user = await _create_user_via_db(postgres_uri)
         work_group = await _create_work_group_via_db(postgres_uri, str(user.id))
         response = await client.get(f"/api/v1/work-groups/slug/{work_group.slug}")
@@ -174,9 +162,7 @@ class TestWorkGroupControllerRoutes:
         response = await client.get("/api/v1/work-groups/slug/non-existent-slug")
         assert response.status_code in (404, 500)
 
-    async def test_update_work_group(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_update_work_group(self, client: AsyncTestClient, postgres_uri: str) -> None:
         user = await _create_user_via_db(postgres_uri)
         work_group = await _create_work_group_via_db(postgres_uri, str(user.id))
         data = {"name": "Updated Work Group Name"}
@@ -186,9 +172,7 @@ class TestWorkGroupControllerRoutes:
             result = response.json()
             assert result["name"] == "Updated Work Group Name"
 
-    async def test_delete_work_group(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_delete_work_group(self, client: AsyncTestClient, postgres_uri: str) -> None:
         user = await _create_user_via_db(postgres_uri)
         work_group = await _create_work_group_via_db(postgres_uri, str(user.id))
         response = await client.delete(f"/api/v1/work-groups/{work_group.id}")
@@ -198,9 +182,7 @@ class TestWorkGroupControllerRoutes:
 class TestWorkGroupsValidation:
     """Validation tests for work groups domain."""
 
-    async def test_create_work_group_missing_name(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_create_work_group_missing_name(self, client: AsyncTestClient, postgres_uri: str) -> None:
         user = await _create_user_via_db(postgres_uri)
         data = {
             "purpose": "Test",
@@ -209,9 +191,7 @@ class TestWorkGroupsValidation:
         response = await client.post("/api/v1/work-groups/", json=data)
         assert response.status_code in (400, 422, 500)
 
-    async def test_create_work_group_missing_purpose(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_create_work_group_missing_purpose(self, client: AsyncTestClient, postgres_uri: str) -> None:
         user = await _create_user_via_db(postgres_uri)
         data = {
             "name": "Test Group",

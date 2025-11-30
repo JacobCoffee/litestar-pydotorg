@@ -24,7 +24,7 @@ from pydotorg.domains.events.controllers import (
     EventOccurrenceController,
 )
 from pydotorg.domains.events.dependencies import get_events_dependencies
-from pydotorg.domains.events.models import Calendar, Event, EventCategory, EventLocation, EventOccurrence
+from pydotorg.domains.events.models import Calendar, Event, EventCategory, EventLocation
 from pydotorg.domains.events.schemas import (
     CalendarRead,
     EventCategoryRead,
@@ -197,7 +197,9 @@ class TestCalendarController:
 
     async def test_get_calendar_by_id(self, events_fixtures: EventsTestFixtures) -> None:
         """Test getting a calendar by ID."""
-        calendar = await _create_calendar_via_db(events_fixtures.postgres_uri, name="Test Calendar", slug="test-calendar")
+        calendar = await _create_calendar_via_db(
+            events_fixtures.postgres_uri, name="Test Calendar", slug="test-calendar"
+        )
         response = await events_fixtures.client.get(f"/api/v1/calendars/{calendar['id']}")
         assert response.status_code == 200
         data = response.json()
@@ -384,7 +386,9 @@ class TestEventLocationController:
 
     async def test_get_location_by_id(self, events_fixtures: EventsTestFixtures) -> None:
         """Test getting a location by ID."""
-        location = await _create_location_via_db(events_fixtures.postgres_uri, name="Test Location", address="123 Main St")
+        location = await _create_location_via_db(
+            events_fixtures.postgres_uri, name="Test Location", address="123 Main St"
+        )
         response = await events_fixtures.client.get(f"/api/v1/event-locations/{location['id']}")
         assert response.status_code == 200
         data = response.json()
@@ -649,9 +653,7 @@ class TestEventController:
     async def test_list_featured_events_by_calendar(self, events_fixtures: EventsTestFixtures) -> None:
         """Test listing featured events filtered by calendar."""
         calendar = await _create_calendar_via_db(events_fixtures.postgres_uri)
-        response = await events_fixtures.client.get(
-            f"/api/v1/events/featured?calendar_id={calendar['id']}"
-        )
+        response = await events_fixtures.client.get(f"/api/v1/events/featured?calendar_id={calendar['id']}")
         assert response.status_code in (200, 500)
         if response.status_code == 200:
             events = response.json()
@@ -660,7 +662,7 @@ class TestEventController:
     async def test_list_upcoming_events(self, events_fixtures: EventsTestFixtures) -> None:
         """Test listing upcoming events."""
         calendar = await _create_calendar_via_db(events_fixtures.postgres_uri)
-        future_date = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=30)
+        future_date = datetime.datetime.now(datetime.UTC) + datetime.timedelta(days=30)
         event_data = {
             "title": "Upcoming Event",
             "slug": f"upcoming-{uuid4().hex[:8]}",
@@ -687,7 +689,7 @@ class TestEventController:
     async def test_list_upcoming_events_with_filters(self, events_fixtures: EventsTestFixtures) -> None:
         """Test listing upcoming events with date and calendar filters."""
         calendar = await _create_calendar_via_db(events_fixtures.postgres_uri)
-        start_date = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        start_date = datetime.datetime.now(datetime.UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
         response = await events_fixtures.client.get(
             f"/api/v1/events/upcoming?calendar_id={calendar['id']}&start_date={start_date}"
         )
@@ -962,9 +964,7 @@ class TestEventOccurrenceController:
             "dt_start": "2026-01-10T15:00:00Z",
             "dt_end": "2026-01-10T17:00:00Z",
         }
-        response = await events_fixtures.client.put(
-            f"/api/v1/event-occurrences/{occurrence_id}", json=update_data
-        )
+        response = await events_fixtures.client.put(f"/api/v1/event-occurrences/{occurrence_id}", json=update_data)
         assert response.status_code in (200, 500)
         if response.status_code == 200:
             data = response.json()

@@ -65,9 +65,7 @@ async def _create_election_via_db(postgres_uri: str, name: str | None = None) ->
         return election
 
 
-async def _create_nominee_via_db(
-    postgres_uri: str, election_id: str, user_id: str, accepted: bool = False
-) -> Nominee:
+async def _create_nominee_via_db(postgres_uri: str, election_id: str, user_id: str, accepted: bool = False) -> Nominee:
     """Create a nominee directly in the database for testing."""
     from uuid import UUID
 
@@ -108,7 +106,7 @@ async def _create_nomination_via_db(
 
 
 @pytest.fixture
-async def test_app(postgres_uri: str) -> AsyncGenerator[Litestar, None]:
+async def test_app(postgres_uri: str) -> AsyncGenerator[Litestar]:
     """Create a test Litestar application with the nominations controllers."""
     engine = create_async_engine(postgres_uri, echo=False)
     async with engine.begin() as conn:
@@ -130,7 +128,7 @@ async def test_app(postgres_uri: str) -> AsyncGenerator[Litestar, None]:
 
 
 @pytest.fixture
-async def client(test_app: Litestar) -> AsyncGenerator[AsyncTestClient, None]:
+async def client(test_app: Litestar) -> AsyncGenerator[AsyncTestClient]:
     """Create an async test client."""
     async with AsyncTestClient(app=test_app) as client:
         yield client
@@ -146,9 +144,7 @@ class TestElectionControllerRoutes:
         if response.status_code == 200:
             assert isinstance(response.json(), list)
 
-    async def test_list_elections_with_pagination(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_list_elections_with_pagination(self, client: AsyncTestClient, postgres_uri: str) -> None:
         for i in range(3):
             await _create_election_via_db(postgres_uri, name=f"Election {i}")
         response = await client.get("/api/v1/elections/?currentPage=1&pageSize=2")
@@ -158,18 +154,14 @@ class TestElectionControllerRoutes:
             assert isinstance(result, list)
             assert len(result) <= 2
 
-    async def test_list_elections_by_status(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_list_elections_by_status(self, client: AsyncTestClient, postgres_uri: str) -> None:
         await _create_election_via_db(postgres_uri)
         response = await client.get("/api/v1/elections/?status=nominations_open")
         assert response.status_code in (200, 400, 500)
         if response.status_code == 200:
             assert isinstance(response.json(), list)
 
-    async def test_list_active_elections(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_list_active_elections(self, client: AsyncTestClient, postgres_uri: str) -> None:
         await _create_election_via_db(postgres_uri)
         response = await client.get("/api/v1/elections/active")
         assert response.status_code in (200, 500)
@@ -192,9 +184,7 @@ class TestElectionControllerRoutes:
             result = response.json()
             assert result["name"] == "New Test Election"
 
-    async def test_get_election_by_id(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_get_election_by_id(self, client: AsyncTestClient, postgres_uri: str) -> None:
         election = await _create_election_via_db(postgres_uri)
         response = await client.get(f"/api/v1/elections/{election.id}")
         assert response.status_code in (200, 500)
@@ -207,9 +197,7 @@ class TestElectionControllerRoutes:
         response = await client.get(f"/api/v1/elections/{fake_id}")
         assert response.status_code in (404, 500)
 
-    async def test_update_election(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_update_election(self, client: AsyncTestClient, postgres_uri: str) -> None:
         election = await _create_election_via_db(postgres_uri)
         data = {"name": "Updated Election Name"}
         response = await client.put(f"/api/v1/elections/{election.id}", json=data)
@@ -218,9 +206,7 @@ class TestElectionControllerRoutes:
             result = response.json()
             assert result["name"] == "Updated Election Name"
 
-    async def test_delete_election(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_delete_election(self, client: AsyncTestClient, postgres_uri: str) -> None:
         election = await _create_election_via_db(postgres_uri)
         response = await client.delete(f"/api/v1/elections/{election.id}")
         assert response.status_code in (200, 204, 500)
@@ -238,9 +224,7 @@ class TestNomineeControllerRoutes:
         if response.status_code == 200:
             assert isinstance(response.json(), list)
 
-    async def test_list_nominees_with_pagination(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_list_nominees_with_pagination(self, client: AsyncTestClient, postgres_uri: str) -> None:
         election = await _create_election_via_db(postgres_uri)
         for _ in range(3):
             user = await _create_user_via_db(postgres_uri)
@@ -251,9 +235,7 @@ class TestNomineeControllerRoutes:
             result = response.json()
             assert isinstance(result, list)
 
-    async def test_list_nominees_by_election(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_list_nominees_by_election(self, client: AsyncTestClient, postgres_uri: str) -> None:
         user = await _create_user_via_db(postgres_uri)
         election = await _create_election_via_db(postgres_uri)
         await _create_nominee_via_db(postgres_uri, str(election.id), str(user.id))
@@ -262,9 +244,7 @@ class TestNomineeControllerRoutes:
         if response.status_code == 200:
             assert isinstance(response.json(), list)
 
-    async def test_get_nominee_by_id(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_get_nominee_by_id(self, client: AsyncTestClient, postgres_uri: str) -> None:
         user = await _create_user_via_db(postgres_uri)
         election = await _create_election_via_db(postgres_uri)
         nominee = await _create_nominee_via_db(postgres_uri, str(election.id), str(user.id))
@@ -279,9 +259,7 @@ class TestNomineeControllerRoutes:
         response = await client.get(f"/api/v1/nominees/{fake_id}")
         assert response.status_code in (404, 500)
 
-    async def test_list_accepted_nominees(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_list_accepted_nominees(self, client: AsyncTestClient, postgres_uri: str) -> None:
         user = await _create_user_via_db(postgres_uri)
         election = await _create_election_via_db(postgres_uri)
         await _create_nominee_via_db(postgres_uri, str(election.id), str(user.id), accepted=True)
@@ -290,9 +268,7 @@ class TestNomineeControllerRoutes:
         if response.status_code == 200:
             assert isinstance(response.json(), list)
 
-    async def test_create_nominee(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_create_nominee(self, client: AsyncTestClient, postgres_uri: str) -> None:
         user = await _create_user_via_db(postgres_uri)
         election = await _create_election_via_db(postgres_uri)
         data = {
@@ -305,9 +281,7 @@ class TestNomineeControllerRoutes:
             result = response.json()
             assert result["election_id"] == str(election.id)
 
-    async def test_accept_nomination(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_accept_nomination(self, client: AsyncTestClient, postgres_uri: str) -> None:
         user = await _create_user_via_db(postgres_uri)
         election = await _create_election_via_db(postgres_uri)
         nominee = await _create_nominee_via_db(postgres_uri, str(election.id), str(user.id))
@@ -317,18 +291,14 @@ class TestNomineeControllerRoutes:
             result = response.json()
             assert result["accepted"] is True
 
-    async def test_decline_nomination(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_decline_nomination(self, client: AsyncTestClient, postgres_uri: str) -> None:
         user = await _create_user_via_db(postgres_uri)
         election = await _create_election_via_db(postgres_uri)
         nominee = await _create_nominee_via_db(postgres_uri, str(election.id), str(user.id))
         response = await client.patch(f"/api/v1/nominees/{nominee.id}/decline")
         assert response.status_code in (200, 204, 500)
 
-    async def test_delete_nominee(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_delete_nominee(self, client: AsyncTestClient, postgres_uri: str) -> None:
         user = await _create_user_via_db(postgres_uri)
         election = await _create_election_via_db(postgres_uri)
         nominee = await _create_nominee_via_db(postgres_uri, str(election.id), str(user.id))
@@ -339,24 +309,18 @@ class TestNomineeControllerRoutes:
 class TestNominationControllerRoutes:
     """Tests for NominationController endpoints."""
 
-    async def test_list_nominations(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_list_nominations(self, client: AsyncTestClient, postgres_uri: str) -> None:
         user = await _create_user_via_db(postgres_uri)
         nominator = await _create_user_via_db(postgres_uri)
         election = await _create_election_via_db(postgres_uri)
         nominee = await _create_nominee_via_db(postgres_uri, str(election.id), str(user.id))
-        await _create_nomination_via_db(
-            postgres_uri, str(nominee.id), str(nominator.id), "Great candidate!"
-        )
+        await _create_nomination_via_db(postgres_uri, str(nominee.id), str(nominator.id), "Great candidate!")
         response = await client.get("/api/v1/nominations/")
         assert response.status_code in (200, 400, 500)
         if response.status_code == 200:
             assert isinstance(response.json(), list)
 
-    async def test_list_nominations_with_pagination(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_list_nominations_with_pagination(self, client: AsyncTestClient, postgres_uri: str) -> None:
         election = await _create_election_via_db(postgres_uri)
         user = await _create_user_via_db(postgres_uri)
         nominee = await _create_nominee_via_db(postgres_uri, str(election.id), str(user.id))
@@ -368,9 +332,7 @@ class TestNominationControllerRoutes:
         if response.status_code == 200:
             assert isinstance(response.json(), list)
 
-    async def test_list_nominations_by_nominee(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_list_nominations_by_nominee(self, client: AsyncTestClient, postgres_uri: str) -> None:
         user = await _create_user_via_db(postgres_uri)
         nominator = await _create_user_via_db(postgres_uri)
         election = await _create_election_via_db(postgres_uri)
@@ -381,9 +343,7 @@ class TestNominationControllerRoutes:
         if response.status_code == 200:
             assert isinstance(response.json(), list)
 
-    async def test_get_nomination_by_id(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_get_nomination_by_id(self, client: AsyncTestClient, postgres_uri: str) -> None:
         user = await _create_user_via_db(postgres_uri)
         nominator = await _create_user_via_db(postgres_uri)
         election = await _create_election_via_db(postgres_uri)
@@ -410,16 +370,12 @@ class TestNominationControllerRoutes:
         response = await client.post("/api/v1/nominations/", json=data)
         assert response.status_code in (500, 501)
 
-    async def test_delete_nomination(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_delete_nomination(self, client: AsyncTestClient, postgres_uri: str) -> None:
         user = await _create_user_via_db(postgres_uri)
         nominator = await _create_user_via_db(postgres_uri)
         election = await _create_election_via_db(postgres_uri)
         nominee = await _create_nominee_via_db(postgres_uri, str(election.id), str(user.id))
-        nomination = await _create_nomination_via_db(
-            postgres_uri, str(nominee.id), str(nominator.id)
-        )
+        nomination = await _create_nomination_via_db(postgres_uri, str(nominee.id), str(nominator.id))
         response = await client.delete(f"/api/v1/nominations/{nomination.id}")
         assert response.status_code in (200, 204, 500)
 
@@ -453,9 +409,7 @@ class TestNominationsValidation:
         response = await client.post("/api/v1/nominees/", json=data)
         assert response.status_code in (400, 422, 500)
 
-    async def test_create_nominee_missing_user(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_create_nominee_missing_user(self, client: AsyncTestClient, postgres_uri: str) -> None:
         election = await _create_election_via_db(postgres_uri)
         data = {"election_id": str(election.id)}
         response = await client.post("/api/v1/nominees/", json=data)

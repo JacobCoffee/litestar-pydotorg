@@ -86,9 +86,7 @@ async def _create_category_via_db(postgres_uri: str, **category_data: object) ->
     return result
 
 
-async def _create_story_via_db(
-    postgres_uri: str, category_id: str, creator_id: str, **story_data: object
-) -> dict:
+async def _create_story_via_db(postgres_uri: str, category_id: str, creator_id: str, **story_data: object) -> dict:
     """Create a story directly in the database."""
     from uuid import UUID as PyUUID
 
@@ -192,9 +190,7 @@ class TestStoryCategoryControllerRoutes:
         categories = response.json()
         assert isinstance(categories, list)
 
-    async def test_list_categories_with_pagination(
-        self, successstories_fixtures: SuccessStoriesTestFixtures
-    ) -> None:
+    async def test_list_categories_with_pagination(self, successstories_fixtures: SuccessStoriesTestFixtures) -> None:
         """Test listing categories with pagination."""
         for i in range(3):
             await _create_category_via_db(
@@ -215,9 +211,7 @@ class TestStoryCategoryControllerRoutes:
             "name": "Web Development",
             "slug": f"web-dev-{uuid4().hex[:8]}",
         }
-        response = await successstories_fixtures.client.post(
-            "/api/v1/success-stories/categories/", json=category_data
-        )
+        response = await successstories_fixtures.client.post("/api/v1/success-stories/categories/", json=category_data)
         assert response.status_code in (200, 201, 500)
         if response.status_code in (200, 201):
             result = response.json()
@@ -229,22 +223,16 @@ class TestStoryCategoryControllerRoutes:
             successstories_fixtures.postgres_uri,
             name="Test Category",
         )
-        response = await successstories_fixtures.client.get(
-            f"/api/v1/success-stories/categories/{category['id']}"
-        )
+        response = await successstories_fixtures.client.get(f"/api/v1/success-stories/categories/{category['id']}")
         assert response.status_code in (200, 500)
         if response.status_code == 200:
             result = response.json()
             assert result["id"] == category["id"]
 
-    async def test_get_category_by_id_not_found(
-        self, successstories_fixtures: SuccessStoriesTestFixtures
-    ) -> None:
+    async def test_get_category_by_id_not_found(self, successstories_fixtures: SuccessStoriesTestFixtures) -> None:
         """Test getting a non-existent category."""
         fake_id = uuid4()
-        response = await successstories_fixtures.client.get(
-            f"/api/v1/success-stories/categories/{fake_id}"
-        )
+        response = await successstories_fixtures.client.get(f"/api/v1/success-stories/categories/{fake_id}")
         assert response.status_code in (404, 500)
 
     async def test_get_category_by_slug(self, successstories_fixtures: SuccessStoriesTestFixtures) -> None:
@@ -255,9 +243,7 @@ class TestStoryCategoryControllerRoutes:
             name="Category With Slug",
             slug=slug,
         )
-        response = await successstories_fixtures.client.get(
-            f"/api/v1/success-stories/categories/slug/{slug}"
-        )
+        response = await successstories_fixtures.client.get(f"/api/v1/success-stories/categories/slug/{slug}")
         assert response.status_code in (200, 500)
         if response.status_code == 200:
             result = response.json()
@@ -284,9 +270,7 @@ class TestStoryCategoryControllerRoutes:
             successstories_fixtures.postgres_uri,
             name="Category To Delete",
         )
-        response = await successstories_fixtures.client.delete(
-            f"/api/v1/success-stories/categories/{category['id']}"
-        )
+        response = await successstories_fixtures.client.delete(f"/api/v1/success-stories/categories/{category['id']}")
         assert response.status_code in (200, 204, 500)
 
 
@@ -300,9 +284,7 @@ class TestStoryControllerRoutes:
         stories = response.json()
         assert isinstance(stories, list)
 
-    async def test_list_stories_with_pagination(
-        self, successstories_fixtures: SuccessStoriesTestFixtures
-    ) -> None:
+    async def test_list_stories_with_pagination(self, successstories_fixtures: SuccessStoriesTestFixtures) -> None:
         """Test listing stories with pagination."""
         user = await _create_user_via_db(successstories_fixtures.postgres_uri)
         category = await _create_category_via_db(successstories_fixtures.postgres_uri)
@@ -314,16 +296,12 @@ class TestStoryControllerRoutes:
                 name=f"Story {i}",
                 slug=f"story-{i}-{uuid4().hex[:8]}",
             )
-        response = await successstories_fixtures.client.get(
-            "/api/v1/success-stories/?pageSize=2&currentPage=1"
-        )
+        response = await successstories_fixtures.client.get("/api/v1/success-stories/?pageSize=2&currentPage=1")
         assert response.status_code == 200
         stories = response.json()
         assert len(stories) <= 2
 
-    async def test_list_published_stories(
-        self, successstories_fixtures: SuccessStoriesTestFixtures
-    ) -> None:
+    async def test_list_published_stories(self, successstories_fixtures: SuccessStoriesTestFixtures) -> None:
         """Test listing published stories."""
         user = await _create_user_via_db(successstories_fixtures.postgres_uri)
         category = await _create_category_via_db(successstories_fixtures.postgres_uri)
@@ -336,9 +314,7 @@ class TestStoryControllerRoutes:
         response = await successstories_fixtures.client.get("/api/v1/success-stories/published")
         assert response.status_code in (200, 500)
 
-    async def test_list_featured_stories(
-        self, successstories_fixtures: SuccessStoriesTestFixtures
-    ) -> None:
+    async def test_list_featured_stories(self, successstories_fixtures: SuccessStoriesTestFixtures) -> None:
         """Test listing featured stories."""
         user = await _create_user_via_db(successstories_fixtures.postgres_uri)
         category = await _create_category_via_db(successstories_fixtures.postgres_uri)
@@ -352,9 +328,7 @@ class TestStoryControllerRoutes:
         response = await successstories_fixtures.client.get("/api/v1/success-stories/featured")
         assert response.status_code in (200, 500)
 
-    async def test_list_stories_by_category(
-        self, successstories_fixtures: SuccessStoriesTestFixtures
-    ) -> None:
+    async def test_list_stories_by_category(self, successstories_fixtures: SuccessStoriesTestFixtures) -> None:
         """Test listing stories by category."""
         user = await _create_user_via_db(successstories_fixtures.postgres_uri)
         category = await _create_category_via_db(successstories_fixtures.postgres_uri)
@@ -363,9 +337,7 @@ class TestStoryControllerRoutes:
             category_id=category["id"],
             creator_id=user["id"],
         )
-        response = await successstories_fixtures.client.get(
-            f"/api/v1/success-stories/category/{category['id']}"
-        )
+        response = await successstories_fixtures.client.get(f"/api/v1/success-stories/category/{category['id']}")
         assert response.status_code in (200, 500)
 
     async def test_create_story(self, successstories_fixtures: SuccessStoriesTestFixtures) -> None:
@@ -383,9 +355,7 @@ class TestStoryControllerRoutes:
             "category_id": category["id"],
             "creator_id": user["id"],
         }
-        response = await successstories_fixtures.client.post(
-            "/api/v1/success-stories/", json=story_data
-        )
+        response = await successstories_fixtures.client.post("/api/v1/success-stories/", json=story_data)
         assert response.status_code in (200, 201, 500)
         if response.status_code in (200, 201):
             result = response.json()
@@ -406,9 +376,7 @@ class TestStoryControllerRoutes:
             result = response.json()
             assert result["id"] == story["id"]
 
-    async def test_get_story_by_id_not_found(
-        self, successstories_fixtures: SuccessStoriesTestFixtures
-    ) -> None:
+    async def test_get_story_by_id_not_found(self, successstories_fixtures: SuccessStoriesTestFixtures) -> None:
         """Test getting a non-existent story."""
         fake_id = uuid4()
         response = await successstories_fixtures.client.get(f"/api/v1/success-stories/{fake_id}")
@@ -442,9 +410,7 @@ class TestStoryControllerRoutes:
             name="Original Story Name",
         )
         update_data = {"name": "Updated Story Name", "featured": True}
-        response = await successstories_fixtures.client.put(
-            f"/api/v1/success-stories/{story['id']}", json=update_data
-        )
+        response = await successstories_fixtures.client.put(f"/api/v1/success-stories/{story['id']}", json=update_data)
         assert response.status_code in (200, 500)
         if response.status_code == 200:
             result = response.json()
@@ -466,33 +432,23 @@ class TestStoryControllerRoutes:
 class TestSuccessStoriesValidation:
     """Tests for success stories input validation."""
 
-    async def test_create_category_missing_name(
-        self, successstories_fixtures: SuccessStoriesTestFixtures
-    ) -> None:
+    async def test_create_category_missing_name(self, successstories_fixtures: SuccessStoriesTestFixtures) -> None:
         """Test creating category without name fails validation."""
         data = {
             "slug": "missing-name",
         }
-        response = await successstories_fixtures.client.post(
-            "/api/v1/success-stories/categories/", json=data
-        )
+        response = await successstories_fixtures.client.post("/api/v1/success-stories/categories/", json=data)
         assert response.status_code in (400, 422)
 
-    async def test_create_category_missing_slug(
-        self, successstories_fixtures: SuccessStoriesTestFixtures
-    ) -> None:
+    async def test_create_category_missing_slug(self, successstories_fixtures: SuccessStoriesTestFixtures) -> None:
         """Test creating category without slug fails validation."""
         data = {
             "name": "Missing Slug",
         }
-        response = await successstories_fixtures.client.post(
-            "/api/v1/success-stories/categories/", json=data
-        )
+        response = await successstories_fixtures.client.post("/api/v1/success-stories/categories/", json=data)
         assert response.status_code in (400, 422)
 
-    async def test_create_story_missing_name(
-        self, successstories_fixtures: SuccessStoriesTestFixtures
-    ) -> None:
+    async def test_create_story_missing_name(self, successstories_fixtures: SuccessStoriesTestFixtures) -> None:
         """Test creating story without name fails validation."""
         user = await _create_user_via_db(successstories_fixtures.postgres_uri)
         category = await _create_category_via_db(successstories_fixtures.postgres_uri)
@@ -502,14 +458,10 @@ class TestSuccessStoriesValidation:
             "category_id": category["id"],
             "creator_id": user["id"],
         }
-        response = await successstories_fixtures.client.post(
-            "/api/v1/success-stories/", json=data
-        )
+        response = await successstories_fixtures.client.post("/api/v1/success-stories/", json=data)
         assert response.status_code in (400, 422)
 
-    async def test_create_story_missing_category(
-        self, successstories_fixtures: SuccessStoriesTestFixtures
-    ) -> None:
+    async def test_create_story_missing_category(self, successstories_fixtures: SuccessStoriesTestFixtures) -> None:
         """Test creating story without category fails validation."""
         user = await _create_user_via_db(successstories_fixtures.postgres_uri)
         data = {
@@ -518,14 +470,10 @@ class TestSuccessStoriesValidation:
             "content": "Test content",
             "creator_id": user["id"],
         }
-        response = await successstories_fixtures.client.post(
-            "/api/v1/success-stories/", json=data
-        )
+        response = await successstories_fixtures.client.post("/api/v1/success-stories/", json=data)
         assert response.status_code in (400, 422)
 
-    async def test_get_story_invalid_uuid(
-        self, successstories_fixtures: SuccessStoriesTestFixtures
-    ) -> None:
+    async def test_get_story_invalid_uuid(self, successstories_fixtures: SuccessStoriesTestFixtures) -> None:
         """Test getting story with invalid UUID returns 404."""
         response = await successstories_fixtures.client.get("/api/v1/success-stories/not-a-uuid")
         assert response.status_code == 404

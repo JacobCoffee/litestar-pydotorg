@@ -75,6 +75,7 @@ async def _create_image_via_db(postgres_uri: str, page_id: str, **image_data: ob
     async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session_factory() as session:
         from uuid import UUID as PyUUID
+
         image = Image(
             page_id=PyUUID(page_id),
             image=image_data.get("image", f"/images/test-{uuid4().hex[:8]}.png"),
@@ -97,6 +98,7 @@ async def _create_document_via_db(postgres_uri: str, page_id: str, **doc_data: o
     async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session_factory() as session:
         from uuid import UUID as PyUUID
+
         document = DocumentFile(
             page_id=PyUUID(page_id),
             document=doc_data.get("document", f"/docs/test-{uuid4().hex[:8]}.pdf"),

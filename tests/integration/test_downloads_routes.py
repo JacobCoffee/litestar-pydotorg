@@ -95,9 +95,7 @@ async def _create_release_via_db(postgres_uri: str, **release_data: object) -> d
     return result
 
 
-async def _create_release_file_via_db(
-    postgres_uri: str, release_id: str, os_id: str, **file_data: object
-) -> dict:
+async def _create_release_file_via_db(postgres_uri: str, release_id: str, os_id: str, **file_data: object) -> dict:
     """Create a release file directly in the database."""
     engine = create_async_engine(postgres_uri, echo=False)
     async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
@@ -243,9 +241,7 @@ class TestOSControllerRoutes:
             assert result["name"] == "Linux"
             assert result["slug"] == slug
 
-    async def test_get_os_by_slug_not_found(
-        self, downloads_fixtures: DownloadsTestFixtures
-    ) -> None:
+    async def test_get_os_by_slug_not_found(self, downloads_fixtures: DownloadsTestFixtures) -> None:
         """Test getting OS by non-existent slug returns 404."""
         response = await downloads_fixtures.client.get("/api/v1/os/slug/nonexistent-os")
         assert response.status_code in (404, 500)
@@ -277,9 +273,7 @@ class TestReleaseControllerRoutes:
         releases = response.json()
         assert isinstance(releases, list)
 
-    async def test_list_releases_with_pagination(
-        self, downloads_fixtures: DownloadsTestFixtures
-    ) -> None:
+    async def test_list_releases_with_pagination(self, downloads_fixtures: DownloadsTestFixtures) -> None:
         """Test listing releases with pagination."""
         for i in range(3):
             await _create_release_via_db(
@@ -287,9 +281,7 @@ class TestReleaseControllerRoutes:
                 name=f"Python 3.{i}.0",
                 slug=f"python-3-{i}-0-{uuid4().hex[:8]}",
             )
-        response = await downloads_fixtures.client.get(
-            "/api/v1/releases/?pageSize=2&currentPage=1"
-        )
+        response = await downloads_fixtures.client.get("/api/v1/releases/?pageSize=2&currentPage=1")
         assert response.status_code == 200
         releases = response.json()
         assert len(releases) <= 2
@@ -327,9 +319,7 @@ class TestReleaseControllerRoutes:
             result = response.json()
             assert result["name"] == "Python 3.12.1"
 
-    async def test_get_release_by_id_not_found(
-        self, downloads_fixtures: DownloadsTestFixtures
-    ) -> None:
+    async def test_get_release_by_id_not_found(self, downloads_fixtures: DownloadsTestFixtures) -> None:
         """Test getting a non-existent release returns 404."""
         fake_id = str(uuid4())
         response = await downloads_fixtures.client.get(f"/api/v1/releases/{fake_id}")
@@ -350,13 +340,9 @@ class TestReleaseControllerRoutes:
             assert result["name"] == "Python 3.11.0"
             assert result["slug"] == slug
 
-    async def test_get_release_by_slug_not_found(
-        self, downloads_fixtures: DownloadsTestFixtures
-    ) -> None:
+    async def test_get_release_by_slug_not_found(self, downloads_fixtures: DownloadsTestFixtures) -> None:
         """Test getting release by non-existent slug returns 404."""
-        response = await downloads_fixtures.client.get(
-            "/api/v1/releases/slug/nonexistent-release"
-        )
+        response = await downloads_fixtures.client.get("/api/v1/releases/slug/nonexistent-release")
         assert response.status_code in (404, 500)
 
     async def test_get_latest_release(self, downloads_fixtures: DownloadsTestFixtures) -> None:
@@ -385,16 +371,12 @@ class TestReleaseControllerRoutes:
         response = await downloads_fixtures.client.get("/api/v1/releases/latest/2")
         assert response.status_code in (200, 404, 500)
 
-    async def test_get_latest_by_invalid_version(
-        self, downloads_fixtures: DownloadsTestFixtures
-    ) -> None:
+    async def test_get_latest_by_invalid_version(self, downloads_fixtures: DownloadsTestFixtures) -> None:
         """Test getting latest release with invalid version returns 404."""
         response = await downloads_fixtures.client.get("/api/v1/releases/latest/999")
         assert response.status_code in (404, 500)
 
-    async def test_list_published_releases(
-        self, downloads_fixtures: DownloadsTestFixtures
-    ) -> None:
+    async def test_list_published_releases(self, downloads_fixtures: DownloadsTestFixtures) -> None:
         """Test listing published releases."""
         await _create_release_via_db(
             downloads_fixtures.postgres_uri,
@@ -413,9 +395,7 @@ class TestReleaseControllerRoutes:
         releases = response.json()
         assert isinstance(releases, list)
 
-    async def test_list_download_page_releases(
-        self, downloads_fixtures: DownloadsTestFixtures
-    ) -> None:
+    async def test_list_download_page_releases(self, downloads_fixtures: DownloadsTestFixtures) -> None:
         """Test listing releases for download page."""
         await _create_release_via_db(
             downloads_fixtures.postgres_uri,
@@ -439,23 +419,17 @@ class TestReleaseControllerRoutes:
             "name": "Python 3.10.0 Updated",
             "is_latest": True,
         }
-        response = await downloads_fixtures.client.put(
-            f"/api/v1/releases/{release_data['id']}", json=update_data
-        )
+        response = await downloads_fixtures.client.put(f"/api/v1/releases/{release_data['id']}", json=update_data)
         assert response.status_code in (200, 500)
         if response.status_code == 200:
             result = response.json()
             assert result["name"] == "Python 3.10.0 Updated"
 
-    async def test_update_release_not_found(
-        self, downloads_fixtures: DownloadsTestFixtures
-    ) -> None:
+    async def test_update_release_not_found(self, downloads_fixtures: DownloadsTestFixtures) -> None:
         """Test updating a non-existent release."""
         fake_id = str(uuid4())
         update_data = {"name": "Updated"}
-        response = await downloads_fixtures.client.put(
-            f"/api/v1/releases/{fake_id}", json=update_data
-        )
+        response = await downloads_fixtures.client.put(f"/api/v1/releases/{fake_id}", json=update_data)
         assert response.status_code in (404, 500)
 
     async def test_delete_release(self, downloads_fixtures: DownloadsTestFixtures) -> None:
@@ -465,14 +439,10 @@ class TestReleaseControllerRoutes:
             name="Python 3.9.0",
             slug=f"python-3-9-0-{uuid4().hex[:8]}",
         )
-        response = await downloads_fixtures.client.delete(
-            f"/api/v1/releases/{release_data['id']}"
-        )
+        response = await downloads_fixtures.client.delete(f"/api/v1/releases/{release_data['id']}")
         assert response.status_code in (200, 204, 500)
 
-    async def test_delete_release_not_found(
-        self, downloads_fixtures: DownloadsTestFixtures
-    ) -> None:
+    async def test_delete_release_not_found(self, downloads_fixtures: DownloadsTestFixtures) -> None:
         """Test deleting a non-existent release."""
         fake_id = str(uuid4())
         response = await downloads_fixtures.client.delete(f"/api/v1/releases/{fake_id}")
@@ -506,9 +476,7 @@ class TestReleaseFileControllerRoutes:
             result = response.json()
             assert result["name"] == "Python 3.12.0 Windows x64"
 
-    async def test_get_file_by_id_not_found(
-        self, downloads_fixtures: DownloadsTestFixtures
-    ) -> None:
+    async def test_get_file_by_id_not_found(self, downloads_fixtures: DownloadsTestFixtures) -> None:
         """Test getting a non-existent file returns 404."""
         fake_id = str(uuid4())
         response = await downloads_fixtures.client.get(f"/api/v1/files/{fake_id}")
@@ -532,9 +500,7 @@ class TestReleaseFileControllerRoutes:
             os_id=os_data["id"],
             name="Python 3.12.0 Windows x64",
         )
-        response = await downloads_fixtures.client.get(
-            f"/api/v1/files/release/{release_data['id']}"
-        )
+        response = await downloads_fixtures.client.get(f"/api/v1/files/release/{release_data['id']}")
         assert response.status_code in (200, 500)
         if response.status_code == 200:
             result = response.json()
@@ -590,9 +556,7 @@ class TestReleaseFileControllerRoutes:
             result = response.json()
             assert result["slug"] == slug
 
-    async def test_get_file_by_slug_not_found(
-        self, downloads_fixtures: DownloadsTestFixtures
-    ) -> None:
+    async def test_get_file_by_slug_not_found(self, downloads_fixtures: DownloadsTestFixtures) -> None:
         """Test getting file by non-existent slug returns 404."""
         response = await downloads_fixtures.client.get("/api/v1/files/slug/nonexistent-file")
         assert response.status_code in (404, 500)
@@ -625,9 +589,7 @@ class TestReleaseFileControllerRoutes:
             result = response.json()
             assert result["name"] == "Python 3.12.0 Windows x64 Installer"
 
-    async def test_create_file_invalid_release(
-        self, downloads_fixtures: DownloadsTestFixtures
-    ) -> None:
+    async def test_create_file_invalid_release(self, downloads_fixtures: DownloadsTestFixtures) -> None:
         """Test creating a file with invalid release ID fails."""
         os_data = await _create_os_via_db(
             downloads_fixtures.postgres_uri,
@@ -664,9 +626,7 @@ class TestReleaseFileControllerRoutes:
         response = await downloads_fixtures.client.delete(f"/api/v1/files/{file_data['id']}")
         assert response.status_code in (200, 204, 500)
 
-    async def test_delete_file_not_found(
-        self, downloads_fixtures: DownloadsTestFixtures
-    ) -> None:
+    async def test_delete_file_not_found(self, downloads_fixtures: DownloadsTestFixtures) -> None:
         """Test deleting a non-existent file."""
         fake_id = str(uuid4())
         response = await downloads_fixtures.client.delete(f"/api/v1/files/{fake_id}")
@@ -676,33 +636,25 @@ class TestReleaseFileControllerRoutes:
 class TestDownloadsValidation:
     """Tests for downloads domain validation."""
 
-    async def test_create_os_missing_name(
-        self, downloads_fixtures: DownloadsTestFixtures
-    ) -> None:
+    async def test_create_os_missing_name(self, downloads_fixtures: DownloadsTestFixtures) -> None:
         """Test creating an OS without name fails validation."""
         os_data = {"slug": "test-slug"}
         response = await downloads_fixtures.client.post("/api/v1/os/", json=os_data)
         assert response.status_code in (400, 422, 500)
 
-    async def test_create_os_missing_slug(
-        self, downloads_fixtures: DownloadsTestFixtures
-    ) -> None:
+    async def test_create_os_missing_slug(self, downloads_fixtures: DownloadsTestFixtures) -> None:
         """Test creating an OS without slug fails validation."""
         os_data = {"name": "Test OS"}
         response = await downloads_fixtures.client.post("/api/v1/os/", json=os_data)
         assert response.status_code in (400, 422, 500)
 
-    async def test_create_release_missing_name(
-        self, downloads_fixtures: DownloadsTestFixtures
-    ) -> None:
+    async def test_create_release_missing_name(self, downloads_fixtures: DownloadsTestFixtures) -> None:
         """Test creating a release without name fails validation."""
         release_data = {"slug": "test-slug"}
         response = await downloads_fixtures.client.post("/api/v1/releases/", json=release_data)
         assert response.status_code in (400, 422, 500)
 
-    async def test_create_file_missing_url(
-        self, downloads_fixtures: DownloadsTestFixtures
-    ) -> None:
+    async def test_create_file_missing_url(self, downloads_fixtures: DownloadsTestFixtures) -> None:
         """Test creating a file without URL fails validation."""
         os_data = await _create_os_via_db(
             downloads_fixtures.postgres_uri,
@@ -723,9 +675,7 @@ class TestDownloadsValidation:
         response = await downloads_fixtures.client.post("/api/v1/files/", json=file_data)
         assert response.status_code in (400, 422, 500)
 
-    async def test_create_os_invalid_uuid_parameter(
-        self, downloads_fixtures: DownloadsTestFixtures
-    ) -> None:
+    async def test_create_os_invalid_uuid_parameter(self, downloads_fixtures: DownloadsTestFixtures) -> None:
         """Test getting OS with invalid UUID format returns 404 (path not matched)."""
         response = await downloads_fixtures.client.get("/api/v1/os/not-a-uuid")
         assert response.status_code == 404

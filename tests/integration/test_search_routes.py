@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
-from unittest.mock import AsyncMock
 
 import pytest
 from litestar import Litestar
@@ -46,7 +45,7 @@ def provide_mock_search_service(state: State) -> MockSearchService:
 
 
 @pytest.fixture
-async def test_app() -> AsyncGenerator[Litestar, None]:
+async def test_app() -> AsyncGenerator[Litestar]:
     """Create a test Litestar application with the search controller."""
     app = Litestar(
         route_handlers=[SearchAPIController],
@@ -59,7 +58,7 @@ async def test_app() -> AsyncGenerator[Litestar, None]:
 
 
 @pytest.fixture
-async def client(test_app: Litestar) -> AsyncGenerator[AsyncTestClient, None]:
+async def client(test_app: Litestar) -> AsyncGenerator[AsyncTestClient]:
     """Create an async test client."""
     async with AsyncTestClient(app=test_app) as client:
         yield client

@@ -334,9 +334,7 @@ class TestPostControllerRoutes:
         user = await _create_user_via_db(community_fixtures.postgres_uri)
         post = await _create_post_via_db(community_fixtures.postgres_uri, creator_id=user["id"])
         update_data = {"title": "Updated Post Title"}
-        response = await community_fixtures.client.put(
-            f"/api/v1/community/posts/{post['id']}", json=update_data
-        )
+        response = await community_fixtures.client.put(f"/api/v1/community/posts/{post['id']}", json=update_data)
         assert response.status_code in (200, 500)
         if response.status_code == 200:
             result = response.json()
@@ -408,9 +406,7 @@ class TestPhotoControllerRoutes:
         user = await _create_user_via_db(community_fixtures.postgres_uri)
         photo = await _create_photo_via_db(community_fixtures.postgres_uri, creator_id=user["id"])
         update_data = {"caption": "Updated caption"}
-        response = await community_fixtures.client.put(
-            f"/api/v1/community/photos/{photo['id']}", json=update_data
-        )
+        response = await community_fixtures.client.put(f"/api/v1/community/photos/{photo['id']}", json=update_data)
         assert response.status_code in (200, 500)
         if response.status_code == 200:
             result = response.json()
@@ -482,9 +478,7 @@ class TestVideoControllerRoutes:
         user = await _create_user_via_db(community_fixtures.postgres_uri)
         video = await _create_video_via_db(community_fixtures.postgres_uri, creator_id=user["id"])
         update_data = {"title": "Updated Video Title"}
-        response = await community_fixtures.client.put(
-            f"/api/v1/community/videos/{video['id']}", json=update_data
-        )
+        response = await community_fixtures.client.put(f"/api/v1/community/videos/{video['id']}", json=update_data)
         assert response.status_code in (200, 500)
         if response.status_code == 200:
             result = response.json()
@@ -556,9 +550,7 @@ class TestLinkControllerRoutes:
         user = await _create_user_via_db(community_fixtures.postgres_uri)
         link = await _create_link_via_db(community_fixtures.postgres_uri, creator_id=user["id"])
         update_data = {"title": "Updated Link Title"}
-        response = await community_fixtures.client.put(
-            f"/api/v1/community/links/{link['id']}", json=update_data
-        )
+        response = await community_fixtures.client.put(f"/api/v1/community/links/{link['id']}", json=update_data)
         assert response.status_code in (200, 500)
         if response.status_code == 200:
             result = response.json()

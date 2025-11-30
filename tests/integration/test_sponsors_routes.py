@@ -211,9 +211,7 @@ class TestSponsorshipLevelControllerRoutes:
         levels = response.json()
         assert isinstance(levels, list)
 
-    async def test_list_levels_with_pagination(
-        self, sponsors_fixtures: SponsorsTestFixtures
-    ) -> None:
+    async def test_list_levels_with_pagination(self, sponsors_fixtures: SponsorsTestFixtures) -> None:
         """Test listing levels with pagination."""
         for i in range(3):
             await _create_level_via_db(
@@ -222,9 +220,7 @@ class TestSponsorshipLevelControllerRoutes:
                 slug=f"level-{i}-{uuid4().hex[:8]}",
                 order=i,
             )
-        response = await sponsors_fixtures.client.get(
-            "/api/v1/sponsorship-levels/?pageSize=2&currentPage=1"
-        )
+        response = await sponsors_fixtures.client.get("/api/v1/sponsorship-levels/?pageSize=2&currentPage=1")
         assert response.status_code == 200
         levels = response.json()
         assert len(levels) <= 2
@@ -250,9 +246,7 @@ class TestSponsorshipLevelControllerRoutes:
             "sponsorship_amount": 50000,
             "logo_dimension": 300,
         }
-        response = await sponsors_fixtures.client.post(
-            "/api/v1/sponsorship-levels/", json=level_data
-        )
+        response = await sponsors_fixtures.client.post("/api/v1/sponsorship-levels/", json=level_data)
         assert response.status_code in (200, 201, 500)
         if response.status_code in (200, 201):
             result = response.json()
@@ -265,22 +259,16 @@ class TestSponsorshipLevelControllerRoutes:
             name="Silver Sponsor",
             slug=f"silver-{uuid4().hex[:8]}",
         )
-        response = await sponsors_fixtures.client.get(
-            f"/api/v1/sponsorship-levels/{level['id']}"
-        )
+        response = await sponsors_fixtures.client.get(f"/api/v1/sponsorship-levels/{level['id']}")
         assert response.status_code in (200, 500)
         if response.status_code == 200:
             result = response.json()
             assert result["name"] == "Silver Sponsor"
 
-    async def test_get_level_by_id_not_found(
-        self, sponsors_fixtures: SponsorsTestFixtures
-    ) -> None:
+    async def test_get_level_by_id_not_found(self, sponsors_fixtures: SponsorsTestFixtures) -> None:
         """Test getting a non-existent level returns 404."""
         fake_id = str(uuid4())
-        response = await sponsors_fixtures.client.get(
-            f"/api/v1/sponsorship-levels/{fake_id}"
-        )
+        response = await sponsors_fixtures.client.get(f"/api/v1/sponsorship-levels/{fake_id}")
         assert response.status_code in (404, 500)
 
     async def test_get_level_by_slug(self, sponsors_fixtures: SponsorsTestFixtures) -> None:
@@ -291,21 +279,15 @@ class TestSponsorshipLevelControllerRoutes:
             name="Bronze Sponsor",
             slug=slug,
         )
-        response = await sponsors_fixtures.client.get(
-            f"/api/v1/sponsorship-levels/by-slug/{slug}"
-        )
+        response = await sponsors_fixtures.client.get(f"/api/v1/sponsorship-levels/by-slug/{slug}")
         assert response.status_code in (200, 500)
         if response.status_code == 200:
             result = response.json()
             assert result["name"] == "Bronze Sponsor"
 
-    async def test_get_level_by_slug_not_found(
-        self, sponsors_fixtures: SponsorsTestFixtures
-    ) -> None:
+    async def test_get_level_by_slug_not_found(self, sponsors_fixtures: SponsorsTestFixtures) -> None:
         """Test getting level by non-existent slug returns 404."""
-        response = await sponsors_fixtures.client.get(
-            "/api/v1/sponsorship-levels/by-slug/nonexistent"
-        )
+        response = await sponsors_fixtures.client.get("/api/v1/sponsorship-levels/by-slug/nonexistent")
         assert response.status_code in (404, 500)
 
     async def test_update_level(self, sponsors_fixtures: SponsorsTestFixtures) -> None:
@@ -316,9 +298,7 @@ class TestSponsorshipLevelControllerRoutes:
             slug=f"community-{uuid4().hex[:8]}",
         )
         update_data = {"name": "Community Plus", "sponsorship_amount": 5000}
-        response = await sponsors_fixtures.client.put(
-            f"/api/v1/sponsorship-levels/{level['id']}", json=update_data
-        )
+        response = await sponsors_fixtures.client.put(f"/api/v1/sponsorship-levels/{level['id']}", json=update_data)
         assert response.status_code in (200, 500)
         if response.status_code == 200:
             result = response.json()
@@ -331,9 +311,7 @@ class TestSponsorshipLevelControllerRoutes:
             name="Temporary",
             slug=f"temp-{uuid4().hex[:8]}",
         )
-        response = await sponsors_fixtures.client.delete(
-            f"/api/v1/sponsorship-levels/{level['id']}"
-        )
+        response = await sponsors_fixtures.client.delete(f"/api/v1/sponsorship-levels/{level['id']}")
         assert response.status_code in (200, 204, 500)
 
 
@@ -347,9 +325,7 @@ class TestSponsorControllerRoutes:
         sponsors = response.json()
         assert isinstance(sponsors, list)
 
-    async def test_list_sponsors_with_pagination(
-        self, sponsors_fixtures: SponsorsTestFixtures
-    ) -> None:
+    async def test_list_sponsors_with_pagination(self, sponsors_fixtures: SponsorsTestFixtures) -> None:
         """Test listing sponsors with pagination."""
         for i in range(3):
             await _create_sponsor_via_db(
@@ -357,9 +333,7 @@ class TestSponsorControllerRoutes:
                 name=f"Company {i}",
                 slug=f"company-{i}-{uuid4().hex[:8]}",
             )
-        response = await sponsors_fixtures.client.get(
-            "/api/v1/sponsors/?pageSize=2&currentPage=1"
-        )
+        response = await sponsors_fixtures.client.get("/api/v1/sponsors/?pageSize=2&currentPage=1")
         assert response.status_code == 200
         sponsors = response.json()
         assert len(sponsors) <= 2
@@ -401,9 +375,7 @@ class TestSponsorControllerRoutes:
             result = response.json()
             assert result["name"] == "Test Corp"
 
-    async def test_get_sponsor_by_id_not_found(
-        self, sponsors_fixtures: SponsorsTestFixtures
-    ) -> None:
+    async def test_get_sponsor_by_id_not_found(self, sponsors_fixtures: SponsorsTestFixtures) -> None:
         """Test getting a non-existent sponsor returns 404."""
         fake_id = str(uuid4())
         response = await sponsors_fixtures.client.get(f"/api/v1/sponsors/{fake_id}")
@@ -423,9 +395,7 @@ class TestSponsorControllerRoutes:
             result = response.json()
             assert result["name"] == "Acme Corporation"
 
-    async def test_get_sponsor_by_slug_not_found(
-        self, sponsors_fixtures: SponsorsTestFixtures
-    ) -> None:
+    async def test_get_sponsor_by_slug_not_found(self, sponsors_fixtures: SponsorsTestFixtures) -> None:
         """Test getting sponsor by non-existent slug returns 404."""
         response = await sponsors_fixtures.client.get("/api/v1/sponsors/by-slug/nonexistent")
         assert response.status_code in (404, 500)
@@ -438,9 +408,7 @@ class TestSponsorControllerRoutes:
             slug=f"old-name-{uuid4().hex[:8]}",
         )
         update_data = {"name": "New Name Corp", "city": "Chicago"}
-        response = await sponsors_fixtures.client.put(
-            f"/api/v1/sponsors/{sponsor['id']}", json=update_data
-        )
+        response = await sponsors_fixtures.client.put(f"/api/v1/sponsors/{sponsor['id']}", json=update_data)
         assert response.status_code in (200, 500)
         if response.status_code == 200:
             result = response.json()
@@ -467,9 +435,7 @@ class TestSponsorshipControllerRoutes:
         sponsorships = response.json()
         assert isinstance(sponsorships, list)
 
-    async def test_list_active_sponsorships(
-        self, sponsors_fixtures: SponsorsTestFixtures
-    ) -> None:
+    async def test_list_active_sponsorships(self, sponsors_fixtures: SponsorsTestFixtures) -> None:
         """Test listing active sponsorships."""
         response = await sponsors_fixtures.client.get("/api/v1/sponsorships/active")
         assert response.status_code in (200, 500)
@@ -477,9 +443,7 @@ class TestSponsorshipControllerRoutes:
             result = response.json()
             assert isinstance(result, list)
 
-    async def test_list_sponsorships_by_sponsor(
-        self, sponsors_fixtures: SponsorsTestFixtures
-    ) -> None:
+    async def test_list_sponsorships_by_sponsor(self, sponsors_fixtures: SponsorsTestFixtures) -> None:
         """Test listing sponsorships for a specific sponsor."""
         level = await _create_level_via_db(
             sponsors_fixtures.postgres_uri,
@@ -496,14 +460,10 @@ class TestSponsorshipControllerRoutes:
             sponsor_id=sponsor["id"],
             level_id=level["id"],
         )
-        response = await sponsors_fixtures.client.get(
-            f"/api/v1/sponsorships/by-sponsor/{sponsor['id']}"
-        )
+        response = await sponsors_fixtures.client.get(f"/api/v1/sponsorships/by-sponsor/{sponsor['id']}")
         assert response.status_code in (200, 500)
 
-    async def test_list_sponsorships_by_level(
-        self, sponsors_fixtures: SponsorsTestFixtures
-    ) -> None:
+    async def test_list_sponsorships_by_level(self, sponsors_fixtures: SponsorsTestFixtures) -> None:
         """Test listing sponsorships for a specific level."""
         level = await _create_level_via_db(
             sponsors_fixtures.postgres_uri,
@@ -520,14 +480,10 @@ class TestSponsorshipControllerRoutes:
             sponsor_id=sponsor["id"],
             level_id=level["id"],
         )
-        response = await sponsors_fixtures.client.get(
-            f"/api/v1/sponsorships/by-level/{level['id']}"
-        )
+        response = await sponsors_fixtures.client.get(f"/api/v1/sponsorships/by-level/{level['id']}")
         assert response.status_code in (200, 500)
 
-    async def test_list_sponsorships_by_status(
-        self, sponsors_fixtures: SponsorsTestFixtures
-    ) -> None:
+    async def test_list_sponsorships_by_status(self, sponsors_fixtures: SponsorsTestFixtures) -> None:
         """Test listing sponsorships by status."""
         level = await _create_level_via_db(
             sponsors_fixtures.postgres_uri,
@@ -548,9 +504,7 @@ class TestSponsorshipControllerRoutes:
         response = await sponsors_fixtures.client.get("/api/v1/sponsorships/by-status/applied")
         assert response.status_code in (200, 500)
 
-    async def test_list_sponsorships_by_invalid_status(
-        self, sponsors_fixtures: SponsorsTestFixtures
-    ) -> None:
+    async def test_list_sponsorships_by_invalid_status(self, sponsors_fixtures: SponsorsTestFixtures) -> None:
         """Test listing sponsorships with invalid status."""
         response = await sponsors_fixtures.client.get("/api/v1/sponsorships/by-status/invalid")
         assert response.status_code in (400, 500)
@@ -574,9 +528,7 @@ class TestSponsorshipControllerRoutes:
             "year": 2025,
             "sponsorship_fee": 10000,
         }
-        response = await sponsors_fixtures.client.post(
-            "/api/v1/sponsorships/", json=sponsorship_data
-        )
+        response = await sponsors_fixtures.client.post("/api/v1/sponsorships/", json=sponsorship_data)
         assert response.status_code in (200, 201, 500)
 
     async def test_get_sponsorship_by_id(self, sponsors_fixtures: SponsorsTestFixtures) -> None:
@@ -596,14 +548,10 @@ class TestSponsorshipControllerRoutes:
             sponsor_id=sponsor["id"],
             level_id=level["id"],
         )
-        response = await sponsors_fixtures.client.get(
-            f"/api/v1/sponsorships/{sponsorship['id']}"
-        )
+        response = await sponsors_fixtures.client.get(f"/api/v1/sponsorships/{sponsorship['id']}")
         assert response.status_code in (200, 500)
 
-    async def test_get_sponsorship_by_id_not_found(
-        self, sponsors_fixtures: SponsorsTestFixtures
-    ) -> None:
+    async def test_get_sponsorship_by_id_not_found(self, sponsors_fixtures: SponsorsTestFixtures) -> None:
         """Test getting a non-existent sponsorship returns 404."""
         fake_id = str(uuid4())
         response = await sponsors_fixtures.client.get(f"/api/v1/sponsorships/{fake_id}")
@@ -627,9 +575,7 @@ class TestSponsorshipControllerRoutes:
             level_id=level["id"],
         )
         update_data = {"sponsorship_fee": 15000, "year": 2026}
-        response = await sponsors_fixtures.client.put(
-            f"/api/v1/sponsorships/{sponsorship['id']}", json=update_data
-        )
+        response = await sponsors_fixtures.client.put(f"/api/v1/sponsorships/{sponsorship['id']}", json=update_data)
         assert response.status_code in (200, 500)
 
     async def test_approve_sponsorship(self, sponsors_fixtures: SponsorsTestFixtures) -> None:
@@ -650,9 +596,7 @@ class TestSponsorshipControllerRoutes:
             level_id=level["id"],
             status=SponsorshipStatus.APPLIED,
         )
-        response = await sponsors_fixtures.client.patch(
-            f"/api/v1/sponsorships/{sponsorship['id']}/approve"
-        )
+        response = await sponsors_fixtures.client.patch(f"/api/v1/sponsorships/{sponsorship['id']}/approve")
         assert response.status_code in (200, 500)
         if response.status_code == 200:
             result = response.json()
@@ -676,9 +620,7 @@ class TestSponsorshipControllerRoutes:
             level_id=level["id"],
             status=SponsorshipStatus.APPLIED,
         )
-        response = await sponsors_fixtures.client.patch(
-            f"/api/v1/sponsorships/{sponsorship['id']}/reject"
-        )
+        response = await sponsors_fixtures.client.patch(f"/api/v1/sponsorships/{sponsorship['id']}/reject")
         assert response.status_code in (200, 500)
         if response.status_code == 200:
             result = response.json()
@@ -702,9 +644,7 @@ class TestSponsorshipControllerRoutes:
             level_id=level["id"],
             status=SponsorshipStatus.APPROVED,
         )
-        response = await sponsors_fixtures.client.patch(
-            f"/api/v1/sponsorships/{sponsorship['id']}/finalize"
-        )
+        response = await sponsors_fixtures.client.patch(f"/api/v1/sponsorships/{sponsorship['id']}/finalize")
         assert response.status_code in (200, 500)
         if response.status_code == 200:
             result = response.json()
@@ -727,36 +667,26 @@ class TestSponsorshipControllerRoutes:
             sponsor_id=sponsor["id"],
             level_id=level["id"],
         )
-        response = await sponsors_fixtures.client.delete(
-            f"/api/v1/sponsorships/{sponsorship['id']}"
-        )
+        response = await sponsors_fixtures.client.delete(f"/api/v1/sponsorships/{sponsorship['id']}")
         assert response.status_code in (200, 204, 500)
 
 
 class TestSponsorsValidation:
     """Tests for sponsors domain validation."""
 
-    async def test_create_level_missing_name(
-        self, sponsors_fixtures: SponsorsTestFixtures
-    ) -> None:
+    async def test_create_level_missing_name(self, sponsors_fixtures: SponsorsTestFixtures) -> None:
         """Test creating a level without name fails validation."""
         level_data = {"slug": "test-slug"}
-        response = await sponsors_fixtures.client.post(
-            "/api/v1/sponsorship-levels/", json=level_data
-        )
+        response = await sponsors_fixtures.client.post("/api/v1/sponsorship-levels/", json=level_data)
         assert response.status_code in (400, 422, 500)
 
-    async def test_create_sponsor_missing_name(
-        self, sponsors_fixtures: SponsorsTestFixtures
-    ) -> None:
+    async def test_create_sponsor_missing_name(self, sponsors_fixtures: SponsorsTestFixtures) -> None:
         """Test creating a sponsor without name fails validation."""
         sponsor_data = {"slug": "test-slug"}
         response = await sponsors_fixtures.client.post("/api/v1/sponsors/", json=sponsor_data)
         assert response.status_code in (400, 422, 500)
 
-    async def test_create_sponsorship_missing_sponsor_id(
-        self, sponsors_fixtures: SponsorsTestFixtures
-    ) -> None:
+    async def test_create_sponsorship_missing_sponsor_id(self, sponsors_fixtures: SponsorsTestFixtures) -> None:
         """Test creating a sponsorship without sponsor_id fails validation."""
         level = await _create_level_via_db(
             sponsors_fixtures.postgres_uri,
@@ -764,14 +694,10 @@ class TestSponsorsValidation:
             slug=f"validation-{uuid4().hex[:8]}",
         )
         sponsorship_data = {"level_id": level["id"]}
-        response = await sponsors_fixtures.client.post(
-            "/api/v1/sponsorships/", json=sponsorship_data
-        )
+        response = await sponsors_fixtures.client.post("/api/v1/sponsorships/", json=sponsorship_data)
         assert response.status_code in (400, 422, 500)
 
-    async def test_create_sponsorship_missing_level_id(
-        self, sponsors_fixtures: SponsorsTestFixtures
-    ) -> None:
+    async def test_create_sponsorship_missing_level_id(self, sponsors_fixtures: SponsorsTestFixtures) -> None:
         """Test creating a sponsorship without level_id fails validation."""
         sponsor = await _create_sponsor_via_db(
             sponsors_fixtures.postgres_uri,
@@ -779,14 +705,10 @@ class TestSponsorsValidation:
             slug=f"validation-sponsor-{uuid4().hex[:8]}",
         )
         sponsorship_data = {"sponsor_id": sponsor["id"]}
-        response = await sponsors_fixtures.client.post(
-            "/api/v1/sponsorships/", json=sponsorship_data
-        )
+        response = await sponsors_fixtures.client.post("/api/v1/sponsorships/", json=sponsorship_data)
         assert response.status_code in (400, 422, 500)
 
-    async def test_create_sponsorship_invalid_sponsor_id(
-        self, sponsors_fixtures: SponsorsTestFixtures
-    ) -> None:
+    async def test_create_sponsorship_invalid_sponsor_id(self, sponsors_fixtures: SponsorsTestFixtures) -> None:
         """Test creating a sponsorship with invalid sponsor_id fails."""
         level = await _create_level_via_db(
             sponsors_fixtures.postgres_uri,
@@ -797,7 +719,5 @@ class TestSponsorsValidation:
             "sponsor_id": str(uuid4()),
             "level_id": level["id"],
         }
-        response = await sponsors_fixtures.client.post(
-            "/api/v1/sponsorships/", json=sponsorship_data
-        )
+        response = await sponsors_fixtures.client.post("/api/v1/sponsorships/", json=sponsorship_data)
         assert response.status_code in (400, 404, 409, 500)

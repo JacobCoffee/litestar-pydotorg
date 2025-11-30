@@ -79,7 +79,7 @@ async def _create_entry_via_db(postgres_uri: str, feed_id: str, **entry_data: ob
             summary=entry_data.get("summary", "Test summary"),
             content=entry_data.get("content", "Test content"),
             url=entry_data.get("url", f"https://testblog.com/posts/{uuid4().hex[:8]}"),
-            pub_date=entry_data.get("pub_date", datetime.datetime.now(datetime.timezone.utc)),
+            pub_date=entry_data.get("pub_date", datetime.datetime.now(datetime.UTC)),
             guid=entry_data.get("guid", f"guid-{uuid4().hex}"),
         )
         session.add(entry)
@@ -265,9 +265,7 @@ class TestFeedControllerRoutes:
             name="Original Name",
         )
         update_data = {"name": "Updated Name", "is_active": False}
-        response = await blogs_fixtures.client.put(
-            f"/api/v1/feeds/{feed['id']}", json=update_data
-        )
+        response = await blogs_fixtures.client.put(f"/api/v1/feeds/{feed['id']}", json=update_data)
         assert response.status_code in (200, 500)
         if response.status_code == 200:
             result = response.json()
@@ -303,9 +301,7 @@ class TestBlogEntryControllerRoutes:
                 title=f"Entry {i}",
                 guid=f"guid-{i}-{uuid4().hex}",
             )
-        response = await blogs_fixtures.client.get(
-            "/api/v1/blog-entries/?pageSize=2&currentPage=1"
-        )
+        response = await blogs_fixtures.client.get("/api/v1/blog-entries/?pageSize=2&currentPage=1")
         assert response.status_code == 200
         entries = response.json()
         assert len(entries) <= 2
@@ -341,9 +337,7 @@ class TestBlogEntryControllerRoutes:
             "summary": "A new blog post summary",
             "content": "The full content",
             "url": f"https://blog.com/posts/{uuid4().hex[:8]}",
-            "pub_date": datetime.datetime.now(datetime.timezone.utc).strftime(
-                "%Y-%m-%dT%H:%M:%SZ"
-            ),
+            "pub_date": datetime.datetime.now(datetime.UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
             "guid": f"guid-new-{uuid4().hex}",
         }
         response = await blogs_fixtures.client.post("/api/v1/blog-entries/", json=entry_data)
@@ -381,9 +375,7 @@ class TestBlogEntryControllerRoutes:
             title="Original Title",
         )
         update_data = {"title": "Updated Title", "summary": "Updated summary"}
-        response = await blogs_fixtures.client.put(
-            f"/api/v1/blog-entries/{entry['id']}", json=update_data
-        )
+        response = await blogs_fixtures.client.put(f"/api/v1/blog-entries/{entry['id']}", json=update_data)
         assert response.status_code in (200, 500)
         if response.status_code == 200:
             result = response.json()
@@ -411,9 +403,7 @@ class TestFeedAggregateControllerRoutes:
         aggregates = response.json()
         assert isinstance(aggregates, list)
 
-    async def test_list_aggregates_with_pagination(
-        self, blogs_fixtures: BlogsTestFixtures
-    ) -> None:
+    async def test_list_aggregates_with_pagination(self, blogs_fixtures: BlogsTestFixtures) -> None:
         """Test listing aggregates with pagination."""
         for i in range(3):
             await _create_aggregate_via_db(
@@ -421,9 +411,7 @@ class TestFeedAggregateControllerRoutes:
                 name=f"Aggregate {i}",
                 slug=f"aggregate-{i}-{uuid4().hex[:8]}",
             )
-        response = await blogs_fixtures.client.get(
-            "/api/v1/feed-aggregates/?pageSize=2&currentPage=1"
-        )
+        response = await blogs_fixtures.client.get("/api/v1/feed-aggregates/?pageSize=2&currentPage=1")
         assert response.status_code == 200
         aggregates = response.json()
         assert len(aggregates) <= 2
@@ -436,9 +424,7 @@ class TestFeedAggregateControllerRoutes:
             "description": "A new aggregate",
             "feed_ids": [],
         }
-        response = await blogs_fixtures.client.post(
-            "/api/v1/feed-aggregates/", json=aggregate_data
-        )
+        response = await blogs_fixtures.client.post("/api/v1/feed-aggregates/", json=aggregate_data)
         assert response.status_code in (200, 201, 500)
         if response.status_code in (200, 201):
             result = response.json()
@@ -450,17 +436,13 @@ class TestFeedAggregateControllerRoutes:
             blogs_fixtures.postgres_uri,
             name="Get Aggregate Test",
         )
-        response = await blogs_fixtures.client.get(
-            f"/api/v1/feed-aggregates/{aggregate['id']}"
-        )
+        response = await blogs_fixtures.client.get(f"/api/v1/feed-aggregates/{aggregate['id']}")
         assert response.status_code in (200, 500)
         if response.status_code == 200:
             result = response.json()
             assert result["name"] == "Get Aggregate Test"
 
-    async def test_get_aggregate_by_id_not_found(
-        self, blogs_fixtures: BlogsTestFixtures
-    ) -> None:
+    async def test_get_aggregate_by_id_not_found(self, blogs_fixtures: BlogsTestFixtures) -> None:
         """Test getting a non-existent aggregate returns 404."""
         fake_id = str(uuid4())
         response = await blogs_fixtures.client.get(f"/api/v1/feed-aggregates/{fake_id}")
@@ -480,13 +462,9 @@ class TestFeedAggregateControllerRoutes:
             result = response.json()
             assert result["name"] == "Slug Test Aggregate"
 
-    async def test_get_aggregate_by_slug_not_found(
-        self, blogs_fixtures: BlogsTestFixtures
-    ) -> None:
+    async def test_get_aggregate_by_slug_not_found(self, blogs_fixtures: BlogsTestFixtures) -> None:
         """Test getting aggregate by non-existent slug returns 404."""
-        response = await blogs_fixtures.client.get(
-            "/api/v1/feed-aggregates/slug/nonexistent-slug"
-        )
+        response = await blogs_fixtures.client.get("/api/v1/feed-aggregates/slug/nonexistent-slug")
         assert response.status_code in (404, 500)
 
     async def test_update_aggregate(self, blogs_fixtures: BlogsTestFixtures) -> None:
@@ -496,9 +474,7 @@ class TestFeedAggregateControllerRoutes:
             name="Original Aggregate",
         )
         update_data = {"name": "Updated Aggregate", "description": "Updated description"}
-        response = await blogs_fixtures.client.put(
-            f"/api/v1/feed-aggregates/{aggregate['id']}", json=update_data
-        )
+        response = await blogs_fixtures.client.put(f"/api/v1/feed-aggregates/{aggregate['id']}", json=update_data)
         assert response.status_code in (200, 500)
         if response.status_code == 200:
             result = response.json()
@@ -510,9 +486,7 @@ class TestFeedAggregateControllerRoutes:
             blogs_fixtures.postgres_uri,
             name="Delete Me Aggregate",
         )
-        response = await blogs_fixtures.client.delete(
-            f"/api/v1/feed-aggregates/{aggregate['id']}"
-        )
+        response = await blogs_fixtures.client.delete(f"/api/v1/feed-aggregates/{aggregate['id']}")
         assert response.status_code in (200, 204, 500)
 
 
@@ -526,9 +500,7 @@ class TestRelatedBlogControllerRoutes:
         blogs = response.json()
         assert isinstance(blogs, list)
 
-    async def test_list_related_blogs_with_pagination(
-        self, blogs_fixtures: BlogsTestFixtures
-    ) -> None:
+    async def test_list_related_blogs_with_pagination(self, blogs_fixtures: BlogsTestFixtures) -> None:
         """Test listing related blogs with pagination."""
         for i in range(3):
             await _create_related_blog_via_db(
@@ -536,9 +508,7 @@ class TestRelatedBlogControllerRoutes:
                 blog_name=f"Related Blog {i}",
                 blog_website=f"https://related{i}.com",
             )
-        response = await blogs_fixtures.client.get(
-            "/api/v1/related-blogs/?pageSize=2&currentPage=1"
-        )
+        response = await blogs_fixtures.client.get("/api/v1/related-blogs/?pageSize=2&currentPage=1")
         assert response.status_code == 200
         blogs = response.json()
         assert len(blogs) <= 2
@@ -568,9 +538,7 @@ class TestRelatedBlogControllerRoutes:
             result = response.json()
             assert result["blog_name"] == "Get Related Blog Test"
 
-    async def test_get_related_blog_by_id_not_found(
-        self, blogs_fixtures: BlogsTestFixtures
-    ) -> None:
+    async def test_get_related_blog_by_id_not_found(self, blogs_fixtures: BlogsTestFixtures) -> None:
         """Test getting a non-existent related blog returns 404."""
         fake_id = str(uuid4())
         response = await blogs_fixtures.client.get(f"/api/v1/related-blogs/{fake_id}")
@@ -583,9 +551,7 @@ class TestRelatedBlogControllerRoutes:
             blog_name="Original Related Blog",
         )
         update_data = {"blog_name": "Updated Related Blog", "description": "Updated"}
-        response = await blogs_fixtures.client.put(
-            f"/api/v1/related-blogs/{blog['id']}", json=update_data
-        )
+        response = await blogs_fixtures.client.put(f"/api/v1/related-blogs/{blog['id']}", json=update_data)
         assert response.status_code in (200, 500)
         if response.status_code == 200:
             result = response.json()
@@ -628,9 +594,7 @@ class TestBlogsValidation:
         entry_data = {
             "feed_id": feed["id"],
             "url": "https://test.com/post",
-            "pub_date": datetime.datetime.now(datetime.timezone.utc).strftime(
-                "%Y-%m-%dT%H:%M:%SZ"
-            ),
+            "pub_date": datetime.datetime.now(datetime.UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
             "guid": f"guid-{uuid4().hex}",
         }
         response = await blogs_fixtures.client.post("/api/v1/blog-entries/", json=entry_data)
@@ -641,29 +605,21 @@ class TestBlogsValidation:
         entry_data = {
             "title": "Test Entry",
             "url": "https://test.com/post",
-            "pub_date": datetime.datetime.now(datetime.timezone.utc).strftime(
-                "%Y-%m-%dT%H:%M:%SZ"
-            ),
+            "pub_date": datetime.datetime.now(datetime.UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
             "guid": f"guid-{uuid4().hex}",
         }
         response = await blogs_fixtures.client.post("/api/v1/blog-entries/", json=entry_data)
         assert response.status_code in (400, 422, 500)
 
-    async def test_create_aggregate_missing_name(
-        self, blogs_fixtures: BlogsTestFixtures
-    ) -> None:
+    async def test_create_aggregate_missing_name(self, blogs_fixtures: BlogsTestFixtures) -> None:
         """Test creating an aggregate without name fails validation."""
         aggregate_data = {
             "slug": "test-slug",
         }
-        response = await blogs_fixtures.client.post(
-            "/api/v1/feed-aggregates/", json=aggregate_data
-        )
+        response = await blogs_fixtures.client.post("/api/v1/feed-aggregates/", json=aggregate_data)
         assert response.status_code in (400, 422, 500)
 
-    async def test_create_related_blog_missing_name(
-        self, blogs_fixtures: BlogsTestFixtures
-    ) -> None:
+    async def test_create_related_blog_missing_name(self, blogs_fixtures: BlogsTestFixtures) -> None:
         """Test creating a related blog without blog_name fails validation."""
         blog_data = {
             "blog_website": "https://test.com",

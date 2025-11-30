@@ -69,7 +69,7 @@ async def _create_minutes_via_db(
 
 
 @pytest.fixture
-async def test_app(postgres_uri: str) -> AsyncGenerator[Litestar, None]:
+async def test_app(postgres_uri: str) -> AsyncGenerator[Litestar]:
     """Create a test Litestar application with the minutes controller."""
     engine = create_async_engine(postgres_uri, echo=False)
     async with engine.begin() as conn:
@@ -91,7 +91,7 @@ async def test_app(postgres_uri: str) -> AsyncGenerator[Litestar, None]:
 
 
 @pytest.fixture
-async def client(test_app: Litestar) -> AsyncGenerator[AsyncTestClient, None]:
+async def client(test_app: Litestar) -> AsyncGenerator[AsyncTestClient]:
     """Create an async test client."""
     async with AsyncTestClient(app=test_app) as client:
         yield client
@@ -100,9 +100,7 @@ async def client(test_app: Litestar) -> AsyncGenerator[AsyncTestClient, None]:
 class TestMinutesControllerRoutes:
     """Tests for MinutesController endpoints."""
 
-    async def test_list_minutes(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_list_minutes(self, client: AsyncTestClient, postgres_uri: str) -> None:
         user = await _create_user_via_db(postgres_uri)
         await _create_minutes_via_db(postgres_uri, str(user.id))
         response = await client.get("/api/v1/minutes/")
@@ -110,9 +108,7 @@ class TestMinutesControllerRoutes:
         if response.status_code == 200:
             assert isinstance(response.json(), list)
 
-    async def test_list_minutes_with_pagination(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_list_minutes_with_pagination(self, client: AsyncTestClient, postgres_uri: str) -> None:
         user = await _create_user_via_db(postgres_uri)
         for i in range(3):
             await _create_minutes_via_db(
@@ -126,9 +122,7 @@ class TestMinutesControllerRoutes:
             result = response.json()
             assert isinstance(result, list)
 
-    async def test_list_published_minutes(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_list_published_minutes(self, client: AsyncTestClient, postgres_uri: str) -> None:
         user = await _create_user_via_db(postgres_uri)
         await _create_minutes_via_db(postgres_uri, str(user.id), is_published=True)
         response = await client.get("/api/v1/minutes/published")
@@ -136,9 +130,7 @@ class TestMinutesControllerRoutes:
         if response.status_code == 200:
             assert isinstance(response.json(), list)
 
-    async def test_create_minutes(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_create_minutes(self, client: AsyncTestClient, postgres_uri: str) -> None:
         user = await _create_user_via_db(postgres_uri)
         today = datetime.date.today()
         data = {
@@ -154,9 +146,7 @@ class TestMinutesControllerRoutes:
             result = response.json()
             assert result["content"] == "Test meeting content"
 
-    async def test_get_minutes_by_id(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_get_minutes_by_id(self, client: AsyncTestClient, postgres_uri: str) -> None:
         user = await _create_user_via_db(postgres_uri)
         minutes = await _create_minutes_via_db(postgres_uri, str(user.id))
         response = await client.get(f"/api/v1/minutes/{minutes.id}")
@@ -170,9 +160,7 @@ class TestMinutesControllerRoutes:
         response = await client.get(f"/api/v1/minutes/{fake_id}")
         assert response.status_code in (404, 500)
 
-    async def test_get_minutes_by_slug(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_get_minutes_by_slug(self, client: AsyncTestClient, postgres_uri: str) -> None:
         user = await _create_user_via_db(postgres_uri)
         minutes = await _create_minutes_via_db(postgres_uri, str(user.id))
         response = await client.get(f"/api/v1/minutes/slug/{minutes.slug}")
@@ -185,9 +173,7 @@ class TestMinutesControllerRoutes:
         response = await client.get("/api/v1/minutes/slug/non-existent-slug")
         assert response.status_code in (404, 500)
 
-    async def test_get_minutes_by_date(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_get_minutes_by_date(self, client: AsyncTestClient, postgres_uri: str) -> None:
         user = await _create_user_via_db(postgres_uri)
         meeting_date = datetime.date.today()
         await _create_minutes_via_db(postgres_uri, str(user.id), date=meeting_date)
@@ -198,9 +184,7 @@ class TestMinutesControllerRoutes:
         response = await client.get("/api/v1/minutes/date/1900-01-01")
         assert response.status_code in (404, 500)
 
-    async def test_update_minutes(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_update_minutes(self, client: AsyncTestClient, postgres_uri: str) -> None:
         user = await _create_user_via_db(postgres_uri)
         minutes = await _create_minutes_via_db(postgres_uri, str(user.id))
         data = {"content": "Updated meeting content"}
@@ -210,9 +194,7 @@ class TestMinutesControllerRoutes:
             result = response.json()
             assert result["content"] == "Updated meeting content"
 
-    async def test_delete_minutes(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_delete_minutes(self, client: AsyncTestClient, postgres_uri: str) -> None:
         user = await _create_user_via_db(postgres_uri)
         minutes = await _create_minutes_via_db(postgres_uri, str(user.id))
         response = await client.delete(f"/api/v1/minutes/{minutes.id}")
@@ -222,9 +204,7 @@ class TestMinutesControllerRoutes:
 class TestMinutesValidation:
     """Validation tests for minutes domain."""
 
-    async def test_create_minutes_missing_date(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_create_minutes_missing_date(self, client: AsyncTestClient, postgres_uri: str) -> None:
         user = await _create_user_via_db(postgres_uri)
         data = {
             "content": "Test",
@@ -233,9 +213,7 @@ class TestMinutesValidation:
         response = await client.post("/api/v1/minutes/", json=data)
         assert response.status_code in (400, 422, 500)
 
-    async def test_create_minutes_missing_content(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_create_minutes_missing_content(self, client: AsyncTestClient, postgres_uri: str) -> None:
         user = await _create_user_via_db(postgres_uri)
         data = {
             "date": datetime.date.today().isoformat(),

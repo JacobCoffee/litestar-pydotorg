@@ -38,9 +38,7 @@ async def _create_user_via_db(postgres_uri: str, username: str | None = None) ->
         return user
 
 
-async def _create_code_sample_via_db(
-    postgres_uri: str, creator_id: str, is_published: bool = False
-) -> CodeSample:
+async def _create_code_sample_via_db(postgres_uri: str, creator_id: str, is_published: bool = False) -> CodeSample:
     """Create a code sample directly in the database for testing."""
     from uuid import UUID
 
@@ -62,7 +60,7 @@ async def _create_code_sample_via_db(
 
 
 @pytest.fixture
-async def test_app(postgres_uri: str) -> AsyncGenerator[Litestar, None]:
+async def test_app(postgres_uri: str) -> AsyncGenerator[Litestar]:
     """Create a test Litestar application with the codesamples controller."""
     engine = create_async_engine(postgres_uri, echo=False)
     async with engine.begin() as conn:
@@ -84,7 +82,7 @@ async def test_app(postgres_uri: str) -> AsyncGenerator[Litestar, None]:
 
 
 @pytest.fixture
-async def client(test_app: Litestar) -> AsyncGenerator[AsyncTestClient, None]:
+async def client(test_app: Litestar) -> AsyncGenerator[AsyncTestClient]:
     """Create an async test client."""
     async with AsyncTestClient(app=test_app) as client:
         yield client
@@ -93,9 +91,7 @@ async def client(test_app: Litestar) -> AsyncGenerator[AsyncTestClient, None]:
 class TestCodeSampleControllerRoutes:
     """Tests for CodeSampleController endpoints."""
 
-    async def test_list_code_samples(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_list_code_samples(self, client: AsyncTestClient, postgres_uri: str) -> None:
         user = await _create_user_via_db(postgres_uri)
         await _create_code_sample_via_db(postgres_uri, str(user.id))
         response = await client.get("/api/v1/code-samples/")
@@ -103,9 +99,7 @@ class TestCodeSampleControllerRoutes:
         if response.status_code == 200:
             assert isinstance(response.json(), list)
 
-    async def test_list_code_samples_with_pagination(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_list_code_samples_with_pagination(self, client: AsyncTestClient, postgres_uri: str) -> None:
         user = await _create_user_via_db(postgres_uri)
         for _ in range(3):
             await _create_code_sample_via_db(postgres_uri, str(user.id))
@@ -115,9 +109,7 @@ class TestCodeSampleControllerRoutes:
             result = response.json()
             assert isinstance(result, list)
 
-    async def test_list_published_code_samples(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_list_published_code_samples(self, client: AsyncTestClient, postgres_uri: str) -> None:
         user = await _create_user_via_db(postgres_uri)
         await _create_code_sample_via_db(postgres_uri, str(user.id), is_published=True)
         response = await client.get("/api/v1/code-samples/published")
@@ -125,9 +117,7 @@ class TestCodeSampleControllerRoutes:
         if response.status_code == 200:
             assert isinstance(response.json(), list)
 
-    async def test_create_code_sample(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_create_code_sample(self, client: AsyncTestClient, postgres_uri: str) -> None:
         user = await _create_user_via_db(postgres_uri)
         data = {
             "code": "print('Hello, Test!')",
@@ -141,9 +131,7 @@ class TestCodeSampleControllerRoutes:
             result = response.json()
             assert result["description"] == "A test code sample"
 
-    async def test_get_code_sample_by_id(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_get_code_sample_by_id(self, client: AsyncTestClient, postgres_uri: str) -> None:
         user = await _create_user_via_db(postgres_uri)
         sample = await _create_code_sample_via_db(postgres_uri, str(user.id))
         response = await client.get(f"/api/v1/code-samples/{sample.id}")
@@ -157,9 +145,7 @@ class TestCodeSampleControllerRoutes:
         response = await client.get(f"/api/v1/code-samples/{fake_id}")
         assert response.status_code in (404, 500)
 
-    async def test_get_code_sample_by_slug(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_get_code_sample_by_slug(self, client: AsyncTestClient, postgres_uri: str) -> None:
         user = await _create_user_via_db(postgres_uri)
         sample = await _create_code_sample_via_db(postgres_uri, str(user.id))
         response = await client.get(f"/api/v1/code-samples/slug/{sample.slug}")
@@ -172,9 +158,7 @@ class TestCodeSampleControllerRoutes:
         response = await client.get("/api/v1/code-samples/slug/non-existent-slug")
         assert response.status_code in (404, 500)
 
-    async def test_update_code_sample(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_update_code_sample(self, client: AsyncTestClient, postgres_uri: str) -> None:
         user = await _create_user_via_db(postgres_uri)
         sample = await _create_code_sample_via_db(postgres_uri, str(user.id))
         data = {"description": "Updated description"}
@@ -184,9 +168,7 @@ class TestCodeSampleControllerRoutes:
             result = response.json()
             assert result["description"] == "Updated description"
 
-    async def test_delete_code_sample(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_delete_code_sample(self, client: AsyncTestClient, postgres_uri: str) -> None:
         user = await _create_user_via_db(postgres_uri)
         sample = await _create_code_sample_via_db(postgres_uri, str(user.id))
         response = await client.delete(f"/api/v1/code-samples/{sample.id}")
@@ -196,9 +178,7 @@ class TestCodeSampleControllerRoutes:
 class TestCodeSamplesValidation:
     """Validation tests for code samples domain."""
 
-    async def test_create_code_sample_missing_code(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_create_code_sample_missing_code(self, client: AsyncTestClient, postgres_uri: str) -> None:
         user = await _create_user_via_db(postgres_uri)
         data = {
             "description": "Test",
@@ -207,9 +187,7 @@ class TestCodeSamplesValidation:
         response = await client.post("/api/v1/code-samples/", json=data)
         assert response.status_code in (400, 422, 500)
 
-    async def test_create_code_sample_missing_description(
-        self, client: AsyncTestClient, postgres_uri: str
-    ) -> None:
+    async def test_create_code_sample_missing_description(self, client: AsyncTestClient, postgres_uri: str) -> None:
         user = await _create_user_via_db(postgres_uri)
         data = {
             "code": "print('test')",

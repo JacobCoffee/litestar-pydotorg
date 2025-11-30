@@ -592,7 +592,7 @@ class TestAdminEmailTemplateActions:
         # Returns 200 with HTML error message for HTMX swapping
         assert response.status_code == 200
         assert "alert" in response.text
-        assert ("email" in response.text.lower() or "not found" in response.text.lower())
+        assert "email" in response.text.lower() or "not found" in response.text.lower()
 
     async def test_preview_template_with_invalid_json(self, admin_email_fixtures: AdminEmailTestFixtures) -> None:
         """Test preview with invalid JSON context."""
@@ -670,9 +670,7 @@ class TestAdminEmailNewRoutes:
         )
         assert response.status_code == 302
 
-    async def test_get_preview_template_accessible_to_staff(
-        self, admin_email_fixtures: AdminEmailTestFixtures
-    ) -> None:
+    async def test_get_preview_template_accessible_to_staff(self, admin_email_fixtures: AdminEmailTestFixtures) -> None:
         """Test that staff can access GET preview endpoint."""
         from pydotorg.core.auth.jwt import jwt_service
 
@@ -946,7 +944,9 @@ class TestCSRFProtection:
             response = await client.get("/", follow_redirects=False)
             csrf_token = response.cookies.get("csrftoken")
             assert csrf_token is not None, "CSRF cookie not set"
-            assert len(csrf_token) >= 64, f"CSRF token too short ({len(csrf_token)} chars), expected >= 64. Clear browser cookies!"
+            assert len(csrf_token) >= 64, (
+                f"CSRF token too short ({len(csrf_token)} chars), expected >= 64. Clear browser cookies!"
+            )
 
     async def test_post_without_csrf_fails(self) -> None:
         """Test that POST without CSRF token fails with 403."""

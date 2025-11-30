@@ -22,7 +22,7 @@ from pydotorg.domains.jobs.controllers import (
     JobTypeController,
 )
 from pydotorg.domains.jobs.dependencies import get_jobs_dependencies
-from pydotorg.domains.jobs.models import Job, JobCategory, JobStatus, JobType
+from pydotorg.domains.jobs.models import Job, JobStatus
 from pydotorg.domains.users.models import User
 
 if TYPE_CHECKING:
@@ -41,7 +41,6 @@ class JobsTestFixtures:
 
 async def _create_job_via_db(postgres_uri: str, creator_id, **job_data) -> dict:
     """Create a job directly via database. Used only at fixture setup time."""
-    from pydotorg.domains.jobs.models import JobReviewComment
 
     engine = create_async_engine(postgres_uri, echo=False)
     async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
@@ -482,7 +481,9 @@ class TestJobControllerRoutes:
 
     async def test_archive_job(self, jobs_fixtures: JobsTestFixtures) -> None:
         """Test archiving a job."""
-        job = await _create_job_via_db(jobs_fixtures.postgres_uri, jobs_fixtures.staff_user.id, status=JobStatus.APPROVED)
+        job = await _create_job_via_db(
+            jobs_fixtures.postgres_uri, jobs_fixtures.staff_user.id, status=JobStatus.APPROVED
+        )
 
         response = await jobs_fixtures.client.patch(f"/api/v1/jobs/{job['id']}/archive")
         assert response.status_code in (200, 500)
@@ -601,9 +602,7 @@ class TestJobReviewCommentControllerRoutes:
 
     async def test_list_job_review_comments(self, jobs_fixtures: JobsTestFixtures) -> None:
         """Test listing review comments for a job."""
-        job = await _create_job_via_db(
-            jobs_fixtures.postgres_uri, jobs_fixtures.staff_user.id, status=JobStatus.REVIEW
-        )
+        job = await _create_job_via_db(jobs_fixtures.postgres_uri, jobs_fixtures.staff_user.id, status=JobStatus.REVIEW)
 
         response = await jobs_fixtures.client.get(f"/api/v1/jobs/{job['id']}/review-comments")
         assert response.status_code == 200
@@ -611,21 +610,15 @@ class TestJobReviewCommentControllerRoutes:
 
     async def test_list_review_comments_with_pagination(self, jobs_fixtures: JobsTestFixtures) -> None:
         """Test listing review comments with pagination."""
-        job = await _create_job_via_db(
-            jobs_fixtures.postgres_uri, jobs_fixtures.staff_user.id, status=JobStatus.REVIEW
-        )
+        job = await _create_job_via_db(jobs_fixtures.postgres_uri, jobs_fixtures.staff_user.id, status=JobStatus.REVIEW)
 
-        response = await jobs_fixtures.client.get(
-            f"/api/v1/jobs/{job['id']}/review-comments?limit=10&offset=0"
-        )
+        response = await jobs_fixtures.client.get(f"/api/v1/jobs/{job['id']}/review-comments?limit=10&offset=0")
         assert response.status_code == 200
         assert isinstance(response.json(), list)
 
     async def test_get_review_comment_by_id(self, jobs_fixtures: JobsTestFixtures) -> None:
         """Test getting a specific review comment."""
-        job = await _create_job_via_db(
-            jobs_fixtures.postgres_uri, jobs_fixtures.staff_user.id, status=JobStatus.REVIEW
-        )
+        job = await _create_job_via_db(jobs_fixtures.postgres_uri, jobs_fixtures.staff_user.id, status=JobStatus.REVIEW)
 
         comment = await _create_review_comment_via_db(
             jobs_fixtures.postgres_uri,
@@ -646,9 +639,7 @@ class TestJobReviewCommentControllerRoutes:
 
     async def test_delete_review_comment(self, jobs_fixtures: JobsTestFixtures) -> None:
         """Test deleting a review comment."""
-        job = await _create_job_via_db(
-            jobs_fixtures.postgres_uri, jobs_fixtures.staff_user.id, status=JobStatus.REVIEW
-        )
+        job = await _create_job_via_db(jobs_fixtures.postgres_uri, jobs_fixtures.staff_user.id, status=JobStatus.REVIEW)
 
         comment = await _create_review_comment_via_db(
             jobs_fixtures.postgres_uri,
