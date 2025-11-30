@@ -93,14 +93,6 @@ class Release(AuditBase, ContentManageableMixin, NameSlugMixin):
 
 class ReleaseFile(AuditBase, ContentManageableMixin, NameSlugMixin):
     __tablename__ = "release_files"
-    __table_args__ = (
-        UniqueConstraint(
-            "release_id",
-            "os_id",
-            "download_button",
-            name="uq_release_os_download_button",
-        ),
-    )
 
     release_id: Mapped[UUID] = mapped_column(ForeignKey("releases.id", ondelete="CASCADE"))
     os_id: Mapped[UUID] = mapped_column(ForeignKey("download_os.id", ondelete="CASCADE"))
