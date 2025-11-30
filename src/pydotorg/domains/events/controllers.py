@@ -9,9 +9,11 @@ from uuid import UUID
 from advanced_alchemy.filters import LimitOffset
 from litestar import Controller, delete, get, post, put
 from litestar.exceptions import NotFoundException
-from litestar.params import Parameter
-from litestar.response import Template
+from litestar.openapi import ResponseSpec
+from litestar.params import Body, Parameter
+from litestar.response import Response, Template
 
+from pydotorg.core.ical import ICalendarService
 from pydotorg.domains.events.schemas import (
     CalendarCreate,
     CalendarRead,
@@ -51,17 +53,47 @@ class CalendarController(Controller):
         calendar_service: CalendarService,
         limit_offset: LimitOffset,
     ) -> list[CalendarRead]:
-        """List all calendars with pagination."""
+        """List all event calendars with pagination.
+
+        Retrieves a paginated list of calendars used to organize events by
+        community or topic (e.g., Python Conferences, Local Meetups).
+
+        Args:
+            calendar_service: Service for calendar database operations.
+            limit_offset: Pagination parameters for limiting and offsetting results.
+
+        Returns:
+            List of calendars with their names and descriptions.
+        """
         calendars, _total = await calendar_service.list_and_count(limit_offset)
         return [CalendarRead.model_validate(calendar) for calendar in calendars]
 
-    @get("/{calendar_id:uuid}")
+    @get(
+        "/{calendar_id:uuid}",
+        responses={
+            404: ResponseSpec(None, description="Calendar not found"),
+        },
+    )
     async def get_calendar(
         self,
         calendar_service: CalendarService,
         calendar_id: Annotated[UUID, Parameter(title="Calendar ID", description="The calendar ID")],
     ) -> CalendarRead:
-        """Get a calendar by ID."""
+        """Retrieve a specific calendar by its unique identifier.
+
+        Fetches complete calendar information including name, description,
+        and associated metadata.
+
+        Args:
+            calendar_service: Service for calendar database operations.
+            calendar_id: The unique UUID identifier of the calendar.
+
+        Returns:
+            Complete calendar details.
+
+        Raises:
+            NotFoundException: If no calendar with the given ID exists.
+        """
         calendar = await calendar_service.get(calendar_id)
         return CalendarRead.model_validate(calendar)
 
@@ -71,7 +103,21 @@ class CalendarController(Controller):
         calendar_service: CalendarService,
         slug: Annotated[str, Parameter(title="Slug", description="The calendar slug")],
     ) -> CalendarRead:
-        """Get a calendar by slug."""
+        """Look up a calendar by its URL slug.
+
+        Searches for a calendar with the specified slug and returns its details.
+        Slugs are URL-friendly identifiers used in calendar page URLs.
+
+        Args:
+            calendar_service: Service for calendar database operations.
+            slug: The URL-friendly slug identifier.
+
+        Returns:
+            Complete calendar details.
+
+        Raises:
+            NotFoundException: If no calendar with the given slug exists.
+        """
         calendar = await calendar_service.get_by_slug(slug)
         if not calendar:
             raise NotFoundException(f"Calendar with slug {slug} not found")
@@ -81,9 +127,23 @@ class CalendarController(Controller):
     async def create_calendar(
         self,
         calendar_service: CalendarService,
-        data: CalendarCreate,
+        data: Annotated[CalendarCreate, Body(title="Calendar", description="Calendar to create")],
     ) -> CalendarRead:
-        """Create a new calendar."""
+        """Create a new event calendar.
+
+        Creates a new calendar for organizing related events. Calendars can
+        be used to group events by community, topic, or region.
+
+        Args:
+            calendar_service: Service for calendar database operations.
+            data: Calendar creation payload with name and description.
+
+        Returns:
+            The newly created calendar.
+
+        Raises:
+            ConflictError: If a calendar with the same slug exists.
+        """
         calendar = await calendar_service.create(data.model_dump())
         return CalendarRead.model_validate(calendar)
 
@@ -91,10 +151,25 @@ class CalendarController(Controller):
     async def update_calendar(
         self,
         calendar_service: CalendarService,
-        data: CalendarUpdate,
+        data: Annotated[CalendarUpdate, Body(title="Calendar", description="Calendar data to update")],
         calendar_id: Annotated[UUID, Parameter(title="Calendar ID", description="The calendar ID")],
     ) -> CalendarRead:
-        """Update a calendar."""
+        """Update an existing calendar.
+
+        Modifies calendar fields with the provided values. Changes to name
+        or description are immediately reflected.
+
+        Args:
+            calendar_service: Service for calendar database operations.
+            data: Partial calendar update payload with fields to modify.
+            calendar_id: The unique UUID identifier of the calendar to update.
+
+        Returns:
+            The updated calendar with all current fields.
+
+        Raises:
+            NotFoundException: If no calendar with the given ID exists.
+        """
         update_data = data.model_dump(exclude_unset=True)
         calendar = await calendar_service.update(calendar_id, update_data)
         return CalendarRead.model_validate(calendar)
@@ -105,7 +180,18 @@ class CalendarController(Controller):
         calendar_service: CalendarService,
         calendar_id: Annotated[UUID, Parameter(title="Calendar ID", description="The calendar ID")],
     ) -> None:
-        """Delete a calendar."""
+        """Delete an event calendar.
+
+        Permanently removes a calendar and disassociates its events. Events
+        are not deleted but will need to be reassigned to another calendar.
+
+        Args:
+            calendar_service: Service for calendar database operations.
+            calendar_id: The unique UUID identifier of the calendar to delete.
+
+        Raises:
+            NotFoundException: If no calendar with the given ID exists.
+        """
         await calendar_service.delete(calendar_id)
 
 
@@ -121,7 +207,18 @@ class EventCategoryController(Controller):
         event_category_service: EventCategoryService,
         limit_offset: LimitOffset,
     ) -> list[EventCategoryRead]:
-        """List all event categories with pagination."""
+        """List all event categories with pagination.
+
+        Retrieves a paginated list of event categories used to classify
+        events by type (e.g., Conference, Workshop, Meetup).
+
+        Args:
+            event_category_service: Service for event category operations.
+            limit_offset: Pagination parameters for limiting and offsetting results.
+
+        Returns:
+            List of event categories with their names and slugs.
+        """
         categories, _total = await event_category_service.list_and_count(limit_offset)
         return [EventCategoryRead.model_validate(category) for category in categories]
 
@@ -131,7 +228,21 @@ class EventCategoryController(Controller):
         event_category_service: EventCategoryService,
         category_id: Annotated[UUID, Parameter(title="Category ID", description="The category ID")],
     ) -> EventCategoryRead:
-        """Get an event category by ID."""
+        """Retrieve a specific event category by its unique identifier.
+
+        Fetches complete event category information including name and
+        associated calendar.
+
+        Args:
+            event_category_service: Service for event category operations.
+            category_id: The unique UUID identifier of the category.
+
+        Returns:
+            Complete event category details.
+
+        Raises:
+            NotFoundException: If no category with the given ID exists.
+        """
         category = await event_category_service.get(category_id)
         return EventCategoryRead.model_validate(category)
 
@@ -141,7 +252,21 @@ class EventCategoryController(Controller):
         event_category_service: EventCategoryService,
         slug: Annotated[str, Parameter(title="Slug", description="The category slug")],
     ) -> EventCategoryRead:
-        """Get an event category by slug."""
+        """Look up an event category by its URL slug.
+
+        Searches for a category with the specified slug and returns its details.
+        Slugs are URL-friendly identifiers used in category URLs.
+
+        Args:
+            event_category_service: Service for event category operations.
+            slug: The URL-friendly slug identifier.
+
+        Returns:
+            Complete event category details.
+
+        Raises:
+            NotFoundException: If no category with the given slug exists.
+        """
         category = await event_category_service.get_by_slug(slug)
         if not category:
             raise NotFoundException(f"Category with slug {slug} not found")
@@ -153,7 +278,18 @@ class EventCategoryController(Controller):
         event_category_service: EventCategoryService,
         calendar_id: Annotated[UUID, Parameter(title="Calendar ID", description="The calendar ID")],
     ) -> list[EventCategoryRead]:
-        """List all categories for a calendar."""
+        """List all event categories for a specific calendar.
+
+        Retrieves categories that are associated with the specified calendar.
+        Useful for filtering events within a calendar context.
+
+        Args:
+            event_category_service: Service for event category operations.
+            calendar_id: The unique UUID identifier of the calendar.
+
+        Returns:
+            List of event categories for the specified calendar.
+        """
         categories = await event_category_service.get_by_calendar_id(calendar_id)
         return [EventCategoryRead.model_validate(category) for category in categories]
 
@@ -161,9 +297,23 @@ class EventCategoryController(Controller):
     async def create_category(
         self,
         event_category_service: EventCategoryService,
-        data: EventCategoryCreate,
+        data: Annotated[EventCategoryCreate, Body(title="Event Category", description="Event category to create")],
     ) -> EventCategoryRead:
-        """Create a new event category."""
+        """Create a new event category.
+
+        Creates a new category for classifying events within a calendar.
+        Categories help users filter and find relevant events.
+
+        Args:
+            event_category_service: Service for event category operations.
+            data: Event category creation payload with name and calendar ID.
+
+        Returns:
+            The newly created event category.
+
+        Raises:
+            ConflictError: If a category with the same slug exists.
+        """
         category = await event_category_service.create(data.model_dump())
         return EventCategoryRead.model_validate(category)
 
@@ -173,7 +323,18 @@ class EventCategoryController(Controller):
         event_category_service: EventCategoryService,
         category_id: Annotated[UUID, Parameter(title="Category ID", description="The category ID")],
     ) -> None:
-        """Delete an event category."""
+        """Delete an event category.
+
+        Permanently removes an event category from the system. Events using
+        this category will be disassociated but not deleted.
+
+        Args:
+            event_category_service: Service for event category operations.
+            category_id: The unique UUID identifier of the category to delete.
+
+        Raises:
+            NotFoundException: If no category with the given ID exists.
+        """
         await event_category_service.delete(category_id)
 
 
@@ -189,17 +350,47 @@ class EventLocationController(Controller):
         event_location_service: EventLocationService,
         limit_offset: LimitOffset,
     ) -> list[EventLocationRead]:
-        """List all event locations with pagination."""
+        """List all event locations with pagination.
+
+        Retrieves a paginated list of venues and locations where events
+        are held. Includes both physical and virtual venue information.
+
+        Args:
+            event_location_service: Service for event location operations.
+            limit_offset: Pagination parameters for limiting and offsetting results.
+
+        Returns:
+            List of event locations with addresses and details.
+        """
         locations, _total = await event_location_service.list_and_count(limit_offset)
         return [EventLocationRead.model_validate(location) for location in locations]
 
-    @get("/{location_id:uuid}")
+    @get(
+        "/{location_id:uuid}",
+        responses={
+            404: ResponseSpec(None, description="Event location not found"),
+        },
+    )
     async def get_location(
         self,
         event_location_service: EventLocationService,
         location_id: Annotated[UUID, Parameter(title="Location ID", description="The location ID")],
     ) -> EventLocationRead:
-        """Get an event location by ID."""
+        """Retrieve a specific event location by its unique identifier.
+
+        Fetches complete location information including name, address,
+        coordinates, and capacity details.
+
+        Args:
+            event_location_service: Service for event location operations.
+            location_id: The unique UUID identifier of the location.
+
+        Returns:
+            Complete event location details.
+
+        Raises:
+            NotFoundException: If no location with the given ID exists.
+        """
         location = await event_location_service.get(location_id)
         return EventLocationRead.model_validate(location)
 
@@ -209,7 +400,21 @@ class EventLocationController(Controller):
         event_location_service: EventLocationService,
         slug: Annotated[str, Parameter(title="Slug", description="The location slug")],
     ) -> EventLocationRead:
-        """Get an event location by slug."""
+        """Look up an event location by its URL slug.
+
+        Searches for a location with the specified slug and returns its details.
+        Slugs are URL-friendly identifiers used in location URLs.
+
+        Args:
+            event_location_service: Service for event location operations.
+            slug: The URL-friendly slug identifier.
+
+        Returns:
+            Complete event location details.
+
+        Raises:
+            NotFoundException: If no location with the given slug exists.
+        """
         location = await event_location_service.get_by_slug(slug)
         if not location:
             raise NotFoundException(f"Location with slug {slug} not found")
@@ -219,9 +424,23 @@ class EventLocationController(Controller):
     async def create_location(
         self,
         event_location_service: EventLocationService,
-        data: EventLocationCreate,
+        data: Annotated[EventLocationCreate, Body(title="Event Location", description="Event location to create")],
     ) -> EventLocationRead:
-        """Create a new event location."""
+        """Create a new event location.
+
+        Creates a new venue or location record for hosting events. Supports
+        both physical venues with addresses and virtual event locations.
+
+        Args:
+            event_location_service: Service for event location operations.
+            data: Event location creation payload with name and address.
+
+        Returns:
+            The newly created event location.
+
+        Raises:
+            ConflictError: If a location with the same slug exists.
+        """
         location = await event_location_service.create(data.model_dump())
         return EventLocationRead.model_validate(location)
 
@@ -229,10 +448,25 @@ class EventLocationController(Controller):
     async def update_location(
         self,
         event_location_service: EventLocationService,
-        data: EventLocationUpdate,
+        data: Annotated[EventLocationUpdate, Body(title="Event Location", description="Event location data to update")],
         location_id: Annotated[UUID, Parameter(title="Location ID", description="The location ID")],
     ) -> EventLocationRead:
-        """Update an event location."""
+        """Update an existing event location.
+
+        Modifies location fields with the provided values. Can update name,
+        address, coordinates, and capacity information.
+
+        Args:
+            event_location_service: Service for event location operations.
+            data: Partial location update payload with fields to modify.
+            location_id: The unique UUID identifier of the location to update.
+
+        Returns:
+            The updated location with all current fields.
+
+        Raises:
+            NotFoundException: If no location with the given ID exists.
+        """
         update_data = data.model_dump(exclude_unset=True)
         location = await event_location_service.update(location_id, update_data)
         return EventLocationRead.model_validate(location)
@@ -243,7 +477,18 @@ class EventLocationController(Controller):
         event_location_service: EventLocationService,
         location_id: Annotated[UUID, Parameter(title="Location ID", description="The location ID")],
     ) -> None:
-        """Delete an event location."""
+        """Delete an event location.
+
+        Permanently removes an event location from the system. Events using
+        this location will be disassociated but not deleted.
+
+        Args:
+            event_location_service: Service for event location operations.
+            location_id: The unique UUID identifier of the location to delete.
+
+        Raises:
+            NotFoundException: If no location with the given ID exists.
+        """
         await event_location_service.delete(location_id)
 
 
@@ -259,17 +504,47 @@ class EventController(Controller):
         event_service: EventService,
         limit_offset: LimitOffset,
     ) -> list[EventList]:
-        """List all events with pagination."""
+        """List all events with pagination.
+
+        Retrieves a paginated list of events across all calendars. Returns
+        summary information suitable for listing views.
+
+        Args:
+            event_service: Service for event database operations.
+            limit_offset: Pagination parameters for limiting and offsetting results.
+
+        Returns:
+            List of events with summary information.
+        """
         events, _total = await event_service.list_and_count(limit_offset)
         return [EventList.model_validate(event) for event in events]
 
-    @get("/{event_id:uuid}")
+    @get(
+        "/{event_id:uuid}",
+        responses={
+            404: ResponseSpec(None, description="Event not found"),
+        },
+    )
     async def get_event(
         self,
         event_service: EventService,
         event_id: Annotated[UUID, Parameter(title="Event ID", description="The event ID")],
     ) -> EventRead:
-        """Get an event by ID."""
+        """Retrieve a specific event by its unique identifier.
+
+        Fetches complete event information including title, description,
+        dates, location, and organizer details.
+
+        Args:
+            event_service: Service for event database operations.
+            event_id: The unique UUID identifier of the event.
+
+        Returns:
+            Complete event details.
+
+        Raises:
+            NotFoundException: If no event with the given ID exists.
+        """
         event = await event_service.get(event_id)
         return EventRead.model_validate(event)
 
@@ -279,7 +554,21 @@ class EventController(Controller):
         event_service: EventService,
         slug: Annotated[str, Parameter(title="Slug", description="The event slug")],
     ) -> EventWithRelations:
-        """Get an event by slug with all relations."""
+        """Look up an event by its URL slug with all relations.
+
+        Fetches complete event information including related calendar,
+        categories, occurrences, and venue details.
+
+        Args:
+            event_service: Service for event database operations.
+            slug: The URL-friendly slug identifier.
+
+        Returns:
+            Complete event details with all related entities.
+
+        Raises:
+            NotFoundException: If no event with the given slug exists.
+        """
         event = await event_service.get_by_slug(slug)
         if not event:
             raise NotFoundException(f"Event with slug {slug} not found")
@@ -292,7 +581,19 @@ class EventController(Controller):
         calendar_id: Annotated[UUID, Parameter(title="Calendar ID", description="The calendar ID")],
         limit: Annotated[int, Parameter(ge=1, le=1000)] = 100,
     ) -> list[EventList]:
-        """List all events for a calendar."""
+        """List all events for a specific calendar.
+
+        Retrieves events associated with the specified calendar. Useful for
+        displaying events within a single calendar context.
+
+        Args:
+            event_service: Service for event database operations.
+            calendar_id: The unique UUID identifier of the calendar.
+            limit: Maximum number of events to return (1-1000).
+
+        Returns:
+            List of events for the specified calendar.
+        """
         events = await event_service.get_by_calendar_id(calendar_id, limit=limit)
         return [EventList.model_validate(event) for event in events]
 
@@ -303,7 +604,19 @@ class EventController(Controller):
         category_id: Annotated[UUID, Parameter(title="Category ID", description="The category ID")],
         limit: Annotated[int, Parameter(ge=1, le=1000)] = 100,
     ) -> list[EventList]:
-        """List all events for a category."""
+        """List all events for a specific category.
+
+        Retrieves events classified under the specified category. Useful for
+        filtering events by type (e.g., conferences, workshops).
+
+        Args:
+            event_service: Service for event database operations.
+            category_id: The unique UUID identifier of the category.
+            limit: Maximum number of events to return (1-1000).
+
+        Returns:
+            List of events for the specified category.
+        """
         events = await event_service.get_by_category_id(category_id, limit=limit)
         return [EventList.model_validate(event) for event in events]
 
@@ -314,7 +627,19 @@ class EventController(Controller):
         calendar_id: Annotated[UUID | None, Parameter(title="Calendar ID")] = None,
         limit: Annotated[int, Parameter(ge=1, le=100)] = 10,
     ) -> list[EventWithRelations]:
-        """List featured events."""
+        """List featured events for homepage display.
+
+        Retrieves events marked as featured for promotional display. Can be
+        filtered by calendar for context-specific featuring.
+
+        Args:
+            event_service: Service for event database operations.
+            calendar_id: Optional calendar filter for featured events.
+            limit: Maximum number of events to return (1-100).
+
+        Returns:
+            List of featured events with full details.
+        """
         events = await event_service.get_featured(calendar_id=calendar_id, limit=limit)
         return [EventWithRelations.model_validate(event) for event in events]
 
@@ -326,7 +651,20 @@ class EventController(Controller):
         start_date: Annotated[datetime.datetime | None, Parameter(title="Start date")] = None,
         limit: Annotated[int, Parameter(ge=1, le=1000)] = 100,
     ) -> list[EventWithRelations]:
-        """List upcoming events."""
+        """List upcoming events from the current date.
+
+        Retrieves events with occurrences in the future, sorted by start date.
+        Can be filtered by calendar and custom start date.
+
+        Args:
+            event_service: Service for event database operations.
+            calendar_id: Optional calendar filter for upcoming events.
+            start_date: Custom start date for the upcoming window.
+            limit: Maximum number of events to return (1-1000).
+
+        Returns:
+            List of upcoming events with full details.
+        """
         events = await event_service.get_upcoming(
             calendar_id=calendar_id,
             start_date=start_date,
@@ -338,9 +676,23 @@ class EventController(Controller):
     async def create_event(
         self,
         event_service: EventService,
-        data: EventCreate,
+        data: Annotated[EventCreate, Body(title="Event", description="Event to create")],
     ) -> EventRead:
-        """Create a new event."""
+        """Create a new event with occurrences.
+
+        Creates a new event with the specified details, including title,
+        description, calendar assignment, categories, and occurrence dates.
+
+        Args:
+            event_service: Service for event database operations.
+            data: Event creation payload with all event details.
+
+        Returns:
+            The newly created event.
+
+        Raises:
+            ValidationError: If required fields are missing or invalid.
+        """
         event_data = data.model_dump(exclude={"category_ids", "occurrences"})
         event = await event_service.create(event_data)
 
@@ -361,10 +713,25 @@ class EventController(Controller):
     async def update_event(
         self,
         event_service: EventService,
-        data: EventUpdate,
+        data: Annotated[EventUpdate, Body(title="Event", description="Event data to update")],
         event_id: Annotated[UUID, Parameter(title="Event ID", description="The event ID")],
     ) -> EventRead:
-        """Update an event."""
+        """Update an existing event.
+
+        Modifies event fields with the provided values. Can update title,
+        description, categories, and other event details.
+
+        Args:
+            event_service: Service for event database operations.
+            data: Partial event update payload with fields to modify.
+            event_id: The unique UUID identifier of the event to update.
+
+        Returns:
+            The updated event with all current fields.
+
+        Raises:
+            NotFoundException: If no event with the given ID exists.
+        """
         update_data = data.model_dump(exclude_unset=True, exclude={"category_ids"})
         event = await event_service.update(event_id, update_data)
 
@@ -379,7 +746,18 @@ class EventController(Controller):
         event_service: EventService,
         event_id: Annotated[UUID, Parameter(title="Event ID", description="The event ID")],
     ) -> None:
-        """Delete an event."""
+        """Permanently delete an event.
+
+        Removes an event and all its occurrences from the system.
+        This action is irreversible.
+
+        Args:
+            event_service: Service for event database operations.
+            event_id: The unique UUID identifier of the event to delete.
+
+        Raises:
+            NotFoundException: If no event with the given ID exists.
+        """
         await event_service.delete(event_id)
 
 
@@ -395,17 +773,47 @@ class EventOccurrenceController(Controller):
         event_occurrence_service: EventOccurrenceService,
         limit_offset: LimitOffset,
     ) -> list[EventOccurrenceRead]:
-        """List all event occurrences with pagination."""
+        """List all event occurrences with pagination.
+
+        Retrieves a paginated list of event occurrences. Occurrences represent
+        specific dates/times when an event takes place.
+
+        Args:
+            event_occurrence_service: Service for event occurrence operations.
+            limit_offset: Pagination parameters for limiting and offsetting results.
+
+        Returns:
+            List of event occurrences with date and time details.
+        """
         occurrences, _total = await event_occurrence_service.list_and_count(limit_offset)
         return [EventOccurrenceRead.model_validate(occurrence) for occurrence in occurrences]
 
-    @get("/{occurrence_id:uuid}")
+    @get(
+        "/{occurrence_id:uuid}",
+        responses={
+            404: ResponseSpec(None, description="Event occurrence not found"),
+        },
+    )
     async def get_occurrence(
         self,
         event_occurrence_service: EventOccurrenceService,
         occurrence_id: Annotated[UUID, Parameter(title="Occurrence ID", description="The occurrence ID")],
     ) -> EventOccurrenceRead:
-        """Get an event occurrence by ID."""
+        """Retrieve a specific event occurrence by its unique identifier.
+
+        Fetches complete occurrence information including start time, end time,
+        and all-day flag.
+
+        Args:
+            event_occurrence_service: Service for event occurrence operations.
+            occurrence_id: The unique UUID identifier of the occurrence.
+
+        Returns:
+            Complete event occurrence details.
+
+        Raises:
+            NotFoundException: If no occurrence with the given ID exists.
+        """
         occurrence = await event_occurrence_service.get(occurrence_id)
         return EventOccurrenceRead.model_validate(occurrence)
 
@@ -415,7 +823,18 @@ class EventOccurrenceController(Controller):
         event_occurrence_service: EventOccurrenceService,
         event_id: Annotated[UUID, Parameter(title="Event ID", description="The event ID")],
     ) -> list[EventOccurrenceRead]:
-        """List all occurrences for an event."""
+        """List all occurrences for a specific event.
+
+        Retrieves all date/time occurrences for an event. Useful for events
+        that repeat on multiple dates.
+
+        Args:
+            event_occurrence_service: Service for event occurrence operations.
+            event_id: The unique UUID identifier of the event.
+
+        Returns:
+            List of occurrences for the specified event.
+        """
         occurrences = await event_occurrence_service.get_by_event_id(event_id)
         return [EventOccurrenceRead.model_validate(occurrence) for occurrence in occurrences]
 
@@ -427,7 +846,20 @@ class EventOccurrenceController(Controller):
         end_date: Annotated[datetime.datetime, Parameter(title="End date")],
         calendar_id: Annotated[UUID | None, Parameter(title="Calendar ID")] = None,
     ) -> list[EventOccurrenceRead]:
-        """List occurrences within a date range."""
+        """List event occurrences within a date range.
+
+        Retrieves occurrences falling within the specified date range. Useful
+        for calendar views and date-based filtering.
+
+        Args:
+            event_occurrence_service: Service for event occurrence operations.
+            start_date: Start of the date range (inclusive).
+            end_date: End of the date range (inclusive).
+            calendar_id: Optional calendar filter.
+
+        Returns:
+            List of occurrences within the specified date range.
+        """
         occurrences = await event_occurrence_service.get_by_date_range(
             start_date=start_date,
             end_date=end_date,
@@ -439,9 +871,25 @@ class EventOccurrenceController(Controller):
     async def create_occurrence(
         self,
         event_occurrence_service: EventOccurrenceService,
-        data: EventOccurrenceCreate,
+        data: Annotated[
+            EventOccurrenceCreate, Body(title="Event Occurrence", description="Event occurrence to create")
+        ],
     ) -> EventOccurrenceRead:
-        """Create a new event occurrence."""
+        """Create a new event occurrence.
+
+        Adds a new date/time occurrence to an existing event. Useful for
+        adding additional dates to repeating events.
+
+        Args:
+            event_occurrence_service: Service for event occurrence operations.
+            data: Event occurrence creation payload with date/time details.
+
+        Returns:
+            The newly created event occurrence.
+
+        Raises:
+            ValidationError: If required fields are missing or invalid.
+        """
         occurrence = await event_occurrence_service.create(data.model_dump())
         return EventOccurrenceRead.model_validate(occurrence)
 
@@ -449,10 +897,27 @@ class EventOccurrenceController(Controller):
     async def update_occurrence(
         self,
         event_occurrence_service: EventOccurrenceService,
-        data: EventOccurrenceUpdate,
+        data: Annotated[
+            EventOccurrenceUpdate, Body(title="Event Occurrence", description="Event occurrence data to update")
+        ],
         occurrence_id: Annotated[UUID, Parameter(title="Occurrence ID", description="The occurrence ID")],
     ) -> EventOccurrenceRead:
-        """Update an event occurrence."""
+        """Update an existing event occurrence.
+
+        Modifies occurrence fields with the provided values. Can update
+        start time, end time, and all-day status.
+
+        Args:
+            event_occurrence_service: Service for event occurrence operations.
+            data: Partial occurrence update payload with fields to modify.
+            occurrence_id: The unique UUID identifier of the occurrence to update.
+
+        Returns:
+            The updated occurrence with all current fields.
+
+        Raises:
+            NotFoundException: If no occurrence with the given ID exists.
+        """
         update_data = data.model_dump(exclude_unset=True)
         occurrence = await event_occurrence_service.update(occurrence_id, update_data)
         return EventOccurrenceRead.model_validate(occurrence)
@@ -463,7 +928,18 @@ class EventOccurrenceController(Controller):
         event_occurrence_service: EventOccurrenceService,
         occurrence_id: Annotated[UUID, Parameter(title="Occurrence ID", description="The occurrence ID")],
     ) -> None:
-        """Delete an event occurrence."""
+        """Delete an event occurrence.
+
+        Permanently removes an event occurrence from the system. The parent
+        event remains intact with its other occurrences.
+
+        Args:
+            event_occurrence_service: Service for event occurrence operations.
+            occurrence_id: The unique UUID identifier of the occurrence to delete.
+
+        Raises:
+            NotFoundException: If no occurrence with the given ID exists.
+        """
         await event_occurrence_service.delete(occurrence_id)
 
 
@@ -573,35 +1049,83 @@ class EventsPageController(Controller):
         self,
         slug: str,
         event_service: EventService,
-    ) -> str:
-        """Generate iCalendar export for an event."""
+    ) -> Response[bytes]:
+        """Download iCalendar (.ics) file for a single event.
+
+        Generates an RFC 5545 compliant iCalendar file containing all occurrences
+        of the specified event. Can be imported into calendar applications.
+        """
         event = await event_service.get_by_slug(slug)
         if not event:
             raise NotFoundException(f"Event {slug} not found")
 
-        ical_lines = [
-            "BEGIN:VCALENDAR",
-            "VERSION:2.0",
-            "PRODID:-//Python.org//Events//EN",
-            "BEGIN:VEVENT",
-            f"UID:{event.id}@python.org",
-            f"SUMMARY:{event.title}",
-        ]
+        ical_service = ICalendarService()
+        ical_data = ical_service.generate_event_ical(event)
 
-        if event.description:
-            ical_lines.append(f"DESCRIPTION:{event.description}")
+        filename = f"{event.slug or 'event'}.ics"
+        return Response(
+            content=ical_data.encode("utf-8"),
+            media_type="text/calendar; charset=utf-8",
+            headers={
+                "Content-Disposition": f'attachment; filename="{filename}"',
+            },
+        )
 
-        if event.venue:
-            ical_lines.append(f"LOCATION:{event.venue.name}")
+    @get("/calendar.ics")
+    async def calendar_feed(
+        self,
+        event_service: EventService,
+    ) -> Response[bytes]:
+        """Download iCalendar feed for all upcoming events.
 
-        for occurrence in event.occurrences:
-            dt_start = occurrence.dt_start.strftime("%Y%m%dT%H%M%SZ")
-            ical_lines.append(f"DTSTART:{dt_start}")
+        Generates an RFC 5545 compliant iCalendar feed containing upcoming
+        Python community events. Subscribe to this feed in your calendar app.
+        """
+        events = await event_service.get_upcoming(limit=500)
 
-            if occurrence.dt_end:
-                dt_end = occurrence.dt_end.strftime("%Y%m%dT%H%M%SZ")
-                ical_lines.append(f"DTEND:{dt_end}")
+        ical_service = ICalendarService()
+        ical_data = ical_service.generate_upcoming_feed(
+            events=events,
+            title="Python Community Events",
+        )
 
-        ical_lines.extend(["END:VEVENT", "END:VCALENDAR"])
+        return Response(
+            content=ical_data.encode("utf-8"),
+            media_type="text/calendar; charset=utf-8",
+            headers={
+                "Content-Disposition": 'attachment; filename="python-events.ics"',
+            },
+        )
 
-        return "\r\n".join(ical_lines)
+    @get("/calendar/{slug:str}/calendar.ics")
+    async def calendar_specific_feed(
+        self,
+        slug: str,
+        calendar_service: CalendarService,
+        event_service: EventService,
+    ) -> Response[bytes]:
+        """Download iCalendar feed for a specific calendar.
+
+        Generates an RFC 5545 compliant iCalendar feed containing events
+        from the specified calendar. Subscribe to this feed in your calendar app.
+        """
+        calendar = await calendar_service.get_by_slug(slug)
+        if not calendar:
+            raise NotFoundException(f"Calendar {slug} not found")
+
+        events = await event_service.get_by_calendar_id(calendar.id, limit=500)
+
+        ical_service = ICalendarService()
+        ical_data = ical_service.generate_calendar_feed(
+            calendar=calendar,
+            events=events,
+        )
+
+        filename = f"{calendar.slug or 'calendar'}-events.ics"
+        return Response(
+            content=ical_data.encode("utf-8"),
+            media_type="text/calendar; charset=utf-8",
+            headers={
+                "Content-Disposition": f'attachment; filename="{filename}"',
+            },
+        )

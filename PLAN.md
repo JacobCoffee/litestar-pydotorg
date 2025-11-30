@@ -1050,7 +1050,13 @@ async def domain_fixtures(postgres_uri: str) -> AsyncIterator[DomainTestFixtures
 - Various update endpoints: IntegrityError returns 500 instead of 409
 - Various get endpoints: NotFoundError returns 500 instead of 404
 
-**Files Created** (16 test files, 468 tests):
+**Critical Bug Fixed (2025-11-30)**: Missing `limit_offset` dependency
+- **Issue**: All API list endpoints were returning `400: Missing required query parameter 'limit_offset'`
+- **Root Cause**: The `limit_offset` dependency was only defined in test fixtures, NOT in the production app
+- **Fix**: Added `provide_limit_offset()` to `src/pydotorg/core/dependencies.py`
+- **Result**: API pagination now works with `?currentPage=1&pageSize=10` params
+
+**Files Created** (17 test files, 495 tests):
 ```
 tests/integration/
 ├── test_users_routes.py         ✅ Done (48 tests)
@@ -1068,7 +1074,8 @@ tests/integration/
 ├── test_banners_routes.py       ✅ Done (15 tests)
 ├── test_workgroups_routes.py    ✅ Done (13 tests)
 ├── test_mailing_routes.py       ✅ Done (26 tests)
-└── test_search_routes.py        ✅ Done (12 tests)
+├── test_search_routes.py        ✅ Done (12 tests)
+└── test_api_validation_errors.py ✅ Done (27 tests) - NEW
 ```
 
 **Schema Fixes Applied** (14 files - TYPE_CHECKING → runtime imports):
@@ -1124,13 +1131,28 @@ tests/e2e/
 ### Task 9.1: API Documentation
 **Agent**: `documentation-expert`
 **Priority**: HIGH
+**Status**: ✅ COMPLETE (2025-11-30)
 
 **Tasks**:
-- [ ] Configure OpenAPI/Swagger UI
-- [ ] Write API usage guides
-- [ ] Create API examples
-- [ ] Document authentication
+- [x] Configure OpenAPI/Swagger UI (Scalar + Swagger render plugins)
+- [x] Enhanced OpenAPI tag descriptions with detailed context
+- [x] Added request/response examples to auth schemas
+- [x] Document authentication flows (JWT, Session, OAuth)
+- [x] Added docstrings to all AuthController endpoints
+- [x] Add examples to remaining domain schemas (Jobs, Events, Downloads, Sponsors, Pages, Users)
+- [ ] Write comprehensive API usage guide (markdown)
 - [ ] Generate SDK documentation
+
+**Files Modified (2025-11-30)**:
+- `src/pydotorg/main.py` - Enhanced 18 API tag descriptions
+- `src/pydotorg/core/auth/schemas.py` - Added examples to all auth schemas
+- `src/pydotorg/domains/users/auth_controller.py` - Added comprehensive docstrings
+- `src/pydotorg/domains/jobs/schemas.py` - Added examples to all job schemas
+- `src/pydotorg/domains/events/schemas.py` - Added examples to all event schemas
+- `src/pydotorg/domains/downloads/schemas.py` - Added examples to all download schemas
+- `src/pydotorg/domains/sponsors/schemas.py` - Added examples to sponsor schemas
+- `src/pydotorg/domains/pages/schemas.py` - Added examples to page schemas
+- `src/pydotorg/domains/users/schemas.py` - Already had examples
 
 ---
 
@@ -1649,12 +1671,12 @@ tests/
 | ~~**SAQ Event-Driven Wiring**~~ | 6.1b | ✅ DONE | Medium | 31 tasks wired to app events |
 | ~~**API Rate Limiting**~~ | 5.1 | ✅ DONE | Low | Redis-backed rate limiting with tiered limits |
 | ~~**Admin Email UI**~~ | 10.2b | ✅ DONE | Medium | `/admin/email` - Template management + logs viewer |
-| **API Documentation** | 9.1 | MEDIUM | Medium | OpenAPI/Swagger UI setup (basic exists) |
+| **API Documentation** | 9.1 | ✅ COMPLETE | Medium | All schema examples added, OpenAPI configured |
 | ~~**Mailing Domain**~~ | 3.x | ✅ DONE | Low | Email templates + logs domain with SMTP delivery |
 | **OAuth2 Providers** | 2.2 | MEDIUM | Medium | GitHub/Google providers exist, need testing |
 | **Page Caching** | 3.3 | MEDIUM | Medium | Redis cache for pages |
 | **Download Statistics** | 3.4 | MEDIUM | Medium | Track download counts |
-| **iCalendar Export** | 3.7 | MEDIUM | Low | Events iCal feed |
+| ~~**iCalendar Export**~~ | 3.7 | ✅ DONE | Low | Events iCal feed |
 
 ### Tier 4: LOW PRIORITY (Nice to Have)
 
@@ -1720,13 +1742,29 @@ tests/
    - ✅ Created 54 integration tests
    - **Files**: `domains/admin/controllers/email.py`, `templates/admin/email/*`
 
-5. **OAuth2 Testing** (Tier 3)
+5. ~~**API Documentation**~~ (Task 9.1 - ✅ COMPLETE 2025-11-30)
+   - ✅ Enhanced 18 OpenAPI tag descriptions with detailed context
+   - ✅ Added docstrings to all 13 AuthController endpoints
+   - ✅ Added request/response examples to all auth schemas
+   - ✅ Added examples to all domain schemas (Jobs, Events, Downloads, Sponsors, Pages, Users)
+   - [ ] Write comprehensive API usage guide (markdown)
+   - **Files modified**: `main.py`, `auth_controller.py`, `auth/schemas.py`, `jobs/schemas.py`, `events/schemas.py`, `downloads/schemas.py`, `sponsors/schemas.py`, `pages/schemas.py`
+
+6. **OAuth2 Testing** (Tier 3)
    - Test GitHub/Google OAuth flows end-to-end
    - Add integration tests for OAuth callback handlers
 
-6. **Page Caching** (Tier 3)
+7. ~~**iCalendar Export** (Tier 3 - Low Effort)~~ ✅ DONE (2025-11-30)
+   - ~~Events iCal feed at `/events/calendar.ics`~~
+   - ~~Individual event iCal downloads~~
+
+8. **Page Caching** (Tier 3)
    - Redis cache for rendered pages
    - Cache invalidation on content updates
+
+9. **Download Statistics** (Tier 3)
+   - Track download counts per release file
+   - Analytics dashboard in admin
 
 ### Known Issues / Bugs
 
@@ -1734,11 +1772,16 @@ tests/
 |-------|----------|----------|-------------|
 | ~~**Jobs progress not tracking**~~ | `/admin/tasks/jobs` | ~~HIGH~~ FIXED | ~~Job run counts and completion progress show all 0s even for jobs scheduled every 5 minutes. Statistics not being updated properly.~~ **Fixed (2025-11-29)**: SAQ deletes completed jobs after TTL (600s default), so counts were always 0. Implemented persistent Redis counters (`pydotorg:tasks:stats:*`) updated via `after_process` hook. See `src/pydotorg/tasks/stats.py`. |
 
+### Completed Enhancements
+
+| Enhancement | Location | Date | Description |
+|-------------|----------|------|-------------|
+| **Cron Jobs Dashboard** | `/admin/tasks/cron` | 2025-11-30 | Dedicated view for cron job monitoring showing: each cron job's schedule (parsed cron expression via `croniter`), last/next run times, run count, success rate per job. Uses `TaskStatsService.get_function_stats()` for persistent stats. Routes: `/admin/tasks/cron` (dashboard), `/admin/tasks/cron/{function_name}` (detail). Files: `domains/admin/services/cron.py`, `templates/admin/tasks/cron*.html.jinja2`. 15 integration tests in `test_tasks_admin.py`. |
+| **iCalendar Export** | `/events/calendar.ics` | 2025-11-30 | RFC 5545 compliant iCalendar feed for events. Routes: `/events/calendar.ics` (all upcoming events), `/events/calendar/{slug}/calendar.ics` (calendar-specific), `/events/{slug}/ical/` (single event). `ICalendarService` handles text escaping, line folding, multi-occurrence support, timezone conversion. Returns proper `text/calendar` Content-Type with attachment headers. Files: `core/ical/service.py`, `domains/events/controllers.py`. 29 unit tests in `tests/unit/core/test_ical.py`. |
+
 ### Planned Enhancements
 
-| Enhancement | Location | Priority | Description |
-|-------------|----------|----------|-------------|
-| **Cron Jobs Dashboard** | `/admin/tasks/cron` | MEDIUM | Dedicated view for cron job monitoring. Should show: each cron job's schedule (parsed cron expression), last run time, next scheduled run, run count (24h/7d), success rate per job, and recent execution logs. Use existing per-function stats from `TaskStatsService.get_function_stats()`. Requires: new route/template, cron expression parser (e.g., `croniter`), and UI showing table of all registered cron jobs with their metrics. |
+*None currently planned*
 
 ---
 
@@ -1791,4 +1834,4 @@ make ci                      # Full CI: lint + fmt + type-check + test
 ---
 
 *Document generated for Python.org Litestar rebuild project*
-*Last updated: 2025-11-29 (Admin Email UI + MailDev Integration + None Content Bug Fix)*
+*Last updated: 2025-11-30 (API validation error tests + limit_offset dependency fix)*
