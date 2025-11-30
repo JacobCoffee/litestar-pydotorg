@@ -11,14 +11,13 @@ import pytest
 from pydotorg.core.auth.oauth import (
     GitHubOAuthProvider,
     GoogleOAuthProvider,
-    OAuthProvider,
     OAuthService,
     OAuthUserInfo,
     get_oauth_service,
 )
 
 if TYPE_CHECKING:
-    from pydotorg.config import Settings
+    pass
 
 
 @pytest.fixture

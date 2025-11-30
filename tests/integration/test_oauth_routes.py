@@ -4,12 +4,9 @@ from __future__ import annotations
 
 import secrets
 from typing import TYPE_CHECKING, Any
-from unittest.mock import AsyncMock, MagicMock, Mock, patch
+from unittest.mock import AsyncMock, Mock, patch
 
 import pytest
-from httpx import Response as HttpxResponse
-
-from pydotorg.core.auth.oauth import OAuthUserInfo
 
 if TYPE_CHECKING:
     from litestar.testing import AsyncTestClient
