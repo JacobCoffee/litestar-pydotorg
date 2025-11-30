@@ -8,7 +8,7 @@ from unittest.mock import AsyncMock, patch
 import pytest
 
 if TYPE_CHECKING:
-    from litestar.testing import AsyncTestClient
+    pass
 
 
 class TestPageRenderControllerCaching:
