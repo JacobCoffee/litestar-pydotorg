@@ -601,18 +601,6 @@ src/pydotorg/templates/
 
 ---
 
-### Task 5.2: GraphQL API (Optional)
-**Agent**: `python-backend-architect`
-**Priority**: LOW
-
-**Tasks**:
-- [ ] Evaluate Strawberry GraphQL integration
-- [ ] Create GraphQL schema
-- [ ] Implement resolvers
-- [ ] Add GraphQL playground
-
----
-
 ## Phase 6: Background Tasks & Integrations
 
 ### Task 6.1: SAQ Task Queue - Core Infrastructure
@@ -1689,7 +1677,6 @@ tests/
 
 | Task | Phase | Priority | Effort | Description |
 |------|-------|----------|--------|-------------|
-| **GraphQL API** | 5.2 | LOW | High | Optional alternative to REST |
 | **CDN Integration (Fastly)** | 6.4 | LOW | Medium | Cache purging, surrogate keys |
 | **GPG Signature Verification** | 3.4 | LOW | Low | Download file integrity |
 | **Recurrence Rules** | 3.7 | LOW | Medium | dateutil.rrule for events |
