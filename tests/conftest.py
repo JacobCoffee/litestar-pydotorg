@@ -119,8 +119,11 @@ async def client(postgres_uri: str) -> AsyncIterator[AsyncTestClient]:
     Each test gets a fresh database with tables created. Tables are truncated
     before each test to ensure isolation.
     """
+    from litestar.middleware.session.client_side import CookieBackendConfig
+
+    from pydotorg.config import settings
     from pydotorg.domains.users.auth_controller import AuthController
-    from pydotorg.main import health_check
+    from pydotorg.main import _derive_session_secret, health_check
 
     engine = create_async_engine(postgres_uri, echo=False)
 
@@ -137,10 +140,15 @@ async def client(postgres_uri: str) -> AsyncIterator[AsyncTestClient]:
     )
     sqlalchemy_plugin = SQLAlchemyPlugin(config=sqlalchemy_config)
 
+    session_config = CookieBackendConfig(
+        secret=_derive_session_secret(settings.session_secret_key),
+        max_age=settings.session_expire_minutes * 60,
+    )
+
     test_app = Litestar(
         route_handlers=[health_check, AuthController],
         plugins=[sqlalchemy_plugin],
-        middleware=[JWTAuthMiddleware],
+        middleware=[session_config.middleware, JWTAuthMiddleware],
         debug=True,
     )
 
