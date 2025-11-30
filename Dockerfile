@@ -1,10 +1,10 @@
 # Stage 1: Builder - Build frontend and install Python dependencies
-FROM node:22-slim AS frontend-builder
+FROM oven/bun:1 AS frontend-builder
 
 WORKDIR /app
 
-COPY package.json package-lock.json ./
-RUN npm ci --production=false
+COPY package.json bun.lock ./
+RUN bun install --frozen-lockfile
 
 COPY resources/ ./resources/
 COPY tailwind.config.js ./
@@ -12,7 +12,7 @@ COPY postcss.config.cjs ./
 COPY vite.config.ts ./
 COPY static/ ./static/
 
-RUN npm run build && npm run css
+RUN bun run build && bun run css
 
 
 # Stage 2: Python Builder - Install Python dependencies

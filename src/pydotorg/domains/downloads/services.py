@@ -116,9 +116,7 @@ class ReleaseService(SQLAlchemyAsyncRepositoryService[Release]):
 
         return files_by_os
 
-    async def get_releases_grouped_by_minor_version(
-        self, limit: int = 500
-    ) -> dict[str, dict[str, list[Release]]]:
+    async def get_releases_grouped_by_minor_version(self, limit: int = 500) -> dict[str, dict[str, list[Release]]]:
         """Get releases grouped by major and then minor version.
 
         Returns a nested dict structure:
