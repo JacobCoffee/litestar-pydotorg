@@ -7,10 +7,10 @@ from enum import StrEnum
 from typing import TYPE_CHECKING
 from uuid import UUID
 
-from sqlalchemy import BigInteger, Boolean, Date, Enum, ForeignKey, String, Text, UniqueConstraint
+from sqlalchemy import BigInteger, Boolean, Date, Enum, ForeignKey, Index, Integer, String, Text, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from pydotorg.core.database.base import AuditBase, ContentManageableMixin, NameSlugMixin
+from pydotorg.core.database.base import AuditBase, ContentManageableMixin, NameSlugMixin, UUIDAuditBase
 
 if TYPE_CHECKING:
     from pydotorg.domains.pages.models import Page
@@ -118,3 +118,40 @@ class ReleaseFile(AuditBase, ContentManageableMixin, NameSlugMixin):
 
     release: Mapped[Release] = relationship("Release", back_populates="files")
     os: Mapped[OS] = relationship("OS", back_populates="releases", lazy="selectin")
+    statistics: Mapped[list[DownloadStatistic]] = relationship(
+        "DownloadStatistic",
+        back_populates="release_file",
+        cascade="all, delete-orphan",
+        lazy="noload",
+    )
+
+
+class DownloadStatistic(UUIDAuditBase):
+    """Daily download statistics for release files.
+
+    Stores aggregated download counts per file per day for analytics.
+    Redis provides real-time counters; this table provides historical data.
+    """
+
+    __tablename__ = "download_statistics"
+    __table_args__ = (
+        UniqueConstraint(
+            "release_file_id",
+            "date",
+            name="uq_download_stats_file_date",
+        ),
+        Index("ix_download_stats_date", "date"),
+        Index("ix_download_stats_file_id", "release_file_id"),
+    )
+
+    release_file_id: Mapped[UUID] = mapped_column(
+        ForeignKey("release_files.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    date: Mapped[datetime.date] = mapped_column(Date, nullable=False)
+    download_count: Mapped[int] = mapped_column(Integer, default=0)
+
+    release_file: Mapped[ReleaseFile] = relationship(
+        "ReleaseFile",
+        back_populates="statistics",
+    )

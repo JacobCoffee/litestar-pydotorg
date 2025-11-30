@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from typing import Annotated
+import logging
+from typing import TYPE_CHECKING, Annotated
 from uuid import UUID
 
 from advanced_alchemy.filters import LimitOffset
@@ -10,6 +11,7 @@ from litestar import Controller, delete, get, post, put
 from litestar.exceptions import NotFoundException
 from litestar.params import Body, Parameter
 from litestar.response import Template
+from litestar.stores.redis import RedisStore
 
 from pydotorg.domains.downloads.models import PythonVersion
 from pydotorg.domains.downloads.schemas import (
@@ -23,6 +25,12 @@ from pydotorg.domains.downloads.schemas import (
     ReleaseUpdate,
 )
 from pydotorg.domains.downloads.services import OSService, ReleaseFileService, ReleaseService
+from pydotorg.tasks.downloads import DownloadStatsService
+
+if TYPE_CHECKING:
+    from litestar import Request
+
+logger = logging.getLogger(__name__)
 
 
 class OSController(Controller):
@@ -539,6 +547,49 @@ class ReleaseFileController(Controller):
             NotFoundException: If no file with the given ID exists.
         """
         await release_file_service.delete(file_id)
+
+    @post("/{file_id:uuid}/track")
+    async def track_download(
+        self,
+        request: Request,
+        release_file_service: ReleaseFileService,
+        file_id: Annotated[UUID, Parameter(title="File ID", description="The file ID")],
+    ) -> dict:
+        """Track a download event for a release file.
+
+        Records a download event in Redis for analytics tracking.
+        This endpoint is typically called when a user clicks a download link.
+
+        Args:
+            request: The current HTTP request.
+            release_file_service: Service for release file database operations.
+            file_id: The unique UUID identifier of the file being downloaded.
+
+        Returns:
+            Confirmation of tracking success.
+
+        Raises:
+            NotFoundException: If no file with the given ID exists.
+        """
+        file = await release_file_service.get(file_id)
+        if not file:
+            raise NotFoundException(f"File with ID {file_id} not found")
+
+        try:
+            store = request.app.stores.get("response_cache")
+            if store and isinstance(store, RedisStore):
+                redis = store._redis
+                stats_service = DownloadStatsService(redis)
+                await stats_service.track_download(
+                    file_id=str(file_id),
+                    release_id=str(file.release_id) if file.release_id else None,
+                )
+                return {"success": True, "file_id": str(file_id)}
+        except Exception as e:
+            logger.exception(f"Failed to track download for file {file_id}")
+            return {"success": False, "error": str(e)}
+
+        return {"success": False, "error": "Redis not available"}
 
 
 class DownloadsPageController(Controller):

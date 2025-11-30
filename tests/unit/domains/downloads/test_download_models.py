@@ -5,7 +5,13 @@ from __future__ import annotations
 from datetime import date
 from uuid import uuid4
 
-from pydotorg.domains.downloads.models import OS, PythonVersion, Release, ReleaseFile
+from pydotorg.domains.downloads.models import (
+    OS,
+    DownloadStatistic,
+    PythonVersion,
+    Release,
+    ReleaseFile,
+)
 
 
 class TestPythonVersionEnum:
@@ -223,3 +229,44 @@ class TestReleaseFileModel:
             download_button=True,
         )
         assert file.download_button is True
+
+
+class TestDownloadStatisticModel:
+    def test_create_download_statistic(self) -> None:
+        file_id = uuid4()
+        stat = DownloadStatistic(
+            release_file_id=file_id,
+            date=date(2024, 1, 15),
+            download_count=100,
+        )
+        assert stat.release_file_id == file_id
+        assert stat.date == date(2024, 1, 15)
+        assert stat.download_count == 100
+
+    def test_download_statistic_explicit_zero_count(self) -> None:
+        file_id = uuid4()
+        stat = DownloadStatistic(
+            release_file_id=file_id,
+            date=date.today(),
+            download_count=0,
+        )
+        assert stat.download_count == 0
+
+    def test_download_statistic_with_high_count(self) -> None:
+        file_id = uuid4()
+        stat = DownloadStatistic(
+            release_file_id=file_id,
+            date=date.today(),
+            download_count=1_000_000,
+        )
+        assert stat.download_count == 1_000_000
+
+    def test_download_statistic_tablename(self) -> None:
+        assert DownloadStatistic.__tablename__ == "download_statistics"
+
+    def test_download_statistic_constraints(self) -> None:
+        constraints = DownloadStatistic.__table_args__
+        constraint_names = [c.name for c in constraints if hasattr(c, "name")]
+        assert "uq_download_stats_file_date" in constraint_names
+        assert "ix_download_stats_date" in constraint_names
+        assert "ix_download_stats_file_id" in constraint_names
