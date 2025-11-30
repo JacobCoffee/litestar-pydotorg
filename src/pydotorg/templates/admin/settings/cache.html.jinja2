@@ -1,0 +1,203 @@
+{% extends "admin/base.html.jinja2" %}
+
+{% block title %}Cache Management - Python.org Admin{% endblock %}
+
+{% block admin_content %}
+<div class="space-y-6">
+    <div class="flex justify-between items-center">
+        <div>
+            <div class="flex items-center gap-2">
+                <a href="/admin/settings" class="btn btn-ghost btn-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </a>
+                <h1 class="text-3xl font-bold text-python-blue">{{ title }}</h1>
+            </div>
+            <p class="text-base-content/70 mt-1 ml-10">{{ description }}</p>
+        </div>
+    </div>
+
+    {% if stats.redis_connected %}
+    <div class="alert alert-success shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span>Redis connected and operational</span>
+    </div>
+    {% else %}
+    <div class="alert alert-error shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span>Redis connection unavailable</span>
+    </div>
+    {% endif %}
+
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <div class="stat bg-base-100 shadow-lg rounded-box border border-base-300">
+            <div class="stat-figure text-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" />
+                </svg>
+            </div>
+            <div class="stat-title">Total Keys</div>
+            <div class="stat-value text-primary">{{ stats.total_keys }}</div>
+            <div class="stat-desc">All Redis keys</div>
+        </div>
+
+        <div class="stat bg-base-100 shadow-lg rounded-box border border-base-300">
+            <div class="stat-figure text-success">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+            </div>
+            <div class="stat-title">Response Cache</div>
+            <div class="stat-value text-success">{{ stats.response_cache_keys }}</div>
+            <div class="stat-desc">Cached page responses</div>
+        </div>
+
+        <div class="stat bg-base-100 shadow-lg rounded-box border border-base-300">
+            <div class="stat-figure text-warning">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+            </div>
+            <div class="stat-title">Hit Rate</div>
+            <div class="stat-value text-warning">{{ stats.hit_rate }}</div>
+            <div class="stat-desc">Cache efficiency</div>
+        </div>
+
+        <div class="stat bg-base-100 shadow-lg rounded-box border border-base-300">
+            <div class="stat-figure text-info">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                </svg>
+            </div>
+            <div class="stat-title">Memory Used</div>
+            <div class="stat-value text-info text-2xl">{{ stats.memory_used }}</div>
+            <div class="stat-desc">Peak: {{ stats.memory_peak }}</div>
+        </div>
+    </div>
+
+    <div class="grid gap-6 md:grid-cols-2">
+        <div class="card bg-base-100 shadow-lg border border-base-300">
+            <div class="card-body">
+                <h2 class="card-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-error" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                    Clear Cache
+                </h2>
+                <p class="text-base-content/70">Remove cached data to force fresh content loading.</p>
+                <div class="divider my-2"></div>
+                <div class="space-y-3">
+                    <form action="/admin/settings/cache/clear-pages" method="post" class="w-full">
+                        <button type="submit" class="btn btn-warning btn-block gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            Clear Page Cache
+                        </button>
+                        <p class="text-xs text-base-content/50 mt-1">Removes cached page renders ({{ stats.response_cache_keys }} items)</p>
+                    </form>
+                    <form action="/admin/settings/cache/clear-all" method="post" class="w-full">
+                        <button type="submit" class="btn btn-error btn-block gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                            Clear All Cache
+                        </button>
+                        <p class="text-xs text-base-content/50 mt-1">Removes all application cache ({{ stats.total_keys }} items)</p>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="card bg-base-100 shadow-lg border border-base-300">
+            <div class="card-body">
+                <h2 class="card-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                    Warm Cache
+                </h2>
+                <p class="text-base-content/70">Pre-populate cache for better performance.</p>
+                <div class="divider my-2"></div>
+                <form action="/admin/settings/cache/warm" method="post">
+                    <button type="submit" class="btn btn-success btn-block gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
+                        </svg>
+                        Warm All Caches
+                    </button>
+                </form>
+                <div class="mt-4 text-sm text-base-content/60">
+                    <p class="font-medium mb-2">This will pre-cache:</p>
+                    <ul class="list-disc list-inside space-y-1">
+                        <li>Homepage data (blogs, events, releases)</li>
+                        <li>Release downloads page</li>
+                        <li>Upcoming events</li>
+                        <li>Recent blog posts</li>
+                        <li>Published pages</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card bg-base-100 shadow-lg border border-base-300">
+        <div class="card-body">
+            <h2 class="card-title">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-info" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Cache Information
+            </h2>
+            <div class="overflow-x-auto">
+                <table class="table table-zebra">
+                    <thead>
+                        <tr>
+                            <th>Cache Type</th>
+                            <th>TTL</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="badge badge-primary">Response Cache</span></td>
+                            <td>5 minutes</td>
+                            <td>Rendered page HTML responses (PageRenderController)</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-success">Homepage Cache</span></td>
+                            <td>5 minutes</td>
+                            <td>Homepage data (recent blogs, events, latest release)</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-warning">Releases Cache</span></td>
+                            <td>1 hour</td>
+                            <td>Download page releases, latest release info</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-info">Events Cache</span></td>
+                            <td>15 minutes</td>
+                            <td>Upcoming events, featured events</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-secondary">Blogs Cache</span></td>
+                            <td>30 minutes</td>
+                            <td>Recent blog posts</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-accent">Pages Cache</span></td>
+                            <td>10 minutes</td>
+                            <td>Pre-warmed static page content</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
