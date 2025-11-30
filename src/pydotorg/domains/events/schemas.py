@@ -2,13 +2,11 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Annotated
+import datetime
+from typing import Annotated
+from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
-
-if TYPE_CHECKING:
-    import datetime
-    from uuid import UUID
 
 
 class CalendarBase(BaseModel):
@@ -61,8 +59,6 @@ class EventCategoryRead(EventCategoryBase):
 
     id: UUID
     calendar_id: UUID
-    created_at: datetime.datetime
-    updated_at: datetime.datetime
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -92,8 +88,6 @@ class EventLocationRead(EventLocationBase):
     """Schema for reading event location data."""
 
     id: UUID
-    created_at: datetime.datetime
-    updated_at: datetime.datetime
 
     model_config = ConfigDict(from_attributes=True)
 
