@@ -541,6 +541,55 @@ async def get_cache_stats(ctx: Context) -> dict[str, Any]:
     return stats
 
 
+async def invalidate_page_response_cache(
+    ctx: Context,
+    *,
+    page_path: str | None = None,
+) -> dict[str, int | str]:
+    """Invalidate page response cache for a specific path or all pages.
+
+    This task clears the Litestar response cache for rendered pages.
+    The response cache uses a different key pattern than the warm cache.
+
+    Args:
+        ctx: SAQ context.
+        page_path: Optional page path to invalidate. If None, clears all page caches.
+
+    Returns:
+        Dictionary with invalidation results.
+    """
+    redis = await _get_redis(ctx)
+    cleared = 0
+
+    try:
+        if page_path:
+            import hashlib  # noqa: PLC0415
+
+            normalized_path = f"/{page_path.strip('/')}" if page_path else "/"
+            raw_key = f"{normalized_path}:"
+            cache_key = f"LITESTAR_RESPONSE_CACHE_cache:page:{hashlib.md5(raw_key.encode(), usedforsecurity=False).hexdigest()}"
+
+            result = await redis.delete(cache_key)
+            cleared = int(result)
+            logger.info(f"Invalidated page response cache: {page_path} (key: {cache_key}, deleted: {cleared})")
+        else:
+            pattern = "LITESTAR_RESPONSE_CACHE_cache:*"
+            cursor = 0
+            while True:
+                cursor, keys = await redis.scan(cursor, match=pattern, count=100)
+                if keys:
+                    await redis.delete(*keys)
+                    cleared += len(keys)
+                if cursor == 0:
+                    break
+            logger.info(f"Invalidated all page response caches: {cleared} keys cleared")
+
+        return {"cleared": cleared, "path": page_path or "all"}
+    except Exception:
+        logger.exception(f"Failed to invalidate page response cache: {page_path or 'all'}")
+        return {"cleared": 0, "path": page_path or "all", "error": "failed"}
+
+
 cron_warm_homepage_cache = CronJob(
     function=warm_homepage_cache,
     cron="*/5 * * * *",

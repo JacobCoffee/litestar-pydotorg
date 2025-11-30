@@ -73,6 +73,7 @@ class PageService(SQLAlchemyAsyncRepositoryService[Page]):
         await self.session.commit()
 
         await enqueue_task("index_page", page_id=str(page.id))
+        await enqueue_task("invalidate_page_response_cache", page_path=page.path)
 
         return page
 

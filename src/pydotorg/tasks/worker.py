@@ -240,6 +240,7 @@ def get_task_functions() -> list[Callable[..., Any]]:
     from pydotorg.tasks.cache import (  # noqa: PLC0415
         clear_cache,
         get_cache_stats,
+        invalidate_page_response_cache,
         warm_blogs_cache,
         warm_events_cache,
         warm_homepage_cache,
@@ -292,6 +293,7 @@ def get_task_functions() -> list[Callable[..., Any]]:
         index_event,
         index_job,
         index_page,
+        invalidate_page_response_cache,
         rebuild_search_index,
         refresh_all_feeds,
         refresh_single_feed,
