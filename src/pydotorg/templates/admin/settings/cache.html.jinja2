@@ -35,7 +35,7 @@
     {% endif %}
 
     <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        <div class="stat bg-base-100 shadow-lg rounded-box border border-base-300">
+        <div class="stat bg-base-100 shadow-lg rounded-box border border-base-300 cursor-pointer hover:shadow-xl transition-shadow" onclick="openKeysModal('all')">
             <div class="stat-figure text-primary">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" />
@@ -43,10 +43,16 @@
             </div>
             <div class="stat-title">Total Keys</div>
             <div class="stat-value text-primary">{{ stats.total_keys }}</div>
-            <div class="stat-desc">All Redis keys</div>
+            <div class="stat-desc flex items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                Click to view keys
+            </div>
         </div>
 
-        <div class="stat bg-base-100 shadow-lg rounded-box border border-base-300">
+        <div class="stat bg-base-100 shadow-lg rounded-box border border-base-300 cursor-pointer hover:shadow-xl transition-shadow" onclick="openKeysModal('response')">
             <div class="stat-figure text-success">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -54,7 +60,13 @@
             </div>
             <div class="stat-title">Response Cache</div>
             <div class="stat-value text-success">{{ stats.response_cache_keys }}</div>
-            <div class="stat-desc">Cached page responses</div>
+            <div class="stat-desc flex items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                Click to view keys
+            </div>
         </div>
 
         <div class="stat bg-base-100 shadow-lg rounded-box border border-base-300">
@@ -79,6 +91,25 @@
             <div class="stat-desc">Peak: {{ stats.memory_peak }}</div>
         </div>
     </div>
+
+    {% if stats.rate_limit_keys > 0 %}
+    <div class="stat bg-base-100 shadow-lg rounded-box border border-base-300 cursor-pointer hover:shadow-xl transition-shadow w-fit" onclick="openKeysModal('rate_limit')">
+        <div class="stat-figure text-secondary">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+        </div>
+        <div class="stat-title">Rate Limit Keys</div>
+        <div class="stat-value text-secondary">{{ stats.rate_limit_keys }}</div>
+        <div class="stat-desc flex items-center gap-1">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            </svg>
+            Click to view keys
+        </div>
+    </div>
+    {% endif %}
 
     <div class="grid gap-6 md:grid-cols-2">
         <div class="card bg-base-100 shadow-lg border border-base-300">
@@ -200,4 +231,35 @@
         </div>
     </div>
 </div>
+
+<dialog id="keys_modal" class="modal">
+    <div class="modal-box w-11/12 max-w-3xl">
+        <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">X</button>
+        </form>
+        <div id="keys_modal_content">
+            <div class="flex justify-center py-8">
+                <span class="loading loading-spinner loading-lg"></span>
+            </div>
+        </div>
+    </div>
+    <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+    </form>
+</dialog>
+
+<script>
+function openKeysModal(category) {
+    const modal = document.getElementById('keys_modal');
+    const content = document.getElementById('keys_modal_content');
+
+    content.innerHTML = '<div class="flex justify-center py-8"><span class="loading loading-spinner loading-lg"></span></div>';
+    modal.showModal();
+
+    htmx.ajax('GET', '/admin/settings/cache/keys/' + category, {
+        target: '#keys_modal_content',
+        swap: 'innerHTML'
+    });
+}
+</script>
 {% endblock %}

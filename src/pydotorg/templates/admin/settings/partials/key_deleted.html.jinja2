@@ -1,0 +1,19 @@
+{% if success %}
+<tr class="bg-success/10">
+    <td colspan="2" class="text-success text-xs">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+        Key deleted successfully
+    </td>
+</tr>
+{% else %}
+<tr class="bg-error/10">
+    <td colspan="2" class="text-error text-xs">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+        Failed to delete key
+    </td>
+</tr>
+{% endif %}

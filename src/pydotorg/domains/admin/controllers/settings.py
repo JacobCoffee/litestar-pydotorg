@@ -132,6 +132,103 @@ class AdminSettingsController(Controller):
         )
         return Redirect("/admin/settings/cache")
 
+    @get("/cache/keys/{category:str}")
+    async def get_cache_keys(self, request: Request, category: str) -> Template:
+        """Get list of cache keys for a specific category (HTMX partial).
+
+        Args:
+            request: The current request
+            category: Category of keys to list (all, response, page, rate_limit)
+
+        Returns:
+            Template partial with key list
+        """
+        keys_data = await self._get_keys_by_category(request, category)
+        return Template(
+            template_name="admin/settings/partials/key_list.html.jinja2",
+            context={
+                "category": category,
+                "keys": keys_data["keys"],
+                "total": keys_data["total"],
+                "truncated": keys_data["truncated"],
+            },
+        )
+
+    @post("/cache/keys/{key:path}/delete")
+    async def delete_cache_key(self, request: Request, key: str) -> Template:
+        """Delete a specific cache key (HTMX action).
+
+        Args:
+            request: The current request
+            key: The Redis key to delete
+
+        Returns:
+            Empty response or error message
+        """
+        try:
+            store = request.app.stores.get("response_cache")
+            if store and isinstance(store, RedisStore):
+                redis = store._redis
+                deleted = await redis.delete(key)
+                if deleted:
+                    return Template(
+                        template_name="admin/settings/partials/key_deleted.html.jinja2",
+                        context={"key": key, "success": True},
+                    )
+        except (ConnectionError, OSError, TimeoutError):
+            pass
+
+        return Template(
+            template_name="admin/settings/partials/key_deleted.html.jinja2",
+            context={"key": key, "success": False},
+        )
+
+    async def _get_keys_by_category(self, request: Request, category: str) -> dict:
+        """Get keys filtered by category.
+
+        Args:
+            request: The current request
+            category: Category filter (all, response, page, rate_limit)
+
+        Returns:
+            Dictionary with keys list and metadata
+        """
+        result = {"keys": [], "total": 0, "truncated": False}
+        max_keys = 100
+
+        try:
+            store = request.app.stores.get("response_cache")
+            if store and isinstance(store, RedisStore):
+                redis = store._redis
+                cursor = 0
+                all_keys = []
+
+                while True:
+                    cursor, keys = await redis.scan(cursor, count=500)
+                    for key in keys:
+                        key_str = key.decode() if isinstance(key, bytes) else key
+                        if category == "all":
+                            all_keys.append(key_str)
+                        elif category == "response":
+                            if "page:" in key_str or "RESPONSE_CACHE" in key_str:
+                                all_keys.append(key_str)
+                        elif category == "page":
+                            if key_str.startswith("pydotorg:cache:pages"):
+                                all_keys.append(key_str)
+                        elif category == "rate_limit" and "rate_limit" in key_str.lower():
+                            all_keys.append(key_str)
+                    if cursor == 0:
+                        break
+
+                result["total"] = len(all_keys)
+                result["truncated"] = len(all_keys) > max_keys
+                result["keys"] = sorted(all_keys[:max_keys])
+
+        except (ConnectionError, OSError, TimeoutError):
+            pass
+
+        return result
+
     async def _get_cache_stats(self, request: Request) -> dict:
         """Get cache statistics from Redis.
 

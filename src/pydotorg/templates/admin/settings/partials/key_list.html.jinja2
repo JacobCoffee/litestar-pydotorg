@@ -1,0 +1,57 @@
+<div class="space-y-4">
+    <div class="flex justify-between items-center">
+        <h3 class="text-lg font-semibold">
+            {% if category == "all" %}All Keys{% elif category == "response" %}Response Cache Keys{% elif category == "page" %}Page Cache Keys{% elif category == "rate_limit" %}Rate Limit Keys{% endif %}
+        </h3>
+        <span class="badge badge-info">{{ total }} total{% if truncated %} (showing first 100){% endif %}</span>
+    </div>
+
+    {% if keys %}
+    <div class="overflow-x-auto max-h-96">
+        <table class="table table-xs table-zebra">
+            <thead class="sticky top-0 bg-base-200">
+                <tr>
+                    <th>Key</th>
+                    <th class="w-20">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for key in keys %}
+                <tr id="key-row-{{ loop.index }}">
+                    <td class="font-mono text-xs break-all">{{ key }}</td>
+                    <td>
+                        <button
+                            class="btn btn-xs btn-error btn-outline"
+                            hx-post="/admin/settings/cache/keys/{{ key | urlencode }}/delete"
+                            hx-target="#key-row-{{ loop.index }}"
+                            hx-swap="outerHTML"
+                            hx-confirm="Delete this cache key?"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span>No keys found in this category.</span>
+    </div>
+    {% endif %}
+
+    {% if truncated %}
+    <div class="alert alert-warning">
+        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+        <span>Showing first 100 keys. Total: {{ total }}</span>
+    </div>
+    {% endif %}
+</div>
