@@ -87,13 +87,7 @@ class AdminSettingsController(Controller):
             Redirect back to cache management page
         """
         await enqueue_task("invalidate_page_response_cache", page_path=None)
-        request.app.state.setdefault("flash_messages", []).append(
-            {
-                "type": "success",
-                "message": "Page cache clear task queued successfully.",
-            }
-        )
-        return Redirect("/admin/settings/cache")
+        return Redirect("/admin/settings/cache?toast=pages_cleared")
 
     @post("/cache/clear-all")
     async def clear_all_cache(self, request: Request) -> Redirect:
@@ -104,13 +98,7 @@ class AdminSettingsController(Controller):
         """
         await enqueue_task("clear_cache", pattern="*")
         await enqueue_task("invalidate_page_response_cache", page_path=None)
-        request.app.state.setdefault("flash_messages", []).append(
-            {
-                "type": "success",
-                "message": "All cache clear tasks queued successfully.",
-            }
-        )
-        return Redirect("/admin/settings/cache")
+        return Redirect("/admin/settings/cache?toast=all_cleared")
 
     @post("/cache/warm")
     async def warm_cache(self, request: Request) -> Redirect:
@@ -124,13 +112,7 @@ class AdminSettingsController(Controller):
         await enqueue_task("warm_events_cache")
         await enqueue_task("warm_blogs_cache")
         await enqueue_task("warm_pages_cache")
-        request.app.state.setdefault("flash_messages", []).append(
-            {
-                "type": "success",
-                "message": "Cache warming tasks queued successfully.",
-            }
-        )
-        return Redirect("/admin/settings/cache")
+        return Redirect("/admin/settings/cache?toast=cache_warmed")
 
     @get("/cache/keys/{category:str}")
     async def get_cache_keys(self, request: Request, category: str) -> Template:
@@ -143,6 +125,7 @@ class AdminSettingsController(Controller):
         Returns:
             Template partial with key list
         """
+        category = category.lstrip("/")
         keys_data = await self._get_keys_by_category(request, category)
         return Template(
             template_name="admin/settings/partials/key_list.html.jinja2",
@@ -154,17 +137,25 @@ class AdminSettingsController(Controller):
             },
         )
 
-    @post("/cache/keys/{key:path}/delete")
-    async def delete_cache_key(self, request: Request, key: str) -> Template:
+    @post("/cache/keys/delete")
+    async def delete_cache_key(self, request: Request) -> Template:
         """Delete a specific cache key (HTMX action).
 
         Args:
             request: The current request
-            key: The Redis key to delete
 
         Returns:
-            Empty response or error message
+            Success or failure feedback template
         """
+        form_data = await request.form()
+        key = form_data.get("key", "")
+
+        if not key:
+            return Template(
+                template_name="admin/settings/partials/key_deleted.html.jinja2",
+                context={"key": "", "success": False},
+            )
+
         try:
             store = request.app.stores.get("response_cache")
             if store and isinstance(store, RedisStore):
@@ -193,39 +184,45 @@ class AdminSettingsController(Controller):
         Returns:
             Dictionary with keys list and metadata
         """
-        result = {"keys": [], "total": 0, "truncated": False}
+        result = {"keys": [], "total": 0, "truncated": False, "error": None}
         max_keys = 100
 
         try:
             store = request.app.stores.get("response_cache")
-            if store and isinstance(store, RedisStore):
-                redis = store._redis
-                cursor = 0
-                all_keys = []
+            if not store:
+                result["error"] = "No response_cache store found"
+                return result
+            if not isinstance(store, RedisStore):
+                result["error"] = f"Store is not RedisStore: {type(store)}"
+                return result
 
-                while True:
-                    cursor, keys = await redis.scan(cursor, count=500)
-                    for key in keys:
-                        key_str = key.decode() if isinstance(key, bytes) else key
-                        if category == "all":
+            redis = store._redis
+            cursor = 0
+            all_keys = []
+
+            while True:
+                cursor, keys = await redis.scan(cursor, count=500)
+                for key in keys:
+                    key_str = key.decode() if isinstance(key, bytes) else key
+                    if category == "all":
+                        all_keys.append(key_str)
+                    elif category == "response":
+                        if "page:" in key_str or "RESPONSE_CACHE" in key_str:
                             all_keys.append(key_str)
-                        elif category == "response":
-                            if "page:" in key_str or "RESPONSE_CACHE" in key_str:
-                                all_keys.append(key_str)
-                        elif category == "page":
-                            if key_str.startswith("pydotorg:cache:pages"):
-                                all_keys.append(key_str)
-                        elif category == "rate_limit" and "rate_limit" in key_str.lower():
+                    elif category == "page":
+                        if key_str.startswith("pydotorg:cache:pages"):
                             all_keys.append(key_str)
-                    if cursor == 0:
-                        break
+                    elif category == "rate_limit" and "rate_limit" in key_str.lower():
+                        all_keys.append(key_str)
+                if cursor == 0:
+                    break
 
-                result["total"] = len(all_keys)
-                result["truncated"] = len(all_keys) > max_keys
-                result["keys"] = sorted(all_keys[:max_keys])
+            result["total"] = len(all_keys)
+            result["truncated"] = len(all_keys) > max_keys
+            result["keys"] = sorted(all_keys[:max_keys])
 
-        except (ConnectionError, OSError, TimeoutError):
-            pass
+        except (ConnectionError, OSError, TimeoutError, RuntimeError) as e:
+            result["error"] = str(e)
 
         return result
 

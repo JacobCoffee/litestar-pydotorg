@@ -18,6 +18,8 @@
         </div>
     </div>
 
+    <div id="toast-container" class="toast toast-top toast-end z-50"></div>
+
     {% if stats.redis_connected %}
     <div class="alert alert-success shadow-lg">
         <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
@@ -261,5 +263,36 @@ function openKeysModal(category) {
 function closeKeysModal() {
     document.getElementById('keys_modal').close();
 }
+
+function showToast(message, type = 'success') {
+    const container = document.getElementById('toast-container');
+    const alertClass = type === 'success' ? 'alert-success' : type === 'error' ? 'alert-error' : 'alert-info';
+    const toast = document.createElement('div');
+    toast.className = `alert ${alertClass} shadow-lg`;
+    toast.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span>${message}</span>
+    `;
+    container.appendChild(toast);
+    setTimeout(() => toast.remove(), 4000);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const params = new URLSearchParams(window.location.search);
+    const toast = params.get('toast');
+    if (toast) {
+        const messages = {
+            'pages_cleared': 'Page cache clear task queued successfully.',
+            'all_cleared': 'All cache clear tasks queued successfully.',
+            'cache_warmed': 'Cache warming tasks queued successfully.'
+        };
+        if (messages[toast]) {
+            showToast(messages[toast], 'success');
+            window.history.replaceState({}, '', window.location.pathname);
+        }
+    }
+});
 </script>
 {% endblock %}
