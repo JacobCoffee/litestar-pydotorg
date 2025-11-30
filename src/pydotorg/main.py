@@ -41,6 +41,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from pydotorg.config import log_startup_banner, settings, validate_production_settings
 from pydotorg.core.admin import AdminController
 from pydotorg.core.auth.middleware import JWTAuthMiddleware, UserPopulationMiddleware
+from pydotorg.core.cache import create_response_cache_config
 from pydotorg.core.database.base import AuditBase
 from pydotorg.core.dependencies import get_core_dependencies
 from pydotorg.core.exceptions import get_exception_handlers
@@ -423,6 +424,7 @@ structlog_plugin = configure_structlog(
 
 csrf_config = create_csrf_config()
 rate_limit_config = create_rate_limit_config(settings)
+response_cache_config = create_response_cache_config()
 
 
 def get_exception_handlers_with_rate_limit() -> dict:
@@ -588,7 +590,11 @@ app = Litestar(
         JWTAuthMiddleware,
         rate_limit_config.middleware,
     ],
-    stores={"rate_limit": RedisStore.with_client(url=settings.redis_url)},
+    stores={
+        "rate_limit": RedisStore.with_client(url=settings.redis_url),
+        "response_cache": RedisStore.with_client(url=settings.redis_url, namespace="cache"),
+    },
+    response_cache_config=response_cache_config,
     template_config=template_config,
     openapi_config=OpenAPIConfig(
         title=settings.site_name,

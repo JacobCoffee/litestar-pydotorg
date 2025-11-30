@@ -206,18 +206,27 @@ class DocumentFileController(Controller):
 
 
 class PageRenderController(Controller):
-    """Controller for rendering page templates."""
+    """Controller for rendering page templates.
+
+    Pages are cached in Redis for 5 minutes (300 seconds) to reduce
+    database load. Cache is automatically invalidated when pages are
+    updated or published/unpublished via the admin interface.
+    """
 
     path = "/{page_path:path}"
     include_in_schema = False
 
-    @get("/")
+    @get("/", cache=300)
     async def render_page(
         self,
         page_service: PageService,
         page_path: str,
     ) -> Template:
-        """Render a page template by path."""
+        """Render a page template by path.
+
+        Responses are cached for 5 minutes. Cache key is based on the
+        full URL path including any query parameters.
+        """
         path = f"/{page_path.lstrip('/')}" if page_path else "/"
         page = await page_service.get_one_or_none(path=path, is_published=True)
         if page is None:
