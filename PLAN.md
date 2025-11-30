@@ -1681,7 +1681,7 @@ tests/
 | **API Documentation** | 9.1 | ✅ COMPLETE | Medium | All schema examples added, OpenAPI configured |
 | ~~**Mailing Domain**~~ | 3.x | ✅ DONE | Low | Email templates + logs domain with SMTP delivery |
 | **OAuth2 Providers** | 2.2 | MEDIUM | Medium | GitHub/Google providers exist, need testing |
-| **Page Caching** | 3.3 | MEDIUM | Medium | Redis cache for pages |
+| ~~**Page Caching**~~ | 3.3 | ✅ DONE | Medium | Redis cache for pages |
 | **Download Statistics** | 3.4 | MEDIUM | Medium | Track download counts |
 | ~~**iCalendar Export**~~ | 3.7 | ✅ DONE | Low | Events iCal feed |
 
@@ -1771,9 +1771,12 @@ tests/
    - ~~Events iCal feed at `/events/calendar.ics`~~
    - ~~Individual event iCal downloads~~
 
-8. **Page Caching** (Tier 3)
-   - Redis cache for rendered pages
-   - Cache invalidation on content updates
+8. ~~**Page Caching**~~ ✅ DONE (2025-11-30)
+   - ~~Redis cache for rendered pages~~
+   - ~~Cache invalidation on content updates~~
+   - **Implementation**: `core/cache/` module with `PageCacheService`, `ResponseCacheConfig`
+   - **Features**: 5-minute TTL on page renders, automatic invalidation on publish/unpublish/update
+   - **Tests**: 31 unit tests + 11 integration tests
 
 9. **Download Statistics** (Tier 3)
    - Track download counts per release file
