@@ -43,6 +43,7 @@ dependencies = [
     "meilisearch-python-sdk>=5.5.0",
     "sqladmin-litestar-plugin>=0.2.0",
     "itsdangerous>=2.2.0",
+    "croniter>=6.0.0",
 ]
 
 [project.urls]
@@ -197,7 +198,10 @@ ignore = [
 "src/pydotorg/main.py" = ["BLE001", "TRY300", "TC002"]
 "src/pydotorg/tasks/**/*" = ["TRY300"]
 "src/pydotorg/domains/users/auth_controller.py" = ["TRY301"]
+"src/pydotorg/config.py" = ["PLR2004"]
+"src/pydotorg/db/seed.py" = ["PLR2004"]
 "src/pydotorg/domains/**/models.py" = ["TC003"]
+"src/pydotorg/domains/**/schemas.py" = ["TC001", "TC003"]
 "src/pydotorg/domains/**/controllers.py" = ["TC001", "TC002", "TC003"]
 "docs/conf.py" = ["A001", "INP001", "PTH", "DTZ"]
 

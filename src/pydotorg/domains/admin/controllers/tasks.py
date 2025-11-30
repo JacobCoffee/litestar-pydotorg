@@ -12,6 +12,7 @@ from litestar.response import Redirect, Response, Template
 
 from pydotorg.core.auth.guards import require_admin
 from pydotorg.domains.admin import urls
+from pydotorg.domains.admin.services.cron import CronJobService  # noqa: TC001
 from pydotorg.domains.admin.services.tasks import TaskAdminService  # noqa: TC001
 
 if TYPE_CHECKING:
@@ -342,5 +343,59 @@ class AdminTasksController(Controller):
             status_code=200,
             headers={
                 "HX-Trigger": '{"showToast": {"message": "Test failure task queued - it will fail!", "type": "warning"}}'
+            },
+        )
+
+    @get("/cron")
+    async def cron_dashboard(
+        self,
+        cron_job_service: CronJobService,
+    ) -> Template:
+        """Render cron jobs dashboard.
+
+        Args:
+            cron_job_service: Cron job monitoring service.
+
+        Returns:
+            Cron dashboard template.
+        """
+        cron_jobs = await cron_job_service.get_all_cron_jobs()
+        summary = await cron_job_service.get_summary_stats()
+
+        return Template(
+            template_name="admin/tasks/cron.html.jinja2",
+            context={
+                "title": "Scheduled Tasks",
+                "description": "Monitor cron jobs and scheduled background tasks",
+                "cron_jobs": cron_jobs,
+                "summary": summary,
+            },
+        )
+
+    @get("/cron/{function_name:str}")
+    async def cron_job_detail(
+        self,
+        cron_job_service: CronJobService,
+        function_name: str,
+    ) -> Template | Response:
+        """Render cron job detail page.
+
+        Args:
+            cron_job_service: Cron job monitoring service.
+            function_name: Name of the cron job function.
+
+        Returns:
+            Cron job detail template or redirect if not found.
+        """
+        cron_job = await cron_job_service.get_cron_job(function_name)
+        if not cron_job:
+            return Redirect(f"{urls.ADMIN}/tasks/cron")
+
+        return Template(
+            template_name="admin/tasks/cron_detail.html.jinja2",
+            context={
+                "title": f"Cron Job: {function_name}",
+                "description": f"Details for scheduled task {function_name}",
+                "cron_job": cron_job,
             },
         )

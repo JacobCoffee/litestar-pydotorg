@@ -1,0 +1,154 @@
+{% extends "admin/base.html.jinja2" %}
+{% from "admin/partials/stats_card.html.jinja2" import stats_card %}
+
+{% block title %}Scheduled Tasks - Python.org Admin{% endblock %}
+
+{% block admin_content %}
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <div>
+            <div class="flex items-center gap-3">
+                <a href="/admin/tasks" class="btn btn-ghost btn-sm" hx-boost="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </a>
+                <div>
+                    <h1 class="text-3xl font-bold text-python-blue">Scheduled Tasks</h1>
+                    <p class="text-base-content/70 mt-1">Monitor cron jobs and their execution history</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {{ stats_card(
+            title='Total Cron Jobs',
+            value=summary.total_cron_jobs,
+            icon='<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>',
+            color='primary'
+        ) }}
+
+        {{ stats_card(
+            title='Total Executions',
+            value=summary.total_executions,
+            icon='<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>',
+            color='info'
+        ) }}
+
+        {{ stats_card(
+            title='Successful',
+            value=summary.total_complete,
+            icon='<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>',
+            color='success'
+        ) }}
+
+        {{ stats_card(
+            title='Success Rate',
+            value=summary.overall_success_rate|round(1) ~ '%',
+            icon='<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>',
+            color='success' if summary.overall_success_rate >= 95 else 'warning' if summary.overall_success_rate >= 80 else 'error'
+        ) }}
+    </div>
+
+    <div class="card bg-base-100 shadow-lg border border-base-300">
+        <div class="card-body">
+            <h2 class="card-title text-python-blue mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Scheduled Jobs
+            </h2>
+
+            {% if cron_jobs %}
+            <div class="overflow-x-auto">
+                <table class="table table-zebra w-full">
+                    <thead>
+                        <tr>
+                            <th>Function</th>
+                            <th>Schedule</th>
+                            <th>Next Run</th>
+                            <th>Last Run</th>
+                            <th class="text-center">Executions</th>
+                            <th class="text-center">Success Rate</th>
+                            <th>Timeout</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for job in cron_jobs %}
+                        <tr class="hover cursor-pointer" onclick="window.location='/admin/tasks/cron/{{ job.function_name }}'">
+                            <td>
+                                <div class="flex flex-col">
+                                    <span class="font-mono font-semibold text-primary">{{ job.function_name }}</span>
+                                    <span class="text-xs text-base-content/60 max-w-xs truncate">{{ job.description }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="flex flex-col">
+                                    <code class="text-xs bg-base-200 px-2 py-1 rounded">{{ job.cron_expression }}</code>
+                                    <span class="text-xs text-base-content/60 mt-1">{{ job.schedule_description }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                {% if job.next_run %}
+                                <span class="text-sm" title="{{ job.next_run }}">
+                                    {{ job.next_run[:16].replace('T', ' ') }}
+                                </span>
+                                {% else %}
+                                <span class="text-base-content/40">-</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if job.previous_run %}
+                                <span class="text-sm" title="{{ job.previous_run }}">
+                                    {{ job.previous_run[:16].replace('T', ' ') }}
+                                </span>
+                                {% else %}
+                                <span class="text-base-content/40">-</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-center">
+                                <div class="flex flex-col items-center">
+                                    <span class="font-semibold">{{ job.stats.total }}</span>
+                                    <span class="text-xs text-base-content/60">
+                                        <span class="text-success">{{ job.stats.complete }}</span> /
+                                        <span class="text-error">{{ job.stats.failed }}</span>
+                                    </span>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                {% set rate = job.stats.success_rate %}
+                                <div class="radial-progress text-{{ 'success' if rate >= 95 else 'warning' if rate >= 80 else 'error' }}" style="--value:{{ rate }}; --size:2.5rem; --thickness:3px;" role="progressbar">
+                                    <span class="text-xs font-semibold">{{ rate|round(0)|int }}%</span>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge badge-ghost">{{ job.timeout }}s</span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center py-12">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-base-content/30 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <h3 class="text-xl font-bold mb-2">No Cron Jobs Found</h3>
+                <p class="text-base-content/60">No scheduled tasks are configured</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if summary.next_scheduled_run %}
+    <div class="alert alert-info">
+        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span>Next scheduled task runs at <strong>{{ summary.next_scheduled_run[:19].replace('T', ' ') }}</strong></span>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

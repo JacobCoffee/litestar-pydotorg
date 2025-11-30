@@ -1,4 +1,4 @@
-"""Integration tests for TaskAdminService and task wiring."""
+"""Integration tests for TaskAdminService, CronJobService, and task wiring."""
 
 from __future__ import annotations
 
@@ -8,6 +8,7 @@ from uuid import uuid4
 
 import pytest
 
+from pydotorg.domains.admin.services.cron import CronJobService, _cron_to_human, _parse_cron_schedule
 from pydotorg.domains.admin.services.jobs import JobAdminService
 from pydotorg.domains.admin.services.tasks import TaskAdminService
 from pydotorg.domains.jobs.models import Job, JobCategory, JobStatus, JobType
@@ -449,3 +450,127 @@ class TestJobAdminTaskWiring:
             mock_enqueue.assert_called_once()
 
         await engine.dispose()
+
+
+@pytest.mark.integration
+class TestCronHelperFunctions:
+    """Tests for cron helper functions."""
+
+    def test_cron_to_human_every_n_minutes(self) -> None:
+        """Test cron expression for every N minutes."""
+        assert _cron_to_human("*/5 * * * *") == "Every 5 minutes"
+        assert _cron_to_human("*/15 * * * *") == "Every 15 minutes"
+
+    def test_cron_to_human_every_n_hours(self) -> None:
+        """Test cron expression for every N hours."""
+        assert _cron_to_human("0 */2 * * *") == "Every 2 hours"
+        assert _cron_to_human("0 */6 * * *") == "Every 6 hours"
+
+    def test_cron_to_human_hourly(self) -> None:
+        """Test cron expression for hourly."""
+        assert _cron_to_human("0 * * * *") == "Every hour at minute 0"
+
+    def test_cron_to_human_daily(self) -> None:
+        """Test cron expression for daily."""
+        assert _cron_to_human("0 0 * * *") == "Daily at 0:00"
+        assert _cron_to_human("0 6 * * *") == "Daily at 6:00"
+        assert _cron_to_human("0 23 * * *") == "Daily at 23:00"
+
+    def test_cron_to_human_weekly(self) -> None:
+        """Test cron expression for weekly (Sunday)."""
+        assert _cron_to_human("0 0 * * 0") == "Weekly on Sunday at 0:00"
+        assert _cron_to_human("0 6 * * 0") == "Weekly on Sunday at 6:00"
+
+    def test_cron_to_human_monthly(self) -> None:
+        """Test cron expression for monthly."""
+        assert _cron_to_human("0 0 1 * *") == "Monthly on 1st at 0:00"
+        assert _cron_to_human("0 6 1 * *") == "Monthly on 1st at 6:00"
+
+    def test_cron_to_human_invalid_format(self) -> None:
+        """Test cron expression with invalid format returns original."""
+        assert _cron_to_human("invalid") == "invalid"
+        assert _cron_to_human("* * *") == "* * *"
+
+    def test_parse_cron_schedule_valid(self) -> None:
+        """Test parsing a valid cron schedule."""
+        result = _parse_cron_schedule("0 0 * * *")
+        assert result["is_valid"] is True
+        assert result["next_run"] is not None
+        assert result["previous_run"] is not None
+        assert result["schedule_description"] == "Daily at 0:00"
+
+    def test_parse_cron_schedule_invalid(self) -> None:
+        """Test parsing an invalid cron schedule."""
+        result = _parse_cron_schedule("invalid cron")
+        assert result["is_valid"] is False
+        assert result["next_run"] is None
+        assert result["previous_run"] is None
+
+
+@pytest.mark.integration
+class TestCronJobServiceIntegration:
+    """Integration tests for CronJobService."""
+
+    async def test_service_initialization(self) -> None:
+        """Test CronJobService can be instantiated."""
+        service = CronJobService()
+        assert service is not None
+        assert service._redis is None
+
+    async def test_get_all_cron_jobs(self) -> None:
+        """Test getting all cron jobs."""
+        service = CronJobService()
+        cron_jobs = await service.get_all_cron_jobs()
+
+        assert isinstance(cron_jobs, list)
+        assert len(cron_jobs) > 0
+
+        for job in cron_jobs:
+            assert "function_name" in job
+            assert "cron_expression" in job
+            assert "next_run" in job
+            assert "stats" in job
+            assert "schedule_description" in job
+
+    async def test_get_cron_job_existing(self) -> None:
+        """Test getting a specific existing cron job."""
+        service = CronJobService()
+        cron_jobs = await service.get_all_cron_jobs()
+
+        if cron_jobs:
+            function_name = cron_jobs[0]["function_name"]
+            job = await service.get_cron_job(function_name)
+
+            assert job is not None
+            assert job["function_name"] == function_name
+            assert "cron_expression" in job
+            assert "stats" in job
+
+    async def test_get_cron_job_nonexistent(self) -> None:
+        """Test getting a nonexistent cron job returns None."""
+        service = CronJobService()
+        job = await service.get_cron_job("nonexistent_function_xyz")
+        assert job is None
+
+    async def test_get_summary_stats(self) -> None:
+        """Test getting summary statistics."""
+        service = CronJobService()
+        summary = await service.get_summary_stats()
+
+        assert isinstance(summary, dict)
+        assert "total_cron_jobs" in summary
+        assert "total_executions" in summary
+        assert "total_complete" in summary
+        assert "total_failed" in summary
+        assert "overall_success_rate" in summary
+        assert summary["total_cron_jobs"] > 0
+
+    async def test_function_stats_without_redis(self) -> None:
+        """Test function stats returns defaults without Redis."""
+        service = CronJobService(redis=None)
+        stats = await service._get_function_stats("some_function")
+
+        assert stats["complete"] == 0
+        assert stats["failed"] == 0
+        assert stats["retried"] == 0
+        assert stats["success_rate"] == 0.0

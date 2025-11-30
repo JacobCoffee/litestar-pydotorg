@@ -1,0 +1,143 @@
+{% extends "admin/base.html.jinja2" %}
+{% from "admin/partials/stats_card.html.jinja2" import stats_card %}
+
+{% block title %}{{ cron_job.function_name }} - Scheduled Task{% endblock %}
+
+{% block admin_content %}
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <a href="/admin/tasks/cron" class="btn btn-ghost btn-sm" hx-boost="false">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+            </a>
+            <div>
+                <h1 class="text-3xl font-bold text-python-blue font-mono">{{ cron_job.function_name }}</h1>
+                <p class="text-base-content/70 mt-1">{{ cron_job.description }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {{ stats_card(
+            title='Total Runs',
+            value=cron_job.stats.total,
+            icon='<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>',
+            color='info'
+        ) }}
+
+        {{ stats_card(
+            title='Successful',
+            value=cron_job.stats.complete,
+            icon='<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>',
+            color='success'
+        ) }}
+
+        {{ stats_card(
+            title='Failed',
+            value=cron_job.stats.failed,
+            icon='<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>',
+            color='error' if cron_job.stats.failed > 0 else 'success'
+        ) }}
+
+        {{ stats_card(
+            title='Success Rate',
+            value=cron_job.stats.success_rate|round(1) ~ '%',
+            icon='<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>',
+            color='success' if cron_job.stats.success_rate >= 95 else 'warning' if cron_job.stats.success_rate >= 80 else 'error'
+        ) }}
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="card bg-base-100 shadow-lg border border-base-300">
+            <div class="card-body">
+                <h2 class="card-title text-python-blue">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Schedule
+                </h2>
+
+                <div class="space-y-4 mt-4">
+                    <div class="flex justify-between items-center py-2 border-b border-base-200">
+                        <span class="text-base-content/70">Cron Expression</span>
+                        <code class="bg-base-200 px-3 py-1 rounded font-mono">{{ cron_job.cron_expression }}</code>
+                    </div>
+                    <div class="flex justify-between items-center py-2 border-b border-base-200">
+                        <span class="text-base-content/70">Human Readable</span>
+                        <span class="font-semibold">{{ cron_job.schedule_description }}</span>
+                    </div>
+                    <div class="flex justify-between items-center py-2 border-b border-base-200">
+                        <span class="text-base-content/70">Timeout</span>
+                        <span class="badge badge-ghost">{{ cron_job.timeout }} seconds</span>
+                    </div>
+                    {% if cron_job.kwargs %}
+                    <div class="py-2 border-b border-base-200">
+                        <span class="text-base-content/70 block mb-2">Default Arguments</span>
+                        <pre class="bg-base-200 p-2 rounded text-sm overflow-x-auto">{{ cron_job.kwargs | tojson(indent=2) }}</pre>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="card bg-base-100 shadow-lg border border-base-300">
+            <div class="card-body">
+                <h2 class="card-title text-python-blue">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    Timing
+                </h2>
+
+                <div class="space-y-4 mt-4">
+                    <div class="flex justify-between items-center py-2 border-b border-base-200">
+                        <span class="text-base-content/70">Next Scheduled Run</span>
+                        {% if cron_job.next_run %}
+                        <span class="font-semibold text-success">{{ cron_job.next_run[:19].replace('T', ' ') }}</span>
+                        {% else %}
+                        <span class="text-base-content/40">Not scheduled</span>
+                        {% endif %}
+                    </div>
+                    <div class="flex justify-between items-center py-2 border-b border-base-200">
+                        <span class="text-base-content/70">Previous Run</span>
+                        {% if cron_job.previous_run %}
+                        <span class="font-semibold">{{ cron_job.previous_run[:19].replace('T', ' ') }}</span>
+                        {% else %}
+                        <span class="text-base-content/40">Never</span>
+                        {% endif %}
+                    </div>
+                    <div class="flex justify-between items-center py-2">
+                        <span class="text-base-content/70">Status</span>
+                        {% if cron_job.is_valid %}
+                        <span class="badge badge-success gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            Active
+                        </span>
+                        {% else %}
+                        <span class="badge badge-error gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                            Invalid Schedule
+                        </span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if cron_job.stats.retried > 0 %}
+    <div class="alert alert-warning">
+        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+        <span>This job has been retried <strong>{{ cron_job.stats.retried }}</strong> times</span>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

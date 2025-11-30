@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 
 from pydotorg.domains.admin.services import (
     BlogAdminService,
+    CronJobService,
     DashboardService,
     EmailAdminService,
     EventAdminService,
@@ -125,6 +126,20 @@ async def provide_email_admin_service(db_session: AsyncSession) -> EmailAdminSer
     return EmailAdminService(session=db_session)
 
 
+async def provide_cron_job_service() -> CronJobService:
+    """Provide a CronJobService instance with Redis connection.
+
+    Returns:
+        CronJobService instance
+    """
+    from redis.asyncio import Redis  # noqa: PLC0415
+
+    from pydotorg.config import settings  # noqa: PLC0415
+
+    redis = Redis.from_url(settings.redis_url, decode_responses=True)
+    return CronJobService(redis=redis)
+
+
 def get_admin_dependencies() -> dict:
     """Get all admin domain dependency providers.
 
@@ -141,4 +156,5 @@ def get_admin_dependencies() -> dict:
         "blog_admin_service": provide_blog_admin_service,
         "task_admin_service": provide_task_admin_service,
         "email_admin_service": provide_email_admin_service,
+        "cron_job_service": provide_cron_job_service,
     }
