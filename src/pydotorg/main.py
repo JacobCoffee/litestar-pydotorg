@@ -21,7 +21,15 @@ from litestar.config.compression import CompressionConfig
 from litestar.contrib.jinja import JinjaTemplateEngine
 from litestar.middleware.session.client_side import CookieBackendConfig
 from litestar.openapi import OpenAPIConfig
-from litestar.openapi.spec import Components, SecurityScheme, Tag
+from litestar.openapi.spec import (
+    Components,
+    Contact,
+    ExternalDocumentation,
+    License,
+    SecurityScheme,
+    Server,
+    Tag,
+)
 from litestar.plugins.flash import FlashConfig, FlashPlugin
 from litestar.response import Template
 from litestar.static_files import create_static_files_router
@@ -476,7 +484,9 @@ async def lifespan(app: Litestar) -> AsyncGenerator[None]:
                 sys.stderr.write(f"\033[93m{error_msg}\033[0m\n\n")
 
             db_url_str = str(settings.database_url)
-            obscured = db_url_str.replace(db_url_str.split("@")[0].split(":")[-1], "***") if "@" in db_url_str else db_url_str
+            obscured = (
+                db_url_str.replace(db_url_str.split("@")[0].split(":")[-1], "***") if "@" in db_url_str else db_url_str
+            )
             sys.stderr.write(f"Connection string: {obscured}\n")
             sys.stderr.write("\033[91m" + "=" * 60 + "\033[0m\n\n")
             sys.stderr.flush()
@@ -586,6 +596,26 @@ app = Litestar(
         description=settings.site_description,
         path="/api",
         render_plugins=get_openapi_plugins(),
+        contact=Contact(
+            name="Python.org",
+            url="https://www.python.org",
+            email="webmaster@python.org",
+        ),
+        license=License(
+            name="Apache 2.0",
+            identifier="Apache-2.0",
+            url="https://www.apache.org/licenses/LICENSE-2.0",
+        ),
+        external_docs=ExternalDocumentation(
+            url="https://docs.python.org",
+            description="Python Documentation",
+        ),
+        servers=[
+            Server(url="http://localhost:8000", description="Development"),
+            Server(url="https://staging.python.org", description="Staging"),
+            Server(url="https://www.python.org", description="Production"),
+        ],
+        use_handler_docstrings=True,
         components=Components(
             security_schemes={
                 "BearerAuth": SecurityScheme(
@@ -598,24 +628,97 @@ app = Litestar(
         ),
         security=[{"BearerAuth": []}],
         tags=[
-            Tag(name="Application", description="Core application endpoints"),
-            Tag(name="Authentication", description="User authentication and registration"),
-            Tag(name="Users", description="User management"),
-            Tag(name="Pages", description="CMS pages and content"),
-            Tag(name="Downloads", description="Python releases and downloads"),
-            Tag(name="Jobs", description="Job board"),
-            Tag(name="Events", description="Community events and calendar"),
-            Tag(name="Blogs", description="Blog posts and feeds"),
-            Tag(name="Sponsors", description="PSF sponsors"),
-            Tag(name="Banners", description="Site banners"),
-            Tag(name="Code Samples", description="Python code examples"),
-            Tag(name="Community", description="Community content"),
-            Tag(name="Minutes", description="PSF meeting minutes"),
-            Tag(name="Nominations", description="PSF board elections and nominations"),
-            Tag(name="Success Stories", description="Python success stories"),
-            Tag(name="Work Groups", description="PSF work groups"),
-            Tag(name="Search", description="Site-wide search"),
-            Tag(name="Admin", description="Admin dashboard and management"),
+            Tag(
+                name="Application",
+                description="Core application endpoints including health checks and system status",
+            ),
+            Tag(
+                name="Authentication",
+                description=(
+                    "User authentication, registration, and session management. "
+                    "Supports JWT tokens, cookie sessions, and OAuth (GitHub). "
+                    "Use POST /api/auth/login for JWT tokens or POST /api/auth/session/login for cookies."
+                ),
+            ),
+            Tag(
+                name="Users",
+                description=(
+                    "User account management including profile retrieval, updates, and search. "
+                    "Also includes user groups and memberships for permission management."
+                ),
+            ),
+            Tag(
+                name="Pages",
+                description="Content management system for static pages, including images and document files",
+            ),
+            Tag(
+                name="Downloads",
+                description=(
+                    "Python release downloads including OS-specific binaries, release notes, "
+                    "and file metadata. Supports filtering by OS and Python version."
+                ),
+            ),
+            Tag(
+                name="Jobs",
+                description=(
+                    "Python job board for posting and browsing Python-related positions. "
+                    "Includes job types, categories, and review workflow."
+                ),
+            ),
+            Tag(
+                name="Events",
+                description=(
+                    "Community events calendar including conferences, meetups, and workshops. "
+                    "Supports recurring events, locations, and category filtering."
+                ),
+            ),
+            Tag(
+                name="Blogs",
+                description="Aggregated Python community blog feeds and entries from various sources",
+            ),
+            Tag(
+                name="Sponsors",
+                description=(
+                    "Python Software Foundation sponsors and sponsorship levels. "
+                    "Includes sponsor details, logos, and sponsorship periods."
+                ),
+            ),
+            Tag(name="Banners", description="Site-wide announcement banners with display scheduling"),
+            Tag(
+                name="Code Samples",
+                description="Python code examples and snippets for educational purposes",
+            ),
+            Tag(
+                name="Community",
+                description="Community-contributed content including posts, photos, videos, and links",
+            ),
+            Tag(name="Minutes", description="PSF board meeting minutes and governance documentation"),
+            Tag(
+                name="Nominations",
+                description="PSF board elections, nominee information, and voting records",
+            ),
+            Tag(
+                name="Success Stories",
+                description=(
+                    "Python success stories showcasing real-world applications and case studies "
+                    "from companies and individuals using Python."
+                ),
+            ),
+            Tag(
+                name="Work Groups",
+                description="PSF work groups and special interest groups",
+            ),
+            Tag(
+                name="Search",
+                description=(
+                    "Full-text search across all content types. "
+                    "Supports filtering by content type and provides autocomplete suggestions."
+                ),
+            ),
+            Tag(
+                name="Admin",
+                description="Administrative dashboard and management tools (staff access required)",
+            ),
         ],
     ),
     compression_config=CompressionConfig(backend="gzip", gzip_compress_level=6),
