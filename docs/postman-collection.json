@@ -1,0 +1,1211 @@
+{
+	"info": {
+		"_postman_id": "litestar-pydotorg-api-collection",
+		"name": "Litestar-pydotorg API",
+		"description": "Complete API collection for the Litestar-pydotorg project. Includes authentication, users, jobs, events, and search endpoints.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "litestar-pydotorg"
+	},
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{access_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Auto-inject access token for authenticated requests",
+					"if (pm.variables.get('access_token')) {",
+					"    pm.request.headers.add({",
+					"        key: 'Authorization',",
+					"        value: 'Bearer ' + pm.variables.get('access_token')",
+					"    });",
+					"}"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000",
+			"type": "string"
+		},
+		{
+			"key": "access_token",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code is 201', function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test('Response has user data', function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('id');",
+									"    pm.expect(jsonData).to.have.property('email');",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"user@example.com\",\n  \"username\": \"testuser\",\n  \"password\": \"SecurePassword123!\",\n  \"first_name\": \"Test\",\n  \"last_name\": \"User\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/register",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "register"]
+						},
+						"description": "Register a new user account"
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response has access token', function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('access_token');",
+									"    ",
+									"    // Save access token to environment",
+									"    pm.collectionVariables.set('access_token', jsonData.access_token);",
+									"});",
+									"",
+									"pm.test('Token type is Bearer', function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData.token_type).to.eql('bearer');",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"SecurePassword123!\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "login"]
+						},
+						"description": "Login with username and password. Automatically saves access token to collection variables."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Current User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response has user data', function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('id');",
+									"    pm.expect(jsonData).to.have.property('email');",
+									"    pm.expect(jsonData).to.have.property('username');",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/auth/me",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "me"]
+						},
+						"description": "Get currently authenticated user information"
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response has new access token', function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('access_token');",
+									"    ",
+									"    // Update access token",
+									"    pm.collectionVariables.set('access_token', jsonData.access_token);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/auth/refresh",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "refresh"]
+						},
+						"description": "Refresh access token using refresh token"
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code is 200 or 204', function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 204]);",
+									"});",
+									"",
+									"// Clear access token",
+									"pm.collectionVariables.set('access_token', '');"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/auth/logout",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "logout"]
+						},
+						"description": "Logout current user and invalidate token"
+					},
+					"response": []
+				}
+			],
+			"description": "Authentication endpoints for user registration, login, token refresh, and logout"
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "List Users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response is an array', function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.an('array');",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/users?limit=10&offset=0",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "users"],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								}
+							]
+						},
+						"description": "Get paginated list of users"
+					},
+					"response": []
+				},
+				{
+					"name": "Get User by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response has user data', function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('id');",
+									"    pm.expect(jsonData).to.have.property('username');",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/users/:user_id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "users", ":user_id"],
+							"variable": [
+								{
+									"key": "user_id",
+									"value": "123e4567-e89b-12d3-a456-426614174000",
+									"description": "User UUID"
+								}
+							]
+						},
+						"description": "Get user details by UUID"
+					},
+					"response": []
+				},
+				{
+					"name": "Create User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code is 201', function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test('Response has user ID', function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('id');",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"newuser@example.com\",\n  \"username\": \"newuser\",\n  \"password\": \"SecurePassword123!\",\n  \"first_name\": \"New\",\n  \"last_name\": \"User\",\n  \"is_active\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/users",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "users"]
+						},
+						"description": "Create a new user"
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('User data updated', function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('id');",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"first_name\": \"Updated\",\n  \"last_name\": \"Name\",\n  \"email\": \"updated@example.com\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/users/:user_id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "users", ":user_id"],
+							"variable": [
+								{
+									"key": "user_id",
+									"value": "123e4567-e89b-12d3-a456-426614174000",
+									"description": "User UUID"
+								}
+							]
+						},
+						"description": "Update user information"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code is 204', function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/users/:user_id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "users", ":user_id"],
+							"variable": [
+								{
+									"key": "user_id",
+									"value": "123e4567-e89b-12d3-a456-426614174000",
+									"description": "User UUID"
+								}
+							]
+						},
+						"description": "Delete user by UUID"
+					},
+					"response": []
+				},
+				{
+					"name": "Deactivate User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('User is deactivated', function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData.is_active).to.be.false;",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/users/:user_id/deactivate",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "users", ":user_id", "deactivate"],
+							"variable": [
+								{
+									"key": "user_id",
+									"value": "123e4567-e89b-12d3-a456-426614174000",
+									"description": "User UUID"
+								}
+							]
+						},
+						"description": "Deactivate a user account"
+					},
+					"response": []
+				},
+				{
+					"name": "Reactivate User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('User is activated', function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData.is_active).to.be.true;",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/users/:user_id/reactivate",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "users", ":user_id", "reactivate"],
+							"variable": [
+								{
+									"key": "user_id",
+									"value": "123e4567-e89b-12d3-a456-426614174000",
+									"description": "User UUID"
+								}
+							]
+						},
+						"description": "Reactivate a deactivated user account"
+					},
+					"response": []
+				}
+			],
+			"description": "User management endpoints"
+		},
+		{
+			"name": "Jobs",
+			"item": [
+				{
+					"name": "List Jobs",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response is an array', function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.an('array');",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/jobs?limit=10&offset=0",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "jobs"],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								}
+							]
+						},
+						"description": "Get paginated list of jobs"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Job by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response has job data', function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('id');",
+									"    pm.expect(jsonData).to.have.property('title');",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/jobs/:job_id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "jobs", ":job_id"],
+							"variable": [
+								{
+									"key": "job_id",
+									"value": "123e4567-e89b-12d3-a456-426614174000",
+									"description": "Job UUID"
+								}
+							]
+						},
+						"description": "Get job details by UUID"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Job",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code is 201', function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test('Response has job ID', function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('id');",
+									"    pm.expect(jsonData).to.have.property('title');",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Senior Python Developer\",\n  \"description\": \"Looking for an experienced Python developer to join our team.\",\n  \"company_name\": \"Tech Corp\",\n  \"location\": \"San Francisco, CA\",\n  \"job_type\": \"Full-time\",\n  \"is_remote\": true,\n  \"salary_min\": 120000,\n  \"salary_max\": 180000,\n  \"application_url\": \"https://techcorp.com/careers/senior-python-dev\",\n  \"email\": \"jobs@techcorp.com\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/jobs",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "jobs"]
+						},
+						"description": "Create a new job posting"
+					},
+					"response": []
+				},
+				{
+					"name": "Submit Job for Review",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Job status is submitted', function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.include('submit');",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/jobs/:job_id/submit",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "jobs", ":job_id", "submit"],
+							"variable": [
+								{
+									"key": "job_id",
+									"value": "123e4567-e89b-12d3-a456-426614174000",
+									"description": "Job UUID"
+								}
+							]
+						},
+						"description": "Submit job posting for review"
+					},
+					"response": []
+				},
+				{
+					"name": "Approve Job",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Job is approved', function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.include('approved');",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"comment\": \"Job posting approved for publication\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/jobs/:job_id/approve",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "jobs", ":job_id", "approve"],
+							"variable": [
+								{
+									"key": "job_id",
+									"value": "123e4567-e89b-12d3-a456-426614174000",
+									"description": "Job UUID"
+								}
+							]
+						},
+						"description": "Approve job posting (admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Reject Job",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Job is rejected', function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.include('reject');",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"comment\": \"Job posting does not meet quality guidelines\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/jobs/:job_id/reject",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "jobs", ":job_id", "reject"],
+							"variable": [
+								{
+									"key": "job_id",
+									"value": "123e4567-e89b-12d3-a456-426614174000",
+									"description": "Job UUID"
+								}
+							]
+						},
+						"description": "Reject job posting (admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Archive Job",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Job is archived', function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.include('archived');",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/jobs/:job_id/archive",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "jobs", ":job_id", "archive"],
+							"variable": [
+								{
+									"key": "job_id",
+									"value": "123e4567-e89b-12d3-a456-426614174000",
+									"description": "Job UUID"
+								}
+							]
+						},
+						"description": "Archive job posting"
+					},
+					"response": []
+				},
+				{
+					"name": "My Jobs",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response is an array', function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.an('array');",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/jobs/mine",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "jobs", "mine"]
+						},
+						"description": "Get jobs created by current user"
+					},
+					"response": []
+				}
+			],
+			"description": "Job posting management endpoints"
+		},
+		{
+			"name": "Events",
+			"item": [
+				{
+					"name": "List Events",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response is an array', function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.an('array');",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/events?limit=10&offset=0",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "events"],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								}
+							]
+						},
+						"description": "Get paginated list of events"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Featured Events",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response is an array', function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.an('array');",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/events/featured",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "events", "featured"]
+						},
+						"description": "Get featured events"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Upcoming Events",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response is an array', function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.an('array');",
+									"});",
+									"",
+									"pm.test('Events are in the future', function () {",
+									"    const jsonData = pm.response.json();",
+									"    const now = new Date();",
+									"    jsonData.forEach(event => {",
+									"        const eventDate = new Date(event.start_date || event.date);",
+									"        pm.expect(eventDate >= now).to.be.true;",
+									"    });",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/events/upcoming?limit=20",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "events", "upcoming"],
+							"query": [
+								{
+									"key": "limit",
+									"value": "20"
+								}
+							]
+						},
+						"description": "Get upcoming events"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Event by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response has event data', function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('id');",
+									"    pm.expect(jsonData).to.have.property('title');",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/events/:event_id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "events", ":event_id"],
+							"variable": [
+								{
+									"key": "event_id",
+									"value": "123e4567-e89b-12d3-a456-426614174000",
+									"description": "Event UUID"
+								}
+							]
+						},
+						"description": "Get event details by UUID"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Event",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code is 201', function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test('Response has event ID', function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('id');",
+									"    pm.expect(jsonData).to.have.property('title');",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"PyCon 2025\",\n  \"description\": \"Annual Python conference bringing together the Python community.\",\n  \"start_date\": \"2025-05-15T09:00:00Z\",\n  \"end_date\": \"2025-05-17T17:00:00Z\",\n  \"location\": \"Pittsburgh, PA, USA\",\n  \"is_virtual\": false,\n  \"is_featured\": true,\n  \"url\": \"https://us.pycon.org/2025/\",\n  \"venue\": \"David L. Lawrence Convention Center\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/events",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "events"]
+						},
+						"description": "Create a new event"
+					},
+					"response": []
+				}
+			],
+			"description": "Event management endpoints"
+		},
+		{
+			"name": "Search",
+			"item": [
+				{
+					"name": "Search Jobs",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response has results', function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('results');",
+									"    pm.expect(jsonData.results).to.be.an('array');",
+									"});",
+									"",
+									"pm.test('Response has pagination info', function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('total');",
+									"    pm.expect(jsonData).to.have.property('limit');",
+									"    pm.expect(jsonData).to.have.property('offset');",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"query\": \"python developer\",\n  \"filters\": {\n    \"is_remote\": true,\n    \"job_type\": \"Full-time\",\n    \"location\": \"San Francisco\"\n  },\n  \"limit\": 10,\n  \"offset\": 0\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/jobs/search",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "jobs", "search"]
+						},
+						"description": "Search jobs with filters and full-text search"
+					},
+					"response": []
+				}
+			],
+			"description": "Search endpoints for full-text search across resources"
+		}
+	]
+}
