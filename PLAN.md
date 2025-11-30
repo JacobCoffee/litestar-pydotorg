@@ -1780,9 +1780,9 @@ tests/
 
 9. ~~**Cache Management Admin UI**~~ ✅ DONE (2025-11-30)
    - ~~Admin UI at `/admin/settings/cache` for cache management~~
-   - **Routes**: `/admin/settings/cache` (stats), `/admin/settings/cache/clear-pages`, `/admin/settings/cache/clear-all`, `/admin/settings/cache/warm`
-   - **Features**: Redis stats display (total keys, hit rate, memory usage), clear page cache, clear all cache, warm all caches
-   - **Files**: `domains/admin/controllers/settings.py`, `templates/admin/settings/cache.html.jinja2`
+   - **Routes**: `/admin/settings/cache` (stats), `/admin/settings/cache/clear-pages`, `/admin/settings/cache/clear-all`, `/admin/settings/cache/warm`, `/admin/settings/cache/keys/{category}` (HTMX), `/admin/settings/cache/keys/delete` (HTMX)
+   - **Features**: Redis stats display (total keys, hit rate, memory usage), clear page cache, clear all cache, warm all caches, clickable stats to view keys in modal, individual key deletion, toast notifications for all operations
+   - **Files**: `domains/admin/controllers/settings.py`, `templates/admin/settings/cache.html.jinja2`, `templates/admin/settings/partials/key_list.html.jinja2`, `templates/admin/settings/partials/key_deleted.html.jinja2`
 
 10. **Download Statistics** (Tier 3)
    - Track download counts per release file
@@ -1803,7 +1803,7 @@ tests/
 | **API Pagination Fix** | `/api/*` | 2025-11-30 | Fixed missing `limit_offset` pagination dependency that caused 400 errors on all list endpoints. Added `provide_limit_offset()` to `core/dependencies.py` that converts `currentPage`/`pageSize` query params to `LimitOffset` filter. |
 | **API JSON Errors** | `/api/*` | 2025-11-30 | Exception handlers now detect API requests (via path prefix `/api/` or `Accept: application/json` header) and return proper JSON error responses instead of HTML templates. Added `_is_api_request()` and `_create_json_error_response()` helpers. |
 | **API Documentation** | `docs/api-*` | 2025-11-30 | Comprehensive API documentation: `api-getting-started.md` (706 lines) covers quickstart, authentication, pagination, error handling; `api-authentication.md` (1037 lines) covers JWT, session, OAuth2 flows with code examples in Python/JS/cURL; `postman-collection.json` provides full Postman collection with all endpoints pre-configured. |
-| **Cache Management Admin UI** | `/admin/settings/cache` | 2025-11-30 | Admin UI for cache management. Shows Redis stats (total keys, response cache keys, hit rate, memory usage), provides buttons to clear page cache, clear all cache, and warm all caches. Updates admin settings index page to link to cache management. Files: `domains/admin/controllers/settings.py`, `templates/admin/settings/cache.html.jinja2`. |
+| **Cache Management Admin UI** | `/admin/settings/cache` | 2025-11-30 | Admin UI for cache management. Shows Redis stats (total keys, response cache keys, hit rate, memory usage), provides buttons to clear page cache, clear all cache, and warm all caches. Clickable stats open modal showing actual Redis keys with delete buttons. Toast notifications for all cache operations. Files: `domains/admin/controllers/settings.py`, `templates/admin/settings/cache.html.jinja2`, `templates/admin/settings/partials/key_list.html.jinja2`, `templates/admin/settings/partials/key_deleted.html.jinja2`. |
 
 ### Planned Enhancements
 
@@ -1860,4 +1860,4 @@ make ci                      # Full CI: lint + fmt + type-check + test
 ---
 
 *Document generated for Python.org Litestar rebuild project*
-*Last updated: 2025-11-30 (API documentation complete - guides, Postman collection, JSON errors, pagination fix)*
+*Last updated: 2025-11-30 (Cache Management Admin UI complete with key viewer, deletion, toast notifications)*
