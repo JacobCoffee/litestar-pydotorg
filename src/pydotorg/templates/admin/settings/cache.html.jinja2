@@ -234,18 +234,14 @@
 
 <dialog id="keys_modal" class="modal">
     <div class="modal-box w-11/12 max-w-3xl">
-        <form method="dialog">
-            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">X</button>
-        </form>
+        <button type="button" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onclick="closeKeysModal()">X</button>
         <div id="keys_modal_content">
             <div class="flex justify-center py-8">
                 <span class="loading loading-spinner loading-lg"></span>
             </div>
         </div>
     </div>
-    <form method="dialog" class="modal-backdrop">
-        <button>close</button>
-    </form>
+    <div class="modal-backdrop" onclick="closeKeysModal()"></div>
 </dialog>
 
 <script>
@@ -260,6 +256,10 @@ function openKeysModal(category) {
         target: '#keys_modal_content',
         swap: 'innerHTML'
     });
+}
+
+function closeKeysModal() {
+    document.getElementById('keys_modal').close();
 }
 </script>
 {% endblock %}
