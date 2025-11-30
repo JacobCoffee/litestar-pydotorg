@@ -1,5 +1,5 @@
 # Stage 1: Builder - Build frontend and install Python dependencies
-FROM node:22-slim AS frontend-builder
+FROM node:25-slim AS frontend-builder
 
 WORKDIR /app
 
@@ -16,7 +16,7 @@ RUN npm run build && npm run css
 
 
 # Stage 2: Python Builder - Install Python dependencies
-FROM python:3.13-slim AS python-builder
+FROM python:3.14-slim AS python-builder
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
@@ -45,7 +45,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 
 
 # Stage 3: Runtime - Minimal production image
-FROM python:3.13-slim AS runtime
+FROM python:3.14-slim AS runtime
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
