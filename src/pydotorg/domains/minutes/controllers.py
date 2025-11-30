@@ -9,7 +9,7 @@ from uuid import UUID
 from advanced_alchemy.filters import LimitOffset
 from litestar import Controller, delete, get, post, put
 from litestar.exceptions import NotFoundException
-from litestar.params import Parameter
+from litestar.params import Body, Parameter
 from litestar.response import Template
 
 from pydotorg.domains.minutes.schemas import (
@@ -86,7 +86,7 @@ class MinutesController(Controller):
     async def create_minutes(
         self,
         minutes_service: MinutesService,
-        data: MinutesCreate,
+        data: Annotated[MinutesCreate, Body(title="Minutes", description="Meeting minutes to create")],
     ) -> MinutesRead:
         """Create new minutes."""
         minutes = await minutes_service.create(data.model_dump())
@@ -96,7 +96,7 @@ class MinutesController(Controller):
     async def update_minutes(
         self,
         minutes_service: MinutesService,
-        data: MinutesUpdate,
+        data: Annotated[MinutesUpdate, Body(title="Minutes", description="Meeting minutes data to update")],
         minutes_id: Annotated[UUID, Parameter(title="Minutes ID", description="The minutes ID")],
     ) -> MinutesRead:
         """Update minutes."""

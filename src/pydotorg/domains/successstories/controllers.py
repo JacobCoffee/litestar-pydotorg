@@ -8,7 +8,7 @@ from uuid import UUID
 from advanced_alchemy.filters import LimitOffset
 from litestar import Controller, delete, get, post, put
 from litestar.exceptions import NotFoundException
-from litestar.params import Parameter
+from litestar.params import Body, Parameter
 from litestar.response import Template
 
 from pydotorg.domains.successstories.schemas import (
@@ -66,7 +66,7 @@ class StoryCategoryController(Controller):
     async def create_category(
         self,
         story_category_service: StoryCategoryService,
-        data: StoryCategoryCreate,
+        data: Annotated[StoryCategoryCreate, Body(title="Story Category", description="Story category to create")],
     ) -> StoryCategoryRead:
         """Create a new story category."""
         category = await story_category_service.create(data.model_dump())
@@ -76,7 +76,7 @@ class StoryCategoryController(Controller):
     async def update_category(
         self,
         story_category_service: StoryCategoryService,
-        data: StoryCategoryUpdate,
+        data: Annotated[StoryCategoryUpdate, Body(title="Story Category", description="Story category data to update")],
         category_id: Annotated[UUID, Parameter(title="Category ID", description="The category ID")],
     ) -> StoryCategoryRead:
         """Update a story category."""
@@ -169,7 +169,7 @@ class StoryController(Controller):
     async def create_story(
         self,
         story_service: StoryService,
-        data: StoryCreate,
+        data: Annotated[StoryCreate, Body(title="Success Story", description="Success story to create")],
     ) -> StoryRead:
         """Create a new story."""
         story = await story_service.create(data.model_dump())
@@ -179,7 +179,7 @@ class StoryController(Controller):
     async def update_story(
         self,
         story_service: StoryService,
-        data: StoryUpdate,
+        data: Annotated[StoryUpdate, Body(title="Success Story", description="Success story data to update")],
         story_id: Annotated[UUID, Parameter(title="Story ID", description="The story ID")],
     ) -> StoryRead:
         """Update a story."""

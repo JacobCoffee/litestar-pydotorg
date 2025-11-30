@@ -8,7 +8,7 @@ from uuid import UUID
 from advanced_alchemy.filters import LimitOffset
 from litestar import Controller, delete, get, post, put
 from litestar.exceptions import NotFoundException
-from litestar.params import Parameter
+from litestar.params import Body, Parameter
 from litestar.response import Template
 
 from pydotorg.domains.downloads.models import PythonVersion
@@ -37,7 +37,18 @@ class OSController(Controller):
         os_service: OSService,
         limit_offset: LimitOffset,
     ) -> list[OSRead]:
-        """List all operating systems with pagination."""
+        """List all operating systems with pagination.
+
+        Retrieves a paginated list of supported operating systems for Python
+        downloads (e.g., Windows, macOS, Linux).
+
+        Args:
+            os_service: Service for operating system database operations.
+            limit_offset: Pagination parameters for limiting and offsetting results.
+
+        Returns:
+            List of supported operating systems with their details.
+        """
         os_list, _total = await os_service.list_and_count(limit_offset)
         return [OSRead.model_validate(os) for os in os_list]
 
@@ -47,7 +58,21 @@ class OSController(Controller):
         os_service: OSService,
         os_id: Annotated[UUID, Parameter(title="OS ID", description="The OS ID")],
     ) -> OSRead:
-        """Get an OS by ID."""
+        """Retrieve a specific operating system by its unique identifier.
+
+        Fetches complete OS information including name, slug, and display
+        configuration.
+
+        Args:
+            os_service: Service for operating system database operations.
+            os_id: The unique UUID identifier of the operating system.
+
+        Returns:
+            Complete operating system details.
+
+        Raises:
+            NotFoundException: If no OS with the given ID exists.
+        """
         os = await os_service.get(os_id)
         return OSRead.model_validate(os)
 
@@ -57,7 +82,21 @@ class OSController(Controller):
         os_service: OSService,
         slug: Annotated[str, Parameter(title="Slug", description="The OS slug")],
     ) -> OSRead:
-        """Get an OS by slug."""
+        """Look up an operating system by its URL slug.
+
+        Searches for an OS with the specified slug (e.g., "windows", "macos",
+        "linux") and returns its details.
+
+        Args:
+            os_service: Service for operating system database operations.
+            slug: The URL-friendly slug identifier.
+
+        Returns:
+            Complete operating system details.
+
+        Raises:
+            NotFoundException: If no OS with the given slug exists.
+        """
         os = await os_service.get_by_slug(slug)
         if not os:
             raise NotFoundException(f"OS with slug {slug} not found")
@@ -67,9 +106,23 @@ class OSController(Controller):
     async def create_os(
         self,
         os_service: OSService,
-        data: OSCreate,
+        data: Annotated[OSCreate, Body(title="O S", description="Operating system to create")],
     ) -> OSRead:
-        """Create a new OS."""
+        """Create a new operating system entry.
+
+        Adds a new supported operating system to the downloads system.
+        Release files can then be associated with this OS.
+
+        Args:
+            os_service: Service for operating system database operations.
+            data: Operating system creation payload with name and slug.
+
+        Returns:
+            The newly created operating system.
+
+        Raises:
+            ConflictError: If an OS with the same slug exists.
+        """
         os = await os_service.create(data.model_dump())
         return OSRead.model_validate(os)
 
@@ -79,7 +132,18 @@ class OSController(Controller):
         os_service: OSService,
         os_id: Annotated[UUID, Parameter(title="OS ID", description="The OS ID")],
     ) -> None:
-        """Delete an OS."""
+        """Delete an operating system entry.
+
+        Permanently removes an OS from the system. Release files associated
+        with this OS should be reassigned first.
+
+        Args:
+            os_service: Service for operating system database operations.
+            os_id: The unique UUID identifier of the OS to delete.
+
+        Raises:
+            NotFoundException: If no OS with the given ID exists.
+        """
         await os_service.delete(os_id)
 
 
@@ -95,7 +159,18 @@ class ReleaseController(Controller):
         release_service: ReleaseService,
         limit_offset: LimitOffset,
     ) -> list[ReleaseList]:
-        """List all releases with pagination."""
+        """List all Python releases with pagination.
+
+        Retrieves a paginated list of all Python releases including stable,
+        pre-release, and archived versions.
+
+        Args:
+            release_service: Service for release database operations.
+            limit_offset: Pagination parameters for limiting and offsetting results.
+
+        Returns:
+            List of releases with version and status information.
+        """
         releases, _total = await release_service.list_and_count(limit_offset)
         return [ReleaseList.model_validate(release) for release in releases]
 
@@ -105,7 +180,21 @@ class ReleaseController(Controller):
         release_service: ReleaseService,
         release_id: Annotated[UUID, Parameter(title="Release ID", description="The release ID")],
     ) -> ReleaseRead:
-        """Get a release by ID."""
+        """Retrieve a specific release by its unique identifier.
+
+        Fetches complete release information including version number,
+        release date, release notes, and download files.
+
+        Args:
+            release_service: Service for release database operations.
+            release_id: The unique UUID identifier of the release.
+
+        Returns:
+            Complete release details with associated files.
+
+        Raises:
+            NotFoundException: If no release with the given ID exists.
+        """
         release = await release_service.get(release_id)
         return ReleaseRead.model_validate(release)
 
@@ -115,7 +204,21 @@ class ReleaseController(Controller):
         release_service: ReleaseService,
         slug: Annotated[str, Parameter(title="Slug", description="The release slug")],
     ) -> ReleaseRead:
-        """Get a release by slug."""
+        """Look up a release by its URL slug.
+
+        Searches for a release with the specified slug (e.g., "python-3.12.0")
+        and returns its complete details.
+
+        Args:
+            release_service: Service for release database operations.
+            slug: The URL-friendly slug identifier.
+
+        Returns:
+            Complete release details with associated files.
+
+        Raises:
+            NotFoundException: If no release with the given slug exists.
+        """
         release = await release_service.get_by_slug(slug)
         if not release:
             raise NotFoundException(f"Release with slug {slug} not found")
@@ -126,7 +229,20 @@ class ReleaseController(Controller):
         self,
         release_service: ReleaseService,
     ) -> ReleaseRead:
-        """Get the latest Python 3 release."""
+        """Get the latest stable Python 3 release.
+
+        Retrieves the most recent stable Python 3.x release recommended
+        for new users and production use.
+
+        Args:
+            release_service: Service for release database operations.
+
+        Returns:
+            The latest Python 3 release details.
+
+        Raises:
+            NotFoundException: If no Python 3 release exists.
+        """
         release = await release_service.get_latest(PythonVersion.PYTHON3)
         if not release:
             raise NotFoundException("No latest release found")
@@ -138,7 +254,21 @@ class ReleaseController(Controller):
         release_service: ReleaseService,
         version: Annotated[str, Parameter(title="Version", description="Python version (2, 3, etc.)")],
     ) -> ReleaseRead:
-        """Get the latest release for a specific Python version."""
+        """Get the latest release for a specific Python major version.
+
+        Retrieves the most recent stable release for the specified Python
+        major version series (e.g., Python 2.x or Python 3.x).
+
+        Args:
+            release_service: Service for release database operations.
+            version: The Python major version ("2" or "3").
+
+        Returns:
+            The latest release for the specified Python version.
+
+        Raises:
+            NotFoundException: If the version is invalid or no release exists.
+        """
         try:
             python_version = PythonVersion(version)
         except ValueError as exc:
@@ -157,7 +287,19 @@ class ReleaseController(Controller):
         limit: Annotated[int, Parameter(ge=1, le=1000)] = 100,
         offset: Annotated[int, Parameter(ge=0)] = 0,
     ) -> list[ReleaseList]:
-        """List all published releases."""
+        """List all publicly published Python releases.
+
+        Retrieves releases that have been marked as published and are
+        available for download. Excludes draft and hidden releases.
+
+        Args:
+            release_service: Service for release database operations.
+            limit: Maximum number of releases to return (1-1000).
+            offset: Number of releases to skip for pagination.
+
+        Returns:
+            List of published releases sorted by release date.
+        """
         releases = await release_service.get_published(limit=limit, offset=offset)
         return [ReleaseList.model_validate(release) for release in releases]
 
@@ -167,7 +309,18 @@ class ReleaseController(Controller):
         release_service: ReleaseService,
         limit: Annotated[int, Parameter(ge=1, le=1000)] = 100,
     ) -> list[ReleaseList]:
-        """List releases for the download page."""
+        """List releases for the main downloads page.
+
+        Retrieves releases that should be displayed on the public downloads
+        page, filtered and sorted for optimal user experience.
+
+        Args:
+            release_service: Service for release database operations.
+            limit: Maximum number of releases to return (1-1000).
+
+        Returns:
+            List of releases suitable for the downloads page.
+        """
         releases = await release_service.get_for_download_page(limit=limit)
         return [ReleaseList.model_validate(release) for release in releases]
 
@@ -175,9 +328,23 @@ class ReleaseController(Controller):
     async def create_release(
         self,
         release_service: ReleaseService,
-        data: ReleaseCreate,
+        data: Annotated[ReleaseCreate, Body(title="Release", description="Release to create")],
     ) -> ReleaseRead:
-        """Create a new release."""
+        """Create a new Python release.
+
+        Creates a new release record with version information, release date,
+        and release notes. Files can be added separately.
+
+        Args:
+            release_service: Service for release database operations.
+            data: Release creation payload with version and metadata.
+
+        Returns:
+            The newly created release.
+
+        Raises:
+            ConflictError: If a release with the same slug exists.
+        """
         release = await release_service.create(data.model_dump())
         return ReleaseRead.model_validate(release)
 
@@ -185,10 +352,25 @@ class ReleaseController(Controller):
     async def update_release(
         self,
         release_service: ReleaseService,
-        data: ReleaseUpdate,
+        data: Annotated[ReleaseUpdate, Body(title="Release", description="Release data to update")],
         release_id: Annotated[UUID, Parameter(title="Release ID", description="The release ID")],
     ) -> ReleaseRead:
-        """Update a release."""
+        """Update an existing release.
+
+        Modifies release fields with the provided values. Can update
+        release notes, publication status, and metadata.
+
+        Args:
+            release_service: Service for release database operations.
+            data: Partial release update payload with fields to modify.
+            release_id: The unique UUID identifier of the release to update.
+
+        Returns:
+            The updated release with all current fields.
+
+        Raises:
+            NotFoundException: If no release with the given ID exists.
+        """
         update_data = data.model_dump(exclude_unset=True)
         release = await release_service.update(release_id, update_data)
         return ReleaseRead.model_validate(release)
@@ -199,7 +381,18 @@ class ReleaseController(Controller):
         release_service: ReleaseService,
         release_id: Annotated[UUID, Parameter(title="Release ID", description="The release ID")],
     ) -> None:
-        """Delete a release."""
+        """Permanently delete a release.
+
+        Removes a release and all associated download files from the system.
+        This action is irreversible.
+
+        Args:
+            release_service: Service for release database operations.
+            release_id: The unique UUID identifier of the release to delete.
+
+        Raises:
+            NotFoundException: If no release with the given ID exists.
+        """
         await release_service.delete(release_id)
 
 
@@ -215,7 +408,21 @@ class ReleaseFileController(Controller):
         release_file_service: ReleaseFileService,
         file_id: Annotated[UUID, Parameter(title="File ID", description="The file ID")],
     ) -> ReleaseFileRead:
-        """Get a release file by ID."""
+        """Retrieve a specific release file by its unique identifier.
+
+        Fetches complete file information including filename, size, checksum,
+        and download URL.
+
+        Args:
+            release_file_service: Service for release file database operations.
+            file_id: The unique UUID identifier of the file.
+
+        Returns:
+            Complete release file details.
+
+        Raises:
+            NotFoundException: If no file with the given ID exists.
+        """
         file = await release_file_service.get(file_id)
         return ReleaseFileRead.model_validate(file)
 
@@ -225,7 +432,18 @@ class ReleaseFileController(Controller):
         release_file_service: ReleaseFileService,
         release_id: Annotated[UUID, Parameter(title="Release ID", description="The release ID")],
     ) -> list[ReleaseFileRead]:
-        """List all files for a release."""
+        """List all download files for a specific release.
+
+        Retrieves all available download files for a release, including
+        installers, source archives, and documentation.
+
+        Args:
+            release_file_service: Service for release file database operations.
+            release_id: The unique UUID identifier of the release.
+
+        Returns:
+            List of download files for the specified release.
+        """
         files = await release_file_service.get_by_release_id(release_id)
         return [ReleaseFileRead.model_validate(file) for file in files]
 
@@ -236,7 +454,19 @@ class ReleaseFileController(Controller):
         os_id: Annotated[UUID, Parameter(title="OS ID", description="The OS ID")],
         limit: Annotated[int, Parameter(ge=1, le=1000)] = 100,
     ) -> list[ReleaseFileRead]:
-        """List all files for an OS."""
+        """List all download files for a specific operating system.
+
+        Retrieves all available download files compatible with the specified
+        OS across all releases.
+
+        Args:
+            release_file_service: Service for release file database operations.
+            os_id: The unique UUID identifier of the operating system.
+            limit: Maximum number of files to return (1-1000).
+
+        Returns:
+            List of download files for the specified OS.
+        """
         files = await release_file_service.get_by_os_id(os_id, limit=limit)
         return [ReleaseFileRead.model_validate(file) for file in files]
 
@@ -246,7 +476,21 @@ class ReleaseFileController(Controller):
         release_file_service: ReleaseFileService,
         slug: Annotated[str, Parameter(title="Slug", description="The file slug")],
     ) -> ReleaseFileRead:
-        """Get a release file by slug."""
+        """Look up a release file by its URL slug.
+
+        Searches for a file with the specified slug and returns its
+        download information.
+
+        Args:
+            release_file_service: Service for release file database operations.
+            slug: The URL-friendly slug identifier.
+
+        Returns:
+            Complete release file details.
+
+        Raises:
+            NotFoundException: If no file with the given slug exists.
+        """
         file = await release_file_service.get_by_slug(slug)
         if not file:
             raise NotFoundException(f"File with slug {slug} not found")
@@ -256,9 +500,23 @@ class ReleaseFileController(Controller):
     async def create_file(
         self,
         release_file_service: ReleaseFileService,
-        data: ReleaseFileCreate,
+        data: Annotated[ReleaseFileCreate, Body(title="Release File", description="Release file to create")],
     ) -> ReleaseFileRead:
-        """Create a new release file."""
+        """Create a new release file entry.
+
+        Adds a new downloadable file to a release with filename, size,
+        checksum, and download URL.
+
+        Args:
+            release_file_service: Service for release file database operations.
+            data: Release file creation payload with file details.
+
+        Returns:
+            The newly created release file.
+
+        Raises:
+            NotFoundException: If the associated release does not exist.
+        """
         file = await release_file_service.create(data.model_dump())
         return ReleaseFileRead.model_validate(file)
 
@@ -268,7 +526,18 @@ class ReleaseFileController(Controller):
         release_file_service: ReleaseFileService,
         file_id: Annotated[UUID, Parameter(title="File ID", description="The file ID")],
     ) -> None:
-        """Delete a release file."""
+        """Delete a release file entry.
+
+        Permanently removes a download file entry from the system.
+        This action is irreversible.
+
+        Args:
+            release_file_service: Service for release file database operations.
+            file_id: The unique UUID identifier of the file to delete.
+
+        Raises:
+            NotFoundException: If no file with the given ID exists.
+        """
         await release_file_service.delete(file_id)
 
 

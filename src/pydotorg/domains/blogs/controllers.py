@@ -8,7 +8,7 @@ from uuid import UUID
 from advanced_alchemy.filters import LimitOffset
 from litestar import Controller, delete, get, post, put
 from litestar.exceptions import NotFoundException
-from litestar.params import Parameter
+from litestar.params import Body, Parameter
 from litestar.response import Template
 
 from pydotorg.domains.blogs.schemas import (
@@ -72,7 +72,7 @@ class FeedController(Controller):
     async def create_feed(
         self,
         feed_service: FeedService,
-        data: FeedCreate,
+        data: Annotated[FeedCreate, Body(title="Feed", description="Feed to create")],
     ) -> FeedRead:
         """Create a new feed."""
         feed = await feed_service.create(data.model_dump())
@@ -82,7 +82,7 @@ class FeedController(Controller):
     async def update_feed(
         self,
         feed_service: FeedService,
-        data: FeedUpdate,
+        data: Annotated[FeedUpdate, Body(title="Feed", description="Feed data to update")],
         feed_id: Annotated[UUID, Parameter(title="Feed ID", description="The feed ID")],
     ) -> FeedRead:
         """Update a feed."""
@@ -167,7 +167,7 @@ class BlogEntryController(Controller):
     async def create_entry(
         self,
         blog_entry_service: BlogEntryService,
-        data: BlogEntryCreate,
+        data: Annotated[BlogEntryCreate, Body(title="Blog Entry", description="Blog entry to create")],
     ) -> BlogEntryRead:
         """Create a new blog entry."""
         entry = await blog_entry_service.create(data.model_dump())
@@ -177,7 +177,7 @@ class BlogEntryController(Controller):
     async def update_entry(
         self,
         blog_entry_service: BlogEntryService,
-        data: BlogEntryUpdate,
+        data: Annotated[BlogEntryUpdate, Body(title="Blog Entry", description="Blog entry data to update")],
         entry_id: Annotated[UUID, Parameter(title="Entry ID", description="The entry ID")],
     ) -> BlogEntryRead:
         """Update a blog entry."""
@@ -237,7 +237,7 @@ class FeedAggregateController(Controller):
     async def create_aggregate(
         self,
         feed_aggregate_service: FeedAggregateService,
-        data: FeedAggregateCreate,
+        data: Annotated[FeedAggregateCreate, Body(title="Feed Aggregate", description="Feed aggregate to create")],
     ) -> FeedAggregateRead:
         """Create a new feed aggregate."""
         aggregate = await feed_aggregate_service.create(data.model_dump(exclude={"feed_ids"}))
@@ -247,7 +247,7 @@ class FeedAggregateController(Controller):
     async def update_aggregate(
         self,
         feed_aggregate_service: FeedAggregateService,
-        data: FeedAggregateUpdate,
+        data: Annotated[FeedAggregateUpdate, Body(title="Feed Aggregate", description="Feed aggregate data to update")],
         aggregate_id: Annotated[UUID, Parameter(title="Aggregate ID", description="The aggregate ID")],
     ) -> FeedAggregateRead:
         """Update a feed aggregate."""
@@ -295,7 +295,7 @@ class RelatedBlogController(Controller):
     async def create_related_blog(
         self,
         related_blog_service: RelatedBlogService,
-        data: RelatedBlogCreate,
+        data: Annotated[RelatedBlogCreate, Body(title="Related Blog", description="Related blog to create")],
     ) -> RelatedBlogRead:
         """Create a new related blog."""
         blog = await related_blog_service.create(data.model_dump())
@@ -305,7 +305,7 @@ class RelatedBlogController(Controller):
     async def update_related_blog(
         self,
         related_blog_service: RelatedBlogService,
-        data: RelatedBlogUpdate,
+        data: Annotated[RelatedBlogUpdate, Body(title="Related Blog", description="Related blog data to update")],
         blog_id: Annotated[UUID, Parameter(title="Blog ID", description="The blog ID")],
     ) -> RelatedBlogRead:
         """Update a related blog."""

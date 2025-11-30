@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import Annotated
 
 from litestar import Controller, Request, get, post
-from litestar.params import Parameter
+from litestar.params import Body, Parameter
 from litestar.response import Template
 
 from pydotorg.core.search import SearchQuery, SearchResult, SearchService
@@ -21,7 +21,7 @@ class SearchAPIController(Controller):
     async def search_content(
         self,
         search_service: SearchService,
-        query: SearchQuery,
+        query: Annotated[SearchQuery, Body(title="Search Query", description="Search query parameters")],
     ) -> SearchResult:
         """Search across all content types.
 

@@ -6,11 +6,12 @@ from typing import Annotated
 from uuid import UUID
 
 from advanced_alchemy.filters import LimitOffset
-from litestar import Controller, delete, get, patch, post, put
+from litestar import Controller, Request, delete, get, patch, post, put
 from litestar.exceptions import NotFoundException
-from litestar.params import Parameter
+from litestar.params import Body, Parameter
 from litestar.response import Template
 
+from pydotorg.core.auth.guards import require_authenticated
 from pydotorg.domains.nominations.models import ElectionStatus
 from pydotorg.domains.nominations.schemas import (
     ElectionCreate,
@@ -76,7 +77,7 @@ class ElectionController(Controller):
     async def create_election(
         self,
         election_service: ElectionService,
-        data: ElectionCreate,
+        data: Annotated[ElectionCreate, Body(title="Election", description="Election to create")],
     ) -> ElectionRead:
         """Create a new election (staff only)."""
         election = await election_service.create_election(data)
@@ -86,7 +87,7 @@ class ElectionController(Controller):
     async def update_election(
         self,
         election_service: ElectionService,
-        data: ElectionUpdate,
+        data: Annotated[ElectionUpdate, Body(title="Election", description="Election data to update")],
         election_id: Annotated[UUID, Parameter(title="Election ID", description="The election ID")],
     ) -> ElectionRead:
         """Update an election (staff only)."""
@@ -153,7 +154,7 @@ class NomineeController(Controller):
     async def create_nominee(
         self,
         nominee_service: NomineeService,
-        data: NomineeCreate,
+        data: Annotated[NomineeCreate, Body(title="Nominee", description="Nominee to create")],
     ) -> NomineeRead:
         """Create a new nominee."""
         nominee = await nominee_service.create_nominee(data.election_id, data.user_id)
@@ -221,15 +222,20 @@ class NominationController(Controller):
         nomination = await nomination_service.get(nomination_id)
         return NominationRead.model_validate(nomination)
 
-    @post("/")
+    @post("/", guards=[require_authenticated])
     async def create_nomination(
         self,
+        request: Request,
         nomination_service: NominationService,
-        data: NominationCreate,
+        data: Annotated[NominationCreate, Body(title="Nomination", description="Nomination to create")],
     ) -> NominationRead:
         """Create a new nomination."""
-        msg = "Authentication not implemented"
-        raise NotImplementedError(msg)
+        nomination = await nomination_service.create_nomination(
+            nominee_id=data.nominee_id,
+            nominator_id=request.user.id,
+            endorsement=data.endorsement,
+        )
+        return NominationRead.model_validate(nomination)
 
     @delete("/{nomination_id:uuid}")
     async def delete_nomination(

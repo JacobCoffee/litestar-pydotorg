@@ -8,7 +8,7 @@ from uuid import UUID
 from advanced_alchemy.filters import LimitOffset
 from litestar import Controller, delete, get, post, put
 from litestar.exceptions import NotFoundException
-from litestar.params import Parameter
+from litestar.params import Body, Parameter
 from litestar.response import Template
 
 from pydotorg.domains.codesamples.schemas import (
@@ -73,7 +73,7 @@ class CodeSampleController(Controller):
     async def create_code_sample(
         self,
         code_sample_service: CodeSampleService,
-        data: CodeSampleCreate,
+        data: Annotated[CodeSampleCreate, Body(title="Code Sample", description="Code sample to create")],
     ) -> CodeSampleRead:
         """Create a new code sample."""
         sample = await code_sample_service.create(data.model_dump())
@@ -83,7 +83,7 @@ class CodeSampleController(Controller):
     async def update_code_sample(
         self,
         code_sample_service: CodeSampleService,
-        data: CodeSampleUpdate,
+        data: Annotated[CodeSampleUpdate, Body(title="Code Sample", description="Code sample data to update")],
         sample_id: Annotated[UUID, Parameter(title="Sample ID", description="The code sample ID")],
     ) -> CodeSampleRead:
         """Update a code sample."""

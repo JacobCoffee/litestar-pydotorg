@@ -9,7 +9,7 @@ from uuid import UUID
 from advanced_alchemy.filters import LimitOffset
 from litestar import Controller, delete, get, post, put
 from litestar.exceptions import NotFoundException
-from litestar.params import Parameter
+from litestar.params import Body, Parameter
 from litestar.response import Template
 
 from pydotorg.domains.banners.schemas import (
@@ -75,7 +75,7 @@ class BannerController(Controller):
     async def create_banner(
         self,
         banner_service: BannerService,
-        data: BannerCreate,
+        data: Annotated[BannerCreate, Body(title="Banner", description="Banner to create")],
     ) -> BannerRead:
         """Create a new banner."""
         banner = await banner_service.create(data.model_dump())
@@ -85,7 +85,7 @@ class BannerController(Controller):
     async def update_banner(
         self,
         banner_service: BannerService,
-        data: BannerUpdate,
+        data: Annotated[BannerUpdate, Body(title="Banner", description="Banner data to update")],
         banner_id: Annotated[UUID, Parameter(title="Banner ID", description="The banner ID")],
     ) -> BannerRead:
         """Update a banner."""

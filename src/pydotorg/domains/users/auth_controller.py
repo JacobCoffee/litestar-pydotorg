@@ -48,6 +48,12 @@ async def get_current_user(request: Request) -> User:
 
 
 class AuthController(Controller):
+    """Authentication API for user registration, login, and session management.
+
+    Provides JWT-based authentication with access and refresh tokens, session-based
+    authentication via cookies, OAuth integration (GitHub), and email verification.
+    """
+
     path = "/api/auth"
     tags = ["Authentication"]
     dependencies = {"current_user": Provide(get_current_user)}
@@ -58,6 +64,28 @@ class AuthController(Controller):
         data: RegisterRequest,
         db_session: AsyncSession,
     ) -> TokenResponse:
+        """Register a new user account.
+
+        Creates a new user with the provided credentials and sends a verification
+        email. Returns JWT tokens for immediate authentication.
+
+        Password Requirements:
+        - Minimum 8 characters
+        - At least one uppercase and lowercase letter
+        - At least one digit
+        - At least one special character
+
+        Example:
+            POST /api/auth/register
+            {"username": "newuser", "email": "user@example.com",
+             "password": "SecureP@ss123", "first_name": "John", "last_name": "Doe"}
+
+        Returns:
+            JWT access and refresh tokens with expiration info.
+
+        Raises:
+            PermissionDeniedException: If username/email exists or password is weak.
+        """
         result = await db_session.execute(
             select(User).where((User.username == data.username) | (User.email == data.email))
         )
@@ -111,6 +139,23 @@ class AuthController(Controller):
         data: LoginRequest,
         db_session: AsyncSession,
     ) -> TokenResponse:
+        """Authenticate user with username and password.
+
+        Validates credentials and returns JWT tokens for API authentication.
+        Use the access_token in the Authorization header as: Bearer <token>
+
+        Example:
+            POST /api/auth/login
+            {"username": "myuser", "password": "mypassword"}
+
+        Returns:
+            access_token: Short-lived token for API requests (default: 30 min)
+            refresh_token: Long-lived token for refreshing access (default: 7 days)
+            expires_in: Access token lifetime in seconds
+
+        Raises:
+            PermissionDeniedException: Invalid credentials or inactive account.
+        """
         result = await db_session.execute(select(User).where(User.username == data.username))
         user = result.scalar_one_or_none()
 
@@ -145,6 +190,21 @@ class AuthController(Controller):
         data: RefreshTokenRequest,
         db_session: AsyncSession,
     ) -> TokenResponse:
+        """Refresh an expired access token using a valid refresh token.
+
+        Exchange a refresh token for a new access/refresh token pair. Use this
+        when the access token expires but the refresh token is still valid.
+
+        Example:
+            POST /api/auth/refresh
+            {"refresh_token": "eyJhbGciOiJIUzI1NiIs..."}
+
+        Returns:
+            New access and refresh tokens with updated expiration.
+
+        Raises:
+            PermissionDeniedException: Invalid/expired refresh token or inactive user.
+        """
         try:
             user_id = jwt_service.get_user_id_from_token(data.refresh_token, token_type="refresh")  # noqa: S106
         except ValueError as e:
@@ -167,6 +227,14 @@ class AuthController(Controller):
 
     @post("/logout", guards=[require_authenticated], status_code=200)
     async def logout(self) -> dict[str, str]:
+        """Logout the current user (JWT-based).
+
+        Invalidates the current session. Requires a valid access token.
+        Note: JWT tokens remain valid until expiration; client should discard them.
+
+        Returns:
+            Confirmation message.
+        """
         return {"message": "Successfully logged out"}
 
     @post("/session/login")
@@ -175,6 +243,21 @@ class AuthController(Controller):
         data: LoginRequest,
         db_session: AsyncSession,
     ) -> Response[dict[str, str]]:
+        """Login using cookie-based sessions.
+
+        Alternative to JWT authentication using HTTP-only session cookies.
+        Preferred for browser-based applications for better security.
+
+        Example:
+            POST /api/auth/session/login
+            {"username": "myuser", "password": "mypassword"}
+
+        Returns:
+            Success message with session cookie set in response headers.
+
+        Raises:
+            PermissionDeniedException: Invalid credentials or inactive account.
+        """
         result = await db_session.execute(select(User).where(User.username == data.username))
         user = result.scalar_one_or_none()
 
@@ -215,6 +298,13 @@ class AuthController(Controller):
 
     @post("/session/logout", guards=[require_authenticated])
     async def session_logout(self, request: Request) -> Response[dict[str, str]]:
+        """Logout and clear session cookie.
+
+        Destroys the server-side session and clears the session cookie.
+
+        Returns:
+            Success message with cookie deletion header.
+        """
         session_id = request.cookies.get(settings.session_cookie_name)
 
         if session_id:
@@ -234,6 +324,14 @@ class AuthController(Controller):
 
     @post("/me", guards=[require_authenticated], status_code=200)
     async def get_me(self, current_user: User) -> UserResponse:
+        """Get the currently authenticated user's profile.
+
+        Returns the full profile of the authenticated user making the request.
+        Requires valid authentication (JWT token or session cookie).
+
+        Returns:
+            Current user's profile including email, username, and account status.
+        """
         return UserResponse.model_validate(current_user)
 
     @get("/oauth/{provider:str}")
@@ -242,6 +340,24 @@ class AuthController(Controller):
         provider: str,
         request: Request,
     ) -> Redirect:
+        """Initiate OAuth login flow.
+
+        Redirects user to the OAuth provider's authorization page.
+        Currently supported providers: github
+
+        Example:
+            GET /api/auth/oauth/github
+            → Redirects to GitHub authorization page
+
+        Args:
+            provider: OAuth provider name (e.g., "github")
+
+        Returns:
+            Redirect to OAuth provider's authorization URL.
+
+        Raises:
+            PermissionDeniedException: Unknown provider.
+        """
         oauth_service = get_oauth_service(settings)
 
         try:
@@ -266,6 +382,25 @@ class AuthController(Controller):
         code: str = Parameter(query="code"),
         oauth_state: str = Parameter(query="state"),
     ) -> Response[TokenResponse]:
+        """Handle OAuth callback from provider.
+
+        Processes the authorization code from the OAuth provider, exchanges it
+        for tokens, and creates or links a user account. Returns JWT tokens.
+
+        This endpoint is called by the OAuth provider after user authorization.
+        New users are automatically registered; existing users are logged in.
+
+        Args:
+            provider: OAuth provider name
+            code: Authorization code from OAuth provider
+            oauth_state: State parameter for CSRF protection
+
+        Returns:
+            JWT access and refresh tokens.
+
+        Raises:
+            PermissionDeniedException: Invalid state, provider, or auth failure.
+        """
         session_state = request.session.get("oauth_state")
         session_provider = request.session.get("oauth_provider")
 
@@ -356,6 +491,21 @@ class AuthController(Controller):
         data: SendVerificationRequest,
         db_session: AsyncSession,
     ) -> VerifyEmailResponse:
+        """Send email verification link to a user.
+
+        Generates a verification token and sends an email with a verification
+        link. Use this for users who registered but haven't verified their email.
+
+        Example:
+            POST /api/auth/send-verification
+            {"email": "user@example.com"}
+
+        Returns:
+            Confirmation message.
+
+        Raises:
+            NotFoundException: User not found.
+        """
         result = await db_session.execute(select(User).where(User.email == data.email))
         user = result.scalar_one_or_none()
 
@@ -383,6 +533,21 @@ class AuthController(Controller):
         token: str,
         db_session: AsyncSession,
     ) -> VerifyEmailResponse:
+        """Verify user's email address using a verification token.
+
+        Validates the token from the verification email and marks the user's
+        email as verified.
+
+        Args:
+            token: JWT verification token from the email link.
+
+        Returns:
+            Confirmation of email verification.
+
+        Raises:
+            PermissionDeniedException: Invalid or expired token.
+            NotFoundException: User not found.
+        """
         try:
             payload = jwt_service.decode_token(token)
             jwt_service.verify_token_type(payload, "verify_email")
@@ -417,6 +582,14 @@ class AuthController(Controller):
         self,
         current_user: User,
     ) -> VerifyEmailResponse:
+        """Resend verification email to the authenticated user.
+
+        Sends a new verification email to the currently logged-in user.
+        Requires authentication.
+
+        Returns:
+            Confirmation that email was sent.
+        """
         if current_user.email_verified:
             return VerifyEmailResponse(message="Email already verified")
 
@@ -438,6 +611,18 @@ class AuthController(Controller):
         data: ForgotPasswordRequest,
         db_session: AsyncSession,
     ) -> VerifyEmailResponse:
+        """Request a password reset email.
+
+        Sends a password reset link if the email exists and is not an OAuth account.
+        Always returns the same message for security (prevents email enumeration).
+
+        Example:
+            POST /api/auth/forgot-password
+            {"email": "user@example.com"}
+
+        Returns:
+            Generic confirmation message regardless of email existence.
+        """
         result = await db_session.execute(select(User).where(User.email == data.email))
         user = result.scalar_one_or_none()
 
@@ -471,6 +656,22 @@ class AuthController(Controller):
         data: ResetPasswordRequest,
         db_session: AsyncSession,
     ) -> VerifyEmailResponse:
+        """Reset password using a reset token.
+
+        Validates the reset token from the forgot-password email and sets
+        a new password. Password must meet strength requirements.
+
+        Example:
+            POST /api/auth/reset-password
+            {"token": "eyJhbGciOiJIUzI1NiIs...", "new_password": "NewSecureP@ss123"}
+
+        Returns:
+            Confirmation of password reset.
+
+        Raises:
+            PermissionDeniedException: Invalid token or password requirements not met.
+            NotFoundException: User not found.
+        """
         try:
             payload = jwt_service.decode_token(data.token)
             jwt_service.verify_token_type(payload, "password_reset")

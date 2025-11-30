@@ -6,12 +6,13 @@ Admin endpoints are protected by staff/superuser guards.
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Annotated, Any
 from uuid import UUID
 
 from advanced_alchemy.exceptions import NotFoundError
 from litestar import Controller, delete, get, patch, post
 from litestar.exceptions import NotFoundException
+from litestar.params import Body
 from litestar.status_codes import HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CONTENT
 
 from pydotorg.core.auth.guards import require_admin, require_staff
@@ -116,7 +117,7 @@ class EmailTemplateController(Controller):
     async def create_template(
         self,
         email_template_service: EmailTemplateService,
-        data: EmailTemplateCreate,
+        data: Annotated[EmailTemplateCreate, Body(title="Email Template", description="Email template to create")],
     ) -> EmailTemplateRead:
         """Create a new email template.
 
@@ -135,7 +136,7 @@ class EmailTemplateController(Controller):
         self,
         email_template_service: EmailTemplateService,
         template_id: UUID,
-        data: EmailTemplateUpdate,
+        data: Annotated[EmailTemplateUpdate, Body(title="Email Template", description="Email template data to update")],
     ) -> EmailTemplateRead:
         """Update an existing email template.
 
@@ -206,7 +207,9 @@ class EmailTemplateController(Controller):
         self,
         email_template_service: EmailTemplateService,
         template_id: UUID,
-        data: dict[str, Any] | None = None,
+        data: Annotated[
+            dict[str, Any] | None, Body(title="Context Data", description="Template context variables")
+        ] = None,
     ) -> EmailTemplatePreview:
         """Preview a rendered email template.
 
@@ -231,7 +234,7 @@ class EmailTemplateController(Controller):
     async def send_email(
         self,
         mailing_service: MailingService,
-        data: SendEmailRequest,
+        data: Annotated[SendEmailRequest, Body(title="Email Request", description="Email send request data")],
     ) -> SendEmailResponse:
         """Send an email using a template.
 
@@ -259,7 +262,9 @@ class EmailTemplateController(Controller):
     async def send_bulk_email(
         self,
         mailing_service: MailingService,
-        data: BulkSendEmailRequest,
+        data: Annotated[
+            BulkSendEmailRequest, Body(title="Bulk Email Request", description="Bulk email send request data")
+        ],
     ) -> BulkSendEmailResponse:
         """Send bulk emails using a template.
 

@@ -8,7 +8,7 @@ from uuid import UUID
 from advanced_alchemy.filters import LimitOffset
 from litestar import Controller, delete, get, post, put
 from litestar.exceptions import NotFoundException
-from litestar.params import Parameter
+from litestar.params import Body, Parameter
 from litestar.response import Template
 
 from pydotorg.domains.work_groups.schemas import (
@@ -73,7 +73,7 @@ class WorkGroupController(Controller):
     async def create_work_group(
         self,
         work_group_service: WorkGroupService,
-        data: WorkGroupCreate,
+        data: Annotated[WorkGroupCreate, Body(title="Work Group", description="Work group to create")],
     ) -> WorkGroupRead:
         """Create a new work group."""
         work_group = await work_group_service.create(data.model_dump())
@@ -83,7 +83,7 @@ class WorkGroupController(Controller):
     async def update_work_group(
         self,
         work_group_service: WorkGroupService,
-        data: WorkGroupUpdate,
+        data: Annotated[WorkGroupUpdate, Body(title="Work Group", description="Work group data to update")],
         work_group_id: Annotated[UUID, Parameter(title="Work Group ID", description="The work group ID")],
     ) -> WorkGroupRead:
         """Update a work group."""

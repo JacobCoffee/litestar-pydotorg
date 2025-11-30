@@ -8,7 +8,7 @@ from uuid import UUID
 from advanced_alchemy.filters import LimitOffset
 from litestar import Controller, delete, get, patch, post, put
 from litestar.exceptions import NotFoundException
-from litestar.params import Parameter
+from litestar.params import Body, Parameter
 from litestar.response import Template
 
 from pydotorg.domains.pages.schemas import (
@@ -66,7 +66,7 @@ class PageController(Controller):
     async def create_page(
         self,
         page_service: PageService,
-        data: PageCreate,
+        data: Annotated[PageCreate, Body(title="Page", description="Page to create")],
     ) -> PageRead:
         """Create a new page."""
         page = await page_service.create(data.model_dump(exclude_unset=True))
@@ -76,7 +76,7 @@ class PageController(Controller):
     async def update_page(
         self,
         page_service: PageService,
-        data: PageUpdate,
+        data: Annotated[PageUpdate, Body(title="Page", description="Page data to update")],
         page_id: Annotated[UUID, Parameter(title="Page ID", description="The page ID")],
     ) -> PageRead:
         """Update a page."""
@@ -143,7 +143,7 @@ class ImageController(Controller):
     async def create_image(
         self,
         image_service: ImageService,
-        data: ImageCreate,
+        data: Annotated[ImageCreate, Body(title="Image", description="Image to create")],
     ) -> ImageRead:
         """Create a new image."""
         image = await image_service.create(data.model_dump(exclude_unset=True))
@@ -189,7 +189,7 @@ class DocumentFileController(Controller):
     async def create_document(
         self,
         document_service: DocumentFileService,
-        data: DocumentFileCreate,
+        data: Annotated[DocumentFileCreate, Body(title="Document File", description="Document to create")],
     ) -> DocumentFileRead:
         """Create a new document."""
         document = await document_service.create(data.model_dump(exclude_unset=True))

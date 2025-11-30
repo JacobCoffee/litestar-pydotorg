@@ -8,7 +8,7 @@ from uuid import UUID
 from advanced_alchemy.filters import LimitOffset
 from litestar import Controller, delete, get, post, put
 from litestar.exceptions import NotFoundException
-from litestar.params import Parameter
+from litestar.params import Body, Parameter
 from litestar.response import Template
 
 from pydotorg.domains.community.schemas import (
@@ -81,7 +81,7 @@ class PostController(Controller):
     async def create_post(
         self,
         post_service: PostService,
-        data: PostCreate,
+        data: Annotated[PostCreate, Body(title="Post", description="Post to create")],
     ) -> PostRead:
         """Create a new post."""
         post = await post_service.create(data.model_dump())
@@ -91,7 +91,7 @@ class PostController(Controller):
     async def update_post(
         self,
         post_service: PostService,
-        data: PostUpdate,
+        data: Annotated[PostUpdate, Body(title="Post", description="Post data to update")],
         post_id: Annotated[UUID, Parameter(title="Post ID", description="The post ID")],
     ) -> PostRead:
         """Update a post."""
@@ -139,7 +139,7 @@ class PhotoController(Controller):
     async def create_photo(
         self,
         photo_service: PhotoService,
-        data: PhotoCreate,
+        data: Annotated[PhotoCreate, Body(title="Photo", description="Photo to create")],
     ) -> PhotoRead:
         """Create a new photo."""
         photo = await photo_service.create(data.model_dump())
@@ -149,7 +149,7 @@ class PhotoController(Controller):
     async def update_photo(
         self,
         photo_service: PhotoService,
-        data: PhotoUpdate,
+        data: Annotated[PhotoUpdate, Body(title="Photo", description="Photo data to update")],
         photo_id: Annotated[UUID, Parameter(title="Photo ID", description="The photo ID")],
     ) -> PhotoRead:
         """Update a photo."""
@@ -197,7 +197,7 @@ class VideoController(Controller):
     async def create_video(
         self,
         video_service: VideoService,
-        data: VideoCreate,
+        data: Annotated[VideoCreate, Body(title="Video", description="Video to create")],
     ) -> VideoRead:
         """Create a new video."""
         video = await video_service.create(data.model_dump())
@@ -207,7 +207,7 @@ class VideoController(Controller):
     async def update_video(
         self,
         video_service: VideoService,
-        data: VideoUpdate,
+        data: Annotated[VideoUpdate, Body(title="Video", description="Video data to update")],
         video_id: Annotated[UUID, Parameter(title="Video ID", description="The video ID")],
     ) -> VideoRead:
         """Update a video."""
@@ -255,7 +255,7 @@ class LinkController(Controller):
     async def create_link(
         self,
         link_service: LinkService,
-        data: LinkCreate,
+        data: Annotated[LinkCreate, Body(title="Link", description="Link to create")],
     ) -> LinkRead:
         """Create a new link."""
         link = await link_service.create(data.model_dump())
@@ -265,7 +265,7 @@ class LinkController(Controller):
     async def update_link(
         self,
         link_service: LinkService,
-        data: LinkUpdate,
+        data: Annotated[LinkUpdate, Body(title="Link", description="Link data to update")],
         link_id: Annotated[UUID, Parameter(title="Link ID", description="The link ID")],
     ) -> LinkRead:
         """Update a link."""
