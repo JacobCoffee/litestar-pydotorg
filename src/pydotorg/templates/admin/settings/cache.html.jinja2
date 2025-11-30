@@ -284,12 +284,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const toast = params.get('toast');
     if (toast) {
         const messages = {
-            'pages_cleared': 'Page cache clear task queued successfully.',
-            'all_cleared': 'All cache clear tasks queued successfully.',
-            'cache_warmed': 'Cache warming tasks queued successfully.'
+            'pages_cleared': { text: 'Page cache clear task queued successfully.', type: 'success' },
+            'all_cleared': { text: 'All cache clear tasks queued successfully.', type: 'success' },
+            'cache_warmed': { text: 'Cache warming tasks queued successfully.', type: 'success' },
+            'warm_failed': { text: 'Failed to queue cache warming tasks.', type: 'error' }
         };
         if (messages[toast]) {
-            showToast(messages[toast], 'success');
+            showToast(messages[toast].text, messages[toast].type);
             window.history.replaceState({}, '', window.location.pathname);
         }
     }

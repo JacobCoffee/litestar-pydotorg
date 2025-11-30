@@ -107,11 +107,14 @@ class AdminSettingsController(Controller):
         Returns:
             Redirect back to cache management page
         """
-        await enqueue_task("warm_homepage_cache")
-        await enqueue_task("warm_releases_cache")
-        await enqueue_task("warm_events_cache")
-        await enqueue_task("warm_blogs_cache")
-        await enqueue_task("warm_pages_cache")
+        try:
+            await enqueue_task("warm_homepage_cache")
+            await enqueue_task("warm_releases_cache")
+            await enqueue_task("warm_events_cache")
+            await enqueue_task("warm_blogs_cache")
+            await enqueue_task("warm_pages_cache")
+        except (ConnectionError, OSError, TimeoutError):
+            return Redirect("/admin/settings/cache?toast=warm_failed")
         return Redirect("/admin/settings/cache?toast=cache_warmed")
 
     @get("/cache/keys/{category:str}")

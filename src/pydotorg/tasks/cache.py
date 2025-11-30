@@ -567,7 +567,9 @@ async def invalidate_page_response_cache(
 
             normalized_path = f"/{page_path.strip('/')}" if page_path else "/"
             raw_key = f"{normalized_path}:"
-            cache_key = f"LITESTAR_RESPONSE_CACHE_cache:page:{hashlib.md5(raw_key.encode(), usedforsecurity=False).hexdigest()}"
+            cache_key = (
+                f"LITESTAR_RESPONSE_CACHE_cache:page:{hashlib.md5(raw_key.encode(), usedforsecurity=False).hexdigest()}"
+            )
 
             result = await redis.delete(cache_key)
             cleared = int(result)

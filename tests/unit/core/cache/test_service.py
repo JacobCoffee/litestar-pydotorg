@@ -37,16 +37,12 @@ class TestPageCacheServiceInit:
 class TestMakeCacheKey:
     """Tests for the _make_cache_key method."""
 
-    def test_normalizes_path_with_leading_slash(
-        self, cache_service: PageCacheService
-    ) -> None:
+    def test_normalizes_path_with_leading_slash(self, cache_service: PageCacheService) -> None:
         """Should ensure path starts with /."""
         key = cache_service._make_cache_key("about/history")
         assert "about/history" in key or key.startswith("page:")
 
-    def test_normalizes_path_strips_trailing_slash(
-        self, cache_service: PageCacheService
-    ) -> None:
+    def test_normalizes_path_strips_trailing_slash(self, cache_service: PageCacheService) -> None:
         """Should strip trailing slashes."""
         key1 = cache_service._make_cache_key("/about/")
         key2 = cache_service._make_cache_key("/about")
@@ -73,9 +69,7 @@ class TestInvalidatePage:
     """Tests for invalidate_page method."""
 
     @pytest.mark.anyio
-    async def test_invalidates_single_page(
-        self, cache_service: PageCacheService, mock_redis: AsyncMock
-    ) -> None:
+    async def test_invalidates_single_page(self, cache_service: PageCacheService, mock_redis: AsyncMock) -> None:
         """Should delete cache entry for specific page."""
         mock_redis.delete.return_value = 1
         result = await cache_service.invalidate_page("/about/history")
@@ -84,9 +78,7 @@ class TestInvalidatePage:
         mock_redis.delete.assert_called_once()
 
     @pytest.mark.anyio
-    async def test_returns_false_when_not_cached(
-        self, cache_service: PageCacheService, mock_redis: AsyncMock
-    ) -> None:
+    async def test_returns_false_when_not_cached(self, cache_service: PageCacheService, mock_redis: AsyncMock) -> None:
         """Should return False when page wasn't cached."""
         mock_redis.delete.return_value = 0
         result = await cache_service.invalidate_page("/nonexistent")
@@ -94,9 +86,7 @@ class TestInvalidatePage:
         assert result is False
 
     @pytest.mark.anyio
-    async def test_handles_redis_errors(
-        self, cache_service: PageCacheService, mock_redis: AsyncMock
-    ) -> None:
+    async def test_handles_redis_errors(self, cache_service: PageCacheService, mock_redis: AsyncMock) -> None:
         """Should return False on Redis errors."""
         mock_redis.delete.side_effect = Exception("Connection refused")
         result = await cache_service.invalidate_page("/about")
@@ -120,9 +110,7 @@ class TestInvalidatePageById:
         mock_redis.delete.assert_called_once()
 
     @pytest.mark.anyio
-    async def test_without_path_returns_false(
-        self, cache_service: PageCacheService
-    ) -> None:
+    async def test_without_path_returns_false(self, cache_service: PageCacheService) -> None:
         """Should return False when path is not provided."""
         page_id = uuid4()
         result = await cache_service.invalidate_page_by_id(page_id)
@@ -134,9 +122,7 @@ class TestInvalidateAllPages:
     """Tests for invalidate_all_pages method."""
 
     @pytest.mark.anyio
-    async def test_clears_all_page_caches(
-        self, cache_service: PageCacheService, mock_redis: AsyncMock
-    ) -> None:
+    async def test_clears_all_page_caches(self, cache_service: PageCacheService, mock_redis: AsyncMock) -> None:
         """Should scan and delete all page:* keys."""
         mock_redis.scan.return_value = (0, ["page:abc123", "page:def456"])
         mock_redis.delete.return_value = 2
@@ -148,9 +134,7 @@ class TestInvalidateAllPages:
         mock_redis.delete.assert_called_once()
 
     @pytest.mark.anyio
-    async def test_handles_empty_cache(
-        self, cache_service: PageCacheService, mock_redis: AsyncMock
-    ) -> None:
+    async def test_handles_empty_cache(self, cache_service: PageCacheService, mock_redis: AsyncMock) -> None:
         """Should return 0 when no pages are cached."""
         mock_redis.scan.return_value = (0, [])
 
@@ -175,9 +159,7 @@ class TestInvalidateAllPages:
         assert mock_redis.scan.call_count == 2
 
     @pytest.mark.anyio
-    async def test_handles_redis_errors(
-        self, cache_service: PageCacheService, mock_redis: AsyncMock
-    ) -> None:
+    async def test_handles_redis_errors(self, cache_service: PageCacheService, mock_redis: AsyncMock) -> None:
         """Should return 0 on Redis errors."""
         mock_redis.scan.side_effect = Exception("Connection refused")
 
@@ -190,9 +172,7 @@ class TestGetCacheStats:
     """Tests for get_cache_stats method."""
 
     @pytest.mark.anyio
-    async def test_returns_cached_page_count(
-        self, cache_service: PageCacheService, mock_redis: AsyncMock
-    ) -> None:
+    async def test_returns_cached_page_count(self, cache_service: PageCacheService, mock_redis: AsyncMock) -> None:
         """Should return count of cached pages."""
         mock_redis.scan.return_value = (0, ["page:1", "page:2", "page:3"])
 
@@ -201,9 +181,7 @@ class TestGetCacheStats:
         assert stats["cached_pages"] == 3
 
     @pytest.mark.anyio
-    async def test_handles_empty_cache(
-        self, cache_service: PageCacheService, mock_redis: AsyncMock
-    ) -> None:
+    async def test_handles_empty_cache(self, cache_service: PageCacheService, mock_redis: AsyncMock) -> None:
         """Should return 0 for empty cache."""
         mock_redis.scan.return_value = (0, [])
 
@@ -212,9 +190,7 @@ class TestGetCacheStats:
         assert stats["cached_pages"] == 0
 
     @pytest.mark.anyio
-    async def test_handles_redis_errors(
-        self, cache_service: PageCacheService, mock_redis: AsyncMock
-    ) -> None:
+    async def test_handles_redis_errors(self, cache_service: PageCacheService, mock_redis: AsyncMock) -> None:
         """Should return error stats on Redis errors."""
         mock_redis.scan.side_effect = Exception("Connection refused")
 

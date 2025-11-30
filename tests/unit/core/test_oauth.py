@@ -162,9 +162,7 @@ class TestOAuthProviderBase:
         assert "state=" in url
 
     @pytest.mark.asyncio
-    async def test_exchange_code_for_token_raises_when_not_configured(
-        self, mock_settings_no_oauth: MagicMock
-    ) -> None:
+    async def test_exchange_code_for_token_raises_when_not_configured(self, mock_settings_no_oauth: MagicMock) -> None:
         """Test exchange_code_for_token raises when credentials not configured."""
         provider = GitHubOAuthProvider(mock_settings_no_oauth)
         code = "test-auth-code"
@@ -252,9 +250,7 @@ class TestGitHubOAuthProvider:
         mock_user_response.raise_for_status = Mock()
 
         mock_email_response = Mock()
-        mock_email_response.json.return_value = [
-            {"email": "test@example.com", "primary": True, "verified": True}
-        ]
+        mock_email_response.json.return_value = [{"email": "test@example.com", "primary": True, "verified": True}]
         mock_email_response.raise_for_status = Mock()
 
         with patch("httpx.AsyncClient") as mock_client_class:
@@ -667,7 +663,9 @@ class TestTokenExchange:
         redirect_uri = "http://localhost:8000/auth/callback/github"
 
         mock_response = Mock()
-        mock_response.raise_for_status = Mock(side_effect=httpx.HTTPStatusError("Bad Request", request=Mock(), response=Mock()))
+        mock_response.raise_for_status = Mock(
+            side_effect=httpx.HTTPStatusError("Bad Request", request=Mock(), response=Mock())
+        )
 
         with patch("httpx.AsyncClient") as mock_client_class:
             mock_client = AsyncMock()
