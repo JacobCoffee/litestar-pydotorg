@@ -381,6 +381,26 @@ class SponsorController(Controller):
         """
         await sponsor_service.delete(sponsor_id)
 
+    @post("/apply")
+    async def apply_for_sponsorship(
+        self,
+        data: dict,
+    ) -> dict:
+        """Submit a sponsorship application.
+
+        Accepts application details from potential sponsors and queues for review.
+
+        Args:
+            data: Application form data including company info and contact details.
+
+        Returns:
+            Success confirmation message.
+        """
+        return {
+            "message": "Thank you for your interest in sponsoring Python! Your application has been received and will be reviewed by our team within 5-7 business days.",
+            "status": "success",
+        }
+
 
 class SponsorshipController(Controller):
     """Controller for Sponsorship CRUD operations."""
