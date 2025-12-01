@@ -9,6 +9,7 @@ from uuid import UUID
 
 from saq import CronJob
 from sqlalchemy import select
+from sqlalchemy.orm import selectinload
 
 from pydotorg.config import settings
 from pydotorg.core.search.schemas import BlogDocument, EventDocument, JobDocument, PageDocument
@@ -219,7 +220,15 @@ async def index_all_events(ctx: dict[str, Any]) -> dict[str, Any]:
         async with session_maker() as session:
             session: AsyncSession
 
-            stmt = select(Event).order_by(Event.created_at.desc())
+            stmt = (
+                select(Event)
+                .options(
+                    selectinload(Event.occurrences),
+                    selectinload(Event.venue),
+                    selectinload(Event.categories),
+                )
+                .order_by(Event.created_at.desc())
+            )
             result = await session.execute(stmt)
             events = result.scalars().all()
 
@@ -289,7 +298,15 @@ async def index_event(ctx: dict[str, Any], *, event_id: str) -> dict[str, Any]:
         async with session_maker() as session:
             session: AsyncSession
 
-            stmt = select(Event).where(Event.id == UUID(event_id))
+            stmt = (
+                select(Event)
+                .where(Event.id == UUID(event_id))
+                .options(
+                    selectinload(Event.occurrences),
+                    selectinload(Event.venue),
+                    selectinload(Event.categories),
+                )
+            )
             result = await session.execute(stmt)
             event = result.scalar_one_or_none()
 
