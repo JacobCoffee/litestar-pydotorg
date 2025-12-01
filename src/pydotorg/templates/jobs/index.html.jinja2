@@ -128,9 +128,13 @@
                                     Apply Filters
                                 </button>
 
-                                <a href="/jobs" class="btn btn-ghost btn-sm btn-block">
+                                <button type="button"
+                                        hx-get="/jobs"
+                                        hx-target="#job-results"
+                                        hx-swap="outerHTML"
+                                        class="btn btn-ghost btn-sm btn-block">
                                     Clear All
-                                </a>
+                                </button>
                             </div>
                         </form>
 
