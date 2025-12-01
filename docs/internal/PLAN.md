@@ -1808,6 +1808,7 @@ tests/
 | **`/events` filters don't filter** | `/events` | MEDIUM | Filter UI exists but doesn't filter event listings. Backend filtering not wired up. |
 | **`/admin/jobs` preview modal UX** | `/admin/jobs` | LOW | Modal needs UI/UX redesign - "Location: NoneRemote" bug, plain text layout, no markdown rendering, better visual hierarchy needed. |
 | ~~**`/admin/email/logs` view button**~~ | `/admin/email/logs` | ~~HIGH~~ FIXED | ~~UndefinedError: `EmailLog` has no attribute `created`. Wrong field name.~~ **Fixed (2025-12-01)**: Changed to `created_at` and `updated_at` (from AuditBase). |
+| **`/admin/email/logs` filters don't work** | `/admin/email/logs` | HIGH | Both "Filters" bar and quick-filter buttons below do nothing. Filter form and button handlers not wired up. |
 | ~~**`/admin/blogs` close button on modal**~~ | `/admin/blogs` | ~~HIGH~~ FIXED | ~~HTTP 405 Method Not Allowed. Missing POST handler for modal dismiss.~~ **Fixed (2025-12-01)**: Changed to onclick JavaScript handler. |
 | ~~**`/admin/blogs` feed detail shows "No entries found"**~~ | `/admin/blogs` | ~~HIGH~~ FIXED | ~~Shows "No entries found" for ALL feeds even though entries exist. Query broken.~~ **Fixed (2025-12-01)**: Template referenced `entries` but service loads them as `feed.entries`. Changed template to use `feed.entries`. |
 | ~~**`/admin/pages` close button on modal**~~ | `/admin/pages` | ~~HIGH~~ FIXED | ~~HTTP 405 Method Not Allowed. Missing POST handler.~~ **Fixed (2025-12-01)**: Changed to onclick JavaScript handler. |
