@@ -1,0 +1,41 @@
+{% macro strip_markdown(text, length=150) %}
+{%- set stripped = text | replace('#', '') | replace('*', '') | replace('_', '') | replace('[', '') | replace(']', '') | replace('(', '') | replace(')', '') | replace('`', '') -%}
+{%- set cleaned = stripped | replace('\n', ' ') | replace('  ', ' ') | trim -%}
+{{ cleaned[:length] }}{% if cleaned|length > length %}...{% endif %}
+{%- endmacro %}
+
+{% macro category_color(category_name) %}
+{%- if category_name.lower() in ['education', 'academic', 'science', 'research'] -%}
+from-green-500 to-emerald-600
+{%- elif category_name.lower() in ['business', 'finance', 'enterprise', 'corporate'] -%}
+from-blue-500 to-indigo-600
+{%- elif category_name.lower() in ['arts', 'entertainment', 'media', 'creative'] -%}
+from-purple-500 to-pink-600
+{%- elif category_name.lower() in ['government', 'public', 'civic'] -%}
+from-red-500 to-orange-600
+{%- elif category_name.lower() in ['technology', 'software', 'engineering'] -%}
+from-cyan-500 to-blue-600
+{%- elif category_name.lower() in ['healthcare', 'medical', 'health'] -%}
+from-teal-500 to-green-600
+{%- else -%}
+from-gray-500 to-slate-600
+{%- endif -%}
+{%- endmacro %}
+
+{% macro category_badge_color(category_name) %}
+{%- if category_name.lower() in ['education', 'academic', 'science', 'research'] -%}
+badge-success
+{%- elif category_name.lower() in ['business', 'finance', 'enterprise', 'corporate'] -%}
+badge-info
+{%- elif category_name.lower() in ['arts', 'entertainment', 'media', 'creative'] -%}
+badge-secondary
+{%- elif category_name.lower() in ['government', 'public', 'civic'] -%}
+badge-error
+{%- elif category_name.lower() in ['technology', 'software', 'engineering'] -%}
+badge-primary
+{%- elif category_name.lower() in ['healthcare', 'medical', 'health'] -%}
+badge-accent
+{%- else -%}
+badge-neutral
+{%- endif -%}
+{%- endmacro %}

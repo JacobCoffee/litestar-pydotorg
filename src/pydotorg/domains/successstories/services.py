@@ -83,3 +83,16 @@ class StoryService(SQLAlchemyAsyncRepositoryService[Story]):
             List of stories.
         """
         return await self.repository.get_by_category_id(category_id, limit=limit, offset=offset)
+
+    async def get_related_stories(self, story_id: UUID, category_id: UUID, limit: int = 3) -> list[Story]:
+        """Get related stories from the same category.
+
+        Args:
+            story_id: The story ID to exclude.
+            category_id: The category ID to search for.
+            limit: Maximum number of stories to return.
+
+        Returns:
+            List of related stories.
+        """
+        return await self.repository.get_related_stories(story_id, category_id, limit=limit)

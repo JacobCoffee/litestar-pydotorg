@@ -235,10 +235,17 @@ class SuccessStoriesPageController(Controller):
         if not story:
             raise NotFoundException(f"Story with slug {slug} not found")
 
+        related_stories = await story_service.get_related_stories(
+            story_id=story.id,
+            category_id=story.category_id,
+            limit=3,
+        )
+
         return Template(
             template_name="successstories/detail.html.jinja2",
             context={
                 "story": story,
+                "related_stories": related_stories,
                 "page_title": story.name,
             },
         )

@@ -108,3 +108,27 @@ class StoryRepository(SQLAlchemyAsyncRepository[Story]):
         )
         result = await self.session.execute(statement)
         return list(result.scalars().all())
+
+    async def get_related_stories(self, story_id: UUID, category_id: UUID, limit: int = 3) -> list[Story]:
+        """Get related stories from the same category.
+
+        Args:
+            story_id: The story ID to exclude.
+            category_id: The category ID to search for.
+            limit: Maximum number of stories to return.
+
+        Returns:
+            List of related stories ordered by created_at descending.
+        """
+        statement = (
+            select(Story)
+            .where(
+                Story.category_id == category_id,
+                Story.is_published.is_(True),
+                Story.id != story_id,
+            )
+            .order_by(Story.created_at.desc())
+            .limit(limit)
+        )
+        result = await self.session.execute(statement)
+        return list(result.scalars().all())
