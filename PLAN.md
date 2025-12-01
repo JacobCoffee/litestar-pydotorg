@@ -74,6 +74,33 @@
 - [ ] Review Litestar's `OpenAPIConfig` for multiple spec generation
 - [ ] Consider `include_in_schema` per security level vs per route
 
+### Page Implementations
+
+#### About Section
+- [ ] **`/about/help`** - FAQ/Help page with common questions, getting started resources
+- [ ] **`/about/apps`** - Python applications showcase (notable apps built with Python)
+- [ ] **`/about/quotes`** - Testimonials and quotes from Python users/companies
+- [ ] **`/about/gettingstarted`** - Beginner's guide to Python, installation, first steps
+- [ ] **`/about/legal`** - Legal information, trademarks, licensing
+
+#### Downloads Section
+- [ ] **`/downloads/alternatives`** - Alternative Python implementations (PyPy, Jython, IronPython, etc.)
+- [ ] **`/downloads/other`** - Other download resources (source tarballs, older versions, etc.)
+
+#### Community Section
+- [ ] **`/community/irc`** - IRC channels information (#python, #python-dev, etc.)
+- [ ] **`/community/forums`** - Python forums (Discourse, Reddit, etc.)
+- [ ] **`/community/lists`** - Mailing lists directory (python-list, python-dev, python-ideas, etc.)
+
+#### PSF Section
+- [ ] **`/psf/about`** - About the Python Software Foundation
+- [ ] **`/psf/conduct`** - Code of Conduct (community guidelines, reporting)
+- [ ] **`/psf/get-involved`** - How to contribute to Python/PSF
+  - Interactive Annual Impact Report
+  - Volunteer opportunities
+  - Working groups
+  - Sponsorship tiers
+
 ---
 
 ## Known Issues / Bugs
@@ -91,9 +118,8 @@
 | **`/blogs` sidebar feed filters** | `/blogs` | Clicking feed links refreshes page instead of filtering. |
 | **`/events` filters don't filter** | `/events` | Filter UI exists but doesn't filter listings. |
 | **`/psf/membership` not implemented** | `/psf/membership` | Shows "not available yet". |
-| **`/about/help` (FAQs) not implemented** | `/about/help` | Shows "not available yet". |
 | **`/community/workshops` not implemented** | `/community/workshops` | Shows "not available yet". |
-| **Feature: Sitewide announcement banner** | Sitewide | Need dismissible banner system. |
+| ~~**Feature: Sitewide announcement banner**~~ | ~~Sitewide~~ | ✅ **DONE**: Full banner system with targeting (`frontend`/`api`), path filtering, toast notifications. Admin UI at `/admin/banners`. API banners via `X-API-Notice` header. Persists across HTMX navigation. |
 | **Feature: Featured jobs** | `/jobs`, `/admin/jobs` | Add `is_featured` field, admin toggle, featured section. |
 | **Feature: Featured blog entries** | `/blogs`, `/admin/blogs` | Add `is_featured` field, admin toggle, featured section. |
 
