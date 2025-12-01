@@ -868,6 +868,7 @@ dependencies = [
     { name = "itsdangerous" },
     { name = "litestar", extra = ["jinja", "standard", "structlog"] },
     { name = "litestar-saq" },
+    { name = "litestar-vite" },
     { name = "lxml" },
     { name = "meilisearch-python-sdk" },
     { name = "passlib", extra = ["bcrypt"] },
@@ -966,6 +967,7 @@ requires-dist = [
     { name = "itsdangerous", specifier = ">=2.2.0" },
     { name = "litestar", extras = ["standard", "jinja", "structlog"], specifier = ">=2.14.0" },
     { name = "litestar-saq", specifier = ">=0.5.3" },
+    { name = "litestar-vite", specifier = ">=0.14.0" },
     { name = "lxml", specifier = ">=5.3.0" },
     { name = "meilisearch-python-sdk", specifier = ">=5.5.0" },
     { name = "passlib", extras = ["bcrypt"], specifier = ">=1.7.4" },
@@ -1058,6 +1060,18 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/26/54/e48f1f656524a7ad8debda010ff87122428a326ed0332faeb322a592aa55/litestar_saq-0.5.3.tar.gz", hash = "sha256:f2e7bcf04443ecc703c2067c0539418c5553251f4a63d02c847601738ddeffcd", size = 149224, upload-time = "2025-05-05T14:54:31.538Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/6d/a2/2fa625897b593edc7d20a55ddfb6890ce02f983d1815fe20c790fb3ad2b2/litestar_saq-0.5.3-py3-none-any.whl", hash = "sha256:9b943867e1359a6d347ea1276788de58cb5cbb19216ae4655dde8e6d6a2770d9", size = 16107, upload-time = "2025-05-05T14:54:30.185Z" },
+]
+
+[[package]]
+name = "litestar-vite"
+version = "0.14.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "litestar" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/dc/64/20ab075abf8888f0369d22cfb119b9d1b67d4fb2b029d584d57a9a6cec88/litestar_vite-0.14.0.tar.gz", hash = "sha256:6da449fb346a9200b912454d94ac76e691f19b2a2d56b4c8a8e80845775d2a40", size = 73906, upload-time = "2025-08-21T22:51:31.708Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/4b/61/0a7e1e51cd98f44fbd7c940b384e47f911c99c52140a750a40900b5e4217/litestar_vite-0.14.0-py3-none-any.whl", hash = "sha256:d6e3e4f0dff5c96a61345c72669041fefd8d0db26ab25041034a19185431c562", size = 35781, upload-time = "2025-08-21T22:51:30.041Z" },
 ]
 
 [[package]]
