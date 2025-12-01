@@ -899,7 +899,7 @@ async def seed_releases(
         status: ReleaseStatus,
         release_notes_url: str,
     ) -> str:
-        """Generate release notes content for a Python version."""
+        """Generate release notes content in Markdown for a Python version."""
         parts = version_name.split(".")
         major = parts[0]
         minor = parts[1] if len(parts) > 1 else "0"
@@ -908,118 +908,140 @@ async def seed_releases(
 
         # Special content for Python 3.14.0
         if version_name == "3.14.0":
-            return """<p><img width="538" height="507" src="https://hugovk.dev/python-3.14.png" alt="Two snakes enjoying a pie with 3.14 on the top and π crimping"></p>
+            return """<img width="538" height="507" src="https://hugovk.dev/python-3.14.png" alt="Two snakes enjoying a pie with 3.14 on the top and π crimping">
 
-<h2>This is the stable release of Python 3.14.0</h2>
-<p>Python 3.14.0 is the newest major release of the Python programming language, and it contains many new features and optimizations compared to Python 3.13.</p>
+# This is the stable release of Python 3.14.0
 
-<h2>Major new features of the 3.14 series, compared to 3.13</h2>
-<p>Some of the major new features and changes in Python 3.14 are:</p>
+Python 3.14.0 is the newest major release of the Python programming language, and it contains many new features and optimisations compared to Python 3.13.
 
-<h3>New features</h3>
-<ul>
-    <li><a href="https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-pep779" class="python-link">PEP 779</a>: Free-threaded Python is officially supported</li>
-    <li><a href="https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-pep649" class="python-link">PEP 649</a>: The evaluation of annotations is now deferred, improving the semantics of using annotations.</li>
-    <li><a href="https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-pep750" class="python-link">PEP 750</a>: Template string literals (t-strings) for custom string processing, using the familiar syntax of f-strings.</li>
-    <li><a href="https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-pep734" class="python-link">PEP 734</a>: Multiple interpreters in the stdlib.</li>
-    <li><a href="https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-pep784" class="python-link">PEP 784</a>: A new module <code>compression.zstd</code> providing support for the Zstandard compression algorithm.</li>
-    <li><a href="https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-pep758" class="python-link">PEP 758</a>: <code>except</code> and <code>except*</code> expressions may now omit the brackets.</li>
-    <li><a href="https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-pyrepl-highlighting" class="python-link">Syntax highlighting in PyREPL</a>, and support for color in unittest, argparse, json and calendar CLIs.</li>
-    <li><a href="https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-pep768" class="python-link">PEP 768</a>: A zero-overhead external debugger interface for CPython.</li>
-    <li><a href="https://docs.python.org/3.14/whatsnew/3.14.html#uuid" class="python-link">UUID versions 6-8</a> are now supported by the <code>uuid</code> module, and generation of versions 3-5 are up to 40% faster.</li>
-    <li><a href="https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-pep765" class="python-link">PEP 765</a>: Disallow <code>return</code>/<code>break</code>/<code>continue</code> that exit a <code>finally</code> block.</li>
-    <li><a href="https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-pep741" class="python-link">PEP 741</a>: An improved C API for configuring Python.</li>
-    <li>A <a href="https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-tail-call" class="python-link">new type of interpreter</a>. For certain newer compilers, this interpreter provides significantly better performance.</li>
-    <li><a href="https://docs.python.org/3.14/whatsnew/3.14.html#improved-error-messages" class="python-link">Improved error messages.</a></li>
-    <li><a href="https://docs.python.org/3.14/whatsnew/3.14.html#hmac" class="python-link">Builtin implementation of HMAC</a> with formally verified code from the HACL* project.</li>
-    <li>A <a href="https://docs.python.org/3.14/whatsnew/3.14.html#asyncio-introspection-capabilities" class="python-link">new command-line interface</a> to inspect running Python processes using asynchronous tasks.</li>
-    <li>The pdb module now supports <a href="https://docs.python.org/3.14/whatsnew/3.14.html#remote-attaching-to-a-running-python-process-with-pdb" class="python-link">remote attaching to a running Python process</a>.</li>
-</ul>
 
-<p>For more details on the changes to Python 3.14, see <a href="https://docs.python.org/3.14/whatsnew/3.14.html" class="python-link">What's new in Python 3.14</a>.</p>
+# Major new features of the 3.14 series, compared to 3.13
 
-<h3>Build changes</h3>
-<ul>
-    <li><a href="https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-pep761" class="python-link">PEP 761</a>: Python 3.14 and onwards no longer provides PGP signatures for release artifacts. Instead, Sigstore is recommended for verifiers.</li>
-    <li>Official macOS and Windows release binaries include an <a href="https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-jit-compiler" class="python-link"><em>experimental</em> JIT compiler</a>.</li>
-    <li>Official <a href="https://github.com/python/cpython/issues/137242" class="python-link">Android binary releases</a> are now available.</li>
-</ul>
+Some of the major new features and changes in Python 3.14 are:
 
-<h3>Incompatible changes, removals and new deprecations</h3>
-<ul>
-    <li><a href="https://docs.python.org/3.14/whatsnew/3.14.html#incompatible-changes" class="python-link">Incompatible changes</a></li>
-    <li>Python <a href="https://docs.python.org/3.14/whatsnew/3.14.html#removed" class="python-link">removals</a> and <a href="https://docs.python.org/3.14/whatsnew/3.14.html#deprecated" class="python-link">deprecations</a></li>
-    <li>C API <a href="https://docs.python.org/3.14/whatsnew/3.14.html#c-api-removed" class="python-link">removals</a> and <a href="https://docs.python.org/3.14/whatsnew/3.14.html#c-api-deprecated" class="python-link">deprecations</a></li>
-    <li>Overview of all <a href="https://docs.python.org/3.14/deprecations/index.html" class="python-link">pending deprecations</a></li>
-</ul>
+## New features
 
-<h2>Python install manager</h2>
-<p>The installer we offer for Windows is being replaced by our new install manager, which can be installed from <a href="https://apps.microsoft.com/detail/9NQ7512CXL7T" class="python-link">the Windows Store</a> or from its <a href="https://www.python.org/downloads/latest/pymanager/" class="python-link">download page</a>. See <a href="https://docs.python.org/3.14/using/windows.html" class="python-link">our documentation</a> for more information.</p>
+- [PEP 779](https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-pep779):  Free-threaded Python is officially supported
+- [PEP 649](https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-pep649): The evaluation of annotations is now deferred, improving the semantics of using annotations.
+- [PEP 750](https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-pep750): Template string literals (t-strings) for custom string processing, using the familiar syntax of f-strings.
+- [PEP 734](https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-pep734): Multiple interpreters in the stdlib.
+- [PEP 784](https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-pep784): A new module `compression.zstd` providing support for the Zstandard compression algorithm.
+- [PEP 758](https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-pep758): `except` and `except*` expressions may now omit the brackets.
+- [Syntax highlighting in PyREPL](https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-pyrepl-highlighting), and support for color in [unittest](https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-color-unittest), [argparse](https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-color-argparse), [json](https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-color-json) and [calendar](https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-color-calendar) CLIs.
+- [PEP 768](https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-pep768): A zero-overhead external debugger interface for CPython.
+- [UUID versions 6-8](https://docs.python.org/3.14/whatsnew/3.14.html#uuid) are now supported by the `uuid` module, and generation of versions 3-5 are up to 40% faster.
+- [PEP 765](https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-pep765): Disallow `return`/`break`/`continue` that exit a `finally` block.
+- [PEP 741](https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-pep741): An improved C API for configuring Python.
+- A [new type of interpreter](https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-tail-call). For certain newer compilers, this interpreter provides significantly better performance. Opt-in for now, requires building from source.
+- [Improved error messages.](https://docs.python.org/3.14/whatsnew/3.14.html#improved-error-messages)
+- [Builtin implementation of HMAC](https://docs.python.org/3.14/whatsnew/3.14.html#hmac) with formally verified code from the HACL* project.
+- A [new command-line interface](https://docs.python.org/3.14/whatsnew/3.14.html#asyncio-introspection-capabilities) to inspect running Python processes using asynchronous tasks.
+- The pdb module now supports [remote attaching to a running Python process](https://docs.python.org/3.14/whatsnew/3.14.html#remote-attaching-to-a-running-python-process-with-pdb).
 
-<h2>More resources</h2>
-<ul>
-    <li><a href="https://docs.python.org/3.14/" class="python-link">Online documentation</a></li>
-    <li><a href="https://peps.python.org/pep-0745/" class="python-link">PEP 745</a>, 3.14 Release Schedule</li>
-    <li>Report bugs at <a href="https://github.com/python/cpython/issues" class="python-link">github.com/python/cpython/issues</a></li>
-    <li><a href="https://www.python.org/psf/donations/python-dev/" class="python-link">Help fund Python directly</a> (or via <a href="https://github.com/sponsors/python" class="python-link">GitHub Sponsors</a>) and support <a href="https://www.python.org/psf/donations/" class="python-link">the Python community</a></li>
-</ul>
+For more details on the changes to Python 3.14, see [What's new in Python 3.14](https://docs.python.org/3.14/whatsnew/3.14.html).
 
-<h2>Enjoy the new release</h2>
-<p>Thanks to all of the many volunteers who help make Python Development and these releases possible! Please consider supporting our efforts by volunteering yourself or through organisation contributions to the <a href="https://www.python.org/psf-landing/" class="python-link">Python Software Foundation</a>.</p>
 
-<p><a href="https://docs.python.org/3.14/whatsnew/3.14.html" class="python-link">Full Changelog</a></p>"""
+## Build changes
+
+- [PEP 761](https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-pep761): Python 3.14 and onwards no longer provides PGP signatures for release artifacts. Instead, Sigstore is recommended for verifiers.
+- Official macOS and Windows release binaries include an [*experimental* JIT compiler](https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-jit-compiler).
+- Official [Android binary releases](https://github.com/python/cpython/issues/137242) are now available.
+
+
+## Incompatible changes, removals and new deprecations
+
+- [Incompatible changes](https://docs.python.org/3.14/whatsnew/3.14.html#incompatible-changes)
+- Python [removals](https://docs.python.org/3.14/whatsnew/3.14.html#removed) and [deprecations](https://docs.python.org/3.14/whatsnew/3.14.html#deprecated)
+- C API [removals](https://docs.python.org/3.14/whatsnew/3.14.html#c-api-removed) and [deprecations](https://docs.python.org/3.14/whatsnew/3.14.html#c-api-deprecated)
+- Overview of all [pending deprecations](https://docs.python.org/3.14/deprecations/index.html)
+
+# Python install manager
+
+The installer we offer for Windows is being replaced by our new install manager, which can be installed from [the Windows Store](https://apps.microsoft.com/detail/9NQ7512CXL7T) or from its [download page](https://www.python.org/downloads/latest/pymanager/). See [our documentation](https://docs.python.org/3.14/using/windows.html) for more information. The JSON file available for download below contains the list of all the installable packages available as part of this release, including file URLs and hashes, but is not required to install the latest release. The traditional installer will remain available throughout the 3.14 and 3.15 releases.
+
+
+# More resources
+
+- [Online documentation](https://docs.python.org/3.14/)
+- [PEP 745](https://peps.python.org/pep-0745/), 3.14 Release Schedule
+- Report bugs at [github.com/python/cpython/issues](https://github.com/python/cpython/issues)
+- [Help fund Python directly](https://www.python.org/psf/donations/python-dev/) (or via [GitHub Sponsors](https://github.com/sponsors/python)) and support [the Python community](https://www.python.org/psf/donations/)
+
+
+
+# And now for something completely different
+
+Edgar Allen Poe died on 7th October 1849.
+
+As we all recall from [3.14.0a1](https://discuss.python.org/t/python-3-14-0-alpha-1/68039#p-199032-and-now-for-something-completely-different-3), piphilology is the creation of mnemonics to help memorise the digits of *π*, and the number of letters in each word in a pi-poem (or "piem") successively correspond to the digits of *π*.
+
+In 1995, Mike Keith, an American mathematician and author of constrained writing, retold Poe's *The Raven* as a 740-word piem. Here's the first two stanzas of [*Near A Raven*](http://www.cadaeic.net/naraven.htm):
+
+> **Poe, E.**
+> **Near a Raven**
+>
+> Midnights so dreary, tired and weary.
+> Silently pondering volumes extolling all by-now obsolete lore.
+> During my rather long nap - the weirdest tap!
+> An ominous vibrating sound disturbing my chamber's antedoor.
+> "This", I whispered quietly, "I ignore".
+>
+> Perfectly, the intellect remembers: the ghostly fires, a glittering ember.
+> Inflamed by lightning's outbursts, windows cast penumbras upon this floor.
+> Sorrowful, as one mistreated, unhappy thoughts I heeded:
+> That inimitable lesson in elegance - Lenore -
+> Is delighting, exciting...nevermore.
+
+
+# Enjoy the new release
+
+Thanks to all of the many volunteers who help make Python Development and these releases possible! Please consider supporting our efforts by volunteering yourself or through organisation contributions to the [Python Software Foundation](https://www.python.org/psf-landing/)."""
 
         status_text = {
-            ReleaseStatus.PRERELEASE: "This is a <strong>pre-release</strong> version for testing purposes.",
-            ReleaseStatus.BUGFIX: "This is an <strong>active bugfix</strong> release receiving regular updates.",
-            ReleaseStatus.SECURITY: "This release branch receives <strong>security fixes only</strong>.",
-            ReleaseStatus.EOL: "This release has reached <strong>end of life</strong> and no longer receives updates.",
+            ReleaseStatus.PRERELEASE: "This is a **pre-release** version for testing purposes.",
+            ReleaseStatus.BUGFIX: "This is an **active bugfix** release receiving regular updates.",
+            ReleaseStatus.SECURITY: "This release branch receives **security fixes only**.",
+            ReleaseStatus.EOL: "This release has reached **end of life** and no longer receives updates.",
         }.get(status, "")
 
         if python_version == PythonVersion.PYTHON3:
-            content = f"""<p>Python {version_name} is a {"patch" if int(patch) > 0 else "feature"} release of the Python {minor_version} series.</p>
+            content = f"""Python {version_name} is a {"patch" if int(patch) > 0 else "feature"} release of the Python {minor_version} series.
 
-<p>{status_text}</p>
+{status_text}
 
-<h3>Highlights</h3>
-<ul>
-    <li>Improved performance and stability</li>
-    <li>Bug fixes and security updates</li>
-    <li>Enhanced standard library modules</li>
-</ul>
+## Highlights
 
-<p>For the complete list of changes, see the <a href="{release_notes_url}" class="python-link" target="_blank" rel="noopener">What's New in Python {minor_version}</a> documentation.</p>
+- Improved performance and stability
+- Bug fixes and security updates
+- Enhanced standard library modules
 
-<p>Full changelog available in the <a href="https://docs.python.org/{minor_version}/whatsnew/changelog.html" class="python-link" target="_blank" rel="noopener">Python {minor_version} Changelog</a>.</p>"""
+For the complete list of changes, see the [What's New in Python {minor_version}]({release_notes_url}) documentation.
+
+Full changelog available in the [Python {minor_version} Changelog](https://docs.python.org/{minor_version}/whatsnew/changelog.html)."""
 
         elif python_version == PythonVersion.PYTHON2:
-            content = f"""<p>Python {version_name} is part of the Python 2 series, which has reached end of life.</p>
+            content = f"""Python {version_name} is part of the Python 2 series, which has reached end of life.
 
-<div class="alert alert-warning my-4">
-    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-    </svg>
-    <span><strong>Python 2 has reached end of life.</strong> Please upgrade to Python 3.</span>
-</div>
+> ⚠️ **Python 2 has reached end of life.** Please upgrade to Python 3.
 
-<p>For historical documentation, see the <a href="{release_notes_url}" class="python-link" target="_blank" rel="noopener">What's New in Python {minor_version}</a>.</p>"""
+For historical documentation, see the [What's New in Python {minor_version}]({release_notes_url})."""
 
         elif python_version == PythonVersion.PYTHON1:
             if version_name.startswith("0."):
-                content = f"""<p>Python {version_name} is one of the earliest releases of Python, created by Guido van Rossum.</p>
+                content = f"""Python {version_name} is one of the earliest releases of Python, created by Guido van Rossum.
 
-<p>These early versions laid the foundation for the Python language we know today.</p>
+These early versions laid the foundation for the Python language we know today.
 
-<p>For historical information about early Python releases, see the <a href="{release_notes_url}" class="python-link" target="_blank" rel="noopener">early releases archive</a>.</p>"""
+For historical information about early Python releases, see the [early releases archive]({release_notes_url})."""
             else:
-                content = f"""<p>Python {version_name} is part of the Python 1.x series, the first major version of Python.</p>
+                content = f"""Python {version_name} is part of the Python 1.x series, the first major version of Python.
 
-<p>For historical documentation, see the <a href="{release_notes_url}" class="python-link" target="_blank" rel="noopener">Python {minor_version} release notes</a>.</p>"""
+For historical documentation, see the [Python {minor_version} release notes]({release_notes_url})."""
 
         else:
-            content = f"""<p>Python {version_name} release.</p>
+            content = f"""Python {version_name} release.
 
-<p>See the <a href="{release_notes_url}" class="python-link" target="_blank" rel="noopener">release notes</a> for details.</p>"""
+See the [release notes]({release_notes_url}) for details."""
 
         return content
 

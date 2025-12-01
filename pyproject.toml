@@ -17,7 +17,7 @@ classifiers = [
 ]
 dependencies = [
     "litestar[standard,jinja,structlog]>=2.14.0",
-    "advanced-alchemy>=0.31.0",
+    "advanced-alchemy[cli]>=0.31.0",
     "sqlalchemy[asyncio]>=2.0.36",
     "asyncpg>=0.30.0",
     "alembic>=1.14.0",
