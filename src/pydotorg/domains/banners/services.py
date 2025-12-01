@@ -29,6 +29,39 @@ class BannerService(SQLAlchemyAsyncRepositoryService[Banner]):
         """
         return await self.repository.get_active_banners(current_date=current_date)
 
+    async def get_sitewide_banners(self, current_date: datetime.date | None = None) -> list[Banner]:
+        """Get active sitewide banners.
+
+        Args:
+            current_date: The date to check against. If None, only checks is_active flag.
+
+        Returns:
+            List of active sitewide banners.
+        """
+        return await self.repository.get_sitewide_banners(current_date=current_date)
+
+    async def get_frontend_banners(self, current_date: datetime.date | None = None) -> list[Banner]:
+        """Get active banners for frontend pages.
+
+        Args:
+            current_date: The date to check against. If None, only checks is_active flag.
+
+        Returns:
+            List of active frontend banners.
+        """
+        return await self.repository.get_frontend_banners(current_date=current_date)
+
+    async def get_api_banners(self, current_date: datetime.date | None = None) -> list[Banner]:
+        """Get active banners for API routes.
+
+        Args:
+            current_date: The date to check against. If None, only checks is_active flag.
+
+        Returns:
+            List of active API banners.
+        """
+        return await self.repository.get_api_banners(current_date=current_date)
+
     async def get_by_name(self, name: str) -> Banner | None:
         """Get a banner by name.
 
