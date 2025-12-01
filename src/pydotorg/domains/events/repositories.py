@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 
 from advanced_alchemy.repository import SQLAlchemyAsyncRepository
 from sqlalchemy import and_, select
+from sqlalchemy.orm import selectinload
 
 from pydotorg.domains.events.models import Calendar, Event, EventCategory, EventLocation, EventOccurrence
 
@@ -126,7 +127,15 @@ class EventRepository(SQLAlchemyAsyncRepository[Event]):
         Returns:
             List of featured events.
         """
-        statement = select(Event).where(Event.featured.is_(True))
+        statement = (
+            select(Event)
+            .where(Event.featured.is_(True))
+            .options(
+                selectinload(Event.occurrences),
+                selectinload(Event.venue),
+                selectinload(Event.categories),
+            )
+        )
 
         if calendar_id:
             statement = statement.where(Event.calendar_id == calendar_id)
@@ -165,7 +174,15 @@ class EventRepository(SQLAlchemyAsyncRepository[Event]):
         Returns:
             List of upcoming events.
         """
-        statement = select(Event).join(Event.occurrences)
+        statement = (
+            select(Event)
+            .join(Event.occurrences)
+            .options(
+                selectinload(Event.occurrences),
+                selectinload(Event.venue),
+                selectinload(Event.categories),
+            )
+        )
 
         conditions = []
         if start_date:
