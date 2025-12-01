@@ -1796,7 +1796,7 @@ tests/
 | **Close modal button on `/admin/events`** | `/admin/events` | HIGH | Triggers HTTP 405; route only has OPTIONS and GET handlers. |
 | **`/admin/events` default sort order** | `/admin/events` | LOW | Currently sorts oldest first; should sort by newest first. |
 | **Next button pagination on `/admin/events`** | `/admin/events` | HIGH | ValidationException 400 - empty string query params fail validation; should handle empty strings as None. |
-| ~~**`/events/submit` form submission**~~ | `/events/submit` | ~~HIGH~~ FIXED | ~~ClientException 400 "JSON is malformed" - form data sent as form-encoded but endpoint expects JSON.~~ **Fixed**: Form already has proper JavaScript handler with `fetch()` and `JSON.stringify()`. |
+| ~~**`/events/submit` form submission**~~ | `/events/submit` | ~~HIGH~~ FIXED | ~~ClientException 400 "JSON is malformed" - form data sent as form-encoded but endpoint expects JSON.~~ **Fixed**: Form has proper JS handler. See toast issue below. |
 | ~~**`/jobs/submit` preview button**~~ | `/jobs/submit` | ~~HIGH~~ FIXED | ~~HTTP 405 Method Not Allowed on `/jobs/preview`. Route missing POST handler.~~ **Fixed**: Route exists at `@post("/preview")` in JobRenderController, template exists at `jobs/partials/preview.html.jinja2`. |
 | ~~**`/jobs/submit` submit button**~~ | `/jobs/submit` | ~~HIGH~~ FIXED | ~~ClientException 400 "JSON is malformed" - form data sent as form-encoded but endpoint expects JSON.~~ **Fixed (2025-12-01)**: Rewrote JavaScript form handler to properly map fields to API schema. |
 | **`/blogs` sidebar feed filters** | `/blogs` | MEDIUM | Clicking feed links just refreshes page instead of filtering. Filter functionality not implemented. |
