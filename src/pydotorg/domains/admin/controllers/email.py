@@ -428,7 +428,7 @@ class AdminEmailController(Controller):
         status: Annotated[str | None, Parameter(description="Filter by status")] = None,
         template: Annotated[str | None, Parameter(description="Filter by template")] = None,
         recipient: Annotated[str | None, Parameter(description="Filter by recipient")] = None,
-        time_range: Annotated[str | None, Parameter(description="Time range filter")] = "24h",
+        time_range: Annotated[str | None, Parameter(description="Time range filter")] = "all",
         limit: Annotated[int, Parameter(ge=1, le=100, description="Page size")] = 50,
         offset: Annotated[int, Parameter(ge=0, description="Offset")] = 0,
     ) -> Template:

@@ -72,10 +72,10 @@
                         <span class="label-text font-semibold">Time Range</span>
                     </label>
                     <select name="time_range" class="select select-bordered select-sm">
-                        <option value="24h" {% if request.query_params.get('time_range', '24h') == '24h' %}selected{% endif %}>Last 24 hours</option>
+                        <option value="all" {% if request.query_params.get('time_range', 'all') == 'all' %}selected{% endif %}>All time</option>
+                        <option value="24h" {% if request.query_params.get('time_range') == '24h' %}selected{% endif %}>Last 24 hours</option>
                         <option value="7d" {% if request.query_params.get('time_range') == '7d' %}selected{% endif %}>Last 7 days</option>
                         <option value="30d" {% if request.query_params.get('time_range') == '30d' %}selected{% endif %}>Last 30 days</option>
-                        <option value="all" {% if request.query_params.get('time_range') == 'all' %}selected{% endif %}>All time</option>
                     </select>
                 </div>
             </form>
