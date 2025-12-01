@@ -26,12 +26,14 @@ Example:
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Final
 
 if TYPE_CHECKING:
-    from saq import Job, Queue
+    from saq import Queue
 
 logger = logging.getLogger(__name__)
+
+DEFAULT_RETRIES: Final = 3
 
 
 def get_queue() -> Queue:
@@ -40,7 +42,7 @@ def get_queue() -> Queue:
     Returns:
         Configured SAQ Queue instance
     """
-    from pydotorg.tasks.worker import queue
+    from pydotorg.tasks.worker import queue  # noqa: PLC0415
 
     return queue
 
@@ -49,7 +51,7 @@ async def enqueue_task(
     task_name: str,
     *,
     timeout: int | None = None,
-    retries: int = 3,
+    retries: int = DEFAULT_RETRIES,
     **kwargs: Any,
 ) -> str | None:
     """Enqueue a background task by name.
@@ -100,7 +102,7 @@ async def enqueue_task(
         job_kwargs = kwargs.copy()
         if timeout:
             job_kwargs["timeout"] = timeout
-        if retries != 3:
+        if retries != DEFAULT_RETRIES:
             job_kwargs["retries"] = retries
 
         job = await queue.enqueue(task_name, **job_kwargs)
@@ -111,26 +113,21 @@ async def enqueue_task(
                 extra={"task_name": task_name, "kwargs": kwargs},
             )
             return None
-
-        logger.info(
-            "Task enqueued successfully",
-            extra={"task_name": task_name, "job_key": job.key},
-        )
-        return job.key
-
     except Exception:
         logger.exception(
             "Failed to enqueue task",
             extra={"task_name": task_name, "kwargs": kwargs},
         )
         return None
+    else:
+        return job.key
 
 
 async def enqueue_task_safe(
     task_name: str,
     *,
     timeout: int | None = None,
-    retries: int = 3,
+    retries: int = DEFAULT_RETRIES,
     **kwargs: Any,
 ) -> tuple[bool, str | None]:
     """Enqueue a task and return success status with optional job key.

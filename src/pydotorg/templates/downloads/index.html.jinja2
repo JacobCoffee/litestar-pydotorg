@@ -193,10 +193,14 @@
                                                 {% endif %}
                                             </td>
                                             <td>
-                                                {% if release.pre_release %}
+                                                {% if release.is_eol %}
+                                                    <span class="badge badge-error badge-sm">End of Life</span>
+                                                {% elif release.is_prerelease %}
                                                     <span class="badge badge-warning badge-sm">Pre-release</span>
+                                                {% elif release.status.value == 'security' %}
+                                                    <span class="badge badge-info badge-sm">Security</span>
                                                 {% else %}
-                                                    <span class="badge badge-success badge-sm">Stable</span>
+                                                    <span class="badge badge-success badge-sm">{{ release.status_label }}</span>
                                                 {% endif %}
                                             </td>
                                             <td>
@@ -241,6 +245,10 @@
                                                 </span>
                                                 {% if is_latest %}
                                                 <span class="badge badge-primary badge-sm">Latest</span>
+                                                {% elif releases[0].is_eol %}
+                                                <span class="badge badge-error badge-sm">EOL</span>
+                                                {% elif releases[0].status.value == 'security' %}
+                                                <span class="badge badge-info badge-sm">Security</span>
                                                 {% endif %}
                                             </div>
                                             <div class="text-sm text-base-content/60 flex items-center gap-2 flex-wrap mt-1">
@@ -294,10 +302,14 @@
                                                     {% endif %}
                                                 </td>
                                                 <td>
-                                                    {% if release.pre_release %}
+                                                    {% if release.is_eol %}
+                                                        <span class="badge badge-error badge-sm">End of Life</span>
+                                                    {% elif release.is_prerelease %}
                                                         <span class="badge badge-warning badge-sm">Pre-release</span>
+                                                    {% elif release.status.value == 'security' %}
+                                                        <span class="badge badge-info badge-sm">Security</span>
                                                     {% else %}
-                                                        <span class="badge badge-success badge-sm">Stable</span>
+                                                        <span class="badge badge-success badge-sm">{{ release.status_label }}</span>
                                                     {% endif %}
                                                 </td>
                                                 <td>

@@ -16,7 +16,7 @@ from pydotorg.domains.banners.models import Banner
 from pydotorg.domains.blogs.models import BlogEntry, Feed, FeedAggregate, RelatedBlog
 from pydotorg.domains.codesamples.models import CodeSample
 from pydotorg.domains.community.models import Link, Photo, Post, Video
-from pydotorg.domains.downloads.models import OS, Release, ReleaseFile
+from pydotorg.domains.downloads.models import OS, PythonVersion, Release, ReleaseFile, ReleaseStatus
 from pydotorg.domains.events.models import Calendar, Event, EventCategory, EventLocation, EventOccurrence
 from pydotorg.domains.jobs.models import Job, JobCategory, JobReviewComment, JobStatus, JobType
 from pydotorg.domains.minutes.models import Minutes
@@ -398,30 +398,75 @@ async def seed_releases(
     session: AsyncSession,
     users: list[User],
     os_list: list[OS],
-    count: int = 5,
+    count: int = 50,
 ) -> list[Release]:
-    """Seed Python releases."""
+    """Seed Python releases with accurate data from python.org."""
     releases = []
 
     release_data = [
-        ("3.13.0", True, False),
-        ("3.12.7", False, False),
-        ("3.11.10", False, False),
-        ("3.10.15", False, False),
-        ("3.14.0a1", False, True),
+        # Python 3.14 - Bugfix (latest)
+        ("3.14.0", datetime.date(2025, 10, 7), ReleaseStatus.BUGFIX, datetime.date(2030, 10, 31), True, False, PythonVersion.PYTHON3),
+        # Python 3.13 - Bugfix
+        ("3.13.9", datetime.date(2025, 10, 14), ReleaseStatus.BUGFIX, datetime.date(2029, 10, 31), False, False, PythonVersion.PYTHON3),
+        ("3.13.8", datetime.date(2025, 10, 7), ReleaseStatus.BUGFIX, datetime.date(2029, 10, 31), False, False, PythonVersion.PYTHON3),
+        ("3.13.7", datetime.date(2025, 8, 14), ReleaseStatus.BUGFIX, datetime.date(2029, 10, 31), False, False, PythonVersion.PYTHON3),
+        ("3.13.5", datetime.date(2025, 6, 11), ReleaseStatus.BUGFIX, datetime.date(2029, 10, 31), False, False, PythonVersion.PYTHON3),
+        ("3.13.3", datetime.date(2025, 4, 8), ReleaseStatus.BUGFIX, datetime.date(2029, 10, 31), False, False, PythonVersion.PYTHON3),
+        ("3.13.1", datetime.date(2024, 12, 3), ReleaseStatus.BUGFIX, datetime.date(2029, 10, 31), False, False, PythonVersion.PYTHON3),
+        ("3.13.0", datetime.date(2024, 10, 7), ReleaseStatus.BUGFIX, datetime.date(2029, 10, 31), False, False, PythonVersion.PYTHON3),
+        # Python 3.12 - Security
+        ("3.12.12", datetime.date(2025, 10, 9), ReleaseStatus.SECURITY, datetime.date(2028, 10, 31), False, False, PythonVersion.PYTHON3),
+        ("3.12.10", datetime.date(2025, 4, 8), ReleaseStatus.SECURITY, datetime.date(2028, 10, 31), False, False, PythonVersion.PYTHON3),
+        ("3.12.8", datetime.date(2024, 12, 3), ReleaseStatus.SECURITY, datetime.date(2028, 10, 31), False, False, PythonVersion.PYTHON3),
+        ("3.12.7", datetime.date(2024, 10, 1), ReleaseStatus.SECURITY, datetime.date(2028, 10, 31), False, False, PythonVersion.PYTHON3),
+        ("3.12.4", datetime.date(2024, 6, 6), ReleaseStatus.SECURITY, datetime.date(2028, 10, 31), False, False, PythonVersion.PYTHON3),
+        ("3.12.0", datetime.date(2023, 10, 2), ReleaseStatus.SECURITY, datetime.date(2028, 10, 31), False, False, PythonVersion.PYTHON3),
+        # Python 3.11 - Security
+        ("3.11.14", datetime.date(2025, 10, 9), ReleaseStatus.SECURITY, datetime.date(2027, 10, 31), False, False, PythonVersion.PYTHON3),
+        ("3.11.11", datetime.date(2024, 12, 3), ReleaseStatus.SECURITY, datetime.date(2027, 10, 31), False, False, PythonVersion.PYTHON3),
+        ("3.11.9", datetime.date(2024, 4, 2), ReleaseStatus.SECURITY, datetime.date(2027, 10, 31), False, False, PythonVersion.PYTHON3),
+        ("3.11.0", datetime.date(2022, 10, 24), ReleaseStatus.SECURITY, datetime.date(2027, 10, 31), False, False, PythonVersion.PYTHON3),
+        # Python 3.10 - Security
+        ("3.10.19", datetime.date(2025, 10, 9), ReleaseStatus.SECURITY, datetime.date(2026, 10, 31), False, False, PythonVersion.PYTHON3),
+        ("3.10.16", datetime.date(2024, 12, 3), ReleaseStatus.SECURITY, datetime.date(2026, 10, 31), False, False, PythonVersion.PYTHON3),
+        ("3.10.14", datetime.date(2024, 3, 19), ReleaseStatus.SECURITY, datetime.date(2026, 10, 31), False, False, PythonVersion.PYTHON3),
+        ("3.10.0", datetime.date(2021, 10, 4), ReleaseStatus.SECURITY, datetime.date(2026, 10, 31), False, False, PythonVersion.PYTHON3),
+        # Python 3.9 - EOL
+        ("3.9.25", datetime.date(2025, 10, 31), ReleaseStatus.EOL, datetime.date(2025, 10, 31), False, False, PythonVersion.PYTHON3),
+        ("3.9.21", datetime.date(2024, 12, 3), ReleaseStatus.EOL, datetime.date(2025, 10, 31), False, False, PythonVersion.PYTHON3),
+        ("3.9.19", datetime.date(2024, 3, 19), ReleaseStatus.EOL, datetime.date(2025, 10, 31), False, False, PythonVersion.PYTHON3),
+        ("3.9.0", datetime.date(2020, 10, 5), ReleaseStatus.EOL, datetime.date(2025, 10, 31), False, False, PythonVersion.PYTHON3),
+        # Python 3.8 - EOL
+        ("3.8.20", datetime.date(2024, 9, 6), ReleaseStatus.EOL, datetime.date(2024, 10, 31), False, False, PythonVersion.PYTHON3),
+        ("3.8.18", datetime.date(2023, 8, 24), ReleaseStatus.EOL, datetime.date(2024, 10, 31), False, False, PythonVersion.PYTHON3),
+        ("3.8.0", datetime.date(2019, 10, 14), ReleaseStatus.EOL, datetime.date(2024, 10, 31), False, False, PythonVersion.PYTHON3),
+        # Python 3.7 - EOL
+        ("3.7.17", datetime.date(2023, 6, 6), ReleaseStatus.EOL, datetime.date(2023, 6, 27), False, False, PythonVersion.PYTHON3),
+        ("3.7.0", datetime.date(2018, 6, 27), ReleaseStatus.EOL, datetime.date(2023, 6, 27), False, False, PythonVersion.PYTHON3),
+        # Python 3.6 - EOL
+        ("3.6.15", datetime.date(2021, 9, 4), ReleaseStatus.EOL, datetime.date(2021, 12, 23), False, False, PythonVersion.PYTHON3),
+        ("3.6.0", datetime.date(2016, 12, 23), ReleaseStatus.EOL, datetime.date(2021, 12, 23), False, False, PythonVersion.PYTHON3),
+        # Python 2.7 - EOL
+        ("2.7.18", datetime.date(2020, 4, 20), ReleaseStatus.EOL, datetime.date(2020, 1, 1), False, False, PythonVersion.PYTHON2),
+        ("2.7.17", datetime.date(2019, 10, 19), ReleaseStatus.EOL, datetime.date(2020, 1, 1), False, False, PythonVersion.PYTHON2),
+        ("2.7.16", datetime.date(2019, 3, 4), ReleaseStatus.EOL, datetime.date(2020, 1, 1), False, False, PythonVersion.PYTHON2),
+        ("2.7.0", datetime.date(2010, 7, 3), ReleaseStatus.EOL, datetime.date(2020, 1, 1), False, False, PythonVersion.PYTHON2),
     ]
 
-    for i, (name, is_latest, pre_release) in enumerate(release_data[:count]):
+    for name, release_date, status, eol_date, is_latest, pre_release, version in release_data[:count]:
         release = Release(
             name=name,
-            slug=name.lower().replace(".", "-"),
+            slug=f"python-{name.replace('.', '')}",
+            version=version,
+            status=status,
             is_latest=is_latest,
             is_published=True,
             pre_release=pre_release,
-            show_on_download_page=not pre_release,
-            release_date=datetime.datetime.now(tz=datetime.UTC).date() - datetime.timedelta(days=i * 30),
-            release_notes_url=f"https://docs.python.org/3/whatsnew/{name.split('.')[1]}.html",
-            content=f"# Python {name}\n\nThis is the release notes for Python {name}.",
+            show_on_download_page=True,
+            release_date=release_date,
+            eol_date=eol_date,
+            release_notes_url=f"https://docs.python.org/release/{name}/whatsnew/changelog.html",
+            content=f"Python {name} release.",
             creator_id=users[0].id,
         )
         session.add(release)
