@@ -144,18 +144,18 @@ class BlogEntryRepository(SQLAlchemyAsyncRepository[BlogEntry]):
         return list(result.scalars().all())
 
     async def get_featured_entries(self, limit: int = 5) -> list[BlogEntry]:
-        """Get featured blog entries (returns recent entries from active feeds).
+        """Get featured blog entries from active feeds.
 
         Args:
             limit: Maximum number of featured entries to return.
 
         Returns:
-            List of recent blog entries ordered by pub_date descending.
+            List of featured blog entries ordered by pub_date descending.
         """
         statement = (
             select(BlogEntry)
             .join(BlogEntry.feed)
-            .where(Feed.is_active.is_(True))
+            .where(Feed.is_active.is_(True), BlogEntry.is_featured.is_(True))
             .order_by(BlogEntry.pub_date.desc())
             .limit(limit)
         )
