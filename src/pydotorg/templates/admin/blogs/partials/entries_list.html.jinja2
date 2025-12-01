@@ -1,0 +1,81 @@
+<div id="entries-list">
+    {% if entries %}
+    <div class="overflow-x-auto">
+        <table class="table table-zebra">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Feed</th>
+                    <th>Published Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in entries %}
+                {% include 'admin/blogs/partials/entry_row.html.jinja2' %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if pagination and pagination.total > pagination.limit %}
+    <div class="flex justify-center mt-6">
+        <div class="join">
+            {% if pagination.offset > 0 %}
+            <button
+                class="join-item btn btn-sm"
+                hx-get="/admin/blogs/entries?feed_id={{ request.query_params.get('feed_id', '') }}&limit={{ pagination.limit }}&offset={{ [0, pagination.offset - pagination.limit]|max }}"
+                hx-target="#entries-list"
+                hx-swap="outerHTML"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+                Previous
+            </button>
+            {% endif %}
+
+            {% set current_page = (pagination.offset // pagination.limit) + 1 %}
+            {% set total_pages = (pagination.total // pagination.limit) + (1 if pagination.total % pagination.limit else 0) %}
+
+            <button class="join-item btn btn-sm btn-active">
+                Page {{ current_page }} of {{ total_pages }}
+            </button>
+
+            {% if pagination.offset + pagination.limit < pagination.total %}
+            <button
+                class="join-item btn btn-sm"
+                hx-get="/admin/blogs/entries?feed_id={{ request.query_params.get('feed_id', '') }}&limit={{ pagination.limit }}&offset={{ pagination.offset + pagination.limit }}"
+                hx-target="#entries-list"
+                hx-swap="outerHTML"
+            >
+                Next
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+    {% else %}
+    <div class="card bg-base-100 shadow-lg border border-base-300">
+        <div class="card-body text-center py-12">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-base-content/30 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+            </svg>
+            <h3 class="text-xl font-bold mb-2">No Entries Found</h3>
+            <p class="text-base-content/60 mb-4">
+                {% if request.query_params.get('feed_id') %}
+                No entries found for this feed
+                {% else %}
+                There are no blog entries
+                {% endif %}
+            </p>
+            <a href="/admin/blogs/entries" class="btn btn-primary btn-sm">
+                View All Entries
+            </a>
+        </div>
+    </div>
+    {% endif %}
+</div>

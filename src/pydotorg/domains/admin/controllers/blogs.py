@@ -51,6 +51,7 @@ class AdminBlogsController(Controller):
     @get("/")
     async def list_feeds(
         self,
+        request: Request,
         blog_admin_service: BlogAdminService,
         is_active: Annotated[bool | None, Parameter(description="Filter by active status")] = None,
         q: Annotated[str | None, Parameter(description="Search query")] = None,
@@ -60,6 +61,7 @@ class AdminBlogsController(Controller):
         """Render blog feeds list page.
 
         Args:
+            request: HTTP request
             blog_admin_service: Blog admin service
             is_active: Filter by active status
             q: Search query
@@ -77,24 +79,35 @@ class AdminBlogsController(Controller):
         )
         stats = await blog_admin_service.get_stats()
 
+        context = {
+            "title": "Blog Feed Management",
+            "description": "Manage blog feeds and entries",
+            "feeds": feeds,
+            "stats": stats,
+            "pagination": {
+                "total": total,
+                "limit": limit,
+                "offset": offset,
+            },
+        }
+
+        is_htmx = request.headers.get("HX-Request") == "true"
+        is_boosted = request.headers.get("HX-Boosted") == "true"
+        if is_htmx and not is_boosted:
+            return Template(
+                template_name="admin/blogs/partials/feeds_list.html.jinja2",
+                context=context,
+            )
+
         return Template(
             template_name="admin/blogs/list.html.jinja2",
-            context={
-                "title": "Blog Feed Management",
-                "description": "Manage blog feeds and entries",
-                "feeds": feeds,
-                "stats": stats,
-                "pagination": {
-                    "total": total,
-                    "limit": limit,
-                    "offset": offset,
-                },
-            },
+            context=context,
         )
 
     @get("/entries")
     async def list_entries(
         self,
+        request: Request,
         blog_admin_service: BlogAdminService,
         feed_id: Annotated[UUID | None, Parameter(description="Filter by feed")] = None,
         q: Annotated[str | None, Parameter(description="Search query")] = None,
@@ -104,6 +117,7 @@ class AdminBlogsController(Controller):
         """Render blog entries list page.
 
         Args:
+            request: HTTP request
             blog_admin_service: Blog admin service
             feed_id: Filter by feed ID
             q: Search query
@@ -122,20 +136,30 @@ class AdminBlogsController(Controller):
         stats = await blog_admin_service.get_stats()
         feeds, _ = await blog_admin_service.list_feeds(limit=100)
 
+        context = {
+            "title": "Blog Entries",
+            "description": "View and manage blog entries",
+            "entries": entries,
+            "feeds": feeds,
+            "stats": stats,
+            "pagination": {
+                "total": total,
+                "limit": limit,
+                "offset": offset,
+            },
+        }
+
+        is_htmx = request.headers.get("HX-Request") == "true"
+        is_boosted = request.headers.get("HX-Boosted") == "true"
+        if is_htmx and not is_boosted:
+            return Template(
+                template_name="admin/blogs/partials/entries_list.html.jinja2",
+                context=context,
+            )
+
         return Template(
             template_name="admin/blogs/entries_list.html.jinja2",
-            context={
-                "title": "Blog Entries",
-                "description": "View and manage blog entries",
-                "entries": entries,
-                "feeds": feeds,
-                "stats": stats,
-                "pagination": {
-                    "total": total,
-                    "limit": limit,
-                    "offset": offset,
-                },
-            },
+            context=context,
         )
 
     @get("/{feed_id:uuid}")
@@ -268,4 +292,56 @@ class AdminBlogsController(Controller):
                 "description": f"Review entry: {entry.title}",
                 "entry": entry,
             },
+        )
+
+    @post("/entry/{entry_id:uuid}/feature")
+    async def feature_entry(
+        self,
+        request: Request,
+        blog_admin_service: BlogAdminService,
+        entry_id: UUID,
+    ) -> Template | Response:
+        """Feature a blog entry.
+
+        Args:
+            request: HTTP request
+            blog_admin_service: Blog admin service
+            entry_id: Entry ID
+
+        Returns:
+            Updated entry row partial or error response
+        """
+        entry = await blog_admin_service.feature_entry(entry_id)
+        if not entry:
+            return Response(content="Entry not found", status_code=404)
+
+        return Template(
+            template_name="admin/blogs/partials/entry_row.html.jinja2",
+            context={"entry": entry},
+        )
+
+    @post("/entry/{entry_id:uuid}/unfeature")
+    async def unfeature_entry(
+        self,
+        request: Request,
+        blog_admin_service: BlogAdminService,
+        entry_id: UUID,
+    ) -> Template | Response:
+        """Unfeature a blog entry.
+
+        Args:
+            request: HTTP request
+            blog_admin_service: Blog admin service
+            entry_id: Entry ID
+
+        Returns:
+            Updated entry row partial or error response
+        """
+        entry = await blog_admin_service.unfeature_entry(entry_id)
+        if not entry:
+            return Response(content="Entry not found", status_code=404)
+
+        return Template(
+            template_name="admin/blogs/partials/entry_row.html.jinja2",
+            context={"entry": entry},
         )
