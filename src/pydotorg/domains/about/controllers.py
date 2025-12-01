@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from litestar import Controller, get
-from litestar.response import Template
+from litestar.response import Redirect, Template
 
 
 class AboutRenderController(Controller):
@@ -48,6 +48,11 @@ class PSFRenderController(Controller):
 
     path = "/psf"
     include_in_schema = False
+
+    @get("/")
+    async def psf_index(self) -> Redirect:
+        """Redirect /psf/ to /about/psf/."""
+        return Redirect(path="/about/psf/")
 
     @get("/diversity/")
     async def psf_diversity(self) -> Template:
