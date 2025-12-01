@@ -17,6 +17,8 @@
 {% endblock %}
 
 {% block content %}
+<div id="toast-container" class="toast toast-top toast-end z-50"></div>
+
 <section class="python-gradient text-white py-16">
     <div class="section-container">
         <div class="max-w-3xl mx-auto text-center">
@@ -466,6 +468,21 @@
                     </div>
                 `;
                 form.reset();
+
+                const toastContainer = document.getElementById('toast-container');
+                toastContainer.innerHTML = `
+                    <div class="alert alert-success shadow-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <div>
+                            <p class="font-bold">Event Submitted!</p>
+                            <p class="text-sm">Your event has been submitted for review. You'll receive an email once it's approved.</p>
+                        </div>
+                    </div>
+                `;
+                setTimeout(() => { toastContainer.innerHTML = ''; }, 8000);
+
                 window.scrollTo({ top: 0, behavior: 'smooth' });
 
             } catch (error) {
