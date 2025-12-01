@@ -42,13 +42,14 @@ async def refresh_all_feeds(ctx: Mapping[str, Any]) -> dict[str, int]:
             error_count = 0
 
             for feed in feeds:
+                feed_name = feed.name
                 try:
                     entries = await feed_service.fetch_feed(feed)
                     success_count += 1
-                    logger.info(f"Successfully refreshed feed '{feed.name}' - {len(entries)} entries")
+                    logger.info(f"Successfully refreshed feed '{feed_name}' - {len(entries)} entries")
                 except Exception:
                     error_count += 1
-                    logger.exception(f"Failed to refresh feed '{feed.name}'")
+                    logger.exception(f"Failed to refresh stale feed '{feed_name}'")
 
             logger.info(f"Feed refresh complete: {success_count} successful, {error_count} errors")
 
@@ -95,13 +96,14 @@ async def refresh_stale_feeds(ctx: Mapping[str, Any], *, max_age_hours: int = 1)
             error_count = 0
 
             for feed in feeds:
+                feed_name = feed.name
                 try:
                     entries = await feed_service.fetch_feed(feed)
                     success_count += 1
-                    logger.info(f"Successfully refreshed stale feed '{feed.name}' - {len(entries)} entries")
+                    logger.info(f"Successfully refreshed stale feed '{feed_name}' - {len(entries)} entries")
                 except Exception:
                     error_count += 1
-                    logger.exception(f"Failed to refresh stale feed '{feed.name}'")
+                    logger.exception(f"Failed to refresh stale feed '{feed_name}'")
 
             logger.info(f"Stale feed refresh complete: {success_count} successful, {error_count} errors")
 
