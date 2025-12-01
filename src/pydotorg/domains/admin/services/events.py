@@ -64,11 +64,7 @@ class EventAdminService:
 
         if upcoming:
             now = datetime.now(tz=UTC)
-            upcoming_event_ids = (
-                select(EventOccurrence.event_id)
-                .where(EventOccurrence.dt_start >= now)
-                .distinct()
-            )
+            upcoming_event_ids = select(EventOccurrence.event_id).where(EventOccurrence.dt_start >= now).distinct()
             query = query.where(Event.id.in_(upcoming_event_ids))
 
         if search:
