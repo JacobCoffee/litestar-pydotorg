@@ -18,6 +18,20 @@
                         {% else %}
                         <span class="badge badge-warning badge-sm">Inactive</span>
                         {% endif %}
+                        <form class="flex items-center gap-1" hx-post="/admin/blogs/{{ feed.id }}/priority" hx-target="#feed-{{ feed.id }}" hx-swap="outerHTML">
+                            <label class="text-xs text-base-content/60" for="priority-{{ feed.id }}">Priority:</label>
+                            <input
+                                type="number"
+                                id="priority-{{ feed.id }}"
+                                name="priority"
+                                value="{{ feed.priority }}"
+                                min="0"
+                                max="1000"
+                                class="input input-bordered input-xs w-24"
+                                hx-trigger="change"
+                                title="Higher values appear first"
+                            />
+                        </form>
                     </div>
 
                     <div class="flex items-center gap-4 text-sm text-base-content/60 mt-1">

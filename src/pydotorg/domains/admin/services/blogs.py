@@ -60,7 +60,7 @@ class BlogAdminService:
         total_result = await self.session.execute(count_query)
         total = total_result.scalar() or 0
 
-        query = query.order_by(Feed.created_at.desc()).limit(limit).offset(offset)
+        query = query.order_by(Feed.priority.desc(), Feed.name).limit(limit).offset(offset)
         result = await self.session.execute(query)
         feeds = list(result.scalars().all())
 
@@ -167,6 +167,25 @@ class BlogAdminService:
             return None
 
         feed.is_active = False
+        await self.session.commit()
+        await self.session.refresh(feed)
+        return feed
+
+    async def update_priority(self, feed_id: UUID, priority: int) -> Feed | None:
+        """Update a feed's display priority.
+
+        Args:
+            feed_id: Feed ID
+            priority: New priority value (higher = first)
+
+        Returns:
+            Updated feed if found, None otherwise
+        """
+        feed = await self.get_feed(feed_id)
+        if not feed:
+            return None
+
+        feed.priority = priority
         await self.session.commit()
         await self.session.refresh(feed)
         return feed

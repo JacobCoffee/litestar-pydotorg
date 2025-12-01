@@ -7,8 +7,9 @@ from urllib.parse import quote
 from uuid import UUID
 
 from litestar import Controller, get, post
+from litestar.enums import RequestEncodingType
 from litestar.exceptions import NotAuthorizedException, PermissionDeniedException
-from litestar.params import Parameter
+from litestar.params import Body, Parameter
 from litestar.response import Redirect, Response, Template
 
 from pydotorg.core.auth.guards import require_staff
@@ -266,6 +267,39 @@ class AdminBlogsController(Controller):
             Updated feed row partial or error response
         """
         feed = await blog_admin_service.deactivate_feed(feed_id)
+        if not feed:
+            return Response(content="Feed not found", status_code=404)
+
+        return Template(
+            template_name="admin/blogs/partials/feed_row.html.jinja2",
+            context={"feed": feed},
+        )
+
+    @post("/{feed_id:uuid}/priority")
+    async def update_priority(
+        self,
+        request: Request,
+        blog_admin_service: BlogAdminService,
+        feed_id: UUID,
+        data: Annotated[dict, Body(media_type=RequestEncodingType.URL_ENCODED)],
+    ) -> Template | Response:
+        """Update a blog feed's display priority.
+
+        Args:
+            request: HTTP request
+            blog_admin_service: Blog admin service
+            feed_id: Feed ID
+            data: Form data with priority value
+
+        Returns:
+            Updated feed row partial or error response
+        """
+        try:
+            priority = int(data.get("priority", 0))
+        except (ValueError, TypeError):
+            priority = 0
+
+        feed = await blog_admin_service.update_priority(feed_id, priority)
         if not feed:
             return Response(content="Feed not found", status_code=404)
 

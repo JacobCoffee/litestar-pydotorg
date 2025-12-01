@@ -31,13 +31,14 @@
                 </div>
 
                 <div class="flex-1">
-                    <div class="flex items-center gap-2">
+                    <div class="flex items-center gap-2 flex-wrap">
                         <h2 class="text-2xl font-bold">{{ feed.name }}</h2>
                         {% if feed.is_active %}
                         <span class="badge badge-success">Active</span>
                         {% else %}
                         <span class="badge badge-warning">Inactive</span>
                         {% endif %}
+                        <span class="badge badge-info">Priority: {{ feed.priority }}</span>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
@@ -61,7 +62,7 @@
                         {% endif %}
                     </div>
 
-                    <div class="flex gap-2 mt-4">
+                    <div class="flex gap-2 mt-4 items-center flex-wrap">
                         {% if feed.is_active %}
                         <button
                             class="btn btn-warning btn-sm"
@@ -81,6 +82,20 @@
                             Activate
                         </button>
                         {% endif %}
+                        <form id="priority-form" class="flex items-center gap-2" hx-post="/admin/blogs/{{ feed.id }}/priority" hx-swap="none" hx-on::after-request="location.reload()">
+                            <label class="text-sm" for="priority">Priority:</label>
+                            <input
+                                type="number"
+                                id="priority"
+                                name="priority"
+                                value="{{ feed.priority }}"
+                                min="0"
+                                max="1000"
+                                class="input input-bordered input-sm w-20"
+                                title="Higher values appear first"
+                            />
+                            <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                        </form>
                     </div>
                 </div>
             </div>
