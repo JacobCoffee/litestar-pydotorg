@@ -53,6 +53,7 @@ class AdminJobsController(Controller):
     @get("/")
     async def list_jobs(
         self,
+        request: Request,
         job_admin_service: JobAdminService,
         status: Annotated[str | None, Parameter(description="Filter by status")] = None,
         q: Annotated[str | None, Parameter(description="Search query")] = None,
@@ -62,6 +63,7 @@ class AdminJobsController(Controller):
         """Render job moderation list page.
 
         Args:
+            request: HTTP request
             job_admin_service: Job admin service
             status: Filter by job status
             q: Search query
@@ -85,19 +87,29 @@ class AdminJobsController(Controller):
         )
         stats = await job_admin_service.get_stats()
 
+        context = {
+            "title": "Job Moderation",
+            "description": "Review and approve job postings",
+            "jobs": jobs,
+            "stats": stats,
+            "pagination": {
+                "total": total,
+                "limit": limit,
+                "offset": offset,
+            },
+        }
+
+        is_htmx = request.headers.get("HX-Request") == "true"
+        is_boosted = request.headers.get("HX-Boosted") == "true"
+        if is_htmx and not is_boosted:
+            return Template(
+                template_name="admin/jobs/partials/jobs_list.html.jinja2",
+                context=context,
+            )
+
         return Template(
             template_name="admin/jobs/list.html.jinja2",
-            context={
-                "title": "Job Moderation",
-                "description": "Review and approve job postings",
-                "jobs": jobs,
-                "stats": stats,
-                "pagination": {
-                    "total": total,
-                    "limit": limit,
-                    "offset": offset,
-                },
-            },
+            context=context,
         )
 
     @get("/{job_id:uuid}")

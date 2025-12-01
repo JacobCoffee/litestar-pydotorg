@@ -48,80 +48,12 @@
         </a>
     </div>
 
-    <div id="jobs-list">
-        {% if jobs %}
-        <div class="space-y-4">
-            {% for job in jobs %}
-            {% include 'admin/jobs/partials/job_row.html.jinja2' %}
-            {% endfor %}
-        </div>
-
-        {% if pagination and pagination.total > pagination.limit %}
-        <div class="flex justify-center mt-6">
-            <div class="join">
-                {% if pagination.offset > 0 %}
-                <button
-                    class="join-item btn btn-sm"
-                    hx-get="/admin/jobs?status={{ request.query_params.get('status', '') }}&limit={{ pagination.limit }}&offset={{ [0, pagination.offset - pagination.limit]|max }}"
-                    hx-target="#jobs-list"
-                    hx-swap="outerHTML"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                    </svg>
-                    Previous
-                </button>
-                {% endif %}
-
-                {% set current_page = (pagination.offset // pagination.limit) + 1 %}
-                {% set total_pages = (pagination.total // pagination.limit) + (1 if pagination.total % pagination.limit else 0) %}
-
-                <button class="join-item btn btn-sm btn-active">
-                    Page {{ current_page }} of {{ total_pages }}
-                </button>
-
-                {% if pagination.offset + pagination.limit < pagination.total %}
-                <button
-                    class="join-item btn btn-sm"
-                    hx-get="/admin/jobs?status={{ request.query_params.get('status', '') }}&limit={{ pagination.limit }}&offset={{ pagination.offset + pagination.limit }}"
-                    hx-target="#jobs-list"
-                    hx-swap="outerHTML"
-                >
-                    Next
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                    </svg>
-                </button>
-                {% endif %}
-            </div>
-        </div>
-        {% endif %}
-        {% else %}
-        <div class="card bg-base-100 shadow-lg border border-base-300">
-            <div class="card-body text-center py-12">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-base-content/30 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-                <h3 class="text-xl font-bold mb-2">No Jobs Found</h3>
-                <p class="text-base-content/60 mb-4">
-                    {% if request.query_params.get('status') == 'pending' %}
-                    All jobs have been reviewed!
-                    {% else %}
-                    There are no jobs matching your criteria
-                    {% endif %}
-                </p>
-                <a href="/admin/jobs" class="btn btn-primary btn-sm">
-                    View All Jobs
-                </a>
-            </div>
-        </div>
-        {% endif %}
-    </div>
+    {% include 'admin/jobs/partials/jobs_list.html.jinja2' %}
 </div>
 
 <dialog id="job_preview_modal" class="modal">
     <div class="modal-box max-w-4xl">
-        <form method="dialog">
+        <form method="dialog" hx-boost="false">
             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
         </form>
         <div id="job_preview_content">
