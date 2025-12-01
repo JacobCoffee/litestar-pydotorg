@@ -8,7 +8,7 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from pydotorg.domains.downloads.models import PythonVersion
+from pydotorg.domains.downloads.models import PythonVersion, ReleaseStatus
 
 
 class OSBase(BaseModel):

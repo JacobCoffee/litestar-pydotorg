@@ -23,6 +23,13 @@ class PythonVersion(StrEnum):
     PYMANAGER = "manager"
 
 
+class ReleaseStatus(StrEnum):
+    PRERELEASE = "prerelease"
+    BUGFIX = "bugfix"
+    SECURITY = "security"
+    EOL = "eol"
+
+
 class OS(AuditBase, ContentManageableMixin, NameSlugMixin):
     __tablename__ = "download_os"
 
@@ -40,11 +47,16 @@ class Release(AuditBase, ContentManageableMixin, NameSlugMixin):
         Enum(PythonVersion, values_callable=lambda x: [e.value for e in x]),
         default=PythonVersion.PYTHON3,
     )
+    status: Mapped[ReleaseStatus] = mapped_column(
+        Enum(ReleaseStatus, values_callable=lambda x: [e.value for e in x]),
+        default=ReleaseStatus.BUGFIX,
+    )
     is_latest: Mapped[bool] = mapped_column(Boolean, default=False, index=True)
     is_published: Mapped[bool] = mapped_column(Boolean, default=False, index=True)
     pre_release: Mapped[bool] = mapped_column(Boolean, default=False)
     show_on_download_page: Mapped[bool] = mapped_column(Boolean, default=True)
     release_date: Mapped[datetime.date | None] = mapped_column(Date, nullable=True)
+    eol_date: Mapped[datetime.date | None] = mapped_column(Date, nullable=True)
     release_page_id: Mapped[UUID | None] = mapped_column(
         ForeignKey("pages.id", ondelete="SET NULL"),
         nullable=True,
@@ -115,6 +127,45 @@ class Release(AuditBase, ContentManageableMixin, NameSlugMixin):
         except (ValueError, IndexError):
             pass
         return self.name
+
+    @property
+    def is_eol(self) -> bool:
+        """Check if this release series has reached end of life.
+
+        Returns:
+            True if status is EOL or eol_date has passed.
+        """
+        if self.status == ReleaseStatus.EOL:
+            return True
+        if self.eol_date and self.eol_date < datetime.date.today():
+            return True
+        return False
+
+    @property
+    def is_prerelease(self) -> bool:
+        """Check if this is a pre-release version (alpha, beta, RC).
+
+        Returns:
+            True if status is prerelease or pre_release flag is set.
+        """
+        return self.pre_release or self.status == ReleaseStatus.PRERELEASE
+
+    @property
+    def status_label(self) -> str:
+        """Get human-readable status label.
+
+        Returns:
+            Status label string.
+        """
+        if self.is_eol:
+            return "End of Life"
+        if self.is_prerelease:
+            return "Pre-release"
+        if self.status == ReleaseStatus.SECURITY:
+            return "Security"
+        if self.status == ReleaseStatus.BUGFIX:
+            return "Active"
+        return self.status.value.title()
 
     def files_for_os(self, os_slug: str) -> list[ReleaseFile]:
         return [f for f in self.files if f.os.slug == os_slug]

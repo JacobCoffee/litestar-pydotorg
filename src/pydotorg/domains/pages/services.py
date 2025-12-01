@@ -43,7 +43,7 @@ class PageService(SQLAlchemyAsyncRepositoryService[Page]):
     repository_type = PageRepository
     match_fields = ["path"]
 
-    async def create(self, data: dict) -> Page:
+    async def create(self, data: dict) -> Page:  # type: ignore[override]
         """Create a new page.
 
         Args:
@@ -59,7 +59,7 @@ class PageService(SQLAlchemyAsyncRepositoryService[Page]):
 
         return page
 
-    async def update(self, item_id: UUID, data: dict) -> Page:
+    async def update(self, item_id: UUID, data: dict) -> Page:  # type: ignore[override]
         """Update a page.
 
         Args:
