@@ -96,6 +96,29 @@ class JobAdminService:
         result = await self.session.execute(query)
         return result.scalar_one_or_none()
 
+    async def submit_for_review(self, job_id: UUID) -> Job | None:
+        """Submit a draft job for review.
+
+        Transitions the job from DRAFT to REVIEW status.
+
+        Args:
+            job_id: Job ID
+
+        Returns:
+            Updated job if found and was in draft status, None otherwise
+        """
+        job = await self.get_job(job_id)
+        if not job:
+            return None
+
+        if job.status != JobStatus.DRAFT:
+            return job
+
+        job.status = JobStatus.REVIEW
+        await self.session.commit()
+        await self.session.refresh(job)
+        return job
+
     async def approve_job(self, job_id: UUID) -> Job | None:
         """Approve a job.
 

@@ -382,6 +382,14 @@ document.getElementById('job-submit-form').addEventListener('submit', function(e
         return response.json();
     })
     .then(result => {
+        return fetch(`/api/v1/jobs/${result.id}/submit`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }).then(() => result);
+    })
+    .then(result => {
         document.getElementById('form-response').innerHTML = `
             <div class="alert alert-success">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">

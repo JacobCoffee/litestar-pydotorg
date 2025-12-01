@@ -164,6 +164,30 @@ class AdminJobsController(Controller):
             context={"job": job},
         )
 
+    @post("/{job_id:uuid}/submit")
+    async def submit_job_for_review(
+        self,
+        job_admin_service: JobAdminService,
+        job_id: UUID,
+    ) -> Template | Response:
+        """Submit a draft job for review.
+
+        Args:
+            job_admin_service: Job admin service
+            job_id: Job ID
+
+        Returns:
+            Updated job row partial or error response
+        """
+        job = await job_admin_service.submit_for_review(job_id)
+        if not job:
+            return Response(content="Job not found", status_code=404)
+
+        return Template(
+            template_name="admin/jobs/partials/job_row.html.jinja2",
+            context={"job": job},
+        )
+
     @post("/{job_id:uuid}/approve")
     async def approve_job(
         self,

@@ -147,7 +147,20 @@
             <div class="divider"></div>
 
             <div class="flex flex-wrap gap-2">
-                {% if job.status.value == 'review' %}
+                {% if job.status.value == 'draft' %}
+                <button
+                    class="btn btn-primary gap-1"
+                    hx-post="/admin/jobs/{{ job.id }}/submit"
+                    hx-swap="none"
+                    hx-confirm="Submit this job for review?"
+                    hx-on::after-request="window.location.reload()"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Submit for Review
+                </button>
+                {% elif job.status.value == 'review' %}
                 <button
                     class="btn btn-success gap-1"
                     hx-post="/admin/jobs/{{ job.id }}/approve"
