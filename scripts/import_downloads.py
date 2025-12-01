@@ -32,8 +32,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 # Add src to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from pydotorg.core.database import get_async_session_factory, get_engine
-from pydotorg.domains.downloads.models import OS, PythonVersion, Release, ReleaseFile
+from pydotorg.core.database import get_async_session_factory, get_engine  # noqa: E402
+from pydotorg.domains.downloads.models import OS, PythonVersion, Release, ReleaseFile  # noqa: E402
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
