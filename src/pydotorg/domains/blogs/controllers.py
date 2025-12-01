@@ -6,7 +6,7 @@ from typing import Annotated
 from uuid import UUID
 
 from advanced_alchemy.filters import LimitOffset
-from litestar import Controller, delete, get, post, put
+from litestar import Controller, Request, delete, get, post, put
 from litestar.exceptions import NotFoundException
 from litestar.params import Body, Parameter
 from litestar.response import Template
@@ -332,22 +332,44 @@ class BlogsPageController(Controller):
     @get("/")
     async def blogs_index(
         self,
+        request: Request,
         blog_entry_service: BlogEntryService,
         feed_service: FeedService,
         related_blog_service: RelatedBlogService,
+        feed_id: Annotated[UUID | None, Parameter(description="Filter by feed")] = None,
     ) -> Template:
         """Render the main blogs page."""
-        recent_entries = await blog_entry_service.get_recent_entries(limit=20)
+        featured_entries = await blog_entry_service.get_featured_entries(limit=5)
+
+        if feed_id:
+            recent_entries = await blog_entry_service.get_by_feed_id(feed_id, limit=20)
+        else:
+            recent_entries = await blog_entry_service.get_recent_entries(limit=20)
+
         feeds = await feed_service.get_active_feeds(limit=100)
         related_blogs = await related_blog_service.get_all_active(limit=100)
 
+        current_feed = next((f for f in feeds if f.id == feed_id), None) if feed_id else None
+
+        context = {
+            "featured_entries": featured_entries,
+            "recent_entries": recent_entries,
+            "feeds": feeds,
+            "related_blogs": related_blogs,
+            "current_feed": current_feed,
+        }
+
+        is_htmx = request.headers.get("HX-Request") == "true"
+        is_boosted = request.headers.get("HX-Boosted") == "true"
+        if is_htmx and not is_boosted:
+            return Template(
+                template_name="blogs/partials/blog_entries.html.jinja2",
+                context=context,
+            )
+
         return Template(
             template_name="blogs/index.html.jinja2",
-            context={
-                "recent_entries": recent_entries,
-                "feeds": feeds,
-                "related_blogs": related_blogs,
-            },
+            context=context,
         )
 
     @get("/feed/{slug:str}/")

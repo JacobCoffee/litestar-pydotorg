@@ -17,41 +17,8 @@
 <section class="bg-base-100 py-16">
     <div class="section-container">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div class="lg:col-span-2">
-                <h2 class="text-3xl font-bold text-python-blue mb-8">Recent Posts</h2>
-
-                {% if recent_entries %}
-                <div class="space-y-6">
-                    {% for entry in recent_entries %}
-                    <article class="card bg-base-200 shadow-sm hover:shadow-md transition-shadow">
-                        <div class="card-body">
-                            <h3 class="card-title">
-                                <a href="{{ entry.url }}" target="_blank" rel="noopener noreferrer" class="python-link">
-                                    {{ entry.title }}
-                                </a>
-                            </h3>
-                            <div class="text-sm text-base-content/60">
-                                {% if entry.feed %}
-                                <span class="badge badge-ghost">{{ entry.feed.name }}</span>
-                                {% endif %}
-                                {% if entry.published_at %}
-                                <span class="ml-2">{{ entry.published_at.strftime('%B %d, %Y') }}</span>
-                                {% endif %}
-                            </div>
-                            {% if entry.summary %}
-                            <p class="text-base-content/80 line-clamp-3 mt-2">
-                                {{ entry.summary|striptags|truncate(200) }}
-                            </p>
-                            {% endif %}
-                        </div>
-                    </article>
-                    {% endfor %}
-                </div>
-                {% else %}
-                <div class="alert alert-info">
-                    <span>No blog posts available at this time.</span>
-                </div>
-                {% endif %}
+            <div id="blog-entries" class="lg:col-span-2">
+                {% include "blogs/partials/blog_entries.html.jinja2" %}
             </div>
 
             <div class="lg:col-span-1">
@@ -59,9 +26,22 @@
                 <div class="mb-8">
                     <h3 class="text-xl font-bold text-python-blue mb-4">Feeds</h3>
                     <ul class="menu bg-base-200 rounded-box">
+                        <li>
+                            <a href="/blogs/"
+                               hx-get="/blogs/"
+                               hx-target="#blog-entries"
+                               hx-push-url="true"
+                               class="{% if not current_feed %}active{% endif %}">
+                                All Feeds
+                            </a>
+                        </li>
                         {% for feed in feeds %}
                         <li>
-                            <a href="{{ feed.url }}" target="_blank" rel="noopener noreferrer">
+                            <a href="/blogs/?feed_id={{ feed.id }}"
+                               hx-get="/blogs/?feed_id={{ feed.id }}"
+                               hx-target="#blog-entries"
+                               hx-push-url="true"
+                               class="{% if current_feed and current_feed.id == feed.id %}active{% endif %}">
                                 {{ feed.name }}
                             </a>
                         </li>
