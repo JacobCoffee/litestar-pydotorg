@@ -12,6 +12,18 @@ module.exports = {
     'lg:flex',
     'lg:inline-flex',
     'lg:block',
+    // Category gradient colors for success stories
+    'from-green-500', 'to-emerald-600',
+    'from-blue-500', 'to-indigo-600',
+    'from-purple-500', 'to-pink-600',
+    'from-red-500', 'to-orange-600',
+    'from-cyan-500', 'to-blue-600',
+    'from-teal-500', 'to-green-600',
+    'from-gray-500', 'to-slate-600',
+    'bg-gradient-to-br',
+    // Category badge colors
+    'badge-success', 'badge-info', 'badge-secondary',
+    'badge-error', 'badge-primary', 'badge-accent', 'badge-neutral',
   ],
   theme: {
     extend: {
