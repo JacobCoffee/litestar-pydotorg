@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
+import contextlib
 from typing import TYPE_CHECKING, Annotated
 from urllib.parse import quote
-from uuid import UUID  # noqa: TC003
+from uuid import UUID
 
 from litestar import Controller, get, post
 from litestar.exceptions import NotAuthorizedException, PermissionDeniedException
@@ -51,10 +52,12 @@ class AdminEventsController(Controller):
     @get("/")
     async def list_events(
         self,
+        request: Request,
         event_admin_service: EventAdminService,
-        calendar_id: Annotated[UUID | None, Parameter(description="Filter by calendar")] = None,
+        calendar_id: Annotated[str | None, Parameter(description="Filter by calendar")] = None,
         featured: Annotated[bool | None, Parameter(description="Filter by featured status")] = None,
         q: Annotated[str | None, Parameter(description="Search query")] = None,
+        filter_type: Annotated[str | None, Parameter(description="Filter type", query="filter")] = None,
         limit: Annotated[int, Parameter(ge=1, le=100, description="Page size")] = 20,
         offset: Annotated[int, Parameter(ge=0, description="Offset")] = 0,
     ) -> Template:
@@ -65,36 +68,55 @@ class AdminEventsController(Controller):
             calendar_id: Filter by calendar ID
             featured: Filter by featured status
             q: Search query
+            filter: Filter type (featured, upcoming)
             limit: Maximum events per page
             offset: Pagination offset
 
         Returns:
             Events list template
         """
+        if q == "":
+            q = None
+        calendar_uuid: UUID | None = None
+        if calendar_id and calendar_id.strip():
+            with contextlib.suppress(ValueError):
+                calendar_uuid = UUID(calendar_id)
+        if filter_type == "featured":
+            featured = True
         events, total = await event_admin_service.list_events(
             limit=limit,
             offset=offset,
-            calendar_id=calendar_id,
+            calendar_id=calendar_uuid,
             featured=featured,
             search=q,
         )
         stats = await event_admin_service.get_stats()
         calendars, _ = await event_admin_service.list_calendars(limit=100)
 
+        context = {
+            "title": "Event Management",
+            "description": "Manage events and calendars",
+            "events": events,
+            "calendars": calendars,
+            "stats": stats,
+            "pagination": {
+                "total": total,
+                "limit": limit,
+                "offset": offset,
+            },
+        }
+
+        is_htmx = request.headers.get("HX-Request") == "true"
+        is_boosted = request.headers.get("HX-Boosted") == "true"
+        if is_htmx and not is_boosted:
+            return Template(
+                template_name="admin/events/partials/events_list.html.jinja2",
+                context=context,
+            )
+
         return Template(
             template_name="admin/events/list.html.jinja2",
-            context={
-                "title": "Event Management",
-                "description": "Manage events and calendars",
-                "events": events,
-                "calendars": calendars,
-                "stats": stats,
-                "pagination": {
-                    "total": total,
-                    "limit": limit,
-                    "offset": offset,
-                },
-            },
+            context=context,
         )
 
     @get("/calendars")
@@ -116,6 +138,8 @@ class AdminEventsController(Controller):
         Returns:
             Calendars list template
         """
+        if q == "":
+            q = None
         calendars, total = await event_admin_service.list_calendars(
             limit=limit,
             offset=offset,
@@ -242,7 +266,7 @@ class AdminEventsController(Controller):
             context={"event": event},
         )
 
-    @get("/calendar/{calendar_id:uuid}")
+    @get("/calendars/{calendar_id:uuid}")
     async def get_calendar_detail(
         self,
         event_admin_service: EventAdminService,
