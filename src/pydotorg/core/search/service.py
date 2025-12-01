@@ -267,6 +267,20 @@ class SearchService:
             logger.info(f"Index cleared successfully: {task.task_uid}")
             return task
 
+    async def is_available(self) -> bool:
+        """Check if Meilisearch service is available.
+
+        Returns:
+            True if Meilisearch is reachable, False otherwise.
+        """
+        try:
+            await self.client.health()
+        except Exception as e:  # noqa: BLE001
+            logger.warning(f"Meilisearch is not available at {self.url}: {e}")
+            return False
+        else:
+            return True
+
     async def search(
         self,
         query: SearchQuery,
@@ -279,6 +293,28 @@ class SearchService:
         Returns:
             Aggregated search results.
         """
+        try:
+            if not await self.is_available():
+                logger.warning("Meilisearch unavailable, returning empty search results")
+                return SearchResult(
+                    hits=[],
+                    total=0,
+                    offset=query.offset,
+                    limit=query.limit,
+                    processing_time_ms=0,
+                    query=query.query,
+                )
+        except Exception as e:  # noqa: BLE001
+            logger.warning(f"Failed to check Meilisearch availability: {e}, returning empty results")
+            return SearchResult(
+                hits=[],
+                total=0,
+                offset=query.offset,
+                limit=query.limit,
+                processing_time_ms=0,
+                query=query.query,
+            )
+
         indexes = query.indexes or ["jobs", "events", "blogs", "pages"]
 
         all_hits: list[SearchHit] = []
