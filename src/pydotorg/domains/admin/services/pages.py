@@ -197,3 +197,25 @@ class PageAdminService:
             "html_pages": html_pages,
             "rst_pages": rst_pages,
         }
+
+    async def delete_page(self, page_id: UUID) -> bool:
+        """Delete a page.
+
+        Args:
+            page_id: Page ID
+
+        Returns:
+            True if deleted, False if not found
+        """
+        page = await self.get_page(page_id)
+        if not page:
+            return False
+
+        page_path = page.path
+        await self.session.delete(page)
+        await self.session.commit()
+
+        await enqueue_task("remove_page_from_index", page_id=str(page_id))
+        await enqueue_task("invalidate_page_response_cache", page_path=page_path)
+
+        return True
