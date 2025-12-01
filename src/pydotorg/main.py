@@ -35,6 +35,7 @@ from litestar.response import Template
 from litestar.static_files import create_static_files_router
 from litestar.status_codes import HTTP_200_OK, HTTP_503_SERVICE_UNAVAILABLE
 from litestar.template.config import TemplateConfig
+from litestar_vite import ViteConfig, VitePlugin
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -283,6 +284,20 @@ session_config = CookieBackendConfig(
 
 templates_dir = Path(__file__).parent / "templates"
 static_dir = Path(__file__).parent.parent.parent / "static"
+resources_dir = Path(__file__).parent.parent.parent / "resources"
+
+vite_plugin = VitePlugin(
+    config=ViteConfig(
+        bundle_dir=static_dir,
+        resource_dir=resources_dir,
+        public_dir=static_dir,
+        dev_mode=settings.is_debug,
+        hot_reload=settings.is_debug,
+        port=5173,
+        host="localhost",
+        set_static_folders=False,
+    )
+)
 
 
 def configure_template_engine(engine: JinjaTemplateEngine) -> None:  # noqa: PLR0915
@@ -605,7 +620,7 @@ app = Litestar(
     ],
     dependencies=get_all_dependencies(),
     exception_handlers=get_exception_handlers_with_rate_limit(),
-    plugins=[sqlalchemy_plugin, sqladmin_plugin, flash_plugin, structlog_plugin, saq_plugin],
+    plugins=[sqlalchemy_plugin, sqladmin_plugin, flash_plugin, structlog_plugin, saq_plugin, vite_plugin],
     middleware=[
         session_config.middleware,
         UserPopulationMiddleware,
