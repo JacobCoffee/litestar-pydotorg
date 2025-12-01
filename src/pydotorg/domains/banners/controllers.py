@@ -16,6 +16,7 @@ from pydotorg.domains.banners.schemas import (
     BannerCreate,
     BannerList,
     BannerRead,
+    BannerSitewideRead,
     BannerUpdate,
 )
 from pydotorg.domains.banners.services import BannerService
@@ -70,6 +71,16 @@ class BannerController(Controller):
         current_date = datetime.now(UTC).date() if should_check_dates else None
         banners = await banner_service.get_active_banners(current_date=current_date)
         return [BannerRead.model_validate(banner) for banner in banners]
+
+    @get("/sitewide")
+    async def list_sitewide_banners(
+        self,
+        banner_service: BannerService,
+    ) -> list[BannerSitewideRead]:
+        """List active sitewide banners for display on all pages."""
+        current_date = datetime.now(UTC).date()
+        banners = await banner_service.get_sitewide_banners(current_date=current_date)
+        return [BannerSitewideRead.model_validate(banner) for banner in banners]
 
     @post("/")
     async def create_banner(

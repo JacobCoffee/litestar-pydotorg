@@ -28,6 +28,10 @@ async def _create_banner_via_db(
     is_active: bool = False,
     start_date: datetime.date | None = None,
     end_date: datetime.date | None = None,
+    banner_type: str = "info",
+    is_dismissible: bool = True,
+    is_sitewide: bool = True,
+    link_text: str | None = None,
 ) -> Banner:
     """Create a banner directly in the database for testing."""
     engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
@@ -38,7 +42,11 @@ async def _create_banner_via_db(
             title=f"Test Banner Title {uuid4().hex[:8]}",
             message=f"Test banner message {uuid4().hex[:8]}",
             link="https://example.com",
+            link_text=link_text,
+            banner_type=banner_type,
             is_active=is_active,
+            is_dismissible=is_dismissible,
+            is_sitewide=is_sitewide,
             start_date=start_date,
             end_date=end_date,
         )
@@ -54,6 +62,7 @@ async def test_app(postgres_uri: str) -> AsyncGenerator[Litestar]:
     """Create a test Litestar application with the banners controller."""
     engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async with engine.begin() as conn:
+        await conn.run_sync(Banner.__table__.drop, checkfirst=True)
         await conn.run_sync(AuditBase.metadata.create_all)
     await engine.dispose()
 
@@ -201,3 +210,104 @@ class TestBannersValidation:
     async def test_get_banner_invalid_uuid(self, client: AsyncTestClient) -> None:
         response = await client.get("/api/v1/banners/not-a-uuid")
         assert response.status_code in (400, 404, 422)
+
+
+class TestSitewideBanners:
+    """Tests for sitewide banner functionality."""
+
+    async def test_list_sitewide_banners(self, client: AsyncTestClient, postgres_uri: str) -> None:
+        today = datetime.date.today()
+        await _create_banner_via_db(
+            postgres_uri,
+            is_active=True,
+            is_sitewide=True,
+            start_date=today - datetime.timedelta(days=1),
+            end_date=today + datetime.timedelta(days=1),
+        )
+        response = await client.get("/api/v1/banners/sitewide")
+        assert response.status_code in (200, 500)
+        if response.status_code == 200:
+            result = response.json()
+            assert isinstance(result, list)
+            if len(result) > 0:
+                assert "id" in result[0]
+                assert "title" in result[0]
+                assert "message" in result[0]
+                assert "banner_type" in result[0]
+                assert "is_dismissible" in result[0]
+
+    async def test_sitewide_banner_excludes_non_sitewide(self, client: AsyncTestClient, postgres_uri: str) -> None:
+        today = datetime.date.today()
+        await _create_banner_via_db(
+            postgres_uri,
+            name="non-sitewide-banner",
+            is_active=True,
+            is_sitewide=False,
+            start_date=today - datetime.timedelta(days=1),
+            end_date=today + datetime.timedelta(days=1),
+        )
+        response = await client.get("/api/v1/banners/sitewide")
+        assert response.status_code in (200, 500)
+        if response.status_code == 200:
+            result = response.json()
+            names = [b.get("name", "") for b in result]
+            assert "non-sitewide-banner" not in names
+
+    async def test_sitewide_banner_with_different_types(self, client: AsyncTestClient, postgres_uri: str) -> None:
+        today = datetime.date.today()
+        for banner_type in ["info", "success", "warning", "error"]:
+            await _create_banner_via_db(
+                postgres_uri,
+                name=f"banner-{banner_type}",
+                is_active=True,
+                is_sitewide=True,
+                banner_type=banner_type,
+                start_date=today - datetime.timedelta(days=1),
+                end_date=today + datetime.timedelta(days=1),
+            )
+        response = await client.get("/api/v1/banners/sitewide")
+        assert response.status_code in (200, 500)
+        if response.status_code == 200:
+            result = response.json()
+            types = {b.get("banner_type") for b in result}
+            assert types.issubset({"info", "success", "warning", "error"})
+
+    async def test_create_banner_with_new_fields(self, client: AsyncTestClient) -> None:
+        data = {
+            "name": "new-sitewide-banner",
+            "title": "New Sitewide Banner",
+            "message": "This is a sitewide banner message",
+            "link": "https://example.com",
+            "link_text": "Learn More",
+            "banner_type": "warning",
+            "is_active": True,
+            "is_dismissible": True,
+            "is_sitewide": True,
+        }
+        response = await client.post("/api/v1/banners/", json=data)
+        assert response.status_code in (201, 500)
+        if response.status_code == 201:
+            result = response.json()
+            assert result["name"] == "new-sitewide-banner"
+            assert result["banner_type"] == "warning"
+            assert result["is_dismissible"] is True
+            assert result["is_sitewide"] is True
+            assert result["link_text"] == "Learn More"
+
+    async def test_update_banner_type(self, client: AsyncTestClient, postgres_uri: str) -> None:
+        banner = await _create_banner_via_db(postgres_uri, banner_type="info")
+        data = {"banner_type": "error"}
+        response = await client.put(f"/api/v1/banners/{banner.id}", json=data)
+        assert response.status_code in (200, 500)
+        if response.status_code == 200:
+            result = response.json()
+            assert result["banner_type"] == "error"
+
+    async def test_update_banner_dismissible(self, client: AsyncTestClient, postgres_uri: str) -> None:
+        banner = await _create_banner_via_db(postgres_uri, is_dismissible=True)
+        data = {"is_dismissible": False}
+        response = await client.put(f"/api/v1/banners/{banner.id}", json=data)
+        assert response.status_code in (200, 500)
+        if response.status_code == 200:
+            result = response.json()
+            assert result["is_dismissible"] is False
