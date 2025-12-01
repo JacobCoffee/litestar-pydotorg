@@ -28,7 +28,7 @@
 
                         <div class="flex-1">
                             <div class="flex items-center gap-3 flex-wrap">
-                                <h1 class="text-2xl font-bold">{{ event.title }}</h1>
+                                <h1 class="text-2xl font-bold">{{ event.title|safe }}</h1>
                                 {% if event.featured %}
                                 <span class="badge badge-warning">Featured</span>
                                 {% endif %}
@@ -47,7 +47,7 @@
                             </div>
 
                             {% if event.description %}
-                            <p class="mt-4 text-base-content/70">{{ event.description }}</p>
+                            <p class="mt-4 text-base-content/70">{{ event.description|safe }}</p>
                             {% endif %}
                         </div>
                     </div>
