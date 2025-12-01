@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import pytest
-from litestar.status_codes import HTTP_200_OK
+from litestar.status_codes import HTTP_200_OK, HTTP_302_FOUND
 
 if TYPE_CHECKING:
     from litestar.testing import TestClient
@@ -34,6 +34,24 @@ class TestAboutRenderController:
         response = about_test_client.get("/about/governance/")
         assert response.status_code == HTTP_200_OK
         assert b"Python Governance" in response.content
+
+
+class TestPSFRenderControllerRedirects:
+    """Tests for PSFRenderController redirects."""
+
+    @pytest.mark.asyncio
+    async def test_psf_index_redirect(self, about_test_client: TestClient) -> None:
+        """Test /psf/ redirects to /about/psf/."""
+        response = about_test_client.get("/psf/", follow_redirects=False)
+        assert response.status_code == HTTP_302_FOUND
+        assert response.headers["location"] == "/about/psf/"
+
+    @pytest.mark.asyncio
+    async def test_psf_diversity_redirect(self, about_test_client: TestClient) -> None:
+        """Test /psf/diversity/ redirects to /community/diversity/."""
+        response = about_test_client.get("/psf/diversity/", follow_redirects=False)
+        assert response.status_code == HTTP_302_FOUND
+        assert response.headers["location"] == "/community/diversity/"
 
 
 class TestCommunityDiversityPage:
