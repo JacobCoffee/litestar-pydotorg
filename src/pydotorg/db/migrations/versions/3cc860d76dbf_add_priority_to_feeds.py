@@ -27,7 +27,8 @@ def upgrade() -> None:
     op.alter_column(
         "blog_entries", "is_featured", existing_type=sa.BOOLEAN(), server_default=None, existing_nullable=False
     )
-    op.add_column("feeds", sa.Column("priority", sa.Integer(), nullable=False))
+    # Add priority column with server default so existing rows get value 0
+    op.add_column("feeds", sa.Column("priority", sa.Integer(), nullable=False, server_default="0"))
     op.create_index(op.f("ix_feeds_priority"), "feeds", ["priority"], unique=False)
     # ### end Alembic commands ###
 
