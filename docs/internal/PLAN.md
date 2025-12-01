@@ -296,7 +296,7 @@ src/pydotorg/templates/
 - [x] Create ReleaseService with publishing logic
 - [x] Create ReleaseFileRepository/Service
 - [x] Implement download page logic
-- [ ] Add download statistics tracking - *Not yet implemented*
+- [x] Add download statistics tracking (2025-11-30)
 - [x] Create release API endpoints
 - [ ] Implement GPG signature verification - *Not yet implemented*
 
@@ -1670,7 +1670,7 @@ tests/
 | ~~**Mailing Domain**~~ | 3.x | ✅ DONE | Low | Email templates + logs domain with SMTP delivery |
 | **OAuth2 Providers** | 2.2 | MEDIUM | Medium | GitHub/Google providers exist, need testing |
 | ~~**Page Caching**~~ | 3.3 | ✅ DONE | Medium | Redis cache for pages |
-| **Download Statistics** | 3.4 | MEDIUM | Medium | Track download counts |
+| ~~**Download Statistics**~~ | 3.4 | ✅ DONE | Medium | Download counts, admin analytics, PyPI sync |
 | ~~**iCalendar Export**~~ | 3.7 | ✅ DONE | Low | Events iCal feed |
 
 ### Tier 4: LOW PRIORITY (Nice to Have)
@@ -1771,9 +1771,15 @@ tests/
    - **Features**: Redis stats display (total keys, hit rate, memory usage), clear page cache, clear all cache, warm all caches, clickable stats to view keys in modal, individual key deletion, toast notifications for all operations
    - **Files**: `domains/admin/controllers/settings.py`, `templates/admin/settings/cache.html.jinja2`, `templates/admin/settings/partials/key_list.html.jinja2`, `templates/admin/settings/partials/key_deleted.html.jinja2`
 
-10. **Download Statistics** (Tier 3)
-   - Track download counts per release file
-   - Analytics dashboard in admin
+10. ~~**Download Statistics**~~ (Tier 3) - ✅ COMPLETE (2025-11-30)
+   - ~~Track download counts per release file~~
+   - ~~Analytics dashboard in admin~~
+   - **Models**: `DownloadStatistic` model with `release_file_id`, `download_count`, `country_code`, `download_type`, `date`
+   - **PyPI Integration**: Sync download stats from PyPI BigQuery via `import_downloads.py` script
+   - **Admin Analytics**: `/admin/analytics/downloads` with interactive dashboard
+   - **SAQ Tasks**: `sync_download_statistics` (daily), `aggregate_download_statistics` (hourly)
+   - **Features**: Version selector, OS/country breakdowns, daily/monthly aggregation, chart.js visualizations
+   - **Files**: `domains/downloads/models.py`, `domains/admin/controllers/analytics.py`, `domains/admin/services/downloads.py`, `tasks/downloads.py`, `scripts/import_downloads.py`, `templates/admin/analytics/downloads.html.jinja2`
 
 ### Known Issues / Bugs
 
