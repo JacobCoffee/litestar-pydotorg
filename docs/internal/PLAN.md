@@ -1850,7 +1850,10 @@ tests/
 
 ### Planned Enhancements
 
-*None currently planned*
+| Enhancement | Location | Priority | Description |
+|-------------|----------|----------|-------------|
+| **Job auto-submit on creation** | `domains/jobs/services.py` | LOW | Add `submit_immediately: bool = False` flag to `create_job()` that auto-transitions to REVIEW status. Cleaner than current two-step API call approach in public form JS. |
+| **Investigate litestar-workflows** | Workflows/Tasks | MEDIUM | Investigate `litestar-workflows` plugin for potential integration with job/event approval workflows, email notifications, and other multi-step processes. |
 
 ---
 
