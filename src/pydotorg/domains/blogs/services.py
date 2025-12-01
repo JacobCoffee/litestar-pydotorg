@@ -8,6 +8,7 @@ from typing import TYPE_CHECKING
 
 import feedparser
 from advanced_alchemy.service import SQLAlchemyAsyncRepositoryService
+from sqlalchemy import select
 
 from pydotorg.domains.blogs.models import BlogEntry, Feed, FeedAggregate, RelatedBlog
 from pydotorg.domains.blogs.repositories import (
@@ -97,7 +98,7 @@ class FeedService(SQLAlchemyAsyncRepositoryService[Feed]):
 
                 try:
                     existing_entry = await self.repository.session.scalar(
-                        self.repository.select_query().where(BlogEntry.guid == guid)
+                        select(BlogEntry).where(BlogEntry.guid == guid)
                     )
 
                     if existing_entry:

@@ -349,19 +349,26 @@ document.getElementById('job-submit-form').addEventListener('submit', function(e
     e.preventDefault();
 
     const formData = new FormData(this);
-    const data = {};
 
-    for (const [key, value] of formData.entries()) {
-        if (key === 'job_type_ids' || key === 'category_ids') {
-            if (!data[key]) {
-                data[key] = formData.getAll(key);
-            }
-        } else if (key === 'telecommuting') {
-            data[key] = value === 'on';
-        } else {
-            data[key] = value;
-        }
-    }
+    const jobTypeIds = formData.getAll('job_type_ids');
+    const categoryIds = formData.getAll('category_ids');
+
+    const data = {
+        company_name: formData.get('company_name') || '',
+        url: formData.get('company_url') || null,
+        job_title: formData.get('job_title') || '',
+        description: formData.get('description') || '',
+        requirements: formData.get('requirements') || null,
+        city: formData.get('city') || null,
+        region: formData.get('region') || null,
+        country: formData.get('country') || '',
+        email: formData.get('contact_email') || '',
+        contact: formData.get('contact') || null,
+        telecommuting: formData.get('telecommuting') === 'on',
+        agencies: false,
+        job_type_ids: jobTypeIds,
+        category_id: categoryIds.length > 0 ? categoryIds[0] : null
+    };
 
     fetch('/api/v1/jobs', {
         method: 'POST',
