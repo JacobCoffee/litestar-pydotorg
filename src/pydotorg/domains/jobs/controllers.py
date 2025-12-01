@@ -618,26 +618,76 @@ class JobRenderController(Controller):
     @get("/")
     async def list_jobs_html(
         self,
+        request: Request,
         job_service: JobService,
         job_type_service: JobTypeService,
         job_category_service: JobCategoryService,
         limit: Annotated[int, Parameter(ge=1, le=1000)] = 50,
         offset: Annotated[int, Parameter(ge=0)] = 0,
+        q: Annotated[str | None, Parameter(description="Search query")] = None,
+        remote: Annotated[str | None, Parameter(description="Remote only filter")] = None,
+        location: Annotated[str | None, Parameter(description="Location filter")] = None,
+        job_type: Annotated[list[str] | None, Parameter(description="Job type slugs")] = None,
+        category: Annotated[list[str] | None, Parameter(description="Category slugs")] = None,
     ) -> Template:
         """Render jobs listing page."""
-        jobs = await job_service.list_by_status(JobStatus.APPROVED, limit=limit, offset=offset)
-        job_types, _ = await job_type_service.list_and_count()
-        job_categories, _ = await job_category_service.list_and_count()
+        job_types_all, _ = await job_type_service.list_and_count()
+        job_categories_all, _ = await job_category_service.list_and_count()
+
+        telecommuting_filter = remote == "true" if remote else None
+        job_type_ids = None
+        category_id = None
+
+        if job_type:
+            job_type_ids = [jt.id for jt in job_types_all if jt.slug in job_type]
+
+        if category:
+            for cat in job_categories_all:
+                if cat.slug in category:
+                    category_id = cat.id
+                    break
+
+        jobs = await job_service.search_jobs(
+            filters=JobSearchFilters(
+                telecommuting=telecommuting_filter,
+                city=location if location else None,
+                category_id=category_id,
+                job_type_ids=job_type_ids if job_type_ids else None,
+            ),
+            limit=limit,
+            offset=offset,
+        )
+
+        if q:
+            q_lower = q.lower()
+            jobs = [
+                job
+                for job in jobs
+                if q_lower in job.job_title.lower()
+                or q_lower in job.company_name.lower()
+                or (job.description and q_lower in job.description.lower())
+            ]
+
+        is_htmx = request.headers.get("HX-Request") == "true"
+        is_boosted = request.headers.get("HX-Boosted") == "true"
+
+        context = {
+            "jobs": jobs,
+            "job_types": job_types_all,
+            "job_categories": job_categories_all,
+            "title": "Job Board",
+            "description": "Browse available Python jobs",
+        }
+
+        if is_htmx and not is_boosted:
+            return Template(
+                template_name="jobs/partials/job_results.html.jinja2",
+                context=context,
+            )
 
         return Template(
             template_name="jobs/index.html.jinja2",
-            context={
-                "jobs": jobs,
-                "job_types": job_types,
-                "job_categories": job_categories,
-                "title": "Job Board",
-                "description": "Browse available Python jobs",
-            },
+            context=context,
         )
 
     @get("/{slug:str}")
@@ -701,6 +751,34 @@ class JobRenderController(Controller):
                 "title": "My Jobs",
                 "description": "Manage your job postings",
             },
+        )
+
+    @post("/preview")
+    async def preview_job(
+        self,
+        request: Request,
+    ) -> Template:
+        """Render job preview from form data."""
+        form_data = await request.form()
+
+        job_preview = {
+            "job_title": form_data.get("job_title", ""),
+            "company_name": form_data.get("company_name", ""),
+            "company_url": form_data.get("company_url", ""),
+            "description": form_data.get("description", ""),
+            "requirements": form_data.get("requirements", ""),
+            "city": form_data.get("city", ""),
+            "region": form_data.get("region", ""),
+            "country": form_data.get("country", ""),
+            "telecommuting": form_data.get("telecommuting") == "on",
+            "contact": form_data.get("contact", ""),
+            "contact_name": form_data.get("contact_name", ""),
+            "contact_email": form_data.get("contact_email", ""),
+        }
+
+        return Template(
+            template_name="jobs/partials/preview.html.jinja2",
+            context={"job": job_preview},
         )
 
 

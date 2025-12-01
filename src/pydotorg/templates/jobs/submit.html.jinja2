@@ -28,9 +28,6 @@
                                 id="job-submit-form"
                                 method="post"
                                 action="/api/v1/jobs"
-                                hx-post="/api/v1/jobs"
-                                hx-target="#form-response"
-                                hx-swap="innerHTML"
                                 class="space-y-6"
                             >
                                 <div class="space-y-4">
@@ -328,7 +325,7 @@
 
 <dialog id="preview_modal" class="modal">
     <div class="modal-box max-w-4xl">
-        <form method="dialog">
+        <form method="dialog" hx-boost="false">
             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
         </form>
         <h3 class="font-bold text-lg mb-4">Job Preview</h3>
@@ -338,7 +335,7 @@
             </div>
         </div>
     </div>
-    <form method="dialog" class="modal-backdrop">
+    <form method="dialog" class="modal-backdrop" hx-boost="false">
         <button>close</button>
     </form>
 </dialog>
