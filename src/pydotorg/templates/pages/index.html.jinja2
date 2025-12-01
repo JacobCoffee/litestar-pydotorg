@@ -197,7 +197,7 @@ message = <span class="text-green-500">greet</span>(<span class="text-yellow-500
                     {{ cards.event_card(
                         event.title,
                         event.occurrences[0].dt_start.strftime('%B %d, %Y') if event.occurrences else 'TBD',
-                        event.venue or 'Online',
+                        event.venue.name if event.venue else 'Online',
                         '/events/' + event.slug if event.slug else '#',
                         event.calendar.name if event.calendar else ''
                     ) }}
