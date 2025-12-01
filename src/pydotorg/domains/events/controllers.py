@@ -7,7 +7,7 @@ from typing import Annotated
 from uuid import UUID
 
 from advanced_alchemy.filters import LimitOffset
-from litestar import Controller, delete, get, post, put
+from litestar import Controller, Request, delete, get, post, put
 from litestar.exceptions import NotFoundException
 from litestar.openapi import ResponseSpec
 from litestar.params import Body, Parameter
@@ -952,6 +952,7 @@ class EventsPageController(Controller):
     @get("/")
     async def events_index(
         self,
+        request: Request,
         event_service: EventService,
         calendar_service: CalendarService,
         event_category_service: EventCategoryService,
@@ -961,28 +962,50 @@ class EventsPageController(Controller):
         featured_events = await event_service.get_featured(limit=5)
         calendars, _total = await calendar_service.list_and_count()
 
+        is_htmx = request.headers.get("HX-Request") == "true"
+        is_boosted = request.headers.get("HX-Boosted") == "true"
+
+        context = {
+            "upcoming_events": upcoming_events,
+            "featured_events": featured_events,
+            "calendars": calendars,
+        }
+
+        if is_htmx and not is_boosted:
+            return Template(
+                template_name="events/partials/events_content.html.jinja2",
+                context=context,
+            )
+
         return Template(
             template_name="events/index.html.jinja2",
-            context={
-                "upcoming_events": upcoming_events,
-                "featured_events": featured_events,
-                "calendars": calendars,
-            },
+            context=context,
         )
 
     @get("/calendar/")
     async def events_calendar_list(
         self,
+        request: Request,
         calendar_service: CalendarService,
     ) -> Template:
         """Render the calendars list page."""
         calendars, _total = await calendar_service.list_and_count()
 
+        context = {
+            "calendars": calendars,
+        }
+
+        is_htmx = request.headers.get("HX-Request") == "true"
+        is_boosted = request.headers.get("HX-Boosted") == "true"
+        if is_htmx and not is_boosted:
+            return Template(
+                template_name="events/partials/calendar_list_content.html.jinja2",
+                context=context,
+            )
+
         return Template(
             template_name="events/calendar_list.html.jinja2",
-            context={
-                "calendars": calendars,
-            },
+            context=context,
         )
 
     @get("/calendar/{slug:str}/")
@@ -1001,6 +1024,7 @@ class EventsPageController(Controller):
         events = await event_service.get_by_calendar_id(calendar.id)
         featured_events = await event_service.get_featured(calendar_id=calendar.id)
         categories = await event_category_service.get_by_calendar_id(calendar.id)
+        current_date = datetime.datetime.now(tz=datetime.UTC)
 
         return Template(
             template_name="events/calendar.html.jinja2",
@@ -1009,6 +1033,9 @@ class EventsPageController(Controller):
                 "events": events,
                 "featured_events": featured_events,
                 "categories": categories,
+                "current_date": current_date,
+                "timedelta": datetime.timedelta,
+                "calendar_data": [],
             },
         )
 

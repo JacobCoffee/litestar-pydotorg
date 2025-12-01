@@ -43,10 +43,7 @@
                         </div>
                     </div>
 
-                    <form hx-post="/api/v1/events/"
-                          hx-target="#form-response"
-                          hx-swap="innerHTML"
-                          class="space-y-6">
+                    <form id="event-form" class="space-y-6">
 
                         <div class="form-control">
                             <label class="label" for="event-title">
@@ -325,13 +322,142 @@
 
 {% block extra_js %}
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const form = document.querySelector('form');
+    function slugify(text) {
+        return text
+            .toString()
+            .toLowerCase()
+            .trim()
+            .replace(/\s+/g, '-')
+            .replace(/[^\w\-]+/g, '')
+            .replace(/\-\-+/g, '-')
+            .replace(/^-+/, '')
+            .replace(/-+$/, '');
+    }
 
-        form.addEventListener('htmx:afterRequest', function(event) {
-            if (event.detail.successful) {
-                const response = document.getElementById('form-response');
-                response.innerHTML = `
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('event-form');
+        const responseDiv = document.getElementById('form-response');
+        let defaultCalendarId = null;
+
+        async function getDefaultCalendar() {
+            try {
+                const response = await fetch('/api/v1/calendars/slug/python-events');
+                if (response.ok) {
+                    const calendar = await response.json();
+                    return calendar.id;
+                }
+            } catch (error) {
+                console.error('Error fetching default calendar:', error);
+            }
+            return null;
+        }
+
+        getDefaultCalendar().then(calendarId => {
+            defaultCalendarId = calendarId;
+        });
+
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            const submitButton = form.querySelector('button[type="submit"]');
+            const originalButtonText = submitButton.innerHTML;
+
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<span class="loading loading-spinner"></span> Submitting...';
+
+            try {
+                if (!defaultCalendarId) {
+                    defaultCalendarId = await getDefaultCalendar();
+                    if (!defaultCalendarId) {
+                        throw new Error('Unable to retrieve default calendar. Please try again later.');
+                    }
+                }
+
+                const title = formData.get('title');
+                const venueName = formData.get('venue_name');
+                const startDate = formData.get('start_date');
+                const startTime = formData.get('start_time');
+                const endDate = formData.get('end_date');
+                const endTime = formData.get('end_time');
+                const allDay = formData.get('all_day') === 'on';
+
+                let venueId = null;
+                if (venueName) {
+                    const venueAddress = [
+                        formData.get('venue_address'),
+                        formData.get('venue_city'),
+                        formData.get('venue_state'),
+                        formData.get('venue_country')
+                    ].filter(Boolean).join(', ');
+
+                    const venueData = {
+                        name: venueName,
+                        slug: slugify(venueName),
+                        address: venueAddress || null,
+                        url: formData.get('url') || null
+                    };
+
+                    const venueResponse = await fetch('/api/v1/events/locations', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(venueData)
+                    });
+
+                    if (!venueResponse.ok) {
+                        const venueError = await venueResponse.json();
+                        throw new Error(venueError.detail || 'Failed to create venue');
+                    }
+
+                    const venue = await venueResponse.json();
+                    venueId = venue.id;
+                }
+
+                const dtStart = new Date(`${startDate}T${startTime}`).toISOString();
+                let dtEnd = null;
+                if (endDate && endTime) {
+                    dtEnd = new Date(`${endDate}T${endTime}`).toISOString();
+                } else if (endDate) {
+                    dtEnd = new Date(`${endDate}T23:59:59`).toISOString();
+                }
+
+                const categoryIds = [];
+                const categoryValue = formData.get('category_ids');
+                if (categoryValue) {
+                    categoryIds.push(categoryValue);
+                }
+
+                const eventData = {
+                    name: title,
+                    slug: slugify(title),
+                    title: title,
+                    description: formData.get('description') || null,
+                    featured: false,
+                    calendar_id: defaultCalendarId,
+                    venue_id: venueId,
+                    creator_id: null,
+                    category_ids: categoryIds,
+                    occurrences: [
+                        {
+                            dt_start: dtStart,
+                            dt_end: dtEnd,
+                            all_day: allDay
+                        }
+                    ]
+                };
+
+                const response = await fetch('/api/v1/events', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(eventData)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Failed to submit event');
+                }
+
+                responseDiv.innerHTML = `
                     <div class="alert alert-success">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -341,16 +467,20 @@
                 `;
                 form.reset();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
-            } else {
-                const response = document.getElementById('form-response');
-                response.innerHTML = `
+
+            } catch (error) {
+                console.error('Error submitting event:', error);
+                responseDiv.innerHTML = `
                     <div class="alert alert-error">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                        <span>There was an error submitting your event. Please try again.</span>
+                        <span>Error: ${error.message || 'There was an error submitting your event. Please try again.'}</span>
                     </div>
                 `;
+            } finally {
+                submitButton.disabled = false;
+                submitButton.innerHTML = originalButtonText;
             }
         });
     });
