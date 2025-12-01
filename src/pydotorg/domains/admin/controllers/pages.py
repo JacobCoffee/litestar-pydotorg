@@ -53,7 +53,7 @@ class AdminPagesController(Controller):
         self,
         page_admin_service: PageAdminService,
         content_type: Annotated[str | None, Parameter(description="Filter by content type")] = None,
-        is_published: Annotated[bool | None, Parameter(description="Filter by publish status")] = None,
+        published: Annotated[str | None, Parameter(description="Filter by publish status (true/false)")] = None,
         q: Annotated[str | None, Parameter(description="Search query")] = None,
         limit: Annotated[int, Parameter(ge=1, le=100, description="Page size")] = 20,
         offset: Annotated[int, Parameter(ge=0, description="Offset")] = 0,
@@ -63,7 +63,7 @@ class AdminPagesController(Controller):
         Args:
             page_admin_service: Page admin service
             content_type: Filter by content type
-            is_published: Filter by publish status
+            published: Filter by publish status (true/false string)
             q: Search query
             limit: Maximum pages per page
             offset: Pagination offset
@@ -71,6 +71,12 @@ class AdminPagesController(Controller):
         Returns:
             Pages list template
         """
+        is_published: bool | None = None
+        if published == "true":
+            is_published = True
+        elif published == "false":
+            is_published = False
+
         pages, total = await page_admin_service.list_pages(
             limit=limit,
             offset=offset,
