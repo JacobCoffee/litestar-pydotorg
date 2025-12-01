@@ -70,7 +70,7 @@
                                                 name="job_type"
                                                 value="{{ job_type.slug }}"
                                                 class="checkbox checkbox-sm checkbox-primary"
-                                                {% if job_type.slug in request.query_params.getlist('job_type') %}checked{% endif %}
+                                                {% if job_type.slug in (request.query_params.getall('job_type') if 'job_type' in request.query_params else []) %}checked{% endif %}
                                             />
                                             <span class="label-text">{{ job_type.name }}</span>
                                         </label>
@@ -92,7 +92,7 @@
                                                 name="category"
                                                 value="{{ category.slug }}"
                                                 class="checkbox checkbox-sm checkbox-primary"
-                                                {% if category.slug in request.query_params.getlist('category') %}checked{% endif %}
+                                                {% if category.slug in (request.query_params.getall('category') if 'category' in request.query_params else []) %}checked{% endif %}
                                             />
                                             <span class="label-text">{{ category.name }}</span>
                                         </label>
@@ -231,7 +231,7 @@
 
                                         {% if job.description %}
                                         <p class="text-base-content/80 line-clamp-2">
-                                            {{ job.description[:200] }}{% if job.description|length > 200 %}...{% endif %}
+                                            {{ job.description|striptags|truncate(200) }}
                                         </p>
                                         {% endif %}
                                     </div>

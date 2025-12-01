@@ -38,7 +38,7 @@
             {% endif %}
           </div>
 
-          <p class="text-base-content/80 mt-3">{{ article.excerpt }}</p>
+          <p class="text-base-content/80 mt-3">{{ article.excerpt|striptags|truncate(150) }}</p>
 
           <div class="card-actions justify-end mt-4">
             <a href="{{ article.url }}" class="python-link font-semibold">
@@ -86,7 +86,7 @@
               <a href="{{ article.url }}" class="hover:underline">{{ article.title }}</a>
             </h3>
 
-            <p class="text-base-content/80 mb-3">{{ article.excerpt }}</p>
+            <p class="text-base-content/80 mb-3">{{ article.excerpt|striptags|truncate(200) }}</p>
 
             <a href="{{ article.url }}" class="python-link font-semibold text-sm">
               Read more →

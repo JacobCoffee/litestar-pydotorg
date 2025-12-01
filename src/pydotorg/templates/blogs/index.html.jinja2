@@ -40,7 +40,7 @@
                             </div>
                             {% if entry.summary %}
                             <p class="text-base-content/80 line-clamp-3 mt-2">
-                                {{ entry.summary[:200] }}{% if entry.summary|length > 200 %}...{% endif %}
+                                {{ entry.summary|striptags|truncate(200) }}
                             </p>
                             {% endif %}
                         </div>

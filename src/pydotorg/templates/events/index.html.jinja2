@@ -65,7 +65,7 @@
 
                     {% if event.description %}
                     <p class="text-base-content/80 line-clamp-3 mt-2">
-                        {{ event.description[:150] }}{% if event.description|length > 150 %}...{% endif %}
+                        {{ event.description|striptags|truncate(150) }}
                     </p>
                     {% endif %}
                 </div>
@@ -180,7 +180,7 @@
 
                         {% if event.description %}
                         <p class="text-base-content/80 line-clamp-2 mt-2">
-                            {{ event.description[:120] }}{% if event.description|length > 120 %}...{% endif %}
+                            {{ event.description|striptags|truncate(120) }}
                         </p>
                         {% endif %}
                     </div>

@@ -50,7 +50,7 @@
           </div>
 
           {% if event.description %}
-          <p class="text-base-content/80 mt-3 line-clamp-2">{{ event.description }}</p>
+          <p class="text-base-content/80 mt-3 line-clamp-2">{{ event.description|striptags|truncate(120) }}</p>
           {% endif %}
 
           <div class="card-actions justify-end mt-4">
@@ -105,7 +105,7 @@
             {% endif %}
 
             {% if event.description %}
-            <p class="text-base-content/80">{{ event.description }}</p>
+            <p class="text-base-content/80">{{ event.description|striptags|truncate(200) }}</p>
             {% endif %}
 
             <a href="{{ event.url }}" class="python-link font-semibold mt-3 inline-block">
