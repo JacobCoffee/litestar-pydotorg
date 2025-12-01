@@ -15,16 +15,19 @@ db/
 │       └── 001_initial_migration.py
 ```
 
-## Running Migrations
+## Running Migrations (Litestar CLI - PREFERRED)
+
+The project uses Advanced Alchemy's Litestar CLI integration for database migrations.
+This provides a unified interface with better integration than raw Alembic commands.
 
 ### Apply Migrations
 
 Run all pending migrations to bring the database to the latest schema:
 
 ```bash
-make db-migrate
+make litestar-db-upgrade
 # or
-uv run alembic upgrade head
+LITESTAR_APP=pydotorg.main:app uv run litestar database upgrade
 ```
 
 ### Create a New Migration
@@ -32,9 +35,25 @@ uv run alembic upgrade head
 After modifying models, generate a new migration:
 
 ```bash
-make db-revision
+make litestar-db-make
 # or
-uv run alembic revision --autogenerate -m "Description of changes"
+LITESTAR_APP=pydotorg.main:app uv run litestar database make-migrations
+```
+
+### View Migration History
+
+```bash
+make litestar-db-history
+# or
+LITESTAR_APP=pydotorg.main:app uv run litestar database history
+```
+
+### Check Current Revision
+
+```bash
+make litestar-db-current
+# or
+LITESTAR_APP=pydotorg.main:app uv run litestar database show-current-revision
 ```
 
 ### Downgrade Migration
@@ -42,9 +61,9 @@ uv run alembic revision --autogenerate -m "Description of changes"
 Rollback the last migration:
 
 ```bash
-make db-downgrade
+make litestar-db-downgrade
 # or
-uv run alembic downgrade -1
+LITESTAR_APP=pydotorg.main:app uv run litestar database downgrade -1
 ```
 
 ### Reset Database
@@ -53,9 +72,17 @@ Drop all tables and re-apply migrations (WARNING: Data loss!):
 
 ```bash
 make db-reset
-# or
-uv run alembic downgrade base
+```
+
+### Legacy Alembic Commands
+
+Direct Alembic commands still work but Litestar CLI is preferred:
+
+```bash
+# Legacy - prefer Litestar CLI above
 uv run alembic upgrade head
+uv run alembic revision --autogenerate -m "Description"
+uv run alembic downgrade -1
 ```
 
 ## Seeding the Database
