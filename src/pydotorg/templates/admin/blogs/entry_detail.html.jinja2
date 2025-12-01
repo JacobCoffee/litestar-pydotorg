@@ -73,7 +73,7 @@
                     <div class="mt-4">
                         <h4 class="font-medium text-sm text-base-content/60 mb-2">Summary</h4>
                         <div class="prose max-w-none text-base-content/80">
-                            {{ entry.summary }}
+                            {{ entry.summary|safe }}
                         </div>
                     </div>
                     {% endif %}
