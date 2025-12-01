@@ -34,8 +34,8 @@
                         <form id="job-filters"
                               hx-get="/jobs"
                               hx-target="#job-results"
-                              hx-trigger="change, submit"
-                              hx-swap="innerHTML"
+                              hx-trigger="change, submit, input from:find input[name='q'] changed delay:300ms"
+                              hx-swap="outerHTML"
                               hx-indicator="#search-indicator">
 
                             <div class="space-y-4">
@@ -49,10 +49,6 @@
                                         placeholder="Job title, company..."
                                         value="{{ request.query_params.get('q', '') }}"
                                         class="input input-bordered input-sm w-full"
-                                        hx-get="/jobs"
-                                        hx-target="#job-results"
-                                        hx-trigger="input changed delay:300ms"
-                                        hx-swap="innerHTML"
                                     />
                                 </div>
 
