@@ -45,8 +45,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 PYTHON_EVENTS_CALENDAR_URL = (
-    "https://calendar.google.com/calendar/ical/"
-    "j7gov1cmnqr9tvg14k621j7t5c@group.calendar.google.com/public/basic.ics"
+    "https://calendar.google.com/calendar/ical/j7gov1cmnqr9tvg14k621j7t5c@group.calendar.google.com/public/basic.ics"
 )
 
 OFFICIAL_FEEDS = [
@@ -238,9 +237,7 @@ async def sync_events_from_ics(ctx: Mapping[str, Any]) -> dict[str, int]:  # noq
             if not slug:
                 slug = slugify(uid)[:100]
 
-            result = await session.execute(
-                select(Event).where(Event.slug == slug, Event.calendar_id == calendar.id)
-            )
+            result = await session.execute(select(Event).where(Event.slug == slug, Event.calendar_id == calendar.id))
             existing_event = result.scalar_one_or_none()
 
             category_name = _detect_category(summary, description)
