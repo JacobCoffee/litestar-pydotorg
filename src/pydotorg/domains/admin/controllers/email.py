@@ -810,6 +810,45 @@ class AdminEmailController(Controller):
             headers={"HX-Trigger": "templateDeleted"},
         )
 
+    @post("/templates/{template_id:uuid}/duplicate", guards=[require_admin])
+    async def duplicate_template(
+        self,
+        email_template_service: EmailTemplateService,
+        template_id: UUID,
+    ) -> Response:
+        """Duplicate an email template.
+
+        Args:
+            email_template_service: Email template service
+            template_id: Template ID to duplicate
+
+        Returns:
+            Redirect to the new template's edit page
+        """
+        try:
+            original = await email_template_service.get(template_id)
+        except NotFoundError:
+            return Response(content="Template not found", status_code=404)
+
+        new_template = await email_template_service.create(
+            data={
+                "name": f"{original.name} (Copy)",
+                "slug": f"{original.slug}-copy",
+                "subject": original.subject,
+                "body_html": original.body_html,
+                "body_text": original.body_text,
+                "description": original.description,
+                "is_active": False,
+            },
+            auto_commit=True,
+        )
+
+        return Response(
+            content="",
+            status_code=200,
+            headers={"HX-Redirect": f"/admin/email/templates/{new_template.id}/edit"},
+        )
+
     @post("/logs/{log_id:uuid}/retry", guards=[require_admin])
     async def retry_failed_email(
         self,
