@@ -13,6 +13,7 @@ from litestar.template.config import TemplateConfig
 from litestar.testing import TestClient
 
 from pydotorg.domains.about import AboutRenderController, PSFRenderController
+from pydotorg.domains.community.controllers import CommunityPageController
 
 if TYPE_CHECKING:
     from litestar.testing import TestClient as TestClientType
@@ -33,7 +34,7 @@ def about_test_client() -> TestClientType:
     templates_dir = Path(__file__).parent.parent.parent.parent.parent / "src" / "pydotorg" / "templates"
 
     app = Litestar(
-        route_handlers=[AboutRenderController, PSFRenderController],
+        route_handlers=[AboutRenderController, PSFRenderController, CommunityPageController],
         template_config=TemplateConfig(
             directory=templates_dir,
             engine=JinjaTemplateEngine,

@@ -36,21 +36,21 @@ class TestAboutRenderController:
         assert b"Python Governance" in response.content
 
 
-class TestPSFRenderController:
-    """Tests for PSFRenderController."""
+class TestCommunityDiversityPage:
+    """Tests for community diversity page."""
 
     @pytest.mark.asyncio
-    async def test_psf_diversity_page(self, about_test_client: TestClient) -> None:
-        """Test PSF diversity page renders correctly."""
-        response = about_test_client.get("/psf/diversity/")
+    async def test_community_diversity_page(self, about_test_client: TestClient) -> None:
+        """Test community diversity page renders correctly."""
+        response = about_test_client.get("/community/diversity/")
         assert response.status_code == HTTP_200_OK
         assert b"Diversity" in response.content
         assert b"Python Software Foundation" in response.content
 
     @pytest.mark.asyncio
-    async def test_psf_diversity_page_contains_key_content(self, about_test_client: TestClient) -> None:
-        """Test PSF diversity page contains key content sections."""
-        response = about_test_client.get("/psf/diversity/")
+    async def test_community_diversity_page_contains_key_content(self, about_test_client: TestClient) -> None:
+        """Test community diversity page contains key content sections."""
+        response = about_test_client.get("/community/diversity/")
         assert response.status_code == HTTP_200_OK
 
         content = response.content
@@ -64,9 +64,9 @@ class TestPSFRenderController:
         assert b"Be Careful" in content
 
     @pytest.mark.asyncio
-    async def test_psf_diversity_page_contains_related_links(self, about_test_client: TestClient) -> None:
-        """Test PSF diversity page contains related resource links."""
-        response = about_test_client.get("/psf/diversity/")
+    async def test_community_diversity_page_contains_related_links(self, about_test_client: TestClient) -> None:
+        """Test community diversity page contains related resource links."""
+        response = about_test_client.get("/community/diversity/")
         assert response.status_code == HTTP_200_OK
 
         content = response.content
@@ -76,9 +76,9 @@ class TestPSFRenderController:
         assert b"Code of Conduct" in content
 
     @pytest.mark.asyncio
-    async def test_psf_diversity_page_meta_description(self, about_test_client: TestClient) -> None:
-        """Test PSF diversity page has proper meta description."""
-        response = about_test_client.get("/psf/diversity/")
+    async def test_community_diversity_page_meta_description(self, about_test_client: TestClient) -> None:
+        """Test community diversity page has proper meta description."""
+        response = about_test_client.get("/community/diversity/")
         assert response.status_code == HTTP_200_OK
 
         assert b"welcomes and encourages participation by everyone" in response.content

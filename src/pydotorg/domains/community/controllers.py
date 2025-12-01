@@ -9,7 +9,7 @@ from advanced_alchemy.filters import LimitOffset
 from litestar import Controller, delete, get, post, put
 from litestar.exceptions import NotFoundException
 from litestar.params import Body, Parameter
-from litestar.response import Redirect, Template
+from litestar.response import Template
 
 from pydotorg.domains.community.schemas import (
     LinkCreate,
@@ -325,6 +325,11 @@ class CommunityPageController(Controller):
         )
 
     @get("/diversity/")
-    async def community_diversity(self) -> Redirect:
-        """Redirect /community/diversity/ to /psf/diversity/."""
-        return Redirect(path="/psf/diversity/")
+    async def community_diversity(self) -> Template:
+        """Render the PSF Diversity Statement page."""
+        return Template(
+            template_name="psf/diversity.html.jinja2",
+            context={
+                "page_title": "Diversity | Python Software Foundation",
+            },
+        )

@@ -55,11 +55,6 @@ class PSFRenderController(Controller):
         return Redirect(path="/about/psf/")
 
     @get("/diversity/")
-    async def psf_diversity(self) -> Template:
-        """Render the PSF Diversity Statement page."""
-        return Template(
-            template_name="psf/diversity.html.jinja2",
-            context={
-                "page_title": "Diversity | Python Software Foundation",
-            },
-        )
+    async def psf_diversity(self) -> Redirect:
+        """Redirect /psf/diversity/ to /community/diversity/."""
+        return Redirect(path="/community/diversity/")
