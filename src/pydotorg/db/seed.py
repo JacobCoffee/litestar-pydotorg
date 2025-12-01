@@ -16,7 +16,7 @@ from pydotorg.domains.banners.models import Banner
 from pydotorg.domains.blogs.models import BlogEntry, Feed, FeedAggregate, RelatedBlog
 from pydotorg.domains.codesamples.models import CodeSample
 from pydotorg.domains.community.models import Link, Photo, Post, Video
-from pydotorg.domains.downloads.models import OS, Release, ReleaseFile
+from pydotorg.domains.downloads.models import OS, PythonVersion, Release, ReleaseFile, ReleaseStatus
 from pydotorg.domains.events.models import Calendar, Event, EventCategory, EventLocation, EventOccurrence
 from pydotorg.domains.jobs.models import Job, JobCategory, JobReviewComment, JobStatus, JobType
 from pydotorg.domains.minutes.models import Minutes
@@ -398,30 +398,668 @@ async def seed_releases(
     session: AsyncSession,
     users: list[User],
     os_list: list[OS],
-    count: int = 5,
+    count: int = 100,
 ) -> list[Release]:
-    """Seed Python releases."""
+    """Seed Python releases with accurate data from python.org."""
     releases = []
 
     release_data = [
-        ("3.13.0", True, False),
-        ("3.12.7", False, False),
-        ("3.11.10", False, False),
-        ("3.10.15", False, False),
-        ("3.14.0a1", False, True),
+        # Python 3.14 - Bugfix (latest)
+        (
+            "3.14.0",
+            datetime.date(2025, 10, 7),
+            ReleaseStatus.BUGFIX,
+            datetime.date(2030, 10, 31),
+            True,
+            False,
+            PythonVersion.PYTHON3,
+        ),
+        # Python 3.13 - Bugfix
+        (
+            "3.13.9",
+            datetime.date(2025, 10, 14),
+            ReleaseStatus.BUGFIX,
+            datetime.date(2029, 10, 31),
+            False,
+            False,
+            PythonVersion.PYTHON3,
+        ),
+        (
+            "3.13.8",
+            datetime.date(2025, 10, 7),
+            ReleaseStatus.BUGFIX,
+            datetime.date(2029, 10, 31),
+            False,
+            False,
+            PythonVersion.PYTHON3,
+        ),
+        (
+            "3.13.7",
+            datetime.date(2025, 8, 14),
+            ReleaseStatus.BUGFIX,
+            datetime.date(2029, 10, 31),
+            False,
+            False,
+            PythonVersion.PYTHON3,
+        ),
+        (
+            "3.13.5",
+            datetime.date(2025, 6, 11),
+            ReleaseStatus.BUGFIX,
+            datetime.date(2029, 10, 31),
+            False,
+            False,
+            PythonVersion.PYTHON3,
+        ),
+        (
+            "3.13.3",
+            datetime.date(2025, 4, 8),
+            ReleaseStatus.BUGFIX,
+            datetime.date(2029, 10, 31),
+            False,
+            False,
+            PythonVersion.PYTHON3,
+        ),
+        (
+            "3.13.1",
+            datetime.date(2024, 12, 3),
+            ReleaseStatus.BUGFIX,
+            datetime.date(2029, 10, 31),
+            False,
+            False,
+            PythonVersion.PYTHON3,
+        ),
+        (
+            "3.13.0",
+            datetime.date(2024, 10, 7),
+            ReleaseStatus.BUGFIX,
+            datetime.date(2029, 10, 31),
+            False,
+            False,
+            PythonVersion.PYTHON3,
+        ),
+        # Python 3.12 - Security
+        (
+            "3.12.12",
+            datetime.date(2025, 10, 9),
+            ReleaseStatus.SECURITY,
+            datetime.date(2028, 10, 31),
+            False,
+            False,
+            PythonVersion.PYTHON3,
+        ),
+        (
+            "3.12.10",
+            datetime.date(2025, 4, 8),
+            ReleaseStatus.SECURITY,
+            datetime.date(2028, 10, 31),
+            False,
+            False,
+            PythonVersion.PYTHON3,
+        ),
+        (
+            "3.12.8",
+            datetime.date(2024, 12, 3),
+            ReleaseStatus.SECURITY,
+            datetime.date(2028, 10, 31),
+            False,
+            False,
+            PythonVersion.PYTHON3,
+        ),
+        (
+            "3.12.7",
+            datetime.date(2024, 10, 1),
+            ReleaseStatus.SECURITY,
+            datetime.date(2028, 10, 31),
+            False,
+            False,
+            PythonVersion.PYTHON3,
+        ),
+        (
+            "3.12.4",
+            datetime.date(2024, 6, 6),
+            ReleaseStatus.SECURITY,
+            datetime.date(2028, 10, 31),
+            False,
+            False,
+            PythonVersion.PYTHON3,
+        ),
+        (
+            "3.12.0",
+            datetime.date(2023, 10, 2),
+            ReleaseStatus.SECURITY,
+            datetime.date(2028, 10, 31),
+            False,
+            False,
+            PythonVersion.PYTHON3,
+        ),
+        # Python 3.11 - Security
+        (
+            "3.11.14",
+            datetime.date(2025, 10, 9),
+            ReleaseStatus.SECURITY,
+            datetime.date(2027, 10, 31),
+            False,
+            False,
+            PythonVersion.PYTHON3,
+        ),
+        (
+            "3.11.11",
+            datetime.date(2024, 12, 3),
+            ReleaseStatus.SECURITY,
+            datetime.date(2027, 10, 31),
+            False,
+            False,
+            PythonVersion.PYTHON3,
+        ),
+        (
+            "3.11.9",
+            datetime.date(2024, 4, 2),
+            ReleaseStatus.SECURITY,
+            datetime.date(2027, 10, 31),
+            False,
+            False,
+            PythonVersion.PYTHON3,
+        ),
+        (
+            "3.11.0",
+            datetime.date(2022, 10, 24),
+            ReleaseStatus.SECURITY,
+            datetime.date(2027, 10, 31),
+            False,
+            False,
+            PythonVersion.PYTHON3,
+        ),
+        # Python 3.10 - Security
+        (
+            "3.10.19",
+            datetime.date(2025, 10, 9),
+            ReleaseStatus.SECURITY,
+            datetime.date(2026, 10, 31),
+            False,
+            False,
+            PythonVersion.PYTHON3,
+        ),
+        (
+            "3.10.16",
+            datetime.date(2024, 12, 3),
+            ReleaseStatus.SECURITY,
+            datetime.date(2026, 10, 31),
+            False,
+            False,
+            PythonVersion.PYTHON3,
+        ),
+        (
+            "3.10.14",
+            datetime.date(2024, 3, 19),
+            ReleaseStatus.SECURITY,
+            datetime.date(2026, 10, 31),
+            False,
+            False,
+            PythonVersion.PYTHON3,
+        ),
+        (
+            "3.10.0",
+            datetime.date(2021, 10, 4),
+            ReleaseStatus.SECURITY,
+            datetime.date(2026, 10, 31),
+            False,
+            False,
+            PythonVersion.PYTHON3,
+        ),
+        # Python 3.9 - EOL
+        (
+            "3.9.25",
+            datetime.date(2025, 10, 31),
+            ReleaseStatus.EOL,
+            datetime.date(2025, 10, 31),
+            False,
+            False,
+            PythonVersion.PYTHON3,
+        ),
+        (
+            "3.9.21",
+            datetime.date(2024, 12, 3),
+            ReleaseStatus.EOL,
+            datetime.date(2025, 10, 31),
+            False,
+            False,
+            PythonVersion.PYTHON3,
+        ),
+        (
+            "3.9.19",
+            datetime.date(2024, 3, 19),
+            ReleaseStatus.EOL,
+            datetime.date(2025, 10, 31),
+            False,
+            False,
+            PythonVersion.PYTHON3,
+        ),
+        (
+            "3.9.0",
+            datetime.date(2020, 10, 5),
+            ReleaseStatus.EOL,
+            datetime.date(2025, 10, 31),
+            False,
+            False,
+            PythonVersion.PYTHON3,
+        ),
+        # Python 3.8 - EOL
+        (
+            "3.8.20",
+            datetime.date(2024, 9, 6),
+            ReleaseStatus.EOL,
+            datetime.date(2024, 10, 31),
+            False,
+            False,
+            PythonVersion.PYTHON3,
+        ),
+        (
+            "3.8.18",
+            datetime.date(2023, 8, 24),
+            ReleaseStatus.EOL,
+            datetime.date(2024, 10, 31),
+            False,
+            False,
+            PythonVersion.PYTHON3,
+        ),
+        (
+            "3.8.0",
+            datetime.date(2019, 10, 14),
+            ReleaseStatus.EOL,
+            datetime.date(2024, 10, 31),
+            False,
+            False,
+            PythonVersion.PYTHON3,
+        ),
+        # Python 3.7 - EOL
+        (
+            "3.7.17",
+            datetime.date(2023, 6, 6),
+            ReleaseStatus.EOL,
+            datetime.date(2023, 6, 27),
+            False,
+            False,
+            PythonVersion.PYTHON3,
+        ),
+        (
+            "3.7.0",
+            datetime.date(2018, 6, 27),
+            ReleaseStatus.EOL,
+            datetime.date(2023, 6, 27),
+            False,
+            False,
+            PythonVersion.PYTHON3,
+        ),
+        # Python 3.6 - EOL
+        (
+            "3.6.15",
+            datetime.date(2021, 9, 4),
+            ReleaseStatus.EOL,
+            datetime.date(2021, 12, 23),
+            False,
+            False,
+            PythonVersion.PYTHON3,
+        ),
+        (
+            "3.6.0",
+            datetime.date(2016, 12, 23),
+            ReleaseStatus.EOL,
+            datetime.date(2021, 12, 23),
+            False,
+            False,
+            PythonVersion.PYTHON3,
+        ),
+        # Python 2.7 - EOL
+        (
+            "2.7.18",
+            datetime.date(2020, 4, 20),
+            ReleaseStatus.EOL,
+            datetime.date(2020, 1, 1),
+            False,
+            False,
+            PythonVersion.PYTHON2,
+        ),
+        (
+            "2.7.17",
+            datetime.date(2019, 10, 19),
+            ReleaseStatus.EOL,
+            datetime.date(2020, 1, 1),
+            False,
+            False,
+            PythonVersion.PYTHON2,
+        ),
+        (
+            "2.7.16",
+            datetime.date(2019, 3, 4),
+            ReleaseStatus.EOL,
+            datetime.date(2020, 1, 1),
+            False,
+            False,
+            PythonVersion.PYTHON2,
+        ),
+        (
+            "2.7.0",
+            datetime.date(2010, 7, 3),
+            ReleaseStatus.EOL,
+            datetime.date(2020, 1, 1),
+            False,
+            False,
+            PythonVersion.PYTHON2,
+        ),
+        # Python 1.x - Ancient EOL releases
+        (
+            "1.6.1",
+            datetime.date(2000, 9, 1),
+            ReleaseStatus.EOL,
+            datetime.date(2000, 9, 1),
+            False,
+            False,
+            PythonVersion.PYTHON1,
+        ),
+        (
+            "1.6",
+            datetime.date(2000, 9, 5),
+            ReleaseStatus.EOL,
+            datetime.date(2000, 9, 5),
+            False,
+            False,
+            PythonVersion.PYTHON1,
+        ),
+        (
+            "1.5.2",
+            datetime.date(1999, 4, 13),
+            ReleaseStatus.EOL,
+            datetime.date(1999, 4, 13),
+            False,
+            False,
+            PythonVersion.PYTHON1,
+        ),
+        (
+            "1.5.1",
+            datetime.date(1998, 4, 14),
+            ReleaseStatus.EOL,
+            datetime.date(1998, 4, 14),
+            False,
+            False,
+            PythonVersion.PYTHON1,
+        ),
+        (
+            "1.5",
+            datetime.date(1998, 1, 3),
+            ReleaseStatus.EOL,
+            datetime.date(1998, 1, 3),
+            False,
+            False,
+            PythonVersion.PYTHON1,
+        ),
+        (
+            "1.4",
+            datetime.date(1996, 10, 25),
+            ReleaseStatus.EOL,
+            datetime.date(1996, 10, 25),
+            False,
+            False,
+            PythonVersion.PYTHON1,
+        ),
+        (
+            "1.3",
+            datetime.date(1995, 10, 13),
+            ReleaseStatus.EOL,
+            datetime.date(1995, 10, 13),
+            False,
+            False,
+            PythonVersion.PYTHON1,
+        ),
+        (
+            "1.2",
+            datetime.date(1995, 4, 13),
+            ReleaseStatus.EOL,
+            datetime.date(1995, 4, 13),
+            False,
+            False,
+            PythonVersion.PYTHON1,
+        ),
+        (
+            "1.1",
+            datetime.date(1994, 10, 11),
+            ReleaseStatus.EOL,
+            datetime.date(1994, 10, 11),
+            False,
+            False,
+            PythonVersion.PYTHON1,
+        ),
+        (
+            "1.0.1",
+            datetime.date(1994, 2, 15),
+            ReleaseStatus.EOL,
+            datetime.date(1994, 2, 15),
+            False,
+            False,
+            PythonVersion.PYTHON1,
+        ),
+        (
+            "1.0.0",
+            datetime.date(1994, 1, 26),
+            ReleaseStatus.EOL,
+            datetime.date(1994, 1, 26),
+            False,
+            False,
+            PythonVersion.PYTHON1,
+        ),
+        (
+            "0.9.9",
+            datetime.date(1993, 7, 29),
+            ReleaseStatus.EOL,
+            datetime.date(1993, 7, 29),
+            False,
+            False,
+            PythonVersion.PYTHON1,
+        ),
+        (
+            "0.9.8",
+            datetime.date(1993, 1, 9),
+            ReleaseStatus.EOL,
+            datetime.date(1993, 1, 9),
+            False,
+            False,
+            PythonVersion.PYTHON1,
+        ),
+        (
+            "0.9.1",
+            datetime.date(1991, 2, 1),
+            ReleaseStatus.EOL,
+            datetime.date(1991, 2, 1),
+            False,
+            False,
+            PythonVersion.PYTHON1,
+        ),
     ]
 
-    for i, (name, is_latest, pre_release) in enumerate(release_data[:count]):
+    def get_release_notes_url(version_name: str, python_version: PythonVersion) -> str:
+        """Generate the appropriate release notes URL for a Python version."""
+        parts = version_name.split(".")
+        major = parts[0]
+        minor = parts[1] if len(parts) > 1 else "0"
+        minor_version = f"{major}.{minor}"
+
+        if python_version == PythonVersion.PYTHON3:
+            return f"https://docs.python.org/{minor_version}/whatsnew/{minor_version}.html"
+        if python_version == PythonVersion.PYTHON2:
+            return f"https://docs.python.org/{minor_version}/whatsnew/{minor_version}.html"
+        if python_version == PythonVersion.PYTHON1:
+            if version_name.startswith("0."):
+                return "https://www.python.org/download/releases/early/"
+            return f"https://docs.python.org/release/{minor_version}/"
+        return f"https://www.python.org/downloads/release/python-{version_name.replace('.', '')}/"
+
+    def get_release_content(
+        version_name: str,
+        python_version: PythonVersion,
+        status: ReleaseStatus,
+        release_notes_url: str,
+    ) -> str:
+        """Generate release notes content in Markdown for a Python version."""
+        parts = version_name.split(".")
+        major = parts[0]
+        minor = parts[1] if len(parts) > 1 else "0"
+        patch = parts[2] if len(parts) > 2 else "0"
+        minor_version = f"{major}.{minor}"
+
+        # Special content for Python 3.14.0
+        if version_name == "3.14.0":
+            return """<img width="538" height="507" src="https://hugovk.dev/python-3.14.png" alt="Two snakes enjoying a pie with 3.14 on the top and π crimping">
+
+# This is the stable release of Python 3.14.0
+
+Python 3.14.0 is the newest major release of the Python programming language, and it contains many new features and optimisations compared to Python 3.13.
+
+
+# Major new features of the 3.14 series, compared to 3.13
+
+Some of the major new features and changes in Python 3.14 are:
+
+## New features
+
+- [PEP 779](https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-pep779):  Free-threaded Python is officially supported
+- [PEP 649](https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-pep649): The evaluation of annotations is now deferred, improving the semantics of using annotations.
+- [PEP 750](https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-pep750): Template string literals (t-strings) for custom string processing, using the familiar syntax of f-strings.
+- [PEP 734](https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-pep734): Multiple interpreters in the stdlib.
+- [PEP 784](https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-pep784): A new module `compression.zstd` providing support for the Zstandard compression algorithm.
+- [PEP 758](https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-pep758): `except` and `except*` expressions may now omit the brackets.
+- [Syntax highlighting in PyREPL](https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-pyrepl-highlighting), and support for color in [unittest](https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-color-unittest), [argparse](https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-color-argparse), [json](https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-color-json) and [calendar](https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-color-calendar) CLIs.
+- [PEP 768](https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-pep768): A zero-overhead external debugger interface for CPython.
+- [UUID versions 6-8](https://docs.python.org/3.14/whatsnew/3.14.html#uuid) are now supported by the `uuid` module, and generation of versions 3-5 are up to 40% faster.
+- [PEP 765](https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-pep765): Disallow `return`/`break`/`continue` that exit a `finally` block.
+- [PEP 741](https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-pep741): An improved C API for configuring Python.
+- A [new type of interpreter](https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-tail-call). For certain newer compilers, this interpreter provides significantly better performance. Opt-in for now, requires building from source.
+- [Improved error messages.](https://docs.python.org/3.14/whatsnew/3.14.html#improved-error-messages)
+- [Builtin implementation of HMAC](https://docs.python.org/3.14/whatsnew/3.14.html#hmac) with formally verified code from the HACL* project.
+- A [new command-line interface](https://docs.python.org/3.14/whatsnew/3.14.html#asyncio-introspection-capabilities) to inspect running Python processes using asynchronous tasks.
+- The pdb module now supports [remote attaching to a running Python process](https://docs.python.org/3.14/whatsnew/3.14.html#remote-attaching-to-a-running-python-process-with-pdb).
+
+For more details on the changes to Python 3.14, see [What's new in Python 3.14](https://docs.python.org/3.14/whatsnew/3.14.html).
+
+
+## Build changes
+
+- [PEP 761](https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-pep761): Python 3.14 and onwards no longer provides PGP signatures for release artifacts. Instead, Sigstore is recommended for verifiers.
+- Official macOS and Windows release binaries include an [*experimental* JIT compiler](https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-jit-compiler).
+- Official [Android binary releases](https://github.com/python/cpython/issues/137242) are now available.
+
+
+## Incompatible changes, removals and new deprecations
+
+- [Incompatible changes](https://docs.python.org/3.14/whatsnew/3.14.html#incompatible-changes)
+- Python [removals](https://docs.python.org/3.14/whatsnew/3.14.html#removed) and [deprecations](https://docs.python.org/3.14/whatsnew/3.14.html#deprecated)
+- C API [removals](https://docs.python.org/3.14/whatsnew/3.14.html#c-api-removed) and [deprecations](https://docs.python.org/3.14/whatsnew/3.14.html#c-api-deprecated)
+- Overview of all [pending deprecations](https://docs.python.org/3.14/deprecations/index.html)
+
+# Python install manager
+
+The installer we offer for Windows is being replaced by our new install manager, which can be installed from [the Windows Store](https://apps.microsoft.com/detail/9NQ7512CXL7T) or from its [download page](https://www.python.org/downloads/latest/pymanager/). See [our documentation](https://docs.python.org/3.14/using/windows.html) for more information. The JSON file available for download below contains the list of all the installable packages available as part of this release, including file URLs and hashes, but is not required to install the latest release. The traditional installer will remain available throughout the 3.14 and 3.15 releases.
+
+
+# More resources
+
+- [Online documentation](https://docs.python.org/3.14/)
+- [PEP 745](https://peps.python.org/pep-0745/), 3.14 Release Schedule
+- Report bugs at [github.com/python/cpython/issues](https://github.com/python/cpython/issues)
+- [Help fund Python directly](https://www.python.org/psf/donations/python-dev/) (or via [GitHub Sponsors](https://github.com/sponsors/python)) and support [the Python community](https://www.python.org/psf/donations/)
+
+
+
+# And now for something completely different
+
+Edgar Allen Poe died on 7th October 1849.
+
+As we all recall from [3.14.0a1](https://discuss.python.org/t/python-3-14-0-alpha-1/68039#p-199032-and-now-for-something-completely-different-3), piphilology is the creation of mnemonics to help memorise the digits of *π*, and the number of letters in each word in a pi-poem (or "piem") successively correspond to the digits of *π*.
+
+In 1995, Mike Keith, an American mathematician and author of constrained writing, retold Poe's *The Raven* as a 740-word piem. Here's the first two stanzas of [*Near A Raven*](http://www.cadaeic.net/naraven.htm):
+
+> **Poe, E.**
+> **Near a Raven**
+>
+> Midnights so dreary, tired and weary.
+> Silently pondering volumes extolling all by-now obsolete lore.
+> During my rather long nap - the weirdest tap!
+> An ominous vibrating sound disturbing my chamber's antedoor.
+> "This", I whispered quietly, "I ignore".
+>
+> Perfectly, the intellect remembers: the ghostly fires, a glittering ember.
+> Inflamed by lightning's outbursts, windows cast penumbras upon this floor.
+> Sorrowful, as one mistreated, unhappy thoughts I heeded:
+> That inimitable lesson in elegance - Lenore -
+> Is delighting, exciting...nevermore.
+
+
+# Enjoy the new release
+
+Thanks to all of the many volunteers who help make Python Development and these releases possible! Please consider supporting our efforts by volunteering yourself or through organisation contributions to the [Python Software Foundation](https://www.python.org/psf-landing/)."""
+
+        status_text = {
+            ReleaseStatus.PRERELEASE: "This is a **pre-release** version for testing purposes.",
+            ReleaseStatus.BUGFIX: "This is an **active bugfix** release receiving regular updates.",
+            ReleaseStatus.SECURITY: "This release branch receives **security fixes only**.",
+            ReleaseStatus.EOL: "This release has reached **end of life** and no longer receives updates.",
+        }.get(status, "")
+
+        if python_version == PythonVersion.PYTHON3:
+            content = f"""Python {version_name} is a {"patch" if int(patch) > 0 else "feature"} release of the Python {minor_version} series.
+
+{status_text}
+
+## Highlights
+
+- Improved performance and stability
+- Bug fixes and security updates
+- Enhanced standard library modules
+
+For the complete list of changes, see the [What's New in Python {minor_version}]({release_notes_url}) documentation.
+
+Full changelog available in the [Python {minor_version} Changelog](https://docs.python.org/{minor_version}/whatsnew/changelog.html)."""
+
+        elif python_version == PythonVersion.PYTHON2:
+            content = f"""Python {version_name} is part of the Python 2 series, which has reached end of life.
+
+> ⚠️ **Python 2 has reached end of life.** Please upgrade to Python 3.
+
+For historical documentation, see the [What's New in Python {minor_version}]({release_notes_url})."""
+
+        elif python_version == PythonVersion.PYTHON1:
+            if version_name.startswith("0."):
+                content = f"""Python {version_name} is one of the earliest releases of Python, created by Guido van Rossum.
+
+These early versions laid the foundation for the Python language we know today.
+
+For historical information about early Python releases, see the [early releases archive]({release_notes_url})."""
+            else:
+                content = f"""Python {version_name} is part of the Python 1.x series, the first major version of Python.
+
+For historical documentation, see the [Python {minor_version} release notes]({release_notes_url})."""
+
+        else:
+            content = f"""Python {version_name} release.
+
+See the [release notes]({release_notes_url}) for details."""
+
+        return content
+
+    for name, release_date, status, eol_date, is_latest, pre_release, version in release_data[:count]:
+        notes_url = get_release_notes_url(name, version)
         release = Release(
             name=name,
-            slug=name.lower().replace(".", "-"),
+            slug=f"python-{name.replace('.', '')}",
+            version=version,
+            status=status,
             is_latest=is_latest,
             is_published=True,
             pre_release=pre_release,
-            show_on_download_page=not pre_release,
-            release_date=datetime.datetime.now(tz=datetime.UTC).date() - datetime.timedelta(days=i * 30),
-            release_notes_url=f"https://docs.python.org/3/whatsnew/{name.split('.')[1]}.html",
-            content=f"# Python {name}\n\nThis is the release notes for Python {name}.",
+            show_on_download_page=True,
+            release_date=release_date,
+            eol_date=eol_date,
+            release_notes_url=notes_url,
+            content=get_release_content(name, version, status, notes_url),
             creator_id=users[0].id,
         )
         session.add(release)
@@ -930,7 +1568,7 @@ async def seed_database() -> None:
         await seed_pages(session, users, count=15)
 
         os_list = await seed_operating_systems(session, users)
-        await seed_releases(session, users, os_list, count=5)
+        await seed_releases(session, users, os_list, count=100)
 
         sponsors = await seed_sponsors(session, users, count=5)
         levels = await seed_sponsorship_levels(session)

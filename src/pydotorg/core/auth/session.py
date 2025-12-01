@@ -84,7 +84,10 @@ class SessionAuthMiddleware(AbstractAuthenticationMiddleware):
             return AuthenticationResult(user=None, auth=None)
 
         plugin = connection.app.plugins.get(SQLAlchemyPlugin)
-        async with plugin.get_session() as db_session:
+        if plugin is None:
+            return AuthenticationResult(user=None, auth=None)
+        config = plugin.config[0] if isinstance(plugin.config, list) else plugin.config
+        async with config.get_session() as db_session:  # type: ignore[union-attr]
             db_session: AsyncSession
             result = await db_session.execute(select(User).where(User.id == user_id, User.is_active.is_(True)))
             user = result.scalar_one_or_none()

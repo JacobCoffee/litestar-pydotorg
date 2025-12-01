@@ -27,7 +27,7 @@ extensions = [
 ]
 
 templates_path = ["_templates"]
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "internal"]
 
 source_suffix = {
     ".rst": "restructuredtext",
@@ -107,5 +107,9 @@ intersphinx_mapping = {
     "pydantic": ("https://docs.pydantic.dev/latest/", None),
     "advanced-alchemy": ("https://docs.advanced-alchemy.litestar.dev/latest/", None),
 }
+
+intersphinx_disabled_reftypes = ["*"]
+
+suppress_warnings = ["intersphinx"]
 
 todo_include_todos = True

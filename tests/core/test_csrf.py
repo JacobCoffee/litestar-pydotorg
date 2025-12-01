@@ -85,6 +85,6 @@ class TestCSRFSecuritySettings:
     """Test suite for CSRF security settings based on debug mode."""
 
     def test_cookie_secure_based_on_debug(self) -> None:
-        """Test that cookie_secure is opposite of debug setting."""
+        """Test that cookie_secure is opposite of is_debug setting."""
         config = create_csrf_config()
-        assert config.cookie_secure == (not settings.debug if settings.debug is not None else not settings.is_debug)
+        assert config.cookie_secure == (not settings.is_debug)

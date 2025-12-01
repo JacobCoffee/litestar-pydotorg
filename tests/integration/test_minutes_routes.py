@@ -10,6 +10,7 @@ import pytest
 from litestar import Litestar
 from litestar.plugins.sqlalchemy import SQLAlchemyAsyncConfig, SQLAlchemyPlugin
 from litestar.testing import AsyncTestClient
+from sqlalchemy import NullPool
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 from pydotorg.core.database.base import AuditBase
@@ -25,7 +26,7 @@ if TYPE_CHECKING:
 
 async def _create_user_via_db(postgres_uri: str, username: str | None = None) -> User:
     """Create a user directly in the database for testing."""
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async_session = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session() as session:
         user = User(
@@ -49,7 +50,7 @@ async def _create_minutes_via_db(
     """Create minutes directly in the database for testing."""
     from uuid import UUID
 
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async_session = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     meeting_date = date or datetime.date.today()
     async with async_session() as session:
@@ -71,7 +72,7 @@ async def _create_minutes_via_db(
 @pytest.fixture
 async def test_app(postgres_uri: str) -> AsyncGenerator[Litestar]:
     """Create a test Litestar application with the minutes controller."""
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async with engine.begin() as conn:
         await conn.run_sync(AuditBase.metadata.create_all)
     await engine.dispose()

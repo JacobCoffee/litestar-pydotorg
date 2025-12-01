@@ -116,6 +116,52 @@ class ReleaseService(SQLAlchemyAsyncRepositoryService[Release]):
 
         return files_by_os
 
+    async def get_releases_grouped_by_minor_version(self, limit: int = 500) -> dict[str, dict[str, list[Release]]]:
+        """Get releases grouped by major and then minor version.
+
+        Returns a nested dict structure:
+        {
+            "3": {
+                "3.14": [releases...],
+                "3.13": [releases...],
+                ...
+            },
+            "2": {
+                "2.7": [releases...],
+            }
+        }
+
+        Args:
+            limit: Maximum number of releases to fetch.
+
+        Returns:
+            Nested dictionary mapping major version -> minor version -> releases.
+        """
+        releases = await self.repository.get_for_download_page(limit=limit)
+
+        grouped: dict[str, dict[str, list[Release]]] = {}
+        for release in releases:
+            major = release.major_version
+            minor = release.minor_version
+
+            if major not in grouped:
+                grouped[major] = {}
+            if minor not in grouped[major]:
+                grouped[major][minor] = []
+
+            grouped[major][minor].append(release)
+
+        sorted_grouped: dict[str, dict[str, list[Release]]] = {}
+        for major in sorted(grouped.keys(), key=lambda x: (0 if x.isdigit() else 1, -int(x) if x.isdigit() else x)):
+            sorted_grouped[major] = {}
+            for minor in sorted(
+                grouped[major].keys(),
+                key=lambda x: tuple(-int(p) if p.isdigit() else 0 for p in x.split(".")),
+            ):
+                sorted_grouped[major][minor] = grouped[major][minor]
+
+        return sorted_grouped
+
     async def mark_as_latest(self, release_id: UUID, version: PythonVersion) -> Release:
         """Mark a release as the latest for its Python version.
 

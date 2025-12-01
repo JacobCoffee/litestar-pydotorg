@@ -12,6 +12,7 @@ from advanced_alchemy.extensions.litestar.plugins.init.config.asyncio import SQL
 from advanced_alchemy.filters import LimitOffset
 from litestar import Litestar
 from litestar.testing import AsyncTestClient
+from sqlalchemy import NullPool
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -40,7 +41,7 @@ if TYPE_CHECKING:
 
 async def _create_calendar_via_db(postgres_uri: str, **calendar_data) -> dict:
     """Create a calendar directly via database."""
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session_factory() as session:
         calendar = Calendar(
@@ -57,7 +58,7 @@ async def _create_calendar_via_db(postgres_uri: str, **calendar_data) -> dict:
 
 async def _create_category_via_db(postgres_uri: str, calendar_id: str, **category_data) -> dict:
     """Create a category directly via database."""
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session_factory() as session:
         category = EventCategory(
@@ -75,7 +76,7 @@ async def _create_category_via_db(postgres_uri: str, calendar_id: str, **categor
 
 async def _create_location_via_db(postgres_uri: str, **location_data) -> dict:
     """Create a location directly via database."""
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session_factory() as session:
         location = EventLocation(
@@ -94,7 +95,7 @@ async def _create_location_via_db(postgres_uri: str, **location_data) -> dict:
 
 async def _create_event_via_db(postgres_uri: str, calendar_id: str, **event_data) -> dict:
     """Create an event directly via database."""
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session_factory() as session:
         event = Event(
@@ -126,7 +127,7 @@ async def events_fixtures(postgres_uri: str) -> AsyncIterator[EventsTestFixtures
     """Async test client with events controllers."""
     from sqlalchemy import text
 
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
 
     async with engine.begin() as conn:
         await conn.execute(text("DROP SCHEMA public CASCADE"))

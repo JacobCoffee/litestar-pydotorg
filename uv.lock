@@ -17,6 +17,11 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/c9/a3/9c1ffd384f8ed517d0961a230b92dc235b4be45027c57a5290f615358a2f/advanced_alchemy-1.8.0-py3-none-any.whl", hash = "sha256:df3fc0794f3b2288ac84f537e5d2918c70658116de4e2c2e2294778b179cfa70", size = 258817, upload-time = "2025-10-28T21:01:29.163Z" },
 ]
 
+[package.optional-dependencies]
+cli = [
+    { name = "rich-click" },
+]
+
 [[package]]
 name = "aiofiles"
 version = "25.1.0"
@@ -848,7 +853,7 @@ name = "litestar-pydotorg"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
-    { name = "advanced-alchemy" },
+    { name = "advanced-alchemy", extra = ["cli"] },
     { name = "alembic" },
     { name = "asyncpg" },
     { name = "beautifulsoup4" },
@@ -946,7 +951,7 @@ test = [
 
 [package.metadata]
 requires-dist = [
-    { name = "advanced-alchemy", specifier = ">=0.31.0" },
+    { name = "advanced-alchemy", extras = ["cli"], specifier = ">=0.31.0" },
     { name = "alembic", specifier = ">=1.14.0" },
     { name = "asyncpg", specifier = ">=0.30.0" },
     { name = "beautifulsoup4", specifier = ">=4.12.0" },

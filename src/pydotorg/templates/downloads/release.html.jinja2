@@ -1,8 +1,8 @@
 {% extends "base.html.jinja2" %}
 
-{% block title %}Python {{ release.version }} Release | Python.org{% endblock %}
+{% block title %}Python {{ release.name }} Release | Python.org{% endblock %}
 
-{% block meta_description %}Download Python {{ release.version }}. Released on {{ release.release_date.strftime('%B %d, %Y') if release.release_date else 'TBD' }}.{% endblock %}
+{% block meta_description %}Download Python {{ release.name }}. Released on {{ release.release_date.strftime('%B %d, %Y') if release.release_date else 'TBD' }}.{% endblock %}
 
 {% block breadcrumbs %}
 <div class="bg-base-200 py-4">
@@ -11,7 +11,7 @@
             <ul>
                 <li><a href="/">Home</a></li>
                 <li><a href="/downloads/">Downloads</a></li>
-                <li>Python {{ release.version }}</li>
+                <li>Python {{ release.name }}</li>
             </ul>
         </div>
     </div>
@@ -25,7 +25,7 @@
             <div class="mb-8">
                 <div class="flex items-center gap-4 mb-4">
                     <h1 class="text-5xl font-bold text-python-blue">
-                        Python {{ release.version }}
+                        Python {{ release.name }}
                     </h1>
                     {% if release.pre_release %}
                         <span class="badge badge-warning">Pre-release</span>
@@ -44,9 +44,8 @@
             {% if release.content %}
             <div class="card bg-base-200 mb-8">
                 <div class="card-body">
-                    <h2 class="card-title text-2xl text-python-blue mb-4">Release Notes</h2>
-                    <div class="prose max-w-none">
-                        {{ release.content|safe }}
+                    <div class="prose prose-lg max-w-none prose-headings:text-python-blue prose-a:text-python-blue prose-a:no-underline hover:prose-a:underline prose-img:mx-auto prose-img:rounded-lg prose-blockquote:border-python-yellow prose-blockquote:bg-base-300 prose-blockquote:py-1 prose-blockquote:px-4 prose-blockquote:rounded-r-lg">
+                        {{ release.content|markdown|safe }}
                     </div>
                 </div>
             </div>
@@ -161,7 +160,7 @@
                     </svg>
                     Back to Downloads
                 </a>
-                <a href="https://docs.python.org/{{ release.version.split('.')[0] }}/" class="btn btn-primary">
+                <a href="https://docs.python.org/{{ release.major_version }}/" class="btn btn-primary">
                     View Documentation
                 </a>
             </div>

@@ -5,7 +5,13 @@ from __future__ import annotations
 from datetime import date
 from uuid import uuid4
 
-from pydotorg.domains.downloads.models import OS, PythonVersion, Release, ReleaseFile
+from pydotorg.domains.downloads.models import (
+    OS,
+    DownloadStatistic,
+    PythonVersion,
+    Release,
+    ReleaseFile,
+)
 
 
 class TestPythonVersionEnum:
@@ -133,6 +139,38 @@ class TestReleaseModel:
         )
         assert release.show_on_download_page is False
 
+    def test_minor_version_standard(self) -> None:
+        release = Release(name="3.12.1", slug="3-12-1", version=PythonVersion.PYTHON3)
+        assert release.minor_version == "3.12"
+
+    def test_minor_version_python2(self) -> None:
+        release = Release(name="2.7.18", slug="2-7-18", version=PythonVersion.PYTHON2)
+        assert release.minor_version == "2.7"
+
+    def test_minor_version_prerelease(self) -> None:
+        release = Release(name="3.14.0a1", slug="3-14-0a1", version=PythonVersion.PYTHON3)
+        assert release.minor_version == "3.14"
+
+    def test_minor_version_invalid(self) -> None:
+        release = Release(name="invalid", slug="invalid", version=PythonVersion.PYTHON3)
+        assert release.minor_version == "invalid"
+
+    def test_minor_version_single_part(self) -> None:
+        release = Release(name="3", slug="3", version=PythonVersion.PYTHON3)
+        assert release.minor_version == "3"
+
+    def test_major_version_standard(self) -> None:
+        release = Release(name="3.12.1", slug="3-12-1", version=PythonVersion.PYTHON3)
+        assert release.major_version == "3"
+
+    def test_major_version_python2(self) -> None:
+        release = Release(name="2.7.18", slug="2-7-18", version=PythonVersion.PYTHON2)
+        assert release.major_version == "2"
+
+    def test_major_version_invalid(self) -> None:
+        release = Release(name="invalid", slug="invalid", version=PythonVersion.PYTHON3)
+        assert release.major_version == "invalid"
+
 
 class TestReleaseFileModel:
     def test_create_release_file(self) -> None:
@@ -223,3 +261,44 @@ class TestReleaseFileModel:
             download_button=True,
         )
         assert file.download_button is True
+
+
+class TestDownloadStatisticModel:
+    def test_create_download_statistic(self) -> None:
+        file_id = uuid4()
+        stat = DownloadStatistic(
+            release_file_id=file_id,
+            date=date(2024, 1, 15),
+            download_count=100,
+        )
+        assert stat.release_file_id == file_id
+        assert stat.date == date(2024, 1, 15)
+        assert stat.download_count == 100
+
+    def test_download_statistic_explicit_zero_count(self) -> None:
+        file_id = uuid4()
+        stat = DownloadStatistic(
+            release_file_id=file_id,
+            date=date.today(),
+            download_count=0,
+        )
+        assert stat.download_count == 0
+
+    def test_download_statistic_with_high_count(self) -> None:
+        file_id = uuid4()
+        stat = DownloadStatistic(
+            release_file_id=file_id,
+            date=date.today(),
+            download_count=1_000_000,
+        )
+        assert stat.download_count == 1_000_000
+
+    def test_download_statistic_tablename(self) -> None:
+        assert DownloadStatistic.__tablename__ == "download_statistics"
+
+    def test_download_statistic_constraints(self) -> None:
+        constraints = DownloadStatistic.__table_args__
+        constraint_names = [c.name for c in constraints if hasattr(c, "name")]
+        assert "uq_download_stats_file_date" in constraint_names
+        assert "ix_download_stats_date" in constraint_names
+        assert "ix_download_stats_file_id" in constraint_names

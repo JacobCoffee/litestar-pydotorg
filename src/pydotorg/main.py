@@ -53,6 +53,7 @@ from pydotorg.core.security.csrf import create_csrf_config
 from pydotorg.core.worker import saq_plugin
 from pydotorg.domains.about import AboutRenderController
 from pydotorg.domains.admin import (
+    AdminAnalyticsController,
     AdminBlogsController,
     AdminDashboardController,
     AdminEmailController,
@@ -284,6 +285,8 @@ def configure_template_engine(engine: JinjaTemplateEngine) -> None:  # noqa: PLR
     """Configure the Jinja2 template engine with global context."""
     from datetime import UTC, datetime  # noqa: PLC0415
 
+    import cmarkgfm  # noqa: PLC0415
+
     ms_threshold = 1e12
     minute = 60
     hour = 3600
@@ -403,10 +406,24 @@ def configure_template_engine(engine: JinjaTemplateEngine) -> None:  # noqa: PLR
             return ""
         return value.replace("\\n", "\n")
 
+    def render_markdown(content: str | None) -> str:
+        """Render markdown content to HTML using GitHub-flavored markdown.
+
+        Args:
+            content: The markdown content to render.
+
+        Returns:
+            Rendered HTML string, or empty string if content is None/empty.
+        """
+        if not content:
+            return ""
+        return cmarkgfm.github_flavored_markdown_to_html(content)
+
     engine.engine.filters["friendly_date"] = friendly_date
     engine.engine.filters["time_ago"] = time_ago
     engine.engine.filters["pretty_json"] = pretty_json
     engine.engine.filters["format_traceback"] = format_traceback
+    engine.engine.filters["markdown"] = render_markdown
 
 
 template_config = TemplateConfig(
@@ -505,6 +522,18 @@ app = Litestar(
         index,
         health_check,
         AdminController,
+        AdminAnalyticsController,
+        AdminBlogsController,
+        AdminDashboardController,
+        AdminEmailController,
+        AdminEventsController,
+        AdminJobsController,
+        AdminLogsController,
+        AdminPagesController,
+        AdminSettingsController,
+        AdminSponsorsController,
+        AdminTasksController,
+        AdminUsersController,
         create_static_files_router(
             path="/static",
             directories=[static_dir] if static_dir.exists() else [],
@@ -567,17 +596,6 @@ app = Litestar(
         WorkGroupsPageController,
         SearchAPIController,
         SearchRenderController,
-        AdminBlogsController,
-        AdminDashboardController,
-        AdminEmailController,
-        AdminEventsController,
-        AdminJobsController,
-        AdminLogsController,
-        AdminPagesController,
-        AdminSettingsController,
-        AdminSponsorsController,
-        AdminTasksController,
-        AdminUsersController,
         EmailTemplateController,
         EmailLogController,
     ],

@@ -1032,6 +1032,5 @@ For issues or questions:
 
 ## See Also
 
-- [API Reference](/docs/api-reference.md)
-- [User Management API](/docs/api-users.md)
-- [Rate Limiting](/docs/rate-limiting.md)
+- [Rate Limiting Architecture](architecture/RATE_LIMITING_ARCHITECTURE.md)
+- [API Tags Structure](architecture/API_TAGS_STRUCTURE.md)

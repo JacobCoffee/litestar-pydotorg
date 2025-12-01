@@ -10,6 +10,7 @@ import pytest
 from litestar import Litestar
 from litestar.plugins.sqlalchemy import SQLAlchemyAsyncConfig, SQLAlchemyPlugin
 from litestar.testing import AsyncTestClient
+from sqlalchemy import NullPool
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 from pydotorg.core.database.base import AuditBase
@@ -28,7 +29,7 @@ if TYPE_CHECKING:
 
 async def _create_user_via_db(postgres_uri: str, username: str | None = None) -> User:
     """Create a user directly in the database for testing."""
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async_session = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session() as session:
         user = User(
@@ -45,7 +46,7 @@ async def _create_user_via_db(postgres_uri: str, username: str | None = None) ->
 
 async def _create_election_via_db(postgres_uri: str, name: str | None = None) -> Election:
     """Create an election directly in the database for testing."""
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async_session = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     today = datetime.date.today()
     async with async_session() as session:
@@ -69,7 +70,7 @@ async def _create_nominee_via_db(postgres_uri: str, election_id: str, user_id: s
     """Create a nominee directly in the database for testing."""
     from uuid import UUID
 
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async_session = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session() as session:
         nominee = Nominee(
@@ -90,7 +91,7 @@ async def _create_nomination_via_db(
     """Create a nomination directly in the database for testing."""
     from uuid import UUID
 
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async_session = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session() as session:
         nomination = Nomination(
@@ -108,7 +109,7 @@ async def _create_nomination_via_db(
 @pytest.fixture
 async def test_app(postgres_uri: str) -> AsyncGenerator[Litestar]:
     """Create a test Litestar application with the nominations controllers."""
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async with engine.begin() as conn:
         await conn.run_sync(AuditBase.metadata.create_all)
     await engine.dispose()

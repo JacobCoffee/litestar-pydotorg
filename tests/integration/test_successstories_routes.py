@@ -15,7 +15,7 @@ from advanced_alchemy.filters import LimitOffset
 from litestar import Litestar
 from litestar.params import Parameter
 from litestar.testing import AsyncTestClient
-from sqlalchemy import text
+from sqlalchemy import NullPool, text
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -42,7 +42,7 @@ class SuccessStoriesTestFixtures:
 
 async def _create_user_via_db(postgres_uri: str, **user_data: object) -> dict:
     """Create a user directly in the database."""
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session_factory() as session:
         user = User(
@@ -66,7 +66,7 @@ async def _create_user_via_db(postgres_uri: str, **user_data: object) -> dict:
 
 async def _create_category_via_db(postgres_uri: str, **category_data: object) -> dict:
     """Create a story category directly in the database."""
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session_factory() as session:
         slug = category_data.get("slug", f"category-{uuid4().hex[:8]}")
@@ -90,7 +90,7 @@ async def _create_story_via_db(postgres_uri: str, category_id: str, creator_id: 
     """Create a story directly in the database."""
     from uuid import UUID as PyUUID
 
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session_factory() as session:
         slug = story_data.get("slug", f"story-{uuid4().hex[:8]}")
@@ -135,7 +135,7 @@ async def provide_story_service(db_session: AsyncSession) -> StoryService:
 @pytest.fixture
 async def successstories_fixtures(postgres_uri: str) -> AsyncIterator[SuccessStoriesTestFixtures]:
     """Create test fixtures with fresh database schema."""
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async with engine.begin() as conn:
         await conn.execute(text("DROP SCHEMA public CASCADE"))
         await conn.execute(text("CREATE SCHEMA public"))

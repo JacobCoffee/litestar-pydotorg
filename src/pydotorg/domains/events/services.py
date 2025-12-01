@@ -95,7 +95,7 @@ class EventService(SQLAlchemyAsyncRepositoryService[Event]):
     repository_type = EventRepository
     match_fields = ["slug"]
 
-    async def create(self, data: dict | Event) -> Event:
+    async def create(self, data: dict | Event) -> Event:  # type: ignore[override]
         """Create an event and enqueue search indexing.
 
         Args:

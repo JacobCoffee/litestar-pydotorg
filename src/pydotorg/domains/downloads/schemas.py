@@ -8,7 +8,7 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from pydotorg.domains.downloads.models import PythonVersion
+from pydotorg.domains.downloads.models import PythonVersion, ReleaseStatus
 
 
 class OSBase(BaseModel):
@@ -58,11 +58,13 @@ class ReleaseBase(BaseModel):
     name: Annotated[str, Field(min_length=1, max_length=255)]
     slug: Annotated[str, Field(min_length=1, max_length=255)]
     version: PythonVersion = PythonVersion.PYTHON3
+    status: ReleaseStatus = ReleaseStatus.BUGFIX
     is_latest: bool = False
     is_published: bool = False
     pre_release: bool = False
     show_on_download_page: bool = True
     release_date: datetime.date | None = None
+    eol_date: datetime.date | None = None
     release_notes_url: str = ""
     content: str = ""
 
@@ -76,11 +78,13 @@ class ReleaseCreate(ReleaseBase):
                 "name": "Python 3.13.1",
                 "slug": "python-3131",
                 "version": "python3",
+                "status": "bugfix",
                 "is_latest": True,
                 "is_published": True,
                 "pre_release": False,
                 "show_on_download_page": True,
                 "release_date": "2025-01-15",
+                "eol_date": "2029-10-31",
                 "release_notes_url": "https://docs.python.org/release/3.13.1/whatsnew/changelog.html",
                 "content": "Python 3.13.1 is the first maintenance release of Python 3.13...",
                 "release_page_id": "550e8400-e29b-41d4-a716-446655440100",
@@ -99,17 +103,20 @@ class ReleaseUpdate(BaseModel):
             "example": {
                 "is_latest": True,
                 "is_published": True,
+                "status": "bugfix",
                 "content": "Updated release notes for Python 3.13.1...",
             }
         }
     )
 
     name: Annotated[str, Field(min_length=1, max_length=255)] | None = None
+    status: ReleaseStatus | None = None
     is_latest: bool | None = None
     is_published: bool | None = None
     pre_release: bool | None = None
     show_on_download_page: bool | None = None
     release_date: datetime.date | None = None
+    eol_date: datetime.date | None = None
     release_notes_url: str | None = None
     content: str | None = None
     release_page_id: UUID | None = None
@@ -126,11 +133,13 @@ class ReleaseRead(ReleaseBase):
                 "name": "Python 3.13.1",
                 "slug": "python-3131",
                 "version": "python3",
+                "status": "bugfix",
                 "is_latest": True,
                 "is_published": True,
                 "pre_release": False,
                 "show_on_download_page": True,
                 "release_date": "2025-01-15",
+                "eol_date": "2029-10-31",
                 "release_notes_url": "https://docs.python.org/release/3.13.1/whatsnew/changelog.html",
                 "content": "Python 3.13.1 is the first maintenance release...",
                 "release_page_id": "550e8400-e29b-41d4-a716-446655440100",
@@ -157,10 +166,12 @@ class ReleaseList(BaseModel):
                 "name": "Python 3.13.1",
                 "slug": "python-3131",
                 "version": "python3",
+                "status": "bugfix",
                 "is_latest": True,
                 "is_published": True,
                 "pre_release": False,
                 "release_date": "2025-01-15",
+                "eol_date": "2029-10-31",
             }
         },
     )
@@ -169,10 +180,12 @@ class ReleaseList(BaseModel):
     name: str
     slug: str
     version: PythonVersion
+    status: ReleaseStatus
     is_latest: bool
     is_published: bool
     pre_release: bool
     release_date: datetime.date | None
+    eol_date: datetime.date | None
 
 
 class ReleaseFileBase(BaseModel):

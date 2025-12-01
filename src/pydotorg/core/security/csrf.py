@@ -60,7 +60,7 @@ def create_csrf_config() -> CSRFConfig:
         secret=settings.csrf_secret,
         cookie_name=settings.csrf_cookie_name,
         header_name=settings.csrf_header_name,
-        cookie_secure=not settings.debug,
+        cookie_secure=not settings.is_debug,
         cookie_httponly=False,
         cookie_samesite="lax",
         cookie_path="/",

@@ -20,6 +20,23 @@ architecture/QUICK_START
 
 architecture/ARCHITECTURE
 architecture/DATABASE_SCHEMA
+architecture/RATE_LIMITING_ARCHITECTURE
+architecture/RATE_LIMITING_QUICK_REF
+```
+
+```{toctree}
+:maxdepth: 2
+:caption: API Documentation
+:hidden:
+
+api-getting-started
+api-authentication
+architecture/API_TAGS_INDEX
+architecture/API_TAGS_STRUCTURE
+architecture/API_TAGS_IMPLEMENTATION
+architecture/API_TAGS_BEST_PRACTICES
+architecture/API_TAGS_QUICK_REF
+architecture/README_API_TAGS
 ```
 
 ```{toctree}
@@ -29,6 +46,17 @@ architecture/DATABASE_SCHEMA
 
 architecture/adr/001-litestar-framework
 architecture/adr/002-saq-background-tasks
+architecture/adr/template
+```
+
+```{toctree}
+:maxdepth: 2
+:caption: Guides
+:hidden:
+
+FEATURE_FLAGS
+FEATURE_FLAG_LIBRARY_ANALYSIS
+POSTMAN_GUIDE
 ```
 
 ```{toctree}

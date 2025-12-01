@@ -14,6 +14,7 @@ from litestar.contrib.jinja import JinjaTemplateEngine
 from litestar.di import Provide
 from litestar.template.config import TemplateConfig
 from litestar.testing import AsyncTestClient
+from sqlalchemy import NullPool
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -38,7 +39,7 @@ if TYPE_CHECKING:
 
 async def _create_db_session(postgres_uri: str) -> tuple[AsyncSession, any]:
     """Helper to create a database session."""
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
 
     async with engine.begin() as conn:
         await conn.run_sync(AuditBase.metadata.create_all)
@@ -99,7 +100,7 @@ async def admin_email_fixtures(postgres_uri: str) -> AsyncIterator[AdminEmailTes
     """
     from sqlalchemy import text
 
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
 
     async with engine.begin() as conn:
         await conn.execute(text("DROP SCHEMA public CASCADE"))

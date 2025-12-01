@@ -194,6 +194,54 @@ docker-clean: ## Remove all containers, volumes, and images
 	docker compose --profile full down -v --rmi local
 
 # ============================================================================
+# Litestar CLI
+# ============================================================================
+
+##@ Litestar CLI
+
+LITESTAR := LITESTAR_APP=pydotorg.main:app $(UV) run litestar
+
+.PHONY: litestar
+litestar: ## Run Litestar CLI (usage: make litestar ARGS="--help")
+	$(LITESTAR) $(ARGS)
+
+.PHONY: litestar-info
+litestar-info: ## Show Litestar application info
+	$(LITESTAR) info
+
+.PHONY: litestar-routes
+litestar-routes: ## Show all application routes
+	$(LITESTAR) routes
+
+.PHONY: litestar-schema
+litestar-schema: ## Export OpenAPI schema to JSON
+	$(LITESTAR) schema openapi --output openapi.json
+
+.PHONY: litestar-db
+litestar-db: ## Show database commands (usage: make litestar-db ARGS="--help")
+	$(LITESTAR) database $(ARGS)
+
+.PHONY: litestar-db-init
+litestar-db-init: ## Initialize Alembic migrations via Litestar CLI
+	$(LITESTAR) database init ./migrations
+
+.PHONY: litestar-db-make
+litestar-db-make: ## Create new migration via Litestar CLI
+	$(LITESTAR) database make-migrations
+
+.PHONY: litestar-db-upgrade
+litestar-db-upgrade: ## Upgrade database to latest via Litestar CLI
+	$(LITESTAR) database upgrade
+
+.PHONY: litestar-db-downgrade
+litestar-db-downgrade: ## Downgrade database by one revision via Litestar CLI
+	$(LITESTAR) database downgrade
+
+.PHONY: litestar-db-current
+litestar-db-current: ## Show current database revision
+	$(LITESTAR) database show-current-revision
+
+# ============================================================================
 # Database
 # ============================================================================
 
@@ -224,6 +272,9 @@ db-seed: ## Seed database with development data
 .PHONY: db-clear
 db-clear: ## Clear all data from database
 	$(PYTHON) -m pydotorg.db.seed clear
+
+.PHONY: db-reseed
+db-reseed: db-clear db-seed ## Clear and reseed database
 
 .PHONY: db-init
 db-init: db-migrate db-seed ## Initialize database (migrate + seed)

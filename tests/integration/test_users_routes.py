@@ -10,7 +10,7 @@ from advanced_alchemy.extensions.litestar import SQLAlchemyPlugin
 from advanced_alchemy.extensions.litestar.plugins.init.config.asyncio import SQLAlchemyAsyncConfig
 from litestar import Litestar
 from litestar.testing import AsyncTestClient
-from sqlalchemy import text
+from sqlalchemy import NullPool, text
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -41,7 +41,7 @@ async def users_fixtures(postgres_uri: str) -> AsyncIterator[UsersTestFixtures]:
     Creates the database schema, test users, memberships, and groups in the correct order
     to ensure all tests have access to the same database state.
     """
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
 
     async with engine.begin() as conn:
         await conn.execute(text("DROP SCHEMA public CASCADE"))

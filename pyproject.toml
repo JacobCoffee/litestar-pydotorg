@@ -17,7 +17,7 @@ classifiers = [
 ]
 dependencies = [
     "litestar[standard,jinja,structlog]>=2.14.0",
-    "advanced-alchemy>=0.31.0",
+    "advanced-alchemy[cli]>=0.31.0",
     "sqlalchemy[asyncio]>=2.0.36",
     "asyncpg>=0.30.0",
     "alembic>=1.14.0",
@@ -200,7 +200,7 @@ ignore = [
 "src/pydotorg/domains/users/auth_controller.py" = ["TRY301"]
 "src/pydotorg/config.py" = ["PLR2004"]
 "src/pydotorg/db/seed.py" = ["PLR2004"]
-"src/pydotorg/domains/**/models.py" = ["TC003"]
+"src/pydotorg/domains/**/models.py" = ["PLR2004", "TC003"]
 "src/pydotorg/domains/**/schemas.py" = ["TC001", "TC003"]
 "src/pydotorg/domains/**/controllers.py" = ["TC001", "TC002", "TC003"]
 "docs/conf.py" = ["A001", "INP001", "PTH", "DTZ"]
@@ -316,7 +316,8 @@ exclude = [
 ]
 
 [tool.codespell]
-skip = "uv.lock,*.svg,docs/_build/*"
+skip = "uv.lock,bun.lock,*.svg,docs/_build/*,**/static/**"
+ignore-words-list = "selectin,ot,te,ue,nd,administrer"
 quiet-level = 3
 
 [tool.git-cliff.changelog]

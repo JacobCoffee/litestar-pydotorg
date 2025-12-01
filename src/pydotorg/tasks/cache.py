@@ -188,7 +188,7 @@ async def warm_homepage_cache(ctx: Context) -> dict[str, int]:
                     "slug": latest_release.slug,
                     "version": str(latest_release.version),
                     "is_latest": latest_release.is_latest,
-                    "release_date": latest_release.release_date.isoformat(),
+                    "release_date": latest_release.release_date.isoformat() if latest_release.release_date else None,
                 }
                 await _set_cache(redis, _make_key("homepage", "latest_release"), release_data, TTL_HOMEPAGE)
                 cached_count += 1
@@ -231,7 +231,7 @@ async def warm_releases_cache(ctx: Context) -> dict[str, int]:
                 "slug": latest_release.slug,
                 "version": str(latest_release.version),
                 "is_latest": latest_release.is_latest,
-                "release_date": latest_release.release_date.isoformat(),
+                "release_date": latest_release.release_date.isoformat() if latest_release.release_date else None,
                 "release_page": latest_release.release_page,
             }
             await _set_cache(redis, _make_key("releases", "latest"), release_data, TTL_RELEASES)
@@ -250,7 +250,7 @@ async def warm_releases_cache(ctx: Context) -> dict[str, int]:
                 "slug": release.slug,
                 "version": str(release.version),
                 "is_latest": release.is_latest,
-                "release_date": release.release_date.isoformat(),
+                "release_date": release.release_date.isoformat() if release.release_date else None,
             }
             for release in published_releases
         ]
@@ -269,7 +269,7 @@ async def warm_releases_cache(ctx: Context) -> dict[str, int]:
                 "name": release.name,
                 "slug": release.slug,
                 "version": str(release.version),
-                "release_date": release.release_date.isoformat(),
+                "release_date": release.release_date.isoformat() if release.release_date else None,
             }
             for release in download_releases
         ]

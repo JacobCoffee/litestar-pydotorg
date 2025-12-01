@@ -12,6 +12,7 @@ from advanced_alchemy.extensions.litestar import SQLAlchemyPlugin
 from advanced_alchemy.extensions.litestar.plugins.init.config.asyncio import SQLAlchemyAsyncConfig
 from litestar import Litestar
 from litestar.testing import AsyncTestClient
+from sqlalchemy import NullPool
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -39,7 +40,7 @@ def _is_maildev_available() -> bool:
 
 async def _create_db_session(postgres_uri: str) -> tuple[AsyncSession, any]:
     """Helper to create a database session."""
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
 
     async with engine.begin() as conn:
         await conn.run_sync(AuditBase.metadata.create_all)
@@ -714,7 +715,7 @@ async def mailing_fixtures(postgres_uri: str) -> AsyncIterator[MailingTestFixtur
     """
     from sqlalchemy import text
 
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
 
     async with engine.begin() as conn:
         await conn.execute(text("DROP SCHEMA public CASCADE"))

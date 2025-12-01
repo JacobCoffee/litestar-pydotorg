@@ -247,6 +247,10 @@ def get_task_functions() -> list[Callable[..., Any]]:
         warm_pages_cache,
         warm_releases_cache,
     )
+    from pydotorg.tasks.downloads import (  # noqa: PLC0415
+        aggregate_download_stats,
+        flush_download_stats,
+    )
     from pydotorg.tasks.email import (  # noqa: PLC0415
         send_bulk_email,
         send_event_reminder_email,
@@ -277,6 +281,8 @@ def get_task_functions() -> list[Callable[..., Any]]:
     )
 
     return [
+        aggregate_download_stats,
+        flush_download_stats,
         archive_old_jobs,
         check_event_reminders,
         cleanup_draft_jobs,
