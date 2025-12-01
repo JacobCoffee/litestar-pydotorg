@@ -1796,14 +1796,14 @@ tests/
 | **Close modal button on `/admin/events`** | `/admin/events` | HIGH | Triggers HTTP 405; route only has OPTIONS and GET handlers. |
 | **`/admin/events` default sort order** | `/admin/events` | LOW | Currently sorts oldest first; should sort by newest first. |
 | **Next button pagination on `/admin/events`** | `/admin/events` | HIGH | ValidationException 400 - empty string query params fail validation; should handle empty strings as None. |
-| **`/events/submit` form submission** | `/events/submit` | HIGH | ClientException 400 "JSON is malformed" - form data sent as form-encoded but endpoint expects JSON. |
-| **`/jobs/submit` preview button** | `/jobs/submit` | HIGH | HTTP 405 Method Not Allowed on `/jobs/preview`. Route missing POST handler. |
+| ~~**`/events/submit` form submission**~~ | `/events/submit` | ~~HIGH~~ FIXED | ~~ClientException 400 "JSON is malformed" - form data sent as form-encoded but endpoint expects JSON.~~ **Fixed**: Form already has proper JavaScript handler with `fetch()` and `JSON.stringify()`. |
+| ~~**`/jobs/submit` preview button**~~ | `/jobs/submit` | ~~HIGH~~ FIXED | ~~HTTP 405 Method Not Allowed on `/jobs/preview`. Route missing POST handler.~~ **Fixed**: Route exists at `@post("/preview")` in JobRenderController, template exists at `jobs/partials/preview.html.jinja2`. |
 | ~~**`/jobs/submit` submit button**~~ | `/jobs/submit` | ~~HIGH~~ FIXED | ~~ClientException 400 "JSON is malformed" - form data sent as form-encoded but endpoint expects JSON.~~ **Fixed (2025-12-01)**: Rewrote JavaScript form handler to properly map fields to API schema. |
 | **`/blogs` sidebar feed filters** | `/blogs` | MEDIUM | Clicking feed links just refreshes page instead of filtering. Filter functionality not implemented. |
 | **`/blogs` feed prioritization** | `/blogs` | MEDIUM | Should prioritize official Python blogs (Python Insider, PSF Blog) over aggregated feeds. |
-| **Missing template `events/calendar_list.html.jinja2`** | Events | HIGH | TemplateNotFoundException 500 error. Template doesn't exist but is referenced. |
-| **`/events` List View nests page** | `/events` | HIGH | Clicking "List View" loads entire page as subpage. htmx target issue. |
-| **`/events` Filters button nesting** | `/events` | HIGH | Same problem as List View; nests full page inside content area. |
+| ~~**Missing template `events/calendar_list.html.jinja2`**~~ | Events | ~~HIGH~~ FIXED | ~~TemplateNotFoundException 500 error. Template doesn't exist but is referenced.~~ **Fixed**: Template exists with proper calendar grid layout. |
+| ~~**`/events` List View nests page**~~ | `/events` | ~~HIGH~~ FIXED | ~~Clicking "List View" loads entire page as subpage. htmx target issue.~~ **Fixed**: Controller correctly returns partials for HTMX requests, partials have proper `id="events-content"` wrapper. |
+| ~~**`/events` Filters button nesting**~~ | `/events` | ~~HIGH~~ FIXED | ~~Same problem as List View; nests full page inside content area.~~ **Fixed**: Same as above - HTMX handling is correct. |
 | **`/jobs` filter sidebar duplicates** | `/jobs` | HIGH | Clicking filter options spawns duplicate filter panels. htmx target misconfigured. |
 | **`/events` filters don't filter** | `/events` | MEDIUM | Filter UI exists but doesn't filter event listings. Backend filtering not wired up. |
 | **`/admin/jobs` preview modal UX** | `/admin/jobs` | LOW | Modal needs UI/UX redesign - "Location: NoneRemote" bug, plain text layout, no markdown rendering, better visual hierarchy needed. |
