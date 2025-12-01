@@ -423,6 +423,7 @@ class AdminEmailController(Controller):
     @get("/logs")
     async def list_logs(
         self,
+        request: Request,
         email_admin_service: EmailAdminService,
         q: Annotated[str | None, Parameter(description="Search query")] = None,
         limit: Annotated[int, Parameter(ge=1, le=100, description="Page size")] = 50,
@@ -433,6 +434,7 @@ class AdminEmailController(Controller):
         """Render email logs list page.
 
         Args:
+            request: HTTP request
             email_admin_service: Email admin service
             q: Search query
             limit: Maximum logs per page
@@ -440,7 +442,7 @@ class AdminEmailController(Controller):
             failed_only: Show only failed emails
 
         Returns:
-            Email logs template
+            Email logs template or partial for HTMX requests
         """
         logs, total = await email_admin_service.list_logs(
             limit=limit,
@@ -449,18 +451,28 @@ class AdminEmailController(Controller):
             failed_only=failed_only,
         )
 
+        context = {
+            "title": "Email Logs",
+            "description": "View email delivery logs",
+            "logs": logs,
+            "pagination": {
+                "total": total,
+                "limit": limit,
+                "offset": offset,
+            },
+        }
+
+        is_htmx = request.headers.get("HX-Request") == "true"
+        is_boosted = request.headers.get("HX-Boosted") == "true"
+        if is_htmx and not is_boosted:
+            return Template(
+                template_name="admin/email/partials/logs_list.html.jinja2",
+                context=context,
+            )
+
         return Template(
             template_name="admin/email/logs/list.html.jinja2",
-            context={
-                "title": "Email Logs",
-                "description": "View email delivery logs",
-                "logs": logs,
-                "pagination": {
-                    "total": total,
-                    "limit": limit,
-                    "offset": offset,
-                },
-            },
+            context=context,
         )
 
     @get("/logs/{log_id:uuid}")

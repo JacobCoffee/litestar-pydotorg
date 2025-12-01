@@ -1,0 +1,69 @@
+<div id="logs-list">
+    {% if logs %}
+    <div class="space-y-4">
+        {% for log in logs %}
+        {% include 'admin/email/partials/log_row.html.jinja2' %}
+        {% endfor %}
+    </div>
+
+    {% if pagination and pagination.total > pagination.limit %}
+    <div class="flex justify-center mt-6">
+        <div class="join">
+            {% if pagination.offset > 0 %}
+            <button
+                class="join-item btn btn-sm"
+                hx-get="/admin/email/logs?status={{ request.query_params.get('status', '') }}&template={{ request.query_params.get('template', '') }}&recipient={{ request.query_params.get('recipient', '') }}&time_range={{ request.query_params.get('time_range', '24h') }}&limit={{ pagination.limit }}&offset={{ [0, pagination.offset - pagination.limit]|max }}"
+                hx-target="#logs-list"
+                hx-swap="outerHTML"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+                Previous
+            </button>
+            {% endif %}
+
+            {% set current_page = (pagination.offset // pagination.limit) + 1 %}
+            {% set total_pages = (pagination.total // pagination.limit) + (1 if pagination.total % pagination.limit else 0) %}
+
+            <button class="join-item btn btn-sm btn-active">
+                Page {{ current_page }} of {{ total_pages }}
+            </button>
+
+            {% if pagination.offset + pagination.limit < pagination.total %}
+            <button
+                class="join-item btn btn-sm"
+                hx-get="/admin/email/logs?status={{ request.query_params.get('status', '') }}&template={{ request.query_params.get('template', '') }}&recipient={{ request.query_params.get('recipient', '') }}&time_range={{ request.query_params.get('time_range', '24h') }}&limit={{ pagination.limit }}&offset={{ pagination.offset + pagination.limit }}"
+                hx-target="#logs-list"
+                hx-swap="outerHTML"
+            >
+                Next
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+    {% else %}
+    <div class="card bg-base-100 shadow-lg border border-base-300">
+        <div class="card-body text-center py-12">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-base-content/30 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 19v-8.93a2 2 0 01.89-1.664l7-4.666a2 2 0 012.22 0l7 4.666A2 2 0 0121 10.07V19M3 19a2 2 0 002 2h14a2 2 0 002-2M3 19l6.75-4.5M21 19l-6.75-4.5M3 10l6.75 4.5M21 10l-6.75 4.5m0 0l-1.14.76a2 2 0 01-2.22 0l-1.14-.76" />
+            </svg>
+            <h3 class="text-xl font-bold mb-2">No Email Logs Found</h3>
+            <p class="text-base-content/60 mb-4">
+                {% if request.query_params.get('status') or request.query_params.get('template') or request.query_params.get('recipient') %}
+                No emails match your filters
+                {% else %}
+                No emails have been sent yet
+                {% endif %}
+            </p>
+            <a href="/admin/email/logs" class="btn btn-primary btn-sm">
+                Clear Filters
+            </a>
+        </div>
+    </div>
+    {% endif %}
+</div>
