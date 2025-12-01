@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Annotated
 from urllib.parse import quote
 from uuid import UUID  # noqa: TC003
 
-from litestar import Controller, get, post
+from litestar import Controller, delete, get, post
 from litestar.exceptions import NotAuthorizedException, PermissionDeniedException
 from litestar.params import Parameter
 from litestar.response import Redirect, Response, Template
@@ -257,3 +257,24 @@ class AdminJobsController(Controller):
             status_code=200,
             headers={"HX-Trigger": "commentAdded"},
         )
+
+    @delete("/{job_id:uuid}", status_code=200)
+    async def delete_job(
+        self,
+        job_admin_service: JobAdminService,
+        job_id: UUID,
+    ) -> Response:
+        """Delete a job.
+
+        Args:
+            job_admin_service: Job admin service
+            job_id: Job ID
+
+        Returns:
+            Empty response on success, 404 if not found
+        """
+        deleted = await job_admin_service.delete_job(job_id)
+        if not deleted:
+            return Response(content="Job not found", status_code=404)
+
+        return Response(content="Deleted", status_code=200)

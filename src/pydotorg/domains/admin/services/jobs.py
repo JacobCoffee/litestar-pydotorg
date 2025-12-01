@@ -223,3 +223,20 @@ class JobAdminService:
             "approved_jobs": approved_jobs,
             "rejected_jobs": rejected_jobs,
         }
+
+    async def delete_job(self, job_id: UUID) -> bool:
+        """Delete a job.
+
+        Args:
+            job_id: Job ID
+
+        Returns:
+            True if job was deleted, False if not found
+        """
+        job = await self.get_job(job_id)
+        if not job:
+            return False
+
+        await self.session.delete(job)
+        await self.session.commit()
+        return True
