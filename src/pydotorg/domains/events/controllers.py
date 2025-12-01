@@ -1011,32 +1011,113 @@ class EventsPageController(Controller):
     @get("/calendar/{slug:str}/")
     async def events_calendar_detail(
         self,
+        request: Request,
         slug: str,
         calendar_service: CalendarService,
         event_service: EventService,
         event_category_service: EventCategoryService,
+        event_occurrence_service: EventOccurrenceService,
+        date: Annotated[str | None, Parameter(description="Date to view (YYYY-MM-DD)")] = None,
+        view: Annotated[str | None, Parameter(description="View type (month/week/list)")] = None,
     ) -> Template:
-        """Render a specific calendar's events."""
-        calendar = await calendar_service.get_by_slug(slug)
-        if not calendar:
+        """Render a specific calendar's events with calendar grid."""
+        import calendar as cal  # noqa: PLC0415
+
+        calendar_obj = await calendar_service.get_by_slug(slug)
+        if not calendar_obj:
             raise NotFoundException(f"Calendar {slug} not found")
 
-        events = await event_service.get_by_calendar_id(calendar.id)
-        featured_events = await event_service.get_featured(calendar_id=calendar.id)
-        categories = await event_category_service.get_by_calendar_id(calendar.id)
-        current_date = datetime.datetime.now(tz=datetime.UTC)
+        now = datetime.datetime.now(tz=datetime.UTC)
+        if date:
+            try:
+                current_date = datetime.datetime.strptime(date, "%Y-%m-%d").replace(tzinfo=datetime.UTC)
+            except ValueError:
+                current_date = now
+        else:
+            current_date = now
+
+        events = await event_service.get_by_calendar_id(calendar_obj.id)
+        featured_events = await event_service.get_featured(calendar_id=calendar_obj.id)
+        categories = await event_category_service.get_by_calendar_id(calendar_obj.id)
+
+        first_day = current_date.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        _, days_in_month = cal.monthrange(current_date.year, current_date.month)
+        last_day = first_day.replace(day=days_in_month, hour=23, minute=59, second=59)
+
+        occurrences = await event_occurrence_service.get_by_date_range(
+            start_date=first_day - datetime.timedelta(days=7),
+            end_date=last_day + datetime.timedelta(days=7),
+            calendar_id=calendar_obj.id,
+        )
+
+        events_by_date: dict[datetime.date, list] = {}
+        for occ in occurrences:
+            occ_date = occ.dt_start.date()
+            if occ_date not in events_by_date:
+                events_by_date[occ_date] = []
+            events_by_date[occ_date].append(occ.event)
+
+        calendar_data = []
+        start_weekday = first_day.weekday()
+        days_before = (start_weekday + 1) % 7
+
+        for i in range(days_before):
+            d = first_day - datetime.timedelta(days=days_before - i)
+            day_events = events_by_date.get(d.date(), [])
+            calendar_data.append({
+                "date": d,
+                "is_today": d.date() == now.date(),
+                "in_month": False,
+                "events": day_events,
+                "event_count": len(day_events),
+            })
+
+        for day in range(1, days_in_month + 1):
+            d = first_day.replace(day=day)
+            day_events = events_by_date.get(d.date(), [])
+            calendar_data.append({
+                "date": d,
+                "is_today": d.date() == now.date(),
+                "in_month": True,
+                "events": day_events,
+                "event_count": len(day_events),
+            })
+
+        remaining = (7 - len(calendar_data) % 7) % 7
+        for i in range(1, remaining + 1):
+            d = last_day + datetime.timedelta(days=i)
+            day_events = events_by_date.get(d.date(), [])
+            calendar_data.append({
+                "date": d,
+                "is_today": d.date() == now.date(),
+                "in_month": False,
+                "events": day_events,
+                "event_count": len(day_events),
+            })
+
+        context = {
+            "calendar": calendar_obj,
+            "events": events,
+            "featured_events": featured_events,
+            "categories": categories,
+            "current_date": current_date,
+            "timedelta": datetime.timedelta,
+            "calendar_data": calendar_data,
+            "view": view or "month",
+        }
+
+        is_htmx = request.headers.get("HX-Request") == "true"
+        is_boosted = request.headers.get("HX-Boosted") == "true"
+
+        if is_htmx and not is_boosted:
+            return Template(
+                template_name="events/partials/calendar_grid.html.jinja2",
+                context=context,
+            )
 
         return Template(
             template_name="events/calendar.html.jinja2",
-            context={
-                "calendar": calendar,
-                "events": events,
-                "featured_events": featured_events,
-                "categories": categories,
-                "current_date": current_date,
-                "timedelta": datetime.timedelta,
-                "calendar_data": [],
-            },
+            context=context,
         )
 
     @get("/{slug:str}/")

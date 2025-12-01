@@ -18,20 +18,20 @@
     <div class="section-container">
         <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-8">
             <div class="tabs tabs-boxed">
-                <button class="tab tab-active"
-                        hx-get="/events/calendar/?view=month"
+                <button class="tab {% if view == 'month' %}tab-active{% endif %}"
+                        hx-get="/events/calendar/{{ calendar.slug }}/?view=month"
                         hx-target="#calendar-view"
                         hx-swap="innerHTML">
                     Month
                 </button>
-                <button class="tab"
-                        hx-get="/events/calendar/?view=week"
+                <button class="tab {% if view == 'week' %}tab-active{% endif %}"
+                        hx-get="/events/calendar/{{ calendar.slug }}/?view=week"
                         hx-target="#calendar-view"
                         hx-swap="innerHTML">
                     Week
                 </button>
-                <button class="tab"
-                        hx-get="/events/calendar/?view=list"
+                <button class="tab {% if view == 'list' %}tab-active{% endif %}"
+                        hx-get="/events/calendar/{{ calendar.slug }}/?view=list"
                         hx-target="#calendar-view"
                         hx-swap="innerHTML">
                     List
@@ -40,7 +40,7 @@
 
             <div class="flex items-center gap-4">
                 <button class="btn btn-sm btn-circle btn-ghost"
-                        hx-get="/events/calendar/?date={{ (current_date - timedelta(days=30)).strftime('%Y-%m-%d') }}"
+                        hx-get="/events/calendar/{{ calendar.slug }}/?date={{ (current_date - timedelta(days=30)).strftime('%Y-%m-%d') }}"
                         hx-target="#calendar-view"
                         hx-swap="innerHTML"
                         aria-label="Previous month">
@@ -54,7 +54,7 @@
                 </h2>
 
                 <button class="btn btn-sm btn-circle btn-ghost"
-                        hx-get="/events/calendar/?date={{ (current_date + timedelta(days=30)).strftime('%Y-%m-%d') }}"
+                        hx-get="/events/calendar/{{ calendar.slug }}/?date={{ (current_date + timedelta(days=30)).strftime('%Y-%m-%d') }}"
                         hx-target="#calendar-view"
                         hx-swap="innerHTML"
                         aria-label="Next month">
@@ -64,7 +64,7 @@
                 </button>
 
                 <button class="btn btn-sm btn-outline"
-                        hx-get="/events/calendar/"
+                        hx-get="/events/calendar/{{ calendar.slug }}/"
                         hx-target="#calendar-view"
                         hx-swap="innerHTML">
                     Today
@@ -87,7 +87,7 @@
                 <div class="grid grid-cols-7 gap-px bg-base-300">
                     {% for day in calendar_data %}
                     <div class="bg-base-100 min-h-[120px] p-2 {% if day.is_today %}ring-2 ring-python-blue{% endif %} {% if not day.in_month %}opacity-50{% endif %}"
-                         hx-get="/events/calendar/?date={{ day.date.strftime('%Y-%m-%d') }}"
+                         hx-get="/events/calendar/{{ calendar.slug }}/?date={{ day.date.strftime('%Y-%m-%d') }}"
                          hx-target="#event-details"
                          hx-swap="innerHTML"
                          role="button"
