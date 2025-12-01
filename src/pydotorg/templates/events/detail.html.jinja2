@@ -41,7 +41,7 @@
 
                     {% if event.description %}
                     <div class="prose max-w-none">
-                        {{ event.description }}
+                        {{ event.description|safe }}
                     </div>
                     {% endif %}
 
