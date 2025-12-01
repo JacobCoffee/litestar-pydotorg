@@ -219,7 +219,7 @@ class AdminBlogsController(Controller):
 
         return Template(
             template_name="admin/blogs/partials/feed_preview.html.jinja2",
-            context={"feed": feed},
+            context={"feed": feed, "entries": feed.entries},
         )
 
     @post("/{feed_id:uuid}/activate")
