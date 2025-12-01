@@ -28,6 +28,7 @@ class UserAdmin(AuditModelView, model=User):
     name = "User"
     name_plural = "Users"
     icon = "fa-solid fa-users"
+    category = "Users"
 
     column_list = [
         User.id,
@@ -56,6 +57,7 @@ class MembershipAdmin(AuditModelView, model=Membership):
     name = "Membership"
     name_plural = "Memberships"
     icon = "fa-solid fa-id-card"
+    category = "Users"
 
     column_list = [
         Membership.id,
@@ -78,6 +80,7 @@ class UserGroupAdmin(AuditModelView, model=UserGroup):
     name = "User Group"
     name_plural = "User Groups"
     icon = "fa-solid fa-users-gear"
+    category = "Users"
 
     column_list = [
         UserGroup.id,
@@ -98,6 +101,7 @@ class JobAdmin(ModelView, model=Job):
     name = "Job"
     name_plural = "Jobs"
     icon = "fa-solid fa-briefcase"
+    category = "Jobs"
 
     column_list = [
         Job.id,
@@ -121,6 +125,7 @@ class JobTypeAdmin(ModelView, model=JobType):
     name = "Job Type"
     name_plural = "Job Types"
     icon = "fa-solid fa-tag"
+    category = "Jobs"
 
     column_list = [JobType.id, JobType.name, JobType.slug]
     column_searchable_list = [JobType.name, JobType.slug]
@@ -133,6 +138,7 @@ class JobCategoryAdmin(ModelView, model=JobCategory):
     name = "Job Category"
     name_plural = "Job Categories"
     icon = "fa-solid fa-tags"
+    category = "Jobs"
 
     column_list = [JobCategory.id, JobCategory.name, JobCategory.slug]
     column_searchable_list = [JobCategory.name, JobCategory.slug]
@@ -145,6 +151,7 @@ class JobReviewCommentAdmin(ModelView, model=JobReviewComment):
     name = "Job Review Comment"
     name_plural = "Job Review Comments"
     icon = "fa-solid fa-comment"
+    category = "Jobs"
 
     column_list = [
         JobReviewComment.id,
@@ -164,6 +171,7 @@ class EventAdmin(ModelView, model=Event):
     name = "Event"
     name_plural = "Events"
     icon = "fa-solid fa-calendar"
+    category = "Events"
 
     column_list = [
         Event.id,
@@ -184,6 +192,7 @@ class CalendarAdmin(ModelView, model=Calendar):
     name = "Calendar"
     name_plural = "Calendars"
     icon = "fa-solid fa-calendar-days"
+    category = "Events"
 
     column_list = [Calendar.id, Calendar.name, Calendar.slug, Calendar.created]
     column_searchable_list = [Calendar.name, Calendar.slug]
@@ -196,6 +205,7 @@ class EventCategoryAdmin(ModelView, model=EventCategory):
     name = "Event Category"
     name_plural = "Event Categories"
     icon = "fa-solid fa-list"
+    category = "Events"
 
     column_list = [EventCategory.id, EventCategory.name, EventCategory.slug, EventCategory.calendar_id]
     column_searchable_list = [EventCategory.name, EventCategory.slug]
@@ -208,6 +218,7 @@ class EventLocationAdmin(ModelView, model=EventLocation):
     name = "Event Location"
     name_plural = "Event Locations"
     icon = "fa-solid fa-location-dot"
+    category = "Events"
 
     column_list = [EventLocation.id, EventLocation.name, EventLocation.address, EventLocation.url]
     column_searchable_list = [EventLocation.name, EventLocation.address]
@@ -220,6 +231,7 @@ class EventOccurrenceAdmin(ModelView, model=EventOccurrence):
     name = "Event Occurrence"
     name_plural = "Event Occurrences"
     icon = "fa-solid fa-calendar-check"
+    category = "Events"
 
     column_list = [
         EventOccurrence.id,
@@ -238,6 +250,7 @@ class SponsorAdmin(ModelView, model=Sponsor):
     name = "Sponsor"
     name_plural = "Sponsors"
     icon = "fa-solid fa-handshake"
+    category = "Sponsors"
 
     column_list = [
         Sponsor.id,
@@ -258,6 +271,7 @@ class SponsorshipAdmin(ModelView, model=Sponsorship):
     name = "Sponsorship"
     name_plural = "Sponsorships"
     icon = "fa-solid fa-file-contract"
+    category = "Sponsors"
 
     column_list = [
         Sponsorship.id,
@@ -280,6 +294,7 @@ class SponsorshipLevelAdmin(ModelView, model=SponsorshipLevel):
     name = "Sponsorship Level"
     name_plural = "Sponsorship Levels"
     icon = "fa-solid fa-layer-group"
+    category = "Sponsors"
 
     column_list = [
         SponsorshipLevel.id,
@@ -300,6 +315,7 @@ class PageAdmin(ModelView, model=Page):
     name = "Page"
     name_plural = "Pages"
     icon = "fa-solid fa-file"
+    category = "Content"
 
     column_list = [
         Page.id,
@@ -321,6 +337,7 @@ class ImageAdmin(ModelView, model=Image):
     name = "Page Image"
     name_plural = "Page Images"
     icon = "fa-solid fa-image"
+    category = "Content"
 
     column_list = [Image.id, Image.page_id, Image.image, Image.created_at]
     column_sortable_list = [Image.created_at]
@@ -332,6 +349,7 @@ class DocumentFileAdmin(ModelView, model=DocumentFile):
     name = "Page Document"
     name_plural = "Page Documents"
     icon = "fa-solid fa-file-pdf"
+    category = "Content"
 
     column_list = [DocumentFile.id, DocumentFile.page_id, DocumentFile.document, DocumentFile.created_at]
     column_sortable_list = [DocumentFile.created_at]
@@ -343,6 +361,7 @@ class BlogEntryAdmin(ModelView, model=BlogEntry):
     name = "Blog Entry"
     name_plural = "Blog Entries"
     icon = "fa-solid fa-blog"
+    category = "Blogs"
 
     column_list = [
         BlogEntry.id,
@@ -363,6 +382,7 @@ class FeedAdmin(ModelView, model=Feed):
     name = "Feed"
     name_plural = "Feeds"
     icon = "fa-solid fa-rss"
+    category = "Blogs"
 
     column_list = [
         Feed.id,
@@ -383,6 +403,7 @@ class FeedAggregateAdmin(ModelView, model=FeedAggregate):
     name = "Feed Aggregate"
     name_plural = "Feed Aggregates"
     icon = "fa-solid fa-layer-group"
+    category = "Blogs"
 
     column_list = [FeedAggregate.id, FeedAggregate.name, FeedAggregate.slug, FeedAggregate.created_at]
     column_searchable_list = [FeedAggregate.name, FeedAggregate.slug]
@@ -395,6 +416,7 @@ class RelatedBlogAdmin(ModelView, model=RelatedBlog):
     name = "Related Blog"
     name_plural = "Related Blogs"
     icon = "fa-solid fa-link"
+    category = "Blogs"
 
     column_list = [
         RelatedBlog.id,
@@ -412,6 +434,7 @@ class BannerAdmin(AuditModelView, model=Banner):
     name = "Banner"
     name_plural = "Banners"
     icon = "fa-solid fa-flag"
+    category = "Content"
 
     column_list = [
         Banner.id,
@@ -435,6 +458,7 @@ class CodeSampleAdmin(AuditModelView, model=CodeSample):
     name = "Code Sample"
     name_plural = "Code Samples"
     icon = "fa-solid fa-code"
+    category = "Content"
 
     column_list = [
         CodeSample.id,
@@ -454,6 +478,7 @@ class CommunityPostAdmin(AuditModelView, model=Post):
     name = "Community Post"
     name_plural = "Community Posts"
     icon = "fa-solid fa-comments"
+    category = "Community"
 
     column_list = [
         Post.id,
@@ -475,6 +500,7 @@ class CommunityPhotoAdmin(ModelView, model=Photo):
     name = "Community Photo"
     name_plural = "Community Photos"
     icon = "fa-solid fa-camera"
+    category = "Community"
 
     column_list = [
         Photo.id,
@@ -492,6 +518,7 @@ class CommunityVideoAdmin(ModelView, model=Video):
     name = "Community Video"
     name_plural = "Community Videos"
     icon = "fa-solid fa-video"
+    category = "Community"
 
     column_list = [
         Video.id,
@@ -510,6 +537,7 @@ class CommunityLinkAdmin(ModelView, model=Link):
     name = "Community Link"
     name_plural = "Community Links"
     icon = "fa-solid fa-link"
+    category = "Community"
 
     column_list = [
         Link.id,
@@ -528,6 +556,7 @@ class OSAdmin(AuditModelView, model=OS):
     name = "Operating System"
     name_plural = "Operating Systems"
     icon = "fa-solid fa-desktop"
+    category = "Downloads"
 
     column_list = [
         OS.id,
@@ -545,6 +574,7 @@ class ReleaseAdmin(AuditModelView, model=Release):
     name = "Release"
     name_plural = "Releases"
     icon = "fa-solid fa-download"
+    category = "Downloads"
 
     column_list = [
         Release.id,
@@ -568,6 +598,7 @@ class ReleaseFileAdmin(AuditModelView, model=ReleaseFile):
     name = "Release File"
     name_plural = "Release Files"
     icon = "fa-solid fa-file-archive"
+    category = "Downloads"
 
     column_list = [
         ReleaseFile.id,
@@ -588,6 +619,7 @@ class DownloadStatisticAdmin(AuditModelView, model=DownloadStatistic):
     name = "Download Statistic"
     name_plural = "Download Statistics"
     icon = "fa-solid fa-chart-line"
+    category = "Downloads"
 
     column_list = [
         DownloadStatistic.id,
@@ -605,6 +637,7 @@ class EmailTemplateAdmin(AuditModelView, model=EmailTemplate):
     name = "Email Template"
     name_plural = "Email Templates"
     icon = "fa-solid fa-envelope-open-text"
+    category = "Email"
 
     column_list = [
         EmailTemplate.id,
@@ -625,6 +658,7 @@ class EmailLogAdmin(AuditModelView, model=EmailLog):
     name = "Email Log"
     name_plural = "Email Logs"
     icon = "fa-solid fa-envelope"
+    category = "Email"
 
     column_list = [
         EmailLog.id,
@@ -645,6 +679,7 @@ class MinutesAdmin(AuditModelView, model=Minutes):
     name = "Minutes"
     name_plural = "Minutes"
     icon = "fa-solid fa-clipboard-list"
+    category = "PSF"
 
     column_list = [
         Minutes.id,
@@ -665,6 +700,7 @@ class ElectionAdmin(AuditModelView, model=Election):
     name = "Election"
     name_plural = "Elections"
     icon = "fa-solid fa-vote-yea"
+    category = "PSF"
 
     column_list = [
         Election.id,
@@ -686,6 +722,7 @@ class NomineeAdmin(AuditModelView, model=Nominee):
     name = "Nominee"
     name_plural = "Nominees"
     icon = "fa-solid fa-user-check"
+    category = "PSF"
 
     column_list = [
         Nominee.id,
@@ -704,6 +741,7 @@ class NominationAdmin(AuditModelView, model=Nomination):
     name = "Nomination"
     name_plural = "Nominations"
     icon = "fa-solid fa-hand-point-up"
+    category = "PSF"
 
     column_list = [
         Nomination.id,
@@ -722,6 +760,7 @@ class StoryCategoryAdmin(ModelView, model=StoryCategory):
     name = "Story Category"
     name_plural = "Story Categories"
     icon = "fa-solid fa-folder"
+    category = "Success Stories"
 
     column_list = [
         StoryCategory.id,
@@ -738,6 +777,7 @@ class StoryAdmin(AuditModelView, model=Story):
     name = "Success Story"
     name_plural = "Success Stories"
     icon = "fa-solid fa-star"
+    category = "Success Stories"
 
     column_list = [
         Story.id,
@@ -760,6 +800,7 @@ class WorkGroupAdmin(AuditModelView, model=WorkGroup):
     name = "Work Group"
     name_plural = "Work Groups"
     icon = "fa-solid fa-people-group"
+    category = "PSF"
 
     column_list = [
         WorkGroup.id,
