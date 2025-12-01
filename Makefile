@@ -356,21 +356,47 @@ worktree-prune: ## Clean up stale git worktrees
 	@git worktree prune -v
 
 # ============================================================================
-# Frontend Assets
+# Frontend Assets (Litestar Vite - PREFERRED)
 # ============================================================================
 
-##@ Frontend
+##@ Frontend (Litestar Vite)
+
+.PHONY: assets-install
+assets-install: ## Install frontend dependencies via Litestar CLI (preferred)
+	$(LITESTAR) assets install
+
+.PHONY: assets-serve
+assets-serve: ## Run Vite dev server with HMR via Litestar CLI (preferred)
+	$(LITESTAR) assets serve
+
+.PHONY: assets-build
+assets-build: ## Build frontend assets for production via Litestar CLI (preferred)
+	$(LITESTAR) assets build
+
+.PHONY: assets-init
+assets-init: ## Initialize Vite for project (one-time setup)
+	$(LITESTAR) assets init
+
+.PHONY: assets-routes
+assets-routes: ## Generate route configuration JSON for frontend
+	$(LITESTAR) assets generate-routes
+
+# ============================================================================
+# Frontend Assets (Legacy - prefer Litestar CLI above)
+# ============================================================================
+
+##@ Frontend (Legacy)
 
 .PHONY: frontend-install
-frontend-install: ## Install frontend dependencies using bun
+frontend-install: ## Install frontend dependencies using bun (prefer: make assets-install)
 	bunx --bun install
 
 .PHONY: frontend-dev
-frontend-dev: ## Run Vite dev server with HMR
+frontend-dev: ## Run Vite dev server with HMR (prefer: make assets-serve)
 	bunx --bun vite
 
 .PHONY: frontend-build
-frontend-build: ## Build frontend assets for production
+frontend-build: ## Build frontend assets for production (prefer: make assets-build)
 	bunx --bun vite build
 
 .PHONY: frontend-preview
