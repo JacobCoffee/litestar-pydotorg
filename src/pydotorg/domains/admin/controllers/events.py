@@ -81,13 +81,17 @@ class AdminEventsController(Controller):
         if calendar_id and calendar_id.strip():
             with contextlib.suppress(ValueError):
                 calendar_uuid = UUID(calendar_id)
+        upcoming: bool | None = None
         if filter_type == "featured":
             featured = True
+        elif filter_type == "upcoming":
+            upcoming = True
         events, total = await event_admin_service.list_events(
             limit=limit,
             offset=offset,
             calendar_id=calendar_uuid,
             featured=featured,
+            upcoming=upcoming,
             search=q,
         )
         stats = await event_admin_service.get_stats()
@@ -269,14 +273,20 @@ class AdminEventsController(Controller):
     @get("/calendars/{calendar_id:uuid}")
     async def get_calendar_detail(
         self,
+        request: Request,
         event_admin_service: EventAdminService,
         calendar_id: UUID,
+        limit: Annotated[int, Parameter(ge=1, le=100, description="Page size")] = 20,
+        offset: Annotated[int, Parameter(ge=0, description="Offset")] = 0,
     ) -> Template | Response:
-        """Render calendar detail page.
+        """Render calendar detail page with paginated events.
 
         Args:
+            request: HTTP request
             event_admin_service: Event admin service
             calendar_id: Calendar ID
+            limit: Maximum events per page
+            offset: Pagination offset
 
         Returns:
             Calendar detail template or redirect if not found
@@ -285,11 +295,33 @@ class AdminEventsController(Controller):
         if not calendar:
             return Redirect("/admin/events/calendars")
 
+        events, total = await event_admin_service.get_calendar_events(
+            calendar_id=calendar_id,
+            limit=limit,
+            offset=offset,
+        )
+
+        context = {
+            "title": f"{calendar.name} - Calendar Details",
+            "description": f"View calendar: {calendar.name}",
+            "calendar": calendar,
+            "events": events,
+            "pagination": {
+                "total": total,
+                "limit": limit,
+                "offset": offset,
+            },
+        }
+
+        is_htmx = request.headers.get("HX-Request") == "true"
+        is_boosted = request.headers.get("HX-Boosted") == "true"
+        if is_htmx and not is_boosted:
+            return Template(
+                template_name="admin/events/partials/calendar_events_list.html.jinja2",
+                context=context,
+            )
+
         return Template(
             template_name="admin/events/calendar_detail.html.jinja2",
-            context={
-                "title": f"{calendar.name} - Calendar Details",
-                "description": f"View calendar: {calendar.name}",
-                "calendar": calendar,
-            },
+            context=context,
         )

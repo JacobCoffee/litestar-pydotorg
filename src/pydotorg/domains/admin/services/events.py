@@ -33,6 +33,7 @@ class EventAdminService:
         calendar_id: UUID | None = None,
         *,
         featured: bool | None = None,
+        upcoming: bool | None = None,
         search: str | None = None,
     ) -> tuple[list[Event], int]:
         """List events with filtering and pagination.
@@ -42,6 +43,7 @@ class EventAdminService:
             offset: Number of events to skip
             calendar_id: Filter by calendar ID
             featured: Filter by featured status
+            upcoming: Filter for events with future occurrences only
             search: Search query for event name/title/description
 
         Returns:
@@ -59,6 +61,15 @@ class EventAdminService:
 
         if featured is not None:
             query = query.where(Event.featured == featured)
+
+        if upcoming:
+            now = datetime.now(tz=UTC)
+            upcoming_event_ids = (
+                select(EventOccurrence.event_id)
+                .where(EventOccurrence.dt_start >= now)
+                .distinct()
+            )
+            query = query.where(Event.id.in_(upcoming_event_ids))
 
         if search:
             search_term = f"%{search}%"
@@ -96,17 +107,22 @@ class EventAdminService:
         Returns:
             Tuple of (calendars list, total count)
         """
-        query = select(Calendar)
+        base_query = select(Calendar)
 
         if search:
             search_term = f"%{search}%"
-            query = query.where(Calendar.name.ilike(search_term))
+            base_query = base_query.where(Calendar.name.ilike(search_term))
 
-        count_query = select(func.count()).select_from(query.subquery())
+        count_query = select(func.count()).select_from(base_query.subquery())
         total_result = await self.session.execute(count_query)
         total = total_result.scalar() or 0
 
-        query = query.order_by(Calendar.created_at.desc()).limit(limit).offset(offset)
+        query = (
+            base_query.options(selectinload(Calendar.events))
+            .order_by(Calendar.created_at.desc())
+            .limit(limit)
+            .offset(offset)
+        )
         result = await self.session.execute(query)
         calendars = list(result.scalars().all())
 
@@ -135,7 +151,7 @@ class EventAdminService:
         return result.scalar_one_or_none()
 
     async def get_calendar(self, calendar_id: UUID) -> Calendar | None:
-        """Get a calendar by ID.
+        """Get a calendar by ID (without events).
 
         Args:
             calendar_id: Calendar ID
@@ -143,9 +159,45 @@ class EventAdminService:
         Returns:
             Calendar if found, None otherwise
         """
-        query = select(Calendar).where(Calendar.id == calendar_id).options(selectinload(Calendar.events))
+        query = select(Calendar).where(Calendar.id == calendar_id)
         result = await self.session.execute(query)
         return result.scalar_one_or_none()
+
+    async def get_calendar_events(
+        self,
+        calendar_id: UUID,
+        limit: int = 20,
+        offset: int = 0,
+    ) -> tuple[list[Event], int]:
+        """Get paginated events for a calendar.
+
+        Args:
+            calendar_id: Calendar ID
+            limit: Maximum number of events to return
+            offset: Number of events to skip
+
+        Returns:
+            Tuple of (events list, total count)
+        """
+        query = (
+            select(Event)
+            .where(Event.calendar_id == calendar_id)
+            .options(
+                selectinload(Event.venue),
+                selectinload(Event.occurrences),
+                selectinload(Event.categories),
+            )
+        )
+
+        count_query = select(func.count()).select_from(query.subquery())
+        total_result = await self.session.execute(count_query)
+        total = total_result.scalar() or 0
+
+        query = query.order_by(Event.created_at.desc()).limit(limit).offset(offset)
+        result = await self.session.execute(query)
+        events = list(result.scalars().all())
+
+        return events, total
 
     async def feature_event(self, event_id: UUID) -> Event | None:
         """Feature an event.

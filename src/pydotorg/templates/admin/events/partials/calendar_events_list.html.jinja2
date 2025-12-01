@@ -1,0 +1,118 @@
+<div id="calendar-events-list" class="space-y-4">
+    {% if events %}
+    {% for event in events %}
+    <div class="border border-base-300 rounded-lg p-4 hover:bg-base-200 transition-colors">
+        <div class="flex items-start justify-between gap-4">
+            <div class="flex-1">
+                <div class="flex items-center gap-2">
+                    <h3 class="font-bold">{{ event.title|safe }}</h3>
+                    {% if event.featured %}
+                    <span class="badge badge-warning badge-sm">Featured</span>
+                    {% endif %}
+                </div>
+
+                {% if event.description %}
+                <p class="text-sm text-base-content/70 mt-1 line-clamp-2">{{ event.description|safe }}</p>
+                {% endif %}
+
+                <div class="flex items-center gap-4 text-sm text-base-content/60 mt-2">
+                    {% if event.venue %}
+                    <span class="flex items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        {{ event.venue.name }}
+                    </span>
+                    {% endif %}
+                    {% if event.occurrences %}
+                    <span>{{ event.occurrences|length }} occurrence{{ 's' if event.occurrences|length != 1 }}</span>
+                    {% endif %}
+                </div>
+
+                {% if event.occurrences and event.occurrences[0] %}
+                <div class="text-xs text-base-content/50 mt-1">
+                    {% set occurrence = event.occurrences[0] %}
+                    Next: {% if occurrence.all_day %}
+                    {{ occurrence.dt_start.strftime('%b %d, %Y') }} - All Day
+                    {% else %}
+                    {{ occurrence.dt_start.strftime('%b %d, %Y at %I:%M %p') }}
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="flex gap-2">
+                <a href="/admin/events/{{ event.id }}" class="btn btn-ghost btn-sm" hx-boost="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    View
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="text-center py-12">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-base-content/30 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+        <h3 class="text-xl font-bold mb-2">No Events Yet</h3>
+        <p class="text-base-content/60 mb-4">
+            This calendar doesn't have any events yet
+        </p>
+    </div>
+    {% endif %}
+
+    {% if pagination.total > pagination.limit %}
+    <div class="flex items-center justify-between mt-6 pt-4 border-t border-base-300">
+        <div class="text-sm text-base-content/60">
+            Page {{ (pagination.offset // pagination.limit) + 1 }} of {{ ((pagination.total - 1) // pagination.limit) + 1 }}
+        </div>
+        <div class="join">
+            {% if pagination.offset > 0 %}
+            <button
+                class="join-item btn btn-sm"
+                hx-get="/admin/events/calendars/{{ calendar.id }}?limit={{ pagination.limit }}&offset={{ pagination.offset - pagination.limit }}"
+                hx-target="#calendar-events-list"
+                hx-swap="outerHTML"
+                hx-push-url="true">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+                Previous
+            </button>
+            {% else %}
+            <button class="join-item btn btn-sm btn-disabled" disabled>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+                Previous
+            </button>
+            {% endif %}
+
+            {% if pagination.offset + pagination.limit < pagination.total %}
+            <button
+                class="join-item btn btn-sm"
+                hx-get="/admin/events/calendars/{{ calendar.id }}?limit={{ pagination.limit }}&offset={{ pagination.offset + pagination.limit }}"
+                hx-target="#calendar-events-list"
+                hx-swap="outerHTML"
+                hx-push-url="true">
+                Next
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
+            {% else %}
+            <button class="join-item btn btn-sm btn-disabled" disabled>
+                Next
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+</div>
