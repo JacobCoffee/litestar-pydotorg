@@ -29,8 +29,8 @@ class EmailAdminService:
         limit: int = 20,
         offset: int = 0,
         search: str | None = None,
-        *,
-        active_only: bool = False,
+        status: str | None = None,
+        template_type: str | None = None,
     ) -> tuple[list[EmailTemplate], int]:
         """List email templates with filtering and pagination.
 
@@ -38,15 +38,21 @@ class EmailAdminService:
             limit: Maximum number of templates to return
             offset: Number of templates to skip
             search: Search query for template name or display name
-            active_only: Only return active templates
+            status: Filter by status (active, inactive)
+            template_type: Filter by template type
 
         Returns:
             Tuple of (templates list, total count)
         """
         query = select(EmailTemplate)
 
-        if active_only:
+        if status == "active":
             query = query.where(EmailTemplate.is_active.is_(True))
+        elif status == "inactive":
+            query = query.where(EmailTemplate.is_active.is_(False))
+
+        if template_type:
+            query = query.where(EmailTemplate.template_type == template_type)
 
         if search:
             search_term = f"%{search}%"
@@ -215,4 +221,26 @@ class EmailAdminService:
             "failed_logs": failed_logs,
             "bounced_logs": bounced_logs,
             "pending_logs": pending_logs,
+        }
+
+    async def get_template_stats(self) -> dict:
+        """Get email template statistics for the templates page.
+
+        Returns:
+            Dictionary with template counts by status
+        """
+        total_query = select(func.count()).select_from(EmailTemplate)
+        total_result = await self.session.execute(total_query)
+        total_templates = total_result.scalar() or 0
+
+        active_query = select(func.count()).where(EmailTemplate.is_active.is_(True))
+        active_result = await self.session.execute(active_query)
+        active_templates = active_result.scalar() or 0
+
+        inactive_templates = total_templates - active_templates
+
+        return {
+            "total_templates": total_templates,
+            "active_templates": active_templates,
+            "inactive_templates": inactive_templates,
         }

@@ -83,19 +83,20 @@ class AdminEmailController(Controller):
         self,
         email_admin_service: EmailAdminService,
         q: Annotated[str | None, Parameter(description="Search query")] = None,
+        status: Annotated[str | None, Parameter(description="Filter by status (active, inactive)")] = None,
+        template_type: Annotated[str | None, Parameter(query="type", description="Filter by template type")] = None,
         limit: Annotated[int, Parameter(ge=1, le=100, description="Page size")] = 20,
         offset: Annotated[int, Parameter(ge=0, description="Offset")] = 0,
-        *,
-        active_only: Annotated[bool, Parameter(description="Show only active templates")] = False,
     ) -> Template:
         """Render email templates list page.
 
         Args:
             email_admin_service: Email admin service
             q: Search query
+            status: Filter by status (active, inactive)
+            type: Filter by template type
             limit: Maximum templates per page
             offset: Pagination offset
-            active_only: Show only active templates
 
         Returns:
             Templates list template
@@ -104,8 +105,12 @@ class AdminEmailController(Controller):
             limit=limit,
             offset=offset,
             search=q,
-            active_only=active_only,
+            status=status if status else None,
+            template_type=template_type if template_type else None,
         )
+
+        stats = await email_admin_service.get_template_stats()
+        template_types = [t.value for t in EmailTemplateType]
 
         return Template(
             template_name="admin/email/templates/list.html.jinja2",
@@ -113,6 +118,8 @@ class AdminEmailController(Controller):
                 "title": "Email Templates",
                 "description": "Manage email templates",
                 "templates": templates,
+                "stats": stats,
+                "template_types": template_types,
                 "pagination": {
                     "total": total,
                     "limit": limit,
