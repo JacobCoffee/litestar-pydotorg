@@ -215,7 +215,9 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                {# Iterate through all menu items (both top-level views and category children) #}
                 {% for item in admin._menu.items %}
+                {# Handle top-level View items (no category set) #}
                 {% if item.is_visible(request) and item.is_accessible(request) and item.type_ == "View" %}
                 {% if section_map.get(item.display_name) == section_key %}
                 <a href="{{ item.url(request) }}"
@@ -234,6 +236,30 @@
                     </div>
                 </a>
                 {% endif %}
+                {% endif %}
+                {# Handle Category items - iterate through their children #}
+                {% if item.type_ == "Category" %}
+                {% for child in item.children %}
+                {% if child.is_visible(request) and child.is_accessible(request) %}
+                {% if section_map.get(child.display_name) == section_key %}
+                <a href="{{ child.url(request) }}"
+                   class="card bg-base-100 shadow border border-base-300 hover:shadow-lg hover:border-python-blue/30 transition-all cursor-pointer group"
+                   data-model-name="{{ child.display_name|lower }}">
+                    <div class="card-body p-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-python-blue/10 text-python-blue rounded-lg flex items-center justify-center group-hover:bg-python-blue group-hover:text-white transition-colors">
+                                <i data-lucide="{{ icon_map.get(child.display_name, 'database') }}" class="h-5 w-5"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold">{{ child.display_name }}</h3>
+                                <p class="text-xs text-base-content/50">Manage {{ child.display_name|lower }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                {% endif %}
+                {% endif %}
+                {% endfor %}
                 {% endif %}
                 {% endfor %}
             </div>
@@ -258,6 +284,17 @@ function modelSearch() {
             url: "{{ item.url(request) }}",
             icon: "{{ icon_map.get(item.display_name, 'database') }}"
         },
+        {% endif %}
+        {% if item.type_ == "Category" %}
+        {% for child in item.children %}
+        {% if child.is_visible(request) and child.is_accessible(request) %}
+        {
+            name: "{{ child.display_name }}",
+            url: "{{ child.url(request) }}",
+            icon: "{{ icon_map.get(child.display_name, 'database') }}"
+        },
+        {% endif %}
+        {% endfor %}
         {% endif %}
         {% endfor %}
     ];
