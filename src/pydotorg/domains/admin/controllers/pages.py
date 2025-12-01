@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Annotated
 from urllib.parse import quote
 from uuid import UUID  # noqa: TC003
 
-from litestar import Controller, get, post
+from litestar import Controller, delete, get, post
 from litestar.exceptions import NotAuthorizedException, PermissionDeniedException
 from litestar.params import Parameter
 from litestar.response import Redirect, Response, Template
@@ -203,4 +203,31 @@ class AdminPagesController(Controller):
         return Template(
             template_name="admin/pages/partials/page_row.html.jinja2",
             context={"page": page},
+        )
+
+    @delete("/{page_id:uuid}", status_code=200)
+    async def delete_page(
+        self,
+        request: Request,
+        page_admin_service: PageAdminService,
+        page_id: UUID,
+    ) -> Response:
+        """Delete a page.
+
+        Args:
+            request: HTTP request
+            page_admin_service: Page admin service
+            page_id: Page ID
+
+        Returns:
+            Success response or error response
+        """
+        deleted = await page_admin_service.delete_page(page_id)
+        if not deleted:
+            return Response(content="Page not found", status_code=404)
+
+        return Response(
+            content="",
+            status_code=200,
+            headers={"HX-Redirect": "/admin/pages"},
         )
