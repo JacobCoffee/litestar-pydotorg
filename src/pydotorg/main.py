@@ -135,6 +135,7 @@ from pydotorg.domains.minutes import (
 from pydotorg.domains.nominations import (
     ElectionController,
     NominationController,
+    NominationsHTMXController,
     NominationsRenderController,
     NomineeController,
     get_nominations_dependencies,
@@ -608,6 +609,7 @@ app = Litestar(
         ElectionController,
         NomineeController,
         NominationController,
+        NominationsHTMXController,
         NominationsRenderController,
         StoryCategoryController,
         StoryController,

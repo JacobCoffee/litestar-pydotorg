@@ -9,7 +9,7 @@ from advanced_alchemy.filters import LimitOffset
 from litestar import Controller, Request, delete, get, patch, post, put
 from litestar.exceptions import NotFoundException
 from litestar.params import Body, Parameter
-from litestar.response import Template
+from litestar.response import Response, Template
 
 from pydotorg.core.auth.guards import require_authenticated
 from pydotorg.domains.nominations.models import ElectionStatus
@@ -27,6 +27,7 @@ from pydotorg.domains.nominations.services import (
     NominationService,
     NomineeService,
 )
+from pydotorg.domains.users.services import UserService
 
 
 class ElectionController(Controller):
@@ -297,4 +298,68 @@ class NominationsRenderController(Controller):
                 "title": election.name,
                 "description": election.description or f"PSF Board Election: {election.name}",
             },
+        )
+
+
+class NominationsHTMXController(Controller):
+    """HTMX controller for nominations form submissions."""
+
+    path = "/api/nominations"
+    include_in_schema = False
+
+    @post("/{slug:str}/nominate", guards=[require_authenticated])
+    async def nominate_candidate(
+        self,
+        request: Request,
+        election_service: ElectionService,
+        nominee_service: NomineeService,
+        nomination_service: NominationService,
+        user_service: UserService,
+        slug: Annotated[str, Parameter(title="Election Slug", description="The election URL slug")],
+    ) -> Response:
+        """Submit a nomination for an election via HTMX."""
+        form_data = await request.form()
+        nominee_username = form_data.get("nominee_username", "").strip()
+        endorsement = form_data.get("endorsement", "").strip() or None
+
+        if not nominee_username:
+            return Response(
+                content='<div class="alert alert-error">Nominee username is required.</div>',
+                media_type="text/html",
+            )
+
+        election = await election_service.get_by_slug(slug)
+        if not election:
+            return Response(
+                content='<div class="alert alert-error">Election not found.</div>',
+                media_type="text/html",
+            )
+
+        if election.status != ElectionStatus.NOMINATION:
+            return Response(
+                content='<div class="alert alert-warning">This election is not currently accepting nominations.</div>',
+                media_type="text/html",
+            )
+
+        nominee_user = await user_service.get_by_username(nominee_username)
+        if not nominee_user:
+            return Response(
+                content=f'<div class="alert alert-error">User "{nominee_username}" not found.</div>',
+                media_type="text/html",
+            )
+
+        try:
+            nominee = await nominee_service.create_nominee(election.id, nominee_user.id)
+        except ValueError:
+            nominee = await nominee_service.repository.get_by_election_and_user(election.id, nominee_user.id)
+
+        await nomination_service.create_nomination(
+            nominee_id=nominee.id,
+            nominator_id=request.user.id,
+            endorsement=endorsement,
+        )
+
+        return Response(
+            content=f'<div class="alert alert-success">Your nomination for {nominee_username} has been submitted successfully!</div>',
+            media_type="text/html",
         )

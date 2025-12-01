@@ -3,6 +3,7 @@
 from pydotorg.domains.nominations.controllers import (
     ElectionController,
     NominationController,
+    NominationsHTMXController,
     NominationsRenderController,
     NomineeController,
 )
@@ -49,6 +50,7 @@ __all__ = [
     "NominationRepository",
     "NominationService",
     "NominationUpdate",
+    "NominationsHTMXController",
     "NominationsRenderController",
     "Nominee",
     "NomineeController",
