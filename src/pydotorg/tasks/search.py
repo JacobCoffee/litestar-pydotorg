@@ -245,9 +245,7 @@ async def index_all_events(ctx: dict[str, Any]) -> dict[str, Any]:
                     tags=[cat.name for cat in event.categories] if event.categories else [],
                     searchable_text=f"{event.title} {event.description or ''}",
                     venue=venue_obj.name if venue_obj else None,
-                    location=f"{venue_obj.address or ''} {venue_obj.city or ''} {venue_obj.state or ''}".strip()
-                    if venue_obj
-                    else None,
+                    location=venue_obj.address if venue_obj else None,
                     start_date=next_occurrence.dt_start if next_occurrence else None,
                     end_date=next_occurrence.dt_end if next_occurrence else None,
                 )
@@ -316,9 +314,7 @@ async def index_event(ctx: dict[str, Any], *, event_id: str) -> dict[str, Any]:
                 tags=[cat.name for cat in event.categories] if event.categories else [],
                 searchable_text=f"{event.title} {event.description or ''}",
                 venue=venue_obj.name if venue_obj else None,
-                location=f"{venue_obj.address or ''} {venue_obj.city or ''} {venue_obj.state or ''}".strip()
-                if venue_obj
-                else None,
+                location=venue_obj.address if venue_obj else None,
                 start_date=next_occurrence.dt_start if next_occurrence else None,
                 end_date=next_occurrence.dt_end if next_occurrence else None,
             )
