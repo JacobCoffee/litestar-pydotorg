@@ -254,7 +254,7 @@ async def sync_events_from_ics(ctx: Mapping[str, Any]) -> dict[str, int]:  # noq
                     session.add(category)
                     await session.flush()
                 category_cache[category_name] = category
-            category = category_cache[category_name]
+            _ = category_cache[category_name]
 
             loc_name, loc_address, loc_url = _parse_location(location_str)
             loc_key = slugify(loc_name)[:50]

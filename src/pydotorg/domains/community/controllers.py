@@ -323,3 +323,13 @@ class CommunityPageController(Controller):
                 "page_title": post.title,
             },
         )
+
+    @get("/diversity/")
+    async def community_diversity(self) -> Template:
+        """Render the PSF Diversity Statement page."""
+        return Template(
+            template_name="psf/diversity.html.jinja2",
+            context={
+                "page_title": "Diversity | Python Software Foundation",
+            },
+        )

@@ -48,8 +48,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger(__name__)
 
 PYTHON_EVENTS_CALENDAR_URL = (
-    "https://calendar.google.com/calendar/ical/"
-    "j7gov1cmnqr9tvg14k621j7t5c@group.calendar.google.com/public/basic.ics"
+    "https://calendar.google.com/calendar/ical/j7gov1cmnqr9tvg14k621j7t5c@group.calendar.google.com/public/basic.ics"
 )
 
 CATEGORY_PATTERNS = {
@@ -135,9 +134,7 @@ async def fetch_calendar(url: str) -> bytes:
         return response.content
 
 
-async def get_or_create_calendar(
-    session: AsyncSession, name: str, slug: str, creator_id: UUID
-) -> Calendar:
+async def get_or_create_calendar(session: AsyncSession, name: str, slug: str, creator_id: UUID) -> Calendar:
     """Get or create a calendar."""
     result = await session.execute(select(Calendar).where(Calendar.slug == slug))
     calendar = result.scalar_one_or_none()
@@ -151,15 +148,11 @@ async def get_or_create_calendar(
     return calendar
 
 
-async def get_or_create_category(
-    session: AsyncSession, name: str, calendar_id: UUID
-) -> EventCategory:
+async def get_or_create_category(session: AsyncSession, name: str, calendar_id: UUID) -> EventCategory:
     """Get or create an event category."""
     slug = slugify(name)
     result = await session.execute(
-        select(EventCategory).where(
-            EventCategory.slug == slug, EventCategory.calendar_id == calendar_id
-        )
+        select(EventCategory).where(EventCategory.slug == slug, EventCategory.calendar_id == calendar_id)
     )
     category = result.scalar_one_or_none()
 
@@ -223,24 +216,18 @@ async def import_events(
         if not slug:
             slug = slugify(uid)[:100]
 
-        result = await session.execute(
-            select(Event).where(Event.slug == slug, Event.calendar_id == calendar.id)
-        )
+        result = await session.execute(select(Event).where(Event.slug == slug, Event.calendar_id == calendar.id))
         existing_event = result.scalar_one_or_none()
 
         category_name = detect_category(summary, description)
         if category_name not in category_cache:
-            category_cache[category_name] = await get_or_create_category(
-                session, category_name, calendar.id
-            )
-        category = category_cache[category_name]
+            category_cache[category_name] = await get_or_create_category(session, category_name, calendar.id)
+        _ = category_cache[category_name]
 
         loc_name, loc_address, loc_url = parse_location(location_str)
         loc_key = slugify(loc_name)[:50]
         if loc_key not in location_cache:
-            location_cache[loc_key] = await get_or_create_location(
-                session, loc_name, loc_address, loc_url
-            )
+            location_cache[loc_key] = await get_or_create_location(session, loc_name, loc_address, loc_url)
         location = location_cache[loc_key]
 
         start_dt = parse_datetime(dtstart)
@@ -368,7 +355,7 @@ async def get_admin_user(session: AsyncSession) -> User:
     is_flag=True,
     help="Enable verbose logging",
 )
-def main(  # noqa: FBT001
+def main(
     url: str,
     calendar_name: str,
     calendar_slug: str,
@@ -394,13 +381,9 @@ def main(  # noqa: FBT001
             admin_user = await get_admin_user(session)
             logger.info(f"Using admin user: {admin_user.username}")
 
-            calendar = await get_or_create_calendar(
-                session, calendar_name, calendar_slug, admin_user.id
-            )
+            calendar = await get_or_create_calendar(session, calendar_name, calendar_slug, admin_user.id)
 
-            stats = await import_events(
-                session, ical_data, calendar, admin_user.id, dry_run
-            )
+            stats = await import_events(session, ical_data, calendar, admin_user.id, dry_run)
 
             logger.info("=" * 50)
             logger.info("Import complete!")
