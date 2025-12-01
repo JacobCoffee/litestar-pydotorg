@@ -33,12 +33,17 @@
 
     {% block extra_css %}{% endblock %}
 </head>
-<body class="min-h-screen flex flex-col bg-base-100" hx-boost="true">
+<body class="min-h-screen flex flex-col bg-base-100">
     {# Skip to content link for accessibility #}
     <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-4 focus:bg-primary focus:text-primary-content">
         Skip to main content
     </a>
 
+    {# Sitewide Announcement Banners - Outside swap target so they persist across navigation #}
+    {% set sitewide_banners = request.scope.get('sitewide_banners', []) %}
+    {% include 'partials/sitewide_banner.html.jinja2' %}
+
+    <div id="page-wrapper" class="flex flex-col flex-grow" hx-boost="true">
     {# Navigation #}
     {% block navbar %}
     {% include 'partials/navbar.html.jinja2' %}
@@ -68,6 +73,7 @@
 
     {# Footer #}
     {% include 'partials/footer.html.jinja2' %}
+    </div>{# end page-wrapper #}
 
     {# Scroll to Top Button #}
     <button
