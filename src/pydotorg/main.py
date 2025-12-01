@@ -52,7 +52,7 @@ from pydotorg.core.openapi import get_openapi_plugins
 from pydotorg.core.ratelimit import create_rate_limit_config, rate_limit_exception_handler
 from pydotorg.core.security.csrf import create_csrf_config
 from pydotorg.core.worker import saq_plugin
-from pydotorg.domains.about import AboutRenderController
+from pydotorg.domains.about import AboutRenderController, PSFRenderController
 from pydotorg.domains.admin import (
     AdminAnalyticsController,
     AdminBlogsController,
@@ -573,6 +573,7 @@ app = Litestar(
         DownloadsPageController,
         DocsRenderController,
         AboutRenderController,
+        PSFRenderController,
         JobTypeController,
         JobCategoryController,
         JobController,

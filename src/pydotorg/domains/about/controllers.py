@@ -41,3 +41,20 @@ class AboutRenderController(Controller):
                 "page_title": "Python Governance",
             },
         )
+
+
+class PSFRenderController(Controller):
+    """Controller for rendering PSF-specific pages at /psf/ route."""
+
+    path = "/psf"
+    include_in_schema = False
+
+    @get("/diversity/")
+    async def psf_diversity(self) -> Template:
+        """Render the PSF Diversity Statement page."""
+        return Template(
+            template_name="psf/diversity.html.jinja2",
+            context={
+                "page_title": "Diversity | Python Software Foundation",
+            },
+        )
