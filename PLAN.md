@@ -81,9 +81,9 @@
 ### HIGH Priority
 | Issue | Location | Description |
 |-------|----------|-------------|
-| **Worker: `warm_homepage_cache` MissingGreenlet** | SAQ worker | SQLAlchemy MissingGreenlet in cron job. Async context issue. |
-| **SQLAlchemy MissingGreenlet in async context** | DB operations | Occurs when sync DB operations called in async context. Need `async with session` or `run_sync()`. |
-| **Worker: `index_event` EventLocation error** | `tasks/search.py:319` | `EventLocation` has no `city` attribute. Wrong field names. |
+| ~~**Worker: `warm_homepage_cache` MissingGreenlet**~~ | ~~SAQ worker~~ | ✅ **FIXED**: Added `selectinload()` to `EventRepository.get_upcoming()` and `get_featured()`. |
+| ~~**SQLAlchemy MissingGreenlet in async context**~~ | ~~DB operations~~ | ✅ **FIXED**: Added eager loading to all event-related queries in repositories and search tasks. |
+| ~~**Worker: `index_event` EventLocation error**~~ | ~~`tasks/search.py`~~ | ✅ **FIXED**: Added `selectinload()` for `Event.venue`, `Event.occurrences`, `Event.categories` in `index_event()` and `index_all_events()`. |
 
 ### MEDIUM Priority
 | Issue | Location | Description |
