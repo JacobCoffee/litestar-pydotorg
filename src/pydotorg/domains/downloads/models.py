@@ -137,9 +137,7 @@ class Release(AuditBase, ContentManageableMixin, NameSlugMixin):
         """
         if self.status == ReleaseStatus.EOL:
             return True
-        if self.eol_date and self.eol_date < datetime.date.today():
-            return True
-        return False
+        return bool(self.eol_date and self.eol_date < datetime.datetime.now(tz=datetime.UTC).date())
 
     @property
     def is_prerelease(self) -> bool:

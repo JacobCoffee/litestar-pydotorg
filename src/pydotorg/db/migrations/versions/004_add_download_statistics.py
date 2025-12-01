@@ -18,7 +18,7 @@ if TYPE_CHECKING:
     from collections.abc import Sequence
 
 revision: str = "004_add_download_statistics"
-down_revision: str | None = "003_add_mailing_domain"
+down_revision: str | None = "003"
 branch_labels: str | Sequence[str] | None = None
 depends_on: str | Sequence[str] | None = None
 

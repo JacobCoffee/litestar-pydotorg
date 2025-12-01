@@ -108,4 +108,8 @@ intersphinx_mapping = {
     "advanced-alchemy": ("https://docs.advanced-alchemy.litestar.dev/latest/", None),
 }
 
+intersphinx_disabled_reftypes = ["*"]
+
+suppress_warnings = ["intersphinx"]
+
 todo_include_todos = True
