@@ -12,7 +12,8 @@ from advanced_alchemy.extensions.litestar.plugins.init.config.asyncio import SQL
 from litestar import Litestar
 from litestar.testing import AsyncTestClient, TestClient
 from pytest_databases.docker.postgres import PostgresService
-from sqlalchemy.ext.asyncio import create_async_engine
+from sqlalchemy import NullPool
+from sqlalchemy.ext.asyncio import AsyncEngine, create_async_engine
 
 import pydotorg.domains  # noqa: F401 - ensure all models are loaded
 from pydotorg.core.auth.middleware import JWTAuthMiddleware
@@ -112,6 +113,17 @@ def test_client() -> TestClient:
     return TestClient(app=app)
 
 
+@pytest.fixture(scope="session")
+async def async_engine(postgres_uri: str) -> AsyncIterator[AsyncEngine]:
+    """Session-scoped async engine for integration tests.
+
+    Provides a single engine instance to prevent connection pool exhaustion.
+    """
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
+    yield engine
+    await engine.dispose()
+
+
 @pytest.fixture
 async def client(postgres_uri: str) -> AsyncIterator[AsyncTestClient]:
     """Async test client with PostgreSQL database for integration tests.
@@ -125,7 +137,7 @@ async def client(postgres_uri: str) -> AsyncIterator[AsyncTestClient]:
     from pydotorg.domains.users.auth_controller import AuthController
     from pydotorg.main import _derive_session_secret, health_check
 
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
 
     async with engine.begin() as conn:
         await conn.run_sync(AuditBase.metadata.drop_all)

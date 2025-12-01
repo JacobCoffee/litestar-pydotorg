@@ -7,6 +7,132 @@
 {% block meta_description %}Download the latest version of Python. Official Python downloads for Windows, macOS, and Linux.{% endblock %}
 
 {% block content %}
+
+{% macro render_version_table(releases) %}
+<div class="overflow-x-auto rounded-lg border border-base-300">
+    <table class="table w-full">
+        <thead class="bg-base-200">
+            <tr>
+                <th>Version</th>
+                <th>Release Date</th>
+                <th>Type</th>
+                <th>Release Notes</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for release in releases %}
+            <tr class="hover">
+                <td>
+                    <a href="/downloads/release/{{ release.slug }}/" class="font-semibold text-python-blue hover:underline">
+                        {{ release.name }}
+                    </a>
+                    {% if release.is_latest %}
+                    <span class="badge badge-primary badge-xs ml-2">Latest</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if release.release_date %}
+                        {{ release.release_date.strftime('%B %d, %Y') }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td>
+                    {% if release.is_eol %}
+                        <span class="badge badge-error badge-sm">End of Life</span>
+                    {% elif release.is_prerelease %}
+                        <span class="badge badge-warning badge-sm">Pre-release</span>
+                    {% elif release.status.value == 'security' %}
+                        <span class="badge badge-info badge-sm">Security</span>
+                    {% else %}
+                        <span class="badge badge-success badge-sm">{{ release.status_label }}</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if release.release_notes_url %}
+                    <a href="{{ release.release_notes_url }}" class="link link-primary text-sm" target="_blank" rel="noopener">
+                        What's New
+                    </a>
+                    {% else %}
+                    -
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="/downloads/release/{{ release.slug }}/" class="btn btn-primary btn-sm gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                        Download
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endmacro %}
+
+{% macro render_version_pill(minor_version, releases, is_latest, release_count, stable_count, version_id) %}
+<div>
+    <button
+        class="version-pill group w-full text-left px-4 py-3 rounded-lg border-2 transition-all duration-200
+               {% if is_latest %}
+               border-primary bg-primary/5 hover:bg-primary/10
+               {% elif releases[0].status.value == 'security' %}
+               border-info/30 bg-info/5 hover:bg-info/10 hover:border-info
+               {% else %}
+               border-base-300 bg-base-100 hover:bg-base-200 hover:border-python-blue
+               {% endif %}"
+        onclick="toggleVersionDetails('{{ version_id }}')"
+        aria-expanded="false"
+        aria-controls="{{ version_id }}"
+    >
+        <div class="flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3 min-w-0 flex-1">
+                <div class="flex-shrink-0">
+                    <div class="w-10 h-10 rounded-full {% if releases[0].status.value == 'security' %}bg-info/10 text-info{% else %}bg-python-blue/10 text-python-blue{% endif %} flex items-center justify-center font-bold">
+                        {{ minor_version.split('.')[1] }}
+                    </div>
+                </div>
+                <div class="min-w-0 flex-1">
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <span class="font-semibold text-lg {% if is_latest %}text-primary{% elif releases[0].status.value == 'security' %}text-info{% else %}text-python-blue{% endif %}">
+                            Python {{ minor_version }}
+                        </span>
+                        {% if is_latest %}
+                        <span class="badge badge-primary badge-sm">Latest</span>
+                        {% elif releases[0].status.value == 'security' %}
+                        <span class="badge badge-info badge-sm">Security</span>
+                        {% endif %}
+                    </div>
+                    <div class="text-sm text-base-content/60 flex items-center gap-2 flex-wrap mt-1">
+                        <span>{{ release_count }} release{{ 's' if release_count != 1 else '' }}</span>
+                        {% if stable_count > 0 and stable_count != release_count %}
+                        <span class="opacity-50">•</span>
+                        <span>{{ stable_count }} stable</span>
+                        {% endif %}
+                        {% if releases[0].release_date %}
+                        <span class="opacity-50 hidden sm:inline">•</span>
+                        <span class="hidden sm:inline">{{ releases[0].release_date.strftime('%b %Y') }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 flex-shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-base-content/40 transition-transform group-hover:text-python-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+            </div>
+        </div>
+    </button>
+
+    <div id="{{ version_id }}" class="version-details hidden overflow-hidden mt-3">
+        {{ render_version_table(releases) }}
+    </div>
+</div>
+{% endmacro %}
+
 <section class="python-gradient text-white">
     <div class="section-container py-20">
         <div class="max-w-4xl mx-auto text-center">
@@ -85,7 +211,7 @@
             <div class="space-y-8">
                 {% for major_version, minor_groups in grouped_releases.items() %}
                 {% set is_python3 = major_version == "3" %}
-                {% set is_major_eol = major_version == "2" %}
+                {% set is_major_eol = major_version in ["0", "1", "2"] %}
 
                 <div class="bg-base-100 rounded-lg shadow-lg p-6">
                     <div class="flex items-center gap-3 mb-6 pb-4 border-b border-base-300">
@@ -251,6 +377,7 @@
                                                         <th>Version</th>
                                                         <th>Release Date</th>
                                                         <th>Type</th>
+                                                        <th>Release Notes</th>
                                                         <th>Actions</th>
                                                     </tr>
                                                 </thead>
@@ -273,6 +400,15 @@
                                                             <span class="badge badge-error badge-sm">End of Life</span>
                                                         </td>
                                                         <td>
+                                                            {% if release.release_notes_url %}
+                                                            <a href="{{ release.release_notes_url }}" class="link link-primary text-sm" target="_blank" rel="noopener">
+                                                                What's New
+                                                            </a>
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                        </td>
+                                                        <td>
                                                             <a href="/downloads/release/{{ release.slug }}/" class="btn btn-outline btn-sm gap-2">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -293,93 +429,123 @@
                         {% endif %}
 
                         {% if is_major_eol %}
-                        {% for minor_version, releases in minor_groups.items() %}
-                        {% set release_count = releases|length %}
-                        {% set version_id = 'version-' ~ major_version ~ '-' ~ minor_version|replace('.', '-') %}
+                        {% set total_releases = minor_groups.values()|map('length')|sum %}
+                        <button
+                            class="btn btn-ghost btn-sm gap-2 text-base-content/60 hover:text-warning w-full justify-center"
+                            onclick="toggleEolSection('eol-section-{{ major_version }}')"
+                            aria-expanded="false"
+                            aria-controls="eol-section-{{ major_version }}"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                            </svg>
+                            <span>Show {{ minor_groups|length }} version{{ 's' if minor_groups|length != 1 else '' }} ({{ total_releases }} release{{ 's' if total_releases != 1 else '' }})</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform eol-chevron" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
 
-                        <div class="opacity-75 hover:opacity-100 transition-opacity">
-                            <button
-                                class="version-pill group w-full text-left px-4 py-3 rounded-lg border-2 transition-all duration-200 border-warning/30 bg-warning/5 hover:bg-warning/10 hover:border-warning/50"
-                                onclick="toggleVersionDetails('{{ version_id }}')"
-                                aria-expanded="false"
-                                aria-controls="{{ version_id }}"
-                            >
-                                <div class="flex items-center justify-between gap-4">
-                                    <div class="flex items-center gap-3 min-w-0 flex-1">
-                                        <div class="flex-shrink-0">
-                                            <div class="w-10 h-10 rounded-full bg-warning/10 flex items-center justify-center text-warning font-bold">
-                                                {{ minor_version.split('.')[1] }}
+                        <div id="eol-section-{{ major_version }}" class="eol-section hidden overflow-hidden">
+                            <div class="space-y-4 pt-4">
+                                {% for minor_version, releases in minor_groups.items() %}
+                                {% set release_count = releases|length %}
+                                {% set version_id = 'version-' ~ major_version ~ '-' ~ minor_version|replace('.', '-') %}
+
+                                <div class="opacity-75 hover:opacity-100 transition-opacity">
+                                    <button
+                                        class="version-pill group w-full text-left px-4 py-3 rounded-lg border-2 transition-all duration-200 border-warning/30 bg-warning/5 hover:bg-warning/10 hover:border-warning/50"
+                                        onclick="toggleVersionDetails('{{ version_id }}')"
+                                        aria-expanded="false"
+                                        aria-controls="{{ version_id }}"
+                                    >
+                                        <div class="flex items-center justify-between gap-4">
+                                            <div class="flex items-center gap-3 min-w-0 flex-1">
+                                                <div class="flex-shrink-0">
+                                                    <div class="w-10 h-10 rounded-full bg-warning/10 flex items-center justify-center text-warning font-bold">
+                                                        {{ minor_version.split('.')[1] if '.' in minor_version else minor_version }}
+                                                    </div>
+                                                </div>
+                                                <div class="min-w-0 flex-1">
+                                                    <div class="flex items-center gap-2 flex-wrap">
+                                                        <span class="font-semibold text-lg text-base-content/70">
+                                                            Python {{ minor_version }}
+                                                        </span>
+                                                        <span class="badge badge-warning badge-sm">EOL</span>
+                                                    </div>
+                                                    <div class="text-sm text-base-content/50 flex items-center gap-2 flex-wrap mt-1">
+                                                        <span>{{ release_count }} release{{ 's' if release_count != 1 else '' }}</span>
+                                                        {% if releases[0].eol_date %}
+                                                        <span class="opacity-50">•</span>
+                                                        <span>EOL: {{ releases[0].eol_date.strftime('%b %Y') }}</span>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center gap-2 flex-shrink-0">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-base-content/40 transition-transform group-hover:text-warning" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                                </svg>
                                             </div>
                                         </div>
-                                        <div class="min-w-0 flex-1">
-                                            <div class="flex items-center gap-2 flex-wrap">
-                                                <span class="font-semibold text-lg text-base-content/70">
-                                                    Python {{ minor_version }}
-                                                </span>
-                                                <span class="badge badge-warning badge-sm">EOL</span>
-                                            </div>
-                                            <div class="text-sm text-base-content/50 flex items-center gap-2 flex-wrap mt-1">
-                                                <span>{{ release_count }} release{{ 's' if release_count != 1 else '' }}</span>
-                                                {% if releases[0].eol_date %}
-                                                <span class="opacity-50">•</span>
-                                                <span>EOL: {{ releases[0].eol_date.strftime('%b %Y') }}</span>
-                                                {% endif %}
-                                            </div>
+                                    </button>
+
+                                    <div id="{{ version_id }}" class="version-details hidden overflow-hidden mt-3">
+                                        <div class="overflow-x-auto rounded-lg border border-base-300">
+                                            <table class="table w-full">
+                                                <thead class="bg-base-200">
+                                                    <tr>
+                                                        <th>Version</th>
+                                                        <th>Release Date</th>
+                                                        <th>Type</th>
+                                                        <th>Release Notes</th>
+                                                        <th>Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for release in releases %}
+                                                    <tr class="hover">
+                                                        <td>
+                                                            <a href="/downloads/release/{{ release.slug }}/" class="font-semibold text-python-blue hover:underline">
+                                                                {{ release.name }}
+                                                            </a>
+                                                        </td>
+                                                        <td>
+                                                            {% if release.release_date %}
+                                                                {{ release.release_date.strftime('%B %d, %Y') }}
+                                                            {% else %}
+                                                                -
+                                                            {% endif %}
+                                                        </td>
+                                                        <td>
+                                                            <span class="badge badge-warning badge-sm">End of Life</span>
+                                                        </td>
+                                                        <td>
+                                                            {% if release.release_notes_url %}
+                                                            <a href="{{ release.release_notes_url }}" class="link link-primary text-sm" target="_blank" rel="noopener">
+                                                                What's New
+                                                            </a>
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                        </td>
+                                                        <td>
+                                                            <a href="/downloads/release/{{ release.slug }}/" class="btn btn-outline btn-sm gap-2">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                                                </svg>
+                                                                Download
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
-                                    <div class="flex items-center gap-2 flex-shrink-0">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-base-content/40 transition-transform group-hover:text-warning" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                                        </svg>
-                                    </div>
                                 </div>
-                            </button>
-
-                            <div id="{{ version_id }}" class="version-details hidden overflow-hidden mt-3">
-                                <div class="overflow-x-auto rounded-lg border border-base-300">
-                                    <table class="table w-full">
-                                        <thead class="bg-base-200">
-                                            <tr>
-                                                <th>Version</th>
-                                                <th>Release Date</th>
-                                                <th>Type</th>
-                                                <th>Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {% for release in releases %}
-                                            <tr class="hover">
-                                                <td>
-                                                    <a href="/downloads/release/{{ release.slug }}/" class="font-semibold text-python-blue hover:underline">
-                                                        {{ release.name }}
-                                                    </a>
-                                                </td>
-                                                <td>
-                                                    {% if release.release_date %}
-                                                        {{ release.release_date.strftime('%B %d, %Y') }}
-                                                    {% else %}
-                                                        -
-                                                    {% endif %}
-                                                </td>
-                                                <td>
-                                                    <span class="badge badge-warning badge-sm">End of Life</span>
-                                                </td>
-                                                <td>
-                                                    <a href="/downloads/release/{{ release.slug }}/" class="btn btn-outline btn-sm gap-2">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                                        </svg>
-                                                        Download
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
+                                {% endfor %}
                             </div>
                         </div>
-                        {% endfor %}
                         {% endif %}
                     </div>
                 </div>
@@ -387,6 +553,17 @@
             </div>
 
             <script>
+                function updateParentHeights(element) {
+                    // Find and update any parent eol-section containers
+                    let parent = element.closest('.eol-section');
+                    while (parent) {
+                        if (!parent.classList.contains('hidden')) {
+                            parent.style.maxHeight = 'none';
+                        }
+                        parent = parent.parentElement?.closest('.eol-section');
+                    }
+                }
+
                 function toggleVersionDetails(versionId) {
                     const details = document.getElementById(versionId);
                     const button = document.querySelector(`[aria-controls="${versionId}"]`);
@@ -398,6 +575,8 @@
                         requestAnimationFrame(() => {
                             details.style.transition = 'max-height 0.3s ease-out';
                             details.style.maxHeight = details.scrollHeight + 'px';
+                            // Update parent container heights to accommodate expanded content
+                            updateParentHeights(details);
                         });
                         button.setAttribute('aria-expanded', 'true');
                         if (icon) icon.style.transform = 'rotate(180deg)';
@@ -422,12 +601,22 @@
                         section.style.maxHeight = '0px';
                         requestAnimationFrame(() => {
                             section.style.transition = 'max-height 0.4s ease-out';
+                            // Use scrollHeight for initial animation, then switch to none
+                            // to allow nested content to expand
                             section.style.maxHeight = section.scrollHeight + 'px';
+                            setTimeout(() => {
+                                section.style.maxHeight = 'none';
+                            }, 400);
                         });
                         button.setAttribute('aria-expanded', 'true');
                         if (chevron) chevron.style.transform = 'rotate(180deg)';
                     } else {
-                        section.style.maxHeight = '0px';
+                        // Set explicit height before collapsing for smooth animation
+                        section.style.maxHeight = section.scrollHeight + 'px';
+                        requestAnimationFrame(() => {
+                            section.style.transition = 'max-height 0.4s ease-out';
+                            section.style.maxHeight = '0px';
+                        });
                         setTimeout(() => {
                             section.classList.add('hidden');
                             section.style.maxHeight = '';
@@ -459,172 +648,6 @@
         </div>
     </div>
 </section>
-
-{% macro render_version_table(releases) %}
-<div class="overflow-x-auto rounded-lg border border-base-300">
-    <table class="table w-full">
-        <thead class="bg-base-200">
-            <tr>
-                <th>Version</th>
-                <th>Release Date</th>
-                <th>Type</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for release in releases %}
-            <tr class="hover">
-                <td>
-                    <a href="/downloads/release/{{ release.slug }}/" class="font-semibold text-python-blue hover:underline">
-                        {{ release.name }}
-                    </a>
-                    {% if release.is_latest %}
-                    <span class="badge badge-primary badge-xs ml-2">Latest</span>
-                    {% endif %}
-                </td>
-                <td>
-                    {% if release.release_date %}
-                        {{ release.release_date.strftime('%B %d, %Y') }}
-                    {% else %}
-                        -
-                    {% endif %}
-                </td>
-                <td>
-                    {% if release.is_eol %}
-                        <span class="badge badge-error badge-sm">End of Life</span>
-                    {% elif release.is_prerelease %}
-                        <span class="badge badge-warning badge-sm">Pre-release</span>
-                    {% elif release.status.value == 'security' %}
-                        <span class="badge badge-info badge-sm">Security</span>
-                    {% else %}
-                        <span class="badge badge-success badge-sm">{{ release.status_label }}</span>
-                    {% endif %}
-                </td>
-                <td>
-                    <a href="/downloads/release/{{ release.slug }}/" class="btn btn-primary btn-sm gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                        </svg>
-                        Download
-                    </a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-{% endmacro %}
-
-{% macro render_version_pill(minor_version, releases, is_latest, release_count, stable_count, version_id) %}
-<div>
-    <button
-        class="version-pill group w-full text-left px-4 py-3 rounded-lg border-2 transition-all duration-200
-               {% if is_latest %}
-               border-primary bg-primary/5 hover:bg-primary/10
-               {% elif releases[0].status.value == 'security' %}
-               border-info/30 bg-info/5 hover:bg-info/10 hover:border-info
-               {% else %}
-               border-base-300 bg-base-100 hover:bg-base-200 hover:border-python-blue
-               {% endif %}"
-        onclick="toggleVersionDetails('{{ version_id }}')"
-        aria-expanded="false"
-        aria-controls="{{ version_id }}"
-    >
-        <div class="flex items-center justify-between gap-4">
-            <div class="flex items-center gap-3 min-w-0 flex-1">
-                <div class="flex-shrink-0">
-                    <div class="w-10 h-10 rounded-full {% if releases[0].status.value == 'security' %}bg-info/10 text-info{% else %}bg-python-blue/10 text-python-blue{% endif %} flex items-center justify-center font-bold">
-                        {{ minor_version.split('.')[1] }}
-                    </div>
-                </div>
-                <div class="min-w-0 flex-1">
-                    <div class="flex items-center gap-2 flex-wrap">
-                        <span class="font-semibold text-lg {% if is_latest %}text-primary{% elif releases[0].status.value == 'security' %}text-info{% else %}text-python-blue{% endif %}">
-                            Python {{ minor_version }}
-                        </span>
-                        {% if is_latest %}
-                        <span class="badge badge-primary badge-sm">Latest</span>
-                        {% elif releases[0].status.value == 'security' %}
-                        <span class="badge badge-info badge-sm">Security</span>
-                        {% endif %}
-                    </div>
-                    <div class="text-sm text-base-content/60 flex items-center gap-2 flex-wrap mt-1">
-                        <span>{{ release_count }} release{{ 's' if release_count != 1 else '' }}</span>
-                        {% if stable_count > 0 and stable_count != release_count %}
-                        <span class="opacity-50">•</span>
-                        <span>{{ stable_count }} stable</span>
-                        {% endif %}
-                        {% if releases[0].release_date %}
-                        <span class="opacity-50 hidden sm:inline">•</span>
-                        <span class="hidden sm:inline">{{ releases[0].release_date.strftime('%b %Y') }}</span>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-            <div class="flex items-center gap-2 flex-shrink-0">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-base-content/40 transition-transform group-hover:text-python-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                </svg>
-            </div>
-        </div>
-    </button>
-
-    <div id="{{ version_id }}" class="version-details hidden overflow-hidden mt-3">
-        <div class="overflow-x-auto rounded-lg border border-base-300">
-            <table class="table w-full">
-                <thead class="bg-base-200">
-                    <tr>
-                        <th>Version</th>
-                        <th>Release Date</th>
-                        <th>Type</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for release in releases %}
-                    <tr class="hover">
-                        <td>
-                            <a href="/downloads/release/{{ release.slug }}/" class="font-semibold text-python-blue hover:underline">
-                                {{ release.name }}
-                            </a>
-                            {% if release.is_latest %}
-                            <span class="badge badge-primary badge-xs ml-2">Latest</span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if release.release_date %}
-                                {{ release.release_date.strftime('%B %d, %Y') }}
-                            {% else %}
-                                -
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if release.is_eol %}
-                                <span class="badge badge-error badge-sm">End of Life</span>
-                            {% elif release.is_prerelease %}
-                                <span class="badge badge-warning badge-sm">Pre-release</span>
-                            {% elif release.status.value == 'security' %}
-                                <span class="badge badge-info badge-sm">Security</span>
-                            {% else %}
-                                <span class="badge badge-success badge-sm">{{ release.status_label }}</span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            <a href="/downloads/release/{{ release.slug }}/" class="btn btn-primary btn-sm gap-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                </svg>
-                                Download
-                            </a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-{% endmacro %}
 
 <section class="bg-base-100 py-16">
     <div class="section-container">

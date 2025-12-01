@@ -16,7 +16,7 @@ from advanced_alchemy.filters import LimitOffset
 from litestar import Litestar
 from litestar.params import Parameter
 from litestar.testing import AsyncTestClient
-from sqlalchemy import text
+from sqlalchemy import NullPool, text
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -51,7 +51,7 @@ class SponsorsTestFixtures:
 
 async def _create_level_via_db(postgres_uri: str, **level_data: object) -> dict:
     """Create a sponsorship level directly in the database."""
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session_factory() as session:
         slug = level_data.get("slug", f"level-{uuid4().hex[:8]}")
@@ -78,7 +78,7 @@ async def _create_level_via_db(postgres_uri: str, **level_data: object) -> dict:
 
 async def _create_sponsor_via_db(postgres_uri: str, **sponsor_data: object) -> dict:
     """Create a sponsor directly in the database."""
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session_factory() as session:
         slug = sponsor_data.get("slug", f"sponsor-{uuid4().hex[:8]}")
@@ -108,7 +108,7 @@ async def _create_sponsorship_via_db(
     postgres_uri: str, sponsor_id: str, level_id: str, **sponsorship_data: object
 ) -> dict:
     """Create a sponsorship directly in the database."""
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session_factory() as session:
         from uuid import UUID as PyUUID
@@ -154,7 +154,7 @@ async def provide_sponsorship_service(db_session: AsyncSession) -> SponsorshipSe
 @pytest.fixture
 async def sponsors_fixtures(postgres_uri: str) -> AsyncIterator[SponsorsTestFixtures]:
     """Create test fixtures with fresh database schema."""
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async with engine.begin() as conn:
         await conn.execute(text("DROP SCHEMA public CASCADE"))
         await conn.execute(text("CREATE SCHEMA public"))

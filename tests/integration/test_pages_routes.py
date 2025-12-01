@@ -15,7 +15,7 @@ from advanced_alchemy.filters import LimitOffset
 from litestar import Litestar
 from litestar.params import Parameter
 from litestar.testing import AsyncTestClient
-from sqlalchemy import text
+from sqlalchemy import NullPool, text
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -41,7 +41,7 @@ class PagesTestFixtures:
 
 async def _create_page_via_db(postgres_uri: str, **page_data: object) -> dict:
     """Create a page directly in the database."""
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session_factory() as session:
         page = Page(
@@ -71,7 +71,7 @@ async def _create_page_via_db(postgres_uri: str, **page_data: object) -> dict:
 
 async def _create_image_via_db(postgres_uri: str, page_id: str, **image_data: object) -> dict:
     """Create an image directly in the database."""
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session_factory() as session:
         from uuid import UUID as PyUUID
@@ -94,7 +94,7 @@ async def _create_image_via_db(postgres_uri: str, page_id: str, **image_data: ob
 
 async def _create_document_via_db(postgres_uri: str, page_id: str, **doc_data: object) -> dict:
     """Create a document directly in the database."""
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session_factory() as session:
         from uuid import UUID as PyUUID
@@ -118,7 +118,7 @@ async def _create_document_via_db(postgres_uri: str, page_id: str, **doc_data: o
 @pytest.fixture
 async def pages_fixtures(postgres_uri: str) -> AsyncIterator[PagesTestFixtures]:
     """Create test fixtures with fresh database schema."""
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async with engine.begin() as conn:
         await conn.execute(text("DROP SCHEMA public CASCADE"))
         await conn.execute(text("CREATE SCHEMA public"))

@@ -16,7 +16,7 @@ from advanced_alchemy.filters import LimitOffset
 from litestar import Litestar
 from litestar.params import Parameter
 from litestar.testing import AsyncTestClient
-from sqlalchemy import text
+from sqlalchemy import NullPool, text
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -43,7 +43,7 @@ class BlogsTestFixtures:
 
 async def _create_feed_via_db(postgres_uri: str, **feed_data: object) -> dict:
     """Create a feed directly in the database."""
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session_factory() as session:
         feed = Feed(
@@ -68,7 +68,7 @@ async def _create_feed_via_db(postgres_uri: str, **feed_data: object) -> dict:
 
 async def _create_entry_via_db(postgres_uri: str, feed_id: str, **entry_data: object) -> dict:
     """Create a blog entry directly in the database."""
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session_factory() as session:
         from uuid import UUID as PyUUID
@@ -98,7 +98,7 @@ async def _create_entry_via_db(postgres_uri: str, feed_id: str, **entry_data: ob
 
 async def _create_aggregate_via_db(postgres_uri: str, **aggregate_data: object) -> dict:
     """Create a feed aggregate directly in the database."""
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session_factory() as session:
         slug = aggregate_data.get("slug", f"aggregate-{uuid4().hex[:8]}")
@@ -121,7 +121,7 @@ async def _create_aggregate_via_db(postgres_uri: str, **aggregate_data: object) 
 
 async def _create_related_blog_via_db(postgres_uri: str, **blog_data: object) -> dict:
     """Create a related blog directly in the database."""
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session_factory() as session:
         blog = RelatedBlog(
@@ -144,7 +144,7 @@ async def _create_related_blog_via_db(postgres_uri: str, **blog_data: object) ->
 @pytest.fixture
 async def blogs_fixtures(postgres_uri: str) -> AsyncIterator[BlogsTestFixtures]:
     """Create test fixtures with fresh database schema."""
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async with engine.begin() as conn:
         await conn.execute(text("DROP SCHEMA public CASCADE"))
         await conn.execute(text("CREATE SCHEMA public"))

@@ -20,7 +20,7 @@ from advanced_alchemy.filters import LimitOffset
 from litestar import Litestar
 from litestar.params import Parameter
 from litestar.testing import AsyncTestClient
-from sqlalchemy import text
+from sqlalchemy import NullPool, text
 from sqlalchemy.ext.asyncio import create_async_engine
 
 from pydotorg.core.database.base import AuditBase
@@ -44,7 +44,7 @@ class ValidationTestFixtures:
 @pytest.fixture
 async def validation_fixtures(postgres_uri: str) -> AsyncIterator[ValidationTestFixtures]:
     """Create test fixtures with exception handlers for validation testing."""
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async with engine.begin() as conn:
         await conn.execute(text("DROP SCHEMA public CASCADE"))
         await conn.execute(text("CREATE SCHEMA public"))

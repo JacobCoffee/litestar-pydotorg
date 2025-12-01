@@ -9,6 +9,7 @@ import pytest
 from litestar import Litestar
 from litestar.plugins.sqlalchemy import SQLAlchemyAsyncConfig, SQLAlchemyPlugin
 from litestar.testing import AsyncTestClient
+from sqlalchemy import NullPool
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 from pydotorg.core.database.base import AuditBase
@@ -26,7 +27,7 @@ async def _create_email_template_via_db(
     is_active: bool = True,
 ) -> EmailTemplate:
     """Create an email template directly in the database for testing."""
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async_session = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session() as session:
         template = EmailTemplate(
@@ -52,7 +53,7 @@ async def _create_email_log_via_db(
     status: str = "sent",
 ) -> EmailLog:
     """Create an email log directly in the database for testing."""
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async_session = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session() as session:
         log = EmailLog(
@@ -72,7 +73,7 @@ async def _create_email_log_via_db(
 @pytest.fixture
 async def test_app(postgres_uri: str) -> AsyncGenerator[Litestar]:
     """Create a test Litestar application with the mailing controllers."""
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async with engine.begin() as conn:
         await conn.run_sync(AuditBase.metadata.create_all)
     await engine.dispose()

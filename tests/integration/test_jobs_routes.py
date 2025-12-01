@@ -10,6 +10,7 @@ from advanced_alchemy.extensions.litestar import SQLAlchemyPlugin
 from advanced_alchemy.extensions.litestar.plugins.init.config.asyncio import SQLAlchemyAsyncConfig
 from litestar import Litestar
 from litestar.testing import AsyncTestClient
+from sqlalchemy import NullPool
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -42,7 +43,7 @@ class JobsTestFixtures:
 async def _create_job_via_db(postgres_uri: str, creator_id, **job_data) -> dict:
     """Create a job directly via database. Used only at fixture setup time."""
 
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
     async with async_session_factory() as session:
@@ -78,7 +79,7 @@ async def _create_review_comment_via_db(postgres_uri: str, job_id: str, creator_
     """Create a review comment directly via database."""
     from pydotorg.domains.jobs.models import JobReviewComment
 
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
     async with async_session_factory() as session:
@@ -101,7 +102,7 @@ async def jobs_fixtures(postgres_uri: str) -> AsyncIterator[JobsTestFixtures]:
     """Async test client with jobs controllers and test users."""
     from sqlalchemy import text
 
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
 
     async with engine.begin() as conn:
         await conn.execute(text("DROP SCHEMA public CASCADE"))

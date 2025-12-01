@@ -76,12 +76,13 @@ class TestTaskAdminServiceIntegration:
 @pytest.fixture
 async def test_user(postgres_uri: str) -> User:
     """Create a test user."""
+    from sqlalchemy import NullPool
     from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
     from sqlalchemy.orm import sessionmaker
 
     from pydotorg.core.database.base import AuditBase
 
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
 
     async with engine.begin() as conn:
         await conn.run_sync(AuditBase.metadata.create_all)
@@ -117,12 +118,13 @@ async def test_user(postgres_uri: str) -> User:
 @pytest.fixture
 async def test_job(postgres_uri: str, test_user: User) -> Job:
     """Create a test job."""
+    from sqlalchemy import NullPool
     from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
     from sqlalchemy.orm import sessionmaker
 
     from pydotorg.core.database.base import AuditBase
 
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
 
     async with engine.begin() as conn:
         await conn.run_sync(AuditBase.metadata.create_all)
@@ -282,12 +284,13 @@ class TestJobAdminTaskWiring:
         test_job: Job,
     ) -> None:
         """Test that approving a job enqueues approval email task."""
+        from sqlalchemy import NullPool
         from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
         from sqlalchemy.orm import sessionmaker
 
         mock_enqueue.return_value = "job-key-approved"
 
-        engine = create_async_engine(postgres_uri, echo=False)
+        engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
         async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
         async with async_session() as session:
@@ -320,12 +323,13 @@ class TestJobAdminTaskWiring:
         test_job: Job,
     ) -> None:
         """Test that approving a job enqueues search indexing task."""
+        from sqlalchemy import NullPool
         from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
         from sqlalchemy.orm import sessionmaker
 
         mock_enqueue.return_value = "job-key-index"
 
-        engine = create_async_engine(postgres_uri, echo=False)
+        engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
         async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
         async with async_session() as session:
@@ -348,12 +352,13 @@ class TestJobAdminTaskWiring:
         test_job: Job,
     ) -> None:
         """Test that rejecting a job enqueues rejection email task."""
+        from sqlalchemy import NullPool
         from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
         from sqlalchemy.orm import sessionmaker
 
         mock_enqueue.return_value = "job-key-rejected"
 
-        engine = create_async_engine(postgres_uri, echo=False)
+        engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
         async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
         async with async_session() as session:
@@ -382,12 +387,13 @@ class TestJobAdminTaskWiring:
         test_job: Job,
     ) -> None:
         """Test that rejecting a job uses default reason when none provided."""
+        from sqlalchemy import NullPool
         from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
         from sqlalchemy.orm import sessionmaker
 
         mock_enqueue.return_value = "job-key-rejected-default"
 
-        engine = create_async_engine(postgres_uri, echo=False)
+        engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
         async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
         async with async_session() as session:
@@ -407,12 +413,13 @@ class TestJobAdminTaskWiring:
         test_job: Job,
     ) -> None:
         """Test that job approval continues even if task enqueueing fails."""
+        from sqlalchemy import NullPool
         from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
         from sqlalchemy.orm import sessionmaker
 
         mock_enqueue.return_value = None
 
-        engine = create_async_engine(postgres_uri, echo=False)
+        engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
         async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
         async with async_session() as session:
@@ -433,12 +440,13 @@ class TestJobAdminTaskWiring:
         test_job: Job,
     ) -> None:
         """Test that job rejection continues even if email enqueueing fails."""
+        from sqlalchemy import NullPool
         from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
         from sqlalchemy.orm import sessionmaker
 
         mock_enqueue.return_value = None
 
-        engine = create_async_engine(postgres_uri, echo=False)
+        engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
         async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
         async with async_session() as session:

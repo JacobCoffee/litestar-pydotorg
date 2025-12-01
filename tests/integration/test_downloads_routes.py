@@ -16,7 +16,7 @@ from advanced_alchemy.filters import LimitOffset
 from litestar import Litestar
 from litestar.params import Parameter
 from litestar.testing import AsyncTestClient
-from sqlalchemy import text
+from sqlalchemy import NullPool, text
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -42,7 +42,7 @@ class DownloadsTestFixtures:
 
 async def _create_os_via_db(postgres_uri: str, **os_data: object) -> dict:
     """Create an OS directly in the database."""
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session_factory() as session:
         slug = os_data.get("slug", f"test-os-{uuid4().hex[:8]}")
@@ -64,7 +64,7 @@ async def _create_os_via_db(postgres_uri: str, **os_data: object) -> dict:
 
 async def _create_release_via_db(postgres_uri: str, **release_data: object) -> dict:
     """Create a release directly in the database."""
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session_factory() as session:
         slug = release_data.get("slug", f"python-{uuid4().hex[:8]}")
@@ -97,7 +97,7 @@ async def _create_release_via_db(postgres_uri: str, **release_data: object) -> d
 
 async def _create_release_file_via_db(postgres_uri: str, release_id: str, os_id: str, **file_data: object) -> dict:
     """Create a release file directly in the database."""
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session_factory() as session:
         from uuid import UUID as PyUUID
@@ -133,7 +133,7 @@ async def _create_release_file_via_db(postgres_uri: str, release_id: str, os_id:
 @pytest.fixture
 async def downloads_fixtures(postgres_uri: str) -> AsyncIterator[DownloadsTestFixtures]:
     """Create test fixtures with fresh database schema."""
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async with engine.begin() as conn:
         await conn.execute(text("DROP SCHEMA public CASCADE"))
         await conn.execute(text("CREATE SCHEMA public"))

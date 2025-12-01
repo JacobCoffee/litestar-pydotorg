@@ -15,7 +15,7 @@ from advanced_alchemy.filters import LimitOffset
 from litestar import Litestar
 from litestar.params import Parameter
 from litestar.testing import AsyncTestClient
-from sqlalchemy import text
+from sqlalchemy import NullPool, text
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -44,7 +44,7 @@ class CommunityTestFixtures:
 
 async def _create_user_via_db(postgres_uri: str, **user_data: object) -> dict:
     """Create a user directly in the database."""
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session_factory() as session:
         user = User(
@@ -70,7 +70,7 @@ async def _create_post_via_db(postgres_uri: str, creator_id: str, **post_data: o
     """Create a post directly in the database."""
     from uuid import UUID as PyUUID
 
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session_factory() as session:
         slug = post_data.get("slug", f"post-{uuid4().hex[:8]}")
@@ -100,7 +100,7 @@ async def _create_photo_via_db(postgres_uri: str, creator_id: str, **photo_data:
     """Create a photo directly in the database."""
     from uuid import UUID as PyUUID
 
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session_factory() as session:
         photo = Photo(
@@ -126,7 +126,7 @@ async def _create_video_via_db(postgres_uri: str, creator_id: str, **video_data:
     """Create a video directly in the database."""
     from uuid import UUID as PyUUID
 
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session_factory() as session:
         video = Video(
@@ -152,7 +152,7 @@ async def _create_link_via_db(postgres_uri: str, creator_id: str, **link_data: o
     """Create a link directly in the database."""
     from uuid import UUID as PyUUID
 
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session_factory() as session:
         link = Link(
@@ -197,7 +197,7 @@ async def provide_link_service(db_session: AsyncSession) -> LinkService:
 @pytest.fixture
 async def community_fixtures(postgres_uri: str) -> AsyncIterator[CommunityTestFixtures]:
     """Create test fixtures with fresh database schema."""
-    engine = create_async_engine(postgres_uri, echo=False)
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
     async with engine.begin() as conn:
         await conn.execute(text("DROP SCHEMA public CASCADE"))
         await conn.execute(text("CREATE SCHEMA public"))
