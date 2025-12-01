@@ -1,59 +1,3 @@
-<div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-8">
-    <div class="tabs tabs-boxed">
-        <button class="tab {% if view == 'month' %}tab-active{% endif %}"
-                hx-get="/events/calendar/{{ calendar.slug }}/?view=month"
-                hx-target="#calendar-view"
-                hx-swap="innerHTML">
-            Month
-        </button>
-        <button class="tab {% if view == 'week' %}tab-active{% endif %}"
-                hx-get="/events/calendar/{{ calendar.slug }}/?view=week"
-                hx-target="#calendar-view"
-                hx-swap="innerHTML">
-            Week
-        </button>
-        <button class="tab {% if view == 'list' %}tab-active{% endif %}"
-                hx-get="/events/calendar/{{ calendar.slug }}/?view=list"
-                hx-target="#calendar-view"
-                hx-swap="innerHTML">
-            List
-        </button>
-    </div>
-
-    <div class="flex items-center gap-4">
-        <button class="btn btn-sm btn-circle btn-ghost"
-                hx-get="/events/calendar/{{ calendar.slug }}/?date={{ (current_date - timedelta(days=30)).strftime('%Y-%m-%d') }}"
-                hx-target="#calendar-view"
-                hx-swap="innerHTML"
-                aria-label="Previous month">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-            </svg>
-        </button>
-
-        <h2 class="text-xl font-bold text-python-blue">
-            {{ current_date.strftime('%B %Y') }}
-        </h2>
-
-        <button class="btn btn-sm btn-circle btn-ghost"
-                hx-get="/events/calendar/{{ calendar.slug }}/?date={{ (current_date + timedelta(days=30)).strftime('%Y-%m-%d') }}"
-                hx-target="#calendar-view"
-                hx-swap="innerHTML"
-                aria-label="Next month">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
-        </button>
-
-        <button class="btn btn-sm btn-outline"
-                hx-get="/events/calendar/{{ calendar.slug }}/"
-                hx-target="#calendar-view"
-                hx-swap="innerHTML">
-            Today
-        </button>
-    </div>
-</div>
-
 {% if view == 'list' %}
 <div class="space-y-4">
     {% if events %}
@@ -78,7 +22,7 @@
                     </h4>
 
                     {% if event.description %}
-                    <p class="text-sm text-base-content/70 mb-2 line-clamp-2">{{ event.description|safe }}</p>
+                    <p class="text-sm text-base-content/70 mb-2 line-clamp-2">{{ event.description|striptags|truncate(150) }}</p>
                     {% endif %}
 
                     {% if event.venue %}
@@ -104,6 +48,40 @@
     </div>
     {% endif %}
 </div>
+{% elif view == 'week' %}
+<div class="bg-base-200 rounded-lg overflow-hidden">
+    <div class="grid grid-cols-7 gap-px bg-base-300">
+        {% for day in week_data %}
+        <div class="bg-base-200 p-2 text-center">
+            <div class="font-semibold text-sm">{{ day.date.strftime('%a') }}</div>
+            <div class="text-xs text-base-content/70">{{ day.date.strftime('%b %d') }}</div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="grid grid-cols-7 gap-px bg-base-300">
+        {% for day in week_data %}
+        <div class="bg-base-100 min-h-[200px] p-2 {% if day.is_today %}ring-2 ring-python-blue{% endif %}">
+            {% if day.events %}
+            <div class="space-y-1">
+                {% for event in day.events[:5] %}
+                <a href="/events/{{ event.slug }}/" class="block text-xs p-1 bg-python-blue/10 hover:bg-python-blue/20 rounded truncate" title="{{ event.title }}">
+                    {{ event.title|safe }}
+                </a>
+                {% endfor %}
+                {% if day.event_count > 5 %}
+                <div class="text-xs text-base-content/60">
+                    +{{ day.event_count - 5 }} more
+                </div>
+                {% endif %}
+            </div>
+            {% else %}
+            <div class="text-xs text-base-content/40 text-center mt-4">No events</div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
 {% else %}
 <div class="bg-base-200 rounded-lg overflow-hidden">
     <div class="grid grid-cols-7 gap-px bg-base-300">
@@ -118,12 +96,7 @@
 
     <div class="grid grid-cols-7 gap-px bg-base-300">
         {% for day in calendar_data %}
-        <div class="bg-base-100 min-h-[120px] p-2 {% if day.is_today %}ring-2 ring-python-blue{% endif %} {% if not day.in_month %}opacity-50{% endif %}"
-             hx-get="/events/calendar/{{ calendar.slug }}/?date={{ day.date.strftime('%Y-%m-%d') }}"
-             hx-target="#event-details"
-             hx-swap="innerHTML"
-             role="button"
-             tabindex="0">
+        <div class="bg-base-100 min-h-[120px] p-2 {% if day.is_today %}ring-2 ring-python-blue{% endif %} {% if not day.in_month %}opacity-50{% endif %}">
             <div class="flex justify-between items-start mb-2">
                 <span class="text-sm font-semibold {% if day.is_today %}text-python-blue{% endif %}">
                     {{ day.date.day }}
@@ -136,10 +109,9 @@
             {% if day.events %}
             <div class="space-y-1">
                 {% for event in day.events[:3] %}
-                <div class="text-xs p-1 bg-python-blue/10 hover:bg-python-blue/20 rounded truncate cursor-pointer"
-                     title="{{ event.title }}">
+                <a href="/events/{{ event.slug }}/" class="block text-xs p-1 bg-python-blue/10 hover:bg-python-blue/20 rounded truncate" title="{{ event.title }}">
                     {{ event.title|safe }}
-                </div>
+                </a>
                 {% endfor %}
                 {% if day.event_count > 3 %}
                 <div class="text-xs text-base-content/60">

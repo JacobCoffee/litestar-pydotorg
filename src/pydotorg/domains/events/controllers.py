@@ -987,12 +987,21 @@ class EventsPageController(Controller):
         self,
         request: Request,
         calendar_service: CalendarService,
+        event_service: EventService,
     ) -> Template:
         """Render the calendars list page."""
         calendars, _total = await calendar_service.list_and_count()
 
+        calendars_with_counts = []
+        for calendar_obj in calendars:
+            events = await event_service.get_by_calendar_id(calendar_obj.id, limit=1000)
+            calendars_with_counts.append({
+                "calendar": calendar_obj,
+                "event_count": len(events),
+            })
+
         context = {
-            "calendars": calendars,
+            "calendars": calendars_with_counts,
         }
 
         is_htmx = request.headers.get("HX-Request") == "true"
@@ -1095,6 +1104,20 @@ class EventsPageController(Controller):
                 "event_count": len(day_events),
             })
 
+        week_data = []
+        days_since_sunday = (current_date.weekday() + 1) % 7
+        week_start = current_date - datetime.timedelta(days=days_since_sunday)
+
+        for i in range(7):
+            d = week_start + datetime.timedelta(days=i)
+            day_events = events_by_date.get(d.date(), [])
+            week_data.append({
+                "date": d,
+                "is_today": d.date() == now.date(),
+                "events": day_events,
+                "event_count": len(day_events),
+            })
+
         context = {
             "calendar": calendar_obj,
             "events": events,
@@ -1103,6 +1126,7 @@ class EventsPageController(Controller):
             "current_date": current_date,
             "timedelta": datetime.timedelta,
             "calendar_data": calendar_data,
+            "week_data": week_data,
             "view": view or "month",
         }
 

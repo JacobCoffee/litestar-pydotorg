@@ -1,15 +1,21 @@
 {% extends "base.html.jinja2" %}
 
-{% block title %}Python Events Calendar{% endblock %}
+{% block title %}{{ calendar.name }} - Python Events Calendar{% endblock %}
 
 {% block content %}
 <section class="python-gradient text-white py-16">
     <div class="section-container">
         <div class="max-w-4xl mx-auto text-center">
-            <h1 class="text-5xl font-bold mb-6">Events Calendar</h1>
+            <h1 class="text-5xl font-bold mb-6">{{ calendar.name }}</h1>
+            {% if calendar.description %}
+            <p class="text-xl opacity-90">
+                {{ calendar.description|striptags|truncate(200) }}
+            </p>
+            {% else %}
             <p class="text-xl opacity-90">
                 View Python events by date and find the perfect event for you
             </p>
+            {% endif %}
         </div>
     </div>
 </section>
@@ -17,31 +23,34 @@
 <section class="bg-base-100 py-12">
     <div class="section-container">
         <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-8">
-            <div class="tabs tabs-boxed">
+            <div class="tabs tabs-boxed" id="view-tabs">
                 <button class="tab {% if view == 'month' %}tab-active{% endif %}"
-                        hx-get="/events/calendar/{{ calendar.slug }}/?view=month"
-                        hx-target="#calendar-view"
-                        hx-swap="innerHTML">
+                        hx-get="/events/calendar/{{ calendar.slug }}/?view=month&date={{ current_date.strftime('%Y-%m-%d') }}"
+                        hx-target="#calendar-grid"
+                        hx-swap="innerHTML"
+                        hx-on::after-request="updateActiveTab(this)">
                     Month
                 </button>
                 <button class="tab {% if view == 'week' %}tab-active{% endif %}"
-                        hx-get="/events/calendar/{{ calendar.slug }}/?view=week"
-                        hx-target="#calendar-view"
-                        hx-swap="innerHTML">
+                        hx-get="/events/calendar/{{ calendar.slug }}/?view=week&date={{ current_date.strftime('%Y-%m-%d') }}"
+                        hx-target="#calendar-grid"
+                        hx-swap="innerHTML"
+                        hx-on::after-request="updateActiveTab(this)">
                     Week
                 </button>
                 <button class="tab {% if view == 'list' %}tab-active{% endif %}"
-                        hx-get="/events/calendar/{{ calendar.slug }}/?view=list"
-                        hx-target="#calendar-view"
-                        hx-swap="innerHTML">
+                        hx-get="/events/calendar/{{ calendar.slug }}/?view=list&date={{ current_date.strftime('%Y-%m-%d') }}"
+                        hx-target="#calendar-grid"
+                        hx-swap="innerHTML"
+                        hx-on::after-request="updateActiveTab(this)">
                     List
                 </button>
             </div>
 
-            <div class="flex items-center gap-4">
+            <div class="flex items-center gap-4" id="date-nav">
                 <button class="btn btn-sm btn-circle btn-ghost"
-                        hx-get="/events/calendar/{{ calendar.slug }}/?date={{ (current_date - timedelta(days=30)).strftime('%Y-%m-%d') }}"
-                        hx-target="#calendar-view"
+                        hx-get="/events/calendar/{{ calendar.slug }}/?date={{ (current_date - timedelta(days=30)).strftime('%Y-%m-%d') }}&view={{ view }}"
+                        hx-target="#calendar-grid"
                         hx-swap="innerHTML"
                         aria-label="Previous month">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -49,13 +58,13 @@
                     </svg>
                 </button>
 
-                <h2 class="text-xl font-bold text-python-blue">
+                <h2 class="text-xl font-bold text-python-blue" id="current-month">
                     {{ current_date.strftime('%B %Y') }}
                 </h2>
 
                 <button class="btn btn-sm btn-circle btn-ghost"
-                        hx-get="/events/calendar/{{ calendar.slug }}/?date={{ (current_date + timedelta(days=30)).strftime('%Y-%m-%d') }}"
-                        hx-target="#calendar-view"
+                        hx-get="/events/calendar/{{ calendar.slug }}/?date={{ (current_date + timedelta(days=30)).strftime('%Y-%m-%d') }}&view={{ view }}"
+                        hx-target="#calendar-grid"
                         hx-swap="innerHTML"
                         aria-label="Next month">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -64,139 +73,16 @@
                 </button>
 
                 <button class="btn btn-sm btn-outline"
-                        hx-get="/events/calendar/{{ calendar.slug }}/"
-                        hx-target="#calendar-view"
+                        hx-get="/events/calendar/{{ calendar.slug }}/?view={{ view }}"
+                        hx-target="#calendar-grid"
                         hx-swap="innerHTML">
                     Today
                 </button>
             </div>
         </div>
 
-        <div id="calendar-view">
-            <div class="bg-base-200 rounded-lg overflow-hidden">
-                <div class="grid grid-cols-7 gap-px bg-base-300">
-                    <div class="bg-base-200 p-3 text-center font-semibold text-sm">Sun</div>
-                    <div class="bg-base-200 p-3 text-center font-semibold text-sm">Mon</div>
-                    <div class="bg-base-200 p-3 text-center font-semibold text-sm">Tue</div>
-                    <div class="bg-base-200 p-3 text-center font-semibold text-sm">Wed</div>
-                    <div class="bg-base-200 p-3 text-center font-semibold text-sm">Thu</div>
-                    <div class="bg-base-200 p-3 text-center font-semibold text-sm">Fri</div>
-                    <div class="bg-base-200 p-3 text-center font-semibold text-sm">Sat</div>
-                </div>
-
-                <div class="grid grid-cols-7 gap-px bg-base-300">
-                    {% for day in calendar_data %}
-                    <div class="bg-base-100 min-h-[120px] p-2 {% if day.is_today %}ring-2 ring-python-blue{% endif %} {% if not day.in_month %}opacity-50{% endif %}"
-                         hx-get="/events/calendar/{{ calendar.slug }}/?date={{ day.date.strftime('%Y-%m-%d') }}"
-                         hx-target="#event-details"
-                         hx-swap="innerHTML"
-                         role="button"
-                         tabindex="0">
-                        <div class="flex justify-between items-start mb-2">
-                            <span class="text-sm font-semibold {% if day.is_today %}text-python-blue{% endif %}">
-                                {{ day.date.day }}
-                            </span>
-                            {% if day.event_count > 0 %}
-                            <span class="badge badge-primary badge-xs">{{ day.event_count }}</span>
-                            {% endif %}
-                        </div>
-
-                        {% if day.events %}
-                        <div class="space-y-1">
-                            {% for event in day.events[:3] %}
-                            <div class="text-xs p-1 bg-python-blue/10 hover:bg-python-blue/20 rounded truncate cursor-pointer"
-                                 title="{{ event.title }}">
-                                {{ event.title }}
-                            </div>
-                            {% endfor %}
-                            {% if day.event_count > 3 %}
-                            <div class="text-xs text-base-content/60">
-                                +{{ day.event_count - 3 }} more
-                            </div>
-                            {% endif %}
-                        </div>
-                        {% endif %}
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-
-        <div id="event-details" class="mt-8">
-            {% if events %}
-            <div class="card bg-base-200">
-                <div class="card-body">
-                    <h3 class="card-title text-xl mb-4">
-                        Events on {{ current_date.strftime('%B %d, %Y') }}
-                    </h3>
-
-                    <div class="space-y-4">
-                        {% for event in events %}
-                        <div class="card bg-base-100 shadow-sm hover:shadow-md transition-shadow">
-                            <div class="card-body">
-                                <div class="flex flex-col md:flex-row md:items-start gap-4">
-                                    {% if event.occurrences and event.occurrences|length > 0 %}
-                                    <div class="flex-shrink-0">
-                                        <div class="bg-python-blue text-white rounded-lg p-3 text-center w-16">
-                                            <div class="text-xs font-semibold">{{ event.occurrences[0].dt_start.strftime('%b').upper() }}</div>
-                                            <div class="text-2xl font-bold">{{ event.occurrences[0].dt_start.day }}</div>
-                                        </div>
-                                    </div>
-                                    {% endif %}
-
-                                    <div class="flex-grow">
-                                        <h4 class="text-lg font-semibold mb-2">
-                                            <a href="/events/{{ event.slug }}/" class="python-link">
-                                                {{ event.title }}
-                                            </a>
-                                        </h4>
-
-                                        {% if event.occurrences and event.occurrences|length > 0 %}
-                                        <div class="flex items-center gap-2 text-sm text-base-content/70 mb-2">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                            </svg>
-                                            <time>{{ event.occurrences[0].dt_start.strftime('%I:%M %p') }}
-                                                {% if event.occurrences[0].dt_end %}
-                                                - {{ event.occurrences[0].dt_end.strftime('%I:%M %p') }}
-                                                {% endif %}
-                                            </time>
-                                        </div>
-                                        {% endif %}
-
-                                        {% if event.venue %}
-                                        <div class="flex items-center gap-2 text-sm text-base-content/70 mb-2">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                            </svg>
-                                            <span>{{ event.venue.name }}</span>
-                                        </div>
-                                        {% endif %}
-
-                                        {% if event.categories %}
-                                        <div class="flex flex-wrap gap-2 mt-2">
-                                            {% for category in event.categories %}
-                                            <span class="badge badge-ghost badge-sm">{{ category.name }}</span>
-                                            {% endfor %}
-                                        </div>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-            {% else %}
-            <div class="alert alert-info">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span>No events scheduled for this date. Select another date to view events.</span>
-            </div>
-            {% endif %}
+        <div id="calendar-grid">
+            {% include "events/partials/calendar_grid.html.jinja2" %}
         </div>
     </div>
 </section>
@@ -219,7 +105,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
                     </svg>
-                    List View
+                    All Events
                 </a>
             </div>
         </div>
@@ -229,6 +115,13 @@
 
 {% block extra_js %}
 <script>
+    function updateActiveTab(clickedTab) {
+        document.querySelectorAll('#view-tabs .tab').forEach(tab => {
+            tab.classList.remove('tab-active');
+        });
+        clickedTab.classList.add('tab-active');
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
         const calendarDays = document.querySelectorAll('[role="button"]');
 
