@@ -53,12 +53,17 @@
 
 <dialog id="job_preview_modal" class="modal">
     <div class="modal-box max-w-4xl">
-        <form method="dialog" hx-boost="false">
-            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-        </form>
+        <button
+            type="button"
+            class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+            onclick="job_preview_modal.close()"
+        >✕</button>
         <div id="job_preview_content">
         </div>
     </div>
+    <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+    </form>
 </dialog>
 {% endblock %}
 
