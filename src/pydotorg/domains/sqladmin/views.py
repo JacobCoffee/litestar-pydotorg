@@ -5,12 +5,21 @@ from __future__ import annotations
 from sqladmin import ModelView
 from sqladmin_litestar_plugin.ext.advanced_alchemy import AuditModelView
 
+from pydotorg.domains.banners.models import Banner
 from pydotorg.domains.blogs.models import BlogEntry, Feed, FeedAggregate, RelatedBlog
+from pydotorg.domains.codesamples.models import CodeSample
+from pydotorg.domains.community.models import Link, Photo, Post, Video
+from pydotorg.domains.downloads.models import OS, DownloadStatistic, Release, ReleaseFile
 from pydotorg.domains.events.models import Calendar, Event, EventCategory, EventLocation, EventOccurrence
 from pydotorg.domains.jobs.models import Job, JobCategory, JobReviewComment, JobType
+from pydotorg.domains.mailing.models import EmailLog, EmailTemplate
+from pydotorg.domains.minutes.models import Minutes
+from pydotorg.domains.nominations.models import Election, Nomination, Nominee
 from pydotorg.domains.pages.models import DocumentFile, Image, Page
 from pydotorg.domains.sponsors.models import Sponsor, Sponsorship, SponsorshipLevel
+from pydotorg.domains.successstories.models import Story, StoryCategory
 from pydotorg.domains.users.models import Membership, User, UserGroup
+from pydotorg.domains.work_groups.models import WorkGroup
 
 
 class UserAdmin(AuditModelView, model=User):
@@ -397,10 +406,388 @@ class RelatedBlogAdmin(ModelView, model=RelatedBlog):
     column_sortable_list = [RelatedBlog.blog_name]
 
 
+class BannerAdmin(AuditModelView, model=Banner):
+    """Admin view for Banner model."""
+
+    name = "Banner"
+    name_plural = "Banners"
+    icon = "fa-solid fa-flag"
+
+    column_list = [
+        Banner.id,
+        Banner.name,
+        Banner.title,
+        Banner.banner_type,
+        Banner.target,
+        Banner.is_active,
+        Banner.is_sitewide,
+        Banner.start_date,
+        Banner.end_date,
+    ]
+    column_searchable_list = [Banner.name, Banner.title, Banner.message]
+    column_sortable_list = [Banner.name, Banner.is_active, Banner.start_date, Banner.end_date]
+    column_default_sort = [(Banner.created_at, True)]
+
+
+class CodeSampleAdmin(AuditModelView, model=CodeSample):
+    """Admin view for CodeSample model."""
+
+    name = "Code Sample"
+    name_plural = "Code Samples"
+    icon = "fa-solid fa-code"
+
+    column_list = [
+        CodeSample.id,
+        CodeSample.slug,
+        CodeSample.is_published,
+        CodeSample.creator_id,
+        CodeSample.created_at,
+    ]
+    column_searchable_list = [CodeSample.slug, CodeSample.description]
+    column_sortable_list = [CodeSample.slug, CodeSample.is_published, CodeSample.created_at]
+    column_default_sort = [(CodeSample.created_at, True)]
+
+
+class CommunityPostAdmin(AuditModelView, model=Post):
+    """Admin view for Community Post model."""
+
+    name = "Community Post"
+    name_plural = "Community Posts"
+    icon = "fa-solid fa-comments"
+
+    column_list = [
+        Post.id,
+        Post.title,
+        Post.slug,
+        Post.content_type,
+        Post.is_published,
+        Post.creator_id,
+        Post.created_at,
+    ]
+    column_searchable_list = [Post.title, Post.content]
+    column_sortable_list = [Post.title, Post.is_published, Post.created_at]
+    column_default_sort = [(Post.created_at, True)]
+
+
+class CommunityPhotoAdmin(ModelView, model=Photo):
+    """Admin view for Community Photo model."""
+
+    name = "Community Photo"
+    name_plural = "Community Photos"
+    icon = "fa-solid fa-camera"
+
+    column_list = [
+        Photo.id,
+        Photo.post_id,
+        Photo.image,
+        Photo.caption,
+        Photo.creator_id,
+    ]
+    column_searchable_list = [Photo.caption]
+
+
+class CommunityVideoAdmin(ModelView, model=Video):
+    """Admin view for Community Video model."""
+
+    name = "Community Video"
+    name_plural = "Community Videos"
+    icon = "fa-solid fa-video"
+
+    column_list = [
+        Video.id,
+        Video.post_id,
+        Video.title,
+        Video.url,
+        Video.creator_id,
+    ]
+    column_searchable_list = [Video.title, Video.url]
+    column_sortable_list = [Video.title]
+
+
+class CommunityLinkAdmin(ModelView, model=Link):
+    """Admin view for Community Link model."""
+
+    name = "Community Link"
+    name_plural = "Community Links"
+    icon = "fa-solid fa-link"
+
+    column_list = [
+        Link.id,
+        Link.post_id,
+        Link.title,
+        Link.url,
+        Link.creator_id,
+    ]
+    column_searchable_list = [Link.title, Link.url]
+    column_sortable_list = [Link.title]
+
+
+class OSAdmin(AuditModelView, model=OS):
+    """Admin view for OS model."""
+
+    name = "Operating System"
+    name_plural = "Operating Systems"
+    icon = "fa-solid fa-desktop"
+
+    column_list = [
+        OS.id,
+        OS.name,
+        OS.slug,
+        OS.created_at,
+    ]
+    column_searchable_list = [OS.name, OS.slug]
+    column_sortable_list = [OS.name]
+
+
+class ReleaseAdmin(AuditModelView, model=Release):
+    """Admin view for Release model."""
+
+    name = "Release"
+    name_plural = "Releases"
+    icon = "fa-solid fa-download"
+
+    column_list = [
+        Release.id,
+        Release.name,
+        Release.slug,
+        Release.version,
+        Release.status,
+        Release.is_latest,
+        Release.is_published,
+        Release.release_date,
+        Release.eol_date,
+    ]
+    column_searchable_list = [Release.name, Release.slug]
+    column_sortable_list = [Release.name, Release.is_latest, Release.is_published, Release.release_date]
+    column_default_sort = [(Release.release_date, True)]
+
+
+class ReleaseFileAdmin(AuditModelView, model=ReleaseFile):
+    """Admin view for ReleaseFile model."""
+
+    name = "Release File"
+    name_plural = "Release Files"
+    icon = "fa-solid fa-file-archive"
+
+    column_list = [
+        ReleaseFile.id,
+        ReleaseFile.name,
+        ReleaseFile.release_id,
+        ReleaseFile.os_id,
+        ReleaseFile.is_source,
+        ReleaseFile.filesize,
+        ReleaseFile.download_button,
+    ]
+    column_searchable_list = [ReleaseFile.name, ReleaseFile.url]
+    column_sortable_list = [ReleaseFile.name, ReleaseFile.filesize]
+
+
+class DownloadStatisticAdmin(AuditModelView, model=DownloadStatistic):
+    """Admin view for DownloadStatistic model."""
+
+    name = "Download Statistic"
+    name_plural = "Download Statistics"
+    icon = "fa-solid fa-chart-line"
+
+    column_list = [
+        DownloadStatistic.id,
+        DownloadStatistic.release_file_id,
+        DownloadStatistic.date,
+        DownloadStatistic.download_count,
+    ]
+    column_sortable_list = [DownloadStatistic.date, DownloadStatistic.download_count]
+    column_default_sort = [(DownloadStatistic.date, True)]
+
+
+class EmailTemplateAdmin(AuditModelView, model=EmailTemplate):
+    """Admin view for EmailTemplate model."""
+
+    name = "Email Template"
+    name_plural = "Email Templates"
+    icon = "fa-solid fa-envelope-open-text"
+
+    column_list = [
+        EmailTemplate.id,
+        EmailTemplate.internal_name,
+        EmailTemplate.display_name,
+        EmailTemplate.template_type,
+        EmailTemplate.is_active,
+        EmailTemplate.created_at,
+    ]
+    column_searchable_list = [EmailTemplate.internal_name, EmailTemplate.display_name, EmailTemplate.subject]
+    column_sortable_list = [EmailTemplate.internal_name, EmailTemplate.template_type, EmailTemplate.is_active]
+    column_default_sort = [(EmailTemplate.created_at, True)]
+
+
+class EmailLogAdmin(AuditModelView, model=EmailLog):
+    """Admin view for EmailLog model."""
+
+    name = "Email Log"
+    name_plural = "Email Logs"
+    icon = "fa-solid fa-envelope"
+
+    column_list = [
+        EmailLog.id,
+        EmailLog.template_name,
+        EmailLog.recipient_email,
+        EmailLog.subject,
+        EmailLog.status,
+        EmailLog.created_at,
+    ]
+    column_searchable_list = [EmailLog.template_name, EmailLog.recipient_email, EmailLog.subject]
+    column_sortable_list = [EmailLog.template_name, EmailLog.status, EmailLog.created_at]
+    column_default_sort = [(EmailLog.created_at, True)]
+
+
+class MinutesAdmin(AuditModelView, model=Minutes):
+    """Admin view for Minutes model."""
+
+    name = "Minutes"
+    name_plural = "Minutes"
+    icon = "fa-solid fa-clipboard-list"
+
+    column_list = [
+        Minutes.id,
+        Minutes.slug,
+        Minutes.date,
+        Minutes.content_type,
+        Minutes.is_published,
+        Minutes.creator_id,
+    ]
+    column_searchable_list = [Minutes.slug, Minutes.content]
+    column_sortable_list = [Minutes.slug, Minutes.date, Minutes.is_published]
+    column_default_sort = [(Minutes.date, True)]
+
+
+class ElectionAdmin(AuditModelView, model=Election):
+    """Admin view for Election model."""
+
+    name = "Election"
+    name_plural = "Elections"
+    icon = "fa-solid fa-vote-yea"
+
+    column_list = [
+        Election.id,
+        Election.name,
+        Election.slug,
+        Election.nominations_open,
+        Election.nominations_close,
+        Election.voting_open,
+        Election.voting_close,
+    ]
+    column_searchable_list = [Election.name, Election.description]
+    column_sortable_list = [Election.name, Election.nominations_open, Election.voting_open]
+    column_default_sort = [(Election.voting_close, True)]
+
+
+class NomineeAdmin(AuditModelView, model=Nominee):
+    """Admin view for Nominee model."""
+
+    name = "Nominee"
+    name_plural = "Nominees"
+    icon = "fa-solid fa-user-check"
+
+    column_list = [
+        Nominee.id,
+        Nominee.election_id,
+        Nominee.user_id,
+        Nominee.accepted,
+        Nominee.created_at,
+    ]
+    column_sortable_list = [Nominee.accepted, Nominee.created_at]
+    column_default_sort = [(Nominee.created_at, True)]
+
+
+class NominationAdmin(AuditModelView, model=Nomination):
+    """Admin view for Nomination model."""
+
+    name = "Nomination"
+    name_plural = "Nominations"
+    icon = "fa-solid fa-hand-point-up"
+
+    column_list = [
+        Nomination.id,
+        Nomination.nominee_id,
+        Nomination.nominator_id,
+        Nomination.created_at,
+    ]
+    column_searchable_list = [Nomination.endorsement]
+    column_sortable_list = [Nomination.created_at]
+    column_default_sort = [(Nomination.created_at, True)]
+
+
+class StoryCategoryAdmin(ModelView, model=StoryCategory):
+    """Admin view for StoryCategory model."""
+
+    name = "Story Category"
+    name_plural = "Story Categories"
+    icon = "fa-solid fa-folder"
+
+    column_list = [
+        StoryCategory.id,
+        StoryCategory.name,
+        StoryCategory.slug,
+    ]
+    column_searchable_list = [StoryCategory.name, StoryCategory.slug]
+    column_sortable_list = [StoryCategory.name]
+
+
+class StoryAdmin(AuditModelView, model=Story):
+    """Admin view for Story model."""
+
+    name = "Success Story"
+    name_plural = "Success Stories"
+    icon = "fa-solid fa-star"
+
+    column_list = [
+        Story.id,
+        Story.name,
+        Story.slug,
+        Story.company_name,
+        Story.category_id,
+        Story.is_published,
+        Story.featured,
+        Story.created_at,
+    ]
+    column_searchable_list = [Story.name, Story.company_name, Story.content]
+    column_sortable_list = [Story.name, Story.company_name, Story.is_published, Story.featured]
+    column_default_sort = [(Story.created_at, True)]
+
+
+class WorkGroupAdmin(AuditModelView, model=WorkGroup):
+    """Admin view for WorkGroup model."""
+
+    name = "Work Group"
+    name_plural = "Work Groups"
+    icon = "fa-solid fa-people-group"
+
+    column_list = [
+        WorkGroup.id,
+        WorkGroup.name,
+        WorkGroup.slug,
+        WorkGroup.active,
+        WorkGroup.url,
+        WorkGroup.creator_id,
+    ]
+    column_searchable_list = [WorkGroup.name, WorkGroup.purpose]
+    column_sortable_list = [WorkGroup.name, WorkGroup.active]
+    column_default_sort = [(WorkGroup.created_at, True)]
+
+
 __all__ = [
+    "BannerAdmin",
     "BlogEntryAdmin",
     "CalendarAdmin",
+    "CodeSampleAdmin",
+    "CommunityLinkAdmin",
+    "CommunityPhotoAdmin",
+    "CommunityPostAdmin",
+    "CommunityVideoAdmin",
     "DocumentFileAdmin",
+    "DownloadStatisticAdmin",
+    "ElectionAdmin",
+    "EmailLogAdmin",
+    "EmailTemplateAdmin",
     "EventAdmin",
     "EventCategoryAdmin",
     "EventLocationAdmin",
@@ -413,11 +800,20 @@ __all__ = [
     "JobReviewCommentAdmin",
     "JobTypeAdmin",
     "MembershipAdmin",
+    "MinutesAdmin",
+    "NominationAdmin",
+    "NomineeAdmin",
+    "OSAdmin",
     "PageAdmin",
     "RelatedBlogAdmin",
+    "ReleaseAdmin",
+    "ReleaseFileAdmin",
     "SponsorAdmin",
     "SponsorshipAdmin",
     "SponsorshipLevelAdmin",
+    "StoryAdmin",
+    "StoryCategoryAdmin",
     "UserAdmin",
     "UserGroupAdmin",
+    "WorkGroupAdmin",
 ]
