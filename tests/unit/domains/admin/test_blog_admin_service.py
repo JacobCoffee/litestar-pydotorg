@@ -434,12 +434,16 @@ class TestGetStats:
         mock_entries_today = MagicMock()
         mock_entries_today.scalar.return_value = 10
 
+        mock_featured_entries = MagicMock()
+        mock_featured_entries.scalar.return_value = 5
+
         mock_session.execute.side_effect = [
             mock_total_feeds,
             mock_active_feeds,
             mock_inactive_feeds,
             mock_total_entries,
             mock_entries_today,
+            mock_featured_entries,
         ]
 
         stats = await service.get_stats()
@@ -449,7 +453,8 @@ class TestGetStats:
         assert stats["inactive_feeds"] == 15
         assert stats["total_entries"] == 500
         assert stats["entries_today"] == 10
-        assert mock_session.execute.call_count == 5
+        assert stats["featured_entries"] == 5
+        assert mock_session.execute.call_count == 6
 
     async def test_get_stats_empty_database(
         self,
@@ -469,3 +474,4 @@ class TestGetStats:
         assert stats["inactive_feeds"] == 0
         assert stats["total_entries"] == 0
         assert stats["entries_today"] == 0
+        assert stats["featured_entries"] == 0

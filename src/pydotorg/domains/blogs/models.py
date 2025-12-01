@@ -31,7 +31,7 @@ class Feed(AuditBase):
         "BlogEntry",
         back_populates="feed",
         cascade="all, delete-orphan",
-        lazy="selectin",
+        lazy="noload",
     )
 
 
@@ -46,6 +46,7 @@ class BlogEntry(AuditBase):
     url: Mapped[str] = mapped_column(String(1000))
     pub_date: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), index=True)
     guid: Mapped[str] = mapped_column(String(500))
+    is_featured: Mapped[bool] = mapped_column(Boolean, default=False, index=True)
 
     feed: Mapped[Feed] = relationship("Feed", back_populates="entries", lazy="selectin")
 

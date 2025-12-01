@@ -198,6 +198,17 @@ class BlogEntryService(SQLAlchemyAsyncRepositoryService[BlogEntry]):
         """
         return await self.repository.get_entries_by_feed_ids(feed_ids, limit=limit)
 
+    async def get_featured_entries(self, limit: int = 5) -> list[BlogEntry]:
+        """Get featured blog entries.
+
+        Args:
+            limit: Maximum number of featured entries to return.
+
+        Returns:
+            List of featured blog entries.
+        """
+        return await self.repository.get_featured_entries(limit=limit)
+
 
 class FeedAggregateService(SQLAlchemyAsyncRepositoryService[FeedAggregate]):
     """Service for FeedAggregate business logic."""

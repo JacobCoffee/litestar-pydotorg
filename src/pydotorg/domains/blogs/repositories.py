@@ -116,7 +116,14 @@ class BlogEntryRepository(SQLAlchemyAsyncRepository[BlogEntry]):
         Returns:
             List of recent blog entries ordered by pub_date descending.
         """
-        statement = select(BlogEntry).order_by(BlogEntry.pub_date.desc()).limit(limit).offset(offset)
+        statement = (
+            select(BlogEntry)
+            .join(BlogEntry.feed)
+            .where(Feed.is_active.is_(True))
+            .order_by(BlogEntry.pub_date.desc())
+            .limit(limit)
+            .offset(offset)
+        )
         result = await self.session.execute(statement)
         return list(result.scalars().all())
 
@@ -132,6 +139,25 @@ class BlogEntryRepository(SQLAlchemyAsyncRepository[BlogEntry]):
         """
         statement = (
             select(BlogEntry).where(BlogEntry.feed_id.in_(feed_ids)).order_by(BlogEntry.pub_date.desc()).limit(limit)
+        )
+        result = await self.session.execute(statement)
+        return list(result.scalars().all())
+
+    async def get_featured_entries(self, limit: int = 5) -> list[BlogEntry]:
+        """Get featured blog entries (returns recent entries from active feeds).
+
+        Args:
+            limit: Maximum number of featured entries to return.
+
+        Returns:
+            List of recent blog entries ordered by pub_date descending.
+        """
+        statement = (
+            select(BlogEntry)
+            .join(BlogEntry.feed)
+            .where(Feed.is_active.is_(True))
+            .order_by(BlogEntry.pub_date.desc())
+            .limit(limit)
         )
         result = await self.session.execute(statement)
         return list(result.scalars().all())

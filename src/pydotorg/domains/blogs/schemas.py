@@ -16,6 +16,8 @@ class FeedBase(BaseModel):
     website_url: Annotated[str, Field(min_length=1, max_length=500)]
     feed_url: Annotated[str, Field(min_length=1, max_length=500)]
     is_active: bool = True
+    is_official: bool = False
+    priority: int = 100
 
 
 class FeedCreate(FeedBase):
@@ -29,6 +31,8 @@ class FeedUpdate(BaseModel):
     website_url: Annotated[str, Field(min_length=1, max_length=500)] | None = None
     feed_url: Annotated[str, Field(min_length=1, max_length=500)] | None = None
     is_active: bool | None = None
+    is_official: bool | None = None
+    priority: int | None = None
 
 
 class FeedRead(FeedBase):
@@ -49,6 +53,8 @@ class FeedList(BaseModel):
     name: str
     website_url: str
     is_active: bool
+    is_official: bool
+    priority: int
     last_fetched: datetime.datetime | None
 
     model_config = ConfigDict(from_attributes=True)
@@ -63,6 +69,7 @@ class BlogEntryBase(BaseModel):
     url: Annotated[str, Field(min_length=1, max_length=1000)]
     pub_date: datetime.datetime
     guid: Annotated[str, Field(min_length=1, max_length=500)]
+    is_featured: bool = False
 
 
 class BlogEntryCreate(BlogEntryBase):
@@ -79,6 +86,7 @@ class BlogEntryUpdate(BaseModel):
     content: str | None = None
     url: Annotated[str, Field(min_length=1, max_length=1000)] | None = None
     pub_date: datetime.datetime | None = None
+    is_featured: bool | None = None
 
 
 class BlogEntryRead(BlogEntryBase):
@@ -101,6 +109,7 @@ class BlogEntryList(BaseModel):
     summary: str | None
     url: str
     pub_date: datetime.datetime
+    is_featured: bool
 
     model_config = ConfigDict(from_attributes=True)
 

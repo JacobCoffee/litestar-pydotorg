@@ -41,7 +41,7 @@ class BlogAdminService:
         Returns:
             Tuple of (feeds list, total count)
         """
-        query = select(Feed).options(selectinload(Feed.entries))
+        query = select(Feed)
 
         if is_active is not None:
             query = query.where(Feed.is_active == is_active)
@@ -171,6 +171,42 @@ class BlogAdminService:
         await self.session.refresh(feed)
         return feed
 
+    async def feature_entry(self, entry_id: UUID) -> BlogEntry | None:
+        """Feature a blog entry.
+
+        Args:
+            entry_id: Entry ID
+
+        Returns:
+            Updated entry if found, None otherwise
+        """
+        entry = await self.get_entry(entry_id)
+        if not entry:
+            return None
+
+        entry.is_featured = True
+        await self.session.commit()
+        await self.session.refresh(entry)
+        return entry
+
+    async def unfeature_entry(self, entry_id: UUID) -> BlogEntry | None:
+        """Unfeature a blog entry.
+
+        Args:
+            entry_id: Entry ID
+
+        Returns:
+            Updated entry if found, None otherwise
+        """
+        entry = await self.get_entry(entry_id)
+        if not entry:
+            return None
+
+        entry.is_featured = False
+        await self.session.commit()
+        await self.session.refresh(entry)
+        return entry
+
     async def get_stats(self) -> dict:
         """Get blog statistics.
 
@@ -199,10 +235,15 @@ class BlogAdminService:
         entries_today_result = await self.session.execute(entries_today_query)
         entries_today = entries_today_result.scalar() or 0
 
+        featured_entries_query = select(func.count()).where(BlogEntry.is_featured)
+        featured_entries_result = await self.session.execute(featured_entries_query)
+        featured_entries = featured_entries_result.scalar() or 0
+
         return {
             "total_feeds": total_feeds,
             "active_feeds": active_feeds,
             "inactive_feeds": inactive_feeds,
             "total_entries": total_entries,
             "entries_today": entries_today,
+            "featured_entries": featured_entries,
         }
