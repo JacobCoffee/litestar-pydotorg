@@ -1,0 +1,71 @@
+<div id="banners-list">
+    {% if banners %}
+    <div class="space-y-4">
+        {% for banner in banners %}
+        {% include 'admin/banners/partials/banner_row.html.jinja2' %}
+        {% endfor %}
+    </div>
+
+    {% if pagination and pagination.total > pagination.limit %}
+    <div class="flex justify-center mt-6">
+        <div class="join">
+            {% if pagination.offset > 0 %}
+            <button
+                class="join-item btn btn-sm"
+                hx-get="/admin/banners?status={{ request.query_params.get('status', '') }}&limit={{ pagination.limit }}&offset={{ [0, pagination.offset - pagination.limit]|max }}"
+                hx-target="#banners-list"
+                hx-swap="outerHTML"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+                Previous
+            </button>
+            {% endif %}
+
+            {% set current_page = (pagination.offset // pagination.limit) + 1 %}
+            {% set total_pages = (pagination.total // pagination.limit) + (1 if pagination.total % pagination.limit else 0) %}
+
+            <button class="join-item btn btn-sm btn-active">
+                Page {{ current_page }} of {{ total_pages }}
+            </button>
+
+            {% if pagination.offset + pagination.limit < pagination.total %}
+            <button
+                class="join-item btn btn-sm"
+                hx-get="/admin/banners?status={{ request.query_params.get('status', '') }}&limit={{ pagination.limit }}&offset={{ pagination.offset + pagination.limit }}"
+                hx-target="#banners-list"
+                hx-swap="outerHTML"
+            >
+                Next
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+    {% else %}
+    <div class="card bg-base-100 shadow-lg border border-base-300">
+        <div class="card-body text-center py-12">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-base-content/30 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
+            </svg>
+            <h3 class="text-xl font-bold mb-2">No Banners Found</h3>
+            <p class="text-base-content/60 mb-4">
+                {% if request.query_params.get('status') == 'active' %}
+                There are no active banners
+                {% elif request.query_params.get('status') == 'inactive' %}
+                There are no inactive banners
+                {% else %}
+                Get started by creating your first banner
+                {% endif %}
+            </p>
+            <a href="/admin/banners/new" class="btn btn-primary btn-sm">
+                Create Banner
+            </a>
+        </div>
+    </div>
+    {% endif %}
+</div>

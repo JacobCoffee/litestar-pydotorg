@@ -1,0 +1,98 @@
+{% extends "admin/base.html.jinja2" %}
+
+{% block title %}Banner Management - Python.org Admin{% endblock %}
+
+{% block admin_content %}
+{% if toast %}
+<div id="toast-notification" class="toast toast-top toast-end z-50">
+    <div class="alert {% if toast.type == 'success' %}alert-success{% elif toast.type == 'error' %}alert-error{% else %}alert-info{% endif %}">
+        <span>{{ toast.message }}</span>
+    </div>
+</div>
+<script>
+    setTimeout(function() {
+        var toast = document.getElementById('toast-notification');
+        if (toast) {
+            toast.style.transition = 'opacity 0.3s';
+            toast.style.opacity = '0';
+            setTimeout(function() { toast.remove(); }, 300);
+        }
+    }, 3000);
+</script>
+{% endif %}
+
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold text-python-blue">Banner Management</h1>
+            <p class="text-base-content/70 mt-1">Create and manage sitewide announcement banners</p>
+        </div>
+        <a href="/admin/banners/new" class="btn btn-primary gap-2" hx-boost="true">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            Create Banner
+        </a>
+    </div>
+
+    <div class="flex gap-2">
+        <a
+            href="/admin/banners"
+            class="btn btn-sm {% if not request.query_params.get('status') %}btn-primary{% else %}btn-ghost{% endif %}"
+            hx-boost="true"
+        >
+            All Banners
+            {% if stats and stats.total_banners %}
+            <span class="badge badge-sm">{{ stats.total_banners }}</span>
+            {% endif %}
+        </a>
+        <a
+            href="/admin/banners?status=active"
+            class="btn btn-sm {% if request.query_params.get('status') == 'active' %}btn-primary{% else %}btn-ghost{% endif %}"
+            hx-boost="true"
+        >
+            Active
+            {% if stats and stats.active_banners %}
+            <span class="badge badge-success badge-sm">{{ stats.active_banners }}</span>
+            {% endif %}
+        </a>
+        <a
+            href="/admin/banners?status=inactive"
+            class="btn btn-sm {% if request.query_params.get('status') == 'inactive' %}btn-primary{% else %}btn-ghost{% endif %}"
+            hx-boost="true"
+        >
+            Inactive
+            {% if stats and stats.inactive_banners %}
+            <span class="badge badge-ghost badge-sm">{{ stats.inactive_banners }}</span>
+            {% endif %}
+        </a>
+    </div>
+
+    {% include 'admin/banners/partials/banners_list.html.jinja2' %}
+</div>
+
+<dialog id="banner_preview_modal" class="modal">
+    <div class="modal-box max-w-4xl">
+        <button
+            type="button"
+            class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+            onclick="banner_preview_modal.close()"
+        >✕</button>
+        <div id="banner_preview_content">
+        </div>
+    </div>
+    <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+    </form>
+</dialog>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.body.addEventListener('htmx:afterSwap', function(evt) {
+        if (evt.detail.target.id === 'banner_preview_content') {
+            banner_preview_modal.showModal();
+        }
+    });
+</script>
+{% endblock %}

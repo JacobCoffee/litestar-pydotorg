@@ -1,0 +1,170 @@
+{% extends "admin/base.html.jinja2" %}
+
+{% block title %}{{ banner.name }} - Banner Detail{% endblock %}
+
+{% block admin_content %}
+<div class="space-y-6">
+    <div class="flex items-center gap-4">
+        <a href="/admin/banners" class="btn btn-ghost btn-sm gap-1" hx-boost="true">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            Back to Banners
+        </a>
+    </div>
+
+    <div class="card bg-base-100 shadow-lg border border-base-300">
+        <div class="card-body">
+            <div class="flex items-start justify-between gap-4">
+                <div>
+                    <h1 class="text-3xl font-bold text-python-blue">{{ banner.title }}</h1>
+                    <p class="text-base-content/70 mt-1">
+                        <span class="font-medium">Slug:</span> {{ banner.name }}
+                    </p>
+                </div>
+                <div class="flex flex-col items-end gap-2">
+                    {% if banner.is_active %}
+                    <span class="badge badge-success badge-lg">Active</span>
+                    {% else %}
+                    <span class="badge badge-ghost badge-lg">Inactive</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-4">
+                    <h2 class="text-lg font-semibold">Banner Details</h2>
+
+                    <div class="flex items-center gap-2">
+                        <span class="font-medium">Type:</span>
+                        {% set type_colors = {
+                            'info': 'badge-info',
+                            'success': 'badge-success',
+                            'warning': 'badge-warning',
+                            'error': 'badge-error'
+                        } %}
+                        <span class="badge {{ type_colors.get(banner.banner_type, 'badge-ghost') }}">
+                            {{ banner.banner_type | title }}
+                        </span>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <span class="font-medium">Dismissible:</span>
+                        <span class="{% if banner.is_dismissible %}text-success{% else %}text-base-content/60{% endif %}">
+                            {{ 'Yes' if banner.is_dismissible else 'No' }}
+                        </span>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <span class="font-medium">Sitewide:</span>
+                        <span class="{% if banner.is_sitewide %}text-success{% else %}text-base-content/60{% endif %}">
+                            {{ 'Yes' if banner.is_sitewide else 'No' }}
+                        </span>
+                    </div>
+
+                    {% if banner.link %}
+                    <div class="flex items-center gap-2">
+                        <span class="font-medium">Link:</span>
+                        <a href="{{ banner.link }}" target="_blank" class="link link-primary">
+                            {{ banner.link_text or banner.link }}
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="space-y-4">
+                    <h2 class="text-lg font-semibold">Schedule</h2>
+
+                    {% if banner.start_date %}
+                    <div class="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-base-content/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        <span>Starts: {{ banner.start_date.strftime('%B %d, %Y') }}</span>
+                    </div>
+                    {% else %}
+                    <p class="text-base-content/60">No start date set</p>
+                    {% endif %}
+
+                    {% if banner.end_date %}
+                    <div class="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-base-content/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        <span>Ends: {{ banner.end_date.strftime('%B %d, %Y') }}</span>
+                    </div>
+                    {% else %}
+                    <p class="text-base-content/60">No end date set</p>
+                    {% endif %}
+
+                    {% if banner.created_at %}
+                    <div class="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-base-content/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>Created: {{ banner.created_at.strftime('%B %d, %Y at %I:%M %p') }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div>
+                <h2 class="text-lg font-semibold mb-3">Message</h2>
+                <div class="bg-base-200 rounded-lg p-4">
+                    {{ banner.message }}
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <h2 class="text-lg font-semibold mb-3">Preview</h2>
+            {% include 'admin/banners/partials/banner_preview.html.jinja2' %}
+
+            <div class="divider"></div>
+
+            <div class="flex flex-wrap gap-2">
+                <a href="/admin/banners/{{ banner.id }}/edit" class="btn btn-primary gap-1" hx-boost="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                    Edit Banner
+                </a>
+                <button
+                    class="btn btn-ghost gap-1"
+                    hx-post="/admin/banners/{{ banner.id }}/toggle"
+                    hx-swap="none"
+                    hx-on::after-request="window.location.reload()"
+                >
+                    {% if banner.is_active %}
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                    </svg>
+                    Deactivate
+                    {% else %}
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    Activate
+                    {% endif %}
+                </button>
+                <button
+                    class="btn btn-error btn-outline gap-1"
+                    hx-delete="/admin/banners/{{ banner.id }}"
+                    hx-confirm="Are you sure you want to delete this banner?"
+                    hx-on::after-request="window.location.href='/admin/banners'"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                    Delete
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -3,6 +3,7 @@
 from pydotorg.domains.admin import urls
 from pydotorg.domains.admin.controllers import (
     AdminAnalyticsController,
+    AdminBannersController,
     AdminBlogsController,
     AdminDashboardController,
     AdminEmailController,
@@ -37,6 +38,7 @@ from pydotorg.domains.admin.services import (
 
 __all__ = [
     "AdminAnalyticsController",
+    "AdminBannersController",
     "AdminBlogsController",
     "AdminDashboardController",
     "AdminEmailController",
