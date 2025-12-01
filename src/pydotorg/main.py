@@ -42,6 +42,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from pydotorg.config import log_startup_banner, settings, validate_production_settings
 from pydotorg.core.admin import AdminController
 from pydotorg.core.auth.middleware import JWTAuthMiddleware, UserPopulationMiddleware
+from pydotorg.core.banners_middleware import APIBannerMiddleware, SitewideBannerMiddleware
 from pydotorg.core.cache import create_response_cache_config
 from pydotorg.core.database.base import AuditBase
 from pydotorg.core.dependencies import get_core_dependencies
@@ -55,6 +56,7 @@ from pydotorg.core.worker import saq_plugin
 from pydotorg.domains.about import AboutRenderController, PSFRenderController
 from pydotorg.domains.admin import (
     AdminAnalyticsController,
+    AdminBannersController,
     AdminBlogsController,
     AdminDashboardController,
     AdminEmailController,
@@ -70,7 +72,6 @@ from pydotorg.domains.admin import (
 )
 from pydotorg.domains.banners import (
     BannerController,
-    BannersPageController,
     get_banners_dependencies,
 )
 from pydotorg.domains.blogs import (
@@ -543,6 +544,7 @@ app = Litestar(
         health_check,
         AdminController,
         AdminAnalyticsController,
+        AdminBannersController,
         AdminBlogsController,
         AdminDashboardController,
         AdminEmailController,
@@ -596,7 +598,6 @@ app = Litestar(
         SponsorshipController,
         SponsorRenderController,
         BannerController,
-        BannersPageController,
         CodeSampleController,
         CodeSamplesPageController,
         PostController,
@@ -626,6 +627,8 @@ app = Litestar(
     plugins=[sqlalchemy_plugin, sqladmin_plugin, flash_plugin, structlog_plugin, saq_plugin, vite_plugin],
     middleware=[
         session_config.middleware,
+        SitewideBannerMiddleware,
+        APIBannerMiddleware,
         UserPopulationMiddleware,
         JWTAuthMiddleware,
         rate_limit_config.middleware,
