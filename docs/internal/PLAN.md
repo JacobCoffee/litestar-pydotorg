@@ -1797,6 +1797,8 @@ tests/
 | **API JSON Errors** | `/api/*` | 2025-11-30 | Exception handlers now detect API requests (via path prefix `/api/` or `Accept: application/json` header) and return proper JSON error responses instead of HTML templates. Added `_is_api_request()` and `_create_json_error_response()` helpers. |
 | **API Documentation** | `docs/api-*` | 2025-11-30 | Comprehensive API documentation: `api-getting-started.md` (706 lines) covers quickstart, authentication, pagination, error handling; `api-authentication.md` (1037 lines) covers JWT, session, OAuth2 flows with code examples in Python/JS/cURL; `postman-collection.json` provides full Postman collection with all endpoints pre-configured. |
 | **Cache Management Admin UI** | `/admin/settings/cache` | 2025-11-30 | Admin UI for cache management. Shows Redis stats (total keys, response cache keys, hit rate, memory usage), provides buttons to clear page cache, clear all cache, and warm all caches. Clickable stats open modal showing actual Redis keys with delete buttons. Toast notifications for all cache operations. Files: `domains/admin/controllers/settings.py`, `templates/admin/settings/cache.html.jinja2`, `templates/admin/settings/partials/key_list.html.jinja2`, `templates/admin/settings/partials/key_deleted.html.jinja2`. |
+| **Litestar CLI Database Commands** | Makefile + `main.py` | 2025-11-30 | Fixed `litestar database` commands (upgrade, history, make-migrations, etc.) by adding `AlembicAsyncConfig(script_location="src/pydotorg/db/migrations")` to SQLAlchemyAsyncConfig. Added Makefile targets: `litestar-db-upgrade`, `litestar-db-make`, `litestar-db-downgrade`, `litestar-db-history`, `litestar-db-current`, `litestar-db-check`. Legacy Alembic commands deprecated. |
+| **litestar-vite Integration** | `main.py`, Makefile, pyproject.toml | 2025-11-30 | Added `litestar-vite>=0.14.0` dependency for frontend asset management. Configured `VitePlugin` with `ViteConfig(set_static_folders=False)` to avoid conflict with existing static router. Added Makefile targets: `assets-install`, `assets-serve`, `assets-build`, `assets-init`, `assets-routes`. Legacy bun/vite commands deprecated. |
 
 ### Planned Enhancements
 
@@ -1841,6 +1843,33 @@ make infra-down              # Stop containers (postgres, redis, meilisearch)
 | Meilisearch | 7700 | Full-text search                     |
 | MailDev     | 1080 | Email testing UI (docker only)       |
 
+### Database Migrations (Litestar CLI - PREFERRED)
+
+```bash
+make litestar-db-upgrade     # Apply all pending migrations
+make litestar-db-make        # Create new migration from model changes
+make litestar-db-downgrade   # Rollback one migration
+make litestar-db-history     # Show migration history
+make litestar-db-current     # Show current revision
+make litestar-db-check       # Check if database is up to date
+
+# Or run directly:
+LITESTAR_APP=pydotorg.main:app uv run litestar database --help
+```
+
+### Frontend Assets (Litestar Vite - PREFERRED)
+
+```bash
+make assets-install          # Install frontend dependencies
+make assets-serve            # Run Vite dev server with HMR
+make assets-build            # Build for production
+make assets-init             # Initialize Vite (one-time setup)
+make assets-routes           # Generate route config JSON
+
+# Or run directly:
+LITESTAR_APP=pydotorg.main:app uv run litestar assets --help
+```
+
 ### Running Tests
 
 ```bash
@@ -1853,4 +1882,4 @@ make ci                      # Full CI: lint + fmt + type-check + test
 ---
 
 *Document generated for Python.org Litestar rebuild project*
-*Last updated: 2025-11-30 (Cache Management Admin UI complete with key viewer, deletion, toast notifications)*
+*Last updated: 2025-11-30 (Litestar CLI database commands + litestar-vite integration)*
