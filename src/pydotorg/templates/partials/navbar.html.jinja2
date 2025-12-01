@@ -17,16 +17,19 @@
                 <li><a href="/about" class="hover:text-primary transition-colors" hx-boost="true">About</a></li>
                 <li><a href="/downloads" class="hover:text-primary transition-colors" hx-boost="true">Downloads</a></li>
                 <li><a href="https://docs.python.org" target="_blank" rel="noopener" class="hover:text-primary transition-colors">Documentation</a></li>
-                <li x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
+                <li x-data="{ open: false, closeTimeout: null }"
+                    @mouseenter="clearTimeout(closeTimeout); open = true"
+                    @mouseleave="closeTimeout = setTimeout(() => open = false, 100)"
+                    class="relative">
                     <details :open="open">
-                        <summary class="hover:text-primary transition-colors">Community</summary>
-                        <ul class="p-2 bg-base-100 rounded-box shadow-lg w-52 z-50">
+                        <summary class="hover:text-primary transition-colors cursor-pointer">Community</summary>
+                        <ul class="p-2 bg-base-100 rounded-box shadow-lg w-52 z-50 !mt-0">
                             <li><a href="/community" hx-boost="true">Overview</a></li>
                             <li><a href="/community/diversity" hx-boost="true">Diversity</a></li>
                             <li><a href="https://www.python.org/community/lists/" target="_blank">Mailing Lists</a></li>
                             <li><a href="https://www.python.org/community/irc/" target="_blank">IRC</a></li>
                             <li><a href="https://discuss.python.org" target="_blank">Discussions</a></li>
-                            <li><a href="https://www.python.org/psf/" target="_blank">PSF</a></li>
+                            <li><a href="/psf" hx-boost="true">PSF</a></li>
                         </ul>
                     </details>
                 </li>
