@@ -109,7 +109,7 @@ class AdminBlogsController(Controller):
         self,
         request: Request,
         blog_admin_service: BlogAdminService,
-        feed_id: Annotated[UUID | None, Parameter(description="Filter by feed")] = None,
+        feed_id: Annotated[str | None, Parameter(description="Filter by feed")] = None,
         q: Annotated[str | None, Parameter(description="Search query")] = None,
         limit: Annotated[int, Parameter(ge=1, le=100, description="Page size")] = 20,
         offset: Annotated[int, Parameter(ge=0, description="Offset")] = 0,
@@ -127,10 +127,18 @@ class AdminBlogsController(Controller):
         Returns:
             Blog entries list template
         """
+        if q == "":
+            q = None
+        feed_uuid: UUID | None = None
+        if feed_id and feed_id.strip():
+            try:
+                feed_uuid = UUID(feed_id)
+            except ValueError:
+                feed_uuid = None
         entries, total = await blog_admin_service.list_entries(
             limit=limit,
             offset=offset,
-            feed_id=feed_id,
+            feed_id=feed_uuid,
             search=q,
         )
         stats = await blog_admin_service.get_stats()
