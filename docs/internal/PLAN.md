@@ -1786,6 +1786,53 @@ tests/
 | Issue | Location | Priority | Description |
 |-------|----------|----------|-------------|
 | ~~**Jobs progress not tracking**~~ | `/admin/tasks/jobs` | ~~HIGH~~ FIXED | ~~Job run counts and completion progress show all 0s even for jobs scheduled every 5 minutes. Statistics not being updated properly.~~ **Fixed (2025-11-29)**: SAQ deletes completed jobs after TTL (600s default), so counts were always 0. Implemented persistent Redis counters (`pydotorg:tasks:stats:*`) updated via `after_process` hook. See `src/pydotorg/tasks/stats.py`. |
+| **Meilisearch not running** | Search features | LOW | Port 7700 refused, search features may error. |
+| **Admin sub-pages missing** | `/admin/*` | MEDIUM | `/admin/users`, `/admin/sponsors`, etc. show "coming soon" toast (routes not implemented yet) |
+| **HTTP 405 on `/admin/jobs`** | `/admin/jobs` | HIGH | Method Not Allowed error when accessing admin jobs page (route only has OPTIONS and GET, missing POST handler) |
+| **HTTP 405 on `/admin/jobs/{job_id}`** | `/admin/jobs/{id}` | HIGH | Method Not Allowed error; route exists but missing GET handler. Path template expects `job_id:uuid` but GET method not implemented. |
+| **Close button on preview modal in `/admin/jobs`** | `/admin/jobs` | HIGH | Triggers HTTP 405; likely POST/DELETE but route only has OPTIONS and GET handlers. |
+| **CODEBASE-WIDE: Audit htmx 405 errors** | All templates | HIGH | Search all templates for `hx-post`, `hx-put`, `hx-delete`, `hx-patch` and verify corresponding route handlers exist. |
+| **View Details button on `/admin/events/calendars`** | `/admin/events/calendars` | MEDIUM | Calendar detail page not implemented. Shows "coming soon" toast. |
+| **Close modal button on `/admin/events`** | `/admin/events` | HIGH | Triggers HTTP 405; route only has OPTIONS and GET handlers. |
+| **`/admin/events` default sort order** | `/admin/events` | LOW | Currently sorts oldest first; should sort by newest first. |
+| **Next button pagination on `/admin/events`** | `/admin/events` | HIGH | ValidationException 400 - empty string query params fail validation; should handle empty strings as None. |
+| **`/events/submit` form submission** | `/events/submit` | HIGH | ClientException 400 "JSON is malformed" - form data sent as form-encoded but endpoint expects JSON. |
+| **`/jobs/submit` preview button** | `/jobs/submit` | HIGH | HTTP 405 Method Not Allowed on `/jobs/preview`. Route missing POST handler. |
+| **`/jobs/submit` submit button** | `/jobs/submit` | HIGH | ClientException 400 "JSON is malformed" - form data sent as form-encoded but endpoint expects JSON. |
+| **`/blogs` sidebar feed filters** | `/blogs` | MEDIUM | Clicking feed links just refreshes page instead of filtering. Filter functionality not implemented. |
+| **`/blogs` feed prioritization** | `/blogs` | MEDIUM | Should prioritize official Python blogs (Python Insider, PSF Blog) over aggregated feeds. |
+| **Missing template `events/calendar_list.html.jinja2`** | Events | HIGH | TemplateNotFoundException 500 error. Template doesn't exist but is referenced. |
+| **`/events` List View nests page** | `/events` | HIGH | Clicking "List View" loads entire page as subpage. htmx target issue. |
+| **`/events` Filters button nesting** | `/events` | HIGH | Same problem as List View; nests full page inside content area. |
+| **`/jobs` filter sidebar duplicates** | `/jobs` | HIGH | Clicking filter options spawns duplicate filter panels. htmx target misconfigured. |
+| **`/events` filters don't filter** | `/events` | MEDIUM | Filter UI exists but doesn't filter event listings. Backend filtering not wired up. |
+| **`/admin/jobs` preview modal UX** | `/admin/jobs` | LOW | Modal is ugly - "Location: NoneRemote" bug, plain text layout, no markdown rendering. |
+| **`/admin/email/logs` view button** | `/admin/email/logs` | HIGH | UndefinedError: `EmailLog` has no attribute `created`. Wrong field name. |
+| **`/admin/blogs` close button on modal** | `/admin/blogs` | HIGH | HTTP 405 Method Not Allowed. Missing POST handler for modal dismiss. |
+| **`/admin/blogs` feed detail shows "No entries found"** | `/admin/blogs` | HIGH | Shows "No entries found" for ALL feeds even though entries exist. Query broken. |
+| **`/admin/pages` close button on modal** | `/admin/pages` | HIGH | HTTP 405 Method Not Allowed. Missing POST handler. |
+| **`/admin/jobs/{id}` delete button** | `/admin/jobs/{id}` | HIGH | HTTP 405 Method Not Allowed. Route missing DELETE handler. |
+| **Blog feed processing error** | `blogs/services.py:100` | HIGH | `FeedRepository` has no `select_query`. Wrong Advanced-Alchemy method. |
+| **SITEWIDE: Pagination first/last buttons** | All paginated views | LOW | Current pagination only has Previous/Next. Need First/Last for many pages. |
+| **Feature: Featured jobs** | `/jobs`, `/admin/jobs` | MEDIUM | Add `is_featured` field on Job model, admin toggle, featured section on jobs page. |
+| **`/admin/events` metadata columns** | `/admin/events` | LOW | Add date added, submitted by, last modified, status columns. |
+| **`/admin/blogs` search button layout** | `/admin/blogs` | LOW | Search button appears under input instead of inline. CSS issue. |
+| **Feature: Featured blog entries** | `/blogs`, `/admin/blogs` | MEDIUM | Add `is_featured` field on BlogEntry, admin toggle, featured section. |
+| **`/jobs` Apply Filters does nothing** | `/jobs` | HIGH | Clicking "Apply Filters" has no effect. Not wired up. |
+| **`/psf/diversity` not implemented** | `/psf/diversity` | MEDIUM | Shows "not available yet". Page needs to be created. |
+| **`/about/help` (FAQs) not implemented** | `/about/help` | MEDIUM | Shows "not available yet". Page needs to be created. |
+| **`/community/posts` UX overhaul** | `/community/posts` | LOW | Page needs complete UX redesign. |
+| **`/community/workshops` not implemented** | `/community/workshops` | MEDIUM | Find User Groups page shows "not available yet". |
+| **Feature: Sitewide announcement banner** | Sitewide | MEDIUM | Need dismissible banner system for announcements (surveys, PyCon, news). |
+| **`/events/{slug}` shows raw HTML** | `/events/{slug}` | HIGH | Event detail pages display raw HTML. Need `\|safe` filter. |
+| **`/events/{slug}` iCalendar shows raw text** | `/events/{slug}` | HIGH | iCalendar button shows raw iCal format instead of downloading .ics file. |
+| **Donate button link** | Sitewide | HIGH | All donate buttons should point to `https://donate.python.org`. |
+| **`/admin/blogs/entries` pagination** | `/admin/blogs/entries` | HIGH | ValidationException 400 - empty `feed_id=` fails validation. |
+| **`/blogs` Featured Posts ignores admin flag** | `/blogs` | HIGH | Featured Posts shows arbitrary entries, not ones marked featured in admin. |
+| **Worker: `warm_homepage_cache` MissingGreenlet** | SAQ worker | HIGH | SQLAlchemy MissingGreenlet in cron job. Async context issue. |
+| **SITEWIDE: Normalize page header sizes** | All pages | LOW | Inconsistent header sizes. About=small, Success Stories=big, etc. |
+| **Worker: `index_event` EventLocation error** | `tasks/search.py:319` | HIGH | `EventLocation` has no `city` attribute. Wrong field names in search indexing. |
+| **`/events/submit` no confirmation** | `/events/submit` | MEDIUM | No toast or confirmation after submitting event. |
 
 ### Completed Enhancements
 
