@@ -155,3 +155,53 @@ class ResetPasswordRequest(BaseModel):
 
     token: str = Field(..., min_length=1)
     new_password: str = Field(..., min_length=8)
+
+
+class ProfileUpdateRequest(BaseModel):
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "first_name": "Guido",
+                "last_name": "van Rossum",
+                "username": "guido_van_rossum",
+                "email": "guido@python.org",
+            }
+        }
+    )
+
+    first_name: str = Field(..., max_length=150)
+    last_name: str = Field(..., max_length=150)
+    username: str = Field(..., min_length=3, max_length=150)
+    email: EmailStr
+
+
+class ChangePasswordRequest(BaseModel):
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "current_password": "OldSecureP@ss123!",
+                "new_password": "NewSecureP@ss456!",
+                "confirm_password": "NewSecureP@ss456!",
+            }
+        }
+    )
+
+    current_password: str = Field(..., min_length=1)
+    new_password: str = Field(..., min_length=8)
+    confirm_password: str = Field(..., min_length=8)
+
+
+class SettingsUpdateRequest(BaseModel):
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "public_profile": True,
+                "email_privacy": "private",
+                "search_visibility": "public",
+            }
+        }
+    )
+
+    public_profile: bool = True
+    email_privacy: str = "private"
+    search_visibility: str = "public"

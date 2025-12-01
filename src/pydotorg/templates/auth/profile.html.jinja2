@@ -96,7 +96,7 @@
                                     <button
                                         type="button"
                                         class="btn btn-outline btn-sm"
-                                        hx-post="/api/auth/verify-email"
+                                        hx-post="/api/auth/resend-verification"
                                         hx-target="#profile-messages"
                                     >
                                         Verify
@@ -185,22 +185,31 @@
                             {{ csrf_input|safe }}
 
                             {{ checkbox_field(
-                                name='email_notifications',
-                                label='Receive email notifications',
-                                checked=user.settings.email_notifications|default(true)
-                            ) }}
-
-                            {{ checkbox_field(
-                                name='newsletter',
-                                label='Subscribe to Python newsletter',
-                                checked=user.settings.newsletter|default(false)
-                            ) }}
-
-                            {{ checkbox_field(
-                                name='profile_public',
+                                name='public_profile',
                                 label='Make profile publicly visible',
-                                checked=user.settings.profile_public|default(true)
+                                checked=user.public_profile|default(true)
                             ) }}
+
+                            <div class="form-control">
+                                <label class="label" for="email_privacy">
+                                    <span class="label-text">Email Privacy</span>
+                                </label>
+                                <select name="email_privacy" id="email_privacy" class="select select-bordered w-full">
+                                    <option value="public" {% if user.email_privacy.value == 'public' %}selected{% endif %}>Public - Visible to everyone</option>
+                                    <option value="private" {% if user.email_privacy.value == 'private' %}selected{% endif %}>Private - Visible to logged-in users only</option>
+                                    <option value="never" {% if user.email_privacy.value == 'never' %}selected{% endif %}>Never - Hidden from everyone</option>
+                                </select>
+                            </div>
+
+                            <div class="form-control">
+                                <label class="label" for="search_visibility">
+                                    <span class="label-text">Profile Searchability</span>
+                                </label>
+                                <select name="search_visibility" id="search_visibility" class="select select-bordered w-full">
+                                    <option value="public" {% if user.search_visibility.value == 'public' %}selected{% endif %}>Public - Appear in search results</option>
+                                    <option value="private" {% if user.search_visibility.value == 'private' %}selected{% endif %}>Private - Don't appear in search results</option>
+                                </select>
+                            </div>
 
                             <div class="card-actions justify-end">
                                 <button type="submit" class="btn btn-primary">

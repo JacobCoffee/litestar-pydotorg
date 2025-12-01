@@ -7,7 +7,7 @@ from datetime import UTC, datetime
 from typing import TYPE_CHECKING
 from uuid import UUID
 
-from litestar import Controller, Request, Response, get, post
+from litestar import Controller, Request, Response, delete, get, post, put
 from litestar.di import Provide
 from litestar.exceptions import NotFoundException, PermissionDeniedException
 from litestar.params import Parameter
@@ -20,19 +20,22 @@ from pydotorg.core.auth.jwt import jwt_service
 from pydotorg.core.auth.oauth import get_oauth_service
 from pydotorg.core.auth.password import password_service
 from pydotorg.core.auth.schemas import (
+    ChangePasswordRequest,
     ForgotPasswordRequest,
     LoginRequest,
+    ProfileUpdateRequest,
     RefreshTokenRequest,
     RegisterRequest,
     ResetPasswordRequest,
     SendVerificationRequest,
+    SettingsUpdateRequest,
     TokenResponse,
     UserResponse,
     VerifyEmailResponse,
 )
 from pydotorg.core.auth.session import session_service
 from pydotorg.core.logging import get_logger
-from pydotorg.domains.users.models import User
+from pydotorg.domains.users.models import EmailPrivacy, SearchVisibility, User
 from pydotorg.lib.tasks import enqueue_task
 
 if TYPE_CHECKING:
@@ -704,6 +707,154 @@ class AuthController(Controller):
         await db_session.commit()
 
         return VerifyEmailResponse(message="Password reset successfully")
+
+    @post("/oauth/{provider:str}")
+    async def oauth_login_post(
+        self,
+        provider: str,
+        request: Request,
+    ) -> Redirect:
+        """Initiate OAuth login flow via POST (HTMX compatible).
+
+        Same as GET /oauth/{provider} but accepts POST for HTMX buttons.
+        """
+        oauth_service = get_oauth_service(settings)
+
+        try:
+            oauth_provider = oauth_service.get_provider(provider)
+        except ValueError as e:
+            raise PermissionDeniedException(str(e)) from e
+
+        state = secrets.token_urlsafe(32)
+        request.set_session({"oauth_state": state, "oauth_provider": provider})
+
+        redirect_uri = f"{settings.oauth_redirect_base_url}/api/auth/oauth/{provider}/callback"
+        auth_url = oauth_provider.get_authorization_url(redirect_uri, state)
+
+        return Redirect(path=auth_url)
+
+    @put("/profile", guards=[require_authenticated])
+    async def update_profile(
+        self,
+        data: ProfileUpdateRequest,
+        current_user: User,
+        db_session: AsyncSession,
+    ) -> Response:
+        """Update user profile information.
+
+        Updates the authenticated user's profile fields including name,
+        username, and email address.
+        """
+        if data.username != current_user.username:
+            result = await db_session.execute(select(User).where(User.username == data.username))
+            if result.scalar_one_or_none():
+                raise PermissionDeniedException("Username already taken")
+
+        if data.email != current_user.email:
+            result = await db_session.execute(select(User).where(User.email == data.email))
+            if result.scalar_one_or_none():
+                raise PermissionDeniedException("Email already registered")
+            current_user.email_verified = False
+
+        current_user.first_name = data.first_name
+        current_user.last_name = data.last_name
+        current_user.username = data.username
+        current_user.email = data.email
+
+        await db_session.commit()
+
+        return Response(
+            content='<div class="alert alert-success">Profile updated successfully!</div>',
+            media_type="text/html",
+        )
+
+    @post("/change-password", guards=[require_authenticated])
+    async def change_password(
+        self,
+        data: ChangePasswordRequest,
+        current_user: User,
+        db_session: AsyncSession,
+    ) -> Response:
+        """Change password for authenticated user.
+
+        Validates current password and updates to new password.
+        """
+        if current_user.oauth_provider:
+            raise PermissionDeniedException(f"This account uses {current_user.oauth_provider} login")
+
+        if not current_user.password_hash or not password_service.verify_password(
+            data.current_password, current_user.password_hash
+        ):
+            return Response(
+                content='<div class="alert alert-error">Current password is incorrect</div>',
+                media_type="text/html",
+            )
+
+        if data.new_password != data.confirm_password:
+            return Response(
+                content='<div class="alert alert-error">New passwords do not match</div>',
+                media_type="text/html",
+            )
+
+        is_valid, error_message = password_service.validate_password_strength(data.new_password)
+        if not is_valid:
+            return Response(
+                content=f'<div class="alert alert-error">{error_message}</div>',
+                media_type="text/html",
+            )
+
+        current_user.password_hash = password_service.hash_password(data.new_password)
+        await db_session.commit()
+
+        return Response(
+            content='<div class="alert alert-success">Password changed successfully!</div>',
+            media_type="text/html",
+        )
+
+    @put("/settings", guards=[require_authenticated])
+    async def update_settings(
+        self,
+        data: SettingsUpdateRequest,
+        current_user: User,
+        db_session: AsyncSession,
+    ) -> Response:
+        """Update user account settings.
+
+        Updates privacy and visibility preferences.
+        """
+        current_user.public_profile = data.public_profile
+
+        try:
+            current_user.email_privacy = EmailPrivacy(data.email_privacy)
+        except ValueError:
+            current_user.email_privacy = EmailPrivacy.PRIVATE
+
+        try:
+            current_user.search_visibility = SearchVisibility(data.search_visibility)
+        except ValueError:
+            current_user.search_visibility = SearchVisibility.PUBLIC
+
+        await db_session.commit()
+
+        return Response(
+            content='<div class="alert alert-success">Settings saved successfully!</div>',
+            media_type="text/html",
+        )
+
+    @delete("/account", guards=[require_authenticated], status_code=303)
+    async def delete_account(
+        self,
+        current_user: User,
+        db_session: AsyncSession,
+    ) -> Redirect:
+        """Delete user account permanently.
+
+        Permanently deletes the authenticated user's account and all associated data.
+        """
+        await db_session.delete(current_user)
+        await db_session.commit()
+
+        return Redirect(path="/")
 
 
 class AuthPageController(Controller):
