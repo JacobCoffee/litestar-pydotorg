@@ -14,7 +14,7 @@ from litestar.stores.redis import RedisStore
 if TYPE_CHECKING:
     from litestar.config.app import AppConfig
 
-from advanced_alchemy.extensions.litestar import SQLAlchemyPlugin
+from advanced_alchemy.extensions.litestar import AlembicAsyncConfig, SQLAlchemyPlugin
 from advanced_alchemy.extensions.litestar.plugins.init.config.asyncio import SQLAlchemyAsyncConfig
 from litestar import Litestar, get
 from litestar.config.compression import CompressionConfig
@@ -254,6 +254,10 @@ sqlalchemy_config = SQLAlchemyAsyncConfig(
     connection_string=str(settings.database_url),
     metadata=AuditBase.metadata,
     create_all=settings.create_all,
+    alembic_config=AlembicAsyncConfig(
+        script_location="src/pydotorg/db/migrations",
+        version_table_name="alembic_version",
+    ),
 )
 
 sqlalchemy_plugin = SQLAlchemyPlugin(config=sqlalchemy_config)
