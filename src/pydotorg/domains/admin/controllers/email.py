@@ -425,21 +425,24 @@ class AdminEmailController(Controller):
         self,
         request: Request,
         email_admin_service: EmailAdminService,
-        q: Annotated[str | None, Parameter(description="Search query")] = None,
+        status: Annotated[str | None, Parameter(description="Filter by status")] = None,
+        template: Annotated[str | None, Parameter(description="Filter by template")] = None,
+        recipient: Annotated[str | None, Parameter(description="Filter by recipient")] = None,
+        time_range: Annotated[str | None, Parameter(description="Time range filter")] = "24h",
         limit: Annotated[int, Parameter(ge=1, le=100, description="Page size")] = 50,
         offset: Annotated[int, Parameter(ge=0, description="Offset")] = 0,
-        *,
-        failed_only: Annotated[bool, Parameter(description="Show only failed")] = False,
     ) -> Template:
         """Render email logs list page.
 
         Args:
             request: HTTP request
             email_admin_service: Email admin service
-            q: Search query
+            status: Filter by status (sent, failed, bounced, pending)
+            template: Filter by template internal name
+            recipient: Filter by recipient email
+            time_range: Time range filter (24h, 7d, 30d, all)
             limit: Maximum logs per page
             offset: Pagination offset
-            failed_only: Show only failed emails
 
         Returns:
             Email logs template or partial for HTMX requests
@@ -447,14 +450,21 @@ class AdminEmailController(Controller):
         logs, total = await email_admin_service.list_logs(
             limit=limit,
             offset=offset,
-            search=q,
-            failed_only=failed_only,
+            status=status if status else None,
+            template_name=template if template else None,
+            recipient=recipient if recipient else None,
+            time_range=time_range,
         )
+
+        stats = await email_admin_service.get_log_stats()
+        available_templates, _ = await email_admin_service.list_templates(limit=100)
 
         context = {
             "title": "Email Logs",
             "description": "View email delivery logs",
             "logs": logs,
+            "stats": stats,
+            "available_templates": available_templates,
             "pagination": {
                 "total": total,
                 "limit": limit,

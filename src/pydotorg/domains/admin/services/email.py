@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+from datetime import UTC, datetime, timedelta
 from typing import TYPE_CHECKING
 
 from sqlalchemy import func, or_, select
@@ -82,29 +83,48 @@ class EmailAdminService:
         self,
         limit: int = 50,
         offset: int = 0,
-        search: str | None = None,
-        *,
-        failed_only: bool = False,
+        status: str | None = None,
+        template_name: str | None = None,
+        recipient: str | None = None,
+        time_range: str | None = None,
     ) -> tuple[list[EmailLog], int]:
         """List email logs with filtering and pagination.
 
         Args:
             limit: Maximum number of logs to return
             offset: Number of logs to skip
-            search: Search query for recipient email
-            failed_only: Only return failed emails
+            status: Filter by status (sent, failed, bounced, pending)
+            template_name: Filter by template internal name
+            recipient: Filter by recipient email
+            time_range: Time range filter (24h, 7d, 30d, all)
 
         Returns:
             Tuple of (logs list, total count)
         """
         query = select(EmailLog)
 
-        if failed_only:
-            query = query.where(EmailLog.status == "failed")
+        if status:
+            query = query.where(EmailLog.status == status)
 
-        if search:
-            search_term = f"%{search}%"
+        if template_name:
+            query = query.where(EmailLog.template_name == template_name)
+
+        if recipient:
+            search_term = f"%{recipient}%"
             query = query.where(EmailLog.recipient_email.ilike(search_term))
+
+        if time_range and time_range != "all":
+            now = datetime.now(tz=UTC)
+            if time_range == "24h":
+                cutoff = now - timedelta(hours=24)
+            elif time_range == "7d":
+                cutoff = now - timedelta(days=7)
+            elif time_range == "30d":
+                cutoff = now - timedelta(days=30)
+            else:
+                cutoff = None
+            if cutoff:
+                query = query.where(EmailLog.created_at >= cutoff)
 
         count_query = select(func.count()).select_from(query.subquery())
         total_result = await self.session.execute(count_query)
@@ -161,4 +181,38 @@ class EmailAdminService:
             "failed_count": failed_count,
             "pending_count": pending_count,
             "total_logs": total_logs,
+        }
+
+    async def get_log_stats(self) -> dict:
+        """Get email log statistics for the logs page.
+
+        Returns:
+            Dictionary with log counts by status
+        """
+        total_logs_query = select(func.count()).select_from(EmailLog)
+        total_logs_result = await self.session.execute(total_logs_query)
+        total_logs = total_logs_result.scalar() or 0
+
+        sent_query = select(func.count()).where(EmailLog.status == "sent")
+        sent_result = await self.session.execute(sent_query)
+        sent_logs = sent_result.scalar() or 0
+
+        failed_query = select(func.count()).where(EmailLog.status == "failed")
+        failed_result = await self.session.execute(failed_query)
+        failed_logs = failed_result.scalar() or 0
+
+        bounced_query = select(func.count()).where(EmailLog.status == "bounced")
+        bounced_result = await self.session.execute(bounced_query)
+        bounced_logs = bounced_result.scalar() or 0
+
+        pending_query = select(func.count()).where(EmailLog.status == "pending")
+        pending_result = await self.session.execute(pending_query)
+        pending_logs = pending_result.scalar() or 0
+
+        return {
+            "total_logs": total_logs,
+            "sent_logs": sent_logs,
+            "failed_logs": failed_logs,
+            "bounced_logs": bounced_logs,
+            "pending_logs": pending_logs,
         }
