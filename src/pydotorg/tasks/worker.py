@@ -279,6 +279,13 @@ def get_task_functions() -> list[Callable[..., Any]]:
         rebuild_search_index,
         remove_job_from_index,
     )
+    from pydotorg.tasks.sync import (  # noqa: PLC0415
+        sync_all_external_content,
+        sync_events_from_ics,
+        sync_jobs_from_rss,
+        sync_news_from_feeds,
+        sync_success_stories,
+    )
 
     return [
         aggregate_download_stats,
@@ -311,6 +318,11 @@ def get_task_functions() -> list[Callable[..., Any]]:
         send_job_rejected_email,
         send_password_reset_email,
         send_verification_email,
+        sync_all_external_content,
+        sync_events_from_ics,
+        sync_jobs_from_rss,
+        sync_news_from_feeds,
+        sync_success_stories,
         test_failing_task,
         warm_blogs_cache,
         warm_events_cache,
@@ -337,6 +349,12 @@ def get_cron_jobs() -> list[Any]:
         cron_expire_jobs,
     )
     from pydotorg.tasks.search import cron_rebuild_indexes  # noqa: PLC0415
+    from pydotorg.tasks.sync import (  # noqa: PLC0415
+        cron_sync_events,
+        cron_sync_jobs,
+        cron_sync_news,
+        cron_sync_stories,
+    )
 
     return [
         cron_archive_old_jobs,
@@ -346,6 +364,10 @@ def get_cron_jobs() -> list[Any]:
         cron_expire_jobs,
         cron_rebuild_indexes,
         cron_refresh_feeds,
+        cron_sync_events,
+        cron_sync_jobs,
+        cron_sync_news,
+        cron_sync_stories,
         cron_warm_homepage_cache,
         cron_warm_releases_cache,
     ]

@@ -284,6 +284,47 @@ db-reseed: db-clear db-seed ## Clear and reseed database
 db-init: db-migrate db-seed ## Initialize database (migrate + seed)
 
 # ============================================================================
+# Data Import Scripts
+# ============================================================================
+
+##@ Data Import
+
+.PHONY: import-events
+import-events: ## Import events from Python.org Google Calendar
+	$(PYTHON) scripts/import_events.py
+
+.PHONY: import-events-dry
+import-events-dry: ## Import events (dry run - no changes saved)
+	$(PYTHON) scripts/import_events.py --dry-run
+
+.PHONY: import-news
+import-news: ## Import blog entries from Python.org RSS feeds
+	$(PYTHON) scripts/import_news.py --refresh-all
+
+.PHONY: import-news-dry
+import-news-dry: ## Import news (dry run - no changes saved)
+	$(PYTHON) scripts/import_news.py --dry-run
+
+.PHONY: import-stories
+import-stories: ## Import success stories from python.org
+	$(PYTHON) scripts/import_success_stories.py
+
+.PHONY: import-stories-dry
+import-stories-dry: ## Import success stories (dry run - no changes saved)
+	$(PYTHON) scripts/import_success_stories.py --dry-run --limit 5
+
+.PHONY: import-jobs
+import-jobs: ## Import job postings from python.org RSS feed
+	$(PYTHON) scripts/import_jobs.py
+
+.PHONY: import-jobs-dry
+import-jobs-dry: ## Import jobs (dry run - no changes saved)
+	$(PYTHON) scripts/import_jobs.py --dry-run --limit 5
+
+.PHONY: import-all
+import-all: import-events import-news import-stories import-jobs ## Import all external data
+
+# ============================================================================
 # Application
 # ============================================================================
 
