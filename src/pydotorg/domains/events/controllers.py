@@ -1135,7 +1135,7 @@ class EventsPageController(Controller):
 
         if is_htmx and not is_boosted:
             return Template(
-                template_name="events/partials/calendar_grid.html.jinja2",
+                template_name="events/partials/calendar_view.html.jinja2",
                 context=context,
             )
 

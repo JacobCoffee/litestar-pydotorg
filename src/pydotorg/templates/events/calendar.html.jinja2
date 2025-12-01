@@ -22,67 +22,8 @@
 
 <section class="bg-base-100 py-12">
     <div class="section-container">
-        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-8">
-            <div class="tabs tabs-boxed" id="view-tabs">
-                <button class="tab {% if view == 'month' %}tab-active{% endif %}"
-                        hx-get="/events/calendar/{{ calendar.slug }}/?view=month&date={{ current_date.strftime('%Y-%m-%d') }}"
-                        hx-target="#calendar-grid"
-                        hx-swap="innerHTML"
-                        hx-on::after-request="updateActiveTab(this)">
-                    Month
-                </button>
-                <button class="tab {% if view == 'week' %}tab-active{% endif %}"
-                        hx-get="/events/calendar/{{ calendar.slug }}/?view=week&date={{ current_date.strftime('%Y-%m-%d') }}"
-                        hx-target="#calendar-grid"
-                        hx-swap="innerHTML"
-                        hx-on::after-request="updateActiveTab(this)">
-                    Week
-                </button>
-                <button class="tab {% if view == 'list' %}tab-active{% endif %}"
-                        hx-get="/events/calendar/{{ calendar.slug }}/?view=list&date={{ current_date.strftime('%Y-%m-%d') }}"
-                        hx-target="#calendar-grid"
-                        hx-swap="innerHTML"
-                        hx-on::after-request="updateActiveTab(this)">
-                    List
-                </button>
-            </div>
-
-            <div class="flex items-center gap-4" id="date-nav">
-                <button class="btn btn-sm btn-circle btn-ghost"
-                        hx-get="/events/calendar/{{ calendar.slug }}/?date={{ (current_date - timedelta(days=30)).strftime('%Y-%m-%d') }}&view={{ view }}"
-                        hx-target="#calendar-grid"
-                        hx-swap="innerHTML"
-                        aria-label="Previous month">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                    </svg>
-                </button>
-
-                <h2 class="text-xl font-bold text-python-blue" id="current-month">
-                    {{ current_date.strftime('%B %Y') }}
-                </h2>
-
-                <button class="btn btn-sm btn-circle btn-ghost"
-                        hx-get="/events/calendar/{{ calendar.slug }}/?date={{ (current_date + timedelta(days=30)).strftime('%Y-%m-%d') }}&view={{ view }}"
-                        hx-target="#calendar-grid"
-                        hx-swap="innerHTML"
-                        aria-label="Next month">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                    </svg>
-                </button>
-
-                <button class="btn btn-sm btn-outline"
-                        hx-get="/events/calendar/{{ calendar.slug }}/?view={{ view }}"
-                        hx-target="#calendar-grid"
-                        hx-swap="innerHTML">
-                    Today
-                </button>
-            </div>
-        </div>
-
-        <div id="calendar-grid">
-            {% include "events/partials/calendar_grid.html.jinja2" %}
+        <div id="calendar-container">
+            {% include "events/partials/calendar_view.html.jinja2" %}
         </div>
     </div>
 </section>
@@ -111,28 +52,4 @@
         </div>
     </div>
 </section>
-{% endblock %}
-
-{% block extra_js %}
-<script>
-    function updateActiveTab(clickedTab) {
-        document.querySelectorAll('#view-tabs .tab').forEach(tab => {
-            tab.classList.remove('tab-active');
-        });
-        clickedTab.classList.add('tab-active');
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        const calendarDays = document.querySelectorAll('[role="button"]');
-
-        calendarDays.forEach(day => {
-            day.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    this.click();
-                }
-            });
-        });
-    });
-</script>
 {% endblock %}

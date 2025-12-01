@@ -1,0 +1,85 @@
+<div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-8">
+    <div class="tabs tabs-boxed">
+        <button class="tab {% if view == 'month' %}tab-active{% endif %}"
+                hx-get="/events/calendar/{{ calendar.slug }}/?view=month&date={{ current_date.strftime('%Y-%m-%d') }}"
+                hx-target="#calendar-container"
+                hx-swap="innerHTML">
+            Month
+        </button>
+        <button class="tab {% if view == 'week' %}tab-active{% endif %}"
+                hx-get="/events/calendar/{{ calendar.slug }}/?view=week&date={{ current_date.strftime('%Y-%m-%d') }}"
+                hx-target="#calendar-container"
+                hx-swap="innerHTML">
+            Week
+        </button>
+        <button class="tab {% if view == 'list' %}tab-active{% endif %}"
+                hx-get="/events/calendar/{{ calendar.slug }}/?view=list&date={{ current_date.strftime('%Y-%m-%d') }}"
+                hx-target="#calendar-container"
+                hx-swap="innerHTML">
+            List
+        </button>
+    </div>
+
+    <div class="flex items-center gap-4">
+        {% if view == 'week' %}
+        <button class="btn btn-sm btn-circle btn-ghost"
+                hx-get="/events/calendar/{{ calendar.slug }}/?date={{ (current_date - timedelta(days=7)).strftime('%Y-%m-%d') }}&view={{ view }}"
+                hx-target="#calendar-container"
+                hx-swap="innerHTML"
+                aria-label="Previous week">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+        </button>
+        {% else %}
+        <button class="btn btn-sm btn-circle btn-ghost"
+                hx-get="/events/calendar/{{ calendar.slug }}/?date={{ (current_date - timedelta(days=30)).strftime('%Y-%m-%d') }}&view={{ view }}"
+                hx-target="#calendar-container"
+                hx-swap="innerHTML"
+                aria-label="Previous month">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+        </button>
+        {% endif %}
+
+        <h2 class="text-xl font-bold text-python-blue min-w-[140px] text-center">
+            {% if view == 'week' %}
+            {{ week_data[0].date.strftime('%b %d') }} - {{ week_data[6].date.strftime('%b %d, %Y') }}
+            {% else %}
+            {{ current_date.strftime('%B %Y') }}
+            {% endif %}
+        </h2>
+
+        {% if view == 'week' %}
+        <button class="btn btn-sm btn-circle btn-ghost"
+                hx-get="/events/calendar/{{ calendar.slug }}/?date={{ (current_date + timedelta(days=7)).strftime('%Y-%m-%d') }}&view={{ view }}"
+                hx-target="#calendar-container"
+                hx-swap="innerHTML"
+                aria-label="Next week">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+        </button>
+        {% else %}
+        <button class="btn btn-sm btn-circle btn-ghost"
+                hx-get="/events/calendar/{{ calendar.slug }}/?date={{ (current_date + timedelta(days=30)).strftime('%Y-%m-%d') }}&view={{ view }}"
+                hx-target="#calendar-container"
+                hx-swap="innerHTML"
+                aria-label="Next month">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+        </button>
+        {% endif %}
+
+        <button class="btn btn-sm btn-outline"
+                hx-get="/events/calendar/{{ calendar.slug }}/?view={{ view }}"
+                hx-target="#calendar-container"
+                hx-swap="innerHTML">
+            Today
+        </button>
+    </div>
+</div>
+
+{% include "events/partials/calendar_grid.html.jinja2" %}
