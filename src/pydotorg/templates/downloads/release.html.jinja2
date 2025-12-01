@@ -44,9 +44,8 @@
             {% if release.content %}
             <div class="card bg-base-200 mb-8">
                 <div class="card-body">
-                    <h2 class="card-title text-2xl text-python-blue mb-4">Release Notes</h2>
-                    <div class="prose max-w-none">
-                        {{ release.content|safe }}
+                    <div class="prose prose-lg max-w-none prose-headings:text-python-blue prose-a:text-python-blue prose-a:no-underline hover:prose-a:underline prose-img:mx-auto prose-img:rounded-lg prose-blockquote:border-python-yellow prose-blockquote:bg-base-300 prose-blockquote:py-1 prose-blockquote:px-4 prose-blockquote:rounded-r-lg">
+                        {{ release.content|markdown|safe }}
                     </div>
                 </div>
             </div>
