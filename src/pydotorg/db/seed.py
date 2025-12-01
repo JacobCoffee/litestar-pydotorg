@@ -1196,22 +1196,25 @@ async def seed_blogs(session: AsyncSession) -> tuple[list[Feed], list[BlogEntry]
             "Python Software Foundation Blog",
             "https://pyfound.blogspot.com",
             "https://pyfound.blogspot.com/feeds/posts/default?alt=rss",
+            100,
         ),
         (
             "Python Insider",
             "https://blog.python.org",
             "https://blog.python.org/feeds/posts/default?alt=rss",
+            100,
         ),
-        ("Planet Python", "https://planetpython.org", "https://planetpython.org/rss20.xml"),
-        ("Real Python", "https://realpython.com", "https://realpython.com/atom.xml"),
+        ("Planet Python", "https://planetpython.org", "https://planetpython.org/rss20.xml", 50),
+        ("Real Python", "https://realpython.com", "https://realpython.com/atom.xml", 30),
     ]
 
-    for name, website, feed_url in feed_data:
+    for name, website, feed_url, priority in feed_data:
         feed = Feed(
             name=name,
             website_url=website,
             feed_url=feed_url,
             is_active=True,
+            priority=priority,
         )
         session.add(feed)
         feeds.append(feed)

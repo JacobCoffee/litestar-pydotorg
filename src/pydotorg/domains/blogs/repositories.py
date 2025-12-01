@@ -33,15 +33,15 @@ class FeedRepository(SQLAlchemyAsyncRepository[Feed]):
         return result.scalar_one_or_none()
 
     async def get_active_feeds(self, limit: int = 100) -> list[Feed]:
-        """Get all active feeds.
+        """Get all active feeds ordered by priority.
 
         Args:
             limit: Maximum number of feeds to return.
 
         Returns:
-            List of active feeds.
+            List of active feeds ordered by priority (highest first).
         """
-        statement = select(Feed).where(Feed.is_active.is_(True)).limit(limit)
+        statement = select(Feed).where(Feed.is_active.is_(True)).order_by(Feed.priority.desc(), Feed.name).limit(limit)
         result = await self.session.execute(statement)
         return list(result.scalars().all())
 
@@ -109,18 +109,21 @@ class BlogEntryRepository(SQLAlchemyAsyncRepository[BlogEntry]):
     async def get_recent_entries(self, limit: int = 20, offset: int = 0) -> list[BlogEntry]:
         """Get recent blog entries across all feeds.
 
+        Entries are ordered by publication date, with entries from higher-priority
+        feeds (e.g., official Python blogs) appearing first when dates are similar.
+
         Args:
             limit: Maximum number of entries to return.
             offset: Number of entries to skip.
 
         Returns:
-            List of recent blog entries ordered by pub_date descending.
+            List of recent blog entries ordered by pub_date descending, then feed priority.
         """
         statement = (
             select(BlogEntry)
             .join(BlogEntry.feed)
             .where(Feed.is_active.is_(True))
-            .order_by(BlogEntry.pub_date.desc())
+            .order_by(BlogEntry.pub_date.desc(), Feed.priority.desc())
             .limit(limit)
             .offset(offset)
         )
