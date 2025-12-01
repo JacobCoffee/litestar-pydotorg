@@ -325,9 +325,11 @@
 
 <dialog id="preview_modal" class="modal">
     <div class="modal-box max-w-4xl">
-        <form method="dialog" hx-boost="false">
-            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-        </form>
+        <button
+            type="button"
+            class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+            onclick="preview_modal.close()"
+        >✕</button>
         <h3 class="font-bold text-lg mb-4">Job Preview</h3>
         <div id="preview-modal-content">
             <div class="flex justify-center py-8">
@@ -335,7 +337,7 @@
             </div>
         </div>
     </div>
-    <form method="dialog" class="modal-backdrop" hx-boost="false">
+    <form method="dialog" class="modal-backdrop">
         <button>close</button>
     </form>
 </dialog>
@@ -347,7 +349,19 @@ document.getElementById('job-submit-form').addEventListener('submit', function(e
     e.preventDefault();
 
     const formData = new FormData(this);
-    const data = Object.fromEntries(formData.entries());
+    const data = {};
+
+    for (const [key, value] of formData.entries()) {
+        if (key === 'job_type_ids' || key === 'category_ids') {
+            if (!data[key]) {
+                data[key] = formData.getAll(key);
+            }
+        } else if (key === 'telecommuting') {
+            data[key] = value === 'on';
+        } else {
+            data[key] = value;
+        }
+    }
 
     fetch('/api/v1/jobs', {
         method: 'POST',
