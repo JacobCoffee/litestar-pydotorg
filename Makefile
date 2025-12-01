@@ -221,49 +221,53 @@ litestar-schema: ## Export OpenAPI schema to JSON
 litestar-db: ## Show database commands (usage: make litestar-db ARGS="--help")
 	$(LITESTAR) database $(ARGS)
 
-.PHONY: litestar-db-init
-litestar-db-init: ## Initialize Alembic migrations via Litestar CLI
-	$(LITESTAR) database init ./migrations
-
 .PHONY: litestar-db-make
-litestar-db-make: ## Create new migration via Litestar CLI
+litestar-db-make: ## Create new migration via Litestar CLI (preferred)
 	$(LITESTAR) database make-migrations
 
 .PHONY: litestar-db-upgrade
-litestar-db-upgrade: ## Upgrade database to latest via Litestar CLI
+litestar-db-upgrade: ## Upgrade database to latest via Litestar CLI (preferred)
 	$(LITESTAR) database upgrade
 
 .PHONY: litestar-db-downgrade
 litestar-db-downgrade: ## Downgrade database by one revision via Litestar CLI
-	$(LITESTAR) database downgrade
+	$(LITESTAR) database downgrade -1
 
 .PHONY: litestar-db-current
 litestar-db-current: ## Show current database revision
 	$(LITESTAR) database show-current-revision
 
+.PHONY: litestar-db-history
+litestar-db-history: ## Show migration history
+	$(LITESTAR) database history
+
+.PHONY: litestar-db-check
+litestar-db-check: ## Check if database is up to date
+	$(LITESTAR) database check
+
 # ============================================================================
-# Database
+# Database (Legacy Alembic - prefer Litestar CLI commands above)
 # ============================================================================
 
-##@ Database Management
+##@ Database Management (Legacy)
 
 .PHONY: db-migrate
-db-migrate: ## Run database migrations
+db-migrate: ## Run database migrations (prefer: make litestar-db-upgrade)
 	$(UV) run alembic upgrade head
 
 .PHONY: db-revision
-db-revision: ## Create a new migration revision
+db-revision: ## Create a new migration revision (prefer: make litestar-db-make)
 	@read -p "Migration message: " msg; \
 	$(UV) run alembic revision --autogenerate -m "$$msg"
 
 .PHONY: db-downgrade
-db-downgrade: ## Downgrade database by one revision
+db-downgrade: ## Downgrade database by one revision (prefer: make litestar-db-downgrade)
 	$(UV) run alembic downgrade -1
 
 .PHONY: db-reset
 db-reset: ## Reset database (dangerous!)
-	$(UV) run alembic downgrade base
-	$(UV) run alembic upgrade head
+	$(LITESTAR) database downgrade base
+	$(LITESTAR) database upgrade
 
 .PHONY: db-seed
 db-seed: ## Seed database with development data
