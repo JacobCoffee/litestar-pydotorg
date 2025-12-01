@@ -8,7 +8,7 @@
         <div>
             <h1 class="text-3xl font-bold text-python-blue">Email Log Details</h1>
             <p class="text-base-content/70 mt-1">
-                Sent {{ log.created.strftime('%B %d, %Y at %H:%M') }}
+                Sent {{ log.created_at.strftime('%B %d, %Y at %H:%M') }}
             </p>
         </div>
         <a href="/admin/email/logs" class="btn btn-ghost gap-2">
@@ -64,8 +64,8 @@
                             <div>
                                 <div class="text-sm font-semibold text-base-content/70">Sent At</div>
                                 <div class="mt-1 text-sm">
-                                    {{ log.created.strftime('%B %d, %Y') }}<br>
-                                    {{ log.created.strftime('%H:%M:%S') }}
+                                    {{ log.created_at.strftime('%B %d, %Y') }}<br>
+                                    {{ log.created_at.strftime('%H:%M:%S') }}
                                 </div>
                             </div>
                         </div>
@@ -98,7 +98,7 @@
                             <div class="timeline-start timeline-box">
                                 <div class="text-sm font-semibold">Created</div>
                                 <div class="text-xs text-base-content/70">
-                                    {{ log.created.strftime('%H:%M:%S') }}
+                                    {{ log.created_at.strftime('%H:%M:%S') }}
                                 </div>
                             </div>
                             <div class="timeline-middle">
@@ -128,7 +128,7 @@
                             <div class="timeline-end timeline-box">
                                 <div class="text-sm font-semibold">{{ log.status|title }}</div>
                                 <div class="text-xs text-base-content/70">
-                                    {{ log.updated.strftime('%H:%M:%S') }}
+                                    {{ log.updated_at.strftime('%H:%M:%S') }}
                                 </div>
                             </div>
                         </li>
