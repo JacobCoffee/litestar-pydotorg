@@ -12,7 +12,7 @@
             {% if pagination.offset > 0 %}
             <button
                 class="join-item btn btn-sm"
-                hx-get="/admin/events?filter={{ request.query_params.get('filter', '') }}&calendar_id={{ request.query_params.get('calendar_id', '') }}&limit={{ pagination.limit }}&offset={{ [0, pagination.offset - pagination.limit]|max }}"
+                hx-get="/admin/events?{% if request.query_params.get('filter') %}filter={{ request.query_params.get('filter') }}&{% endif %}{% if request.query_params.get('calendar_id') %}calendar_id={{ request.query_params.get('calendar_id') }}&{% endif %}limit={{ pagination.limit }}&offset={{ [0, pagination.offset - pagination.limit]|max }}"
                 hx-target="#events-list"
                 hx-swap="outerHTML"
             >
@@ -33,7 +33,7 @@
             {% if pagination.offset + pagination.limit < pagination.total %}
             <button
                 class="join-item btn btn-sm"
-                hx-get="/admin/events?filter={{ request.query_params.get('filter', '') }}&calendar_id={{ request.query_params.get('calendar_id', '') }}&limit={{ pagination.limit }}&offset={{ pagination.offset + pagination.limit }}"
+                hx-get="/admin/events?{% if request.query_params.get('filter') %}filter={{ request.query_params.get('filter') }}&{% endif %}{% if request.query_params.get('calendar_id') %}calendar_id={{ request.query_params.get('calendar_id') }}&{% endif %}limit={{ pagination.limit }}&offset={{ pagination.offset + pagination.limit }}"
                 hx-target="#events-list"
                 hx-swap="outerHTML"
             >
