@@ -108,7 +108,7 @@ class Release(AuditBase, ContentManageableMixin, NameSlugMixin):
                 if major.isdigit() and minor.isdigit():
                     return f"{major}.{minor}"
         except (ValueError, IndexError):
-            pass
+            pass  # Fall through to return full name as fallback
         return self.name
 
     @property
@@ -125,7 +125,7 @@ class Release(AuditBase, ContentManageableMixin, NameSlugMixin):
                 if major.isdigit():
                     return major
         except (ValueError, IndexError):
-            pass
+            pass  # Fall through to return full name as fallback
         return self.name
 
     @property

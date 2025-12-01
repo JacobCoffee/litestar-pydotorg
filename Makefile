@@ -225,6 +225,9 @@ db-seed: ## Seed database with development data
 db-clear: ## Clear all data from database
 	$(PYTHON) -m pydotorg.db.seed clear
 
+.PHONY: db-reseed
+db-reseed: db-clear db-seed ## Clear and reseed database
+
 .PHONY: db-init
 db-init: db-migrate db-seed ## Initialize database (migrate + seed)
 
