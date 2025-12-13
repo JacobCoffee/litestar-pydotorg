@@ -1,3 +1,33 @@
+<div id="feed-sidebar" hx-swap-oob="true" class="mb-8">
+    {% if feeds %}
+    <h3 class="text-xl font-bold text-python-blue mb-4">Feeds</h3>
+    <ul class="menu bg-base-200 rounded-box">
+        <li>
+            <a href="/blogs/"
+               hx-get="/blogs/"
+               hx-target="#blog-entries"
+               hx-swap="innerHTML"
+               hx-push-url="true"
+               class="{% if not current_feed %}active{% endif %}">
+                All Feeds
+            </a>
+        </li>
+        {% for feed in feeds %}
+        <li>
+            <a href="/blogs/?feed_id={{ feed.id }}"
+               hx-get="/blogs/?feed_id={{ feed.id }}"
+               hx-target="#blog-entries"
+               hx-swap="innerHTML"
+               hx-push-url="true"
+               class="{% if current_feed and current_feed.id == feed.id %}active{% endif %}">
+                {{ feed.name }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div>
+
 {% if featured_entries and not current_feed %}
 <div class="mb-12">
     <h2 class="text-3xl font-bold text-python-blue mb-6">Featured Posts</h2>
