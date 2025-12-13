@@ -189,6 +189,7 @@ class ReleaseFile(AuditBase, ContentManageableMixin, NameSlugMixin):
     sigstore_bundle_file: Mapped[str] = mapped_column(String(500), default="")
     sbom_spdx2_file: Mapped[str] = mapped_column(String(500), default="")
     md5_sum: Mapped[str] = mapped_column(String(200), default="")
+    sha256_sum: Mapped[str] = mapped_column(String(200), default="")
     filesize: Mapped[int] = mapped_column(BigInteger, default=0)
     download_button: Mapped[bool] = mapped_column(Boolean, default=False)
 
