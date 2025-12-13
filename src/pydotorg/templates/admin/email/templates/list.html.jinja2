@@ -66,24 +66,35 @@
         </div>
 
         {% if pagination and pagination.total > pagination.limit %}
+        {% set current_page = (pagination.offset // pagination.limit) + 1 %}
+        {% set total_pages = (pagination.total // pagination.limit) + (1 if pagination.total % pagination.limit else 0) %}
+        {% set last_offset = (total_pages - 1) * pagination.limit %}
         <div class="flex justify-center mt-6">
             <div class="join">
                 {% if pagination.offset > 0 %}
                 <button
                     class="join-item btn btn-sm"
+                    hx-get="/admin/email/templates?status={{ request.query_params.get('status', '') }}&type={{ request.query_params.get('type', '') }}&limit={{ pagination.limit }}&offset=0"
+                    hx-target="#templates-list"
+                    hx-swap="outerHTML"
+                    title="First page"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+                    </svg>
+                </button>
+                <button
+                    class="join-item btn btn-sm"
                     hx-get="/admin/email/templates?status={{ request.query_params.get('status', '') }}&type={{ request.query_params.get('type', '') }}&limit={{ pagination.limit }}&offset={{ [0, pagination.offset - pagination.limit]|max }}"
                     hx-target="#templates-list"
                     hx-swap="outerHTML"
+                    title="Previous page"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                     </svg>
-                    Previous
                 </button>
                 {% endif %}
-
-                {% set current_page = (pagination.offset // pagination.limit) + 1 %}
-                {% set total_pages = (pagination.total // pagination.limit) + (1 if pagination.total % pagination.limit else 0) %}
 
                 <button class="join-item btn btn-sm btn-active">
                     Page {{ current_page }} of {{ total_pages }}
@@ -95,10 +106,21 @@
                     hx-get="/admin/email/templates?status={{ request.query_params.get('status', '') }}&type={{ request.query_params.get('type', '') }}&limit={{ pagination.limit }}&offset={{ pagination.offset + pagination.limit }}"
                     hx-target="#templates-list"
                     hx-swap="outerHTML"
+                    title="Next page"
                 >
-                    Next
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+                <button
+                    class="join-item btn btn-sm"
+                    hx-get="/admin/email/templates?status={{ request.query_params.get('status', '') }}&type={{ request.query_params.get('type', '') }}&limit={{ pagination.limit }}&offset={{ last_offset }}"
+                    hx-target="#templates-list"
+                    hx-swap="outerHTML"
+                    title="Last page"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7m-8-14l7 7-7 7" />
                     </svg>
                 </button>
                 {% endif %}

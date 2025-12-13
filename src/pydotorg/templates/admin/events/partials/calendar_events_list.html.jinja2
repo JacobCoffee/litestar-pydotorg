@@ -66,29 +66,47 @@
     {% endif %}
 
     {% if pagination.total > pagination.limit %}
+    {% set current_page = (pagination.offset // pagination.limit) + 1 %}
+    {% set total_pages = ((pagination.total - 1) // pagination.limit) + 1 %}
+    {% set last_offset = (total_pages - 1) * pagination.limit %}
     <div class="flex items-center justify-between mt-6 pt-4 border-t border-base-300">
         <div class="text-sm text-base-content/60">
-            Page {{ (pagination.offset // pagination.limit) + 1 }} of {{ ((pagination.total - 1) // pagination.limit) + 1 }}
+            Page {{ current_page }} of {{ total_pages }}
         </div>
         <div class="join">
             {% if pagination.offset > 0 %}
             <button
                 class="join-item btn btn-sm"
+                hx-get="/admin/events/calendars/{{ calendar.id }}?limit={{ pagination.limit }}&offset=0"
+                hx-target="#calendar-events-list"
+                hx-swap="outerHTML"
+                hx-push-url="true"
+                title="First page">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+                </svg>
+            </button>
+            <button
+                class="join-item btn btn-sm"
                 hx-get="/admin/events/calendars/{{ calendar.id }}?limit={{ pagination.limit }}&offset={{ pagination.offset - pagination.limit }}"
                 hx-target="#calendar-events-list"
                 hx-swap="outerHTML"
-                hx-push-url="true">
+                hx-push-url="true"
+                title="Previous page">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                 </svg>
-                Previous
             </button>
             {% else %}
-            <button class="join-item btn btn-sm btn-disabled" disabled>
+            <button class="join-item btn btn-sm btn-disabled" disabled title="First page">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+                </svg>
+            </button>
+            <button class="join-item btn btn-sm btn-disabled" disabled title="Previous page">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                 </svg>
-                Previous
             </button>
             {% endif %}
 
@@ -98,17 +116,32 @@
                 hx-get="/admin/events/calendars/{{ calendar.id }}?limit={{ pagination.limit }}&offset={{ pagination.offset + pagination.limit }}"
                 hx-target="#calendar-events-list"
                 hx-swap="outerHTML"
-                hx-push-url="true">
-                Next
+                hx-push-url="true"
+                title="Next page">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                 </svg>
             </button>
+            <button
+                class="join-item btn btn-sm"
+                hx-get="/admin/events/calendars/{{ calendar.id }}?limit={{ pagination.limit }}&offset={{ last_offset }}"
+                hx-target="#calendar-events-list"
+                hx-swap="outerHTML"
+                hx-push-url="true"
+                title="Last page">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7m-8-14l7 7-7 7" />
+                </svg>
+            </button>
             {% else %}
-            <button class="join-item btn btn-sm btn-disabled" disabled>
-                Next
+            <button class="join-item btn btn-sm btn-disabled" disabled title="Next page">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
+            <button class="join-item btn btn-sm btn-disabled" disabled title="Last page">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7m-8-14l7 7-7 7" />
                 </svg>
             </button>
             {% endif %}
