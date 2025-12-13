@@ -476,6 +476,17 @@ document.addEventListener('alpine:init', () => {
           details: 'The PSF Board withdrew a recommended $1.5M NSF grant for Python/PyPI security improvements after grant terms required affirming no DEI programs, conflicting with PSF\'s mission to support a diverse international community.',
           highlights: ['$1.5M security grant', 'DEI policy conflict', 'Unanimous board vote'],
           links: [{ label: 'PSF Statement', url: 'https://pyfound.blogspot.com/2025/10/NSF-funding-statement.html' }]
+        },
+        {
+          id: 'sc-election-2026',
+          year: 2025,
+          month: 'Dec',
+          title: 'Steering Council Election (2026 Term)',
+          description: 'Savannah Ostrowski joins, Thomas Wouters returns to the Steering Council.',
+          type: 'event',
+          details: 'Elected members: Pablo Galindo Salgado (313 votes), Savannah Ostrowski (249 votes), Barry Warsaw (239 votes), Donghee Na (191 votes), Thomas Wouters (187 votes). Emily Morehouse and Gregory P. Smith step down.',
+          highlights: ['Savannah Ostrowski elected', 'Thomas Wouters returns', '5 members elected'],
+          links: [{ label: 'PEP 8107', url: 'https://peps.python.org/pep-8107/' }]
         }
       ];
     },
