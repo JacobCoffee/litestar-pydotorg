@@ -77,24 +77,35 @@
 
 {% macro pagination(total, limit, offset, target='#table-results') %}
 {% if total > limit %}
+{% set current_page = (offset // limit) + 1 %}
+{% set total_pages = (total // limit) + (1 if total % limit else 0) %}
+{% set last_offset = (total_pages - 1) * limit %}
 <div class="flex justify-center mt-6">
     <div class="join">
         {% if offset > 0 %}
         <button
             class="join-item btn btn-sm"
+            hx-get="{{ request.url.path }}?limit={{ limit }}&offset=0"
+            hx-target="{{ target }}"
+            hx-swap="outerHTML"
+            title="First page"
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+            </svg>
+        </button>
+        <button
+            class="join-item btn btn-sm"
             hx-get="{{ request.url.path }}?limit={{ limit }}&offset={{ [0, offset - limit]|max }}"
             hx-target="{{ target }}"
             hx-swap="outerHTML"
+            title="Previous page"
         >
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
             </svg>
-            Previous
         </button>
         {% endif %}
-
-        {% set current_page = (offset // limit) + 1 %}
-        {% set total_pages = (total // limit) + (1 if total % limit else 0) %}
 
         <button class="join-item btn btn-sm btn-active">
             Page {{ current_page }} of {{ total_pages }}
@@ -106,10 +117,21 @@
             hx-get="{{ request.url.path }}?limit={{ limit }}&offset={{ offset + limit }}"
             hx-target="{{ target }}"
             hx-swap="outerHTML"
+            title="Next page"
         >
-            Next
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+        </button>
+        <button
+            class="join-item btn btn-sm"
+            hx-get="{{ request.url.path }}?limit={{ limit }}&offset={{ last_offset }}"
+            hx-target="{{ target }}"
+            hx-swap="outerHTML"
+            title="Last page"
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7m-8-14l7 7-7 7" />
             </svg>
         </button>
         {% endif %}
