@@ -127,6 +127,7 @@ class Settings(BaseSettings):
     smtp_from_name: str = "Python.org"
     smtp_use_tls: bool = True
     email_verification_expire_hours: int = 24
+    jobs_admin_email: str = "jobs@python.org"
 
     static_url: str = "/static"
     media_url: str = "/media"

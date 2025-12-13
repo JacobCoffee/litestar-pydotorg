@@ -66,8 +66,9 @@ async def enqueue_task(
         task_name: Name of the task function to enqueue (must be registered).
             Available tasks:
             - Email: send_verification_email, send_password_reset_email,
-                     send_job_approved_email, send_job_rejected_email,
-                     send_event_reminder_email, send_bulk_email
+                     send_job_submitted_email, send_job_approved_email,
+                     send_job_rejected_email, send_event_reminder_email,
+                     send_bulk_email
             - Search: index_job, index_event, index_page, index_blog_entry,
                       index_all_jobs, index_all_events, index_all_pages,
                       index_all_blogs, remove_job_from_index, rebuild_search_index

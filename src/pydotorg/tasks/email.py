@@ -77,6 +77,109 @@ async def send_password_reset_email(
         return {"success": False, "to_email": to_email, "email_type": "password_reset", "error": str(e)}
 
 
+async def send_job_submitted_email(
+    ctx: Context,
+    *,
+    to_email: str,
+    job_title: str,
+    company_name: str,
+    job_id: str,
+    admin_url: str,
+) -> dict[str, Any]:
+    """Send job submission notification email to administrators.
+
+    Args:
+        ctx: SAQ job context
+        to_email: Admin email address
+        job_title: Title of submitted job posting
+        company_name: Company name
+        job_id: Job ID for reference
+        admin_url: URL to admin job review page
+
+    Returns:
+        Dict with success status and metadata
+    """
+    logger.info(
+        "Sending job submitted email",
+        extra={"to_email": to_email, "job_title": job_title, "company_name": company_name},
+    )
+
+    try:
+        email_service = EmailService()
+        subject = f"New Job Posting Requires Review - {company_name}"
+
+        html_content = f"""
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Job Posting - Python.org</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+    <div style="background-color: #f8f9fa; border-radius: 8px; padding: 30px; margin: 20px 0;">
+        <h1 style="color: #306998; margin-top: 0;">New Job Posting Submitted</h1>
+        <p>A new job posting has been submitted and requires review:</p>
+        <div style="background-color: #e7f3ff; border-left: 4px solid #306998; padding: 15px; margin: 20px 0;">
+            <h2 style="margin: 0 0 10px 0; color: #306998;">{job_title}</h2>
+            <p style="margin: 0;"><strong>Company:</strong> {company_name}</p>
+            <p style="margin: 0; font-size: 12px; color: #666;">Job ID: {job_id}</p>
+        </div>
+        <div style="text-align: center; margin: 30px 0;">
+            <a href="{admin_url}"
+               style="background-color: #306998; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold;">
+                Review Job Posting
+            </a>
+        </div>
+        <p style="color: #666; font-size: 14px;">
+            Please review this job posting and either approve or reject it.
+        </p>
+    </div>
+    <div style="text-align: center; color: #666; font-size: 12px; margin-top: 20px;">
+        <p>&copy; Python Software Foundation</p>
+    </div>
+</body>
+</html>
+"""
+
+        text_content = f"""
+New Job Posting Submitted
+
+A new job posting has been submitted and requires review:
+
+Title: {job_title}
+Company: {company_name}
+Job ID: {job_id}
+
+Review the job posting: {admin_url}
+
+Please review this job posting and either approve or reject it.
+
+---
+Python Software Foundation
+"""
+
+        msg = email_service._create_message(to_email, subject, text_content, html_content)
+        email_service._send_email(msg)
+
+        logger.info("Job submitted email sent successfully", extra={"to_email": to_email, "job_title": job_title})
+        return {
+            "success": True,
+            "to_email": to_email,
+            "email_type": "job_submitted",
+            "job_title": job_title,
+        }
+
+    except Exception as e:
+        logger.exception("Failed to send job submitted email", extra={"to_email": to_email, "error": str(e)})
+        return {
+            "success": False,
+            "to_email": to_email,
+            "email_type": "job_submitted",
+            "error": str(e),
+        }
+
+
 async def send_job_approved_email(
     ctx: Context,
     *,

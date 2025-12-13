@@ -256,6 +256,7 @@ def get_task_functions() -> list[Callable[..., Any]]:
         send_event_reminder_email,
         send_job_approved_email,
         send_job_rejected_email,
+        send_job_submitted_email,
         send_password_reset_email,
         send_verification_email,
     )
@@ -316,6 +317,7 @@ def get_task_functions() -> list[Callable[..., Any]]:
         send_event_reminder_email,
         send_job_approved_email,
         send_job_rejected_email,
+        send_job_submitted_email,
         send_password_reset_email,
         send_verification_email,
         sync_all_external_content,

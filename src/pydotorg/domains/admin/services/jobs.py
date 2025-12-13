@@ -99,7 +99,8 @@ class JobAdminService:
     async def submit_for_review(self, job_id: UUID) -> Job | None:
         """Submit a draft job for review.
 
-        Transitions the job from DRAFT to REVIEW status.
+        Transitions the job from DRAFT to REVIEW status and notifies
+        administrators via email.
 
         Args:
             job_id: Job ID
@@ -117,6 +118,19 @@ class JobAdminService:
         job.status = JobStatus.REVIEW
         await self.session.commit()
         await self.session.refresh(job)
+
+        admin_url = f"{settings.oauth_redirect_base_url}/admin/jobs/{job.id}/"
+        email_key = await enqueue_task(
+            "send_job_submitted_email",
+            to_email=settings.jobs_admin_email,
+            job_title=job.job_title,
+            company_name=job.company_name,
+            job_id=str(job.id),
+            admin_url=admin_url,
+        )
+        if not email_key:
+            logger.warning(f"Failed to enqueue submission email for job {job.id}")
+
         return job
 
     async def approve_job(self, job_id: UUID) -> Job | None:
