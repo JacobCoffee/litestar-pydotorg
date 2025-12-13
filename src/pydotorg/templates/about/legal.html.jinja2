@@ -1,0 +1,383 @@
+{% extends "base.html.jinja2" %}
+
+{% block title %}Legal Information | Python.org{% endblock %}
+
+{% block meta_description %}Legal information about Python, including trademark policies, licensing, privacy policy, and terms of use.{% endblock %}
+
+{% block content %}
+<section class="python-gradient text-white py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-5xl font-bold mb-6">Legal Information</h1>
+            <p class="text-xl opacity-90">
+                Trademark policies, licensing, and terms of use for Python
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <div class="card bg-gradient-to-br from-python-blue/5 to-python-yellow/5 border-l-4 border-python-blue mb-8">
+                <div class="card-body">
+                    <div class="flex items-start gap-4">
+                        <div class="flex-shrink-0 hidden md:block">
+                            <svg class="w-12 h-12 text-python-blue/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-lg text-base-content/90 leading-relaxed">
+                                The <strong class="text-python-blue">Python Software Foundation</strong> holds the intellectual
+                                property rights to Python and manages its trademarks. This page provides information about
+                                licensing, trademarks, privacy, and terms of use.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-200 py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-python-blue mb-8">Python Trademark</h2>
+            <div class="card bg-base-100 shadow-lg mb-6">
+                <div class="card-body">
+                    <div class="flex items-start gap-4 mb-4">
+                        <div class="flex-shrink-0">
+                            <svg class="w-8 h-8 text-python-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-xl mb-3">Trademark Usage</h3>
+                            <p class="text-base-content/80 mb-4">
+                                The Python logo and wordmark are trademarks owned by the Python Software Foundation (PSF).
+                                The PSF holds and protects the trademarks for the Python programming language.
+                            </p>
+                            <div class="space-y-3">
+                                <div class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-success mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    <p class="text-base-content/80">
+                                        You may use the Python logo to link to python.org or indicate compatibility with Python
+                                    </p>
+                                </div>
+                                <div class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-success mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    <p class="text-base-content/80">
+                                        Community and commercial use must follow the PSF trademark usage policy
+                                    </p>
+                                </div>
+                                <div class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-error mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                    </svg>
+                                    <p class="text-base-content/80">
+                                        Do not modify the logo or use it in a way that suggests PSF endorsement
+                                    </p>
+                                </div>
+                            </div>
+                            <a href="https://www.python.org/psf/trademarks/" target="_blank" rel="noopener" class="btn btn-primary btn-sm mt-4">
+                                Read Trademark Policy
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-python-blue mb-8">Python Software License</h2>
+            <div class="card bg-base-200 shadow-lg mb-6">
+                <div class="card-body">
+                    <div class="flex items-start gap-4 mb-4">
+                        <div class="flex-shrink-0">
+                            <svg class="w-8 h-8 text-python-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="font-bold text-xl mb-3">Open Source License</h3>
+                            <p class="text-base-content/80 mb-4">
+                                Python is developed under an OSI-approved open source license, making it freely usable
+                                and distributable, even for commercial use.
+                            </p>
+                            <div class="bg-base-100 p-4 rounded-lg mb-4">
+                                <h4 class="font-semibold mb-2">Key Points:</h4>
+                                <ul class="space-y-2 text-sm text-base-content/80">
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-python-blue">•</span>
+                                        Python's license is administered by the Python Software Foundation
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-python-blue">•</span>
+                                        GPL-compatible and allows commercial use without restrictions
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-python-blue">•</span>
+                                        Does not require you to release your source code
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-python-blue">•</span>
+                                        You can modify Python and distribute your modifications
+                                    </li>
+                                </ul>
+                            </div>
+                            <a href="https://docs.python.org/3/license.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
+                                Read Full License
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-info">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <div>
+                    <p class="font-semibold">Third-Party Licenses</p>
+                    <p class="text-sm">
+                        Some components of the Python distribution are covered by other licenses. Please review the
+                        full license documentation for details.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-200 py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-python-blue mb-8">Privacy Policy</h2>
+            <div class="card bg-base-100 shadow-lg">
+                <div class="card-body">
+                    <div class="flex items-start gap-4 mb-4">
+                        <div class="flex-shrink-0">
+                            <svg class="w-8 h-8 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-xl mb-3">Your Privacy Matters</h3>
+                            <p class="text-base-content/80 mb-4">
+                                The PSF is committed to protecting your privacy. This website and PSF services collect
+                                minimal information necessary to provide services and improve the user experience.
+                            </p>
+                            <div class="space-y-4">
+                                <div>
+                                    <h4 class="font-semibold mb-2">Information We Collect:</h4>
+                                    <ul class="space-y-2 text-sm text-base-content/70">
+                                        <li class="flex items-start gap-2">
+                                            <span class="text-python-blue">•</span>
+                                            Account information (username, email) for registered users
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <span class="text-python-blue">•</span>
+                                            Analytics data to understand how the website is used
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <span class="text-python-blue">•</span>
+                                            Cookies for essential functionality and preferences
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold mb-2">Your Rights:</h4>
+                                    <ul class="space-y-2 text-sm text-base-content/70">
+                                        <li class="flex items-start gap-2">
+                                            <span class="text-python-blue">•</span>
+                                            Access, correct, or delete your personal information
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <span class="text-python-blue">•</span>
+                                            Opt out of non-essential data collection
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <span class="text-python-blue">•</span>
+                                            Request a copy of your data
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <a href="https://www.python.org/privacy/" target="_blank" rel="noopener" class="btn btn-primary btn-sm mt-4">
+                                Read Privacy Policy
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-python-blue mb-8">Terms of Use</h2>
+            <div class="card bg-base-200 shadow-lg mb-6">
+                <div class="card-body">
+                    <div class="flex items-start gap-4 mb-4">
+                        <div class="flex-shrink-0">
+                            <svg class="w-8 h-8 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-xl mb-3">Website Terms</h3>
+                            <p class="text-base-content/80 mb-4">
+                                By using python.org and related PSF websites, you agree to these terms of use.
+                            </p>
+                            <div class="space-y-3 text-sm text-base-content/80">
+                                <div>
+                                    <p class="font-semibold mb-1">Content Usage:</p>
+                                    <p>
+                                        Content on this website is provided for informational purposes. While we strive for
+                                        accuracy, the PSF makes no warranties about the completeness or reliability of content.
+                                    </p>
+                                </div>
+                                <div>
+                                    <p class="font-semibold mb-1">User Conduct:</p>
+                                    <p>
+                                        You agree not to use the website for any unlawful purpose or to violate any regulations.
+                                        Respect the community and follow the PSF Code of Conduct.
+                                    </p>
+                                </div>
+                                <div>
+                                    <p class="font-semibold mb-1">External Links:</p>
+                                    <p>
+                                        This website may contain links to external sites. The PSF is not responsible for the
+                                        content or privacy practices of external websites.
+                                    </p>
+                                </div>
+                            </div>
+                            <a href="https://www.python.org/about/legal/" target="_blank" rel="noopener" class="btn btn-primary btn-sm mt-4">
+                                Read Full Terms
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-200 py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-python-blue mb-8">Copyright & Attribution</h2>
+            <div class="card bg-base-100 shadow-lg">
+                <div class="card-body">
+                    <div class="flex items-start gap-4 mb-4">
+                        <div class="flex-shrink-0">
+                            <svg class="w-8 h-8 text-info" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-xl mb-3">Copyright Notices</h3>
+                            <p class="text-base-content/80 mb-4">
+                                Copyright © 2001-2025 Python Software Foundation. All rights reserved.
+                            </p>
+                            <div class="bg-base-200 p-4 rounded-lg mb-4">
+                                <p class="text-sm text-base-content/80 mb-3">
+                                    The Python logo is a registered trademark of the Python Software Foundation.
+                                </p>
+                                <p class="text-sm text-base-content/80">
+                                    Documentation and code examples are licensed under the Python Software Foundation License.
+                                    See the individual documentation pages for specific copyright and license information.
+                                </p>
+                            </div>
+                            <div class="divider"></div>
+                            <h4 class="font-semibold mb-3">Reporting Copyright Violations</h4>
+                            <p class="text-base-content/80 text-sm mb-3">
+                                If you believe that content on this website violates your copyright, please contact the PSF
+                                with details of the alleged infringement.
+                            </p>
+                            <a href="https://www.python.org/psf/about/" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
+                                Contact PSF
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-3xl font-bold text-python-blue mb-8 text-center">Quick Links</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <a href="https://www.python.org/psf/trademarks/" target="_blank" rel="noopener" class="card bg-base-200 shadow hover:shadow-lg transition-all group">
+                    <div class="card-body">
+                        <svg class="w-8 h-8 text-python-blue mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                        <h3 class="font-semibold mb-1">Trademark Policy</h3>
+                        <p class="text-xs text-base-content/70">Guidelines for using Python trademarks</p>
+                    </div>
+                </a>
+
+                <a href="https://docs.python.org/3/license.html" target="_blank" rel="noopener" class="card bg-base-200 shadow hover:shadow-lg transition-all group">
+                    <div class="card-body">
+                        <svg class="w-8 h-8 text-python-blue mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+                        </svg>
+                        <h3 class="font-semibold mb-1">License</h3>
+                        <p class="text-xs text-base-content/70">Python Software Foundation License</p>
+                    </div>
+                </a>
+
+                <a href="https://www.python.org/privacy/" target="_blank" rel="noopener" class="card bg-base-200 shadow hover:shadow-lg transition-all group">
+                    <div class="card-body">
+                        <svg class="w-8 h-8 text-python-blue mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                        </svg>
+                        <h3 class="font-semibold mb-1">Privacy Policy</h3>
+                        <p class="text-xs text-base-content/70">How we protect your data</p>
+                    </div>
+                </a>
+
+                <a href="https://www.python.org/psf/conduct/" target="_blank" rel="noopener" class="card bg-base-200 shadow hover:shadow-lg transition-all group">
+                    <div class="card-body">
+                        <svg class="w-8 h-8 text-python-blue mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                        <h3 class="font-semibold mb-1">Code of Conduct</h3>
+                        <p class="text-xs text-base-content/70">Community guidelines</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-gradient-to-br from-python-blue to-python-blue/80 text-white py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-4xl font-bold mb-4">Questions About Legal Matters?</h2>
+            <p class="text-xl opacity-90 mb-8">
+                Contact the Python Software Foundation for legal inquiries and licensing questions.
+            </p>
+            <a href="https://www.python.org/psf/about/" target="_blank" rel="noopener" class="btn btn-lg bg-white text-python-blue hover:bg-white/90 border-none">
+                Contact PSF
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

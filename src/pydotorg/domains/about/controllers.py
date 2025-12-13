@@ -42,6 +42,56 @@ class AboutRenderController(Controller):
             },
         )
 
+    @get("/help/")
+    async def about_help(self) -> Template:
+        """Render the Help & FAQ page."""
+        return Template(
+            template_name="about/help.html.jinja2",
+            context={
+                "page_title": "Help & FAQ",
+            },
+        )
+
+    @get("/apps/")
+    async def about_apps(self) -> Template:
+        """Render the Python applications showcase page."""
+        return Template(
+            template_name="about/apps.html.jinja2",
+            context={
+                "page_title": "Applications Built with Python",
+            },
+        )
+
+    @get("/quotes/")
+    async def about_quotes(self) -> Template:
+        """Render the testimonials page."""
+        return Template(
+            template_name="about/quotes.html.jinja2",
+            context={
+                "page_title": "What People Say About Python",
+            },
+        )
+
+    @get("/gettingstarted/")
+    async def about_gettingstarted(self) -> Template:
+        """Render the getting started guide."""
+        return Template(
+            template_name="about/gettingstarted.html.jinja2",
+            context={
+                "page_title": "Getting Started with Python",
+            },
+        )
+
+    @get("/legal/")
+    async def about_legal(self) -> Template:
+        """Render the legal information page."""
+        return Template(
+            template_name="about/legal.html.jinja2",
+            context={
+                "page_title": "Legal Information",
+            },
+        )
+
 
 class PSFRenderController(Controller):
     """Controller for rendering PSF-specific pages at /psf/ route."""
