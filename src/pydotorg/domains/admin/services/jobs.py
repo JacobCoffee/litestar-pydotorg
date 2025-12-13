@@ -263,3 +263,21 @@ class JobAdminService:
         await self.session.delete(job)
         await self.session.commit()
         return True
+
+    async def toggle_featured(self, job_id: UUID) -> Job | None:
+        """Toggle the featured status of a job.
+
+        Args:
+            job_id: Job ID
+
+        Returns:
+            Updated job if found, None otherwise
+        """
+        job = await self.get_job(job_id)
+        if not job:
+            return None
+
+        job.is_featured = not job.is_featured
+        await self.session.commit()
+        await self.session.refresh(job)
+        return job

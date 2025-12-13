@@ -275,6 +275,17 @@ class JobService(SQLAlchemyAsyncRepositoryService[Job]):
 
         return updated_jobs
 
+    async def get_featured(self, limit: int = 5) -> list[Job]:
+        """Get featured job listings.
+
+        Args:
+            limit: Maximum number of featured jobs to return.
+
+        Returns:
+            List of featured approved jobs.
+        """
+        return await self.repository.get_featured(limit=limit)
+
     async def update_job_types(self, job_id: UUID, job_type_ids: list[UUID]) -> Job:
         """Update job types for a job.
 
