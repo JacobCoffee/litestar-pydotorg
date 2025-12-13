@@ -126,9 +126,9 @@
 ### LOW Priority
 | Issue | Location | Description |
 |-------|----------|-------------|
-| **`/admin/events` default sort order** | `/admin/events` | Sorts oldest first; should sort newest first. |
-| **`/admin/jobs` preview modal UX** | `/admin/jobs` | "Location: NoneRemote" bug, plain text layout, needs redesign. |
-| **`/admin/events` metadata columns** | `/admin/events` | Need date added, submitted by, last modified columns. |
+| ~~**`/admin/events` default sort order**~~ | `/admin/events` | ✅ DONE - Already sorted by created_at DESC (newest first). |
+| ~~**`/admin/jobs` preview modal UX**~~ | `/admin/jobs` | ✅ DONE - Fixed Location bug, added icons, improved layout. |
+| ~~**`/admin/events` metadata columns**~~ | `/admin/events` | ✅ DONE - Added date added and last modified to event rows. |
 | **`/admin/blogs` search button layout** | `/admin/blogs` | Button under input instead of inline. |
 | ~~**SITEWIDE: Pagination first/last buttons**~~ | All paginated views | ✅ DONE - Added First/Last buttons to all 15 paginated templates. |
 | **SITEWIDE: Normalize page header sizes** | All pages | Inconsistent header sizes. |
