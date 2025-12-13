@@ -42,7 +42,7 @@
 ## Remaining TODO Items
 
 ### Domain Feature Gaps
-- [ ] **Page caching** (Redis) - Task 3.3
+- [x] **Page caching** (Redis) - Task 3.3 ✅ Cache-Control middleware, Surrogate-Key headers, 404 caching
 - [ ] **GPG signature verification** for downloads - Task 3.4
 - [x] **Feed refresh SAQ task** for blogs - Task 3.5 ✅ Already implemented: `refresh_stale_feeds` runs every 15 min via `cron_refresh_feeds`
 - [x] **Job expiration SAQ task** - Task 3.6 ✅ Already implemented: `expire_jobs` (daily), `archive_old_jobs` (weekly), `cleanup_draft_jobs` (monthly)
@@ -57,7 +57,7 @@
 - [ ] **API keys** - JWT auth only, no API key support
 
 ### Infrastructure
-- [ ] **Fastly CDN** - cache purging, surrogate keys, health monitoring
+- [x] **Fastly CDN** - ✅ Surrogate-Key middleware added, cache purging ready (needs Fastly API key config)
 - [ ] **Notification emails** - job/event notifications not wired
 
 ### Documentation (Phase 9)
@@ -156,7 +156,7 @@
 ### Tier 4: LOW (Nice to Have)
 | Task | Effort | Description |
 |------|--------|-------------|
-| CDN Integration (Fastly) | Medium | Cache purging, surrogate keys |
+| ~~CDN Integration (Fastly)~~ | ~~Medium~~ | ✅ Surrogate-Key middleware done |
 | GPG Signature Verification | Low | Download file integrity |
 | Recurrence Rules | Medium | dateutil.rrule for events |
 | Calendar RSS/Atom | Low | Event feed |
