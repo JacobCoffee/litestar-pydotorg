@@ -14,6 +14,7 @@ from litestar.openapi import ResponseSpec
 from litestar.params import Body, Parameter
 from litestar.response import Response, Template
 
+from pydotorg.core.feeds import AtomFeedService, RSSFeedService
 from pydotorg.core.ical import ICalendarService
 from pydotorg.domains.events.schemas import (
     CalendarCreate,
@@ -1305,5 +1306,154 @@ class EventsPageController(Controller):
             media_type="text/calendar; charset=utf-8",
             headers={
                 "Content-Disposition": f'attachment; filename="{filename}"',
+            },
+        )
+
+    @get("/rss/")
+    async def events_rss_feed(
+        self,
+        request: Request,
+        event_service: EventService,
+    ) -> Response[bytes]:
+        """RSS 2.0 feed of upcoming Python community events.
+
+        Subscribe to this feed in your RSS reader to stay updated on
+        upcoming Python events worldwide.
+        """
+        events = await event_service.get_upcoming(limit=100)
+
+        base_url = str(request.base_url).rstrip("/")
+        feed_url = f"{base_url}/events/rss/"
+
+        rss_service = RSSFeedService(
+            title="Python Community Events",
+            link=f"{base_url}/events/",
+            description="Upcoming Python conferences, meetups, and community events",
+        )
+        rss_data = rss_service.generate_feed(
+            events=events,
+            base_url=base_url,
+            feed_url=feed_url,
+        )
+
+        return Response(
+            content=rss_data.encode("utf-8"),
+            media_type="application/rss+xml; charset=utf-8",
+            headers={
+                "Cache-Control": "public, max-age=3600",
+            },
+        )
+
+    @get("/atom/")
+    async def events_atom_feed(
+        self,
+        request: Request,
+        event_service: EventService,
+    ) -> Response[bytes]:
+        """Atom 1.0 feed of upcoming Python community events.
+
+        Subscribe to this feed in your feed reader to stay updated on
+        upcoming Python events worldwide.
+        """
+        events = await event_service.get_upcoming(limit=100)
+
+        base_url = str(request.base_url).rstrip("/")
+        feed_url = f"{base_url}/events/atom/"
+
+        atom_service = AtomFeedService(
+            title="Python Community Events",
+            subtitle="Upcoming Python conferences, meetups, and community events",
+        )
+        atom_data = atom_service.generate_feed(
+            events=events,
+            base_url=base_url,
+            feed_url=feed_url,
+        )
+
+        return Response(
+            content=atom_data.encode("utf-8"),
+            media_type="application/atom+xml; charset=utf-8",
+            headers={
+                "Cache-Control": "public, max-age=3600",
+            },
+        )
+
+    @get("/calendar/{slug:str}/rss/")
+    async def calendar_rss_feed(
+        self,
+        request: Request,
+        slug: str,
+        calendar_service: CalendarService,
+        event_service: EventService,
+    ) -> Response[bytes]:
+        """RSS 2.0 feed for a specific calendar's events.
+
+        Subscribe to this feed to receive updates for events in this calendar.
+        """
+        calendar = await calendar_service.get_by_slug(slug)
+        if not calendar:
+            raise NotFoundException(f"Calendar {slug} not found")
+
+        events = await event_service.get_by_calendar_id(calendar.id, limit=100)
+
+        base_url = str(request.base_url).rstrip("/")
+        feed_url = f"{base_url}/events/calendar/{slug}/rss/"
+
+        rss_service = RSSFeedService(
+            title=f"{calendar.name} - Python Events",
+            link=f"{base_url}/events/calendar/{slug}/",
+            description=f"Events from {calendar.name}",
+        )
+        rss_data = rss_service.generate_feed(
+            events=events,
+            base_url=base_url,
+            feed_url=feed_url,
+        )
+
+        return Response(
+            content=rss_data.encode("utf-8"),
+            media_type="application/rss+xml; charset=utf-8",
+            headers={
+                "Cache-Control": "public, max-age=3600",
+            },
+        )
+
+    @get("/calendar/{slug:str}/atom/")
+    async def calendar_atom_feed(
+        self,
+        request: Request,
+        slug: str,
+        calendar_service: CalendarService,
+        event_service: EventService,
+    ) -> Response[bytes]:
+        """Atom 1.0 feed for a specific calendar's events.
+
+        Subscribe to this feed to receive updates for events in this calendar.
+        """
+        calendar = await calendar_service.get_by_slug(slug)
+        if not calendar:
+            raise NotFoundException(f"Calendar {slug} not found")
+
+        events = await event_service.get_by_calendar_id(calendar.id, limit=100)
+
+        base_url = str(request.base_url).rstrip("/")
+        feed_url = f"{base_url}/events/calendar/{slug}/atom/"
+
+        atom_service = AtomFeedService(
+            title=f"{calendar.name} - Python Events",
+            subtitle=f"Events from {calendar.name}",
+        )
+        atom_data = atom_service.generate_feed(
+            events=events,
+            feed_id=f"tag:python.org,2025:events/calendar/{slug}",
+            base_url=base_url,
+            feed_url=feed_url,
+        )
+
+        return Response(
+            content=atom_data.encode("utf-8"),
+            media_type="application/atom+xml; charset=utf-8",
+            headers={
+                "Cache-Control": "public, max-age=3600",
             },
         )
