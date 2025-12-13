@@ -44,8 +44,8 @@
 ### Domain Feature Gaps
 - [ ] **Page caching** (Redis) - Task 3.3
 - [ ] **GPG signature verification** for downloads - Task 3.4
-- [ ] **Feed refresh SAQ task** for blogs - Task 3.5
-- [ ] **Job expiration SAQ task** - Task 3.6
+- [x] **Feed refresh SAQ task** for blogs - Task 3.5 ✅ Already implemented: `refresh_stale_feeds` runs every 15 min via `cron_refresh_feeds`
+- [x] **Job expiration SAQ task** - Task 3.6 ✅ Already implemented: `expire_jobs` (daily), `archive_old_jobs` (weekly), `cleanup_draft_jobs` (monthly)
 - [ ] **Email notifications** for jobs - Task 3.6
 - [ ] **Recurrence rule engine** (dateutil.rrule) for events - Task 3.7
 - [ ] **Calendar feed** (RSS/Atom) for events - Task 3.7
@@ -77,25 +77,25 @@
 ### Page Implementations
 
 #### About Section
-- [ ] **`/about/help`** - FAQ/Help page with common questions, getting started resources
-- [ ] **`/about/apps`** - Python applications showcase (notable apps built with Python)
-- [ ] **`/about/quotes`** - Testimonials and quotes from Python users/companies
-- [ ] **`/about/gettingstarted`** - Beginner's guide to Python, installation, first steps
-- [ ] **`/about/legal`** - Legal information, trademarks, licensing
+- [x] **`/about/help`** - FAQ/Help page with common questions, getting started resources ✅
+- [x] **`/about/apps`** - Python applications showcase (notable apps built with Python) ✅
+- [x] **`/about/quotes`** - Testimonials and quotes from Python users/companies ✅
+- [x] **`/about/gettingstarted`** - Beginner's guide to Python, installation, first steps ✅
+- [x] **`/about/legal`** - Legal information, trademarks, licensing ✅
 
 #### Downloads Section
-- [ ] **`/downloads/alternatives`** - Alternative Python implementations (PyPy, Jython, IronPython, etc.)
-- [ ] **`/downloads/other`** - Other download resources (source tarballs, older versions, etc.)
+- [x] **`/downloads/alternatives`** - Alternative Python implementations (PyPy, Jython, IronPython, etc.) ✅
+- [x] **`/downloads/other`** - Other download resources (source tarballs, older versions, etc.) ✅
 
 #### Community Section
-- [ ] **`/community/irc`** - IRC channels information (#python, #python-dev, etc.)
-- [ ] **`/community/forums`** - Python forums (Discourse, Reddit, etc.)
-- [ ] **`/community/lists`** - Mailing lists directory (python-list, python-dev, python-ideas, etc.)
+- [x] **`/community/irc`** - IRC channels information (#python, #python-dev, etc.) ✅
+- [x] **`/community/forums`** - Python forums (Discourse, Reddit, etc.) ✅
+- [x] **`/community/lists`** - Mailing lists directory (python-list, python-dev, python-ideas, etc.) ✅
 
 #### PSF Section
-- [ ] **`/psf/about`** - About the Python Software Foundation
-- [ ] **`/psf/conduct`** - Code of Conduct (community guidelines, reporting)
-- [ ] **`/psf/get-involved`** - How to contribute to Python/PSF
+- [x] **`/psf/about`** - About the Python Software Foundation ✅
+- [x] **`/psf/conduct`** - Code of Conduct (community guidelines, reporting) ✅
+- [x] **`/psf/get-involved`** - How to contribute to Python/PSF ✅
   - Interactive Annual Impact Report
   - Volunteer opportunities
   - Working groups
@@ -115,13 +115,13 @@
 ### MEDIUM Priority
 | Issue | Location | Description |
 |-------|----------|-------------|
-| **`/blogs` sidebar feed filters** | `/blogs` | Clicking feed links refreshes page instead of filtering. |
-| **`/events` filters don't filter** | `/events` | Filter UI exists but doesn't filter listings. |
-| **`/psf/membership` not implemented** | `/psf/membership` | Shows "not available yet". |
-| **`/community/workshops` not implemented** | `/community/workshops` | Shows "not available yet". |
+| ~~**`/blogs` sidebar feed filters**~~ | ~~`/blogs`~~ | ✅ **FIXED**: Added HTMX OOB swap for sidebar active state, explicit `hx-swap="innerHTML"`. |
+| ~~**`/events` filters don't filter**~~ | ~~`/events`~~ | ✅ **FIXED**: Added `calendar`, `start_date`, `end_date` params to controller, filter badge display. |
+| ~~**`/psf/membership` not implemented**~~ | ~~`/psf/membership`~~ | ✅ **DONE**: Created PSF membership page with membership levels (Basic, Supporting, Contributing, Managing, Fellow), benefits, FAQ accordion, and CTAs. Added `PSFPageController` with `/psf/membership/` route. |
+| ~~**`/community/workshops` not implemented**~~ | ~~`/community/workshops`~~ | ✅ **DONE**: Created workshops & user groups page with links to Python Wiki, Meetup.com, event calendar. Includes event types, how to start a user group, and featured groups (PyLadies, Django Girls, Python Brasil). Added `/community/workshops/` route. |
 | ~~**Feature: Sitewide announcement banner**~~ | ~~Sitewide~~ | ✅ **DONE**: Full banner system with targeting (`frontend`/`api`), path filtering, toast notifications. Admin UI at `/admin/banners`. API banners via `X-API-Notice` header. Persists across HTMX navigation. |
-| **Feature: Featured jobs** | `/jobs`, `/admin/jobs` | Add `is_featured` field, admin toggle, featured section. |
-| **Feature: Featured blog entries** | `/blogs`, `/admin/blogs` | Add `is_featured` field, admin toggle, featured section. |
+| ~~**Feature: Featured jobs**~~ | ~~`/jobs`, `/admin/jobs`~~ | ✅ **DONE**: Added `is_featured` field to Job model with migration, admin toggle button in `/admin/jobs`, featured jobs section on `/jobs` page with star badge styling. |
+| ~~**Feature: Featured blog entries**~~ | ~~`/blogs`, `/admin/blogs`~~ | ✅ **DONE**: `is_featured` field already existed in BlogEntry, admin toggle in `/admin/blogs/entries`, featured section on `/blogs` page (shows when no feed filter active). |
 
 ### LOW Priority
 | Issue | Location | Description |
@@ -203,4 +203,4 @@ make ci                      # Full CI pipeline
 
 ---
 
-*Last updated: 2025-12-01*
+*Last updated: 2025-12-13*
