@@ -46,11 +46,11 @@
 - [x] **GPG signature verification** for downloads - Task 3.4 ✅ SHA256 field, signature UI, verification instructions
 - [x] **Feed refresh SAQ task** for blogs - Task 3.5 ✅ Already implemented: `refresh_stale_feeds` runs every 15 min via `cron_refresh_feeds`
 - [x] **Job expiration SAQ task** - Task 3.6 ✅ Already implemented: `expire_jobs` (daily), `archive_old_jobs` (weekly), `cleanup_draft_jobs` (monthly)
-- [ ] **Email notifications** for jobs - Task 3.6
-- [ ] **Recurrence rule engine** (dateutil.rrule) for events - Task 3.7
-- [ ] **Calendar feed** (RSS/Atom) for events - Task 3.7
-- [ ] **Contract management** workflow for sponsors - Task 3.8
-- [ ] **Annual sponsorship renewal** - Task 3.8
+- [x] **Email notifications** for jobs - Task 3.6 ✅ `send_job_submitted_email` (admin), `send_job_approved_email`, `send_job_rejected_email`
+- [x] **Recurrence rule engine** (dateutil.rrule) for events - Task 3.7 ✅ RecurringRule model, recurrence.py utilities, 29 unit tests
+- [x] **Calendar feed** (RSS/Atom) for events - Task 3.7 ✅ RSS 2.0 + Atom 1.0 feeds, per-calendar feeds, 21 unit tests
+- [x] **Contract management** workflow for sponsors - Task 3.8 ✅ LegalClause, Contract models with workflow states (DRAFT→AWAITING_SIGNATURE→EXECUTED/NULLIFIED), ContractService with workflow methods, 24 unit tests
+- [x] **Annual sponsorship renewal** - Task 3.8 ✅ `approve_with_renewal()`, `get_previous_sponsorship()`, `list_expiring_soon()`, `create_renewal()` service methods, repository support
 
 ### API Enhancements
 - [ ] **API versioning** - paths use /api/v1 but no version negotiation
@@ -158,10 +158,10 @@
 |------|--------|-------------|
 | ~~CDN Integration (Fastly)~~ | ~~Medium~~ | ✅ Surrogate-Key middleware done |
 | ~~GPG Signature Verification~~ | ~~Low~~ | ✅ SHA256, signature UI, verification info |
-| Recurrence Rules | Medium | dateutil.rrule for events |
-| Calendar RSS/Atom | Low | Event feed |
+| ~~Recurrence Rules~~ | ~~Medium~~ | ✅ dateutil.rrule for events, 29 tests |
+| ~~Calendar RSS/Atom~~ | ~~Low~~ | ✅ RSS 2.0 + Atom 1.0 feeds, 21 tests |
 | Developer Documentation | Medium | ARCHITECTURE.md, deployment guide |
-| Contract Management | Medium | Full sponsor contract workflow |
+| ~~Contract Management~~ | ~~Medium~~ | ✅ Full sponsor contract workflow, 24 tests |
 | Template Refactor | Medium | Move templates into domain folders |
 
 ---
