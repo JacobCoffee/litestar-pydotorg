@@ -43,7 +43,12 @@ from pydotorg.config import log_startup_banner, settings, validate_production_se
 from pydotorg.core.admin import AdminController
 from pydotorg.core.auth.middleware import JWTAuthMiddleware, UserPopulationMiddleware
 from pydotorg.core.banners_middleware import APIBannerMiddleware, SitewideBannerMiddleware
-from pydotorg.core.cache import create_response_cache_config
+from pydotorg.core.cache import (
+    AdminNoCacheMiddleware,
+    CacheControlMiddleware,
+    SurrogateKeyMiddleware,
+    create_response_cache_config,
+)
 from pydotorg.core.database.base import AuditBase
 from pydotorg.core.dependencies import get_core_dependencies
 from pydotorg.core.exceptions import get_exception_handlers
@@ -633,6 +638,9 @@ app = Litestar(
         APIBannerMiddleware,
         UserPopulationMiddleware,
         JWTAuthMiddleware,
+        CacheControlMiddleware,
+        AdminNoCacheMiddleware,
+        *([SurrogateKeyMiddleware] if settings.fastly_api_key else []),
         rate_limit_config.middleware,
     ],
     stores={
