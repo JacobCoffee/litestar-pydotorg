@@ -1,4 +1,5 @@
 {% extends "base.html.jinja2" %}
+{% from "downloads/macros.html.jinja2" import signature_links, checksum_display, verification_info %}
 
 {% block title %}Python {{ release.name }} Release | Python.org{% endblock %}
 
@@ -77,39 +78,45 @@
                                     <tr>
                                         <th>File</th>
                                         <th>Size</th>
-                                        <th>MD5</th>
+                                        <th>Signatures</th>
                                         <th>Download</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {% for file in files %}
                                     <tr class="hover">
-                                        <td class="font-mono text-sm">
-                                            {{ file.name }}
+                                        <td>
+                                            <div class="font-medium">{{ file.name }}</div>
+                                            {% if file.description %}
+                                            <div class="text-xs text-base-content/60">{{ file.description }}</div>
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-sm">
+                                            {% if file.filesize %}
+                                                {{ (file.filesize / 1024 / 1024)|round(1) }} MB
+                                            {% else %}
+                                                -
+                                            {% endif %}
                                         </td>
                                         <td>
-                                            {% if file.filesize %}
-                                                {{ (file.filesize / 1024 / 1024)|round(2) }} MB
-                                            {% else %}
-                                                -
-                                            {% endif %}
-                                        </td>
-                                        <td class="font-mono text-xs">
-                                            {% if file.md5_digest %}
-                                                <code class="bg-base-200 px-2 py-1 rounded">{{ file.md5_digest[:8] }}...</code>
-                                            {% else %}
-                                                -
-                                            {% endif %}
+                                            {{ signature_links(file) }}
                                         </td>
                                         <td>
                                             <a href="{{ file.url }}" class="btn btn-primary btn-sm gap-2">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                                                 </svg>
-                                                {{ file.download_button_text or 'Download' }}
+                                                Download
                                             </a>
                                         </td>
                                     </tr>
+                                    {% if file.sha256_sum or file.md5_sum %}
+                                    <tr class="bg-base-200/30">
+                                        <td colspan="4" class="py-2">
+                                            {{ checksum_display(file) }}
+                                        </td>
+                                    </tr>
+                                    {% endif %}
                                     {% endfor %}
                                 </tbody>
                             </table>
@@ -152,6 +159,8 @@
                     </div>
                 </div>
             </div>
+
+            {{ verification_info() }}
 
             <div class="mt-8 flex gap-4">
                 <a href="/downloads/" class="btn btn-outline">
