@@ -93,6 +93,7 @@ from pydotorg.domains.community import (
     LinkController,
     PhotoController,
     PostController,
+    PSFPageController,
     VideoController,
     get_community_dependencies,
 )
@@ -605,6 +606,7 @@ app = Litestar(
         VideoController,
         LinkController,
         CommunityPageController,
+        PSFPageController,
         MinutesController,
         MinutesPageController,
         ElectionController,
