@@ -120,6 +120,7 @@ class FeedService(SQLAlchemyAsyncRepositoryService[Feed]):
             await self.repository.session.commit()
 
             for entry in entries:
+                await self.repository.session.refresh(entry)
                 index_key = await enqueue_task("index_blog_entry", entry_id=str(entry.id))
                 if not index_key:
                     logger.warning(f"Failed to enqueue search indexing for blog entry {entry.id}")
