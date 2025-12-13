@@ -129,10 +129,10 @@
 | ~~**`/admin/events` default sort order**~~ | `/admin/events` | ✅ DONE - Already sorted by created_at DESC (newest first). |
 | ~~**`/admin/jobs` preview modal UX**~~ | `/admin/jobs` | ✅ DONE - Fixed Location bug, added icons, improved layout. |
 | ~~**`/admin/events` metadata columns**~~ | `/admin/events` | ✅ DONE - Added date added and last modified to event rows. |
-| **`/admin/blogs` search button layout** | `/admin/blogs` | Button under input instead of inline. |
+| ~~**`/admin/blogs` search button layout**~~ | `/admin/blogs` | ✅ DONE - Used DaisyUI `join` class for inline search button. |
 | ~~**SITEWIDE: Pagination first/last buttons**~~ | All paginated views | ✅ DONE - Added First/Last buttons to all 15 paginated templates. |
-| **SITEWIDE: Normalize page header sizes** | All pages | Inconsistent header sizes. |
-| **`/community/posts` UX overhaul** | `/community/posts` | Needs complete redesign. |
+| ~~**SITEWIDE: Normalize page header sizes**~~ | All pages | ✅ DONE - Standardized: text-5xl (index), text-4xl (detail), text-3xl (admin). |
+| ~~**`/community/posts` UX overhaul**~~ | `/community/posts` | ✅ DONE - New template with hero, featured posts, pagination, sidebar. |
 
 ---
 
