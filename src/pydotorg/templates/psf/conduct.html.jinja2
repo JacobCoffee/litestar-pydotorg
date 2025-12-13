@@ -1,0 +1,413 @@
+{% extends "base.html.jinja2" %}
+
+{% block title %}Code of Conduct | Python Software Foundation{% endblock %}
+
+{% block meta_description %}The Python Community Code of Conduct outlines expected behavior and reporting procedures to ensure a welcoming, diverse, and inclusive community for all Python users.{% endblock %}
+
+{% block content %}
+<section class="python-gradient text-white py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-5xl font-bold mb-6">Python Community Code of Conduct</h1>
+            <p class="text-xl opacity-90">
+                Building a welcoming and inclusive community for everyone
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <div class="card bg-gradient-to-br from-python-blue/5 to-python-yellow/5 border-l-4 border-python-blue mb-8">
+                <div class="card-body">
+                    <p class="text-lg text-base-content/90 leading-relaxed">
+                        The Python community is made up of members from around the globe with a diverse set of
+                        skills, personalities, and experiences. It is through these differences that our community
+                        experiences success and continued growth. We expect everyone in our community to follow
+                        these guidelines when interacting with others both inside and outside of our community.
+                    </p>
+                </div>
+            </div>
+
+            <div class="prose max-w-none">
+                <h2 class="text-3xl font-bold text-python-blue mb-6">Our Standards</h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 not-prose mb-8">
+                    <div class="card bg-base-200 shadow">
+                        <div class="card-body">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="p-2 rounded-full bg-success/10">
+                                    <svg class="w-6 h-6 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                                    </svg>
+                                </div>
+                                <h3 class="font-bold text-lg">Be Open</h3>
+                            </div>
+                            <p class="text-base-content/70 text-sm">
+                                We invite anyone to participate in our community. We prefer to use public methods
+                                of communication for project-related messages.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="card bg-base-200 shadow">
+                        <div class="card-body">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="p-2 rounded-full bg-info/10">
+                                    <svg class="w-6 h-6 text-info" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                                    </svg>
+                                </div>
+                                <h3 class="font-bold text-lg">Be Considerate</h3>
+                            </div>
+                            <p class="text-base-content/70 text-sm">
+                                Your work will be used by other people, and you in turn will depend on the work
+                                of others. Consider the impact of your decisions.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="card bg-base-200 shadow">
+                        <div class="card-body">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="p-2 rounded-full bg-python-blue/10">
+                                    <svg class="w-6 h-6 text-python-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                                    </svg>
+                                </div>
+                                <h3 class="font-bold text-lg">Be Respectful</h3>
+                            </div>
+                            <p class="text-base-content/70 text-sm">
+                                Not all of us will agree all the time, but disagreement is no excuse for poor
+                                behavior and poor manners.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 class="text-3xl font-bold text-python-blue mb-6">The Code of Conduct</h2>
+                <div class="bg-base-200 p-6 rounded-lg mb-8">
+                    <ul class="space-y-4 text-base-content/80">
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-success flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span><strong>Be friendly and patient.</strong> Remember you might not be communicating in someone else's primary language.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-success flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span><strong>Be welcoming.</strong> We strive to be a community that welcomes and supports people of all backgrounds and identities.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-success flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span><strong>Be considerate.</strong> Your work will be used by other people, and you in turn will depend on the work of others.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-success flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span><strong>Be respectful.</strong> Not all of us will agree all the time, but disagreement is no excuse for poor behavior and poor manners.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-success flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span><strong>Be careful in the words that you choose.</strong> We are a community of professionals, and we conduct ourselves professionally.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-success flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span><strong>When we disagree, try to understand why.</strong> Disagreements, both social and technical, happen all the time and Python is no exception.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-200 py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-python-blue mb-6">Scope</h2>
+            <p class="text-base-content/80 leading-relaxed mb-8">
+                This Code of Conduct applies to all spaces managed by the Python Software Foundation, including:
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                <div class="card bg-base-100 shadow">
+                    <div class="card-body p-4">
+                        <div class="flex items-center gap-2">
+                            <svg class="w-5 h-5 text-python-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span class="text-base-content/80">Mailing lists and forums</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card bg-base-100 shadow">
+                    <div class="card-body p-4">
+                        <div class="flex items-center gap-2">
+                            <svg class="w-5 h-5 text-python-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span class="text-base-content/80">Issue trackers and repositories</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card bg-base-100 shadow">
+                    <div class="card-body p-4">
+                        <div class="flex items-center gap-2">
+                            <svg class="w-5 h-5 text-python-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span class="text-base-content/80">PyCon and other events</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card bg-base-100 shadow">
+                    <div class="card-body p-4">
+                        <div class="flex items-center gap-2">
+                            <svg class="w-5 h-5 text-python-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span class="text-base-content/80">Social media channels</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-python-blue mb-6">Reporting Guidelines</h2>
+            <div class="card bg-gradient-to-br from-error/10 to-warning/10 border-l-4 border-error shadow-lg mb-8">
+                <div class="card-body">
+                    <div class="flex items-start gap-4">
+                        <div class="flex-shrink-0">
+                            <svg class="w-8 h-8 text-error" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg mb-2">If you experience or witness unacceptable behavior</h3>
+                            <p class="text-base-content/80 mb-4">
+                                If you are subject to or witness unacceptable behavior, or have any other concerns,
+                                please notify a community organizer as soon as possible.
+                            </p>
+                            <div class="flex flex-wrap gap-3">
+                                <a href="mailto:conduct@python.org" class="btn btn-error btn-sm">
+                                    Email: conduct@python.org
+                                </a>
+                                <a href="https://www.python.org/psf/conduct/reporting/" target="_blank" rel="noopener" class="btn btn-outline btn-error btn-sm">
+                                    Reporting Form
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-python-blue mb-4">What to Include in a Report</h3>
+            <div class="bg-base-200 p-6 rounded-lg mb-8">
+                <ul class="space-y-3 text-base-content/80">
+                    <li class="flex items-start gap-2">
+                        <span class="font-bold text-python-blue">•</span>
+                        <span>Your contact information</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="font-bold text-python-blue">•</span>
+                        <span>Names (real or usernames) of individuals involved</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="font-bold text-python-blue">•</span>
+                        <span>When and where the incident occurred</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="font-bold text-python-blue">•</span>
+                        <span>Your account of what occurred</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="font-bold text-python-blue">•</span>
+                        <span>Any additional context or records (screenshots, logs, etc.)</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="font-bold text-python-blue">•</span>
+                        <span>Whether you believe this is ongoing</span>
+                    </li>
+                </ul>
+            </div>
+
+            <h3 class="text-2xl font-bold text-python-blue mb-4">Enforcement</h3>
+            <p class="text-base-content/80 leading-relaxed mb-4">
+                Participants asked to stop any unacceptable behavior are expected to comply immediately.
+                If a participant engages in unacceptable behavior, the community organizers may take any
+                action they deem appropriate, including:
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="card bg-base-200">
+                    <div class="card-body p-4">
+                        <div class="flex items-start gap-2">
+                            <svg class="w-5 h-5 text-warning flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                            </svg>
+                            <span class="text-sm text-base-content/80">Warning the offender</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card bg-base-200">
+                    <div class="card-body p-4">
+                        <div class="flex items-start gap-2">
+                            <svg class="w-5 h-5 text-error flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/>
+                            </svg>
+                            <span class="text-sm text-base-content/80">Expulsion from the event or space</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card bg-base-200">
+                    <div class="card-body p-4">
+                        <div class="flex items-start gap-2">
+                            <svg class="w-5 h-5 text-error flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                            </svg>
+                            <span class="text-sm text-base-content/80">Temporary or permanent ban</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card bg-base-200">
+                    <div class="card-body p-4">
+                        <div class="flex items-start gap-2">
+                            <svg class="w-5 h-5 text-error flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <span class="text-sm text-base-content/80">Other appropriate actions</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-200 py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-python-blue mb-8">Frequently Asked Questions</h2>
+            <div class="join join-vertical w-full">
+                <div class="collapse collapse-arrow join-item border border-base-300 bg-base-100">
+                    <input type="radio" name="coc-faq" checked="checked" />
+                    <div class="collapse-title text-lg font-medium">
+                        Why do we have a Code of Conduct?
+                    </div>
+                    <div class="collapse-content">
+                        <p class="text-base-content/80">
+                            A Code of Conduct helps create a safe, respectful environment for everyone. It sets
+                            clear expectations for behavior and provides a framework for addressing issues when
+                            they arise. Our goal is to make the Python community welcoming to all.
+                        </p>
+                    </div>
+                </div>
+                <div class="collapse collapse-arrow join-item border border-base-300 bg-base-100">
+                    <input type="radio" name="coc-faq" />
+                    <div class="collapse-title text-lg font-medium">
+                        Does this apply to all Python spaces?
+                    </div>
+                    <div class="collapse-content">
+                        <p class="text-base-content/80">
+                            This Code of Conduct applies to all PSF-managed spaces. Individual Python communities
+                            may have their own codes of conduct, but many adopt or adapt the PSF's CoC as a baseline.
+                        </p>
+                    </div>
+                </div>
+                <div class="collapse collapse-arrow join-item border border-base-300 bg-base-100">
+                    <input type="radio" name="coc-faq" />
+                    <div class="collapse-title text-lg font-medium">
+                        What happens to my report?
+                    </div>
+                    <div class="collapse-content">
+                        <p class="text-base-content/80">
+                            Reports are handled confidentially by the PSF Conduct Working Group. They will review
+                            the report, may contact you for additional information, investigate as needed, and
+                            determine appropriate action. You will be updated on the outcome.
+                        </p>
+                    </div>
+                </div>
+                <div class="collapse collapse-arrow join-item border border-base-300 bg-base-100">
+                    <input type="radio" name="coc-faq" />
+                    <div class="collapse-title text-lg font-medium">
+                        Can I report anonymously?
+                    </div>
+                    <div class="collapse-content">
+                        <p class="text-base-content/80">
+                            Yes, you can submit an anonymous report. However, providing contact information helps
+                            us follow up for clarification and keep you informed of the outcome. All reports are
+                            kept confidential.
+                        </p>
+                    </div>
+                </div>
+                <div class="collapse collapse-arrow join-item border border-base-300 bg-base-100">
+                    <input type="radio" name="coc-faq" />
+                    <div class="collapse-title text-lg font-medium">
+                        What if I disagree with the enforcement decision?
+                    </div>
+                    <div class="collapse-content">
+                        <p class="text-base-content/80">
+                            You can appeal enforcement decisions by contacting the PSF Board of Directors at
+                            psf-board@python.org. The Board will review the case and the decision made.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-python-blue mb-6">Acknowledgments</h2>
+            <div class="card bg-base-200 shadow">
+                <div class="card-body">
+                    <p class="text-base-content/80 leading-relaxed mb-4">
+                        This Code of Conduct is based on the <a href="https://www.djangoproject.com/conduct/" target="_blank" rel="noopener" class="link link-primary">Django Code of Conduct</a>
+                        and the <a href="https://speakup.io/coc.html" target="_blank" rel="noopener" class="link link-primary">Speak Up! Community Code of Conduct</a>,
+                        which are themselves based on the <a href="https://ubuntu.com/community/code-of-conduct" target="_blank" rel="noopener" class="link link-primary">Ubuntu Code of Conduct</a>.
+                    </p>
+                    <p class="text-base-content/80 leading-relaxed">
+                        We are grateful to those projects for developing the foundation that has helped shape
+                        our community standards.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-gradient-to-br from-python-blue to-python-blue/80 text-white py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-4xl font-bold mb-4">Questions?</h2>
+            <p class="text-xl opacity-90 mb-8">
+                Contact the PSF Conduct Working Group
+            </p>
+            <div class="flex flex-wrap gap-4 justify-center">
+                <a href="mailto:conduct@python.org" class="btn btn-lg bg-white text-python-blue hover:bg-white/90 border-none">
+                    Email Us
+                </a>
+                <a href="https://www.python.org/psf/conduct/" target="_blank" rel="noopener" class="btn btn-lg btn-outline border-white text-white hover:bg-white/10">
+                    Full CoC Documentation
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

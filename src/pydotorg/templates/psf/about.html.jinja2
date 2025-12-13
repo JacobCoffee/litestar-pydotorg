@@ -1,0 +1,239 @@
+{% extends "base.html.jinja2" %}
+
+{% block title %}About the PSF | Python Software Foundation{% endblock %}
+
+{% block meta_description %}Learn about the Python Software Foundation, its mission, history, and how it supports the Python programming language and community worldwide.{% endblock %}
+
+{% block content %}
+<section class="python-gradient text-white py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-5xl font-bold mb-6">About the Python Software Foundation</h1>
+            <p class="text-xl opacity-90">
+                Empowering developers worldwide through open-source Python
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <div class="card bg-gradient-to-br from-python-blue/5 to-python-yellow/5 border-l-4 border-python-blue mb-8">
+                <div class="card-body">
+                    <h2 class="card-title text-2xl text-python-blue mb-4">Our Mission</h2>
+                    <p class="text-lg text-base-content/90 leading-relaxed">
+                        The mission of the Python Software Foundation is to <strong>promote, protect, and advance</strong>
+                        the Python programming language, and to support and facilitate the growth of a diverse and
+                        international community of Python programmers.
+                    </p>
+                </div>
+            </div>
+
+            <div class="prose max-w-none">
+                <h2 class="text-3xl font-bold text-python-blue mb-6">History</h2>
+                <p class="text-base-content/80 leading-relaxed mb-4">
+                    The Python Software Foundation (PSF) was <strong>founded in 2001</strong> to serve as the
+                    steward of the Python programming language. Since then, the PSF has grown from a small
+                    organization dedicated to managing Python's intellectual property into a vibrant nonprofit
+                    supporting a global community.
+                </p>
+                <p class="text-base-content/80 leading-relaxed">
+                    Today, the PSF is a 501(c)(3) non-profit organization that holds the intellectual property
+                    rights behind Python, manages the open-source licensing for Python, and leads community
+                    initiatives worldwide.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-200 py-16">
+    <div class="section-container">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-3xl font-bold text-python-blue mb-8 text-center">What the PSF Does</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="card bg-base-100 shadow-lg">
+                    <div class="card-body">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-3 rounded-full bg-python-blue/10">
+                                <svg class="w-6 h-6 text-python-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                </svg>
+                            </div>
+                            <h3 class="card-title text-xl">Intellectual Property</h3>
+                        </div>
+                        <p class="text-base-content/80">
+                            Holds and protects the intellectual property rights for Python, ensuring the language
+                            remains free and open-source for everyone to use, modify, and distribute.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card bg-base-100 shadow-lg">
+                    <div class="card-body">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-3 rounded-full bg-python-yellow/10">
+                                <svg class="w-6 h-6 text-python-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                </svg>
+                            </div>
+                            <h3 class="card-title text-xl">PyCon & Events</h3>
+                        </div>
+                        <p class="text-base-content/80">
+                            Organizes and sponsors PyCon US and supports Python conferences worldwide, bringing
+                            together developers, educators, and enthusiasts to share knowledge and build community.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card bg-base-100 shadow-lg">
+                    <div class="card-body">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-3 rounded-full bg-success/10">
+                                <svg class="w-6 h-6 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </div>
+                            <h3 class="card-title text-xl">Grant Programs</h3>
+                        </div>
+                        <p class="text-base-content/80">
+                            Provides grants to Python projects, sprints, conferences, and community initiatives
+                            around the world, helping to grow and sustain the Python ecosystem.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card bg-base-100 shadow-lg">
+                    <div class="card-body">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-3 rounded-full bg-info/10">
+                                <svg class="w-6 h-6 text-info" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+                                </svg>
+                            </div>
+                            <h3 class="card-title text-xl">Development Support</h3>
+                        </div>
+                        <p class="text-base-content/80">
+                            Supports Python's ongoing development by funding CPython core developers, infrastructure,
+                            and tools that keep Python at the forefront of modern programming.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-python-blue mb-6">Board of Directors</h2>
+            <div class="card bg-base-200 shadow mb-8">
+                <div class="card-body">
+                    <p class="text-base-content/80 leading-relaxed mb-4">
+                        The PSF is governed by a <strong>Board of Directors</strong> elected by the membership.
+                        The Board is responsible for setting strategic direction, managing finances, and ensuring
+                        the PSF fulfills its mission to serve the Python community.
+                    </p>
+                    <p class="text-base-content/80 leading-relaxed">
+                        Board members serve <strong>three-year terms</strong> and are elected by PSF voting members.
+                        Elections are held annually, with approximately one-third of the board seats up for election
+                        each year.
+                    </p>
+                    <div class="mt-4">
+                        <a href="https://www.python.org/psf/records/board/" target="_blank" rel="noopener" class="btn btn-outline btn-primary">
+                            View Current Board
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="text-3xl font-bold text-python-blue mb-6">PSF Staff</h2>
+            <div class="card bg-base-200 shadow">
+                <div class="card-body">
+                    <p class="text-base-content/80 leading-relaxed">
+                        The PSF employs a small but dedicated staff team to manage day-to-day operations,
+                        coordinate community programs, manage infrastructure, and support the Python ecosystem.
+                        Our staff work remotely from around the world to serve the global Python community.
+                    </p>
+                    <div class="mt-4">
+                        <a href="https://www.python.org/psf/staff/" target="_blank" rel="noopener" class="btn btn-outline btn-primary">
+                            Meet the Team
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-200 py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-python-blue mb-6">Financial Transparency</h2>
+            <p class="text-base-content/80 leading-relaxed mb-8">
+                As a 501(c)(3) non-profit organization, the PSF is committed to financial transparency.
+                We publish annual reports and make our IRS Form 990 filings available to the public.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="card bg-base-100 shadow-lg border-l-4 border-python-blue">
+                    <div class="card-body">
+                        <div class="flex items-center gap-3 mb-4">
+                            <svg class="w-8 h-8 text-python-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                            <h3 class="card-title">Annual Reports</h3>
+                        </div>
+                        <p class="text-base-content/70 mb-4">
+                            Detailed reports on our activities, finances, and impact each year.
+                        </p>
+                        <a href="https://www.python.org/psf/annual-report/" target="_blank" rel="noopener" class="btn btn-sm btn-outline btn-primary">
+                            View Reports
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card bg-base-100 shadow-lg border-l-4 border-python-yellow">
+                    <div class="card-body">
+                        <div class="flex items-center gap-3 mb-4">
+                            <svg class="w-8 h-8 text-python-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                            </svg>
+                            <h3 class="card-title">IRS Form 990</h3>
+                        </div>
+                        <p class="text-base-content/70 mb-4">
+                            Official tax filings showing our revenue, expenses, and governance.
+                        </p>
+                        <a href="https://www.python.org/psf/records/990/" target="_blank" rel="noopener" class="btn btn-sm btn-outline btn-primary">
+                            View 990 Forms
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-gradient-to-br from-python-blue to-python-blue/80 text-white py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-4xl font-bold mb-4">Support the PSF</h2>
+            <p class="text-xl opacity-90 mb-8">
+                Help us continue our mission to promote and protect Python
+            </p>
+            <div class="flex flex-wrap gap-4 justify-center">
+                <a href="https://donate.python.org/" target="_blank" rel="noopener" class="btn btn-lg bg-white text-python-blue hover:bg-white/90 border-none">
+                    Donate Now
+                </a>
+                <a href="https://www.python.org/psf/sponsorship/" target="_blank" rel="noopener" class="btn btn-lg btn-outline border-white text-white hover:bg-white/10">
+                    Become a Sponsor
+                </a>
+                <a href="/psf/get-involved" hx-boost="true" class="btn btn-lg btn-outline border-white text-white hover:bg-white/10">
+                    Get Involved
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
