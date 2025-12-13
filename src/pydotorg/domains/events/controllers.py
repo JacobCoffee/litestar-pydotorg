@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import contextlib
 import datetime
 from typing import Annotated
 from uuid import UUID
@@ -956,11 +957,43 @@ class EventsPageController(Controller):
         event_service: EventService,
         calendar_service: CalendarService,
         event_category_service: EventCategoryService,
+        calendar: Annotated[str | None, Parameter(description="Filter by calendar slug")] = None,
+        start_date: Annotated[str | None, Parameter(description="Filter by start date (YYYY-MM-DD)")] = None,
+        end_date: Annotated[str | None, Parameter(description="Filter by end date (YYYY-MM-DD)")] = None,
     ) -> Template:
         """Render the main events page."""
-        upcoming_events = await event_service.get_upcoming(limit=20)
-        featured_events = await event_service.get_featured(limit=5)
         calendars, _total = await calendar_service.list_and_count()
+
+        calendar_id = None
+        current_calendar = None
+        if calendar:
+            current_calendar = await calendar_service.get_by_slug(calendar)
+            if current_calendar:
+                calendar_id = current_calendar.id
+
+        parsed_start_date = None
+        parsed_end_date = None
+        if start_date:
+            with contextlib.suppress(ValueError):
+                parsed_start_date = datetime.datetime.strptime(start_date, "%Y-%m-%d").replace(tzinfo=datetime.UTC)
+        if end_date:
+            with contextlib.suppress(ValueError):
+                parsed_end_date = datetime.datetime.strptime(end_date, "%Y-%m-%d").replace(tzinfo=datetime.UTC)
+
+        upcoming_events = await event_service.get_upcoming(
+            calendar_id=calendar_id,
+            start_date=parsed_start_date,
+            limit=20,
+        )
+
+        if parsed_end_date:
+            upcoming_events = [
+                e
+                for e in upcoming_events
+                if e.occurrences and any(occ.dt_start <= parsed_end_date for occ in e.occurrences)
+            ]
+
+        featured_events = await event_service.get_featured(calendar_id=calendar_id, limit=5)
 
         is_htmx = request.headers.get("HX-Request") == "true"
         is_boosted = request.headers.get("HX-Boosted") == "true"
@@ -969,6 +1002,9 @@ class EventsPageController(Controller):
             "upcoming_events": upcoming_events,
             "featured_events": featured_events,
             "calendars": calendars,
+            "current_calendar": current_calendar,
+            "start_date": start_date,
+            "end_date": end_date,
         }
 
         if is_htmx and not is_boosted:
