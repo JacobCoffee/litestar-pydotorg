@@ -1,0 +1,628 @@
+{% extends "base.html.jinja2" %}
+
+{% block title %}Mailing Lists | Python Community{% endblock %}
+
+{% block meta_description %}Join Python's mailing lists for development discussions, special interest groups, and regional communities. Searchable archives and email-based collaboration.{% endblock %}
+
+{% block content %}
+<section class="python-gradient text-white py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-5xl font-bold mb-6">Python Mailing Lists</h1>
+            <p class="text-xl opacity-90">
+                Email-based discussion groups for every Python interest
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <div class="card bg-gradient-to-br from-python-blue/5 to-python-yellow/5 border-l-4 border-python-blue mb-8">
+                <div class="card-body">
+                    <div class="flex items-start gap-4">
+                        <div class="flex-shrink-0 hidden md:block">
+                            <svg class="w-12 h-12 text-python-blue/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-lg text-base-content/90 leading-relaxed">
+                                Python has a long tradition of <strong class="text-python-blue">mailing list</strong>
+                                based discussions. These lists cover everything from core development to special
+                                interest groups and regional communities. All lists have searchable archives going
+                                back years, making them invaluable resources for Python developers.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-200 py-16">
+    <div class="section-container">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-3xl font-bold text-python-blue mb-8 text-center">General Discussion Lists</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="card bg-base-100 shadow-lg">
+                    <div class="card-body">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-3 rounded-full bg-python-blue/10">
+                                <svg class="w-6 h-6 text-python-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="card-title text-xl">python-list</h3>
+                                <div class="badge badge-primary badge-sm">High Traffic</div>
+                            </div>
+                        </div>
+                        <p class="text-base-content/80 mb-4">
+                            General Python discussion and help. This is the main Python discussion list for
+                            users of all skill levels. Also mirrored to the comp.lang.python newsgroup.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <a href="https://mail.python.org/mailman/listinfo/python-list" target="_blank" rel="noopener" class="btn btn-sm btn-primary">
+                                Subscribe
+                            </a>
+                            <a href="https://mail.python.org/pipermail/python-list/" target="_blank" rel="noopener" class="btn btn-sm btn-outline">
+                                Archives
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card bg-base-100 shadow-lg">
+                    <div class="card-body">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-3 rounded-full bg-green-500/10">
+                                <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="card-title text-xl">python-announce</h3>
+                                <div class="badge badge-outline badge-sm">Low Traffic</div>
+                            </div>
+                        </div>
+                        <p class="text-base-content/80 mb-4">
+                            Announcements only list for new Python releases, security updates, and major
+                            community news. Moderated, very low traffic, essential for staying informed.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <a href="https://mail.python.org/mailman/listinfo/python-announce-list" target="_blank" rel="noopener" class="btn btn-sm btn-primary">
+                                Subscribe
+                            </a>
+                            <a href="https://mail.python.org/pipermail/python-announce-list/" target="_blank" rel="noopener" class="btn btn-sm btn-outline">
+                                Archives
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card bg-base-100 shadow-lg">
+                    <div class="card-body">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-3 rounded-full bg-blue-500/10">
+                                <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                                </svg>
+                            </div>
+                            <h3 class="card-title text-xl">tutor</h3>
+                        </div>
+                        <p class="text-base-content/80 mb-4">
+                            Learning Python? This list is for folks learning to program in Python and for
+                            those teaching programming. Beginner questions welcome!
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <a href="https://mail.python.org/mailman/listinfo/tutor" target="_blank" rel="noopener" class="btn btn-sm btn-primary">
+                                Subscribe
+                            </a>
+                            <a href="https://mail.python.org/pipermail/tutor/" target="_blank" rel="noopener" class="btn btn-sm btn-outline">
+                                Archives
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card bg-base-100 shadow-lg">
+                    <div class="card-body">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-3 rounded-full bg-purple-500/10">
+                                <svg class="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                </svg>
+                            </div>
+                            <h3 class="card-title text-xl">python-jobs</h3>
+                        </div>
+                        <p class="text-base-content/80 mb-4">
+                            Python job postings and opportunities. Employers and recruiters can post
+                            Python-related job openings to reach qualified candidates.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <a href="https://mail.python.org/mailman/listinfo/python-jobs" target="_blank" rel="noopener" class="btn btn-sm btn-primary">
+                                Subscribe
+                            </a>
+                            <a href="https://mail.python.org/pipermail/python-jobs/" target="_blank" rel="noopener" class="btn btn-sm btn-outline">
+                                Archives
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-3xl font-bold text-python-blue mb-8 text-center">Core Development Lists</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="card bg-base-200 shadow">
+                    <div class="card-body">
+                        <div class="flex items-center gap-2 mb-3">
+                            <svg class="w-6 h-6 text-python-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+                            </svg>
+                            <h3 class="card-title text-lg">python-dev</h3>
+                        </div>
+                        <p class="text-base-content/70 text-sm mb-3">
+                            Core Python development discussion. For those working on CPython and
+                            language features.
+                        </p>
+                        <a href="https://mail.python.org/mailman/listinfo/python-dev" target="_blank" rel="noopener" class="link link-primary text-sm">
+                            Subscribe
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200 shadow">
+                    <div class="card-body">
+                        <div class="flex items-center gap-2 mb-3">
+                            <svg class="w-6 h-6 text-python-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                            </svg>
+                            <h3 class="card-title text-lg">python-ideas</h3>
+                        </div>
+                        <p class="text-base-content/70 text-sm mb-3">
+                            Brainstorming for new Python features and language improvements before
+                            formal PEP proposals.
+                        </p>
+                        <a href="https://mail.python.org/mailman/listinfo/python-ideas" target="_blank" rel="noopener" class="link link-primary text-sm">
+                            Subscribe
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200 shadow">
+                    <div class="card-body">
+                        <div class="flex items-center gap-2 mb-3">
+                            <svg class="w-6 h-6 text-python-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                            </svg>
+                            <h3 class="card-title text-lg">security-announce</h3>
+                        </div>
+                        <p class="text-base-content/70 text-sm mb-3">
+                            Security announcements for Python. Very low traffic, important for
+                            production deployments.
+                        </p>
+                        <a href="https://mail.python.org/mailman/listinfo/security-announce" target="_blank" rel="noopener" class="link link-primary text-sm">
+                            Subscribe
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200 shadow">
+                    <div class="card-body">
+                        <div class="flex items-center gap-2 mb-3">
+                            <svg class="w-6 h-6 text-python-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                            <h3 class="card-title text-lg">python-committers</h3>
+                        </div>
+                        <p class="text-base-content/70 text-sm mb-3">
+                            Private list for Python core developers with commit access to the
+                            CPython repository.
+                        </p>
+                        <span class="text-xs text-base-content/60">Private - Core devs only</span>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200 shadow">
+                    <div class="card-body">
+                        <div class="flex items-center gap-2 mb-3">
+                            <svg class="w-6 h-6 text-python-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/>
+                            </svg>
+                            <h3 class="card-title text-lg">python-checkins</h3>
+                        </div>
+                        <p class="text-base-content/70 text-sm mb-3">
+                            Automated notifications of commits to the Python source code repository.
+                            High traffic.
+                        </p>
+                        <a href="https://mail.python.org/mailman/listinfo/python-checkins" target="_blank" rel="noopener" class="link link-primary text-sm">
+                            Subscribe
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200 shadow">
+                    <div class="card-body">
+                        <div class="flex items-center gap-2 mb-3">
+                            <svg class="w-6 h-6 text-python-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                            </svg>
+                            <h3 class="card-title text-lg">docs</h3>
+                        </div>
+                        <p class="text-base-content/70 text-sm mb-3">
+                            Discussion about Python documentation. Help improve the official
+                            Python documentation.
+                        </p>
+                        <a href="https://mail.python.org/mailman/listinfo/docs" target="_blank" rel="noopener" class="link link-primary text-sm">
+                            Subscribe
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-200 py-16">
+    <div class="section-container">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-3xl font-bold text-python-blue mb-8 text-center">Special Interest Groups (SIGs)</h2>
+            <div class="prose prose-lg max-w-4xl mx-auto mb-8">
+                <p class="text-base-content/80">
+                    SIGs are focused groups working on specific Python-related topics. Each SIG has its own
+                    mailing list for discussions, proposals, and coordination.
+                </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="card bg-base-100 shadow">
+                    <div class="card-body">
+                        <h3 class="card-title text-lg">Web-SIG</h3>
+                        <p class="text-base-content/70 text-sm mb-3">
+                            Web frameworks, WSGI, and web-related Python topics
+                        </p>
+                        <a href="https://mail.python.org/mailman/listinfo/web-sig" target="_blank" rel="noopener" class="link link-primary text-sm">
+                            Subscribe
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card bg-base-100 shadow">
+                    <div class="card-body">
+                        <h3 class="card-title text-lg">Distutils-SIG</h3>
+                        <p class="text-base-content/70 text-sm mb-3">
+                            Python packaging, distribution, and installation tools
+                        </p>
+                        <a href="https://mail.python.org/mailman/listinfo/distutils-sig" target="_blank" rel="noopener" class="link link-primary text-sm">
+                            Subscribe
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card bg-base-100 shadow">
+                    <div class="card-body">
+                        <h3 class="card-title text-lg">DB-SIG</h3>
+                        <p class="text-base-content/70 text-sm mb-3">
+                            Database interfaces and modules for Python
+                        </p>
+                        <a href="https://mail.python.org/mailman/listinfo/db-sig" target="_blank" rel="noopener" class="link link-primary text-sm">
+                            Subscribe
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card bg-base-100 shadow">
+                    <div class="card-body">
+                        <h3 class="card-title text-lg">Edu-SIG</h3>
+                        <p class="text-base-content/70 text-sm mb-3">
+                            Using Python in education and teaching
+                        </p>
+                        <a href="https://mail.python.org/mailman/listinfo/edu-sig" target="_blank" rel="noopener" class="link link-primary text-sm">
+                            Subscribe
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card bg-base-100 shadow">
+                    <div class="card-body">
+                        <h3 class="card-title text-lg">NumPy-Discussion</h3>
+                        <p class="text-base-content/70 text-sm mb-3">
+                            NumPy development and scientific computing
+                        </p>
+                        <a href="https://mail.python.org/mailman/listinfo/numpy-discussion" target="_blank" rel="noopener" class="link link-primary text-sm">
+                            Subscribe
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card bg-base-100 shadow">
+                    <div class="card-body">
+                        <h3 class="card-title text-lg">SciPy-Dev</h3>
+                        <p class="text-base-content/70 text-sm mb-3">
+                            SciPy library development and scientific Python
+                        </p>
+                        <a href="https://mail.python.org/mailman/listinfo/scipy-dev" target="_blank" rel="noopener" class="link link-primary text-sm">
+                            Subscribe
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-8">
+                <a href="https://www.python.org/community/sigs/" target="_blank" rel="noopener" class="btn btn-primary">
+                    View All SIGs
+                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-3xl font-bold text-python-blue mb-8 text-center">Regional & Language Lists</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="card bg-base-200 shadow">
+                    <div class="card-body">
+                        <h3 class="card-title text-base">python-brasil</h3>
+                        <p class="text-base-content/70 text-sm mb-2">Portuguese (Brazil)</p>
+                        <a href="https://mail.python.org/mailman/listinfo/python-brasil" target="_blank" rel="noopener" class="link link-primary text-xs">
+                            Subscribe
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200 shadow">
+                    <div class="card-body">
+                        <h3 class="card-title text-base">python-de</h3>
+                        <p class="text-base-content/70 text-sm mb-2">German</p>
+                        <a href="https://mail.python.org/mailman/listinfo/python-de" target="_blank" rel="noopener" class="link link-primary text-xs">
+                            Subscribe
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200 shadow">
+                    <div class="card-body">
+                        <h3 class="card-title text-base">python-es</h3>
+                        <p class="text-base-content/70 text-sm mb-2">Spanish</p>
+                        <a href="https://mail.python.org/mailman/listinfo/python-es" target="_blank" rel="noopener" class="link link-primary text-xs">
+                            Subscribe
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200 shadow">
+                    <div class="card-body">
+                        <h3 class="card-title text-base">python-fr</h3>
+                        <p class="text-base-content/70 text-sm mb-2">French</p>
+                        <a href="https://mail.python.org/mailman/listinfo/python-fr" target="_blank" rel="noopener" class="link link-primary text-xs">
+                            Subscribe
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200 shadow">
+                    <div class="card-body">
+                        <h3 class="card-title text-base">python-it</h3>
+                        <p class="text-base-content/70 text-sm mb-2">Italian</p>
+                        <a href="https://mail.python.org/mailman/listinfo/python-it" target="_blank" rel="noopener" class="link link-primary text-xs">
+                            Subscribe
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200 shadow">
+                    <div class="card-body">
+                        <h3 class="card-title text-base">python-jp</h3>
+                        <p class="text-base-content/70 text-sm mb-2">Japanese</p>
+                        <a href="https://mail.python.org/mailman/listinfo/python-jp" target="_blank" rel="noopener" class="link link-primary text-xs">
+                            Subscribe
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200 shadow">
+                    <div class="card-body">
+                        <h3 class="card-title text-base">python-kr</h3>
+                        <p class="text-base-content/70 text-sm mb-2">Korean</p>
+                        <a href="https://mail.python.org/mailman/listinfo/python-kr" target="_blank" rel="noopener" class="link link-primary text-xs">
+                            Subscribe
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200 shadow">
+                    <div class="card-body">
+                        <h3 class="card-title text-base">python-nl</h3>
+                        <p class="text-base-content/70 text-sm mb-2">Dutch</p>
+                        <a href="https://mail.python.org/mailman/listinfo/python-nl" target="_blank" rel="noopener" class="link link-primary text-xs">
+                            Subscribe
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-200 py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-python-blue mb-8 text-center">How to Subscribe</h2>
+            <div class="card bg-base-100 shadow-lg">
+                <div class="card-body">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="font-bold text-lg mb-4 flex items-center gap-2">
+                                <svg class="w-5 h-5 text-python-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+                                </svg>
+                                Subscribing
+                            </h3>
+                            <ol class="space-y-3 text-base-content/80">
+                                <li class="flex items-start gap-2">
+                                    <span class="text-python-blue font-bold">1.</span>
+                                    <div>Visit the list's subscription page</div>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-python-blue font-bold">2.</span>
+                                    <div>Enter your email address</div>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-python-blue font-bold">3.</span>
+                                    <div>Choose digest or individual emails</div>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-python-blue font-bold">4.</span>
+                                    <div>Confirm subscription via email</div>
+                                </li>
+                            </ol>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg mb-4 flex items-center gap-2">
+                                <svg class="w-5 h-5 text-python-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                </svg>
+                                Options
+                            </h3>
+                            <ul class="space-y-3 text-base-content/80">
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-python-blue mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    <div><strong>Digest mode:</strong> Receive daily summaries instead of individual emails</div>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-python-blue mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    <div><strong>No mail mode:</strong> Stay subscribed to post without receiving emails</div>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-python-blue mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    <div><strong>Filters:</strong> Set up email filters to organize list traffic</div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-3xl font-bold text-python-blue mb-8 text-center">Mailing List Resources</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <a href="https://mail.python.org/mailman/listinfo" target="_blank" rel="noopener" class="card bg-base-200 shadow-lg hover:shadow-xl transition-all group">
+                    <div class="card-body">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-3 rounded-full bg-python-blue/10 group-hover:bg-python-blue/20 transition-colors">
+                                <svg class="w-6 h-6 text-python-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
+                                </svg>
+                            </div>
+                            <h3 class="card-title text-lg">All Lists</h3>
+                        </div>
+                        <p class="text-base-content/70 text-sm mb-4">
+                            Browse the complete directory of all Python mailing lists with subscription
+                            information and descriptions.
+                        </p>
+                        <div class="card-actions justify-end">
+                            <span class="text-python-blue group-hover:translate-x-1 transition-transform inline-flex items-center gap-1 text-sm">
+                                View Directory
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="https://mail.python.org/pipermail/" target="_blank" rel="noopener" class="card bg-base-200 shadow-lg hover:shadow-xl transition-all group">
+                    <div class="card-body">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-3 rounded-full bg-green-500/10 group-hover:bg-green-500/20 transition-colors">
+                                <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/>
+                                </svg>
+                            </div>
+                            <h3 class="card-title text-lg">Archives</h3>
+                        </div>
+                        <p class="text-base-content/70 text-sm mb-4">
+                            Search and browse complete email archives going back years. Find answers
+                            to historical discussions.
+                        </p>
+                        <div class="card-actions justify-end">
+                            <span class="text-python-blue group-hover:translate-x-1 transition-transform inline-flex items-center gap-1 text-sm">
+                                Browse Archives
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+
+                <div class="card bg-base-200 shadow-lg">
+                    <div class="card-body">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-3 rounded-full bg-purple-500/10">
+                                <svg class="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                </svg>
+                            </div>
+                            <h3 class="card-title text-lg">Etiquette Guide</h3>
+                        </div>
+                        <p class="text-base-content/70 text-sm mb-4">
+                            Learn best practices for posting, replying, and participating effectively
+                            in Python mailing lists.
+                        </p>
+                        <ul class="space-y-2 text-xs text-base-content/60">
+                            <li>• Use descriptive subject lines</li>
+                            <li>• Reply below quoted text</li>
+                            <li>• Keep threads on topic</li>
+                            <li>• Use plain text format</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-gradient-to-br from-python-blue to-python-blue/80 text-white py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-4xl font-bold mb-4">Join the Discussion</h2>
+            <p class="text-xl opacity-90 mb-8">
+                Subscribe to mailing lists relevant to your interests and expertise.
+            </p>
+            <div class="flex flex-wrap gap-4 justify-center">
+                <a href="https://mail.python.org/mailman/listinfo" target="_blank" rel="noopener" class="btn btn-lg bg-white text-python-blue hover:bg-white/90 border-none">
+                    Browse All Lists
+                </a>
+                <a href="/community/" class="btn btn-lg btn-outline border-white text-white hover:bg-white/10" hx-boost="true">
+                    Explore Community
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

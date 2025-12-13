@@ -333,3 +333,90 @@ class CommunityPageController(Controller):
                 "page_title": "Diversity | Python Software Foundation",
             },
         )
+
+    @get("/workshops/")
+    async def community_workshops(self) -> Template:
+        """Render the community workshops and user groups page."""
+        return Template(
+            template_name="community/workshops.html.jinja2",
+            context={
+                "page_title": "Workshops & User Groups | Python Community",
+            },
+        )
+
+    @get("/irc/")
+    async def community_irc(self) -> Template:
+        """Render the IRC channels information page."""
+        return Template(
+            template_name="community/irc.html.jinja2",
+            context={
+                "page_title": "IRC Channels | Python Community",
+            },
+        )
+
+    @get("/forums/")
+    async def community_forums(self) -> Template:
+        """Render the Python forums page."""
+        return Template(
+            template_name="community/forums.html.jinja2",
+            context={
+                "page_title": "Forums & Discussion | Python Community",
+            },
+        )
+
+    @get("/lists/")
+    async def community_lists(self) -> Template:
+        """Render the mailing lists directory page."""
+        return Template(
+            template_name="community/lists.html.jinja2",
+            context={
+                "page_title": "Mailing Lists | Python Community",
+            },
+        )
+
+
+class PSFPageController(Controller):
+    """Controller for PSF HTML pages."""
+
+    path = "/psf"
+    include_in_schema = False
+
+    @get("/membership/")
+    async def psf_membership(self) -> Template:
+        """Render the PSF membership page."""
+        return Template(
+            template_name="psf/membership.html.jinja2",
+            context={
+                "page_title": "Membership | Python Software Foundation",
+            },
+        )
+
+    @get("/about/")
+    async def psf_about(self) -> Template:
+        """Render the About PSF page."""
+        return Template(
+            template_name="psf/about.html.jinja2",
+            context={
+                "page_title": "About | Python Software Foundation",
+            },
+        )
+
+    @get("/conduct/")
+    async def psf_conduct(self) -> Template:
+        """Render the Code of Conduct page."""
+        return Template(
+            template_name="psf/conduct.html.jinja2",
+            context={
+                "page_title": "Code of Conduct | Python Software Foundation",
+            },
+        )
+
+    @get("/get-involved/")
+    async def psf_get_involved(self) -> Template:
+        """Render the Get Involved page."""
+        return Template(
+            template_name="psf/get-involved.html.jinja2",
+            context={
+                "page_title": "Get Involved | Python Software Foundation",
+            },
+        )
