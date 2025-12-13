@@ -305,6 +305,32 @@ class CommunityPageController(Controller):
             },
         )
 
+    @get("/posts/")
+    async def posts_list(
+        self,
+        post_service: PostService,
+        limit: Annotated[int, Parameter(ge=1, le=100, description="Page size")] = 20,
+        offset: Annotated[int, Parameter(ge=0, description="Offset")] = 0,
+    ) -> Template:
+        """Render the community posts listing page."""
+        posts = await post_service.get_published_posts(limit=limit, offset=offset)
+        total = await post_service.count_published_posts()
+        featured_posts = [p for p in posts if getattr(p, "is_featured", False)]
+
+        return Template(
+            template_name="community/posts.html.jinja2",
+            context={
+                "posts": posts,
+                "featured_posts": featured_posts,
+                "page_title": "Community Updates | Python Community",
+                "pagination": {
+                    "total": total,
+                    "limit": limit,
+                    "offset": offset,
+                },
+            },
+        )
+
     @get("/posts/{slug:str}/")
     async def post_detail(
         self,

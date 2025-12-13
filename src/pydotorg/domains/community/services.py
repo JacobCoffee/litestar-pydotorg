@@ -54,6 +54,14 @@ class PostService(SQLAlchemyAsyncRepositoryService[Post]):
         """
         return await self.repository.get_by_creator_id(creator_id, limit=limit)
 
+    async def count_published_posts(self) -> int:
+        """Count total published posts.
+
+        Returns:
+            Total count of published posts.
+        """
+        return await self.repository.count_published_posts()
+
 
 class PhotoService(SQLAlchemyAsyncRepositoryService[Photo]):
     """Service for Photo business logic."""
