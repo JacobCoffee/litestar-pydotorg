@@ -117,41 +117,41 @@ quote-style = "double"
 
 [tool.ruff.lint]
 select = [
-    "A",     # flake8-builtins
-    "B",     # flake8-bugbear
-    "BLE",   # flake8-blind-except
-    "C4",    # flake8-comprehensions
-    "DTZ",   # flake8-datetimez
-    "E",     # pycodestyle errors
-    "ERA",   # eradicate
-    "F",     # pyflakes
-    "FA",    # flake8-future-annotations
-    "FBT",   # flake8-boolean-trap
-    "FLY",   # flynt
-    "FURB",  # refurb
-    "I",     # isort
-    "ICN",   # flake8-import-conventions
-    "ISC",   # flake8-implicit-str-concat
-    "LOG",   # flake8-logging
-    "N",     # pep8-naming
-    "PERF",  # perflint
-    "PIE",   # flake8-pie
-    "PL",    # pylint
-    "PTH",   # flake8-use-pathlib
-    "Q",     # flake8-quotes
-    "RET",   # flake8-return
-    "RSE",   # flake8-raise
-    "RUF",   # ruff-specific
-    "S",     # flake8-bandit
-    "SIM",   # flake8-simplify
-    "SLOT",  # flake8-slots
-    "T10",   # flake8-debugger
-    "T20",   # flake8-print
-    "TCH",   # flake8-type-checking
-    "TID",   # flake8-tidy-imports
-    "TRY",   # tryceratops
-    "UP",    # pyupgrade
-    "W",     # pycodestyle warnings
+    "A",    # flake8-builtins
+    "B",    # flake8-bugbear
+    "BLE",  # flake8-blind-except
+    "C4",   # flake8-comprehensions
+    "DTZ",  # flake8-datetimez
+    "E",    # pycodestyle errors
+    "ERA",  # eradicate
+    "F",    # pyflakes
+    "FA",   # flake8-future-annotations
+    "FBT",  # flake8-boolean-trap
+    "FLY",  # flynt
+    "FURB", # refurb
+    "I",    # isort
+    "ICN",  # flake8-import-conventions
+    "ISC",  # flake8-implicit-str-concat
+    "LOG",  # flake8-logging
+    "N",    # pep8-naming
+    "PERF", # perflint
+    "PIE",  # flake8-pie
+    "PL",   # pylint
+    "PTH",  # flake8-use-pathlib
+    "Q",    # flake8-quotes
+    "RET",  # flake8-return
+    "RSE",  # flake8-raise
+    "RUF",  # ruff-specific
+    "S",    # flake8-bandit
+    "SIM",  # flake8-simplify
+    "SLOT", # flake8-slots
+    "T10",  # flake8-debugger
+    "T20",  # flake8-print
+    "TCH",  # flake8-type-checking
+    "TID",  # flake8-tidy-imports
+    "TRY",  # tryceratops
+    "UP",   # pyupgrade
+    "W",    # pycodestyle warnings
 ]
 ignore = [
     "A003",    # class attribute shadowing builtin
@@ -221,9 +221,12 @@ addopts = [
     "--strict-markers",
     "--strict-config",
     "--tb=short",
-    "-p", "no:pastebin",
-    "-p", "no:nose",
-    "-p", "no:doctest",
+    "-p",
+    "no:pastebin",
+    "-p",
+    "no:nose",
+    "-p",
+    "no:doctest",
     "-ra",
 ]
 asyncio_mode = "auto"
@@ -263,10 +266,7 @@ branch = true
 concurrency = ["multiprocessing", "thread"]
 parallel = true
 source = ["src/pydotorg"]
-omit = [
-    "*/migrations/*",
-    "*/__init__.py",
-]
+omit = ["*/migrations/*", "*/__init__.py"]
 
 [tool.coverage.report]
 exclude_lines = [
@@ -310,11 +310,7 @@ invalid-return-type = "ignore"
 parameter-already-assigned = "ignore"
 
 [tool.ty.src]
-exclude = [
-    "docs/conf.py",
-    "tests/",
-    "src/pydotorg/db/seed.py",
-]
+exclude = ["docs/conf.py", "tests/", "src/pydotorg/db/seed.py"]
 
 [tool.codespell]
 skip = "uv.lock,bun.lock,*.svg,docs/_build/*,**/static/**"
