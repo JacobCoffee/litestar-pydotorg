@@ -678,3 +678,23 @@ class DownloadsPageController(Controller):
                 "os": macos_os,
             },
         )
+
+    @get("/alternatives/")
+    async def alternatives_downloads(self) -> Template:
+        """Render the alternative Python implementations page."""
+        return Template(
+            template_name="downloads/alternatives.html.jinja2",
+            context={
+                "page_title": "Alternative Python Implementations",
+            },
+        )
+
+    @get("/other/")
+    async def other_downloads(self) -> Template:
+        """Render the other download resources page."""
+        return Template(
+            template_name="downloads/other.html.jinja2",
+            context={
+                "page_title": "Other Download Resources",
+            },
+        )
