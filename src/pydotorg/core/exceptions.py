@@ -99,12 +99,15 @@ def _create_toast_response(
     )
 
 
+CACHE_404_MAX_AGE = 300
+
+
 def not_found_exception_handler(request: Request, exc: NotFoundException) -> Response | Template:
     """Handle 404 Not Found exceptions site-wide.
 
     For API requests: Returns JSON error response.
     For HTMX requests: Returns empty response with HX-Trigger for toast notification.
-    For regular requests: Renders the 404 error template.
+    For regular requests: Renders the 404 error template with 5-minute cache.
 
     Args:
         request: The incoming request
@@ -138,6 +141,7 @@ def not_found_exception_handler(request: Request, exc: NotFoundException) -> Res
             "path": path,
         },
         status_code=HTTP_404_NOT_FOUND,
+        headers={"Cache-Control": f"max-age={CACHE_404_MAX_AGE}"},
     )
 
 

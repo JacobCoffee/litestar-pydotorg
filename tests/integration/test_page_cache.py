@@ -139,7 +139,12 @@ class TestCacheModuleExports:
             CACHE_TTL_DEFAULT,
             CACHE_TTL_PAGES,
             CACHE_TTL_STATIC,
+            GLOBAL_SURROGATE_KEY,
+            AdminNoCacheMiddleware,
+            CacheControlMiddleware,
             PageCacheService,
+            SurrogateKeyMiddleware,
+            create_cache_middleware_stack,
             create_response_cache_config,
             page_cache_key_builder,
         )
@@ -147,6 +152,21 @@ class TestCacheModuleExports:
         assert CACHE_TTL_DEFAULT == 60
         assert CACHE_TTL_PAGES == 300
         assert CACHE_TTL_STATIC == 3600
+        assert GLOBAL_SURROGATE_KEY == "pydotorg-app"
         assert callable(create_response_cache_config)
         assert callable(page_cache_key_builder)
+        assert callable(create_cache_middleware_stack)
         assert PageCacheService is not None
+        assert AdminNoCacheMiddleware is not None
+        assert CacheControlMiddleware is not None
+        assert SurrogateKeyMiddleware is not None
+
+
+class Test404CacheControl:
+    """Tests for 404 page caching."""
+
+    def test_404_cache_max_age_constant(self) -> None:
+        """Verify 404 cache max age is 300 seconds (5 minutes)."""
+        from pydotorg.core.exceptions import CACHE_404_MAX_AGE
+
+        assert CACHE_404_MAX_AGE == 300
