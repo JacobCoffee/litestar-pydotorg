@@ -869,6 +869,7 @@ dependencies = [
     { name = "litestar", extra = ["jinja", "standard", "structlog"] },
     { name = "litestar-saq" },
     { name = "litestar-vite" },
+    { name = "litestar-workflows", extra = ["db"] },
     { name = "lxml" },
     { name = "meilisearch-python-sdk" },
     { name = "passlib", extra = ["bcrypt"] },
@@ -968,6 +969,7 @@ requires-dist = [
     { name = "litestar", extras = ["standard", "jinja", "structlog"], specifier = ">=2.14.0" },
     { name = "litestar-saq", specifier = ">=0.5.3" },
     { name = "litestar-vite", specifier = ">=0.14.0" },
+    { name = "litestar-workflows", extras = ["db"], specifier = ">=0.3.1" },
     { name = "lxml", specifier = ">=5.3.0" },
     { name = "meilisearch-python-sdk", specifier = ">=5.5.0" },
     { name = "passlib", extras = ["bcrypt"], specifier = ">=1.7.4" },
@@ -1072,6 +1074,25 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/dc/64/20ab075abf8888f0369d22cfb119b9d1b67d4fb2b029d584d57a9a6cec88/litestar_vite-0.14.0.tar.gz", hash = "sha256:6da449fb346a9200b912454d94ac76e691f19b2a2d56b4c8a8e80845775d2a40", size = 73906, upload-time = "2025-08-21T22:51:31.708Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/4b/61/0a7e1e51cd98f44fbd7c940b384e47f911c99c52140a750a40900b5e4217/litestar_vite-0.14.0-py3-none-any.whl", hash = "sha256:d6e3e4f0dff5c96a61345c72669041fefd8d0db26ab25041034a19185431c562", size = 35781, upload-time = "2025-08-21T22:51:30.041Z" },
+]
+
+[[package]]
+name = "litestar-workflows"
+version = "0.3.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "litestar" },
+    { name = "rich-click" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/ca/47/452d1512ee3f35bff7d6c8328add047517b3320c4f7106ffea122db02802/litestar_workflows-0.3.1.tar.gz", hash = "sha256:1f64ad37d45395360908ba5650ce92cf3f529e823ac2e0b074bdf4c3c21532be", size = 67260, upload-time = "2025-11-26T22:52:22.47Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/e5/ed/13a5bcc1eba4b196e084fc3d2decead2f2d719f960a66323582e67b20918/litestar_workflows-0.3.1-py3-none-any.whl", hash = "sha256:e98575ec60fb267ba0a7345cb31da2998bcce60cfb6073d055ee89a5ccc740c0", size = 94057, upload-time = "2025-11-26T22:52:21.006Z" },
+]
+
+[package.optional-dependencies]
+db = [
+    { name = "advanced-alchemy" },
+    { name = "alembic" },
 ]
 
 [[package]]
