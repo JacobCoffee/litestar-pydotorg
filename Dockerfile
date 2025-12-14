@@ -12,6 +12,7 @@ COPY tailwind.config.js ./
 COPY postcss.config.cjs ./
 COPY vite.config.ts ./
 COPY static/ ./static/
+COPY src/ ./src/
 
 RUN bun run build && bun run css
 

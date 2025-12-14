@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING
 
 from advanced_alchemy.repository import SQLAlchemyAsyncRepository
 from sqlalchemy import select
+from sqlalchemy.orm import selectinload
 
 from pydotorg.domains.sponsors.models import (
     Contract,
@@ -97,18 +98,19 @@ class SponsorRepository(SQLAlchemyAsyncRepository[Sponsor]):
             offset: Number of sponsors to skip.
 
         Returns:
-            List of sponsors with active sponsorships.
+            List of sponsors with active sponsorships, with sponsorships and levels loaded.
         """
         statement = (
             select(Sponsor)
             .join(Sponsorship, Sponsor.id == Sponsorship.sponsor_id)
             .where(Sponsorship.status == SponsorshipStatus.FINALIZED)
+            .options(selectinload(Sponsor.sponsorships).selectinload(Sponsorship.level))
             .distinct()
             .limit(limit)
             .offset(offset)
         )
         result = await self.session.execute(statement)
-        return list(result.scalars().all())
+        return list(result.scalars().unique().all())
 
     async def exists_by_slug(self, slug: str) -> bool:
         """Check if a sponsor exists by slug.

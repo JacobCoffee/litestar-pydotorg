@@ -115,6 +115,7 @@
                     hx-post="/admin/jobs/{{ job.id }}/toggle-featured"
                     hx-target="#job-{{ job.id }}"
                     hx-swap="outerHTML"
+                    hx-headers='js:{"x-csrftoken": document.cookie.match(/csrftoken=([^;]+)/)?.[1] || ""}'
                     title="{% if job.is_featured %}Remove from featured{% else %}Mark as featured{% endif %}"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" {% if job.is_featured %}viewBox="0 0 20 20" fill="currentColor"{% else %}fill="none" viewBox="0 0 24 24" stroke="currentColor"{% endif %}>
@@ -133,6 +134,7 @@
                     hx-post="/admin/jobs/{{ job.id }}/approve"
                     hx-target="#job-{{ job.id }}"
                     hx-swap="outerHTML"
+                    hx-headers='js:{"x-csrftoken": document.cookie.match(/csrftoken=([^;]+)/)?.[1] || ""}'
                     hx-confirm="Approve this job posting?"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -146,6 +148,7 @@
                     hx-post="/admin/jobs/{{ job.id }}/reject"
                     hx-target="#job-{{ job.id }}"
                     hx-swap="outerHTML"
+                    hx-headers='js:{"x-csrftoken": document.cookie.match(/csrftoken=([^;]+)/)?.[1] || ""}'
                     hx-confirm="Reject this job posting?"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -159,6 +162,7 @@
                     hx-post="/admin/jobs/{{ job.id }}/reject"
                     hx-target="#job-{{ job.id }}"
                     hx-swap="outerHTML"
+                    hx-headers='js:{"x-csrftoken": document.cookie.match(/csrftoken=([^;]+)/)?.[1] || ""}'
                     hx-confirm="Revoke approval for this job?"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -172,6 +176,7 @@
                     hx-post="/admin/jobs/{{ job.id }}/approve"
                     hx-target="#job-{{ job.id }}"
                     hx-swap="outerHTML"
+                    hx-headers='js:{"x-csrftoken": document.cookie.match(/csrftoken=([^;]+)/)?.[1] || ""}'
                     hx-confirm="Re-approve this job posting?"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -186,6 +191,7 @@
                     hx-delete="/admin/jobs/{{ job.id }}"
                     hx-target="#job-{{ job.id }}"
                     hx-swap="outerHTML swap:1s"
+                    hx-headers='js:{"x-csrftoken": document.cookie.match(/csrftoken=([^;]+)/)?.[1] || ""}'
                     hx-confirm="Permanently delete this job posting?"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -84,6 +84,18 @@ class Sponsor(AuditBase, ContentManageableMixin, NameSlugMixin):
         ]
         return ", ".join(p for p in parts if p)
 
+    @property
+    def tier(self) -> str:
+        """Get the tier name from the sponsor's active sponsorship.
+
+        Returns the level slug from the first finalized sponsorship,
+        or 'community' as a default if no active sponsorship exists.
+        """
+        for sponsorship in self.sponsorships:
+            if sponsorship.status == SponsorshipStatus.FINALIZED and sponsorship.level:
+                return sponsorship.level.slug
+        return "community"
+
 
 class Sponsorship(AuditBase, ContentManageableMixin):
     __tablename__ = "sponsorships"

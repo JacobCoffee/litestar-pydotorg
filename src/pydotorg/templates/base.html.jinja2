@@ -158,9 +158,13 @@
                 lucide.createIcons();
             }
         });
-        document.body.addEventListener('htmx:afterSwap', function() {
+        document.body.addEventListener('htmx:afterSwap', function(evt) {
             if (window.lucide) {
                 lucide.createIcons();
+            }
+            // Reinitialize Alpine.js components in swapped content
+            if (window.Alpine && evt.detail.target) {
+                Alpine.initTree(evt.detail.target);
             }
         });
     </script>

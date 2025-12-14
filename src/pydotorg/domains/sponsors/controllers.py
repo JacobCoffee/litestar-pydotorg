@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import datetime
+import re
 from typing import Annotated
 from uuid import UUID
 
@@ -13,6 +15,7 @@ from litestar.response import Template
 
 from pydotorg.domains.sponsors.models import SponsorshipStatus
 from pydotorg.domains.sponsors.schemas import (
+    SponsorApplicationCreate,
     SponsorCreate,
     SponsorPublic,
     SponsorRead,
@@ -384,21 +387,64 @@ class SponsorController(Controller):
     @post("/apply")
     async def apply_for_sponsorship(
         self,
-        data: dict,
+        sponsor_service: SponsorService,
+        sponsorship_service: SponsorshipService,
+        sponsorship_level_service: SponsorshipLevelService,
+        data: Annotated[
+            SponsorApplicationCreate, Body(title="Sponsor Application", description="Sponsorship application data")
+        ],
     ) -> dict:
         """Submit a sponsorship application.
 
-        Accepts application details from potential sponsors and queues for review.
+        Creates a new sponsor record and sponsorship application with APPLIED status.
 
         Args:
+            sponsor_service: Service for sponsor database operations.
+            sponsorship_service: Service for sponsorship database operations.
+            sponsorship_level_service: Service for sponsorship level database operations.
             data: Application form data including company info and contact details.
 
         Returns:
-            Success confirmation message.
+            Success confirmation message with sponsor ID.
         """
+        slug = re.sub(r"[^a-z0-9]+", "-", data.company_name.lower()).strip("-")
+
+        sponsor_data = SponsorCreate(
+            name=data.company_name,
+            slug=slug,
+            description=data.description,
+            landing_page_url=data.website,
+            twitter_handle=data.twitter_handle,
+            linked_in_page_url=data.linkedin_url,
+            primary_phone=data.contact_phone,
+            mailing_address_line_1=data.mailing_address,
+            city=data.city,
+            state=data.state,
+            postal_code=data.postal_code,
+            country=data.country,
+        )
+        sponsor = await sponsor_service.create(sponsor_data.model_dump(exclude_unset=True))
+
+        level = await sponsorship_level_service.get_by_slug(data.sponsorship_level)
+        if not level:
+            levels = await sponsorship_level_service.list_ordered(limit=1)
+            level = levels[0] if levels else None
+
+        if level:
+            today = datetime.datetime.now(tz=datetime.UTC).date()
+            sponsorship_data = SponsorshipCreate(
+                sponsor_id=sponsor.id,
+                level_id=level.id,
+                status=SponsorshipStatus.APPLIED,
+                applied_on=today,
+                year=today.year,
+            )
+            await sponsorship_service.create(sponsorship_data.model_dump(exclude_unset=True))
+
         return {
             "message": "Thank you for your interest in sponsoring Python! Your application has been received and will be reviewed by our team within 5-7 business days.",
             "status": "success",
+            "sponsor_id": str(sponsor.id),
         }
 
 

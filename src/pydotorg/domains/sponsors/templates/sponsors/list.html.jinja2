@@ -24,12 +24,14 @@
     <div class="section-container">
         {% if sponsors %}
             {% set sponsors_by_tier = sponsors | groupby('tier') %}
-            {% set tier_order = ['platinum', 'gold', 'silver', 'bronze', 'community'] %}
+            {% set tier_order = ['visionary', 'sustainability', 'maintaining', 'contributing', 'supporting', 'partner', 'community'] %}
             {% set tier_names = {
-                'platinum': 'Platinum Sponsors',
-                'gold': 'Gold Sponsors',
-                'silver': 'Silver Sponsors',
-                'bronze': 'Bronze Sponsors',
+                'visionary': 'Visionary Sponsors',
+                'sustainability': 'Sustainability Sponsors',
+                'maintaining': 'Maintaining Sponsors',
+                'contributing': 'Contributing Sponsors',
+                'supporting': 'Supporting Sponsors',
+                'partner': 'Partner Sponsors',
                 'community': 'Community Sponsors'
             } %}
 
@@ -42,10 +44,10 @@
                             {{ tier_names.get(tier, tier | title + ' Sponsors') }}
                         </h2>
 
-                        <div class="grid grid-cols-2 {% if tier == 'platinum' %}md:grid-cols-2 lg:grid-cols-3{% elif tier == 'gold' %}md:grid-cols-3 lg:grid-cols-4{% else %}md:grid-cols-4 lg:grid-cols-6{% endif %} gap-8 items-center justify-items-center">
+                        <div class="grid grid-cols-2 {% if tier in ['visionary', 'sustainability'] %}md:grid-cols-2 lg:grid-cols-3{% elif tier == 'maintaining' %}md:grid-cols-3 lg:grid-cols-4{% else %}md:grid-cols-4 lg:grid-cols-6{% endif %} gap-8 items-center justify-items-center">
                             {% for sponsor in sponsor_list %}
                             <a href="/sponsors/{{ sponsor.slug }}"
-                               class="flex items-center justify-center p-6 bg-base-200 rounded-lg hover:shadow-xl transition-shadow {% if tier == 'platinum' %}w-full max-w-sm{% elif tier == 'gold' %}w-48{% else %}w-32{% endif %}"
+                               class="flex items-center justify-center p-6 bg-base-200 rounded-lg hover:shadow-xl transition-shadow {% if tier in ['visionary', 'sustainability'] %}w-full max-w-sm{% elif tier == 'maintaining' %}w-48{% else %}w-32{% endif %}"
                                title="{{ sponsor.name }}">
                                 {% if sponsor.web_logo %}
                                 <img src="{{ sponsor.web_logo }}"

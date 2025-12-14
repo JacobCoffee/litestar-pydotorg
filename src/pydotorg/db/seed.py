@@ -16,7 +16,14 @@ from pydotorg.domains.banners.models import Banner
 from pydotorg.domains.blogs.models import BlogEntry, Feed, FeedAggregate, RelatedBlog
 from pydotorg.domains.codesamples.models import CodeSample
 from pydotorg.domains.community.models import Link, Photo, Post, Video
-from pydotorg.domains.downloads.models import OS, PythonVersion, Release, ReleaseFile, ReleaseStatus
+from pydotorg.domains.downloads.models import (
+    OS,
+    DownloadStatistic,
+    PythonVersion,
+    Release,
+    ReleaseFile,
+    ReleaseStatus,
+)
 from pydotorg.domains.events.models import Calendar, Event, EventCategory, EventLocation, EventOccurrence
 from pydotorg.domains.jobs.models import Job, JobCategory, JobReviewComment, JobStatus, JobType
 from pydotorg.domains.minutes.models import Minutes
@@ -31,7 +38,7 @@ if TYPE_CHECKING:
     from sqlalchemy.ext.asyncio import AsyncSession
 
 VOTING_THRESHOLD = 3
-SPONSOR_THRESHOLD = 3
+SPONSOR_THRESHOLD = 6
 FEE_THRESHOLD = 2
 MEMBERSHIP_SUPPORTING_INDEX = 2
 
@@ -1088,31 +1095,136 @@ See the [release notes]({release_notes_url}) for details."""
     return releases
 
 
-async def seed_sponsors(session: AsyncSession, users: list[User], count: int = 5) -> list[Sponsor]:
-    """Seed sponsors."""
+async def seed_download_statistics(session: AsyncSession, releases: list[Release]) -> list[DownloadStatistic]:
+    """Seed download statistics with realistic fake data."""
+    import random
+
+    statistics = []
+    today = datetime.datetime.now(tz=datetime.UTC).date()
+
+    result = await session.execute(select(ReleaseFile))
+    release_files = result.scalars().all()
+
+    for release_file in release_files:
+        release = None
+        for r in releases:
+            if r.id == release_file.release_id:
+                release = r
+                break
+
+        if release and release.release_date:
+            start_date = max(release.release_date, today - datetime.timedelta(days=90))
+        else:
+            start_date = today - datetime.timedelta(days=90)
+
+        is_latest = release and release.is_latest
+        is_recent = release and release.release_date and (today - release.release_date).days < 180
+        base_downloads = 50000 if is_latest else (10000 if is_recent else 1000)
+
+        days_to_seed = (today - start_date).days
+        for day_offset in range(days_to_seed):
+            stat_date = start_date + datetime.timedelta(days=day_offset)
+            days_since_release = (stat_date - start_date).days if release else day_offset
+
+            decay_factor = max(0.2, 1.0 - (days_since_release * 0.01))
+            daily_variation = random.uniform(0.7, 1.3)  # noqa: S311
+            weekend_boost = 0.8 if stat_date.weekday() >= 5 else 1.0
+
+            download_count = int(base_downloads * decay_factor * daily_variation * weekend_boost)
+            download_count = max(10, download_count)
+
+            stat = DownloadStatistic(
+                release_file_id=release_file.id,
+                date=stat_date,
+                download_count=download_count,
+            )
+            session.add(stat)
+            statistics.append(stat)
+
+    await session.flush()
+    return statistics
+
+
+async def seed_sponsors(session: AsyncSession, users: list[User], count: int = 6) -> list[Sponsor]:
+    """Seed sponsors based on real PSF sponsors."""
     sponsors = []
 
     sponsor_data = [
-        "Python Software Foundation",
-        "JetBrains",
-        "Microsoft",
-        "Google",
-        "Amazon Web Services",
+        {
+            "name": "Google",
+            "slug": "google",
+            "description": "Google has been a Visionary Sponsor of the Python Software Foundation, supporting Python's growth and development across the globe. Google uses Python extensively in its infrastructure and products.",
+            "landing_page_url": "https://google.com",
+            "twitter_handle": "@Google",
+            "city": "Mountain View",
+            "state": "CA",
+            "country": "USA",
+        },
+        {
+            "name": "Meta",
+            "slug": "meta",
+            "description": "Meta is a Visionary Sponsor committed to advancing Python and open source. Python powers many of Meta's infrastructure tools, data pipelines, and AI/ML systems.",
+            "landing_page_url": "https://meta.com",
+            "twitter_handle": "@Meta",
+            "city": "Menlo Park",
+            "state": "CA",
+            "country": "USA",
+        },
+        {
+            "name": "Bloomberg",
+            "slug": "bloomberg",
+            "description": "Bloomberg is a Visionary Sponsor and major contributor to the Python ecosystem. Python is integral to Bloomberg's financial data analysis and trading systems.",
+            "landing_page_url": "https://bloomberg.com",
+            "twitter_handle": "@Bloomberg",
+            "city": "New York",
+            "state": "NY",
+            "country": "USA",
+        },
+        {
+            "name": "AWS",
+            "slug": "aws",
+            "description": "Amazon Web Services is a Maintaining Sponsor of the PSF. AWS provides cloud infrastructure that powers Python applications worldwide and contributes to Python tooling.",
+            "landing_page_url": "https://aws.amazon.com",
+            "twitter_handle": "@awscloud",
+            "city": "Seattle",
+            "state": "WA",
+            "country": "USA",
+        },
+        {
+            "name": "JetBrains",
+            "slug": "jetbrains",
+            "description": "JetBrains is a Contributing Sponsor and creator of PyCharm, the popular Python IDE. JetBrains has been a long-time supporter of Python developers and the community.",
+            "landing_page_url": "https://jetbrains.com",
+            "twitter_handle": "@jetbrains",
+            "city": "Prague",
+            "state": "",
+            "country": "Czech Republic",
+        },
+        {
+            "name": "Litestar",
+            "slug": "litestar",
+            "description": "Litestar is a Participating Sponsor and the modern Python web framework powering this very site. Litestar provides high-performance, type-safe API development for Python.",
+            "landing_page_url": "https://litestar.dev",
+            "twitter_handle": "@LitestarAPI",
+            "city": "Remote",
+            "state": "",
+            "country": "Worldwide",
+        },
     ]
 
-    for _i, name in enumerate(sponsor_data[:count]):
+    for data in sponsor_data[:count]:
         sponsor = Sponsor(
-            name=name,
-            slug=name.lower().replace(" ", "-"),
-            description=f"{name} is a proud sponsor of Python.org",
-            landing_page_url=f"https://{name.lower().replace(' ', '')}.com",
-            twitter_handle=f"@{name.lower().replace(' ', '')}",
-            web_logo=f"/media/sponsors/{name.lower().replace(' ', '-')}.png",
-            primary_phone="+1-555-0100",
-            city="San Francisco",
-            state="CA",
-            postal_code="94102",
-            country="USA",
+            name=data["name"],
+            slug=data["slug"],
+            description=data["description"],
+            landing_page_url=data["landing_page_url"],
+            twitter_handle=data["twitter_handle"],
+            web_logo=f"/static/images/sponsors/{data['slug']}.png",
+            primary_phone="",
+            city=data["city"],
+            state=data["state"],
+            postal_code="",
+            country=data["country"],
             creator_id=users[0].id,
         )
         session.add(sponsor)
@@ -1576,9 +1688,10 @@ async def seed_database() -> None:
         await seed_pages(session, users, count=15)
 
         os_list = await seed_operating_systems(session, users)
-        await seed_releases(session, users, os_list, count=100)
+        releases = await seed_releases(session, users, os_list, count=100)
+        await seed_download_statistics(session, releases)
 
-        sponsors = await seed_sponsors(session, users, count=5)
+        sponsors = await seed_sponsors(session, users, count=6)
         levels = await seed_sponsorship_levels(session)
         await seed_sponsorships(session, users, sponsors, levels)
 
@@ -1633,6 +1746,7 @@ async def clear_database() -> None:
         await session.execute(Feed.__table__.delete())
         await session.execute(RelatedBlog.__table__.delete())
 
+        await session.execute(DownloadStatistic.__table__.delete())
         await session.execute(ReleaseFile.__table__.delete())
         await session.execute(Release.__table__.delete())
         await session.execute(OS.__table__.delete())
@@ -1654,5 +1768,10 @@ if __name__ == "__main__":
 
     if len(sys.argv) > 1 and sys.argv[1] == "clear":
         asyncio.run(clear_database())
+    elif len(sys.argv) > 1 and sys.argv[1] == "--force":
+        sys.stdout.write("Force re-seeding: clearing database first...\n")
+        asyncio.run(clear_database())
+        sys.stdout.write("Seeding fresh data...\n")
+        asyncio.run(seed_database())
     else:
         asyncio.run(seed_database())

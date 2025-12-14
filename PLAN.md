@@ -112,6 +112,7 @@
 ### HIGH Priority
 | Issue | Location | Description |
 |-------|----------|-------------|
+| **Sponsor application not visible in admin** | `/admin/sponsors` | Sponsor form submits successfully (201) but application doesn't appear in `/admin/sponsors/?status=applied`. Debug why Sponsorship with APPLIED status isn't being created or shown. |
 | ~~**Worker: `warm_homepage_cache` MissingGreenlet**~~ | ~~SAQ worker~~ | ✅ **FIXED**: Added `selectinload()` to `EventRepository.get_upcoming()` and `get_featured()`. |
 | ~~**SQLAlchemy MissingGreenlet in async context**~~ | ~~DB operations~~ | ✅ **FIXED**: Added eager loading to all event-related queries in repositories and search tasks. |
 | ~~**Worker: `index_event` EventLocation error**~~ | ~~`tasks/search.py`~~ | ✅ **FIXED**: Added `selectinload()` for `Event.venue`, `Event.occurrences`, `Event.categories` in `index_event()` and `index_all_events()`. |
@@ -147,6 +148,34 @@
 | **litestar-workflows integration** | MEDIUM | Workflow engine for sponsor/job/event approvals (see below) |
 | **Job auto-submit on creation** | LOW | Add `submit_immediately` flag to `create_job()` |
 | **Calendar detail pagination UI/UX** | LOW | Enhance with page dropdown, "Go to page" input |
+| **Resettable demo instance** | LOW | Public POC instance that resets periodically (see below) |
+
+### Resettable Demo Instance
+
+**Goal**: Allow people to browse the full POC including admin areas without risk of permanent damage.
+
+**Requirements**:
+- Public demo at separate subdomain (e.g., `demo.pydotorg.scriptr.dev`)
+- Full access including admin panel (read-only or with demo credentials)
+- Periodic reset to clean state (hourly/daily via cron)
+- Banner indicating demo mode and reset schedule
+
+**Implementation Options**:
+
+| Option | Pros | Cons |
+|--------|------|------|
+| **Railway cron job** | Simple, uses existing infra | Railway charges per execution |
+| **SAQ scheduled task** | Already have SAQ, zero cost | Runs in same instance, complex DB reset |
+| **Separate Railway service** | Isolated, easy reset via redeploy | Extra cost, duplicate infra |
+| **Docker Compose demo profile** | Local-only, full control | Not publicly accessible |
+
+**Tasks to Investigate**:
+- [ ] Research Railway scheduled deploys / cron for DB reset
+- [ ] Evaluate read-only admin mode vs demo credentials
+- [ ] Design DB reset script (truncate + reseed)
+- [ ] Consider snapshot/restore vs full reseed approach
+- [ ] Add demo mode banner to base template
+- [ ] Document demo instance setup for contributors
 
 ### Sponsor Admin UI Gaps
 
@@ -186,12 +215,19 @@ Backend services complete, admin UI not wired up:
 
 - [x] Research litestar-workflows API and patterns ✅
 - [x] Evaluate fit for existing domain workflows ✅ Excellent fit - matches our existing state machine patterns
-- [ ] Add `litestar-workflows[db]` to dependencies
+- [ ] Add `litestar-workflows[db,ui]` to dependencies
 - [ ] Create `src/pydotorg/core/workflows/` module
 - [ ] Implement `SponsorContractWorkflow` first (most complex, best test case)
 - [ ] Add workflow UI templates for human tasks
 - [ ] Wire email notifications to workflow transitions
 - [ ] Migrate jobs/events to workflow engine
+
+#### Workflow UI Tasks
+
+- [ ] **Enable litestar-workflows UI plugin** - Mount at `/admin/workflows/` behind admin auth guards
+- [ ] **Sponsor stages visualization** - Render workflow step/stage UI showing current state (APPLIED→APPROVED→FINALIZED)
+- [ ] **Admin workflow dashboard** - Central view showing all pending human tasks across workflows (sponsor reviews, contract signatures, job approvals)
+- [ ] **Workflow history/audit log** - Show state transition history for each sponsorship/contract
 
 #### Example: Sponsor Contract Workflow
 
@@ -280,4 +316,4 @@ make ci                      # Full CI pipeline
 
 ---
 
-*Last updated: 2025-12-14*
+*Last updated: 2025-12-14 - Added resettable demo instance investigation*

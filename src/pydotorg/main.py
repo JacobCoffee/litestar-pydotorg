@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import os
 from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -166,6 +167,7 @@ from pydotorg.domains.sponsors import (
     SponsorRenderController,
     SponsorshipController,
     SponsorshipLevelController,
+    get_sponsors_dependencies,
 )
 from pydotorg.domains.sqladmin import create_sqladmin_plugin
 from pydotorg.domains.successstories import (
@@ -259,6 +261,7 @@ def get_all_dependencies() -> dict:
     deps.update(get_work_groups_dependencies())
     deps.update(get_search_dependencies())
     deps.update(get_mailing_dependencies())
+    deps.update(get_sponsors_dependencies())
     deps.update(get_admin_dependencies())
     return deps
 
@@ -344,13 +347,14 @@ def get_template_directories() -> list[Path]:
     return directories
 
 
+is_local_dev = settings.is_debug and not os.getenv("RAILWAY_ENVIRONMENT")
 vite_plugin = VitePlugin(
     config=ViteConfig(
         bundle_dir=static_dir,
         resource_dir=resources_dir,
         public_dir=static_dir,
-        dev_mode=settings.is_debug,
-        hot_reload=settings.is_debug,
+        dev_mode=is_local_dev,
+        hot_reload=is_local_dev,
         port=5173,
         host="localhost",
         set_static_folders=False,
