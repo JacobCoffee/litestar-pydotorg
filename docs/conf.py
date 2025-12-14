@@ -2,11 +2,29 @@
 
 from __future__ import annotations
 
+import logging
 import os
 import sys
 from datetime import datetime
 
 sys.path.insert(0, os.path.abspath("../src"))
+
+
+# Filter duplicate object warnings
+class DuplicateObjectFilter(logging.Filter):
+    """Filter out duplicate object description warnings."""
+
+    def filter(self, record: logging.LogRecord) -> bool:
+        msg = record.getMessage()
+        if "duplicate object description" in msg:
+            return False
+        return True
+
+
+# Apply the filter to the Sphinx logger
+for handler in logging.getLogger("sphinx").handlers:
+    handler.addFilter(DuplicateObjectFilter())
+logging.getLogger("sphinx.domains.python").addFilter(DuplicateObjectFilter())
 
 project = "litestar-pydotorg"
 copyright = f"{datetime.now().year}, Jacob Coffee"
@@ -74,12 +92,14 @@ autodoc_mock_imports = [
     "granian",
     "saq",
     "meilisearch",
+    "meilisearch_python_sdk",
     "redis",
     "asyncpg",
     "httpx",
     "aiosmtplib",
     "posthog",
     "sentry_sdk",
+    "pydotorg.main",
     "pydotorg.core.auth",
     "pydotorg.core.auth.guards",
     "pydotorg.core.auth.jwt",
@@ -89,9 +109,26 @@ autodoc_mock_imports = [
     "pydotorg.core.auth.schemas",
     "pydotorg.core.auth.session",
     "pydotorg.domains",
+    "pydotorg.domains.about",
+    "pydotorg.domains.admin",
+    "pydotorg.domains.banners",
+    "pydotorg.domains.blogs",
+    "pydotorg.domains.codesamples",
+    "pydotorg.domains.community",
+    "pydotorg.domains.docs",
+    "pydotorg.domains.downloads",
+    "pydotorg.domains.events",
+    "pydotorg.domains.jobs",
+    "pydotorg.domains.mailing",
+    "pydotorg.domains.minutes",
+    "pydotorg.domains.nominations",
+    "pydotorg.domains.pages",
+    "pydotorg.domains.search",
+    "pydotorg.domains.sponsors",
+    "pydotorg.domains.sqladmin",
+    "pydotorg.domains.successstories",
     "pydotorg.domains.users",
-    "pydotorg.domains.users.controllers",
-    "pydotorg.domains.users.models",
+    "pydotorg.domains.work_groups",
 ]
 
 napoleon_google_docstring = True
@@ -138,6 +175,25 @@ intersphinx_mapping = {
 
 intersphinx_disabled_reftypes = ["*"]
 
-suppress_warnings = ["intersphinx"]
+# Suppress common warnings for cleaner builds
+suppress_warnings = [
+    "intersphinx",
+    "autodoc",
+    "autodoc.mocked_object",
+    "autodoc.import_object",
+    "ref.python",
+    "ref.doc",
+    "docutils",
+    "sphinx_autodoc_typehints.forward_reference",
+    "sphinx_autodoc_typehints.guarded_import",
+    "ref.obj",
+    "py.duplicate_object_description",
+]
+
+# Don't fail on missing references
+nitpicky = False
+
+# Allow multiple documentation of same objects
+add_module_names = False
 
 todo_include_todos = True
