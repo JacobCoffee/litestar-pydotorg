@@ -10,32 +10,6 @@ This document provides comprehensive documentation for all domain models in the 
 
 ---
 
-## Table of Contents
-
-1. [Domain-Driven Design Approach](#domain-driven-design-approach)
-2. [Core Infrastructure](#core-infrastructure)
-3. [Domain Catalog](#domain-catalog)
-   - [Users](#users-domain)
-   - [Pages](#pages-domain)
-   - [Downloads](#downloads-domain)
-   - [Blogs](#blogs-domain)
-   - [Jobs](#jobs-domain)
-   - [Events](#events-domain)
-   - [Sponsors](#sponsors-domain)
-   - [Community](#community-domain)
-   - [Success Stories](#success-stories-domain)
-   - [Nominations](#nominations-domain)
-   - [Code Samples](#code-samples-domain)
-   - [Minutes](#minutes-domain)
-   - [Banners](#banners-domain)
-   - [Mailing](#mailing-domain)
-   - [Work Groups](#work-groups-domain)
-4. [Entity Relationships](#entity-relationships)
-5. [Cross-Domain Dependencies](#cross-domain-dependencies)
-6. [Database Tables Summary](#database-tables-summary)
-
----
-
 ## Domain-Driven Design Approach
 
 ### Architecture Philosophy
