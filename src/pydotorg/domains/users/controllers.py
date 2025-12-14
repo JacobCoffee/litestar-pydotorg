@@ -6,12 +6,18 @@ from typing import Annotated
 from uuid import UUID
 
 from advanced_alchemy.filters import LimitOffset
-from litestar import Controller, delete, get, patch, post, put
+from litestar import Controller, Request, delete, get, patch, post, put
+from litestar.exceptions import NotFoundException
 from litestar.openapi import ResponseSpec
 from litestar.params import Body, Parameter
 
+from pydotorg.core.auth.guards import require_authenticated
 from pydotorg.domains.users import urls
+from pydotorg.domains.users.models import User
 from pydotorg.domains.users.schemas import (
+    APIKeyCreate,
+    APIKeyCreated,
+    APIKeyRead,
     MembershipCreate,
     MembershipRead,
     MembershipUpdate,
@@ -23,7 +29,7 @@ from pydotorg.domains.users.schemas import (
     UserRead,
     UserUpdate,
 )
-from pydotorg.domains.users.services import MembershipService, UserGroupService, UserService
+from pydotorg.domains.users.services import APIKeyService, MembershipService, UserGroupService, UserService
 
 
 class UserController(Controller):
@@ -755,3 +761,199 @@ class UserGroupController(Controller):
             NotFoundException: If no user group with the given ID exists.
         """
         await user_group_service.delete(group_id)
+
+
+class APIKeyController(Controller):
+    """Controller for API key management.
+
+    API keys allow programmatic access to the API. Users can create multiple keys
+    with optional expiration dates. Keys are shown only once at creation time.
+    """
+
+    path = urls.API_KEYS
+    tags = ["API Keys"]
+    guards = [require_authenticated]
+
+    @get("/")
+    async def list_api_keys(
+        self,
+        request: Request[User, str, dict],
+        api_key_service: APIKeyService,
+    ) -> list[APIKeyRead]:
+        """List all API keys for the authenticated user.
+
+        Returns all API keys (both active and revoked) for the current user.
+        The actual key values are not returned; only metadata is shown.
+
+        Args:
+            request: The HTTP request with authenticated user.
+            api_key_service: Service for API key operations.
+
+        Returns:
+            List of API keys with metadata.
+        """
+        keys = await api_key_service.list_by_user(request.user.id)
+        return [APIKeyRead.model_validate(k) for k in keys]
+
+    @get("/active")
+    async def list_active_api_keys(
+        self,
+        request: Request[User, str, dict],
+        api_key_service: APIKeyService,
+    ) -> list[APIKeyRead]:
+        """List only active API keys for the authenticated user.
+
+        Returns API keys that are currently active and not expired.
+
+        Args:
+            request: The HTTP request with authenticated user.
+            api_key_service: Service for API key operations.
+
+        Returns:
+            List of active API keys with metadata.
+        """
+        keys = await api_key_service.list_active_by_user(request.user.id)
+        return [APIKeyRead.model_validate(k) for k in keys]
+
+    @get(
+        "/{key_id:uuid}",
+        responses={
+            404: ResponseSpec(None, description="API key not found"),
+        },
+    )
+    async def get_api_key(
+        self,
+        request: Request[User, str, dict],
+        api_key_service: APIKeyService,
+        key_id: Annotated[UUID, Parameter(title="Key ID", description="The API key ID")],
+    ) -> APIKeyRead:
+        """Get a specific API key by ID.
+
+        Returns metadata for the specified API key. The actual key value
+        is not returned.
+
+        Args:
+            request: The HTTP request with authenticated user.
+            api_key_service: Service for API key operations.
+            key_id: The unique identifier of the API key.
+
+        Returns:
+            API key metadata.
+
+        Raises:
+            NotFoundException: If the key doesn't exist or belongs to another user.
+        """
+        key = await api_key_service.get(key_id)
+        if key.user_id != request.user.id:
+            raise NotFoundException("API key not found")
+        return APIKeyRead.model_validate(key)
+
+    @post("/")
+    async def create_api_key(
+        self,
+        request: Request[User, str, dict],
+        api_key_service: APIKeyService,
+        data: Annotated[APIKeyCreate, Body(title="API Key", description="API key to create")],
+    ) -> APIKeyCreated:
+        """Create a new API key.
+
+        Generates a new API key for the authenticated user. The full key value
+        is returned ONLY in this response and cannot be retrieved later.
+        Store it securely!
+
+        Args:
+            request: The HTTP request with authenticated user.
+            api_key_service: Service for API key operations.
+            data: API key creation payload with name and optional expiration.
+
+        Returns:
+            The created API key including the raw key value.
+        """
+        key, raw_key = await api_key_service.create_key(request.user.id, data)
+        result = APIKeyCreated.model_validate(key)
+        result.key = raw_key
+        return result
+
+    @patch(
+        "/{key_id:uuid}/revoke",
+        responses={
+            404: ResponseSpec(None, description="API key not found"),
+        },
+    )
+    async def revoke_api_key(
+        self,
+        request: Request[User, str, dict],
+        api_key_service: APIKeyService,
+        key_id: Annotated[UUID, Parameter(title="Key ID", description="The API key ID")],
+    ) -> APIKeyRead:
+        """Revoke an API key.
+
+        Deactivates the specified API key. The key cannot be reactivated;
+        create a new key if needed.
+
+        Args:
+            request: The HTTP request with authenticated user.
+            api_key_service: Service for API key operations.
+            key_id: The unique identifier of the API key to revoke.
+
+        Returns:
+            The revoked API key metadata.
+
+        Raises:
+            NotFoundException: If the key doesn't exist or belongs to another user.
+        """
+        key = await api_key_service.get(key_id)
+        if key.user_id != request.user.id:
+            raise NotFoundException("API key not found")
+        revoked = await api_key_service.revoke(key_id)
+        return APIKeyRead.model_validate(revoked)
+
+    @delete(
+        "/{key_id:uuid}",
+        responses={
+            404: ResponseSpec(None, description="API key not found"),
+        },
+    )
+    async def delete_api_key(
+        self,
+        request: Request[User, str, dict],
+        api_key_service: APIKeyService,
+        key_id: Annotated[UUID, Parameter(title="Key ID", description="The API key ID")],
+    ) -> None:
+        """Delete an API key.
+
+        Permanently removes an API key from the system. This action is irreversible.
+
+        Args:
+            request: The HTTP request with authenticated user.
+            api_key_service: Service for API key operations.
+            key_id: The unique identifier of the API key to delete.
+
+        Raises:
+            NotFoundException: If the key doesn't exist or belongs to another user.
+        """
+        key = await api_key_service.get(key_id)
+        if key.user_id != request.user.id:
+            raise NotFoundException("API key not found")
+        await api_key_service.delete(key_id)
+
+    @post("/revoke-all", status_code=200)
+    async def revoke_all_api_keys(
+        self,
+        request: Request[User, str, dict],
+        api_key_service: APIKeyService,
+    ) -> dict[str, int]:
+        """Revoke all API keys for the authenticated user.
+
+        Deactivates all active API keys. This is useful when keys may have
+        been compromised.
+
+        Args:
+            request: The HTTP request with authenticated user.
+            api_key_service: Service for API key operations.
+
+        Returns:
+            Dictionary with count of revoked keys.
+        """
+        count = await api_key_service.revoke_all_for_user(request.user.id)
+        return {"revoked": count}

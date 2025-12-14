@@ -174,6 +174,7 @@ from pydotorg.domains.successstories import (
 )
 from pydotorg.domains.successstories.services import StoryService  # noqa: TC001
 from pydotorg.domains.users import (
+    APIKeyController,
     MembershipController,
     UserController,
     UserGroupController,
@@ -570,6 +571,7 @@ app = Litestar(
         UserController,
         MembershipController,
         UserGroupController,
+        APIKeyController,
         AuthController,
         AuthPageController,
         PageController,
