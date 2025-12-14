@@ -62,7 +62,6 @@ class EmailNotificationStep(BaseMachineStep):
             context: Workflow context with instance data.
         """
         # Import here to avoid circular imports
-        from pydotorg.domains.mailing.services import MailingService
 
         if not self.template_name:
             return

@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 from litestar_workflows import (
     LocalExecutionEngine,
     WorkflowPlugin,
@@ -11,9 +9,6 @@ from litestar_workflows import (
 )
 
 from pydotorg.core.workflows.registry import workflow_registry
-
-if TYPE_CHECKING:
-    pass
 
 
 def get_workflow_plugin() -> WorkflowPlugin:
@@ -30,6 +25,7 @@ def get_workflow_plugin() -> WorkflowPlugin:
     """
     # Import guard here to avoid circular import
     from pydotorg.core.auth.guards import require_staff  # noqa: PLC0415
+
     engine = LocalExecutionEngine(registry=workflow_registry)
 
     config = WorkflowPluginConfig(

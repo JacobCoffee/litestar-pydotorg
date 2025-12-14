@@ -55,11 +55,11 @@ from pydotorg.core.exceptions import get_exception_handlers
 from pydotorg.core.features import FeatureFlags
 from pydotorg.core.logging import configure_structlog
 from pydotorg.core.openapi import AdminOpenAPIController, get_openapi_plugins
-from pydotorg.core.workflows import get_workflow_plugin
-from pydotorg.core.workflows.registry import register_all_workflows
 from pydotorg.core.ratelimit import create_rate_limit_config, rate_limit_exception_handler
 from pydotorg.core.security.csrf import create_csrf_config
 from pydotorg.core.worker import saq_plugin
+from pydotorg.core.workflows import get_workflow_plugin
+from pydotorg.core.workflows.registry import register_all_workflows
 from pydotorg.domains.about import AboutRenderController, PSFRenderController
 from pydotorg.domains.admin import (
     AdminAnalyticsController,
@@ -342,6 +342,7 @@ def get_template_directories() -> list[Path]:
     directories.append(templates_dir)
 
     return directories
+
 
 vite_plugin = VitePlugin(
     config=ViteConfig(
@@ -686,7 +687,15 @@ app = Litestar(
     ],
     dependencies=get_all_dependencies(),
     exception_handlers=get_exception_handlers_with_rate_limit(),
-    plugins=[sqlalchemy_plugin, sqladmin_plugin, flash_plugin, structlog_plugin, saq_plugin, vite_plugin, get_workflow_plugin()],
+    plugins=[
+        sqlalchemy_plugin,
+        sqladmin_plugin,
+        flash_plugin,
+        structlog_plugin,
+        saq_plugin,
+        vite_plugin,
+        get_workflow_plugin(),
+    ],
     middleware=[
         session_config.middleware,
         APIVersionMiddleware,

@@ -46,7 +46,7 @@ def _require_admin_session(connection: ASGIConnection, _: BaseRouteHandler) -> N
 
     Checks for valid Litestar session with superuser privileges.
     """
-    from pydotorg.core.auth.session import SessionService
+    from pydotorg.core.auth.session import SessionService  # noqa: PLC0415
 
     session_service = SessionService()
 
@@ -69,7 +69,7 @@ def _generate_admin_schema(app: Any) -> dict[str, Any]:
     This creates a complete schema by iterating through all registered routes
     and including those marked with include_in_schema=False (admin routes).
     """
-    from litestar.openapi.spec import (
+    from litestar.openapi.spec import (  # noqa: PLC0415
         Components,
         Contact,
         ExternalDocumentation,
@@ -87,31 +87,36 @@ def _generate_admin_schema(app: Any) -> dict[str, Any]:
     for route in app.routes:
         if hasattr(route, "route_handlers"):
             for handler in route.route_handlers:
-                if hasattr(handler, "include_in_schema") and not handler.include_in_schema:
-                    if hasattr(handler, "paths"):
-                        for path in handler.paths:
-                            full_path = f"{route.path}{path}" if path != "/" else route.path
-                            if full_path.startswith("/api/admin"):
-                                method = handler.http_method.lower() if hasattr(handler, "http_method") else "get"
-                                if isinstance(method, list):
-                                    method = method[0].lower()
+                if (
+                    hasattr(handler, "include_in_schema")
+                    and not handler.include_in_schema
+                    and hasattr(handler, "paths")
+                ):
+                    for path in handler.paths:
+                        full_path = f"{route.path}{path}" if path != "/" else route.path
+                        if full_path.startswith("/api/admin"):
+                            method = handler.http_method.lower() if hasattr(handler, "http_method") else "get"
+                            if isinstance(method, list):
+                                method = method[0].lower()
 
-                                if full_path not in admin_paths:
-                                    admin_paths[full_path] = PathItem()
+                            if full_path not in admin_paths:
+                                admin_paths[full_path] = PathItem()
 
-                                operation = {
-                                    "tags": handler.tags if hasattr(handler, "tags") and handler.tags else ["Admin"],
-                                    "summary": handler.name.replace("_", " ").title() if hasattr(handler, "name") else "",
-                                    "description": handler.fn.__doc__ or "" if hasattr(handler, "fn") else "",
-                                    "operationId": handler.operation_id if hasattr(handler, "operation_id") else handler.name,
-                                    "security": [{"BearerAuth": []}, {"SessionAuth": []}],
-                                    "responses": {
-                                        "200": {"description": "Successful response"},
-                                        "401": {"description": "Authentication required"},
-                                        "403": {"description": "Administrator privileges required"},
-                                    },
-                                }
-                                setattr(admin_paths[full_path], method, operation)
+                            operation = {
+                                "tags": handler.tags if hasattr(handler, "tags") and handler.tags else ["Admin"],
+                                "summary": handler.name.replace("_", " ").title() if hasattr(handler, "name") else "",
+                                "description": handler.fn.__doc__ or "" if hasattr(handler, "fn") else "",
+                                "operationId": handler.operation_id
+                                if hasattr(handler, "operation_id")
+                                else handler.name,
+                                "security": [{"BearerAuth": []}, {"SessionAuth": []}],
+                                "responses": {
+                                    "200": {"description": "Successful response"},
+                                    "401": {"description": "Authentication required"},
+                                    "403": {"description": "Administrator privileges required"},
+                                },
+                            }
+                            setattr(admin_paths[full_path], method, operation)
 
     all_paths = {**base_schema.paths, **admin_paths} if base_schema.paths else admin_paths
 
