@@ -478,6 +478,6 @@ async def revoke_all_sessions(
 
 ## See Also
 
-- [Authorization Patterns](authorization-patterns.md) - Permission patterns
 - [API Usage Guide](../guides/api-usage.md) - Using authentication in API calls
 - [Authentication Guide](../guides/authentication.md) - Full authentication documentation
+- [Domain Patterns](domain-patterns.md) - Creating protected domain controllers

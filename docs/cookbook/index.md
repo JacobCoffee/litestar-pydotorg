@@ -42,27 +42,19 @@ Test fixtures, mocking, and integration testing.
 
 ### Domain Development
 
-- [Domain Patterns](domain-patterns.md) - Create new business domains
-- [Service Layer](service-patterns.md) - Business logic patterns
-- [Controller Patterns](controller-patterns.md) - HTTP endpoint patterns
+- [Domain Patterns](domain-patterns.md) - Create new business domains with services, controllers, models
 
 ### Data Access
 
 - [Database Recipes](database-recipes.md) - Query and transaction patterns
-- [Caching Recipes](caching-recipes.md) - Redis caching strategies
 
 ### Authentication & Authorization
 
 - [Authentication Recipes](authentication-recipes.md) - Auth flows and patterns
-- [Authorization Patterns](authorization-patterns.md) - Guard and permission patterns
 
 ### Testing
 
 - [Testing Recipes](testing-recipes.md) - Common test patterns
-
-### Background Tasks
-
-- [Task Recipes](task-recipes.md) - Background job patterns
 
 ```{toctree}
 :maxdepth: 2

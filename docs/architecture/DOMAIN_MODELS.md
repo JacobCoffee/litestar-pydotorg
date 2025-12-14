@@ -965,7 +965,7 @@ class WorkGroup(AuditBase, SlugMixin):
 
 ### Complete Entity Relationship Diagram
 
-```mermaid
+```text
 erDiagram
     %% Users Domain
     users ||--o| memberships : "has one"
@@ -1026,7 +1026,7 @@ erDiagram
 
 ### Users Domain Relationships
 
-```mermaid
+```text
 erDiagram
     users {
         uuid id PK
@@ -1059,7 +1059,7 @@ erDiagram
 
 ### Downloads Domain Relationships
 
-```mermaid
+```text
 erDiagram
     download_os {
         uuid id PK
@@ -1110,7 +1110,7 @@ erDiagram
 
 ### Jobs Domain Relationships
 
-```mermaid
+```text
 erDiagram
     jobs {
         uuid id PK
@@ -1153,7 +1153,7 @@ erDiagram
 
 ### Events Domain Relationships
 
-```mermaid
+```text
 erDiagram
     calendars {
         uuid id PK
@@ -1209,7 +1209,7 @@ erDiagram
 
 ### Sponsors Domain Relationships
 
-```mermaid
+```text
 erDiagram
     sponsors {
         uuid id PK
@@ -1253,7 +1253,7 @@ erDiagram
 
 ### Dependency Graph
 
-```mermaid
+```text
 graph TB
     subgraph Core["Core Domains (No Dependencies)"]
         USERS[users]

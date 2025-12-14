@@ -554,6 +554,6 @@ class ProductService:
 
 ## See Also
 
-- [Service Patterns](service-patterns.md) - More service layer patterns
-- [Controller Patterns](controller-patterns.md) - HTTP endpoint patterns
 - [Testing Recipes](testing-recipes.md) - Testing domains
+- [Database Recipes](database-recipes.md) - Query and transaction patterns
+- [Authentication Recipes](authentication-recipes.md) - Auth flows

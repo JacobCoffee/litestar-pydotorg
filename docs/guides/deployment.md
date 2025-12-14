@@ -482,7 +482,7 @@ server {
 
 #### Caddy
 
-```caddyfile
+```text
 python.org, www.python.org {
     # Static files
     handle /static/* {

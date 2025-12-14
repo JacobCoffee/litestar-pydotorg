@@ -833,10 +833,10 @@ The project uses MailDev for local email testing:
 
 If you encounter an issue not covered here:
 
-1. Check the [PLAN.md](/PLAN.md) for known issues and fixes
+1. Check the [GitHub Issues](https://github.com/JacobCoffee/litestar-pydotorg/issues) for known issues
 2. Search existing GitHub issues
-3. Check the [Architecture Documentation](/docs/architecture/ARCHITECTURE.md)
-4. Review the [API Documentation](/docs/api-getting-started.md)
+3. Check the [Architecture Documentation](../architecture/ARCHITECTURE.md)
+4. Review the [API Documentation](../api-getting-started.md)
 
 For bugs, please file an issue with:
 - Steps to reproduce
