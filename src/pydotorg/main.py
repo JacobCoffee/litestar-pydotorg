@@ -293,8 +293,53 @@ session_config = CookieBackendConfig(
 )
 
 templates_dir = Path(__file__).parent / "templates"
+domains_dir = Path(__file__).parent / "domains"
 static_dir = Path(__file__).parent.parent.parent / "static"
 resources_dir = Path(__file__).parent.parent.parent / "resources"
+
+
+def get_template_directories() -> list[Path]:
+    """Get all template directories including domain-specific ones.
+
+    Returns a list of template directories in search order:
+    1. Domain-specific template directories (domains/{name}/templates/)
+    2. Main centralized templates directory (templates/)
+
+    This allows domain templates to be colocated with their domain code
+    while still supporting shared templates in the central location.
+    """
+    directories: list[Path] = []
+
+    domain_names = [
+        "blogs",
+        "events",
+        "jobs",
+        "downloads",
+        "community",
+        "sponsors",
+        "banners",
+        "codesamples",
+        "minutes",
+        "nominations",
+        "successstories",
+        "work_groups",
+        "users",
+        "pages",
+        "mailing",
+        "about",
+        "docs",
+        "search",
+        "admin",
+    ]
+
+    for domain in domain_names:
+        domain_templates = domains_dir / domain / "templates"
+        if domain_templates.exists():
+            directories.append(domain_templates)
+
+    directories.append(templates_dir)
+
+    return directories
 
 vite_plugin = VitePlugin(
     config=ViteConfig(
@@ -456,7 +501,7 @@ def configure_template_engine(engine: JinjaTemplateEngine) -> None:  # noqa: PLR
 
 
 template_config = TemplateConfig(
-    directory=templates_dir,
+    directory=get_template_directories(),
     engine=JinjaTemplateEngine,
     engine_callback=configure_template_engine,
 )
