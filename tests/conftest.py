@@ -7,6 +7,7 @@ import socket
 from typing import TYPE_CHECKING
 
 import pytest
+from advanced_alchemy.config import EngineConfig
 from advanced_alchemy.extensions.litestar import SQLAlchemyPlugin
 from advanced_alchemy.extensions.litestar.plugins.init.config.asyncio import SQLAlchemyAsyncConfig
 from litestar import Litestar
@@ -149,6 +150,7 @@ async def client(postgres_uri: str) -> AsyncIterator[AsyncTestClient]:
         connection_string=postgres_uri,
         metadata=AuditBase.metadata,
         create_all=False,
+        engine_config=EngineConfig(poolclass=NullPool),
     )
     sqlalchemy_plugin = SQLAlchemyPlugin(config=sqlalchemy_config)
 
@@ -169,3 +171,5 @@ async def client(postgres_uri: str) -> AsyncIterator[AsyncTestClient]:
         base_url="http://testserver.local",
     ) as test_client:
         yield test_client
+
+    await sqlalchemy_config.get_engine().dispose()
