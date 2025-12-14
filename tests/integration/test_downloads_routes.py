@@ -16,9 +16,7 @@ from advanced_alchemy.filters import LimitOffset
 from litestar import Litestar
 from litestar.params import Parameter
 from litestar.testing import AsyncTestClient
-from sqlalchemy import NullPool, text
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import text
 
 from pydotorg.core.database.base import AuditBase
 from pydotorg.domains.downloads.controllers import (
@@ -32,19 +30,19 @@ from pydotorg.domains.downloads.models import OS, PythonVersion, Release, Releas
 if TYPE_CHECKING:
     from collections.abc import AsyncIterator
 
+    from sqlalchemy.ext.asyncio import AsyncEngine, async_sessionmaker
+
 
 class DownloadsTestFixtures:
     """Test fixtures for downloads routes."""
 
     client: AsyncTestClient
-    postgres_uri: str
+    session_factory: async_sessionmaker
 
 
-async def _create_os_via_db(postgres_uri: str, **os_data: object) -> dict:
-    """Create an OS directly in the database."""
-    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
-    async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-    async with async_session_factory() as session:
+async def _create_os_via_db(session_factory: async_sessionmaker, **os_data: object) -> dict:
+    """Create an OS directly in the database using shared session factory."""
+    async with session_factory() as session:
         slug = os_data.get("slug", f"test-os-{uuid4().hex[:8]}")
         os = OS(
             name=os_data.get("name", "Test OS"),
@@ -53,20 +51,16 @@ async def _create_os_via_db(postgres_uri: str, **os_data: object) -> dict:
         session.add(os)
         await session.commit()
         await session.refresh(os)
-        result = {
+        return {
             "id": str(os.id),
             "name": os.name,
             "slug": os.slug,
         }
-    await engine.dispose()
-    return result
 
 
-async def _create_release_via_db(postgres_uri: str, **release_data: object) -> dict:
-    """Create a release directly in the database."""
-    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
-    async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-    async with async_session_factory() as session:
+async def _create_release_via_db(session_factory: async_sessionmaker, **release_data: object) -> dict:
+    """Create a release directly in the database using shared session factory."""
+    async with session_factory() as session:
         slug = release_data.get("slug", f"python-{uuid4().hex[:8]}")
         release = Release(
             name=release_data.get("name", "Python 3.12.0"),
@@ -83,7 +77,7 @@ async def _create_release_via_db(postgres_uri: str, **release_data: object) -> d
         session.add(release)
         await session.commit()
         await session.refresh(release)
-        result = {
+        return {
             "id": str(release.id),
             "name": release.name,
             "slug": release.slug,
@@ -91,17 +85,15 @@ async def _create_release_via_db(postgres_uri: str, **release_data: object) -> d
             "is_latest": release.is_latest,
             "is_published": release.is_published,
         }
-    await engine.dispose()
-    return result
 
 
-async def _create_release_file_via_db(postgres_uri: str, release_id: str, os_id: str, **file_data: object) -> dict:
-    """Create a release file directly in the database."""
-    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
-    async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-    async with async_session_factory() as session:
-        from uuid import UUID as PyUUID
+async def _create_release_file_via_db(
+    session_factory: async_sessionmaker, release_id: str, os_id: str, **file_data: object
+) -> dict:
+    """Create a release file directly in the database using shared session factory."""
+    from uuid import UUID as PyUUID
 
+    async with session_factory() as session:
         slug = file_data.get("slug", f"python-file-{uuid4().hex[:8]}")
         release_file = ReleaseFile(
             release_id=PyUUID(release_id),
@@ -118,7 +110,7 @@ async def _create_release_file_via_db(postgres_uri: str, release_id: str, os_id:
         session.add(release_file)
         await session.commit()
         await session.refresh(release_file)
-        result = {
+        return {
             "id": str(release_file.id),
             "release_id": str(release_file.release_id),
             "os_id": str(release_file.os_id),
@@ -126,19 +118,22 @@ async def _create_release_file_via_db(postgres_uri: str, release_id: str, os_id:
             "slug": release_file.slug,
             "url": release_file.url,
         }
-    await engine.dispose()
-    return result
 
 
 @pytest.fixture
-async def downloads_fixtures(postgres_uri: str) -> AsyncIterator[DownloadsTestFixtures]:
-    """Create test fixtures with fresh database schema."""
-    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
-    async with engine.begin() as conn:
-        await conn.execute(text("DROP SCHEMA public CASCADE"))
-        await conn.execute(text("CREATE SCHEMA public"))
-        await conn.run_sync(AuditBase.metadata.create_all)
-    await engine.dispose()
+async def downloads_fixtures(
+    async_engine: AsyncEngine,
+    async_session_factory: async_sessionmaker,
+    postgres_uri: str,
+) -> AsyncIterator[DownloadsTestFixtures]:
+    """Create test fixtures using session-scoped engine to prevent connection exhaustion."""
+    async with async_engine.begin() as conn:
+        result = await conn.execute(text("SELECT tablename FROM pg_tables WHERE schemaname = 'public'"))
+        existing_tables = {row[0] for row in result.fetchall()}
+
+        for table in reversed(AuditBase.metadata.sorted_tables):
+            if table.name in existing_tables:
+                await conn.execute(text(f"TRUNCATE TABLE {table.name} CASCADE"))
 
     async def provide_limit_offset(
         current_page: int = Parameter(ge=1, default=1, query="currentPage"),
@@ -168,7 +163,7 @@ async def downloads_fixtures(postgres_uri: str) -> AsyncIterator[DownloadsTestFi
     async with AsyncTestClient(app=app, base_url="http://testserver.local") as client:
         fixtures = DownloadsTestFixtures()
         fixtures.client = client
-        fixtures.postgres_uri = postgres_uri
+        fixtures.session_factory = async_session_factory
         yield fixtures
 
 
@@ -186,7 +181,7 @@ class TestOSControllerRoutes:
         """Test listing OS with pagination."""
         for i in range(3):
             await _create_os_via_db(
-                downloads_fixtures.postgres_uri,
+                downloads_fixtures.session_factory,
                 name=f"OS {i}",
                 slug=f"os-{i}-{uuid4().hex[:8]}",
             )
@@ -210,7 +205,7 @@ class TestOSControllerRoutes:
     async def test_get_os_by_id(self, downloads_fixtures: DownloadsTestFixtures) -> None:
         """Test getting an OS by ID."""
         os_data = await _create_os_via_db(
-            downloads_fixtures.postgres_uri,
+            downloads_fixtures.session_factory,
             name="macOS",
             slug=f"macos-{uuid4().hex[:8]}",
         )
@@ -230,7 +225,7 @@ class TestOSControllerRoutes:
         """Test getting an OS by slug."""
         slug = f"linux-{uuid4().hex[:8]}"
         await _create_os_via_db(
-            downloads_fixtures.postgres_uri,
+            downloads_fixtures.session_factory,
             name="Linux",
             slug=slug,
         )
@@ -249,7 +244,7 @@ class TestOSControllerRoutes:
     async def test_delete_os(self, downloads_fixtures: DownloadsTestFixtures) -> None:
         """Test deleting an OS."""
         os_data = await _create_os_via_db(
-            downloads_fixtures.postgres_uri,
+            downloads_fixtures.session_factory,
             name="FreeBSD",
             slug=f"freebsd-{uuid4().hex[:8]}",
         )
@@ -277,7 +272,7 @@ class TestReleaseControllerRoutes:
         """Test listing releases with pagination."""
         for i in range(3):
             await _create_release_via_db(
-                downloads_fixtures.postgres_uri,
+                downloads_fixtures.session_factory,
                 name=f"Python 3.{i}.0",
                 slug=f"python-3-{i}-0-{uuid4().hex[:8]}",
             )
@@ -309,7 +304,7 @@ class TestReleaseControllerRoutes:
     async def test_get_release_by_id(self, downloads_fixtures: DownloadsTestFixtures) -> None:
         """Test getting a release by ID."""
         release_data = await _create_release_via_db(
-            downloads_fixtures.postgres_uri,
+            downloads_fixtures.session_factory,
             name="Python 3.12.1",
             slug=f"python-3-12-1-{uuid4().hex[:8]}",
         )
@@ -329,7 +324,7 @@ class TestReleaseControllerRoutes:
         """Test getting a release by slug."""
         slug = f"python-3-11-0-{uuid4().hex[:8]}"
         await _create_release_via_db(
-            downloads_fixtures.postgres_uri,
+            downloads_fixtures.session_factory,
             name="Python 3.11.0",
             slug=slug,
         )
@@ -348,7 +343,7 @@ class TestReleaseControllerRoutes:
     async def test_get_latest_release(self, downloads_fixtures: DownloadsTestFixtures) -> None:
         """Test getting the latest Python 3 release."""
         await _create_release_via_db(
-            downloads_fixtures.postgres_uri,
+            downloads_fixtures.session_factory,
             name="Python 3.13.0",
             slug=f"python-3-13-0-{uuid4().hex[:8]}",
             version=PythonVersion.PYTHON3,
@@ -361,7 +356,7 @@ class TestReleaseControllerRoutes:
     async def test_get_latest_by_version(self, downloads_fixtures: DownloadsTestFixtures) -> None:
         """Test getting the latest release for a specific Python version."""
         await _create_release_via_db(
-            downloads_fixtures.postgres_uri,
+            downloads_fixtures.session_factory,
             name="Python 2.7.18",
             slug=f"python-2-7-18-{uuid4().hex[:8]}",
             version=PythonVersion.PYTHON2,
@@ -379,13 +374,13 @@ class TestReleaseControllerRoutes:
     async def test_list_published_releases(self, downloads_fixtures: DownloadsTestFixtures) -> None:
         """Test listing published releases."""
         await _create_release_via_db(
-            downloads_fixtures.postgres_uri,
+            downloads_fixtures.session_factory,
             name="Python 3.12.0",
             slug=f"python-3-12-0-{uuid4().hex[:8]}",
             is_published=True,
         )
         await _create_release_via_db(
-            downloads_fixtures.postgres_uri,
+            downloads_fixtures.session_factory,
             name="Python 3.13.0a1",
             slug=f"python-3-13-0a1-{uuid4().hex[:8]}",
             is_published=False,
@@ -398,7 +393,7 @@ class TestReleaseControllerRoutes:
     async def test_list_download_page_releases(self, downloads_fixtures: DownloadsTestFixtures) -> None:
         """Test listing releases for download page."""
         await _create_release_via_db(
-            downloads_fixtures.postgres_uri,
+            downloads_fixtures.session_factory,
             name="Python 3.12.0",
             slug=f"python-3-12-0-{uuid4().hex[:8]}",
             show_on_download_page=True,
@@ -411,7 +406,7 @@ class TestReleaseControllerRoutes:
     async def test_update_release(self, downloads_fixtures: DownloadsTestFixtures) -> None:
         """Test updating a release."""
         release_data = await _create_release_via_db(
-            downloads_fixtures.postgres_uri,
+            downloads_fixtures.session_factory,
             name="Python 3.10.0",
             slug=f"python-3-10-0-{uuid4().hex[:8]}",
         )
@@ -435,7 +430,7 @@ class TestReleaseControllerRoutes:
     async def test_delete_release(self, downloads_fixtures: DownloadsTestFixtures) -> None:
         """Test deleting a release."""
         release_data = await _create_release_via_db(
-            downloads_fixtures.postgres_uri,
+            downloads_fixtures.session_factory,
             name="Python 3.9.0",
             slug=f"python-3-9-0-{uuid4().hex[:8]}",
         )
@@ -455,17 +450,17 @@ class TestReleaseFileControllerRoutes:
     async def test_get_file_by_id(self, downloads_fixtures: DownloadsTestFixtures) -> None:
         """Test getting a release file by ID."""
         os_data = await _create_os_via_db(
-            downloads_fixtures.postgres_uri,
+            downloads_fixtures.session_factory,
             name="Windows",
             slug=f"windows-{uuid4().hex[:8]}",
         )
         release_data = await _create_release_via_db(
-            downloads_fixtures.postgres_uri,
+            downloads_fixtures.session_factory,
             name="Python 3.12.0",
             slug=f"python-3-12-0-{uuid4().hex[:8]}",
         )
         file_data = await _create_release_file_via_db(
-            downloads_fixtures.postgres_uri,
+            downloads_fixtures.session_factory,
             release_id=release_data["id"],
             os_id=os_data["id"],
             name="Python 3.12.0 Windows x64",
@@ -485,17 +480,17 @@ class TestReleaseFileControllerRoutes:
     async def test_list_files_by_release(self, downloads_fixtures: DownloadsTestFixtures) -> None:
         """Test listing files for a release."""
         os_data = await _create_os_via_db(
-            downloads_fixtures.postgres_uri,
+            downloads_fixtures.session_factory,
             name="Windows",
             slug=f"windows-{uuid4().hex[:8]}",
         )
         release_data = await _create_release_via_db(
-            downloads_fixtures.postgres_uri,
+            downloads_fixtures.session_factory,
             name="Python 3.12.0",
             slug=f"python-3-12-0-{uuid4().hex[:8]}",
         )
         await _create_release_file_via_db(
-            downloads_fixtures.postgres_uri,
+            downloads_fixtures.session_factory,
             release_id=release_data["id"],
             os_id=os_data["id"],
             name="Python 3.12.0 Windows x64",
@@ -509,17 +504,17 @@ class TestReleaseFileControllerRoutes:
     async def test_list_files_by_os(self, downloads_fixtures: DownloadsTestFixtures) -> None:
         """Test listing files for an OS."""
         os_data = await _create_os_via_db(
-            downloads_fixtures.postgres_uri,
+            downloads_fixtures.session_factory,
             name="macOS",
             slug=f"macos-{uuid4().hex[:8]}",
         )
         release_data = await _create_release_via_db(
-            downloads_fixtures.postgres_uri,
+            downloads_fixtures.session_factory,
             name="Python 3.12.0",
             slug=f"python-3-12-0-{uuid4().hex[:8]}",
         )
         await _create_release_file_via_db(
-            downloads_fixtures.postgres_uri,
+            downloads_fixtures.session_factory,
             release_id=release_data["id"],
             os_id=os_data["id"],
             name="Python 3.12.0 macOS",
@@ -533,18 +528,18 @@ class TestReleaseFileControllerRoutes:
     async def test_get_file_by_slug(self, downloads_fixtures: DownloadsTestFixtures) -> None:
         """Test getting a file by slug."""
         os_data = await _create_os_via_db(
-            downloads_fixtures.postgres_uri,
+            downloads_fixtures.session_factory,
             name="Linux",
             slug=f"linux-{uuid4().hex[:8]}",
         )
         release_data = await _create_release_via_db(
-            downloads_fixtures.postgres_uri,
+            downloads_fixtures.session_factory,
             name="Python 3.12.0",
             slug=f"python-3-12-0-{uuid4().hex[:8]}",
         )
         slug = f"python-3-12-0-linux-{uuid4().hex[:8]}"
         await _create_release_file_via_db(
-            downloads_fixtures.postgres_uri,
+            downloads_fixtures.session_factory,
             release_id=release_data["id"],
             os_id=os_data["id"],
             name="Python 3.12.0 Linux",
@@ -564,12 +559,12 @@ class TestReleaseFileControllerRoutes:
     async def test_create_file(self, downloads_fixtures: DownloadsTestFixtures) -> None:
         """Test creating a release file."""
         os_data = await _create_os_via_db(
-            downloads_fixtures.postgres_uri,
+            downloads_fixtures.session_factory,
             name="Windows",
             slug=f"windows-{uuid4().hex[:8]}",
         )
         release_data = await _create_release_via_db(
-            downloads_fixtures.postgres_uri,
+            downloads_fixtures.session_factory,
             name="Python 3.12.0",
             slug=f"python-3-12-0-{uuid4().hex[:8]}",
         )
@@ -592,7 +587,7 @@ class TestReleaseFileControllerRoutes:
     async def test_create_file_invalid_release(self, downloads_fixtures: DownloadsTestFixtures) -> None:
         """Test creating a file with invalid release ID fails."""
         os_data = await _create_os_via_db(
-            downloads_fixtures.postgres_uri,
+            downloads_fixtures.session_factory,
             name="Windows",
             slug=f"windows-{uuid4().hex[:8]}",
         )
@@ -609,17 +604,17 @@ class TestReleaseFileControllerRoutes:
     async def test_delete_file(self, downloads_fixtures: DownloadsTestFixtures) -> None:
         """Test deleting a release file."""
         os_data = await _create_os_via_db(
-            downloads_fixtures.postgres_uri,
+            downloads_fixtures.session_factory,
             name="Windows",
             slug=f"windows-{uuid4().hex[:8]}",
         )
         release_data = await _create_release_via_db(
-            downloads_fixtures.postgres_uri,
+            downloads_fixtures.session_factory,
             name="Python 3.12.0",
             slug=f"python-3-12-0-{uuid4().hex[:8]}",
         )
         file_data = await _create_release_file_via_db(
-            downloads_fixtures.postgres_uri,
+            downloads_fixtures.session_factory,
             release_id=release_data["id"],
             os_id=os_data["id"],
         )
@@ -657,12 +652,12 @@ class TestDownloadsValidation:
     async def test_create_file_missing_url(self, downloads_fixtures: DownloadsTestFixtures) -> None:
         """Test creating a file without URL fails validation."""
         os_data = await _create_os_via_db(
-            downloads_fixtures.postgres_uri,
+            downloads_fixtures.session_factory,
             name="Windows",
             slug=f"windows-{uuid4().hex[:8]}",
         )
         release_data = await _create_release_via_db(
-            downloads_fixtures.postgres_uri,
+            downloads_fixtures.session_factory,
             name="Python 3.12.0",
             slug=f"python-3-12-0-{uuid4().hex[:8]}",
         )
@@ -687,23 +682,23 @@ class TestDownloadTrackingRoutes:
     async def test_track_download(self, downloads_fixtures: DownloadsTestFixtures) -> None:
         """Test tracking a download for a release file."""
         os_data = await _create_os_via_db(
-            downloads_fixtures.postgres_uri,
+            downloads_fixtures.session_factory,
             name="Windows",
             slug=f"windows-{uuid4().hex[:8]}",
         )
         release_data = await _create_release_via_db(
-            downloads_fixtures.postgres_uri,
+            downloads_fixtures.session_factory,
             name="Python 3.12.0",
             slug=f"python-3-12-0-{uuid4().hex[:8]}",
         )
         file_data = await _create_release_file_via_db(
-            downloads_fixtures.postgres_uri,
+            downloads_fixtures.session_factory,
             release_id=release_data["id"],
             os_id=os_data["id"],
             name="Python 3.12.0 Windows x64",
         )
         response = await downloads_fixtures.client.post(f"/api/v1/files/{file_data['id']}/track")
-        assert response.status_code in (200, 500)
+        assert response.status_code in (200, 201, 500)
         if response.status_code == 200:
             result = response.json()
             assert result["success"] is True

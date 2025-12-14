@@ -146,6 +146,17 @@ def _module_sqlalchemy_config(postgres_uri: str) -> SQLAlchemyAsyncConfig:
     )
 
 
+@pytest.fixture(scope="session")
+def async_session_factory(async_engine: AsyncEngine):
+    """Session-scoped async session factory using shared engine.
+
+    Provides a consistent way to create sessions without spawning new engines.
+    """
+    from sqlalchemy.ext.asyncio import async_sessionmaker
+
+    return async_sessionmaker(async_engine, expire_on_commit=False)
+
+
 @pytest.fixture
 async def client(
     async_engine: AsyncEngine,
@@ -163,8 +174,13 @@ async def client(
     from pydotorg.main import _derive_session_secret, health_check
 
     async with async_engine.begin() as conn:
+        # Only truncate tables that exist - some plugin tables may not be created
+        result = await conn.execute(text("SELECT tablename FROM pg_tables WHERE schemaname = 'public'"))
+        existing_tables = {row[0] for row in result.fetchall()}
+
         for table in reversed(AuditBase.metadata.sorted_tables):
-            await conn.execute(text(f"TRUNCATE TABLE {table.name} CASCADE"))
+            if table.name in existing_tables:
+                await conn.execute(text(f"TRUNCATE TABLE {table.name} CASCADE"))
 
     sqlalchemy_plugin = SQLAlchemyPlugin(config=_module_sqlalchemy_config)
 
