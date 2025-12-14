@@ -314,8 +314,8 @@ parameter-already-assigned = "ignore"
 exclude = ["docs/conf.py", "tests/", "src/pydotorg/db/seed.py"]
 
 [tool.codespell]
-skip = "uv.lock,bun.lock,*.svg,docs/_build/*,**/static/**"
-ignore-words-list = "selectin,ot,te,ue,nd,administrer"
+skip = "uv.lock,bun.lock,*.svg,docs/_build,**/static/**,htmlcov,node_modules"
+ignore-words-list = "selectin,ot,te,ue,nd,ond,administrer"
 quiet-level = 3
 
 [tool.git-cliff.changelog]
