@@ -122,7 +122,7 @@ jobs:
             --network host \
             -e DATABASE_URL=postgresql+asyncpg://postgres:postgres@localhost:5432/pydotorg_test \
             -e REDIS_URL=redis://localhost:6379 \
-            -e APP_ENV=test \
+            -e APP_ENV=dev \
             -p 8000:8000 \
             litestar-pydotorg:test
 
