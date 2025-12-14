@@ -66,7 +66,7 @@
 - [ ] Create domain model documentation
 - [ ] Write deployment guide
 - [ ] Create contributing guide
-- [ ] Write troubleshooting guide
+- [x] Write troubleshooting guide - docs/guides/troubleshooting.md
 
 ### Research TODO
 - [ ] Research Litestar patterns for internal API namespacing (`/api/admin/*` vs `/api/_internal/*`)
@@ -151,7 +151,7 @@
 ### Tier 3: MEDIUM (Enhanced Features) - Remaining
 | Task | Effort | Description |
 |------|--------|-------------|
-| OAuth2 Providers Testing | Medium | GitHub/Google providers exist, need full testing |
+| ~~OAuth2 Providers Testing~~ | ~~Medium~~ | ✅ 73 total tests (42 unit + 31 integration), POST endpoint, account restrictions |
 
 ### Tier 4: LOW (Nice to Have)
 | Task | Effort | Description |
@@ -203,4 +203,4 @@ make ci                      # Full CI pipeline
 
 ---
 
-*Last updated: 2025-12-13*
+*Last updated: 2025-12-14*
