@@ -109,6 +109,8 @@ class Settings(BaseSettings):
     github_client_secret: str | None = None
     google_client_id: str | None = None
     google_client_secret: str | None = None
+    discord_client_id: str | None = None
+    discord_client_secret: str | None = None
     oauth_redirect_base_url: str = "http://localhost:8000"
 
     session_secret_key: str = "change-me-in-production-session"  # noqa: S105
@@ -302,6 +304,9 @@ def get_config_warnings() -> list[str]:
     if not cfg.google_client_id or not cfg.google_client_secret:
         warnings.append("Google OAuth disabled")
 
+    if not cfg.discord_client_id or not cfg.discord_client_secret:
+        warnings.append("Discord OAuth disabled")
+
     return warnings
 
 
@@ -375,6 +380,7 @@ def log_startup_banner() -> None:
   Email:            {_bool_icon(val=bool(cfg.smtp_host))} {email_display}
   GitHub OAuth:     {_bool_icon(val=bool(cfg.github_client_id))}
   Google OAuth:     {_bool_icon(val=bool(cfg.google_client_id))}
+  Discord OAuth:    {_bool_icon(val=bool(cfg.discord_client_id))}
   Meilisearch:      {_bool_icon(val=bool(cfg.meilisearch_url))} {cfg.meilisearch_url}
   Jobs:             {_bool_icon(val=cfg.features.enable_jobs)}
   Sponsors:         {_bool_icon(val=cfg.features.enable_sponsors)}
@@ -406,6 +412,7 @@ def get_config_summary() -> dict[str, str | bool | int]:
         "email_enabled": bool(cfg.smtp_host),
         "github_oauth_enabled": bool(cfg.github_client_id),
         "google_oauth_enabled": bool(cfg.google_client_id),
+        "discord_oauth_enabled": bool(cfg.discord_client_id),
         "create_tables_on_startup": cfg.create_all,
         "cors_allow_all": cfg.cors_allow_all,
         "show_error_details": cfg.show_error_details,

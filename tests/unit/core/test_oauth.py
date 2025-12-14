@@ -9,6 +9,7 @@ import httpx
 import pytest
 
 from pydotorg.core.auth.oauth import (
+    DiscordOAuthProvider,
     GitHubOAuthProvider,
     GoogleOAuthProvider,
     OAuthService,
@@ -28,6 +29,8 @@ def mock_settings() -> MagicMock:
     settings.github_client_secret = "test-github-client-secret"
     settings.google_client_id = "test-google-client-id"
     settings.google_client_secret = "test-google-client-secret"
+    settings.discord_client_id = "test-discord-client-id"
+    settings.discord_client_secret = "test-discord-client-secret"
     settings.oauth_redirect_base_url = "http://localhost:8000"
     return settings
 
@@ -40,6 +43,8 @@ def mock_settings_no_oauth() -> MagicMock:
     settings.github_client_secret = None
     settings.google_client_id = None
     settings.google_client_secret = None
+    settings.discord_client_id = None
+    settings.discord_client_secret = None
     settings.oauth_redirect_base_url = "http://localhost:8000"
     return settings
 
@@ -52,6 +57,8 @@ def mock_settings_github_only() -> MagicMock:
     settings.github_client_secret = "test-github-client-secret"
     settings.google_client_id = None
     settings.google_client_secret = None
+    settings.discord_client_id = None
+    settings.discord_client_secret = None
     settings.oauth_redirect_base_url = "http://localhost:8000"
     return settings
 
@@ -527,17 +534,181 @@ class TestGoogleOAuthProvider:
         assert user_info.email_verified is False
 
 
+class TestDiscordOAuthProvider:
+    """Tests for DiscordOAuthProvider."""
+
+    def test_provider_name_returns_discord(self, mock_settings: MagicMock) -> None:
+        """Test provider_name property returns 'discord'."""
+        provider = DiscordOAuthProvider(mock_settings)
+        assert provider.provider_name == "discord"
+
+    def test_authorize_url_is_correct(self, mock_settings: MagicMock) -> None:
+        """Test authorize_url returns correct Discord OAuth URL."""
+        provider = DiscordOAuthProvider(mock_settings)
+        assert provider.authorize_url == "https://discord.com/api/oauth2/authorize"
+
+    def test_token_url_is_correct(self, mock_settings: MagicMock) -> None:
+        """Test token_url returns correct Discord token exchange URL."""
+        provider = DiscordOAuthProvider(mock_settings)
+        assert provider.token_url == "https://discord.com/api/oauth2/token"
+
+    def test_user_info_url_is_correct(self, mock_settings: MagicMock) -> None:
+        """Test user_info_url returns correct Discord API URL."""
+        provider = DiscordOAuthProvider(mock_settings)
+        assert provider.user_info_url == "https://discord.com/api/users/@me"
+
+    def test_scope_returns_identify_email(self, mock_settings: MagicMock) -> None:
+        """Test scope property returns 'identify email'."""
+        provider = DiscordOAuthProvider(mock_settings)
+        assert provider.scope == "identify email"
+
+    def test_client_id_returns_settings_value(self, mock_settings: MagicMock) -> None:
+        """Test client_id returns value from settings."""
+        provider = DiscordOAuthProvider(mock_settings)
+        assert provider.client_id == "test-discord-client-id"
+
+    def test_client_secret_returns_settings_value(self, mock_settings: MagicMock) -> None:
+        """Test client_secret returns value from settings."""
+        provider = DiscordOAuthProvider(mock_settings)
+        assert provider.client_secret == "test-discord-client-secret"
+
+    def test_get_authorization_url_generates_valid_discord_url(self, mock_settings: MagicMock) -> None:
+        """Test get_authorization_url generates valid Discord authorization URL."""
+        provider = DiscordOAuthProvider(mock_settings)
+        redirect_uri = "http://localhost:8000/auth/callback/discord"
+        state = "discord-state-token"
+
+        url = provider.get_authorization_url(redirect_uri, state)
+
+        assert url.startswith("https://discord.com/api/oauth2/authorize?")
+        assert "client_id=test-discord-client-id" in url
+        assert "scope=identify+email" in url
+        assert f"state={state}" in url
+
+    @pytest.mark.asyncio
+    async def test_get_user_info_parses_discord_response(self, mock_settings: MagicMock) -> None:
+        """Test get_user_info parses Discord user response correctly."""
+        provider = DiscordOAuthProvider(mock_settings)
+
+        mock_response = Mock()
+        mock_response.json.return_value = {
+            "id": "80351110224678912",
+            "username": "nelly",
+            "global_name": "Nelly Rose",
+            "email": "nelly@discord.com",
+            "verified": True,
+        }
+        mock_response.raise_for_status = Mock()
+
+        with patch("httpx.AsyncClient") as mock_client_class:
+            mock_client = AsyncMock()
+            mock_client.__aenter__.return_value = mock_client
+            mock_client.__aexit__.return_value = None
+            mock_client.get = AsyncMock(return_value=mock_response)
+            mock_client_class.return_value = mock_client
+
+            user_info = await provider.get_user_info("test-discord-token")
+
+        assert user_info.provider == "discord"
+        assert user_info.oauth_id == "80351110224678912"
+        assert user_info.email == "nelly@discord.com"
+        assert user_info.first_name == "Nelly"
+        assert user_info.last_name == "Rose"
+        assert user_info.username == "nelly"
+        assert user_info.email_verified is True
+
+    @pytest.mark.asyncio
+    async def test_get_user_info_uses_username_when_no_global_name(self, mock_settings: MagicMock) -> None:
+        """Test get_user_info uses username when global_name is missing."""
+        provider = DiscordOAuthProvider(mock_settings)
+
+        mock_response = Mock()
+        mock_response.json.return_value = {
+            "id": "12345678901234567",
+            "username": "discorduser",
+            "email": "user@example.com",
+            "verified": True,
+        }
+        mock_response.raise_for_status = Mock()
+
+        with patch("httpx.AsyncClient") as mock_client_class:
+            mock_client = AsyncMock()
+            mock_client.__aenter__.return_value = mock_client
+            mock_client.__aexit__.return_value = None
+            mock_client.get = AsyncMock(return_value=mock_response)
+            mock_client_class.return_value = mock_client
+
+            user_info = await provider.get_user_info("test-token")
+
+        assert user_info.first_name == "discorduser"
+        assert user_info.last_name == ""
+        assert user_info.username == "discorduser"
+
+    @pytest.mark.asyncio
+    async def test_get_user_info_raises_when_no_email(self, mock_settings: MagicMock) -> None:
+        """Test get_user_info raises ValueError when no email found."""
+        provider = DiscordOAuthProvider(mock_settings)
+
+        mock_response = Mock()
+        mock_response.json.return_value = {
+            "id": "99999999999999999",
+            "username": "noemail",
+            "global_name": "No Email User",
+            "verified": True,
+        }
+        mock_response.raise_for_status = Mock()
+
+        with patch("httpx.AsyncClient") as mock_client_class:
+            mock_client = AsyncMock()
+            mock_client.__aenter__.return_value = mock_client
+            mock_client.__aexit__.return_value = None
+            mock_client.get = AsyncMock(return_value=mock_response)
+            mock_client_class.return_value = mock_client
+
+            with pytest.raises(ValueError, match="No email found in Discord account"):
+                await provider.get_user_info("test-token")
+
+    @pytest.mark.asyncio
+    async def test_get_user_info_handles_single_name(self, mock_settings: MagicMock) -> None:
+        """Test get_user_info correctly handles single-word global_name."""
+        provider = DiscordOAuthProvider(mock_settings)
+
+        mock_response = Mock()
+        mock_response.json.return_value = {
+            "id": "77777777777777777",
+            "username": "cher",
+            "global_name": "Cher",
+            "email": "cher@example.com",
+            "verified": True,
+        }
+        mock_response.raise_for_status = Mock()
+
+        with patch("httpx.AsyncClient") as mock_client_class:
+            mock_client = AsyncMock()
+            mock_client.__aenter__.return_value = mock_client
+            mock_client.__aexit__.return_value = None
+            mock_client.get = AsyncMock(return_value=mock_response)
+            mock_client_class.return_value = mock_client
+
+            user_info = await provider.get_user_info("test-token")
+
+        assert user_info.first_name == "Cher"
+        assert user_info.last_name == ""
+
+
 class TestOAuthService:
     """Tests for OAuthService."""
 
-    def test_service_initializes_with_both_providers(self, mock_settings: MagicMock) -> None:
-        """Test OAuthService initializes with GitHub and Google providers."""
+    def test_service_initializes_with_all_providers(self, mock_settings: MagicMock) -> None:
+        """Test OAuthService initializes with GitHub, Google, and Discord providers."""
         service = OAuthService(mock_settings)
 
         assert "github" in service.providers
         assert "google" in service.providers
+        assert "discord" in service.providers
         assert isinstance(service.providers["github"], GitHubOAuthProvider)
         assert isinstance(service.providers["google"], GoogleOAuthProvider)
+        assert isinstance(service.providers["discord"], DiscordOAuthProvider)
 
     def test_get_provider_github_returns_github_provider(self, mock_settings: MagicMock) -> None:
         """Test get_provider('github') returns GitHubOAuthProvider."""
@@ -557,6 +728,15 @@ class TestOAuthService:
         assert isinstance(provider, GoogleOAuthProvider)
         assert provider.provider_name == "google"
 
+    def test_get_provider_discord_returns_discord_provider(self, mock_settings: MagicMock) -> None:
+        """Test get_provider('discord') returns DiscordOAuthProvider."""
+        service = OAuthService(mock_settings)
+
+        provider = service.get_provider("discord")
+
+        assert isinstance(provider, DiscordOAuthProvider)
+        assert provider.provider_name == "discord"
+
     def test_get_provider_unknown_raises_value_error(self, mock_settings: MagicMock) -> None:
         """Test get_provider raises ValueError for unknown provider."""
         service = OAuthService(mock_settings)
@@ -571,6 +751,7 @@ class TestOAuthService:
         assert isinstance(service, OAuthService)
         assert "github" in service.providers
         assert "google" in service.providers
+        assert "discord" in service.providers
 
     def test_service_providers_use_same_settings(self, mock_settings: MagicMock) -> None:
         """Test all providers in service use the same settings instance."""
@@ -578,9 +759,11 @@ class TestOAuthService:
 
         github_provider = service.get_provider("github")
         google_provider = service.get_provider("google")
+        discord_provider = service.get_provider("discord")
 
         assert github_provider.settings is mock_settings
         assert google_provider.settings is mock_settings
+        assert discord_provider.settings is mock_settings
 
 
 class TestTokenExchange:

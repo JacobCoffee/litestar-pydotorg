@@ -31,6 +31,14 @@ GOOGLE_USER_DATA = {
     "verified_email": True,
 }
 
+DISCORD_USER_DATA = {
+    "id": "80351110224678912",
+    "username": "discorduser",
+    "global_name": "Discord User",
+    "email": "test@discord.com",
+    "verified": True,
+}
+
 TOKEN_RESPONSE = {
     "access_token": "mock-access-token",
     "token_type": "bearer",
@@ -93,6 +101,20 @@ class TestOAuthLoginInitiation:
         assert "client_id=test-google-id" in location
         assert "response_type=code" in location
         assert "scope=openid+email+profile" in location
+        assert "state=" in location
+        assert "redirect_uri=" in location
+
+    async def test_discord_oauth_redirects_to_discord(self, client: AsyncTestClient) -> None:
+        """Test Discord OAuth redirects to Discord authorization URL."""
+        with patch("pydotorg.config.settings.discord_client_id", "test-discord-id"):
+            response = await client.get("/api/auth/oauth/discord", follow_redirects=False)
+
+        assert response.status_code == 302
+        location = response.headers["location"]
+        assert "discord.com/api/oauth2/authorize" in location
+        assert "client_id=test-discord-id" in location
+        assert "response_type=code" in location
+        assert "scope=identify+email" in location
         assert "state=" in location
         assert "redirect_uri=" in location
 
@@ -222,6 +244,36 @@ class TestOAuthCallbackSuccess:
             with patch("pydotorg.core.auth.oauth.httpx.AsyncClient", return_value=mock_client):
                 callback_response = await client.get(
                     f"/api/auth/oauth/google/callback?code=test_code&state={state}",
+                )
+
+                assert callback_response.status_code == 200
+                data = callback_response.json()
+                assert "access_token" in data
+                assert "refresh_token" in data
+
+    async def test_successful_discord_callback_creates_new_user(self, client: AsyncTestClient) -> None:
+        """Test successful Discord callback creates new user and returns JWT tokens."""
+        mock_client = create_mock_async_client(
+            post_response=create_mock_response(TOKEN_RESPONSE),
+            get_responses=[create_mock_response(DISCORD_USER_DATA)],
+        )
+
+        with (
+            patch("pydotorg.config.settings.discord_client_id", "test-id"),
+            patch("pydotorg.config.settings.discord_client_secret", "test-secret"),
+        ):
+            init_response = await client.get("/api/auth/oauth/discord", follow_redirects=False)
+            assert init_response.status_code == 302
+
+            location = init_response.headers["location"]
+            state = next(
+                (p.split("=")[1] for p in location.split("&") if p.startswith("state=")),
+                None,
+            )
+
+            with patch("pydotorg.core.auth.oauth.httpx.AsyncClient", return_value=mock_client):
+                callback_response = await client.get(
+                    f"/api/auth/oauth/discord/callback?code=test_code&state={state}",
                 )
 
                 assert callback_response.status_code == 200
@@ -553,6 +605,16 @@ class TestOAuthLoginPost:
         location = response.headers["location"]
         assert "accounts.google.com/o/oauth2/v2/auth" in location
         assert "client_id=test-google-id" in location
+
+    async def test_discord_oauth_post_redirects_to_discord(self, client: AsyncTestClient) -> None:
+        """Test POST Discord OAuth redirects to Discord authorization URL."""
+        with patch("pydotorg.config.settings.discord_client_id", "test-discord-id"):
+            response = await client.post("/api/auth/oauth/discord", follow_redirects=False)
+
+        assert response.status_code == 302
+        location = response.headers["location"]
+        assert "discord.com/api/oauth2/authorize" in location
+        assert "client_id=test-discord-id" in location
 
     async def test_oauth_post_invalid_provider_returns_403(self, client: AsyncTestClient) -> None:
         """Test POST with unknown provider returns 403 error."""
