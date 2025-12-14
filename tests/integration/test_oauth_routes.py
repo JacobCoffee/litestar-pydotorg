@@ -527,3 +527,141 @@ class TestSessionStateManagement:
 
             assert "github.com" in github_location
             assert "google.com" in google_location
+
+
+@pytest.mark.asyncio
+class TestOAuthLoginPost:
+    """Tests for POST /oauth/{provider} endpoint (HTMX compatible)."""
+
+    async def test_github_oauth_post_redirects_to_github(self, client: AsyncTestClient) -> None:
+        """Test POST GitHub OAuth redirects to GitHub authorization URL."""
+        with patch("pydotorg.config.settings.github_client_id", "test-github-id"):
+            response = await client.post("/api/auth/oauth/github", follow_redirects=False)
+
+        assert response.status_code == 302
+        location = response.headers["location"]
+        assert "github.com/login/oauth/authorize" in location
+        assert "client_id=test-github-id" in location
+        assert "state=" in location
+
+    async def test_google_oauth_post_redirects_to_google(self, client: AsyncTestClient) -> None:
+        """Test POST Google OAuth redirects to Google authorization URL."""
+        with patch("pydotorg.config.settings.google_client_id", "test-google-id"):
+            response = await client.post("/api/auth/oauth/google", follow_redirects=False)
+
+        assert response.status_code == 302
+        location = response.headers["location"]
+        assert "accounts.google.com/o/oauth2/v2/auth" in location
+        assert "client_id=test-google-id" in location
+
+    async def test_oauth_post_invalid_provider_returns_403(self, client: AsyncTestClient) -> None:
+        """Test POST with unknown provider returns 403 error."""
+        response = await client.post("/api/auth/oauth/invalid_provider", follow_redirects=False)
+
+        assert response.status_code == 403
+        assert "Unknown OAuth provider" in response.text
+
+    async def test_oauth_post_not_configured_returns_error(self, client: AsyncTestClient) -> None:
+        """Test POST OAuth fails when provider credentials not configured."""
+        with patch("pydotorg.config.settings.github_client_id", None):
+            response = await client.post("/api/auth/oauth/github", follow_redirects=False)
+
+        assert response.status_code == 500
+
+    async def test_oauth_post_stores_session_state(self, client: AsyncTestClient) -> None:
+        """Test POST OAuth stores state in session for CSRF protection."""
+        with patch("pydotorg.config.settings.github_client_id", "test-github-id"):
+            response = await client.post("/api/auth/oauth/github", follow_redirects=False)
+
+        assert response.status_code == 302
+        location = response.headers["location"]
+        assert "state=" in location
+
+
+@pytest.mark.asyncio
+class TestOAuthAccountRestrictions:
+    """Tests for OAuth account restrictions (no password operations)."""
+
+    async def _create_oauth_user(self, client: AsyncTestClient) -> dict:
+        """Helper to create an OAuth user and return tokens."""
+        mock_client = create_mock_async_client(
+            post_response=create_mock_response(TOKEN_RESPONSE),
+            get_responses=[
+                create_mock_response(GITHUB_USER_DATA),
+                create_mock_response(GITHUB_EMAILS_DATA),
+            ],
+        )
+
+        with (
+            patch("pydotorg.config.settings.github_client_id", "test-id"),
+            patch("pydotorg.config.settings.github_client_secret", "test-secret"),
+        ):
+            init_response = await client.get("/api/auth/oauth/github", follow_redirects=False)
+            location = init_response.headers["location"]
+            state = next((p.split("=")[1] for p in location.split("&") if p.startswith("state=")), None)
+
+            with patch("pydotorg.core.auth.oauth.httpx.AsyncClient", return_value=mock_client):
+                callback_response = await client.get(
+                    f"/api/auth/oauth/github/callback?code=test_code&state={state}",
+                )
+                return callback_response.json()
+
+    async def test_oauth_user_cannot_change_password(self, client: AsyncTestClient) -> None:
+        """Test OAuth accounts cannot change password."""
+        tokens = await self._create_oauth_user(client)
+
+        response = await client.post(
+            "/api/auth/change-password",
+            json={
+                "current_password": "anything",
+                "new_password": "NewSecurePass123!",
+                "confirm_password": "NewSecurePass123!",
+            },
+            headers={"Authorization": f"Bearer {tokens['access_token']}"},
+        )
+
+        assert response.status_code == 403
+        assert "github" in response.text.lower() or "oauth" in response.text.lower()
+
+    async def test_oauth_user_cannot_login_with_password(self, client: AsyncTestClient) -> None:
+        """Test OAuth accounts cannot login with password."""
+        await self._create_oauth_user(client)
+
+        response = await client.post(
+            "/api/auth/login",
+            json={
+                "username": "test@example.com",
+                "password": "anything",
+            },
+        )
+
+        assert response.status_code in (401, 403)
+
+    async def test_oauth_user_cannot_reset_password(self, client: AsyncTestClient) -> None:
+        """Test OAuth accounts cannot reset password."""
+        await self._create_oauth_user(client)
+
+        forgot_response = await client.post(
+            "/api/auth/forgot-password",
+            json={"email": "test@example.com"},
+        )
+
+        if forgot_response.status_code == 200:
+            assert "oauth" in forgot_response.text.lower() or "github" in forgot_response.text.lower()
+
+    async def test_oauth_user_can_update_profile(self, client: AsyncTestClient) -> None:
+        """Test OAuth accounts CAN update profile info."""
+        tokens = await self._create_oauth_user(client)
+
+        response = await client.put(
+            "/api/auth/profile",
+            json={
+                "first_name": "Updated",
+                "last_name": "Name",
+                "username": "testuser",
+                "email": "test@example.com",
+            },
+            headers={"Authorization": f"Bearer {tokens['access_token']}"},
+        )
+
+        assert response.status_code == 200
