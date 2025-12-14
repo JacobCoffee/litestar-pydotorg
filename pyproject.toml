@@ -159,6 +159,7 @@ ignore = [
     "B010",    # setattr with constant
     "E501",    # line too long (handled by formatter)
     "ISC001",  # conflicts with formatter
+    "PLC0415", # import not at top-level (lazy imports for circular dep avoidance)
     "PLR0913", # too many arguments
     "RUF012",  # mutable class attributes
     "S101",    # assert usage (needed for tests)
@@ -198,7 +199,7 @@ ignore = [
 ]
 "src/pydotorg/db/migrations/**/*" = ["ERA001", "INP001"]
 "src/pydotorg/main.py" = ["BLE001", "TRY300", "TC002"]
-"src/pydotorg/tasks/**/*" = ["PLC0415", "TRY300"]
+"src/pydotorg/tasks/**/*" = ["TRY300"]
 "src/pydotorg/domains/users/auth_controller.py" = ["TRY301"]
 "src/pydotorg/config.py" = ["PLR2004"]
 "src/pydotorg/db/seed.py" = ["PLR2004"]

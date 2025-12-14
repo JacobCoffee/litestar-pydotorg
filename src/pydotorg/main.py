@@ -380,7 +380,7 @@ def configure_template_engine(engine: JinjaTemplateEngine) -> None:  # noqa: PLR
         try:
             if isinstance(value, str):
                 if "T" in value:
-                    return datetime.fromisoformat(value.replace("Z", "+00:00"))
+                    return datetime.fromisoformat(value)
                 return None
             if isinstance(value, int | float):
                 if value == 0:
