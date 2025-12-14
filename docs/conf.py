@@ -119,6 +119,14 @@ nitpicky = False
 add_module_names = False
 todo_include_todos = True
 
+# Linkcheck settings - skip auto-generated commit links in changelog
+linkcheck_ignore = [
+    r"https://github\.com/JacobCoffee/litestar-pydotorg/commit/.*",
+    r"https://github\.com/JacobCoffee/litestar-pydotorg/compare/.*",
+]
+linkcheck_timeout = 10
+linkcheck_retries = 2
+
 # Suppress warnings for inherited docstrings from external libraries with RST issues
 suppress_warnings = [
     "autodoc.import_object",
