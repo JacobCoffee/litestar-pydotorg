@@ -1,16 +1,178 @@
 # litestar-pydotorg
 
-Python.org rebuilt with [Litestar](https://litestar.dev/).
+```{rst-class} lead
+Python.org rebuilt with [Litestar](https://litestar.dev/) - A modern, high-performance rewrite featuring Jinja2 templates and Tailwind CSS/DaisyUI.
+```
 
-A modern rewrite of the Python.org website using the Litestar framework, featuring Jinja2 templates and Tailwind CSS/DaisyUI.
+---
+
+::::{grid} 1 2 2 3
+:gutter: 3
+
+:::{grid-item-card} {octicon}`rocket` Getting Started
+:link: getting-started/index
+:link-type: doc
+:class-card: sd-border-0
+
+Install, configure, and run your first local instance in minutes.
+:::
+
+:::{grid-item-card} {octicon}`book` Guides
+:link: guides/index
+:link-type: doc
+:class-card: sd-border-0
+
+Development workflows, testing, deployment, and best practices.
+:::
+
+:::{grid-item-card} {octicon}`code` API Reference
+:link: api/index
+:link-type: doc
+:class-card: sd-border-0
+
+Complete SDK documentation for all modules, classes, and functions.
+:::
+
+:::{grid-item-card} {octicon}`server` Architecture
+:link: architecture/ARCHITECTURE
+:link-type: doc
+:class-card: sd-border-0
+
+System design, domain models, database schema, and ADRs.
+:::
+
+:::{grid-item-card} {octicon}`mortar-board` Cookbook
+:link: cookbook/index
+:link-type: doc
+:class-card: sd-border-0
+
+Real-world recipes and patterns for common development tasks.
+:::
+
+::::
+
+---
+
+## Key Features
+
+::::{grid} 1 2 2 3
+:gutter: 3
+
+:::{grid-item-card} Litestar Framework
+:class-card: sd-border-0
+
+Modern, high-performance ASGI framework with first-class OpenAPI support.
+:::
+
+:::{grid-item-card} SQLAlchemy 2.0
+:class-card: sd-border-0
+
+Async ORM with Advanced-Alchemy integration, migrations, and repositories.
+:::
+
+:::{grid-item-card} 17 Domain Modules
+:class-card: sd-border-0
+
+Users, downloads, events, jobs, sponsors, blogs, and more - all implemented.
+:::
+
+:::{grid-item-card} Tailwind + DaisyUI
+:class-card: sd-border-0
+
+Modern utility-first CSS with pre-built components and Vite HMR.
+:::
+
+:::{grid-item-card} SAQ Background Tasks
+:class-card: sd-border-0
+
+31 async tasks and 7 cron jobs for cache, email, search, and more.
+:::
+
+:::{grid-item-card} Comprehensive Auth
+:class-card: sd-border-0
+
+JWT tokens, session auth, OAuth2 (GitHub/Google), and API keys.
+:::
+
+::::
+
+---
+
+## Quick Start
+
+```bash
+# Clone and setup
+git clone https://github.com/JacobCoffee/litestar-pydotorg.git
+cd litestar-pydotorg
+make install
+
+# Start infrastructure and run
+make infra-up
+make litestar-db-upgrade
+make serve
+```
+
+The application will be available at:
+- **UI**: http://127.0.0.1:8000/
+- **API Docs**: http://127.0.0.1:8000/api/
+- **Admin**: http://127.0.0.1:8000/admin/
+
+---
+
+## Development
+
+```bash
+# Run all CI checks (lint + type-check + test)
+make ci
+
+# Individual commands
+make lint         # Ruff linting
+make fmt          # Ruff formatting
+make type-check   # ty type checking
+make test         # pytest with coverage
+```
+
+---
 
 ```{toctree}
 :maxdepth: 2
 :caption: Getting Started
 :hidden:
 
-architecture/README
-architecture/QUICK_START
+getting-started/index
+getting-started/installation
+getting-started/quickstart
+```
+
+```{toctree}
+:maxdepth: 2
+:caption: Guides
+:hidden:
+
+guides/index
+guides/development
+guides/feature-flags
+guides/api-usage
+guides/authentication
+guides/testing
+guides/debugging
+guides/configuration
+guides/deployment
+guides/docker
+guides/contributing
+guides/troubleshooting
+```
+
+```{toctree}
+:maxdepth: 2
+:caption: Cookbook
+:hidden:
+
+cookbook/index
+cookbook/domain-patterns
+cookbook/authentication-recipes
+cookbook/database-recipes
+cookbook/testing-recipes
 ```
 
 ```{toctree}
@@ -20,8 +182,11 @@ architecture/QUICK_START
 
 architecture/ARCHITECTURE
 architecture/DATABASE_SCHEMA
+architecture/DOMAIN_MODELS
 architecture/RATE_LIMITING_ARCHITECTURE
 architecture/RATE_LIMITING_QUICK_REF
+architecture/QUICK_START
+architecture/README
 ```
 
 ```{toctree}
@@ -31,6 +196,7 @@ architecture/RATE_LIMITING_QUICK_REF
 
 api-getting-started
 api-authentication
+api-versioning
 architecture/API_TAGS_INDEX
 architecture/API_TAGS_STRUCTURE
 architecture/API_TAGS_IMPLEMENTATION
@@ -51,12 +217,10 @@ architecture/adr/template
 
 ```{toctree}
 :maxdepth: 2
-:caption: Guides
+:caption: SDK Reference
 :hidden:
 
-FEATURE_FLAGS
-FEATURE_FLAG_LIBRARY_ANALYSIS
-POSTMAN_GUIDE
+api/index
 ```
 
 ```{toctree}
@@ -64,50 +228,12 @@ POSTMAN_GUIDE
 :caption: Development
 :hidden:
 
-changelog
+FEATURE_FLAGS
+FEATURE_FLAG_LIBRARY_ANALYSIS
+POSTMAN_GUIDE
 ```
 
-## Features
-
-- **Litestar Framework**: Modern, high-performance ASGI framework
-- **SQLAlchemy 2.0**: Async ORM with Advanced-Alchemy integration
-- **Jinja2 Templates**: Server-side rendering with powerful templating
-- **Tailwind CSS + DaisyUI**: Modern utility-first CSS framework
-- **SAQ**: Background task processing with Redis
-- **Comprehensive Auth**: JWT-based authentication system
-
-## Quick Start
-
-```bash
-# Clone the repository
-git clone https://github.com/JacobCoffee/litestar-pydotorg.git
-cd litestar-pydotorg
-
-# Install dependencies
-make install
-
-# Start infrastructure (PostgreSQL, Redis)
-make infra-up
-
-# Run migrations
-make db-migrate
-
-# Start development server
-make serve
-```
-
-## Development
-
-```bash
-# Run all CI checks
-make ci
-
-# Individual checks
-make lint         # Run linter
-make fmt          # Format code
-make type-check   # Type checking
-make test         # Run tests
-```
+---
 
 ## Links
 
@@ -115,7 +241,9 @@ make test         # Run tests
 - [Litestar Documentation](https://docs.litestar.dev/)
 - [Python.org](https://python.org/)
 
-## Indices and tables
+---
+
+## Indices and Tables
 
 - {ref}`genindex`
 - {ref}`modindex`
