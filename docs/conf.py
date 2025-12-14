@@ -114,6 +114,8 @@ intersphinx_mapping = {
     "pydantic": ("https://docs.pydantic.dev/latest/", None),
     "advanced-alchemy": ("https://docs.advanced-alchemy.litestar.dev/latest/", None),
 }
+intersphinx_cache_limit = 5
+intersphinx_timeout = 10
 
 nitpicky = False
 add_module_names = False

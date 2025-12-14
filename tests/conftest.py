@@ -121,10 +121,14 @@ async def async_engine(postgres_uri: str) -> AsyncIterator[AsyncEngine]:
     Provides a single engine instance to prevent connection pool exhaustion.
     Creates tables once at the start of the session.
     """
+    from sqlalchemy import text
+
     engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
 
     async with engine.begin() as conn:
-        await conn.run_sync(AuditBase.metadata.drop_all)
+        # Drop all tables with CASCADE to handle FK dependencies
+        for table in reversed(AuditBase.metadata.sorted_tables):
+            await conn.execute(text(f'DROP TABLE IF EXISTS "{table.name}" CASCADE'))
         await conn.run_sync(AuditBase.metadata.create_all)
 
     yield engine
