@@ -145,10 +145,31 @@
 
 | Enhancement | Priority | Description |
 |-------------|----------|-------------|
+| **Sitewide search** | HIGH | Global search across all content (jobs, events, blogs, pages, downloads) using Meilisearch |
 | **litestar-workflows integration** | MEDIUM | Workflow engine for sponsor/job/event approvals (see below) |
 | **Job auto-submit on creation** | LOW | Add `submit_immediately` flag to `create_job()` |
 | **Calendar detail pagination UI/UX** | LOW | Enhance with page dropdown, "Go to page" input |
 | **Resettable demo instance** | LOW | Public POC instance that resets periodically (see below) |
+
+### Sitewide Search
+
+**Goal**: Implement a unified search experience across the entire site using Meilisearch (already configured).
+
+**Requirements**:
+- Search modal with keyboard shortcut (Cmd/Ctrl+K)
+- Search across: jobs, events, blogs, pages, downloads, success stories
+- Instant results with highlighting
+- Category filters in results
+- Recent searches history
+
+**Tasks**:
+- [ ] Create unified search index in Meilisearch (multi-index search)
+- [ ] Build search API endpoint (`/api/search`)
+- [ ] Create search modal component with Alpine.js
+- [ ] Add keyboard shortcut (Cmd/Ctrl+K) to open search
+- [ ] Implement search results UI with category grouping
+- [ ] Add search button back to navbar when complete
+- [ ] Index all existing content via SAQ task
 
 ### Resettable Demo Instance
 
