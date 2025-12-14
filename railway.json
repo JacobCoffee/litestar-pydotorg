@@ -1,0 +1,13 @@
+{
+  "$schema": "https://railway.com/railway.schema.json",
+  "build": {
+    "builder": "DOCKERFILE"
+  },
+  "deploy": {
+    "startCommand": "/bin/sh -c 'LITESTAR_APP=pydotorg.main:app litestar database upgrade --no-prompt && (sleep 5 && python -m pydotorg.db.seed 2>&1 | head -50 &) && granian --interface asgi pydotorg.main:app --host 0.0.0.0 --port ${PORT:-8000} --workers 4 --log-level info 2>&1'",
+    "healthcheckPath": "/health",
+    "healthcheckTimeout": 120,
+    "restartPolicyType": "ON_FAILURE",
+    "restartPolicyMaxRetries": 3
+  }
+}

@@ -38,6 +38,7 @@ class EmailTemplateController(Controller):
     path = "/api/admin/email-templates"
     tags = ["Admin"]
     guards = [require_staff]
+    include_in_schema = False
 
     @get("/", status_code=HTTP_200_OK)
     async def list_templates(
@@ -297,6 +298,7 @@ class EmailLogController(Controller):
     path = "/api/admin/email-logs"
     tags = ["Admin"]
     guards = [require_staff]
+    include_in_schema = False
 
     @get("/", status_code=HTTP_200_OK)
     async def list_logs(

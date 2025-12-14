@@ -27,3 +27,7 @@ AUTH_REGISTER: Final[str] = "/api/auth/register"
 AUTH_LOGOUT: Final[str] = "/api/auth/logout"
 AUTH_REFRESH: Final[str] = "/api/auth/refresh"
 AUTH_ME: Final[str] = "/api/auth/me"
+
+API_KEYS: Final[str] = "/api/v1/api-keys"
+API_KEY_BY_ID: Final[str] = "/api/v1/api-keys/{key_id:uuid}"
+API_KEY_REVOKE: Final[str] = "/api/v1/api-keys/{key_id:uuid}/revoke"

@@ -25,14 +25,14 @@ __all__ = [
 
 def get_all_tasks() -> list[Callable[..., Any]]:
     """Get all task functions lazily to avoid circular imports."""
-    from pydotorg.tasks.worker import get_task_functions  # noqa: PLC0415
+    from pydotorg.tasks.worker import get_task_functions
 
     return get_task_functions()
 
 
 def get_all_cron_jobs() -> list[Any]:
     """Get all cron jobs lazily to avoid circular imports."""
-    from pydotorg.tasks.worker import get_cron_jobs  # noqa: PLC0415
+    from pydotorg.tasks.worker import get_cron_jobs
 
     return get_cron_jobs()
 

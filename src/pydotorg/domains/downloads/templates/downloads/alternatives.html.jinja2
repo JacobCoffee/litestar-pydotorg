@@ -1,0 +1,439 @@
+{% extends "base.html.jinja2" %}
+
+{% block title %}Alternative Python Implementations | Python.org{% endblock %}
+
+{% block meta_description %}Explore alternative Python implementations including PyPy, Jython, IronPython, MicroPython, and more. Find the right Python implementation for your use case.{% endblock %}
+
+{% block breadcrumbs %}
+<div class="bg-base-200 py-4">
+    <div class="section-container">
+        <div class="text-sm breadcrumbs">
+            <ul>
+                <li><a href="/" hx-boost="true">Home</a></li>
+                <li><a href="/downloads/" hx-boost="true">Downloads</a></li>
+                <li>Alternative Implementations</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <div class="max-w-6xl mx-auto">
+            <div class="mb-12">
+                <h1 class="text-5xl font-bold text-python-blue mb-6">
+                    Alternative Python Implementations
+                </h1>
+
+                <div class="card bg-base-200 mb-8">
+                    <div class="card-body">
+                        <h2 class="card-title text-2xl text-python-blue mb-4">About Alternative Implementations</h2>
+                        <div class="prose max-w-none">
+                            <p class="text-base-content/80">
+                                This page lists alternative Python implementations and specialized variants.
+                                The reference implementation of Python is <strong>CPython</strong>, written in C and maintained
+                                by the core development team. However, there are several other implementations that offer
+                                different features, performance characteristics, or platform support.
+                            </p>
+                            <p class="text-base-content/80">
+                                These implementations may have varying levels of compatibility with CPython and the standard library.
+                                Some focus on performance, others on platform integration, and some on specialized use cases
+                                like embedded systems or educational purposes.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-info mb-8">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <div>
+                        <h3 class="font-bold">Choosing an Implementation</h3>
+                        <div class="text-sm">
+                            For most users, CPython is the recommended implementation. Consider alternatives only if you have
+                            specific requirements like JVM integration, performance optimization, or embedded systems support.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-12">
+                <h2 class="text-3xl font-bold text-python-blue mb-6">Available Implementations</h2>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                    <div class="card bg-base-200 shadow-lg hover:shadow-xl transition-shadow">
+                        <div class="card-body">
+                            <div class="flex items-start gap-3 mb-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-primary flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                </svg>
+                                <h3 class="card-title text-xl text-python-blue">PyPy</h3>
+                            </div>
+                            <p class="text-base-content/80 mb-4">
+                                A fast, compliant alternative implementation of Python featuring a Just-in-Time (JIT) compiler.
+                                PyPy often runs Python code significantly faster than CPython, especially for long-running processes.
+                            </p>
+                            <div class="mb-4">
+                                <h4 class="font-semibold text-sm mb-2">Best for:</h4>
+                                <ul class="text-sm text-base-content/80 space-y-1">
+                                    <li>• Performance-critical applications</li>
+                                    <li>• Long-running server processes</li>
+                                    <li>• CPU-intensive computations</li>
+                                </ul>
+                            </div>
+                            <div class="card-actions justify-between items-center">
+                                <div class="badge badge-success badge-sm">Python 3.10 Compatible</div>
+                                <a href="https://www.pypy.org/" target="_blank" rel="noopener" class="btn btn-primary btn-sm gap-2">
+                                    Visit Site
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card bg-base-200 shadow-lg hover:shadow-xl transition-shadow">
+                        <div class="card-body">
+                            <div class="flex items-start gap-3 mb-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-warning flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                                </svg>
+                                <h3 class="card-title text-xl text-python-blue">Jython</h3>
+                            </div>
+                            <p class="text-base-content/80 mb-4">
+                                Python implementation that runs on the Java Virtual Machine (JVM). Jython allows seamless
+                                integration with Java libraries and can be used to write Python scripts that interact with Java code.
+                            </p>
+                            <div class="mb-4">
+                                <h4 class="font-semibold text-sm mb-2">Best for:</h4>
+                                <ul class="text-sm text-base-content/80 space-y-1">
+                                    <li>• Java ecosystem integration</li>
+                                    <li>• Using Java libraries in Python</li>
+                                    <li>• JVM-based deployments</li>
+                                </ul>
+                            </div>
+                            <div class="card-actions justify-between items-center">
+                                <div class="badge badge-warning badge-sm">Python 2.7 Compatible</div>
+                                <a href="https://www.jython.org/" target="_blank" rel="noopener" class="btn btn-primary btn-sm gap-2">
+                                    Visit Site
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card bg-base-200 shadow-lg hover:shadow-xl transition-shadow">
+                        <div class="card-body">
+                            <div class="flex items-start gap-3 mb-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-info flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                                <h3 class="card-title text-xl text-python-blue">IronPython</h3>
+                            </div>
+                            <p class="text-base-content/80 mb-4">
+                                Python implementation for the .NET Framework and Mono. IronPython enables tight integration
+                                with .NET libraries and allows Python code to interact with C# and other .NET languages.
+                            </p>
+                            <div class="mb-4">
+                                <h4 class="font-semibold text-sm mb-2">Best for:</h4>
+                                <ul class="text-sm text-base-content/80 space-y-1">
+                                    <li>• .NET ecosystem integration</li>
+                                    <li>• Windows desktop applications</li>
+                                    <li>• Using .NET libraries in Python</li>
+                                </ul>
+                            </div>
+                            <div class="card-actions justify-between items-center">
+                                <div class="badge badge-info badge-sm">Python 2.7 Compatible</div>
+                                <a href="https://ironpython.net/" target="_blank" rel="noopener" class="btn btn-primary btn-sm gap-2">
+                                    Visit Site
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card bg-base-200 shadow-lg hover:shadow-xl transition-shadow">
+                        <div class="card-body">
+                            <div class="flex items-start gap-3 mb-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-secondary flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                                <h3 class="card-title text-xl text-python-blue">MicroPython</h3>
+                            </div>
+                            <p class="text-base-content/80 mb-4">
+                                A lean and efficient implementation of Python optimized to run on microcontrollers and embedded systems.
+                                MicroPython includes a subset of the Python standard library and hardware-specific modules.
+                            </p>
+                            <div class="mb-4">
+                                <h4 class="font-semibold text-sm mb-2">Best for:</h4>
+                                <ul class="text-sm text-base-content/80 space-y-1">
+                                    <li>• IoT and embedded systems</li>
+                                    <li>• Microcontroller projects</li>
+                                    <li>• Resource-constrained devices</li>
+                                </ul>
+                            </div>
+                            <div class="card-actions justify-between items-center">
+                                <div class="badge badge-secondary badge-sm">Python 3 Compatible</div>
+                                <a href="https://micropython.org/" target="_blank" rel="noopener" class="btn btn-primary btn-sm gap-2">
+                                    Visit Site
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card bg-base-200 shadow-lg hover:shadow-xl transition-shadow">
+                        <div class="card-body">
+                            <div class="flex items-start gap-3 mb-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-accent flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                                </svg>
+                                <h3 class="card-title text-xl text-python-blue">Cython</h3>
+                            </div>
+                            <p class="text-base-content/80 mb-4">
+                                A superset of Python that compiles to C, allowing you to write C extensions for Python with
+                                Python-like syntax. Cython combines Python's ease of use with C's performance.
+                            </p>
+                            <div class="mb-4">
+                                <h4 class="font-semibold text-sm mb-2">Best for:</h4>
+                                <ul class="text-sm text-base-content/80 space-y-1">
+                                    <li>• Performance optimization</li>
+                                    <li>• Writing C extensions easily</li>
+                                    <li>• Interfacing with C libraries</li>
+                                </ul>
+                            </div>
+                            <div class="card-actions justify-between items-center">
+                                <div class="badge badge-accent badge-sm">Compiler Tool</div>
+                                <a href="https://cython.org/" target="_blank" rel="noopener" class="btn btn-primary btn-sm gap-2">
+                                    Visit Site
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card bg-base-200 shadow-lg hover:shadow-xl transition-shadow">
+                        <div class="card-body">
+                            <div class="flex items-start gap-3 mb-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-primary flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                                </svg>
+                                <h3 class="card-title text-xl text-python-blue">Stackless Python</h3>
+                            </div>
+                            <p class="text-base-content/80 mb-4">
+                                An enhanced version of CPython that supports microthreads (tasklets) for massive concurrency.
+                                Stackless Python removes the C stack dependency, enabling thousands of concurrent tasks.
+                            </p>
+                            <div class="mb-4">
+                                <h4 class="font-semibold text-sm mb-2">Best for:</h4>
+                                <ul class="text-sm text-base-content/80 space-y-1">
+                                    <li>• Massive concurrency needs</li>
+                                    <li>• Game development</li>
+                                    <li>• Simulation systems</li>
+                                </ul>
+                            </div>
+                            <div class="card-actions justify-between items-center">
+                                <div class="badge badge-primary badge-sm">Python 3.8 Compatible</div>
+                                <a href="https://github.com/stackless-dev/stackless/wiki" target="_blank" rel="noopener" class="btn btn-primary btn-sm gap-2">
+                                    Visit Site
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card bg-base-200 shadow-lg hover:shadow-xl transition-shadow">
+                        <div class="card-body">
+                            <div class="flex items-start gap-3 mb-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-success flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                                </svg>
+                                <h3 class="card-title text-xl text-python-blue">GraalPy</h3>
+                            </div>
+                            <p class="text-base-content/80 mb-4">
+                                A high-performance Python implementation built on GraalVM. GraalPy provides excellent performance
+                                through advanced JIT compilation and seamless interoperability with other GraalVM languages.
+                            </p>
+                            <div class="mb-4">
+                                <h4 class="font-semibold text-sm mb-2">Best for:</h4>
+                                <ul class="text-sm text-base-content/80 space-y-1">
+                                    <li>• Polyglot applications</li>
+                                    <li>• High-performance computing</li>
+                                    <li>• Multi-language integration</li>
+                                </ul>
+                            </div>
+                            <div class="card-actions justify-between items-center">
+                                <div class="badge badge-success badge-sm">Python 3.11 Compatible</div>
+                                <a href="https://www.graalvm.org/python/" target="_blank" rel="noopener" class="btn btn-primary btn-sm gap-2">
+                                    Visit Site
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-python-blue mb-6">Comparison Guide</h2>
+
+                <div class="overflow-x-auto bg-base-200 rounded-lg shadow-lg p-6">
+                    <table class="table w-full">
+                        <thead>
+                            <tr>
+                                <th>Implementation</th>
+                                <th>Primary Use Case</th>
+                                <th>Performance</th>
+                                <th>Compatibility</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="hover">
+                                <td class="font-semibold">CPython</td>
+                                <td>General purpose</td>
+                                <td><span class="badge badge-sm">Standard</span></td>
+                                <td><span class="badge badge-success badge-sm">100%</span></td>
+                                <td><span class="badge badge-success badge-sm">Active</span></td>
+                            </tr>
+                            <tr class="hover">
+                                <td class="font-semibold">PyPy</td>
+                                <td>High performance</td>
+                                <td><span class="badge badge-success badge-sm">Fast</span></td>
+                                <td><span class="badge badge-success badge-sm">~99%</span></td>
+                                <td><span class="badge badge-success badge-sm">Active</span></td>
+                            </tr>
+                            <tr class="hover">
+                                <td class="font-semibold">Jython</td>
+                                <td>JVM integration</td>
+                                <td><span class="badge badge-sm">Standard</span></td>
+                                <td><span class="badge badge-warning badge-sm">Py 2.7</span></td>
+                                <td><span class="badge badge-warning badge-sm">Limited</span></td>
+                            </tr>
+                            <tr class="hover">
+                                <td class="font-semibold">IronPython</td>
+                                <td>.NET integration</td>
+                                <td><span class="badge badge-sm">Standard</span></td>
+                                <td><span class="badge badge-warning badge-sm">Py 2.7</span></td>
+                                <td><span class="badge badge-warning badge-sm">Limited</span></td>
+                            </tr>
+                            <tr class="hover">
+                                <td class="font-semibold">MicroPython</td>
+                                <td>Embedded systems</td>
+                                <td><span class="badge badge-sm">Optimized</span></td>
+                                <td><span class="badge badge-info badge-sm">Subset</span></td>
+                                <td><span class="badge badge-success badge-sm">Active</span></td>
+                            </tr>
+                            <tr class="hover">
+                                <td class="font-semibold">Cython</td>
+                                <td>C extensions</td>
+                                <td><span class="badge badge-success badge-sm">Very Fast</span></td>
+                                <td><span class="badge badge-success badge-sm">Superset</span></td>
+                                <td><span class="badge badge-success badge-sm">Active</span></td>
+                            </tr>
+                            <tr class="hover">
+                                <td class="font-semibold">Stackless</td>
+                                <td>Concurrency</td>
+                                <td><span class="badge badge-sm">Standard</span></td>
+                                <td><span class="badge badge-success badge-sm">~95%</span></td>
+                                <td><span class="badge badge-info badge-sm">Maintained</span></td>
+                            </tr>
+                            <tr class="hover">
+                                <td class="font-semibold">GraalPy</td>
+                                <td>Polyglot apps</td>
+                                <td><span class="badge badge-success badge-sm">Fast</span></td>
+                                <td><span class="badge badge-success badge-sm">~95%</span></td>
+                                <td><span class="badge badge-success badge-sm">Active</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
+                <div class="card bg-base-200">
+                    <div class="card-body">
+                        <h2 class="card-title text-xl text-python-blue mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Frequently Asked Questions
+                        </h2>
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="font-semibold text-sm mb-1">Which implementation should I use?</h4>
+                                <p class="text-base-content/80 text-sm">
+                                    For most cases, use CPython. Consider alternatives only if you have specific needs
+                                    like JVM/.NET integration or performance requirements.
+                                </p>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-sm mb-1">Are C extensions compatible?</h4>
+                                <p class="text-base-content/80 text-sm">
+                                    PyPy and CPython variants support most C extensions. Jython, IronPython, and MicroPython
+                                    generally do not support CPython C extensions.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200">
+                    <div class="card-body">
+                        <h2 class="card-title text-xl text-python-blue mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
+                            Additional Resources
+                        </h2>
+                        <div class="prose max-w-none">
+                            <ul class="text-base-content/80 text-sm">
+                                <li>
+                                    <a href="https://docs.python.org/3/faq/general.html#are-there-any-other-python-implementations" target="_blank" rel="noopener" class="python-link">
+                                        Official FAQ on Implementations
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://wiki.python.org/moin/PythonImplementations" target="_blank" rel="noopener" class="python-link">
+                                        Python Wiki: Implementations
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://speed.pypy.org/" target="_blank" rel="noopener" class="python-link">
+                                        PyPy Performance Benchmarks
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8">
+                <a href="/downloads/" hx-boost="true" class="btn btn-outline">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                    Back to Downloads
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

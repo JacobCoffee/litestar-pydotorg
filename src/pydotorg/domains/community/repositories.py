@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from advanced_alchemy.repository import SQLAlchemyAsyncRepository
-from sqlalchemy import select
+from sqlalchemy import func, select
 
 from pydotorg.domains.community.models import Link, Photo, Post, Video
 
@@ -60,6 +60,16 @@ class PostRepository(SQLAlchemyAsyncRepository[Post]):
         statement = select(Post).where(Post.creator_id == creator_id).order_by(Post.created_at.desc()).limit(limit)
         result = await self.session.execute(statement)
         return list(result.scalars().all())
+
+    async def count_published_posts(self) -> int:
+        """Count total published posts.
+
+        Returns:
+            Total count of published posts.
+        """
+        statement = select(func.count()).select_from(Post).where(Post.is_published.is_(True))
+        result = await self.session.execute(statement)
+        return result.scalar_one()
 
 
 class PhotoRepository(SQLAlchemyAsyncRepository[Photo]):

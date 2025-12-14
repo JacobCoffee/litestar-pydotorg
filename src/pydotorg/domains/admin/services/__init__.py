@@ -3,6 +3,7 @@
 from pydotorg.domains.admin.services.blogs import BlogAdminService
 from pydotorg.domains.admin.services.cron import CronJobService
 from pydotorg.domains.admin.services.dashboard import DashboardService
+from pydotorg.domains.admin.services.downloads import DownloadAnalyticsService
 from pydotorg.domains.admin.services.email import EmailAdminService
 from pydotorg.domains.admin.services.events import EventAdminService
 from pydotorg.domains.admin.services.jobs import JobAdminService
@@ -15,6 +16,7 @@ __all__ = [
     "BlogAdminService",
     "CronJobService",
     "DashboardService",
+    "DownloadAnalyticsService",
     "EmailAdminService",
     "EventAdminService",
     "JobAdminService",

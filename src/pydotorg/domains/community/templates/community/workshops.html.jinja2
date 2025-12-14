@@ -1,0 +1,345 @@
+{% extends "base.html.jinja2" %}
+
+{% block title %}Workshops & User Groups | Python Community{% endblock %}
+
+{% block meta_description %}Find Python user groups, workshops, and meetups in your area. Connect with local Python developers and learn together.{% endblock %}
+
+{% block content %}
+<section class="python-gradient text-white py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-5xl font-bold mb-6">Workshops & User Groups</h1>
+            <p class="text-xl opacity-90">
+                Connect with Python developers in your area and learn together
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <div class="card bg-gradient-to-br from-python-blue/5 to-python-yellow/5 border-l-4 border-python-blue mb-8">
+                <div class="card-body">
+                    <div class="flex items-start gap-4">
+                        <div class="flex-shrink-0 hidden md:block">
+                            <svg class="w-12 h-12 text-python-blue/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-lg text-base-content/90 leading-relaxed">
+                                <strong class="text-python-blue">Python User Groups</strong> are local communities
+                                of Python enthusiasts who meet regularly to share knowledge, work on projects,
+                                and support each other's learning journeys. Whether you're a beginner or expert,
+                                there's a group for you.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-200 py-16">
+    <div class="section-container">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-3xl font-bold text-python-blue mb-8 text-center">Find a User Group</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <a href="https://wiki.python.org/moin/LocalUserGroups" target="_blank" rel="noopener" class="card bg-base-100 shadow-lg hover:shadow-xl transition-all group">
+                    <div class="card-body">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-3 rounded-full bg-python-blue/10 group-hover:bg-python-blue/20 transition-colors">
+                                <svg class="w-6 h-6 text-python-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </div>
+                            <h3 class="card-title text-xl">Global Directory</h3>
+                        </div>
+                        <p class="text-base-content/80 mb-4">
+                            Browse the complete list of Python user groups organized by country and region
+                            on the Python Wiki.
+                        </p>
+                        <div class="card-actions justify-end">
+                            <span class="text-python-blue group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+                                Browse Groups
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="https://www.meetup.com/topics/python/" target="_blank" rel="noopener" class="card bg-base-100 shadow-lg hover:shadow-xl transition-all group">
+                    <div class="card-body">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-3 rounded-full bg-red-500/10 group-hover:bg-red-500/20 transition-colors">
+                                <svg class="w-6 h-6 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M6.98.555a.518.518 0 00-.105.011.53.53 0 00-.457.394L6.17 2.042h-.012l-.003.01.003-.002A1.845 1.845 0 004.8 3.082c-.089.267-.108.558-.054.84l.249 1.248a2.7 2.7 0 00-1.084 1.644l-.205 1.03a2.7 2.7 0 00.12 1.378l.005.013.003.011a2.7 2.7 0 00-.54 1.6 2.76 2.76 0 00.192 1.034c-.282.43-.402.951-.33 1.475l.1.73a2.11 2.11 0 00.482 1.027l-.005.111a2.14 2.14 0 00.064.553c.153.594.474 1.07.928 1.37l.013.031v.003c.192.462.508.84.924 1.102.296.187.63.31.987.36l.007.002c.12.014.24.02.36.021.248.1.51.177.786.227l.378.068c.027.004.055.01.083.01h.004c.263.033.526.05.79.05.063 0 .127-.003.19-.004l.053.01c1.155.132 2.352-.204 3.292-.95l.001.001.005-.004a2.84 2.84 0 001.103-.49c.152-.1.29-.217.416-.346l.012.002.135-.144.024-.029c.025-.03.05-.06.073-.093l.066-.074.003-.003c.323-.392.515-.88.538-1.397l.042-.013c.37-.262.573-.649.634-1.17l.004-.047.01-.078a2.05 2.05 0 00-.02-.622l-.003-.017-.002-.004c.066-.14.117-.292.152-.453a1.663 1.663 0 00-.234-1.262c.055-.155.095-.316.119-.483.068-.47.009-.904-.18-1.28l.003-.02a1.975 1.975 0 00-.185-1.204 1.972 1.972 0 00-.148-.227l-.01-.018.003-.009c-.047-.1-.1-.198-.162-.29-.006-.009-.013-.018-.02-.027l.066-.112a1.97 1.97 0 00-.327-2.437l.14-.166a1.41 1.41 0 00-.174-1.97 1.504 1.504 0 00-.316-.197c.009-.27-.054-.544-.198-.795a1.35 1.35 0 00-.473-.467l.003-.007a1.243 1.243 0 00-.68-.2h-.017a1.205 1.205 0 00-.253.028l-.005-.007a1.2 1.2 0 00-.593-.158c-.13 0-.257.02-.378.06l-.111-.224a.591.591 0 00-.099-.147.605.605 0 00-.68-.154l-.096-.09a.534.534 0 00-.158-.397.513.513 0 00-.27-.137l-.26-.588a.507.507 0 00-.468-.305.518.518 0 00-.095.011l-.264.05-.267-.536a.524.524 0 00-.473-.295zm9.483 9.96v.002-.002zm-3.933-7.39a.3.3 0 00.003.001l-.003-.001zm-.033-.007l-.01.001.01-.001zm5.263 7.87l.03.057-.03-.057zm-3.365-3.753l.002.008-.002-.008zm-6.81 6.463l.007.021-.002-.003-.005-.018z"/>
+                                </svg>
+                            </div>
+                            <h3 class="card-title text-xl">Meetup.com</h3>
+                        </div>
+                        <p class="text-base-content/80 mb-4">
+                            Search for Python meetups and events on Meetup.com. Many user groups organize
+                            their events through this platform.
+                        </p>
+                        <div class="card-actions justify-end">
+                            <span class="text-python-blue group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+                                Find Meetups
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="/events/" class="card bg-base-100 shadow-lg hover:shadow-xl transition-all group" hx-boost="true">
+                    <div class="card-body">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-3 rounded-full bg-python-yellow/10 group-hover:bg-python-yellow/20 transition-colors">
+                                <svg class="w-6 h-6 text-python-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                </svg>
+                            </div>
+                            <h3 class="card-title text-xl">Event Calendar</h3>
+                        </div>
+                        <p class="text-base-content/80 mb-4">
+                            Check out Python conferences, meetups, and workshops from around the world
+                            on our events calendar.
+                        </p>
+                        <div class="card-actions justify-end">
+                            <span class="text-python-blue group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+                                View Events
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-3xl font-bold text-python-blue mb-8">Types of Events</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="card bg-base-200 shadow">
+                    <div class="card-body">
+                        <div class="flex items-center gap-3 mb-4">
+                            <svg class="w-8 h-8 text-python-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                            </svg>
+                            <h3 class="card-title">User Group Meetups</h3>
+                        </div>
+                        <p class="text-base-content/80">
+                            Regular gatherings of local Python enthusiasts. Usually held monthly with
+                            presentations, lightning talks, and networking. Great for meeting other
+                            developers in your area.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200 shadow">
+                    <div class="card-body">
+                        <div class="flex items-center gap-3 mb-4">
+                            <svg class="w-8 h-8 text-python-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                            </svg>
+                            <h3 class="card-title">Workshops</h3>
+                        </div>
+                        <p class="text-base-content/80">
+                            Hands-on learning sessions focused on specific topics like web development,
+                            data science, or machine learning. Perfect for diving deep into new skills
+                            with expert guidance.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200 shadow">
+                    <div class="card-body">
+                        <div class="flex items-center gap-3 mb-4">
+                            <svg class="w-8 h-8 text-python-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+                            </svg>
+                            <h3 class="card-title">Coding Sprints</h3>
+                        </div>
+                        <p class="text-base-content/80">
+                            Collaborative sessions where developers work together on open source projects.
+                            A great way to contribute to Python packages and learn from experienced
+                            maintainers.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200 shadow">
+                    <div class="card-body">
+                        <div class="flex items-center gap-3 mb-4">
+                            <svg class="w-8 h-8 text-python-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                            </svg>
+                            <h3 class="card-title">Conferences</h3>
+                        </div>
+                        <p class="text-base-content/80">
+                            Large-scale events like PyCon featuring keynotes, talks, tutorials, and
+                            sprints. The ultimate Python experience with hundreds or thousands of
+                            attendees.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-200 py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-python-blue mb-8 text-center">Start Your Own User Group</h2>
+            <div class="card bg-base-100 shadow-lg">
+                <div class="card-body">
+                    <p class="text-lg text-base-content/80 mb-6">
+                        Can't find a Python user group in your area? Consider starting one! The PSF provides
+                        resources and support for new user groups.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h3 class="font-bold text-lg mb-3">Getting Started</h3>
+                            <ul class="space-y-2 text-base-content/70">
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-python-blue mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    Find a venue (library, co-working space, company office)
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-python-blue mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    Set up a meetup page or mailing list
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-python-blue mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    Spread the word on social media
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg mb-3">PSF Support</h3>
+                            <ul class="space-y-2 text-base-content/70">
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-python-blue mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    Apply for PSF grants for event costs
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-python-blue mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    Get listed on the Python Wiki
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-python-blue mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    Connect with other organizers
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="https://wiki.python.org/moin/StartingYourUsersGroup" target="_blank" rel="noopener" class="btn btn-primary">
+                            User Group Guide
+                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                            </svg>
+                        </a>
+                        <a href="https://www.python.org/psf/grants/" target="_blank" rel="noopener" class="btn btn-outline btn-primary">
+                            PSF Grants
+                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-3xl font-bold text-python-blue mb-8">Featured User Groups</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="card bg-base-200 shadow hover:shadow-lg transition-all">
+                    <div class="card-body">
+                        <h3 class="card-title">PyLadies</h3>
+                        <p class="text-base-content/70 text-sm mb-4">
+                            International mentorship group focused on helping more women become active
+                            participants and leaders in the Python community.
+                        </p>
+                        <a href="https://pyladies.com/" target="_blank" rel="noopener" class="link link-primary text-sm">
+                            Visit PyLadies
+                        </a>
+                    </div>
+                </div>
+                <div class="card bg-base-200 shadow hover:shadow-lg transition-all">
+                    <div class="card-body">
+                        <h3 class="card-title">Django Girls</h3>
+                        <p class="text-base-content/70 text-sm mb-4">
+                            Non-profit organization that empowers and helps women to organize free,
+                            one-day programming workshops.
+                        </p>
+                        <a href="https://djangogirls.org/" target="_blank" rel="noopener" class="link link-primary text-sm">
+                            Visit Django Girls
+                        </a>
+                    </div>
+                </div>
+                <div class="card bg-base-200 shadow hover:shadow-lg transition-all">
+                    <div class="card-body">
+                        <h3 class="card-title">Python Brasil</h3>
+                        <p class="text-base-content/70 text-sm mb-4">
+                            The largest Python community in Latin America, organizing the annual
+                            Python Brasil conference and local meetups.
+                        </p>
+                        <a href="https://python.org.br/" target="_blank" rel="noopener" class="link link-primary text-sm">
+                            Visit Python Brasil
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-gradient-to-br from-python-blue to-python-blue/80 text-white py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-4xl font-bold mb-4">Get Involved</h2>
+            <p class="text-xl opacity-90 mb-8">
+                Join a user group, attend a workshop, or start your own community.
+            </p>
+            <div class="flex flex-wrap gap-4 justify-center">
+                <a href="https://wiki.python.org/moin/LocalUserGroups" target="_blank" rel="noopener" class="btn btn-lg bg-white text-python-blue hover:bg-white/90 border-none">
+                    Find a User Group
+                </a>
+                <a href="/events/" class="btn btn-lg btn-outline border-white text-white hover:bg-white/10" hx-boost="true">
+                    Browse Events
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

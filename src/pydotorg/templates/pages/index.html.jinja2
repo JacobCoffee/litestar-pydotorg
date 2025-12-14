@@ -64,9 +64,10 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {% if recent_blog_entries %}
                     {% for entry in recent_blog_entries %}
+                    {% set clean_summary = (entry.summary|striptags|truncate(150)) if entry.summary else '' %}
                     {{ cards.news_card(
                         entry.title,
-                        entry.summary[:150] + '...' if entry.summary and entry.summary|length > 150 else (entry.summary or ''),
+                        clean_summary,
                         entry.published_at.strftime('%Y-%m-%d') if entry.published_at else '',
                         entry.url or '#',
                         entry.feed.name if entry.feed else 'Python.org'

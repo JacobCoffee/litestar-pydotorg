@@ -15,43 +15,62 @@
         {% endif %}
     </div>
 
-    <div class="grid grid-cols-2 gap-4 text-sm">
-        {% if job.city or job.country %}
-        <div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+        <div class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-base-content/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
             <span class="font-semibold">Location:</span>
-            {{ job.city }}{% if job.city and job.country %}, {% endif %}{{ job.country }}
+            {% if job.city and job.country %}
+                {{ job.city }}, {{ job.country }}
+            {% elif job.city %}
+                {{ job.city }}
+            {% elif job.country %}
+                {{ job.country }}
+            {% else %}
+                <span class="text-base-content/50">Not specified</span>
+            {% endif %}
+            {% if job.telecommuting %}
+                <span class="badge badge-success badge-sm ml-2">Remote</span>
+            {% endif %}
         </div>
-        {% endif %}
-
-        {% if job.telecommuting %}
-        <div>
-            <span class="badge badge-success badge-sm">Remote Available</span>
-        </div>
-        {% endif %}
 
         {% if job.contact_email %}
-        <div>
+        <div class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-base-content/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
             <span class="font-semibold">Contact:</span>
             <a href="mailto:{{ job.contact_email }}" class="link link-primary">{{ job.contact_email }}</a>
         </div>
         {% endif %}
 
         {% if job.contact_url %}
-        <div>
-            <span class="font-semibold">Apply URL:</span>
-            <a href="{{ job.contact_url }}" target="_blank" class="link link-primary">{{ job.contact_url }}</a>
+        <div class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-base-content/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+            </svg>
+            <span class="font-semibold">Apply:</span>
+            <a href="{{ job.contact_url }}" target="_blank" class="link link-primary truncate max-w-xs">Apply Here</a>
         </div>
         {% endif %}
 
         {% if job.created_at %}
-        <div>
+        <div class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-base-content/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
             <span class="font-semibold">Posted:</span>
             {{ job.created_at.strftime('%B %d, %Y') }}
         </div>
         {% endif %}
 
         {% if job.category %}
-        <div>
+        <div class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-base-content/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+            </svg>
             <span class="font-semibold">Category:</span>
             {{ job.category.name }}
         </div>
@@ -59,19 +78,22 @@
     </div>
 
     {% if job.job_types %}
-    <div>
-        <span class="font-semibold">Job Types:</span>
-        <div class="flex flex-wrap gap-2 mt-1">
-            {% for job_type in job.job_types %}
-            <span class="badge badge-outline">{{ job_type.name }}</span>
-            {% endfor %}
-        </div>
+    <div class="flex items-center gap-2 flex-wrap">
+        <span class="font-semibold text-sm">Job Types:</span>
+        {% for job_type in job.job_types %}
+        <span class="badge badge-outline badge-sm">{{ job_type.name }}</span>
+        {% endfor %}
     </div>
     {% endif %}
 
     {% if job.requirements %}
-    <div>
-        <h3 class="font-semibold mb-2">Requirements</h3>
+    <div class="bg-base-200/50 rounded-lg p-4">
+        <h3 class="font-semibold mb-2 flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+            </svg>
+            Requirements
+        </h3>
         <div class="prose prose-sm max-w-none">
             {{ job.requirements | safe }}
         </div>
@@ -79,8 +101,13 @@
     {% endif %}
 
     {% if job.description %}
-    <div>
-        <h3 class="font-semibold mb-2">Description</h3>
+    <div class="bg-base-200/50 rounded-lg p-4">
+        <h3 class="font-semibold mb-2 flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            Description
+        </h3>
         <div class="prose prose-sm max-w-none">
             {{ job.description | safe }}
         </div>

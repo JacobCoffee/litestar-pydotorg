@@ -221,12 +221,72 @@ class GoogleOAuthProvider(OAuthProvider):
             )
 
 
+class DiscordOAuthProvider(OAuthProvider):
+    @property
+    def provider_name(self) -> str:
+        return "discord"
+
+    @property
+    def authorize_url(self) -> str:
+        return "https://discord.com/api/oauth2/authorize"
+
+    @property
+    def token_url(self) -> str:
+        return "https://discord.com/api/oauth2/token"
+
+    @property
+    def user_info_url(self) -> str:
+        return "https://discord.com/api/users/@me"
+
+    @property
+    def client_id(self) -> str | None:
+        return self.settings.discord_client_id
+
+    @property
+    def client_secret(self) -> str | None:
+        return self.settings.discord_client_secret
+
+    @property
+    def scope(self) -> str:
+        return "identify email"
+
+    async def get_user_info(self, access_token: str) -> OAuthUserInfo:
+        async with httpx.AsyncClient() as client:
+            response = await client.get(
+                self.user_info_url,
+                headers={"Authorization": f"Bearer {access_token}"},
+            )
+            response.raise_for_status()
+            user_data = response.json()
+
+            email = user_data.get("email")
+            if not email:
+                msg = "No email found in Discord account. Please enable email access."
+                raise ValueError(msg)
+
+            global_name = user_data.get("global_name") or user_data.get("username", "")
+            name_parts = global_name.split(" ", 1)
+            first_name = name_parts[0] if name_parts else ""
+            last_name = name_parts[1] if len(name_parts) > 1 else ""
+
+            return OAuthUserInfo(
+                provider=self.provider_name,
+                oauth_id=user_data["id"],
+                email=email,
+                first_name=first_name,
+                last_name=last_name,
+                username=user_data.get("username", email.split("@")[0]),
+                email_verified=user_data.get("verified", False),
+            )
+
+
 class OAuthService:
     def __init__(self, settings: Settings) -> None:
         self.settings = settings
         self.providers: dict[str, OAuthProvider] = {
             "github": GitHubOAuthProvider(settings),
             "google": GoogleOAuthProvider(settings),
+            "discord": DiscordOAuthProvider(settings),
         }
 
     def get_provider(self, provider_name: str) -> OAuthProvider:

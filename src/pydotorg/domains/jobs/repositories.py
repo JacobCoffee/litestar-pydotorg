@@ -184,6 +184,24 @@ class JobRepository(SQLAlchemyAsyncRepository[Job]):
         result = await self.session.execute(statement)
         return list(result.scalars().all())
 
+    async def get_featured(self, limit: int = 5) -> list[Job]:
+        """Get featured job listings.
+
+        Args:
+            limit: Maximum number of featured jobs to return.
+
+        Returns:
+            List of featured approved jobs.
+        """
+        statement = (
+            select(Job)
+            .where(Job.is_featured.is_(True), Job.status == JobStatus.APPROVED)
+            .order_by(Job.created_at.desc())
+            .limit(limit)
+        )
+        result = await self.session.execute(statement)
+        return list(result.scalars().all())
+
 
 class JobReviewCommentRepository(SQLAlchemyAsyncRepository[JobReviewComment]):
     """Repository for JobReviewComment database operations."""

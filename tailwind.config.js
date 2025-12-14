@@ -3,6 +3,8 @@ module.exports = {
   content: [
     "./src/pydotorg/templates/**/*.jinja2",
     "./src/pydotorg/templates/**/*.html",
+    "./src/pydotorg/domains/**/templates/**/*.jinja2",
+    "./src/pydotorg/domains/**/templates/**/*.html",
     "./resources/js/**/*.{js,ts}",
   ],
   safelist: [

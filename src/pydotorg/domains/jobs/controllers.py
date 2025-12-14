@@ -668,11 +668,14 @@ class JobRenderController(Controller):
                 or (job.description and q_lower in job.description.lower())
             ]
 
+        featured_jobs = await job_service.get_featured(limit=5)
+
         is_htmx = request.headers.get("HX-Request") == "true"
         is_boosted = request.headers.get("HX-Boosted") == "true"
 
         context = {
             "jobs": jobs,
+            "featured_jobs": featured_jobs,
             "job_types": job_types_all,
             "job_categories": job_categories_all,
             "title": "Job Board",

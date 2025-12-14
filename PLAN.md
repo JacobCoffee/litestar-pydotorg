@@ -42,37 +42,68 @@
 ## Remaining TODO Items
 
 ### Domain Feature Gaps
-- [ ] **Page caching** (Redis) - Task 3.3
-- [ ] **GPG signature verification** for downloads - Task 3.4
-- [ ] **Feed refresh SAQ task** for blogs - Task 3.5
-- [ ] **Job expiration SAQ task** - Task 3.6
-- [ ] **Email notifications** for jobs - Task 3.6
-- [ ] **Recurrence rule engine** (dateutil.rrule) for events - Task 3.7
-- [ ] **Calendar feed** (RSS/Atom) for events - Task 3.7
-- [ ] **Contract management** workflow for sponsors - Task 3.8
-- [ ] **Annual sponsorship renewal** - Task 3.8
+- [x] **Page caching** (Redis) - Task 3.3 ✅ Cache-Control middleware, Surrogate-Key headers, 404 caching
+- [x] **GPG signature verification** for downloads - Task 3.4 ✅ SHA256 field, signature UI, verification instructions
+- [x] **Feed refresh SAQ task** for blogs - Task 3.5 ✅ Already implemented: `refresh_stale_feeds` runs every 15 min via `cron_refresh_feeds`
+- [x] **Job expiration SAQ task** - Task 3.6 ✅ Already implemented: `expire_jobs` (daily), `archive_old_jobs` (weekly), `cleanup_draft_jobs` (monthly)
+- [x] **Email notifications** for jobs - Task 3.6 ✅ `send_job_submitted_email` (admin), `send_job_approved_email`, `send_job_rejected_email`
+- [x] **Recurrence rule engine** (dateutil.rrule) for events - Task 3.7 ✅ RecurringRule model, recurrence.py utilities, 29 unit tests
+- [x] **Calendar feed** (RSS/Atom) for events - Task 3.7 ✅ RSS 2.0 + Atom 1.0 feeds, per-calendar feeds, 21 unit tests
+- [x] **Contract management** workflow for sponsors - Task 3.8 ✅ LegalClause, Contract models with workflow states (DRAFT→AWAITING_SIGNATURE→EXECUTED/NULLIFIED), ContractService with workflow methods, 24 unit tests
+- [x] **Annual sponsorship renewal** - Task 3.8 ✅ `approve_with_renewal()`, `get_previous_sponsorship()`, `list_expiring_soon()`, `create_renewal()` service methods, repository support
 
 ### API Enhancements
-- [ ] **API versioning** - paths use /api/v1 but no version negotiation
-- [ ] **API keys** - JWT auth only, no API key support
+- [x] **API versioning** - ✅ Version negotiation middleware (Accept header, URL path, query param), deprecation headers, 29 unit tests
+- [x] **API keys** - ✅ Full API key authentication: model, service, middleware, guards, endpoints, 21 unit tests
 
 ### Infrastructure
-- [ ] **Fastly CDN** - cache purging, surrogate keys, health monitoring
-- [ ] **Notification emails** - job/event notifications not wired
+- [x] **Fastly CDN** - ✅ Surrogate-Key middleware added, cache purging ready (needs Fastly API key config)
+- [x] **Notification emails** - ✅ Job/event notifications wired to SAQ email tasks
 
-### Documentation (Phase 9)
-- [ ] Generate SDK documentation
-- [ ] Update ARCHITECTURE.md
-- [ ] Create domain model documentation
-- [ ] Write deployment guide
-- [ ] Create contributing guide
-- [ ] Write troubleshooting guide
+### Documentation (Phase 9) ✅
+- [x] **Generate SDK documentation** - ✅ 244 autodoc files via sphinx autosummary (docs/api/core/, docs/api/domains/)
+- [x] **Update ARCHITECTURE.md** - ✅ Existing, linked in docs index
+- [x] **Create domain model documentation** - ✅ docs/architecture/DOMAIN_MODELS.md (1,392 lines, 17 domains, Mermaid ER diagrams)
+- [x] **Write deployment guide** - ✅ docs/guides/deployment.md
+- [x] **Create contributing guide** - ✅ docs/guides/contributing.md
+- [x] **Write troubleshooting guide** - ✅ docs/guides/troubleshooting.md
+- [x] **Getting started section** - ✅ docs/getting-started/ (index, installation, quickstart)
+- [x] **Cookbook section** - ✅ docs/cookbook/ (domain-patterns, authentication, database, testing recipes)
+- [x] **Guides section overhaul** - ✅ docs/guides/ (12 comprehensive guides)
+- [x] **Index.md modernization** - ✅ Grid cards, updated toctrees, sphinx-design integration
 
 ### Research TODO
-- [ ] Research Litestar patterns for internal API namespacing (`/api/admin/*` vs `/api/_internal/*`)
-- [ ] Evaluate authentication requirements for API docs visibility
-- [ ] Review Litestar's `OpenAPIConfig` for multiple spec generation
-- [ ] Consider `include_in_schema` per security level vs per route
+- [x] Research Litestar patterns for internal API namespacing (`/api/admin/*` vs `/api/_internal/*`) ✅ Using `/api/admin/docs/` for admin API docs
+- [x] Evaluate authentication requirements for API docs visibility ✅ Session auth guard (SSO with SQLAdmin)
+- [x] Review Litestar's `OpenAPIConfig` for multiple spec generation ✅ Separate AdminOpenAPIController generates full schema
+- [x] Consider `include_in_schema` per security level vs per route ✅ `include_in_schema=False` on admin controllers
+
+### Page Implementations
+
+#### About Section
+- [x] **`/about/help`** - FAQ/Help page with common questions, getting started resources ✅
+- [x] **`/about/apps`** - Python applications showcase (notable apps built with Python) ✅
+- [x] **`/about/quotes`** - Testimonials and quotes from Python users/companies ✅
+- [x] **`/about/gettingstarted`** - Beginner's guide to Python, installation, first steps ✅
+- [x] **`/about/legal`** - Legal information, trademarks, licensing ✅
+
+#### Downloads Section
+- [x] **`/downloads/alternatives`** - Alternative Python implementations (PyPy, Jython, IronPython, etc.) ✅
+- [x] **`/downloads/other`** - Other download resources (source tarballs, older versions, etc.) ✅
+
+#### Community Section
+- [x] **`/community/irc`** - IRC channels information (#python, #python-dev, etc.) ✅
+- [x] **`/community/forums`** - Python forums (Discourse, Reddit, etc.) ✅
+- [x] **`/community/lists`** - Mailing lists directory (python-list, python-dev, python-ideas, etc.) ✅
+
+#### PSF Section
+- [x] **`/psf/about`** - About the Python Software Foundation ✅
+- [x] **`/psf/conduct`** - Code of Conduct (community guidelines, reporting) ✅
+- [x] **`/psf/get-involved`** - How to contribute to Python/PSF ✅
+  - Interactive Annual Impact Report
+  - Volunteer opportunities
+  - Working groups
+  - Sponsorship tiers
 
 ---
 
@@ -81,32 +112,32 @@
 ### HIGH Priority
 | Issue | Location | Description |
 |-------|----------|-------------|
-| **Worker: `warm_homepage_cache` MissingGreenlet** | SAQ worker | SQLAlchemy MissingGreenlet in cron job. Async context issue. |
-| **SQLAlchemy MissingGreenlet in async context** | DB operations | Occurs when sync DB operations called in async context. Need `async with session` or `run_sync()`. |
-| **Worker: `index_event` EventLocation error** | `tasks/search.py:319` | `EventLocation` has no `city` attribute. Wrong field names. |
+| **Sponsor application not visible in admin** | `/admin/sponsors` | Sponsor form submits successfully (201) but application doesn't appear in `/admin/sponsors/?status=applied`. Debug why Sponsorship with APPLIED status isn't being created or shown. |
+| ~~**Worker: `warm_homepage_cache` MissingGreenlet**~~ | ~~SAQ worker~~ | ✅ **FIXED**: Added `selectinload()` to `EventRepository.get_upcoming()` and `get_featured()`. |
+| ~~**SQLAlchemy MissingGreenlet in async context**~~ | ~~DB operations~~ | ✅ **FIXED**: Added eager loading to all event-related queries in repositories and search tasks. |
+| ~~**Worker: `index_event` EventLocation error**~~ | ~~`tasks/search.py`~~ | ✅ **FIXED**: Added `selectinload()` for `Event.venue`, `Event.occurrences`, `Event.categories` in `index_event()` and `index_all_events()`. |
 
 ### MEDIUM Priority
 | Issue | Location | Description |
 |-------|----------|-------------|
-| **`/blogs` sidebar feed filters** | `/blogs` | Clicking feed links refreshes page instead of filtering. |
-| **`/events` filters don't filter** | `/events` | Filter UI exists but doesn't filter listings. |
-| **`/psf/membership` not implemented** | `/psf/membership` | Shows "not available yet". |
-| **`/about/help` (FAQs) not implemented** | `/about/help` | Shows "not available yet". |
-| **`/community/workshops` not implemented** | `/community/workshops` | Shows "not available yet". |
-| **Feature: Sitewide announcement banner** | Sitewide | Need dismissible banner system. |
-| **Feature: Featured jobs** | `/jobs`, `/admin/jobs` | Add `is_featured` field, admin toggle, featured section. |
-| **Feature: Featured blog entries** | `/blogs`, `/admin/blogs` | Add `is_featured` field, admin toggle, featured section. |
+| ~~**`/blogs` sidebar feed filters**~~ | ~~`/blogs`~~ | ✅ **FIXED**: Added HTMX OOB swap for sidebar active state, explicit `hx-swap="innerHTML"`. |
+| ~~**`/events` filters don't filter**~~ | ~~`/events`~~ | ✅ **FIXED**: Added `calendar`, `start_date`, `end_date` params to controller, filter badge display. |
+| ~~**`/psf/membership` not implemented**~~ | ~~`/psf/membership`~~ | ✅ **DONE**: Created PSF membership page with membership levels (Basic, Supporting, Contributing, Managing, Fellow), benefits, FAQ accordion, and CTAs. Added `PSFPageController` with `/psf/membership/` route. |
+| ~~**`/community/workshops` not implemented**~~ | ~~`/community/workshops`~~ | ✅ **DONE**: Created workshops & user groups page with links to Python Wiki, Meetup.com, event calendar. Includes event types, how to start a user group, and featured groups (PyLadies, Django Girls, Python Brasil). Added `/community/workshops/` route. |
+| ~~**Feature: Sitewide announcement banner**~~ | ~~Sitewide~~ | ✅ **DONE**: Full banner system with targeting (`frontend`/`api`), path filtering, toast notifications. Admin UI at `/admin/banners`. API banners via `X-API-Notice` header. Persists across HTMX navigation. |
+| ~~**Feature: Featured jobs**~~ | ~~`/jobs`, `/admin/jobs`~~ | ✅ **DONE**: Added `is_featured` field to Job model with migration, admin toggle button in `/admin/jobs`, featured jobs section on `/jobs` page with star badge styling. |
+| ~~**Feature: Featured blog entries**~~ | ~~`/blogs`, `/admin/blogs`~~ | ✅ **DONE**: `is_featured` field already existed in BlogEntry, admin toggle in `/admin/blogs/entries`, featured section on `/blogs` page (shows when no feed filter active). |
 
 ### LOW Priority
 | Issue | Location | Description |
 |-------|----------|-------------|
-| **`/admin/events` default sort order** | `/admin/events` | Sorts oldest first; should sort newest first. |
-| **`/admin/jobs` preview modal UX** | `/admin/jobs` | "Location: NoneRemote" bug, plain text layout, needs redesign. |
-| **`/admin/events` metadata columns** | `/admin/events` | Need date added, submitted by, last modified columns. |
-| **`/admin/blogs` search button layout** | `/admin/blogs` | Button under input instead of inline. |
-| **SITEWIDE: Pagination first/last buttons** | All paginated views | Only Previous/Next, need First/Last. |
-| **SITEWIDE: Normalize page header sizes** | All pages | Inconsistent header sizes. |
-| **`/community/posts` UX overhaul** | `/community/posts` | Needs complete redesign. |
+| ~~**`/admin/events` default sort order**~~ | `/admin/events` | ✅ DONE - Already sorted by created_at DESC (newest first). |
+| ~~**`/admin/jobs` preview modal UX**~~ | `/admin/jobs` | ✅ DONE - Fixed Location bug, added icons, improved layout. |
+| ~~**`/admin/events` metadata columns**~~ | `/admin/events` | ✅ DONE - Added date added and last modified to event rows. |
+| ~~**`/admin/blogs` search button layout**~~ | `/admin/blogs` | ✅ DONE - Used DaisyUI `join` class for inline search button. |
+| ~~**SITEWIDE: Pagination first/last buttons**~~ | All paginated views | ✅ DONE - Added First/Last buttons to all 15 paginated templates. |
+| ~~**SITEWIDE: Normalize page header sizes**~~ | All pages | ✅ DONE - Standardized: text-5xl (index), text-4xl (detail), text-3xl (admin). |
+| ~~**`/community/posts` UX overhaul**~~ | `/community/posts` | ✅ DONE - New template with hero, featured posts, pagination, sidebar. |
 
 ---
 
@@ -114,9 +145,138 @@
 
 | Enhancement | Priority | Description |
 |-------------|----------|-------------|
+| **Sitewide search** | HIGH | Global search across all content (jobs, events, blogs, pages, downloads) using Meilisearch |
+| **litestar-workflows integration** | MEDIUM | Workflow engine for sponsor/job/event approvals (see below) |
 | **Job auto-submit on creation** | LOW | Add `submit_immediately` flag to `create_job()` |
-| **Investigate litestar-workflows** | MEDIUM | For job/event approval workflows |
 | **Calendar detail pagination UI/UX** | LOW | Enhance with page dropdown, "Go to page" input |
+| **Resettable demo instance** | LOW | Public POC instance that resets periodically (see below) |
+
+### Sitewide Search
+
+**Goal**: Implement a unified search experience across the entire site using Meilisearch (already configured).
+
+**Requirements**:
+- Search modal with keyboard shortcut (Cmd/Ctrl+K)
+- Search across: jobs, events, blogs, pages, downloads, success stories
+- Instant results with highlighting
+- Category filters in results
+- Recent searches history
+
+**Tasks**:
+- [ ] Create unified search index in Meilisearch (multi-index search)
+- [ ] Build search API endpoint (`/api/search`)
+- [ ] Create search modal component with Alpine.js
+- [ ] Add keyboard shortcut (Cmd/Ctrl+K) to open search
+- [ ] Implement search results UI with category grouping
+- [ ] Add search button back to navbar when complete
+- [ ] Index all existing content via SAQ task
+
+### Resettable Demo Instance
+
+**Goal**: Allow people to browse the full POC including admin areas without risk of permanent damage.
+
+**Requirements**:
+- Public demo at separate subdomain (e.g., `demo.pydotorg.scriptr.dev`)
+- Full access including admin panel (read-only or with demo credentials)
+- Periodic reset to clean state (hourly/daily via cron)
+- Banner indicating demo mode and reset schedule
+
+**Implementation Options**:
+
+| Option | Pros | Cons |
+|--------|------|------|
+| **Railway cron job** | Simple, uses existing infra | Railway charges per execution |
+| **SAQ scheduled task** | Already have SAQ, zero cost | Runs in same instance, complex DB reset |
+| **Separate Railway service** | Isolated, easy reset via redeploy | Extra cost, duplicate infra |
+| **Docker Compose demo profile** | Local-only, full control | Not publicly accessible |
+
+**Tasks to Investigate**:
+- [ ] Research Railway scheduled deploys / cron for DB reset
+- [ ] Evaluate read-only admin mode vs demo credentials
+- [ ] Design DB reset script (truncate + reseed)
+- [ ] Consider snapshot/restore vs full reseed approach
+- [ ] Add demo mode banner to base template
+- [ ] Document demo instance setup for contributors
+
+### Sponsor Admin UI Gaps
+
+Backend services complete, admin UI not wired up:
+
+| Task | Priority | Description |
+|------|----------|-------------|
+| [ ] **Contract management UI** | HIGH | View/send for signature/execute/nullify contracts |
+| [ ] **Contract detail template** | HIGH | `admin/sponsors/contract_detail.html.jinja2` |
+| [ ] **Expiring sponsorships dashboard** | MEDIUM | List sponsorships expiring in 90 days |
+| [ ] **Renewal workflow UI** | MEDIUM | Create renewal from expiring sponsorship |
+| [ ] **Legal clauses CRUD** | LOW | Admin for managing legal clause templates |
+
+### litestar-workflows Integration
+
+**Library**: [JacobCoffee/litestar-workflows](https://github.com/JacobCoffee/litestar-workflows) v0.3.1
+**Install**: `pip install litestar-workflows[db,ui]`
+
+**Key Features**:
+- Async-first with native `async/await` support
+- Hybrid tasks: `BaseMachineStep` (automated) + `BaseHumanStep` (approval)
+- Litestar DI integration, guards, plugin system
+- SQLAlchemy persistence backend
+- MermaidJS visualization
+- SAQ execution backend option (we already use SAQ)
+
+#### Workflow Mapping
+
+| Domain | Current Implementation | litestar-workflows Pattern |
+|--------|------------------------|---------------------------|
+| **Sponsor Contract** | `ContractStatus` enum + `ContractService` methods | `WorkflowDefinition` with DRAFT→send_for_signature (human)→AWAITING_SIGNATURE→execute (human)→EXECUTED |
+| **Sponsorship** | `SponsorshipStatus` enum + service methods | `WorkflowDefinition` with APPLIED→review (human)→APPROVED/REJECTED→finalize (human)→FINALIZED |
+| **Jobs** | `JobStatus` enum + `JobService` methods | `WorkflowDefinition` with DRAFT→submit (machine)→SUBMITTED→approve (human)→APPROVED→publish (machine)→PUBLISHED |
+| **Events** | Basic CRUD, no approval | Add `WorkflowDefinition` for community submissions with moderator approval |
+
+#### Integration Tasks
+
+- [x] Research litestar-workflows API and patterns ✅
+- [x] Evaluate fit for existing domain workflows ✅ Excellent fit - matches our existing state machine patterns
+- [ ] Add `litestar-workflows[db,ui]` to dependencies
+- [ ] Create `src/pydotorg/core/workflows/` module
+- [ ] Implement `SponsorContractWorkflow` first (most complex, best test case)
+- [ ] Add workflow UI templates for human tasks
+- [ ] Wire email notifications to workflow transitions
+- [ ] Migrate jobs/events to workflow engine
+
+#### Workflow UI Tasks
+
+- [ ] **Enable litestar-workflows UI plugin** - Mount at `/admin/workflows/` behind admin auth guards
+- [ ] **Sponsor stages visualization** - Render workflow step/stage UI showing current state (APPLIED→APPROVED→FINALIZED)
+- [ ] **Admin workflow dashboard** - Central view showing all pending human tasks across workflows (sponsor reviews, contract signatures, job approvals)
+- [ ] **Workflow history/audit log** - Show state transition history for each sponsorship/contract
+
+#### Example: Sponsor Contract Workflow
+
+```python
+from litestar_workflows import WorkflowDefinition, Edge, BaseMachineStep, BaseHumanStep
+
+class CreateContract(BaseMachineStep):
+    name = "create"
+    async def execute(self, context): ...
+
+class SendForSignature(BaseHumanStep):
+    name = "send_for_signature"
+    title = "Send Contract for Signature"
+    form_schema = {"properties": {"document_pdf": {"type": "string"}}}
+
+class ExecuteContract(BaseHumanStep):
+    name = "execute"
+    title = "Mark Contract as Executed"
+    form_schema = {"properties": {"signed_document": {"type": "string"}}}
+
+contract_workflow = WorkflowDefinition(
+    name="sponsor_contract",
+    steps={"create": CreateContract(), "send": SendForSignature(), "execute": ExecuteContract()},
+    edges=[Edge("create", "send"), Edge("send", "execute")],
+    initial_step="create",
+    terminal_steps={"execute"},
+)
+```
 
 ---
 
@@ -125,18 +285,18 @@
 ### Tier 3: MEDIUM (Enhanced Features) - Remaining
 | Task | Effort | Description |
 |------|--------|-------------|
-| OAuth2 Providers Testing | Medium | GitHub/Google providers exist, need full testing |
+| ~~OAuth2 Providers Testing~~ | ~~Medium~~ | ✅ 73 total tests (42 unit + 31 integration), POST endpoint, account restrictions |
 
 ### Tier 4: LOW (Nice to Have)
 | Task | Effort | Description |
 |------|--------|-------------|
-| CDN Integration (Fastly) | Medium | Cache purging, surrogate keys |
-| GPG Signature Verification | Low | Download file integrity |
-| Recurrence Rules | Medium | dateutil.rrule for events |
-| Calendar RSS/Atom | Low | Event feed |
-| Developer Documentation | Medium | ARCHITECTURE.md, deployment guide |
-| Contract Management | Medium | Full sponsor contract workflow |
-| Template Refactor | Medium | Move templates into domain folders |
+| ~~CDN Integration (Fastly)~~ | ~~Medium~~ | ✅ Surrogate-Key middleware done |
+| ~~GPG Signature Verification~~ | ~~Low~~ | ✅ SHA256, signature UI, verification info |
+| ~~Recurrence Rules~~ | ~~Medium~~ | ✅ dateutil.rrule for events, 29 tests |
+| ~~Calendar RSS/Atom~~ | ~~Low~~ | ✅ RSS 2.0 + Atom 1.0 feeds, 21 tests |
+| ~~Developer Documentation~~ | ~~Medium~~ | ✅ Full docs overhaul: 244 API files, 12 guides, 5 cookbook recipes, domain models |
+| ~~Contract Management~~ | ~~Medium~~ | ✅ Full sponsor contract workflow, 24 tests |
+| ~~Template Refactor~~ | ~~Medium~~ | ✅ Moved 50 templates to domain folders, multi-directory support |
 
 ---
 
@@ -177,4 +337,4 @@ make ci                      # Full CI pipeline
 
 ---
 
-*Last updated: 2025-12-01*
+*Last updated: 2025-12-14 - Added resettable demo instance investigation*

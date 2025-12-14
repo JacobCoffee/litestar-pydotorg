@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING
 from advanced_alchemy.repository import SQLAlchemyAsyncRepository
 from sqlalchemy import select
 
+from pydotorg.domains.users.api_keys import APIKey
 from pydotorg.domains.users.models import Membership, User, UserGroup
 
 if TYPE_CHECKING:
@@ -120,3 +121,79 @@ class UserGroupRepository(SQLAlchemyAsyncRepository[UserGroup]):
         statement = select(UserGroup).where(UserGroup.trusted.is_(True)).limit(limit).offset(offset)
         result = await self.session.execute(statement)
         return list(result.scalars().all())
+
+
+class APIKeyRepository(SQLAlchemyAsyncRepository[APIKey]):
+    """Repository for API key database operations."""
+
+    model_type = APIKey
+
+    async def get_by_hash(self, key_hash: str) -> APIKey | None:
+        """Get an API key by its hash.
+
+        Args:
+            key_hash: The SHA-256 hash of the API key.
+
+        Returns:
+            The API key if found, None otherwise.
+        """
+        statement = select(APIKey).where(APIKey.key_hash == key_hash)
+        result = await self.session.execute(statement)
+        return result.scalar_one_or_none()
+
+    async def get_by_prefix(self, key_prefix: str) -> APIKey | None:
+        """Get an API key by its prefix.
+
+        Args:
+            key_prefix: The first 12 characters of the key.
+
+        Returns:
+            The API key if found, None otherwise.
+        """
+        statement = select(APIKey).where(APIKey.key_prefix == key_prefix)
+        result = await self.session.execute(statement)
+        return result.scalar_one_or_none()
+
+    async def list_by_user(self, user_id: UUID) -> list[APIKey]:
+        """List all API keys for a user.
+
+        Args:
+            user_id: The user ID.
+
+        Returns:
+            List of API keys.
+        """
+        statement = select(APIKey).where(APIKey.user_id == user_id).order_by(APIKey.created_at.desc())
+        result = await self.session.execute(statement)
+        return list(result.scalars().all())
+
+    async def list_active_by_user(self, user_id: UUID) -> list[APIKey]:
+        """List active API keys for a user.
+
+        Args:
+            user_id: The user ID.
+
+        Returns:
+            List of active API keys.
+        """
+        statement = (
+            select(APIKey)
+            .where(APIKey.user_id == user_id, APIKey.is_active.is_(True))
+            .order_by(APIKey.created_at.desc())
+        )
+        result = await self.session.execute(statement)
+        return list(result.scalars().all())
+
+    async def revoke_all_for_user(self, user_id: UUID) -> int:
+        """Revoke all API keys for a user.
+
+        Args:
+            user_id: The user ID.
+
+        Returns:
+            Number of keys revoked.
+        """
+        keys = await self.list_active_by_user(user_id)
+        for key in keys:
+            key.is_active = False
+        return len(keys)

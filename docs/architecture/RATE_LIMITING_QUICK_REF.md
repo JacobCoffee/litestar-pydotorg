@@ -1,3 +1,5 @@
+:orphan:
+
 # Rate Limiting Quick Reference
 
 ## Developer Cheat Sheet

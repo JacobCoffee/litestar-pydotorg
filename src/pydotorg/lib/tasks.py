@@ -4,8 +4,10 @@ This module provides utilities for enqueueing background tasks from
 service layers. It handles lazy imports to avoid circular dependencies
 and provides consistent error handling.
 
-Example:
+Example::
+
     from pydotorg.lib.tasks import enqueue_task
+
 
     async def approve_job(self, job_id: UUID) -> Job:
         job = await self.repository.update(job_id, status=JobStatus.APPROVED)
@@ -17,7 +19,7 @@ Example:
             to_email=job.creator.email,
             job_title=job.job_title,
             company_name=job.company_name,
-            job_url=f"/jobs/{job.slug}/"
+            job_url=f"/jobs/{job.slug}/",
         )
 
         return job
@@ -42,7 +44,7 @@ def get_queue() -> Queue:
     Returns:
         Configured SAQ Queue instance
     """
-    from pydotorg.tasks.worker import queue  # noqa: PLC0415
+    from pydotorg.tasks.worker import queue
 
     return queue
 
@@ -63,26 +65,16 @@ async def enqueue_task(
     Task arguments should match the function signature (keyword-only args after ctx).
 
     Args:
-        task_name: Name of the task function to enqueue (must be registered).
-            Available tasks:
-            - Email: send_verification_email, send_password_reset_email,
-                     send_job_approved_email, send_job_rejected_email,
-                     send_event_reminder_email, send_bulk_email
-            - Search: index_job, index_event, index_page, index_blog_entry,
-                      index_all_jobs, index_all_events, index_all_pages,
-                      index_all_blogs, remove_job_from_index, rebuild_search_index
-            - Jobs: expire_jobs, archive_old_jobs, cleanup_draft_jobs
-            - Feeds: refresh_all_feeds, refresh_stale_feeds, refresh_single_feed
-            - Cache: warm_homepage_cache, warm_releases_cache, warm_events_cache,
-                     warm_blogs_cache, warm_pages_cache, clear_cache, get_cache_stats
-        timeout: Optional task timeout in seconds
-        retries: Number of retry attempts (default: 3)
-        **kwargs: Task-specific arguments passed to the task function
+        task_name: Name of the task function to enqueue (must be registered in worker).
+        timeout: Optional task timeout in seconds.
+        retries: Number of retry attempts (default: 3).
+        **kwargs: Task-specific arguments passed to the task function.
 
     Returns:
         Job key (str) if successful, None if enqueue failed
 
-    Example:
+    Example::
+
         # Enqueue email after user registration
         job_key = await enqueue_task(
             "send_verification_email",
@@ -144,11 +136,9 @@ async def enqueue_task_safe(
     Returns:
         Tuple of (success: bool, job_key: str | None)
 
-    Example:
-        success, job_key = await enqueue_task_safe(
-            "send_email",
-            to_email="user@example.com"
-        )
+    Example::
+
+        success, job_key = await enqueue_task_safe("send_email", to_email="user@example.com")
         if not success:
             # Handle failure - maybe log or retry later
             pass

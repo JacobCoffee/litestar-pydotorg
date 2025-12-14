@@ -1,3 +1,5 @@
+:orphan:
+
 # API Tags - Best Practices & Guidelines
 
 Guidelines for maintaining and extending the API tag structure in the Python.org API.

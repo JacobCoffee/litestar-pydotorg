@@ -1,3 +1,5 @@
+:orphan:
+
 # Optimal API Documentation Tag Structure
 
 This document defines the recommended OpenAPI tag hierarchy for the Python.org API documentation, optimized for developer experience in Scalar UI.

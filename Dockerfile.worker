@@ -1,0 +1,63 @@
+# syntax=docker/dockerfile:1.9
+# SAQ Worker - No frontend assets needed
+FROM python:3.13-slim AS python-builder
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    UV_COMPILE_BYTECODE=1 \
+    UV_LINK_MODE=copy \
+    UV_PYTHON_PREFERENCE=only-system \
+    UV_PROJECT_ENVIRONMENT=/app/.venv
+
+WORKDIR /app
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    curl \
+    ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
+
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
+
+COPY pyproject.toml uv.lock README.md ./
+
+RUN uv sync --frozen --no-dev --no-install-project
+
+COPY src/ ./src/
+
+RUN uv sync --frozen --no-dev
+
+
+# Runtime - Minimal worker image
+FROM python:3.13-slim AS runtime
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    VIRTUAL_ENV=/app/.venv \
+    PATH="/app/.venv/bin:$PATH" \
+    APP_ENV=prod
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    ca-certificates \
+    libpq5 && \
+    rm -rf /var/lib/apt/lists/* && \
+    groupadd -g 1000 appuser && \
+    useradd -r -u 1000 -g appuser appuser
+
+WORKDIR /app
+
+COPY --from=python-builder --chmod=755 /app/.venv /app/.venv
+COPY --from=python-builder /app/src /app/src
+COPY alembic.ini ./
+
+RUN ln -sf /usr/local/bin/python3 /app/.venv/bin/python && \
+    ln -sf /usr/local/bin/python3 /app/.venv/bin/python3
+
+RUN chown -R appuser:appuser /app
+
+USER appuser
+
+STOPSIGNAL SIGINT
+
+CMD ["python", "-m", "saq", "pydotorg.tasks.worker.saq_settings"]

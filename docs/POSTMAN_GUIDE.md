@@ -1,3 +1,5 @@
+:orphan:
+
 # Postman Collection Guide
 
 This guide explains how to use the Postman collection for the Litestar-pydotorg API.

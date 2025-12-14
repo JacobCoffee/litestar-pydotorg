@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import contextlib
 import datetime
 from typing import Annotated
 from uuid import UUID
@@ -13,6 +14,7 @@ from litestar.openapi import ResponseSpec
 from litestar.params import Body, Parameter
 from litestar.response import Response, Template
 
+from pydotorg.core.feeds import AtomFeedService, RSSFeedService
 from pydotorg.core.ical import ICalendarService
 from pydotorg.domains.events.schemas import (
     CalendarCreate,
@@ -956,11 +958,43 @@ class EventsPageController(Controller):
         event_service: EventService,
         calendar_service: CalendarService,
         event_category_service: EventCategoryService,
+        calendar: Annotated[str | None, Parameter(description="Filter by calendar slug")] = None,
+        start_date: Annotated[str | None, Parameter(description="Filter by start date (YYYY-MM-DD)")] = None,
+        end_date: Annotated[str | None, Parameter(description="Filter by end date (YYYY-MM-DD)")] = None,
     ) -> Template:
         """Render the main events page."""
-        upcoming_events = await event_service.get_upcoming(limit=20)
-        featured_events = await event_service.get_featured(limit=5)
         calendars, _total = await calendar_service.list_and_count()
+
+        calendar_id = None
+        current_calendar = None
+        if calendar:
+            current_calendar = await calendar_service.get_by_slug(calendar)
+            if current_calendar:
+                calendar_id = current_calendar.id
+
+        parsed_start_date = None
+        parsed_end_date = None
+        if start_date:
+            with contextlib.suppress(ValueError):
+                parsed_start_date = datetime.datetime.strptime(start_date, "%Y-%m-%d").replace(tzinfo=datetime.UTC)
+        if end_date:
+            with contextlib.suppress(ValueError):
+                parsed_end_date = datetime.datetime.strptime(end_date, "%Y-%m-%d").replace(tzinfo=datetime.UTC)
+
+        upcoming_events = await event_service.get_upcoming(
+            calendar_id=calendar_id,
+            start_date=parsed_start_date,
+            limit=20,
+        )
+
+        if parsed_end_date:
+            upcoming_events = [
+                e
+                for e in upcoming_events
+                if e.occurrences and any(occ.dt_start <= parsed_end_date for occ in e.occurrences)
+            ]
+
+        featured_events = await event_service.get_featured(calendar_id=calendar_id, limit=5)
 
         is_htmx = request.headers.get("HX-Request") == "true"
         is_boosted = request.headers.get("HX-Boosted") == "true"
@@ -969,6 +1003,9 @@ class EventsPageController(Controller):
             "upcoming_events": upcoming_events,
             "featured_events": featured_events,
             "calendars": calendars,
+            "current_calendar": current_calendar,
+            "start_date": start_date,
+            "end_date": end_date,
         }
 
         if is_htmx and not is_boosted:
@@ -995,10 +1032,12 @@ class EventsPageController(Controller):
         calendars_with_counts = []
         for calendar_obj in calendars:
             events = await event_service.get_by_calendar_id(calendar_obj.id, limit=1000)
-            calendars_with_counts.append({
-                "calendar": calendar_obj,
-                "event_count": len(events),
-            })
+            calendars_with_counts.append(
+                {
+                    "calendar": calendar_obj,
+                    "event_count": len(events),
+                }
+            )
 
         context = {
             "calendars": calendars_with_counts,
@@ -1030,7 +1069,7 @@ class EventsPageController(Controller):
         view: Annotated[str | None, Parameter(description="View type (month/week/list)")] = None,
     ) -> Template:
         """Render a specific calendar's events with calendar grid."""
-        import calendar as cal  # noqa: PLC0415
+        import calendar as cal
 
         calendar_obj = await calendar_service.get_by_slug(slug)
         if not calendar_obj:
@@ -1073,36 +1112,42 @@ class EventsPageController(Controller):
         for i in range(days_before):
             d = first_day - datetime.timedelta(days=days_before - i)
             day_events = events_by_date.get(d.date(), [])
-            calendar_data.append({
-                "date": d,
-                "is_today": d.date() == now.date(),
-                "in_month": False,
-                "events": day_events,
-                "event_count": len(day_events),
-            })
+            calendar_data.append(
+                {
+                    "date": d,
+                    "is_today": d.date() == now.date(),
+                    "in_month": False,
+                    "events": day_events,
+                    "event_count": len(day_events),
+                }
+            )
 
         for day in range(1, days_in_month + 1):
             d = first_day.replace(day=day)
             day_events = events_by_date.get(d.date(), [])
-            calendar_data.append({
-                "date": d,
-                "is_today": d.date() == now.date(),
-                "in_month": True,
-                "events": day_events,
-                "event_count": len(day_events),
-            })
+            calendar_data.append(
+                {
+                    "date": d,
+                    "is_today": d.date() == now.date(),
+                    "in_month": True,
+                    "events": day_events,
+                    "event_count": len(day_events),
+                }
+            )
 
         remaining = (7 - len(calendar_data) % 7) % 7
         for i in range(1, remaining + 1):
             d = last_day + datetime.timedelta(days=i)
             day_events = events_by_date.get(d.date(), [])
-            calendar_data.append({
-                "date": d,
-                "is_today": d.date() == now.date(),
-                "in_month": False,
-                "events": day_events,
-                "event_count": len(day_events),
-            })
+            calendar_data.append(
+                {
+                    "date": d,
+                    "is_today": d.date() == now.date(),
+                    "in_month": False,
+                    "events": day_events,
+                    "event_count": len(day_events),
+                }
+            )
 
         week_data = []
         days_since_sunday = (current_date.weekday() + 1) % 7
@@ -1111,12 +1156,14 @@ class EventsPageController(Controller):
         for i in range(7):
             d = week_start + datetime.timedelta(days=i)
             day_events = events_by_date.get(d.date(), [])
-            week_data.append({
-                "date": d,
-                "is_today": d.date() == now.date(),
-                "events": day_events,
-                "event_count": len(day_events),
-            })
+            week_data.append(
+                {
+                    "date": d,
+                    "is_today": d.date() == now.date(),
+                    "events": day_events,
+                    "event_count": len(day_events),
+                }
+            )
 
         context = {
             "calendar": calendar_obj,
@@ -1259,5 +1306,154 @@ class EventsPageController(Controller):
             media_type="text/calendar; charset=utf-8",
             headers={
                 "Content-Disposition": f'attachment; filename="{filename}"',
+            },
+        )
+
+    @get("/rss/")
+    async def events_rss_feed(
+        self,
+        request: Request,
+        event_service: EventService,
+    ) -> Response[bytes]:
+        """RSS 2.0 feed of upcoming Python community events.
+
+        Subscribe to this feed in your RSS reader to stay updated on
+        upcoming Python events worldwide.
+        """
+        events = await event_service.get_upcoming(limit=100)
+
+        base_url = str(request.base_url).rstrip("/")
+        feed_url = f"{base_url}/events/rss/"
+
+        rss_service = RSSFeedService(
+            title="Python Community Events",
+            link=f"{base_url}/events/",
+            description="Upcoming Python conferences, meetups, and community events",
+        )
+        rss_data = rss_service.generate_feed(
+            events=events,
+            base_url=base_url,
+            feed_url=feed_url,
+        )
+
+        return Response(
+            content=rss_data.encode("utf-8"),
+            media_type="application/rss+xml; charset=utf-8",
+            headers={
+                "Cache-Control": "public, max-age=3600",
+            },
+        )
+
+    @get("/atom/")
+    async def events_atom_feed(
+        self,
+        request: Request,
+        event_service: EventService,
+    ) -> Response[bytes]:
+        """Atom 1.0 feed of upcoming Python community events.
+
+        Subscribe to this feed in your feed reader to stay updated on
+        upcoming Python events worldwide.
+        """
+        events = await event_service.get_upcoming(limit=100)
+
+        base_url = str(request.base_url).rstrip("/")
+        feed_url = f"{base_url}/events/atom/"
+
+        atom_service = AtomFeedService(
+            title="Python Community Events",
+            subtitle="Upcoming Python conferences, meetups, and community events",
+        )
+        atom_data = atom_service.generate_feed(
+            events=events,
+            base_url=base_url,
+            feed_url=feed_url,
+        )
+
+        return Response(
+            content=atom_data.encode("utf-8"),
+            media_type="application/atom+xml; charset=utf-8",
+            headers={
+                "Cache-Control": "public, max-age=3600",
+            },
+        )
+
+    @get("/calendar/{slug:str}/rss/")
+    async def calendar_rss_feed(
+        self,
+        request: Request,
+        slug: str,
+        calendar_service: CalendarService,
+        event_service: EventService,
+    ) -> Response[bytes]:
+        """RSS 2.0 feed for a specific calendar's events.
+
+        Subscribe to this feed to receive updates for events in this calendar.
+        """
+        calendar = await calendar_service.get_by_slug(slug)
+        if not calendar:
+            raise NotFoundException(f"Calendar {slug} not found")
+
+        events = await event_service.get_by_calendar_id(calendar.id, limit=100)
+
+        base_url = str(request.base_url).rstrip("/")
+        feed_url = f"{base_url}/events/calendar/{slug}/rss/"
+
+        rss_service = RSSFeedService(
+            title=f"{calendar.name} - Python Events",
+            link=f"{base_url}/events/calendar/{slug}/",
+            description=f"Events from {calendar.name}",
+        )
+        rss_data = rss_service.generate_feed(
+            events=events,
+            base_url=base_url,
+            feed_url=feed_url,
+        )
+
+        return Response(
+            content=rss_data.encode("utf-8"),
+            media_type="application/rss+xml; charset=utf-8",
+            headers={
+                "Cache-Control": "public, max-age=3600",
+            },
+        )
+
+    @get("/calendar/{slug:str}/atom/")
+    async def calendar_atom_feed(
+        self,
+        request: Request,
+        slug: str,
+        calendar_service: CalendarService,
+        event_service: EventService,
+    ) -> Response[bytes]:
+        """Atom 1.0 feed for a specific calendar's events.
+
+        Subscribe to this feed to receive updates for events in this calendar.
+        """
+        calendar = await calendar_service.get_by_slug(slug)
+        if not calendar:
+            raise NotFoundException(f"Calendar {slug} not found")
+
+        events = await event_service.get_by_calendar_id(calendar.id, limit=100)
+
+        base_url = str(request.base_url).rstrip("/")
+        feed_url = f"{base_url}/events/calendar/{slug}/atom/"
+
+        atom_service = AtomFeedService(
+            title=f"{calendar.name} - Python Events",
+            subtitle=f"Events from {calendar.name}",
+        )
+        atom_data = atom_service.generate_feed(
+            events=events,
+            feed_id=f"tag:python.org,2025:events/calendar/{slug}",
+            base_url=base_url,
+            feed_url=feed_url,
+        )
+
+        return Response(
+            content=atom_data.encode("utf-8"),
+            media_type="application/atom+xml; charset=utf-8",
+            headers={
+                "Cache-Control": "public, max-age=3600",
             },
         )

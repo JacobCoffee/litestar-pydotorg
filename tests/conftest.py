@@ -7,6 +7,7 @@ import socket
 from typing import TYPE_CHECKING
 
 import pytest
+from advanced_alchemy.config import EngineConfig
 from advanced_alchemy.extensions.litestar import SQLAlchemyPlugin
 from advanced_alchemy.extensions.litestar.plugins.init.config.asyncio import SQLAlchemyAsyncConfig
 from litestar import Litestar
@@ -118,39 +119,54 @@ async def async_engine(postgres_uri: str) -> AsyncIterator[AsyncEngine]:
     """Session-scoped async engine for integration tests.
 
     Provides a single engine instance to prevent connection pool exhaustion.
+    Creates tables once at the start of the session.
     """
+    from sqlalchemy import text
+
     engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
+
+    async with engine.begin() as conn:
+        # Drop all tables with CASCADE to handle FK dependencies
+        for table in reversed(AuditBase.metadata.sorted_tables):
+            await conn.execute(text(f'DROP TABLE IF EXISTS "{table.name}" CASCADE'))
+        await conn.run_sync(AuditBase.metadata.create_all)
+
     yield engine
     await engine.dispose()
 
 
+@pytest.fixture(scope="module")
+def _module_sqlalchemy_config(postgres_uri: str) -> SQLAlchemyAsyncConfig:
+    """Module-scoped SQLAlchemy config to prevent creating engines per test."""
+    return SQLAlchemyAsyncConfig(
+        connection_string=postgres_uri,
+        metadata=AuditBase.metadata,
+        create_all=False,
+        engine_config=EngineConfig(poolclass=NullPool),
+    )
+
+
 @pytest.fixture
-async def client(postgres_uri: str) -> AsyncIterator[AsyncTestClient]:
+async def client(
+    async_engine: AsyncEngine,
+    _module_sqlalchemy_config: SQLAlchemyAsyncConfig,
+) -> AsyncIterator[AsyncTestClient]:
     """Async test client with PostgreSQL database for integration tests.
 
-    Each test gets a fresh database with tables created. Tables are truncated
-    before each test to ensure isolation.
+    Uses session-scoped engine and truncates tables between tests for isolation.
     """
     from litestar.middleware.session.client_side import CookieBackendConfig
+    from sqlalchemy import text
 
     from pydotorg.config import settings
     from pydotorg.domains.users.auth_controller import AuthController
     from pydotorg.main import _derive_session_secret, health_check
 
-    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
+    async with async_engine.begin() as conn:
+        for table in reversed(AuditBase.metadata.sorted_tables):
+            await conn.execute(text(f"TRUNCATE TABLE {table.name} CASCADE"))
 
-    async with engine.begin() as conn:
-        await conn.run_sync(AuditBase.metadata.drop_all)
-        await conn.run_sync(AuditBase.metadata.create_all)
-
-    await engine.dispose()
-
-    sqlalchemy_config = SQLAlchemyAsyncConfig(
-        connection_string=postgres_uri,
-        metadata=AuditBase.metadata,
-        create_all=False,
-    )
-    sqlalchemy_plugin = SQLAlchemyPlugin(config=sqlalchemy_config)
+    sqlalchemy_plugin = SQLAlchemyPlugin(config=_module_sqlalchemy_config)
 
     session_config = CookieBackendConfig(
         secret=_derive_session_secret(settings.session_secret_key),

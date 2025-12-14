@@ -1,3 +1,5 @@
+:orphan:
+
 # ADR-XXX: [Title]
 
 ## Status

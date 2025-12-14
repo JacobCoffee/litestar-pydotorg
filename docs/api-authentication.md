@@ -1,3 +1,5 @@
+:orphan:
+
 # API Authentication Guide
 
 Comprehensive guide to authenticating with the Python.org API.

@@ -399,3 +399,47 @@ class AdminTasksController(Controller):
                 "cron_job": cron_job,
             },
         )
+
+    @post("/cron/{function_name:str}/run")
+    async def run_cron_job(
+        self,
+        task_admin_service: TaskAdminService,
+        cron_job_service: CronJobService,
+        function_name: str,
+    ) -> Response:
+        """Manually trigger a cron job to run immediately.
+
+        Args:
+            task_admin_service: Task admin service for enqueueing.
+            cron_job_service: Cron job service to verify job exists.
+            function_name: Name of the cron job function to run.
+
+        Returns:
+            Success or error response with HX-Trigger.
+        """
+        cron_job = await cron_job_service.get_cron_job(function_name)
+        if not cron_job:
+            return Response(
+                content=f"Cron job '{function_name}' not found",
+                status_code=404,
+                headers={"HX-Trigger": '{"showToast": {"message": "Cron job not found", "type": "error"}}'},
+            )
+
+        job_key = await task_admin_service.enqueue_task(function_name, **(cron_job.get("kwargs") or {}))
+
+        if not job_key:
+            return Response(
+                content=f"Failed to enqueue {function_name}",
+                status_code=400,
+                headers={
+                    "HX-Trigger": f'{{"showToast": {{"message": "Failed to enqueue {function_name}", "type": "error"}}}}'
+                },
+            )
+
+        return Response(
+            content=f"Task {function_name} queued (Job: {job_key})",
+            status_code=200,
+            headers={
+                "HX-Trigger": f'{{"showToast": {{"message": "{function_name} triggered successfully!", "type": "success"}}}}'
+            },
+        )

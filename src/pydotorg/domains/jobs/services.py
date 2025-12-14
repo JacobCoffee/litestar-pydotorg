@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
+import logging
 from typing import TYPE_CHECKING
 
 from advanced_alchemy.service import SQLAlchemyAsyncRepositoryService
 from slugify import slugify
 
+from pydotorg.config import settings
 from pydotorg.domains.jobs.models import Job, JobCategory, JobReviewComment, JobStatus, JobType
 from pydotorg.domains.jobs.repositories import (
     JobCategoryRepository,
@@ -14,11 +16,14 @@ from pydotorg.domains.jobs.repositories import (
     JobReviewCommentRepository,
     JobTypeRepository,
 )
+from pydotorg.lib.tasks import enqueue_task
 
 if TYPE_CHECKING:
     from uuid import UUID
 
     from pydotorg.domains.jobs.schemas import JobCreate, JobSearchFilters
+
+logger = logging.getLogger(__name__)
 
 
 class JobTypeService(SQLAlchemyAsyncRepositoryService[JobType]):
@@ -209,7 +214,19 @@ class JobService(SQLAlchemyAsyncRepositoryService[Job]):
             msg = f"Job must be in DRAFT status to submit for review. Current status: {job.status}"
             raise ValueError(msg)
 
-        return await self.update(job_id, {"status": JobStatus.REVIEW})
+        job = await self.update(job_id, {"status": JobStatus.REVIEW})
+
+        admin_url = f"{settings.oauth_redirect_base_url}/admin/jobs/{job.id}/review"
+        await enqueue_task(
+            "send_job_submitted_email",
+            to_email=settings.jobs_admin_email,
+            job_title=job.job_title,
+            company_name=job.company_name,
+            job_id=str(job.id),
+            admin_url=admin_url,
+        )
+
+        return job
 
     async def approve_job(self, job_id: UUID) -> Job:
         """Approve a job posting.
@@ -228,13 +245,25 @@ class JobService(SQLAlchemyAsyncRepositoryService[Job]):
             msg = f"Job must be in REVIEW status to approve. Current status: {job.status}"
             raise ValueError(msg)
 
-        return await self.update(job_id, {"status": JobStatus.APPROVED})
+        job = await self.update(job_id, {"status": JobStatus.APPROVED})
 
-    async def reject_job(self, job_id: UUID) -> Job:
+        job_url = f"{settings.oauth_redirect_base_url}/jobs/{job.slug}"
+        await enqueue_task(
+            "send_job_approved_email",
+            to_email=job.email,
+            job_title=job.job_title,
+            company_name=job.company_name,
+            job_url=job_url,
+        )
+
+        return job
+
+    async def reject_job(self, job_id: UUID, reason: str = "Does not meet posting guidelines") -> Job:
         """Reject a job posting.
 
         Args:
             job_id: The ID of the job to reject.
+            reason: Reason for rejection (default: "Does not meet posting guidelines")
 
         Returns:
             The updated job instance.
@@ -247,7 +276,17 @@ class JobService(SQLAlchemyAsyncRepositoryService[Job]):
             msg = f"Job must be in REVIEW status to reject. Current status: {job.status}"
             raise ValueError(msg)
 
-        return await self.update(job_id, {"status": JobStatus.REJECTED})
+        job = await self.update(job_id, {"status": JobStatus.REJECTED})
+
+        await enqueue_task(
+            "send_job_rejected_email",
+            to_email=job.email,
+            job_title=job.job_title,
+            company_name=job.company_name,
+            reason=reason,
+        )
+
+        return job
 
     async def archive_job(self, job_id: UUID) -> Job:
         """Archive a job posting.
@@ -274,6 +313,17 @@ class JobService(SQLAlchemyAsyncRepositoryService[Job]):
             updated_jobs.append(updated_job)
 
         return updated_jobs
+
+    async def get_featured(self, limit: int = 5) -> list[Job]:
+        """Get featured job listings.
+
+        Args:
+            limit: Maximum number of featured jobs to return.
+
+        Returns:
+            List of featured approved jobs.
+        """
+        return await self.repository.get_featured(limit=limit)
 
     async def update_job_types(self, job_id: UUID, job_type_ids: list[UUID]) -> Job:
         """Update job types for a job.

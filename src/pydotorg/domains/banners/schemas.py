@@ -3,10 +3,20 @@
 from __future__ import annotations
 
 import datetime
+from enum import Enum
 from typing import Annotated
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
+
+
+class BannerTypeEnum(str, Enum):
+    """Banner display type for styling."""
+
+    INFO = "info"
+    SUCCESS = "success"
+    WARNING = "warning"
+    ERROR = "error"
 
 
 class BannerBase(BaseModel):
@@ -16,7 +26,11 @@ class BannerBase(BaseModel):
     title: Annotated[str, Field(min_length=1, max_length=500)]
     message: str
     link: str | None = None
+    link_text: str | None = None
+    banner_type: BannerTypeEnum = BannerTypeEnum.INFO
     is_active: bool = False
+    is_dismissible: bool = True
+    is_sitewide: bool = True
     start_date: datetime.date | None = None
     end_date: datetime.date | None = None
 
@@ -32,7 +46,11 @@ class BannerUpdate(BaseModel):
     title: Annotated[str, Field(min_length=1, max_length=500)] | None = None
     message: str | None = None
     link: str | None = None
+    link_text: str | None = None
+    banner_type: BannerTypeEnum | None = None
     is_active: bool | None = None
+    is_dismissible: bool | None = None
+    is_sitewide: bool | None = None
     start_date: datetime.date | None = None
     end_date: datetime.date | None = None
 
@@ -53,8 +71,25 @@ class BannerList(BaseModel):
     id: UUID
     name: str
     title: str
+    banner_type: BannerTypeEnum
     is_active: bool
+    is_dismissible: bool
+    is_sitewide: bool
     start_date: datetime.date | None
     end_date: datetime.date | None
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class BannerSitewideRead(BaseModel):
+    """Schema for reading sitewide banner data (minimal for frontend)."""
+
+    id: UUID
+    title: str
+    message: str
+    link: str | None = None
+    link_text: str | None = None
+    banner_type: BannerTypeEnum
+    is_dismissible: bool
 
     model_config = ConfigDict(from_attributes=True)

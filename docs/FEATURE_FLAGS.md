@@ -1,3 +1,5 @@
+:orphan:
+
 # Feature Flags System
 
 A simple, configuration-based feature flags system for conditionally enabling/disabling functionality in the application.

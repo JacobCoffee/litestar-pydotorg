@@ -2,13 +2,22 @@
 
 from __future__ import annotations
 
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from typing import TYPE_CHECKING
 
 from advanced_alchemy.repository import SQLAlchemyAsyncRepository
 from sqlalchemy import select
+from sqlalchemy.orm import selectinload
 
-from pydotorg.domains.sponsors.models import Sponsor, Sponsorship, SponsorshipLevel, SponsorshipStatus
+from pydotorg.domains.sponsors.models import (
+    Contract,
+    ContractStatus,
+    LegalClause,
+    Sponsor,
+    Sponsorship,
+    SponsorshipLevel,
+    SponsorshipStatus,
+)
 
 if TYPE_CHECKING:
     from uuid import UUID
@@ -89,18 +98,19 @@ class SponsorRepository(SQLAlchemyAsyncRepository[Sponsor]):
             offset: Number of sponsors to skip.
 
         Returns:
-            List of sponsors with active sponsorships.
+            List of sponsors with active sponsorships, with sponsorships and levels loaded.
         """
         statement = (
             select(Sponsor)
             .join(Sponsorship, Sponsor.id == Sponsorship.sponsor_id)
             .where(Sponsorship.status == SponsorshipStatus.FINALIZED)
+            .options(selectinload(Sponsor.sponsorships).selectinload(Sponsorship.level))
             .distinct()
             .limit(limit)
             .offset(offset)
         )
         result = await self.session.execute(statement)
-        return list(result.scalars().all())
+        return list(result.scalars().unique().all())
 
     async def exists_by_slug(self, slug: str) -> bool:
         """Check if a sponsor exists by slug.
@@ -196,6 +206,145 @@ class SponsorshipRepository(SQLAlchemyAsyncRepository[Sponsorship]):
             .where(Sponsorship.status == SponsorshipStatus.FINALIZED)
             .where(Sponsorship.start_date <= today)
             .where(Sponsorship.end_date >= today)
+            .limit(limit)
+            .offset(offset)
+        )
+        result = await self.session.execute(statement)
+        return list(result.scalars().all())
+
+    async def get_previous_for_sponsor(
+        self,
+        sponsor_id: UUID,
+        current_year: int | None,
+    ) -> Sponsorship | None:
+        """Get the previous sponsorship for a sponsor.
+
+        Args:
+            sponsor_id: The sponsor ID to search for.
+            current_year: The current sponsorship year to exclude.
+
+        Returns:
+            The previous sponsorship if found, None otherwise.
+        """
+        statement = (
+            select(Sponsorship)
+            .where(Sponsorship.sponsor_id == sponsor_id)
+            .where(Sponsorship.status == SponsorshipStatus.FINALIZED)
+        )
+        if current_year is not None:
+            statement = statement.where(Sponsorship.year < current_year)
+        statement = statement.order_by(Sponsorship.year.desc()).limit(1)
+        result = await self.session.execute(statement)
+        return result.scalar_one_or_none()
+
+    async def list_expiring_soon(
+        self,
+        days: int = 90,
+        limit: int = 100,
+        offset: int = 0,
+    ) -> list[Sponsorship]:
+        """List sponsorships expiring within the given number of days.
+
+        Args:
+            days: Number of days until expiration.
+            limit: Maximum number of sponsorships to return.
+            offset: Number of sponsorships to skip.
+
+        Returns:
+            List of sponsorships expiring within the given timeframe.
+        """
+        today = datetime.now(tz=UTC).date()
+        cutoff_date = today + timedelta(days=days)
+        statement = (
+            select(Sponsorship)
+            .where(Sponsorship.status == SponsorshipStatus.FINALIZED)
+            .where(Sponsorship.end_date >= today)
+            .where(Sponsorship.end_date <= cutoff_date)
+            .order_by(Sponsorship.end_date.asc())
+            .limit(limit)
+            .offset(offset)
+        )
+        result = await self.session.execute(statement)
+        return list(result.scalars().all())
+
+
+class LegalClauseRepository(SQLAlchemyAsyncRepository[LegalClause]):
+    """Repository for LegalClause database operations."""
+
+    model_type = LegalClause
+
+    async def get_by_slug(self, slug: str) -> LegalClause | None:
+        """Get a legal clause by its slug.
+
+        Args:
+            slug: The slug to search for.
+
+        Returns:
+            The legal clause if found, None otherwise.
+        """
+        statement = select(LegalClause).where(LegalClause.slug == slug)
+        result = await self.session.execute(statement)
+        return result.scalar_one_or_none()
+
+    async def list_active(self, limit: int = 100, offset: int = 0) -> list[LegalClause]:
+        """List active legal clauses ordered by order field.
+
+        Args:
+            limit: Maximum number of clauses to return.
+            offset: Number of clauses to skip.
+
+        Returns:
+            List of active legal clauses.
+        """
+        statement = (
+            select(LegalClause)
+            .where(LegalClause.is_active.is_(True))
+            .order_by(LegalClause.order.asc())
+            .limit(limit)
+            .offset(offset)
+        )
+        result = await self.session.execute(statement)
+        return list(result.scalars().all())
+
+
+class ContractRepository(SQLAlchemyAsyncRepository[Contract]):
+    """Repository for Contract database operations."""
+
+    model_type = Contract
+
+    async def get_by_sponsorship_id(self, sponsorship_id: UUID) -> Contract | None:
+        """Get a contract by sponsorship ID.
+
+        Args:
+            sponsorship_id: The sponsorship ID to search for.
+
+        Returns:
+            The contract if found, None otherwise.
+        """
+        statement = select(Contract).where(Contract.sponsorship_id == sponsorship_id)
+        result = await self.session.execute(statement)
+        return result.scalar_one_or_none()
+
+    async def list_by_status(
+        self,
+        status: ContractStatus,
+        limit: int = 100,
+        offset: int = 0,
+    ) -> list[Contract]:
+        """List contracts by status.
+
+        Args:
+            status: The status to filter by.
+            limit: Maximum number of contracts to return.
+            offset: Number of contracts to skip.
+
+        Returns:
+            List of contracts with the given status.
+        """
+        statement = (
+            select(Contract)
+            .where(Contract.status == status)
+            .order_by(Contract.created_at.desc())
             .limit(limit)
             .offset(offset)
         )

@@ -12,23 +12,6 @@ This document outlines the comprehensive architecture for migrating python.org f
 
 ---
 
-## Table of Contents
-
-1. [System Overview](#system-overview)
-2. [Technology Stack](#technology-stack)
-3. [Project Structure](#project-structure)
-4. [Domain Model](#domain-model)
-5. [Database Architecture](#database-architecture)
-6. [API Design](#api-design)
-7. [Authentication & Authorization](#authentication--authorization)
-8. [Configuration Management](#configuration-management)
-9. [Background Tasks](#background-tasks)
-10. [Migration Strategy](#migration-strategy)
-11. [Performance Considerations](#performance-considerations)
-12. [Security Architecture](#security-architecture)
-
----
-
 ## System Overview
 
 ### Current Django Architecture

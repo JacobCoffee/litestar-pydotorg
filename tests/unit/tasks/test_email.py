@@ -328,3 +328,177 @@ class TestSendBulkEmail:
 
             assert result["total"] == 0
             assert result["sent"] == 0
+
+
+@pytest.mark.unit
+class TestSendJobSubmittedEmail:
+    """Test suite for send_job_submitted_email task."""
+
+    async def test_sends_job_submitted_email_successfully(self) -> None:
+        """Test successful job submission notification email sending."""
+        ctx = {}
+        to_email = "admin@python.org"
+        job_title = "Senior Python Developer"
+        company_name = "Tech Corp"
+        job_id = "abc-123"
+        admin_url = "https://python.org/admin/jobs/abc-123/review"
+
+        with patch("pydotorg.tasks.email.EmailService") as mock_email_class:
+            mock_service = mock_email_class.return_value
+            mock_service._create_message = MagicMock()
+            mock_service._send_email = MagicMock()
+
+            from pydotorg.tasks.email import send_job_submitted_email
+
+            result = await send_job_submitted_email(
+                ctx,
+                to_email=to_email,
+                job_title=job_title,
+                company_name=company_name,
+                job_id=job_id,
+                admin_url=admin_url,
+            )
+
+            assert result["success"] is True
+            assert result["to_email"] == to_email
+            assert result["email_type"] == "job_submitted"
+            assert result["job_title"] == job_title
+            mock_service._send_email.assert_called_once()
+
+    async def test_handles_email_failure(self) -> None:
+        """Test handling of email sending failure."""
+        ctx = {}
+
+        with patch("pydotorg.tasks.email.EmailService") as mock_email_class:
+            mock_service = mock_email_class.return_value
+            mock_service._create_message = MagicMock()
+            mock_service._send_email = MagicMock(side_effect=Exception("SMTP error"))
+
+            from pydotorg.tasks.email import send_job_submitted_email
+
+            result = await send_job_submitted_email(
+                ctx,
+                to_email="admin@python.org",
+                job_title="Job",
+                company_name="Company",
+                job_id="123",
+                admin_url="url",
+            )
+
+            assert result["success"] is False
+            assert "error" in result
+
+
+@pytest.mark.unit
+class TestSendEventCreatedEmail:
+    """Test suite for send_event_created_email task."""
+
+    async def test_sends_event_created_email_successfully(self) -> None:
+        """Test successful event creation notification email sending."""
+        ctx = {}
+        to_email = "events@python.org"
+        event_title = "PyCon 2025"
+        calendar_name = "Python Events"
+        event_id = "event-123"
+        admin_url = "https://python.org/admin/events/event-123/review"
+
+        with patch("pydotorg.tasks.email.EmailService") as mock_email_class:
+            mock_service = mock_email_class.return_value
+            mock_service._create_message = MagicMock()
+            mock_service._send_email = MagicMock()
+
+            from pydotorg.tasks.email import send_event_created_email
+
+            result = await send_event_created_email(
+                ctx,
+                to_email=to_email,
+                event_title=event_title,
+                calendar_name=calendar_name,
+                event_id=event_id,
+                admin_url=admin_url,
+            )
+
+            assert result["success"] is True
+            assert result["to_email"] == to_email
+            assert result["email_type"] == "event_created"
+            assert result["event_title"] == event_title
+            mock_service._send_email.assert_called_once()
+
+    async def test_handles_email_failure(self) -> None:
+        """Test handling of email sending failure."""
+        ctx = {}
+
+        with patch("pydotorg.tasks.email.EmailService") as mock_email_class:
+            mock_service = mock_email_class.return_value
+            mock_service._create_message = MagicMock()
+            mock_service._send_email = MagicMock(side_effect=Exception("SMTP error"))
+
+            from pydotorg.tasks.email import send_event_created_email
+
+            result = await send_event_created_email(
+                ctx,
+                to_email="events@python.org",
+                event_title="Event",
+                calendar_name="Calendar",
+                event_id="123",
+                admin_url="url",
+            )
+
+            assert result["success"] is False
+            assert "error" in result
+
+
+@pytest.mark.unit
+class TestSendEventApprovedEmail:
+    """Test suite for send_event_approved_email task."""
+
+    async def test_sends_event_approved_email_successfully(self) -> None:
+        """Test successful event approval email sending."""
+        ctx = {}
+        to_email = "organizer@example.com"
+        event_title = "Python Meetup"
+        calendar_name = "Community Events"
+        event_url = "https://python.org/events/python-meetup"
+
+        with patch("pydotorg.tasks.email.EmailService") as mock_email_class:
+            mock_service = mock_email_class.return_value
+            mock_service._create_message = MagicMock()
+            mock_service._send_email = MagicMock()
+
+            from pydotorg.tasks.email import send_event_approved_email
+
+            result = await send_event_approved_email(
+                ctx,
+                to_email=to_email,
+                event_title=event_title,
+                calendar_name=calendar_name,
+                event_url=event_url,
+            )
+
+            assert result["success"] is True
+            assert result["to_email"] == to_email
+            assert result["email_type"] == "event_approved"
+            assert result["event_title"] == event_title
+            mock_service._send_email.assert_called_once()
+
+    async def test_handles_email_failure(self) -> None:
+        """Test handling of email sending failure."""
+        ctx = {}
+
+        with patch("pydotorg.tasks.email.EmailService") as mock_email_class:
+            mock_service = mock_email_class.return_value
+            mock_service._create_message = MagicMock()
+            mock_service._send_email = MagicMock(side_effect=Exception("SMTP error"))
+
+            from pydotorg.tasks.email import send_event_approved_email
+
+            result = await send_event_approved_email(
+                ctx,
+                to_email="organizer@example.com",
+                event_title="Event",
+                calendar_name="Calendar",
+                event_url="url",
+            )
+
+            assert result["success"] is False
+            assert "error" in result

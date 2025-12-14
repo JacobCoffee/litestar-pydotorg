@@ -92,6 +92,7 @@ class Job(AuditBase):
     )
     telecommuting: Mapped[bool] = mapped_column(Boolean, default=False)
     agencies: Mapped[bool] = mapped_column(Boolean, default=False)
+    is_featured: Mapped[bool] = mapped_column(Boolean, default=False, index=True)
     expires: Mapped[datetime.date | None] = mapped_column(Date, nullable=True)
 
     category_id: Mapped[UUID | None] = mapped_column(

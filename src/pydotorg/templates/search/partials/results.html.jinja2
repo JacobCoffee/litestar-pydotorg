@@ -96,21 +96,35 @@
 </div>
 
 {% if results.total > results.limit %}
+{% set current_page = (results.offset // results.limit) + 1 %}
+{% set total_pages = (results.total // results.limit) + (1 if results.total % results.limit else 0) %}
+{% set last_offset = (total_pages - 1) * results.limit %}
 <div class="flex justify-center mt-8">
     <div class="join">
         {% if results.offset > 0 %}
         <button
             class="join-item btn btn-sm"
+            hx-get="/search/results?q={{ query }}&limit={{ results.limit }}&offset=0"
+            hx-target="#search-results"
+            hx-swap="outerHTML"
+            title="First page"
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+            </svg>
+        </button>
+        <button
+            class="join-item btn btn-sm"
             hx-get="/search/results?q={{ query }}&limit={{ results.limit }}&offset={{ [0, results.offset - results.limit]|max }}"
             hx-target="#search-results"
             hx-swap="outerHTML"
+            title="Previous page"
         >
-            Previous
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
         </button>
         {% endif %}
-
-        {% set current_page = (results.offset // results.limit) + 1 %}
-        {% set total_pages = (results.total // results.limit) + (1 if results.total % results.limit else 0) %}
 
         <button class="join-item btn btn-sm btn-active">
             Page {{ current_page }} of {{ total_pages }}
@@ -122,8 +136,22 @@
             hx-get="/search/results?q={{ query }}&limit={{ results.limit }}&offset={{ results.offset + results.limit }}"
             hx-target="#search-results"
             hx-swap="outerHTML"
+            title="Next page"
         >
-            Next
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+        </button>
+        <button
+            class="join-item btn btn-sm"
+            hx-get="/search/results?q={{ query }}&limit={{ results.limit }}&offset={{ last_offset }}"
+            hx-target="#search-results"
+            hx-swap="outerHTML"
+            title="Last page"
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7m-8-14l7 7-7 7" />
+            </svg>
         </button>
         {% endif %}
     </div>

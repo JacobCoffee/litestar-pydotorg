@@ -6,6 +6,7 @@ from pydotorg.domains.sponsors.controllers import (
     SponsorshipController,
     SponsorshipLevelController,
 )
+from pydotorg.domains.sponsors.dependencies import get_sponsors_dependencies
 from pydotorg.domains.sponsors.models import Sponsor, Sponsorship, SponsorshipLevel, SponsorshipStatus
 from pydotorg.domains.sponsors.repositories import (
     SponsorRepository,
@@ -13,6 +14,7 @@ from pydotorg.domains.sponsors.repositories import (
     SponsorshipRepository,
 )
 from pydotorg.domains.sponsors.schemas import (
+    SponsorApplicationCreate,
     SponsorCreate,
     SponsorPublic,
     SponsorRead,
@@ -29,6 +31,7 @@ from pydotorg.domains.sponsors.services import SponsorService, SponsorshipLevelS
 
 __all__ = [
     "Sponsor",
+    "SponsorApplicationCreate",
     "SponsorController",
     "SponsorCreate",
     "SponsorPublic",
@@ -53,4 +56,5 @@ __all__ = [
     "SponsorshipService",
     "SponsorshipStatus",
     "SponsorshipUpdate",
+    "get_sponsors_dependencies",
 ]

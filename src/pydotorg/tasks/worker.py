@@ -85,7 +85,7 @@ async def startup(ctx: dict[str, Any]) -> None:
     ctx["engine"] = engine
     ctx["session_maker"] = session_maker
 
-    from redis.asyncio import Redis  # noqa: PLC0415
+    from redis.asyncio import Redis
 
     redis_client = Redis.from_url(settings.redis_url, decode_responses=False)
     ctx["redis"] = redis_client
@@ -162,7 +162,7 @@ async def after_process(ctx: dict[str, Any]) -> None:
     if not job:
         return
 
-    from pydotorg.tasks.stats import get_stats_service  # noqa: PLC0415
+    from pydotorg.tasks.stats import get_stats_service
 
     stats_service = await get_stats_service(ctx)
 
@@ -237,7 +237,7 @@ async def test_failing_task(ctx: dict[str, Any]) -> dict[str, Any]:
 
 def get_task_functions() -> list[Callable[..., Any]]:
     """Get all task functions dynamically to avoid circular imports."""
-    from pydotorg.tasks.cache import (  # noqa: PLC0415
+    from pydotorg.tasks.cache import (
         clear_cache,
         get_cache_stats,
         invalidate_page_response_cache,
@@ -247,26 +247,29 @@ def get_task_functions() -> list[Callable[..., Any]]:
         warm_pages_cache,
         warm_releases_cache,
     )
-    from pydotorg.tasks.downloads import (  # noqa: PLC0415
+    from pydotorg.tasks.downloads import (
         aggregate_download_stats,
         flush_download_stats,
     )
-    from pydotorg.tasks.email import (  # noqa: PLC0415
+    from pydotorg.tasks.email import (
         send_bulk_email,
+        send_event_approved_email,
+        send_event_created_email,
         send_event_reminder_email,
         send_job_approved_email,
         send_job_rejected_email,
+        send_job_submitted_email,
         send_password_reset_email,
         send_verification_email,
     )
-    from pydotorg.tasks.events import check_event_reminders, cleanup_past_occurrences  # noqa: PLC0415
-    from pydotorg.tasks.feeds import (  # noqa: PLC0415
+    from pydotorg.tasks.events import check_event_reminders, cleanup_past_occurrences
+    from pydotorg.tasks.feeds import (
         refresh_all_feeds,
         refresh_single_feed,
         refresh_stale_feeds,
     )
-    from pydotorg.tasks.jobs import archive_old_jobs, cleanup_draft_jobs, expire_jobs  # noqa: PLC0415
-    from pydotorg.tasks.search import (  # noqa: PLC0415
+    from pydotorg.tasks.jobs import archive_old_jobs, cleanup_draft_jobs, expire_jobs
+    from pydotorg.tasks.search import (
         index_all_blogs,
         index_all_events,
         index_all_jobs,
@@ -279,7 +282,7 @@ def get_task_functions() -> list[Callable[..., Any]]:
         rebuild_search_index,
         remove_job_from_index,
     )
-    from pydotorg.tasks.sync import (  # noqa: PLC0415
+    from pydotorg.tasks.sync import (
         sync_all_external_content,
         sync_events_from_ics,
         sync_jobs_from_rss,
@@ -313,9 +316,12 @@ def get_task_functions() -> list[Callable[..., Any]]:
         refresh_stale_feeds,
         remove_job_from_index,
         send_bulk_email,
+        send_event_approved_email,
+        send_event_created_email,
         send_event_reminder_email,
         send_job_approved_email,
         send_job_rejected_email,
+        send_job_submitted_email,
         send_password_reset_email,
         send_verification_email,
         sync_all_external_content,
@@ -334,22 +340,22 @@ def get_task_functions() -> list[Callable[..., Any]]:
 
 def get_cron_jobs() -> list[Any]:
     """Get all cron jobs dynamically to avoid circular imports."""
-    from pydotorg.tasks.cache import (  # noqa: PLC0415
+    from pydotorg.tasks.cache import (
         cron_warm_homepage_cache,
         cron_warm_releases_cache,
     )
-    from pydotorg.tasks.events import (  # noqa: PLC0415
+    from pydotorg.tasks.events import (
         cron_cleanup_past_occurrences,
         cron_event_reminders,
     )
-    from pydotorg.tasks.feeds import cron_refresh_feeds  # noqa: PLC0415
-    from pydotorg.tasks.jobs import (  # noqa: PLC0415
+    from pydotorg.tasks.feeds import cron_refresh_feeds
+    from pydotorg.tasks.jobs import (
         cron_archive_old_jobs,
         cron_cleanup_draft_jobs,
         cron_expire_jobs,
     )
-    from pydotorg.tasks.search import cron_rebuild_indexes  # noqa: PLC0415
-    from pydotorg.tasks.sync import (  # noqa: PLC0415
+    from pydotorg.tasks.search import cron_rebuild_indexes
+    from pydotorg.tasks.sync import (
         cron_sync_events,
         cron_sync_jobs,
         cron_sync_news,

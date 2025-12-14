@@ -1,0 +1,150 @@
+{# Download helper macros for signature verification display #}
+
+{% macro has_gpg(files) %}
+    {#- Check if any file has a GPG signature -#}
+    {{ files | selectattr('gpg_signature_file') | list | length > 0 }}
+{% endmacro %}
+
+{% macro has_sigstore(files) %}
+    {#- Check if any file has Sigstore materials -#}
+    {{ files | selectattr('sigstore_bundle_file') | list | length > 0 or
+       files | selectattr('sigstore_cert_file') | list | length > 0 or
+       files | selectattr('sigstore_signature_file') | list | length > 0 }}
+{% endmacro %}
+
+{% macro has_sbom(files) %}
+    {#- Check if any file has SBOM -#}
+    {{ files | selectattr('sbom_spdx2_file') | list | length > 0 }}
+{% endmacro %}
+
+{% macro signature_links(file) %}
+    {#- Render signature verification links for a file -#}
+    <div class="flex flex-wrap gap-1">
+        {% if file.gpg_signature_file %}
+        <a href="{{ file.gpg_signature_file }}" class="badge badge-outline badge-sm gap-1" title="GPG Signature">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
+            </svg>
+            GPG
+        </a>
+        {% endif %}
+        {% if file.sigstore_bundle_file %}
+        <a href="{{ file.sigstore_bundle_file }}" class="badge badge-outline badge-sm gap-1" title="Sigstore Bundle">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+            </svg>
+            Sigstore
+        </a>
+        {% elif file.sigstore_signature_file and file.sigstore_cert_file %}
+        <a href="{{ file.sigstore_signature_file }}" class="badge badge-outline badge-sm gap-1" title="Sigstore Signature">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+            </svg>
+            Sigstore
+        </a>
+        {% endif %}
+        {% if file.sbom_spdx2_file %}
+        <a href="{{ file.sbom_spdx2_file }}" class="badge badge-outline badge-sm gap-1" title="Software Bill of Materials (SPDX)">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+            SBOM
+        </a>
+        {% endif %}
+    </div>
+{% endmacro %}
+
+{% macro checksum_display(file) %}
+    {#- Render checksum information for a file -#}
+    <div class="text-xs space-y-1">
+        {% if file.sha256_sum %}
+        <div class="flex items-center gap-2">
+            <span class="text-base-content/50 w-12">SHA256:</span>
+            <code class="bg-base-200 px-2 py-0.5 rounded font-mono text-xs break-all">{{ file.sha256_sum }}</code>
+        </div>
+        {% endif %}
+        {% if file.md5_sum %}
+        <div class="flex items-center gap-2">
+            <span class="text-base-content/50 w-12">MD5:</span>
+            <code class="bg-base-200 px-2 py-0.5 rounded font-mono text-xs break-all">{{ file.md5_sum }}</code>
+        </div>
+        {% endif %}
+    </div>
+{% endmacro %}
+
+{% macro file_row(file, show_checksums=false) %}
+    {#- Render a complete file row with all information -#}
+    <tr class="hover">
+        <td>
+            <div class="font-medium">{{ file.name }}</div>
+            {% if file.description %}
+            <div class="text-xs text-base-content/60">{{ file.description }}</div>
+            {% endif %}
+        </td>
+        <td class="text-sm">
+            {% if file.filesize %}
+                {{ (file.filesize / 1024 / 1024)|round(1) }} MB
+            {% else %}
+                -
+            {% endif %}
+        </td>
+        <td>
+            {{ signature_links(file) }}
+        </td>
+        <td>
+            <a href="{{ file.url }}" class="btn btn-primary btn-sm gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                Download
+            </a>
+        </td>
+    </tr>
+    {% if show_checksums and (file.sha256_sum or file.md5_sum) %}
+    <tr class="bg-base-200/50">
+        <td colspan="4" class="py-2 px-4">
+            {{ checksum_display(file) }}
+        </td>
+    </tr>
+    {% endif %}
+{% endmacro %}
+
+{% macro verification_info() %}
+    {#- Render verification instructions card -#}
+    <div class="card bg-base-200 mt-8">
+        <div class="card-body">
+            <h3 class="card-title text-lg text-python-blue">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                </svg>
+                Verifying Downloads
+            </h3>
+            <div class="prose prose-sm max-w-none">
+                <p class="text-base-content/80">
+                    Python releases are signed to ensure authenticity. You can verify downloads using:
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <div class="bg-base-100 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">GPG Verification</h4>
+                        <pre class="bg-base-300 p-2 rounded text-xs overflow-x-auto"><code>gpg --verify Python-3.x.x.tgz.asc Python-3.x.x.tgz</code></pre>
+                        <p class="text-xs text-base-content/60 mt-2">
+                            <a href="https://www.python.org/downloads/release/pubkeys/" class="python-link">Download release signing keys</a>
+                        </p>
+                    </div>
+                    <div class="bg-base-100 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">Sigstore Verification</h4>
+                        <pre class="bg-base-300 p-2 rounded text-xs overflow-x-auto"><code>python -m pip install sigstore
+sigstore verify identity \
+  --bundle Python-3.x.x.tgz.sigstore \
+  --cert-identity release-managers@python.org \
+  --cert-oidc-issuer https://accounts.google.com \
+  Python-3.x.x.tgz</code></pre>
+                        <p class="text-xs text-base-content/60 mt-2">
+                            <a href="https://www.sigstore.dev/" class="python-link" target="_blank" rel="noopener">Learn about Sigstore</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}

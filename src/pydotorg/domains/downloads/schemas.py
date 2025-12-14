@@ -202,6 +202,7 @@ class ReleaseFileBase(BaseModel):
     sigstore_bundle_file: str = ""
     sbom_spdx2_file: str = ""
     md5_sum: str = ""
+    sha256_sum: str = ""
     filesize: int = 0
     download_button: bool = False
 
@@ -218,6 +219,7 @@ class ReleaseFileCreate(ReleaseFileBase):
                 "is_source": False,
                 "url": "https://www.python.org/ftp/python/3.13.1/python-3.13.1-macos11.pkg",
                 "md5_sum": "abc123def456...",
+                "sha256_sum": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
                 "filesize": 45678901,
                 "download_button": True,
                 "release_id": "550e8400-e29b-41d4-a716-446655440010",
@@ -249,6 +251,7 @@ class ReleaseFileRead(ReleaseFileBase):
                 "sigstore_bundle_file": "",
                 "sbom_spdx2_file": "",
                 "md5_sum": "abc123def456...",
+                "sha256_sum": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
                 "filesize": 45678901,
                 "download_button": True,
                 "release_id": "550e8400-e29b-41d4-a716-446655440010",

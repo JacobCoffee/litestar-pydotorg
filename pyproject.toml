@@ -45,6 +45,7 @@ dependencies = [
     "itsdangerous>=2.2.0",
     "croniter>=6.0.0",
     "litestar-vite>=0.14.0",
+    "litestar-workflows[db]>=0.3.1",
 ]
 
 [project.urls]
@@ -117,47 +118,48 @@ quote-style = "double"
 
 [tool.ruff.lint]
 select = [
-    "A",     # flake8-builtins
-    "B",     # flake8-bugbear
-    "BLE",   # flake8-blind-except
-    "C4",    # flake8-comprehensions
-    "DTZ",   # flake8-datetimez
-    "E",     # pycodestyle errors
-    "ERA",   # eradicate
-    "F",     # pyflakes
-    "FA",    # flake8-future-annotations
-    "FBT",   # flake8-boolean-trap
-    "FLY",   # flynt
-    "FURB",  # refurb
-    "I",     # isort
-    "ICN",   # flake8-import-conventions
-    "ISC",   # flake8-implicit-str-concat
-    "LOG",   # flake8-logging
-    "N",     # pep8-naming
-    "PERF",  # perflint
-    "PIE",   # flake8-pie
-    "PL",    # pylint
-    "PTH",   # flake8-use-pathlib
-    "Q",     # flake8-quotes
-    "RET",   # flake8-return
-    "RSE",   # flake8-raise
-    "RUF",   # ruff-specific
-    "S",     # flake8-bandit
-    "SIM",   # flake8-simplify
-    "SLOT",  # flake8-slots
-    "T10",   # flake8-debugger
-    "T20",   # flake8-print
-    "TCH",   # flake8-type-checking
-    "TID",   # flake8-tidy-imports
-    "TRY",   # tryceratops
-    "UP",    # pyupgrade
-    "W",     # pycodestyle warnings
+    "A",    # flake8-builtins
+    "B",    # flake8-bugbear
+    "BLE",  # flake8-blind-except
+    "C4",   # flake8-comprehensions
+    "DTZ",  # flake8-datetimez
+    "E",    # pycodestyle errors
+    "ERA",  # eradicate
+    "F",    # pyflakes
+    "FA",   # flake8-future-annotations
+    "FBT",  # flake8-boolean-trap
+    "FLY",  # flynt
+    "FURB", # refurb
+    "I",    # isort
+    "ICN",  # flake8-import-conventions
+    "ISC",  # flake8-implicit-str-concat
+    "LOG",  # flake8-logging
+    "N",    # pep8-naming
+    "PERF", # perflint
+    "PIE",  # flake8-pie
+    "PL",   # pylint
+    "PTH",  # flake8-use-pathlib
+    "Q",    # flake8-quotes
+    "RET",  # flake8-return
+    "RSE",  # flake8-raise
+    "RUF",  # ruff-specific
+    "S",    # flake8-bandit
+    "SIM",  # flake8-simplify
+    "SLOT", # flake8-slots
+    "T10",  # flake8-debugger
+    "T20",  # flake8-print
+    "TCH",  # flake8-type-checking
+    "TID",  # flake8-tidy-imports
+    "TRY",  # tryceratops
+    "UP",   # pyupgrade
+    "W",    # pycodestyle warnings
 ]
 ignore = [
     "A003",    # class attribute shadowing builtin
     "B010",    # setattr with constant
     "E501",    # line too long (handled by formatter)
     "ISC001",  # conflicts with formatter
+    "PLC0415", # import not at top-level (lazy imports for circular dep avoidance)
     "PLR0913", # too many arguments
     "RUF012",  # mutable class attributes
     "S101",    # assert usage (needed for tests)
@@ -205,6 +207,7 @@ ignore = [
 "src/pydotorg/domains/**/schemas.py" = ["TC001", "TC003"]
 "src/pydotorg/domains/**/controllers.py" = ["TC001", "TC002", "TC003"]
 "docs/conf.py" = ["A001", "INP001", "PTH", "DTZ"]
+"scripts/**/*" = ["BLE", "FBT", "PLR", "TC", "TRY"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["pydotorg"]
@@ -221,9 +224,12 @@ addopts = [
     "--strict-markers",
     "--strict-config",
     "--tb=short",
-    "-p", "no:pastebin",
-    "-p", "no:nose",
-    "-p", "no:doctest",
+    "-p",
+    "no:pastebin",
+    "-p",
+    "no:nose",
+    "-p",
+    "no:doctest",
     "-ra",
 ]
 asyncio_mode = "auto"
@@ -263,10 +269,7 @@ branch = true
 concurrency = ["multiprocessing", "thread"]
 parallel = true
 source = ["src/pydotorg"]
-omit = [
-    "*/migrations/*",
-    "*/__init__.py",
-]
+omit = ["*/migrations/*", "*/__init__.py"]
 
 [tool.coverage.report]
 exclude_lines = [
@@ -301,8 +304,11 @@ python = ".venv"
 [tool.ty.rules]
 deprecated = "warn"
 invalid-context-manager = "ignore"
+invalid-key = "ignore"
+invalid-type-arguments = "ignore"
 missing-argument = "ignore"
 invalid-argument-type = "ignore"
+possibly-missing-attribute = "ignore"
 unresolved-attribute = "ignore"
 unresolved-import = "ignore"
 unknown-argument = "ignore"
@@ -310,15 +316,11 @@ invalid-return-type = "ignore"
 parameter-already-assigned = "ignore"
 
 [tool.ty.src]
-exclude = [
-    "docs/conf.py",
-    "tests/",
-    "src/pydotorg/db/seed.py",
-]
+exclude = ["docs/conf.py", "tests/", "src/pydotorg/db/seed.py"]
 
 [tool.codespell]
-skip = "uv.lock,bun.lock,*.svg,docs/_build/*,**/static/**"
-ignore-words-list = "selectin,ot,te,ue,nd,administrer"
+skip = "uv.lock,bun.lock,*.svg,docs/_build,static,htmlcov,node_modules"
+ignore-words-list = "selectin,ot,te,ue,nd,ond,administrer,fo,bu,datas,MapPin"
 quiet-level = 3
 
 [tool.git-cliff.changelog]

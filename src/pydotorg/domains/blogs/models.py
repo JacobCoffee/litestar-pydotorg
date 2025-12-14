@@ -26,6 +26,7 @@ class Feed(AuditBase):
     feed_url: Mapped[str] = mapped_column(String(500), unique=True)
     last_fetched: Mapped[datetime.datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, index=True)
+    is_official: Mapped[bool] = mapped_column(Boolean, default=False, index=True)
     priority: Mapped[int] = mapped_column(default=0, index=True)
 
     entries: Mapped[list[BlogEntry]] = relationship(

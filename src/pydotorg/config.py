@@ -109,6 +109,8 @@ class Settings(BaseSettings):
     github_client_secret: str | None = None
     google_client_id: str | None = None
     google_client_secret: str | None = None
+    discord_client_id: str | None = None
+    discord_client_secret: str | None = None
     oauth_redirect_base_url: str = "http://localhost:8000"
 
     session_secret_key: str = "change-me-in-production-session"  # noqa: S105
@@ -127,6 +129,8 @@ class Settings(BaseSettings):
     smtp_from_name: str = "Python.org"
     smtp_use_tls: bool = True
     email_verification_expire_hours: int = 24
+    jobs_admin_email: str = "jobs@python.org"
+    events_admin_email: str = "events@python.org"
 
     static_url: str = "/static"
     media_url: str = "/media"
@@ -195,15 +199,18 @@ class Settings(BaseSettings):
 
         return v
 
-    @field_validator("database_url")
+    @field_validator("database_url", mode="before")
     @classmethod
-    def validate_database_url(cls, v: PostgresDsn) -> PostgresDsn:
-        """Ensure database URL is valid PostgreSQL."""
+    def validate_database_url(cls, v: str | PostgresDsn) -> str:
+        """Ensure database URL uses asyncpg driver."""
         url_str = str(v)
         if not url_str.startswith(("postgresql://", "postgresql+asyncpg://")):
             msg = "DATABASE_URL must be a valid PostgreSQL URL"
             raise ValueError(msg)
-        return v
+        # Auto-convert postgresql:// to postgresql+asyncpg:// for async support
+        if url_str.startswith("postgresql://") and "+asyncpg" not in url_str:
+            url_str = url_str.replace("postgresql://", "postgresql+asyncpg://", 1)
+        return url_str
 
     @model_validator(mode="after")
     def validate_production_config(self) -> Settings:
@@ -300,6 +307,9 @@ def get_config_warnings() -> list[str]:
     if not cfg.google_client_id or not cfg.google_client_secret:
         warnings.append("Google OAuth disabled")
 
+    if not cfg.discord_client_id or not cfg.discord_client_secret:
+        warnings.append("Discord OAuth disabled")
+
     return warnings
 
 
@@ -318,8 +328,8 @@ def validate_production_settings() -> None:
 
 def log_startup_banner() -> None:
     """Print application startup information directly to stdout."""
-    import os  # noqa: PLC0415
-    import sys  # noqa: PLC0415
+    import os
+    import sys
 
     cfg = get_settings()
     warnings = get_config_warnings()
@@ -373,6 +383,7 @@ def log_startup_banner() -> None:
   Email:            {_bool_icon(val=bool(cfg.smtp_host))} {email_display}
   GitHub OAuth:     {_bool_icon(val=bool(cfg.github_client_id))}
   Google OAuth:     {_bool_icon(val=bool(cfg.google_client_id))}
+  Discord OAuth:    {_bool_icon(val=bool(cfg.discord_client_id))}
   Meilisearch:      {_bool_icon(val=bool(cfg.meilisearch_url))} {cfg.meilisearch_url}
   Jobs:             {_bool_icon(val=cfg.features.enable_jobs)}
   Sponsors:         {_bool_icon(val=cfg.features.enable_sponsors)}
@@ -404,6 +415,7 @@ def get_config_summary() -> dict[str, str | bool | int]:
         "email_enabled": bool(cfg.smtp_host),
         "github_oauth_enabled": bool(cfg.github_client_id),
         "google_oauth_enabled": bool(cfg.google_client_id),
+        "discord_oauth_enabled": bool(cfg.discord_client_id),
         "create_tables_on_startup": cfg.create_all,
         "cors_allow_all": cfg.cors_allow_all,
         "show_error_details": cfg.show_error_details,

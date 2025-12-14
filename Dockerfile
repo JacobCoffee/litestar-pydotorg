@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1.9
 # Stage 1: Builder - Build frontend and install Python dependencies
 FROM oven/bun:1 AS frontend-builder
 
@@ -11,17 +12,19 @@ COPY tailwind.config.js ./
 COPY postcss.config.cjs ./
 COPY vite.config.ts ./
 COPY static/ ./static/
+COPY src/ ./src/
 
 RUN bun run build && bun run css
 
 
 # Stage 2: Python Builder - Install Python dependencies
-FROM python:3.14-slim AS python-builder
+FROM python:3.13-slim AS python-builder
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     UV_COMPILE_BYTECODE=1 \
     UV_LINK_MODE=copy \
+    UV_PYTHON_PREFERENCE=only-system \
     UV_PROJECT_ENVIRONMENT=/app/.venv
 
 WORKDIR /app
@@ -36,20 +39,21 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
 COPY pyproject.toml uv.lock README.md ./
 
-RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen --no-dev --no-install-project
+# Sync dependencies only (cached until uv.lock/pyproject.toml change)
+RUN uv sync --frozen --no-dev --no-install-project
 
 COPY src/ ./src/
 
-RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen --no-dev
+# Install application
+RUN uv sync --frozen --no-dev
 
 
 # Stage 3: Runtime - Minimal production image
-FROM python:3.14-slim AS runtime
+FROM python:3.13-slim AS runtime
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
+    VIRTUAL_ENV=/app/.venv \
     PATH="/app/.venv/bin:$PATH" \
     APP_ENV=prod
 
@@ -63,11 +67,17 @@ RUN apt-get update && \
 
 WORKDIR /app
 
-COPY --from=python-builder --chown=appuser:appuser /app/.venv /app/.venv
-COPY --from=python-builder --chown=appuser:appuser /app/src /app/src
-COPY --from=frontend-builder --chown=appuser:appuser /app/static /app/static
+COPY --from=python-builder --chmod=755 /app/.venv /app/.venv
+COPY --from=python-builder /app/src /app/src
+COPY --from=frontend-builder /app/static /app/static
+COPY alembic.ini ./
 
-COPY --chown=appuser:appuser alembic.ini ./
+# Fix venv Python symlink (uv creates symlinks that don't survive multi-stage copy)
+RUN ln -sf /usr/local/bin/python3 /app/.venv/bin/python && \
+    ln -sf /usr/local/bin/python3 /app/.venv/bin/python3
+
+# Set ownership for non-root user
+RUN chown -R appuser:appuser /app
 
 USER appuser
 
@@ -76,4 +86,7 @@ EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
     CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')" || exit 1
 
-CMD ["granian", "--interface", "asgi", "pydotorg.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "4"]
+# Use SIGINT for graceful shutdown
+STOPSIGNAL SIGINT
+
+CMD ["granian", "--interface", "asgi", "pydotorg.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1", "--log-level", "debug"]

@@ -132,9 +132,9 @@ async def provide_cron_job_service() -> CronJobService:
     Returns:
         CronJobService instance
     """
-    from redis.asyncio import Redis  # noqa: PLC0415
+    from redis.asyncio import Redis
 
-    from pydotorg.config import settings  # noqa: PLC0415
+    from pydotorg.config import settings
 
     redis = Redis.from_url(settings.redis_url, decode_responses=True)
     return CronJobService(redis=redis)

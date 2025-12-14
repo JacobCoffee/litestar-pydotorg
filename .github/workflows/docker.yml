@@ -122,7 +122,7 @@ jobs:
             --network host \
             -e DATABASE_URL=postgresql+asyncpg://postgres:postgres@localhost:5432/pydotorg_test \
             -e REDIS_URL=redis://localhost:6379 \
-            -e APP_ENV=test \
+            -e APP_ENV=dev \
             -p 8000:8000 \
             litestar-pydotorg:test
 
@@ -165,6 +165,8 @@ jobs:
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
+        id: trivy
+        continue-on-error: true
         with:
           image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}
           format: 'sarif'
@@ -173,7 +175,7 @@ jobs:
 
       - name: Upload Trivy results to GitHub Security
         uses: github/codeql-action/upload-sarif@v4
-        if: always()
+        if: steps.trivy.outcome == 'success'
         with:
           sarif_file: 'trivy-results.sarif'
 

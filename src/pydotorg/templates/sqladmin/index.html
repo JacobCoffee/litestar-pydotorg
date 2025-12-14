@@ -54,9 +54,46 @@
     'Feed Aggregate': 'layers',
     'Related Blogs': 'link',
     'Related Blog': 'link',
+    'Banners': 'flag',
+    'Banner': 'flag',
+    'Code Samples': 'code',
+    'Code Sample': 'code',
+    'Community Posts': 'message-circle',
+    'Community Post': 'message-circle',
+    'Community Photos': 'image',
+    'Community Photo': 'image',
+    'Community Videos': 'video',
+    'Community Video': 'video',
+    'Community Links': 'external-link',
+    'Community Link': 'external-link',
+    'Operating Systems': 'monitor',
+    'OS': 'monitor',
+    'Releases': 'package',
+    'Release': 'package',
+    'Release Files': 'file-archive',
+    'Release File': 'file-archive',
+    'Download Statistics': 'bar-chart-2',
+    'Download Statistic': 'bar-chart-2',
+    'Email Templates': 'mail',
+    'Email Template': 'mail',
+    'Email Logs': 'inbox',
+    'Email Log': 'inbox',
+    'Minutes': 'clipboard-list',
+    'Elections': 'vote',
+    'Election': 'vote',
+    'Nominees': 'user-check',
+    'Nominee': 'user-check',
+    'Nominations': 'award',
+    'Nomination': 'award',
+    'Story Categories': 'folder',
+    'Story Category': 'folder',
+    'Success Stories': 'star',
+    'Success Story': 'star',
+    'Work Groups': 'users-round',
+    'Work Group': 'users-round',
 } %}
 
-{# Section mapping for models #}
+{# Section mapping for models - keys must match name_plural from views.py #}
 {% set section_map = {
     'Users': 'users',
     'Memberships': 'users',
@@ -76,10 +113,29 @@
     'Pages': 'content',
     'Page Images': 'content',
     'Page Documents': 'content',
+    'Banners': 'content',
+    'Code Samples': 'content',
     'Blog Entries': 'blogs',
     'Feeds': 'blogs',
     'Feed Aggregates': 'blogs',
     'Related Blogs': 'blogs',
+    'Community Posts': 'community',
+    'Community Photos': 'community',
+    'Community Videos': 'community',
+    'Community Links': 'community',
+    'Operating Systems': 'downloads',
+    'Releases': 'downloads',
+    'Release Files': 'downloads',
+    'Download Statistics': 'downloads',
+    'Email Templates': 'email',
+    'Email Logs': 'email',
+    'Minutes': 'psf',
+    'Elections': 'psf',
+    'Nominees': 'psf',
+    'Nominations': 'psf',
+    'Work Groups': 'psf',
+    'Story Categories': 'stories',
+    'Success Stories': 'stories',
 } %}
 
 {% set sections = {
@@ -87,8 +143,13 @@
     'jobs': {'title': 'Job Board', 'icon': 'briefcase', 'description': 'Job listings, categories, and reviews'},
     'events': {'title': 'Events & Calendar', 'icon': 'calendar', 'description': 'Events, calendars, and locations'},
     'sponsors': {'title': 'Sponsors', 'icon': 'handshake', 'description': 'Sponsors and sponsorship management'},
-    'content': {'title': 'Pages & Content', 'icon': 'file-text', 'description': 'CMS pages, images, and documents'},
+    'content': {'title': 'Pages & Content', 'icon': 'file-text', 'description': 'CMS pages, images, banners, and code samples'},
     'blogs': {'title': 'Blogs & Feeds', 'icon': 'rss', 'description': 'Blog entries and RSS feeds'},
+    'community': {'title': 'Community', 'icon': 'message-circle', 'description': 'Community posts, photos, videos, and links'},
+    'downloads': {'title': 'Downloads', 'icon': 'download', 'description': 'Python releases, files, and download statistics'},
+    'email': {'title': 'Email', 'icon': 'mail', 'description': 'Email templates and delivery logs'},
+    'psf': {'title': 'PSF', 'icon': 'building', 'description': 'PSF meetings, elections, nominations, and work groups'},
+    'stories': {'title': 'Success Stories', 'icon': 'star', 'description': 'Python success stories and categories'},
 } %}
 
 <div x-data="modelSearch()" class="space-y-8">
@@ -154,7 +215,9 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                {# Iterate through all menu items (both top-level views and category children) #}
                 {% for item in admin._menu.items %}
+                {# Handle top-level View items (no category set) #}
                 {% if item.is_visible(request) and item.is_accessible(request) and item.type_ == "View" %}
                 {% if section_map.get(item.display_name) == section_key %}
                 <a href="{{ item.url(request) }}"
@@ -173,6 +236,30 @@
                     </div>
                 </a>
                 {% endif %}
+                {% endif %}
+                {# Handle Category items - iterate through their children #}
+                {% if item.type_ == "Category" %}
+                {% for child in item.children %}
+                {% if child.is_visible(request) and child.is_accessible(request) %}
+                {% if section_map.get(child.display_name) == section_key %}
+                <a href="{{ child.url(request) }}"
+                   class="card bg-base-100 shadow border border-base-300 hover:shadow-lg hover:border-python-blue/30 transition-all cursor-pointer group"
+                   data-model-name="{{ child.display_name|lower }}">
+                    <div class="card-body p-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-python-blue/10 text-python-blue rounded-lg flex items-center justify-center group-hover:bg-python-blue group-hover:text-white transition-colors">
+                                <i data-lucide="{{ icon_map.get(child.display_name, 'database') }}" class="h-5 w-5"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold">{{ child.display_name }}</h3>
+                                <p class="text-xs text-base-content/50">Manage {{ child.display_name|lower }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                {% endif %}
+                {% endif %}
+                {% endfor %}
                 {% endif %}
                 {% endfor %}
             </div>
@@ -197,6 +284,17 @@ function modelSearch() {
             url: "{{ item.url(request) }}",
             icon: "{{ icon_map.get(item.display_name, 'database') }}"
         },
+        {% endif %}
+        {% if item.type_ == "Category" %}
+        {% for child in item.children %}
+        {% if child.is_visible(request) and child.is_accessible(request) %}
+        {
+            name: "{{ child.display_name }}",
+            url: "{{ child.url(request) }}",
+            icon: "{{ icon_map.get(child.display_name, 'database') }}"
+        },
+        {% endif %}
+        {% endfor %}
         {% endif %}
         {% endfor %}
     ];

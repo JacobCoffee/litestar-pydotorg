@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING
 
 from advanced_alchemy.service import SQLAlchemyAsyncRepositoryService
 
+from pydotorg.config import settings
 from pydotorg.domains.events.models import Calendar, Event, EventCategory, EventLocation, EventOccurrence
 from pydotorg.domains.events.repositories import (
     CalendarRepository,
@@ -110,6 +111,17 @@ class EventService(SQLAlchemyAsyncRepositoryService[Event]):
         index_key = await enqueue_task("index_event", event_id=str(event.id))
         if not index_key:
             logger.warning(f"Failed to enqueue search indexing for event {event.id}")
+
+        if hasattr(settings, "events_admin_email") and settings.events_admin_email:
+            admin_url = f"{settings.oauth_redirect_base_url}/admin/events/{event.id}/review"
+            await enqueue_task(
+                "send_event_created_email",
+                to_email=settings.events_admin_email,
+                event_title=event.title,
+                calendar_name=event.calendar.name if event.calendar else "Unknown Calendar",
+                event_id=str(event.id),
+                admin_url=admin_url,
+            )
 
         return event
 
@@ -264,6 +276,29 @@ class EventService(SQLAlchemyAsyncRepositoryService[Event]):
             await self.repository.session.refresh(event)
 
         return event
+
+    async def notify_event_approved(self, event_id: UUID) -> None:
+        """Send approval notification email for an event.
+
+        This can be called after manual approval or when implementing
+        an approval workflow for events.
+
+        Args:
+            event_id: The event ID to notify about
+        """
+        event = await self.get(event_id)
+        if not event:
+            raise ValueError(f"Event {event_id} not found")
+
+        if event.creator and event.creator.email:
+            event_url = f"{settings.oauth_redirect_base_url}/events/{event.slug}"
+            await enqueue_task(
+                "send_event_approved_email",
+                to_email=event.creator.email,
+                event_title=event.title,
+                calendar_name=event.calendar.name if event.calendar else "Unknown Calendar",
+                event_url=event_url,
+            )
 
 
 class EventOccurrenceService(SQLAlchemyAsyncRepositoryService[EventOccurrence]):

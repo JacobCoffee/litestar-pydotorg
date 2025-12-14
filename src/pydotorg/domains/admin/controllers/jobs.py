@@ -302,3 +302,27 @@ class AdminJobsController(Controller):
             return Response(content="Job not found", status_code=404)
 
         return Response(content="Deleted", status_code=200)
+
+    @post("/{job_id:uuid}/toggle-featured")
+    async def toggle_featured(
+        self,
+        job_admin_service: JobAdminService,
+        job_id: UUID,
+    ) -> Template | Response:
+        """Toggle the featured status of a job.
+
+        Args:
+            job_admin_service: Job admin service
+            job_id: Job ID
+
+        Returns:
+            Updated job row partial or error response
+        """
+        job = await job_admin_service.toggle_featured(job_id)
+        if not job:
+            return Response(content="Job not found", status_code=404)
+
+        return Template(
+            template_name="admin/jobs/partials/job_row.html.jinja2",
+            context={"job": job},
+        )

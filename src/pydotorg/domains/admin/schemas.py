@@ -110,11 +110,11 @@ class SystemInfo(BaseModel):
 
 def _rebuild_models() -> None:
     """Rebuild models to resolve forward references."""
-    import datetime as _datetime  # noqa: PLC0415
-    from uuid import UUID as _UUID  # noqa: PLC0415
+    import datetime as _datetime
+    from uuid import UUID as _UUID
 
-    from pydotorg.domains.users.models import EmailPrivacy as _EmailPrivacy  # noqa: PLC0415
-    from pydotorg.domains.users.models import SearchVisibility as _SearchVisibility  # noqa: PLC0415
+    from pydotorg.domains.users.models import EmailPrivacy as _EmailPrivacy
+    from pydotorg.domains.users.models import SearchVisibility as _SearchVisibility
 
     _types = {
         "UUID": _UUID,

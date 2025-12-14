@@ -1,0 +1,422 @@
+{% extends "base.html.jinja2" %}
+
+{% block title %}Getting Started with Python | Python.org{% endblock %}
+
+{% block meta_description %}Learn how to install Python, write your first program, and start your Python programming journey with our comprehensive beginner's guide.{% endblock %}
+
+{% block content %}
+<section class="python-gradient text-white py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-5xl font-bold mb-6">Getting Started with Python</h1>
+            <p class="text-xl opacity-90">
+                Your journey to becoming a Python developer starts here
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <div class="card bg-gradient-to-br from-python-blue/5 to-python-yellow/5 border-l-4 border-python-blue mb-8">
+                <div class="card-body">
+                    <div class="flex items-start gap-4">
+                        <div class="flex-shrink-0 hidden md:block">
+                            <svg class="w-12 h-12 text-python-blue/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-lg text-base-content/90 leading-relaxed">
+                                <strong class="text-python-blue">Python</strong> is powerful, easy to learn, and runs everywhere.
+                                Whether you're interested in web development, data science, automation, or just want to learn
+                                programming, Python is an excellent choice.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-200 py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-python-blue mb-8">Step 1: Install Python</h2>
+            <div class="tabs tabs-boxed mb-6 bg-base-100" x-data="{ activeTab: 'windows' }">
+                <button class="tab" :class="{ 'tab-active': activeTab === 'windows' }" @click="activeTab = 'windows'">Windows</button>
+                <button class="tab" :class="{ 'tab-active': activeTab === 'macos' }" @click="activeTab = 'macos'">macOS</button>
+                <button class="tab" :class="{ 'tab-active': activeTab === 'linux' }" @click="activeTab = 'linux'">Linux</button>
+            </div>
+
+            <div x-show="activeTab === 'windows'" x-transition class="card bg-base-100 shadow-lg">
+                <div class="card-body">
+                    <h3 class="font-bold text-xl mb-4">Installing Python on Windows</h3>
+                    <ol class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <span class="flex items-center justify-center w-8 h-8 rounded-full bg-python-blue text-white font-bold flex-shrink-0">1</span>
+                            <div>
+                                <p class="font-semibold mb-2">Download Python</p>
+                                <p class="text-base-content/80 mb-3">
+                                    Visit the <a href="/downloads/" class="link link-primary" hx-boost="true">downloads page</a>
+                                    and download the latest Python installer for Windows.
+                                </p>
+                                <div class="alert alert-info">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    <span class="text-sm">Make sure to check "Add Python to PATH" during installation!</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="flex items-center justify-center w-8 h-8 rounded-full bg-python-blue text-white font-bold flex-shrink-0">2</span>
+                            <div>
+                                <p class="font-semibold mb-2">Run the installer</p>
+                                <p class="text-base-content/80">
+                                    Double-click the downloaded file and follow the installation wizard. Choose "Install Now"
+                                    for a quick setup with default options.
+                                </p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="flex items-center justify-center w-8 h-8 rounded-full bg-python-blue text-white font-bold flex-shrink-0">3</span>
+                            <div>
+                                <p class="font-semibold mb-2">Verify installation</p>
+                                <p class="text-base-content/80 mb-2">
+                                    Open Command Prompt and type:
+                                </p>
+                                <div class="mockup-code">
+                                    <pre><code>python --version</code></pre>
+                                </div>
+                            </div>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+
+            <div x-show="activeTab === 'macos'" x-transition class="card bg-base-100 shadow-lg">
+                <div class="card-body">
+                    <h3 class="font-bold text-xl mb-4">Installing Python on macOS</h3>
+                    <ol class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <span class="flex items-center justify-center w-8 h-8 rounded-full bg-python-blue text-white font-bold flex-shrink-0">1</span>
+                            <div>
+                                <p class="font-semibold mb-2">Download Python</p>
+                                <p class="text-base-content/80">
+                                    Visit the <a href="/downloads/" class="link link-primary" hx-boost="true">downloads page</a>
+                                    and download the latest Python installer for macOS.
+                                </p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="flex items-center justify-center w-8 h-8 rounded-full bg-python-blue text-white font-bold flex-shrink-0">2</span>
+                            <div>
+                                <p class="font-semibold mb-2">Install via Homebrew (Recommended)</p>
+                                <p class="text-base-content/80 mb-2">
+                                    If you have Homebrew installed, you can install Python with:
+                                </p>
+                                <div class="mockup-code mb-3">
+                                    <pre><code>brew install python@3</code></pre>
+                                </div>
+                                <p class="text-base-content/80">
+                                    Or use the downloaded .pkg file and follow the installer.
+                                </p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="flex items-center justify-center w-8 h-8 rounded-full bg-python-blue text-white font-bold flex-shrink-0">3</span>
+                            <div>
+                                <p class="font-semibold mb-2">Verify installation</p>
+                                <p class="text-base-content/80 mb-2">
+                                    Open Terminal and type:
+                                </p>
+                                <div class="mockup-code">
+                                    <pre><code>python3 --version</code></pre>
+                                </div>
+                            </div>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+
+            <div x-show="activeTab === 'linux'" x-transition class="card bg-base-100 shadow-lg">
+                <div class="card-body">
+                    <h3 class="font-bold text-xl mb-4">Installing Python on Linux</h3>
+                    <ol class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <span class="flex items-center justify-center w-8 h-8 rounded-full bg-python-blue text-white font-bold flex-shrink-0">1</span>
+                            <div>
+                                <p class="font-semibold mb-2">Check if Python is installed</p>
+                                <p class="text-base-content/80 mb-2">
+                                    Most Linux distributions come with Python pre-installed. Check with:
+                                </p>
+                                <div class="mockup-code">
+                                    <pre><code>python3 --version</code></pre>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="flex items-center justify-center w-8 h-8 rounded-full bg-python-blue text-white font-bold flex-shrink-0">2</span>
+                            <div>
+                                <p class="font-semibold mb-2">Install via package manager</p>
+                                <p class="text-base-content/80 mb-2">
+                                    Ubuntu/Debian:
+                                </p>
+                                <div class="mockup-code mb-3">
+                                    <pre><code>sudo apt update
+sudo apt install python3 python3-pip</code></pre>
+                                </div>
+                                <p class="text-base-content/80 mb-2">
+                                    Fedora:
+                                </p>
+                                <div class="mockup-code">
+                                    <pre><code>sudo dnf install python3 python3-pip</code></pre>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="flex items-center justify-center w-8 h-8 rounded-full bg-python-blue text-white font-bold flex-shrink-0">3</span>
+                            <div>
+                                <p class="font-semibold mb-2">Verify installation</p>
+                                <div class="mockup-code">
+                                    <pre><code>python3 --version
+pip3 --version</code></pre>
+                                </div>
+                            </div>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-python-blue mb-8">Step 2: Write Your First Program</h2>
+            <div class="card bg-base-200 shadow-lg mb-6">
+                <div class="card-body">
+                    <h3 class="font-bold text-xl mb-4">Hello, World!</h3>
+                    <p class="text-base-content/80 mb-4">
+                        Create a new file called <code class="bg-base-300 px-2 py-1 rounded">hello.py</code> and add this code:
+                    </p>
+                    <div class="mockup-code mb-4">
+                        <pre><code>print("Hello, World!")
+print("Welcome to Python!")</code></pre>
+                    </div>
+                    <p class="text-base-content/80 mb-2">Run it from the command line:</p>
+                    <div class="mockup-code">
+                        <pre><code>python hello.py</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card bg-base-200 shadow-lg">
+                <div class="card-body">
+                    <h3 class="font-bold text-xl mb-4">Try the Interactive Shell</h3>
+                    <p class="text-base-content/80 mb-4">
+                        Python includes an interactive shell where you can try code immediately. Just type <code class="bg-base-300 px-2 py-1 rounded">python</code>
+                        or <code class="bg-base-300 px-2 py-1 rounded">python3</code> in your terminal:
+                    </p>
+                    <div class="mockup-code mb-4">
+                        <pre><code>>>> print("Hello from the Python shell!")
+Hello from the Python shell!
+>>> 2 + 2
+4
+>>> name = "Python"
+>>> f"I love {name}!"
+'I love Python!'</code></pre>
+                    </div>
+                    <p class="text-base-content/80">
+                        Type <code class="bg-base-300 px-2 py-1 rounded">exit()</code> or press Ctrl+D to leave the shell.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-200 py-16">
+    <div class="section-container">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-3xl font-bold text-python-blue mb-8 text-center">Step 3: Choose Your IDE</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="card bg-base-100 shadow-lg">
+                    <div class="card-body">
+                        <h3 class="card-title mb-2">VS Code</h3>
+                        <div class="badge badge-success mb-4">Recommended for Beginners</div>
+                        <p class="text-base-content/80 mb-4">
+                            Free, lightweight, and packed with features. Excellent Python extension available.
+                        </p>
+                        <a href="https://code.visualstudio.com/" target="_blank" rel="noopener" class="link link-primary text-sm">
+                            Download VS Code →
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card bg-base-100 shadow-lg">
+                    <div class="card-body">
+                        <h3 class="card-title mb-2">PyCharm</h3>
+                        <div class="badge badge-info mb-4">Professional IDE</div>
+                        <p class="text-base-content/80 mb-4">
+                            Full-featured IDE designed specifically for Python. Community Edition is free.
+                        </p>
+                        <a href="https://www.jetbrains.com/pycharm/" target="_blank" rel="noopener" class="link link-primary text-sm">
+                            Download PyCharm →
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card bg-base-100 shadow-lg">
+                    <div class="card-body">
+                        <h3 class="card-title mb-2">Jupyter Notebook</h3>
+                        <div class="badge badge-warning mb-4">For Data Science</div>
+                        <p class="text-base-content/80 mb-4">
+                            Interactive notebooks perfect for data science, analysis, and learning.
+                        </p>
+                        <a href="https://jupyter.org/" target="_blank" rel="noopener" class="link link-primary text-sm">
+                            Get Jupyter →
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card bg-base-100 shadow-lg">
+                    <div class="card-body">
+                        <h3 class="card-title mb-2">IDLE</h3>
+                        <div class="badge badge-outline mb-4">Included with Python</div>
+                        <p class="text-base-content/80 mb-4">
+                            Simple editor that comes with Python. Great for quick scripts and learning.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card bg-base-100 shadow-lg">
+                    <div class="card-body">
+                        <h3 class="card-title mb-2">Sublime Text</h3>
+                        <div class="badge badge-outline mb-4">Fast & Lightweight</div>
+                        <p class="text-base-content/80 mb-4">
+                            Fast text editor with Python support through packages.
+                        </p>
+                        <a href="https://www.sublimetext.com/" target="_blank" rel="noopener" class="link link-primary text-sm">
+                            Download Sublime Text →
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card bg-base-100 shadow-lg">
+                    <div class="card-body">
+                        <h3 class="card-title mb-2">Spyder</h3>
+                        <div class="badge badge-outline mb-4">Scientific Python</div>
+                        <p class="text-base-content/80 mb-4">
+                            IDE designed for scientific Python development.
+                        </p>
+                        <a href="https://www.spyder-ide.org/" target="_blank" rel="noopener" class="link link-primary text-sm">
+                            Get Spyder →
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-python-blue mb-8 text-center">Next Steps</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="card bg-base-200 shadow-lg">
+                    <div class="card-body">
+                        <div class="flex items-center gap-3 mb-4">
+                            <svg class="w-8 h-8 text-python-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                            </svg>
+                            <h3 class="card-title">Learn the Basics</h3>
+                        </div>
+                        <p class="text-base-content/80 mb-4">
+                            Work through the official Python tutorial to learn variables, functions, data structures, and more.
+                        </p>
+                        <a href="https://docs.python.org/3/tutorial/" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
+                            Start Tutorial
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200 shadow-lg">
+                    <div class="card-body">
+                        <div class="flex items-center gap-3 mb-4">
+                            <svg class="w-8 h-8 text-python-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                            </svg>
+                            <h3 class="card-title">Explore Packages</h3>
+                        </div>
+                        <p class="text-base-content/80 mb-4">
+                            Discover thousands of packages on PyPI for web development, data science, automation, and more.
+                        </p>
+                        <a href="https://pypi.org/" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
+                            Browse PyPI
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200 shadow-lg">
+                    <div class="card-body">
+                        <div class="flex items-center gap-3 mb-4">
+                            <svg class="w-8 h-8 text-python-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                            </svg>
+                            <h3 class="card-title">Join the Community</h3>
+                        </div>
+                        <p class="text-base-content/80 mb-4">
+                            Connect with other Python developers through forums, user groups, and events.
+                        </p>
+                        <a href="/community/" class="btn btn-primary btn-sm" hx-boost="true">
+                            Explore Community
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200 shadow-lg">
+                    <div class="card-body">
+                        <div class="flex items-center gap-3 mb-4">
+                            <svg class="w-8 h-8 text-python-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                            </svg>
+                            <h3 class="card-title">Get Help</h3>
+                        </div>
+                        <p class="text-base-content/80 mb-4">
+                            Access documentation, FAQs, forums, and IRC channels for support when you need it.
+                        </p>
+                        <a href="/about/help/" class="btn btn-primary btn-sm" hx-boost="true">
+                            Get Help
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-gradient-to-br from-python-blue to-python-blue/80 text-white py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-4xl font-bold mb-4">Ready to Start Coding?</h2>
+            <p class="text-xl opacity-90 mb-8">
+                Python is waiting for you. Download it today and start building amazing things.
+            </p>
+            <div class="flex flex-wrap gap-4 justify-center">
+                <a href="/downloads/" class="btn btn-lg bg-white text-python-blue hover:bg-white/90 border-none" hx-boost="true">
+                    Download Python
+                </a>
+                <a href="https://docs.python.org/3/tutorial/" target="_blank" rel="noopener" class="btn btn-lg btn-outline border-white text-white hover:bg-white/10">
+                    Start Tutorial
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

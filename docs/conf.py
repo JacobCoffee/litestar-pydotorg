@@ -2,9 +2,23 @@
 
 from __future__ import annotations
 
+import logging
 import os
 import sys
+import warnings
 from datetime import datetime
+
+from sqlalchemy.exc import SAWarning
+
+# Suppress DEBUG logging during Sphinx build to prevent myst-parser debug spam
+# This must be set BEFORE importing any application modules
+os.environ.setdefault("APP_ENV", "prod")
+logging.getLogger().setLevel(logging.WARNING)
+logging.getLogger("markdown_it").setLevel(logging.WARNING)
+logging.getLogger("myst_parser").setLevel(logging.WARNING)
+
+# Filter SQLAlchemy warnings during autodoc
+warnings.filterwarnings("ignore", category=SAWarning)
 
 sys.path.insert(0, os.path.abspath("../src"))
 
@@ -15,7 +29,6 @@ release = "0.1.0"
 
 extensions = [
     "sphinx.ext.autodoc",
-    "sphinx.ext.autosummary",
     "sphinx.ext.intersphinx",
     "sphinx.ext.viewcode",
     "sphinx.ext.napoleon",
@@ -51,33 +64,27 @@ html_css_files = [
     "custom.css",
 ]
 
+# Autodoc settings - match Litestar style
+autoclass_content = "class"
+autodoc_class_signature = "separated"
 autodoc_default_options = {
     "members": True,
-    "member-order": "bysource",
     "special-members": "__init__",
-    "undoc-members": True,
-    "exclude-members": "__weakref__",
     "show-inheritance": True,
 }
+autodoc_member_order = "bysource"
+autodoc_typehints_format = "short"
 
-autodoc_class_signature = "separated"
-autodoc_typehints = "description"
-autodoc_typehints_description_target = "documented"
-autodoc_inherit_docstrings = True
-autosummary_generate = True
+# Only mock external libraries that aren't installed or cause issues
+autodoc_mock_imports = [
+    "granian",
+    "meilisearch_python_sdk",
+]
 
 napoleon_google_docstring = True
-napoleon_numpy_docstring = True
-napoleon_include_init_with_doc = True
-napoleon_include_private_with_doc = False
 napoleon_include_special_with_doc = True
 napoleon_use_admonition_for_examples = True
 napoleon_use_admonition_for_notes = True
-napoleon_use_ivar = True
-napoleon_use_param = True
-napoleon_use_rtype = True
-napoleon_use_keyword = True
-napoleon_preprocess_types = True
 napoleon_attr_annotations = True
 
 myst_enable_extensions = [
@@ -107,9 +114,63 @@ intersphinx_mapping = {
     "pydantic": ("https://docs.pydantic.dev/latest/", None),
     "advanced-alchemy": ("https://docs.advanced-alchemy.litestar.dev/latest/", None),
 }
+intersphinx_cache_limit = 5
+intersphinx_timeout = 10
 
-intersphinx_disabled_reftypes = ["*"]
-
-suppress_warnings = ["intersphinx"]
-
+nitpicky = False
+add_module_names = False
 todo_include_todos = True
+
+# Linkcheck settings - skip auto-generated commit links in changelog
+linkcheck_ignore = [
+    r"https://github\.com/JacobCoffee/litestar-pydotorg/commit/.*",
+    r"https://github\.com/JacobCoffee/litestar-pydotorg/compare/.*",
+]
+linkcheck_timeout = 10
+linkcheck_retries = 2
+
+# Suppress warnings for inherited docstrings from external libraries with RST issues
+suppress_warnings = [
+    "autodoc.import_object",
+    "sphinx_autodoc_typehints.forward_reference",
+    "sphinx_autodoc_typehints.guarded_import",
+]
+
+
+def autodoc_skip_member(app, what, name, obj, skip, options):
+    """Skip inherited attributes from SQLAdmin ModelView that have malformed docstrings."""
+    sqladmin_attrs = {
+        "column_list",
+        "column_searchable_list",
+        "column_sortable_list",
+        "column_default_sort",
+        "column_details_list",
+        "column_details_exclude_list",
+        "column_export_list",
+        "column_export_exclude_list",
+        "column_formatters",
+        "column_formatters_detail",
+        "column_formatters_export",
+        "column_type_formatters",
+        "column_labels",
+        "form_columns",
+        "form_excluded_columns",
+        "form_include_pk",
+        "form_widget_args",
+        "form_args",
+        "form_overrides",
+        "form_ajax_refs",
+        "form_rules",
+        "form_converter",
+        "form_base_class",
+        "form_create_rules",
+        "form_edit_rules",
+    }
+    if name in sqladmin_attrs:
+        return True
+    return skip
+
+
+def setup(app):
+    """Setup Sphinx app hooks."""
+    app.connect("autodoc-skip-member", autodoc_skip_member)

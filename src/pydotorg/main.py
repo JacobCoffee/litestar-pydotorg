@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import os
 from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -42,19 +43,28 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from pydotorg.config import log_startup_banner, settings, validate_production_settings
 from pydotorg.core.admin import AdminController
 from pydotorg.core.auth.middleware import JWTAuthMiddleware, UserPopulationMiddleware
-from pydotorg.core.cache import create_response_cache_config
+from pydotorg.core.banners_middleware import APIBannerMiddleware, SitewideBannerMiddleware
+from pydotorg.core.cache import (
+    AdminNoCacheMiddleware,
+    CacheControlMiddleware,
+    SurrogateKeyMiddleware,
+    create_response_cache_config,
+)
 from pydotorg.core.database.base import AuditBase
 from pydotorg.core.dependencies import get_core_dependencies
 from pydotorg.core.exceptions import get_exception_handlers
 from pydotorg.core.features import FeatureFlags
 from pydotorg.core.logging import configure_structlog
-from pydotorg.core.openapi import get_openapi_plugins
+from pydotorg.core.openapi import AdminOpenAPIController, get_openapi_plugins
 from pydotorg.core.ratelimit import create_rate_limit_config, rate_limit_exception_handler
 from pydotorg.core.security.csrf import create_csrf_config
 from pydotorg.core.worker import saq_plugin
+from pydotorg.core.workflows import get_workflow_plugin
+from pydotorg.core.workflows.registry import register_all_workflows
 from pydotorg.domains.about import AboutRenderController, PSFRenderController
 from pydotorg.domains.admin import (
     AdminAnalyticsController,
+    AdminBannersController,
     AdminBlogsController,
     AdminDashboardController,
     AdminEmailController,
@@ -70,7 +80,6 @@ from pydotorg.domains.admin import (
 )
 from pydotorg.domains.banners import (
     BannerController,
-    BannersPageController,
     get_banners_dependencies,
 )
 from pydotorg.domains.blogs import (
@@ -92,6 +101,7 @@ from pydotorg.domains.community import (
     LinkController,
     PhotoController,
     PostController,
+    PSFPageController,
     VideoController,
     get_community_dependencies,
 )
@@ -157,6 +167,7 @@ from pydotorg.domains.sponsors import (
     SponsorRenderController,
     SponsorshipController,
     SponsorshipLevelController,
+    get_sponsors_dependencies,
 )
 from pydotorg.domains.sqladmin import create_sqladmin_plugin
 from pydotorg.domains.successstories import (
@@ -167,6 +178,7 @@ from pydotorg.domains.successstories import (
 )
 from pydotorg.domains.successstories.services import StoryService  # noqa: TC001
 from pydotorg.domains.users import (
+    APIKeyController,
     MembershipController,
     UserController,
     UserGroupController,
@@ -178,6 +190,7 @@ from pydotorg.domains.work_groups import (
     WorkGroupsPageController,
     get_work_groups_dependencies,
 )
+from pydotorg.lib.api_versioning import APIVersionMiddleware
 
 if TYPE_CHECKING:
     from collections.abc import AsyncGenerator
@@ -248,6 +261,7 @@ def get_all_dependencies() -> dict:
     deps.update(get_work_groups_dependencies())
     deps.update(get_search_dependencies())
     deps.update(get_mailing_dependencies())
+    deps.update(get_sponsors_dependencies())
     deps.update(get_admin_dependencies())
     return deps
 
@@ -273,7 +287,7 @@ sqladmin_plugin = create_sqladmin_plugin(
 
 def _derive_session_secret(key: str) -> bytes:
     """Derive a 32-byte secret key for session encryption."""
-    import hashlib  # noqa: PLC0415
+    import hashlib
 
     return hashlib.sha256(key.encode()).digest()
 
@@ -284,16 +298,63 @@ session_config = CookieBackendConfig(
 )
 
 templates_dir = Path(__file__).parent / "templates"
+domains_dir = Path(__file__).parent / "domains"
 static_dir = Path(__file__).parent.parent.parent / "static"
 resources_dir = Path(__file__).parent.parent.parent / "resources"
 
+
+def get_template_directories() -> list[Path]:
+    """Get all template directories including domain-specific ones.
+
+    Returns a list of template directories in search order:
+    1. Domain-specific template directories (domains/{name}/templates/)
+    2. Main centralized templates directory (templates/)
+
+    This allows domain templates to be colocated with their domain code
+    while still supporting shared templates in the central location.
+    """
+    directories: list[Path] = []
+
+    domain_names = [
+        "blogs",
+        "events",
+        "jobs",
+        "downloads",
+        "community",
+        "sponsors",
+        "banners",
+        "codesamples",
+        "minutes",
+        "nominations",
+        "successstories",
+        "work_groups",
+        "users",
+        "pages",
+        "mailing",
+        "about",
+        "docs",
+        "search",
+        "admin",
+    ]
+
+    for domain in domain_names:
+        domain_templates = domains_dir / domain / "templates"
+        if domain_templates.exists():
+            directories.append(domain_templates)
+
+    directories.append(templates_dir)
+
+    return directories
+
+
+is_local_dev = settings.is_debug and not os.getenv("RAILWAY_ENVIRONMENT")
 vite_plugin = VitePlugin(
     config=ViteConfig(
         bundle_dir=static_dir,
         resource_dir=resources_dir,
         public_dir=static_dir,
-        dev_mode=settings.is_debug,
-        hot_reload=settings.is_debug,
+        dev_mode=is_local_dev,
+        hot_reload=is_local_dev,
         port=5173,
         host="localhost",
         set_static_folders=False,
@@ -303,9 +364,9 @@ vite_plugin = VitePlugin(
 
 def configure_template_engine(engine: JinjaTemplateEngine) -> None:  # noqa: PLR0915
     """Configure the Jinja2 template engine with global context."""
-    from datetime import UTC, datetime  # noqa: PLC0415
+    from datetime import UTC, datetime
 
-    import cmarkgfm  # noqa: PLC0415
+    import cmarkgfm
 
     ms_threshold = 1e12
     minute = 60
@@ -323,9 +384,9 @@ def configure_template_engine(engine: JinjaTemplateEngine) -> None:  # noqa: PLR
         try:
             if isinstance(value, str):
                 if "T" in value:
-                    return datetime.fromisoformat(value.replace("Z", "+00:00"))  # noqa: FURB162
+                    return datetime.fromisoformat(value)
                 return None
-            if isinstance(value, (int, float)):
+            if isinstance(value, int | float):
                 if value == 0:
                     return None
                 ts = float(value)
@@ -406,7 +467,7 @@ def configure_template_engine(engine: JinjaTemplateEngine) -> None:  # noqa: PLR
 
     def pretty_json(value: dict | list | str | None) -> str:
         """Format a value as pretty-printed JSON."""
-        import json  # noqa: PLC0415
+        import json
 
         if value is None:
             return "null"
@@ -416,7 +477,7 @@ def configure_template_engine(engine: JinjaTemplateEngine) -> None:  # noqa: PLR
                 return json.dumps(parsed, indent=2)
             except (json.JSONDecodeError, TypeError):
                 return value
-        if isinstance(value, (dict, list)):
+        if isinstance(value, dict | list):
             return json.dumps(value, indent=2, default=str)
         return str(value)
 
@@ -447,7 +508,7 @@ def configure_template_engine(engine: JinjaTemplateEngine) -> None:  # noqa: PLR
 
 
 template_config = TemplateConfig(
-    directory=templates_dir,
+    directory=get_template_directories(),
     engine=JinjaTemplateEngine,
     engine_callback=configure_template_engine,
 )
@@ -488,7 +549,7 @@ def on_app_init(app_config: AppConfig) -> AppConfig:
 @asynccontextmanager
 async def lifespan(app: Litestar) -> AsyncGenerator[None]:
     """Application lifespan hook for startup and shutdown tasks."""
-    import sys  # noqa: PLC0415
+    import sys
 
     try:
         validate_production_settings()
@@ -497,6 +558,10 @@ async def lifespan(app: Litestar) -> AsyncGenerator[None]:
         raise
 
     log_startup_banner()
+
+    # Register workflow definitions
+    register_all_workflows()
+    logger.info("Workflow definitions registered")
 
     async with sqlalchemy_config.get_engine().connect() as conn:
         try:
@@ -542,7 +607,9 @@ app = Litestar(
         index,
         health_check,
         AdminController,
+        AdminOpenAPIController,
         AdminAnalyticsController,
+        AdminBannersController,
         AdminBlogsController,
         AdminDashboardController,
         AdminEmailController,
@@ -562,6 +629,7 @@ app = Litestar(
         UserController,
         MembershipController,
         UserGroupController,
+        APIKeyController,
         AuthController,
         AuthPageController,
         PageController,
@@ -596,7 +664,6 @@ app = Litestar(
         SponsorshipController,
         SponsorRenderController,
         BannerController,
-        BannersPageController,
         CodeSampleController,
         CodeSamplesPageController,
         PostController,
@@ -604,6 +671,7 @@ app = Litestar(
         VideoController,
         LinkController,
         CommunityPageController,
+        PSFPageController,
         MinutesController,
         MinutesPageController,
         ElectionController,
@@ -623,11 +691,25 @@ app = Litestar(
     ],
     dependencies=get_all_dependencies(),
     exception_handlers=get_exception_handlers_with_rate_limit(),
-    plugins=[sqlalchemy_plugin, sqladmin_plugin, flash_plugin, structlog_plugin, saq_plugin, vite_plugin],
+    plugins=[
+        sqlalchemy_plugin,
+        sqladmin_plugin,
+        flash_plugin,
+        structlog_plugin,
+        saq_plugin,
+        vite_plugin,
+        get_workflow_plugin(),
+    ],
     middleware=[
         session_config.middleware,
+        APIVersionMiddleware,
+        SitewideBannerMiddleware,
+        APIBannerMiddleware,
         UserPopulationMiddleware,
         JWTAuthMiddleware,
+        CacheControlMiddleware,
+        AdminNoCacheMiddleware,
+        *([SurrogateKeyMiddleware] if settings.fastly_api_key else []),
         rate_limit_config.middleware,
     ],
     stores={

@@ -6,14 +6,21 @@ from typing import TYPE_CHECKING
 
 from advanced_alchemy.service import SQLAlchemyAsyncRepositoryService
 
+from pydotorg.domains.users.api_keys import APIKey
+from pydotorg.domains.users.api_keys import APIKeyService as APIKeyGenerator
 from pydotorg.domains.users.models import Membership, User, UserGroup
-from pydotorg.domains.users.repositories import MembershipRepository, UserGroupRepository, UserRepository
+from pydotorg.domains.users.repositories import (
+    APIKeyRepository,
+    MembershipRepository,
+    UserGroupRepository,
+    UserRepository,
+)
 from pydotorg.domains.users.security import hash_password
 
 if TYPE_CHECKING:
     from uuid import UUID
 
-    from pydotorg.domains.users.schemas import UserCreate
+    from pydotorg.domains.users.schemas import APIKeyCreate, UserCreate
 
 
 class UserService(SQLAlchemyAsyncRepositoryService[User]):
@@ -208,3 +215,73 @@ class UserGroupService(SQLAlchemyAsyncRepositoryService[UserGroup]):
             The updated group instance.
         """
         return await self.update(group_id, {"trusted": False})
+
+
+class APIKeyService(SQLAlchemyAsyncRepositoryService[APIKey]):
+    """Service for API key management."""
+
+    repository_type = APIKeyRepository
+    match_fields = ["key_hash"]
+
+    async def create_key(self, user_id: UUID, data: APIKeyCreate) -> tuple[APIKey, str]:
+        """Create a new API key for a user.
+
+        Args:
+            user_id: The user ID to create the key for.
+            data: API key creation data.
+
+        Returns:
+            Tuple of (APIKey instance, raw key string).
+        """
+        api_key, raw_key = APIKeyGenerator.create_key(
+            user_id=user_id,
+            name=data.name,
+            description=data.description,
+            expires_in_days=data.expires_in_days,
+        )
+        created = await self.create(api_key.__dict__)
+        return created, raw_key
+
+    async def list_by_user(self, user_id: UUID) -> list[APIKey]:
+        """List all API keys for a user.
+
+        Args:
+            user_id: The user ID.
+
+        Returns:
+            List of API keys.
+        """
+        return await self.repository.list_by_user(user_id)
+
+    async def list_active_by_user(self, user_id: UUID) -> list[APIKey]:
+        """List active API keys for a user.
+
+        Args:
+            user_id: The user ID.
+
+        Returns:
+            List of active API keys.
+        """
+        return await self.repository.list_active_by_user(user_id)
+
+    async def revoke(self, key_id: UUID) -> APIKey:
+        """Revoke an API key.
+
+        Args:
+            key_id: The API key ID.
+
+        Returns:
+            The revoked API key.
+        """
+        return await self.update(key_id, {"is_active": False})
+
+    async def revoke_all_for_user(self, user_id: UUID) -> int:
+        """Revoke all API keys for a user.
+
+        Args:
+            user_id: The user ID.
+
+        Returns:
+            Number of keys revoked.
+        """
+        return await self.repository.revoke_all_for_user(user_id)

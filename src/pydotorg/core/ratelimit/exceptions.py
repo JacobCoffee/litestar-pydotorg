@@ -10,7 +10,8 @@ Features:
     - Browser requests: Renders full 429 error template
     - Automatic Retry-After header extraction from exception
 
-Usage:
+Usage::
+
     from pydotorg.core.ratelimit.exceptions import rate_limit_exception_handler
     from litestar.exceptions import TooManyRequestsException
 

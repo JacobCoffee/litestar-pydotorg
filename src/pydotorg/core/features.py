@@ -77,12 +77,11 @@ def require_feature(feature_name: str):
     Returns:
         Guard function that validates feature is enabled
 
-    Example:
-        ```python
+    Example::
+
         @get("/oauth/login", guards=[require_feature("enable_oauth")])
         async def oauth_login() -> dict:
             return {"message": "OAuth login"}
-        ```
     """
 
     def guard(connection: ASGIConnection, _: BaseRouteHandler) -> None:

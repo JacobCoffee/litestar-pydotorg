@@ -1,4 +1,4 @@
-"""Rate limiting middleware configuration using Redis.
+r"""Rate limiting middleware configuration using Redis.
 
 This module configures rate limiting for the application using Litestar's built-in
 RateLimitConfig with Redis as the backend store. The middleware enforces per-IP
@@ -6,13 +6,15 @@ rate limits while excluding health checks, static assets, and API documentation.
 
 Configuration:
     Rate limits are applied per client IP address. Excluded routes:
+
     - /health (health check endpoint)
-    - /static/* (static files)
+    - /static/\* (static files)
     - /schema (OpenAPI schema)
     - /docs (API documentation)
     - /api (OpenAPI endpoint)
 
-Usage:
+Usage::
+
     from pydotorg.core.ratelimit.middleware import create_rate_limit_config
     from pydotorg.config import settings
     from litestar.stores.redis import RedisStore
@@ -42,17 +44,18 @@ def create_rate_limit_config(settings: Settings) -> RateLimitConfig:
     """Create rate limiting configuration using Redis as the backend store.
 
     Configures per-IP rate limiting with:
+
     - Redis-based persistent storage for distributed rate limiting
-    - Automatic rate limit headers (X-Rate-Limit-*, Retry-After)
+    - Automatic rate limit headers (``X-Rate-Limit-*``, ``Retry-After``)
     - Exclusion of health checks, static files, and API documentation
     - 100 requests per minute per IP (default)
 
     Note:
-        The Redis store must be configured in the Litestar app's `stores` parameter:
+        The Redis store must be configured in the Litestar app's ``stores`` parameter::
 
-        >>> from litestar.stores.redis import RedisStore
-        >>> redis_store = RedisStore.with_client(url=settings.redis_url)
-        >>> app = Litestar(stores={"rate_limit": redis_store}, ...)
+            from litestar.stores.redis import RedisStore
+            redis_store = RedisStore.with_client(url=settings.redis_url)
+            app = Litestar(stores={"rate_limit": redis_store}, ...)
 
     Args:
         settings: Application settings containing Redis connection URL

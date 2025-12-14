@@ -5,6 +5,7 @@ from pydotorg.domains.community.controllers import (
     LinkController,
     PhotoController,
     PostController,
+    PSFPageController,
     VideoController,
 )
 from pydotorg.domains.community.dependencies import get_community_dependencies
@@ -37,6 +38,7 @@ __all__ = [
     "LinkRepository",
     "LinkService",
     "LinkUpdate",
+    "PSFPageController",
     "Photo",
     "PhotoController",
     "PhotoCreate",

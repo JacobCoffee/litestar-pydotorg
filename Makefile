@@ -48,11 +48,15 @@ install-frontend: ## Install frontend dependencies using bun
 ##@ Code Quality
 
 .PHONY: lint
-lint: ## Run linter (ruff check)
+lint: ## Run prek hooks (ruff, codespell, ty, etc.)
+	$(UV) run --no-sync prek run --all-files
+
+.PHONY: ruff-check
+ruff-check: ## Run ruff linter only (no prek)
 	$(UV) run ruff check $(PROJECT_DIR) $(TESTS_DIR)
 
 .PHONY: lint-fix
-lint-fix: ## Run linter with auto-fix
+lint-fix: ## Run ruff linter with auto-fix
 	$(UV) run ruff check --fix $(PROJECT_DIR) $(TESTS_DIR)
 
 .PHONY: fmt
@@ -68,7 +72,7 @@ type-check: ## Run type checker (ty)
 	$(UV) run ty check $(PROJECT_DIR)
 
 .PHONY: ci
-ci: lint fmt-check type-check test ## Run all CI checks (lint + fmt + type-check + test)
+ci: lint test ## Run all CI checks (prek hooks + test)
 
 # ============================================================================
 # Testing

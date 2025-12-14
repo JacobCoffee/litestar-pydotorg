@@ -310,3 +310,37 @@ class SponsorshipPublic(BaseModel):
     year: int | None
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class SponsorApplicationCreate(BaseModel):
+    """Schema for sponsor application form submission."""
+
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "company_name": "Acme Corp",
+                "website": "https://acme.com",
+                "description": "We love Python!",
+                "contact_name": "Jane Doe",
+                "contact_email": "jane@acme.com",
+                "sponsorship_level": "silver",
+            }
+        }
+    )
+
+    company_name: Annotated[str, Field(min_length=1, max_length=200)]
+    website: Annotated[str, Field(max_length=500)]
+    description: str
+    contact_name: Annotated[str, Field(min_length=1, max_length=200)]
+    contact_email: Annotated[str, Field(min_length=1, max_length=255)]
+    contact_phone: Annotated[str, Field(max_length=50)] = ""
+    city: Annotated[str, Field(max_length=100)] = ""
+    state: Annotated[str, Field(max_length=100)] = ""
+    postal_code: Annotated[str, Field(max_length=20)] = ""
+    country: Annotated[str, Field(max_length=100)] = ""
+    mailing_address: Annotated[str, Field(max_length=255)] = ""
+    sponsorship_level: str = "partner"
+    goals: list[str] = []
+    additional_message: str = ""
+    twitter_handle: Annotated[str, Field(max_length=100)] = ""
+    linkedin_url: Annotated[str, Field(max_length=500)] = ""

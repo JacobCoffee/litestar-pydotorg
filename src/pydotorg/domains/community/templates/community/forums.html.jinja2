@@ -1,0 +1,484 @@
+{% extends "base.html.jinja2" %}
+
+{% block title %}Forums & Discussion | Python Community{% endblock %}
+
+{% block meta_description %}Join Python discussion forums, Q&A sites, and communities. Get help, share knowledge, and connect with developers worldwide.{% endblock %}
+
+{% block content %}
+<section class="python-gradient text-white py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-5xl font-bold mb-6">Python Forums & Discussion</h1>
+            <p class="text-xl opacity-90">
+                Threaded discussions, Q&A, and community engagement
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <div class="card bg-gradient-to-br from-python-blue/5 to-python-yellow/5 border-l-4 border-python-blue mb-8">
+                <div class="card-body">
+                    <div class="flex items-start gap-4">
+                        <div class="flex-shrink-0 hidden md:block">
+                            <svg class="w-12 h-12 text-python-blue/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-lg text-base-content/90 leading-relaxed">
+                                Python has a vibrant ecosystem of <strong class="text-python-blue">discussion forums</strong>
+                                and Q&A platforms where you can ask questions, share knowledge, and engage with the
+                                community. From official channels to community-driven spaces, there's a forum for
+                                every type of Python discussion.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-200 py-16">
+    <div class="section-container">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-3xl font-bold text-python-blue mb-8 text-center">Official Python Forums</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <a href="https://discuss.python.org/" target="_blank" rel="noopener" class="card bg-base-100 shadow-lg hover:shadow-xl transition-all group">
+                    <div class="card-body">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-3 rounded-full bg-python-blue/10 group-hover:bg-python-blue/20 transition-colors">
+                                <svg class="w-6 h-6 text-python-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="card-title text-xl">discuss.python.org</h3>
+                                <div class="badge badge-primary badge-sm">Official</div>
+                            </div>
+                        </div>
+                        <p class="text-base-content/80 mb-4">
+                            The official Python Discourse forum. Discuss language development, PEPs,
+                            governance, community topics, and get help from core developers. The primary
+                            place for Python's future.
+                        </p>
+                        <div class="text-sm text-base-content/60 space-y-1 mb-4">
+                            <div class="flex items-center gap-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                </svg>
+                                <span>20,000+ users</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/>
+                                </svg>
+                                <span>Core development discussions</span>
+                            </div>
+                        </div>
+                        <div class="card-actions justify-end">
+                            <span class="text-python-blue group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+                                Join Discussion
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="https://www.python.org/community/forums/" target="_blank" rel="noopener" class="card bg-base-100 shadow-lg hover:shadow-xl transition-all group">
+                    <div class="card-body">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-3 rounded-full bg-green-500/10 group-hover:bg-green-500/20 transition-colors">
+                                <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="card-title text-xl">Python Forums</h3>
+                                <div class="badge badge-outline badge-sm">Community</div>
+                            </div>
+                        </div>
+                        <p class="text-base-content/80 mb-4">
+                            Community-run forum for general Python help and discussion. A welcoming place
+                            for beginners to ask questions and for experienced developers to share knowledge.
+                        </p>
+                        <div class="text-sm text-base-content/60 space-y-1 mb-4">
+                            <div class="flex items-center gap-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                                </svg>
+                                <span>Beginner-friendly</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span>Active community support</span>
+                            </div>
+                        </div>
+                        <div class="card-actions justify-end">
+                            <span class="text-python-blue group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+                                Visit Forums
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-3xl font-bold text-python-blue mb-8 text-center">Community Q&A & Discussion Sites</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <a href="https://stackoverflow.com/questions/tagged/python" target="_blank" rel="noopener" class="card bg-base-200 shadow-lg hover:shadow-xl transition-all group">
+                    <div class="card-body">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-3 rounded-full bg-orange-500/10 group-hover:bg-orange-500/20 transition-colors">
+                                <svg class="w-6 h-6 text-orange-500" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M15.725 0l-1.72 6.277h-6.01L6.281 0H3.173l1.75 6.277H0v3.01h5.48L3.7 15.753H0v3.01h3.143L1.423 24h3.108l1.72-5.237h6.01L10.54 24h3.108l1.72-5.237H21v-3.01h-5.48l1.78-6.466H21v-3.01h-3.143L19.577 0h-3.108l-1.72 6.277h-6.01L10.46 0H7.352zm-7.01 9.287h6.01l-1.78 6.466h-6.01l1.78-6.466z"/>
+                                </svg>
+                            </div>
+                            <h3 class="card-title text-lg">Stack Overflow</h3>
+                        </div>
+                        <p class="text-base-content/70 text-sm mb-4">
+                            The largest programming Q&A site. Over 2 million Python questions with
+                            expert answers, code examples, and voting to surface the best solutions.
+                        </p>
+                        <div class="text-xs text-base-content/60 mb-3">
+                            <div class="badge badge-sm badge-outline">2M+ questions</div>
+                        </div>
+                        <div class="card-actions justify-end">
+                            <span class="text-python-blue group-hover:translate-x-1 transition-transform inline-flex items-center gap-1 text-sm">
+                                Ask & Answer
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="https://www.reddit.com/r/Python/" target="_blank" rel="noopener" class="card bg-base-200 shadow-lg hover:shadow-xl transition-all group">
+                    <div class="card-body">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-3 rounded-full bg-orange-600/10 group-hover:bg-orange-600/20 transition-colors">
+                                <svg class="w-6 h-6 text-orange-600" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 9.75c.584 0 1.058.474 1.058 1.058 0 .337-.168.634-.423.818.012.094.018.19.018.288 0 2.049-2.391 3.711-5.338 3.711-2.947 0-5.338-1.662-5.338-3.711 0-.098.006-.194.018-.288-.255-.184-.423-.481-.423-.818 0-.584.474-1.058 1.058-1.058.339 0 .64.159.837.406.825-.594 1.962-.972 3.239-1.015l.692-3.183.023-.003 2.192.463c.098-.369.435-.643.835-.643.476 0 .862.386.862.862s-.386.862-.862.862c-.476 0-.862-.386-.862-.862l-1.94-.41-.613 2.825c1.253.052 2.36.43 3.168 1.015.197-.247.498-.406.837-.406zm-8.73 1.643c-.476 0-.862.387-.862.862 0 .476.386.862.862.862s.862-.386.862-.862c0-.475-.386-.862-.862-.862zm4.168 3.611c.862 0 1.58-.103 2.154-.308.08-.029.167.029.167.116v.001c0 .038-.024.072-.058.09-.574.3-1.367.466-2.263.466-.896 0-1.689-.166-2.263-.467-.034-.017-.058-.051-.058-.089v-.001c0-.087.087-.145.167-.116.574.205 1.292.308 2.154.308zm.565-1.749c.476 0 .862-.387.862-.862 0-.476-.386-.862-.862-.862s-.862.386-.862.862c0 .475.386.862.862.862z"/>
+                                </svg>
+                            </div>
+                            <h3 class="card-title text-lg">r/Python</h3>
+                        </div>
+                        <p class="text-base-content/70 text-sm mb-4">
+                            News, discussions, and community content. Share projects, articles, and
+                            engage with 1.4M+ Python enthusiasts on Reddit.
+                        </p>
+                        <div class="text-xs text-base-content/60 mb-3">
+                            <div class="badge badge-sm badge-outline">1.4M+ members</div>
+                        </div>
+                        <div class="card-actions justify-end">
+                            <span class="text-python-blue group-hover:translate-x-1 transition-transform inline-flex items-center gap-1 text-sm">
+                                Join Subreddit
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="https://www.reddit.com/r/learnpython/" target="_blank" rel="noopener" class="card bg-base-200 shadow-lg hover:shadow-xl transition-all group">
+                    <div class="card-body">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-3 rounded-full bg-blue-500/10 group-hover:bg-blue-500/20 transition-colors">
+                                <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                                </svg>
+                            </div>
+                            <h3 class="card-title text-lg">r/learnpython</h3>
+                        </div>
+                        <p class="text-base-content/70 text-sm mb-4">
+                            Dedicated to helping beginners learn Python. Ask questions, get feedback on
+                            code, and learn from a supportive community.
+                        </p>
+                        <div class="text-xs text-base-content/60 mb-3">
+                            <div class="badge badge-sm badge-outline">Beginner-friendly</div>
+                        </div>
+                        <div class="card-actions justify-end">
+                            <span class="text-python-blue group-hover:translate-x-1 transition-transform inline-flex items-center gap-1 text-sm">
+                                Start Learning
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="https://discord.gg/python" target="_blank" rel="noopener" class="card bg-base-200 shadow-lg hover:shadow-xl transition-all group">
+                    <div class="card-body">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-3 rounded-full bg-indigo-500/10 group-hover:bg-indigo-500/20 transition-colors">
+                                <svg class="w-6 h-6 text-indigo-500" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                                </svg>
+                            </div>
+                            <h3 class="card-title text-lg">Python Discord</h3>
+                        </div>
+                        <p class="text-base-content/70 text-sm mb-4">
+                            Real-time chat with Python developers. Voice channels, code help, project
+                            showcases, and an active community.
+                        </p>
+                        <div class="text-xs text-base-content/60 mb-3">
+                            <div class="badge badge-sm badge-outline">500K+ members</div>
+                        </div>
+                        <div class="card-actions justify-end">
+                            <span class="text-python-blue group-hover:translate-x-1 transition-transform inline-flex items-center gap-1 text-sm">
+                                Join Server
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="https://dev.to/t/python" target="_blank" rel="noopener" class="card bg-base-200 shadow-lg hover:shadow-xl transition-all group">
+                    <div class="card-body">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-3 rounded-full bg-slate-800/10 group-hover:bg-slate-800/20 transition-colors">
+                                <svg class="w-6 h-6 text-slate-800" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M7.42 10.05c-.18-.16-.46-.23-.84-.23H6l.02 2.44.04 2.45.56-.02c.41 0 .63-.07.83-.26.24-.24.26-.36.26-2.2 0-1.91-.02-1.96-.29-2.18zM0 4.94v14.12h24V4.94H0zM8.56 15.3c-.44.58-1.06.77-2.53.77H4.71V8.53h1.4c1.67 0 2.16.18 2.6.9.27.43.29.6.32 2.57.05 2.23-.02 2.73-.47 3.3zm5.09-5.47h-2.47v1.77h1.52v1.28l-.72.04-.75.03v1.77l1.22.03 1.2.04v1.28h-1.6c-1.53 0-1.6-.01-1.87-.3l-.3-.28v-3.16c0-3.02.01-3.18.25-3.48.23-.31.25-.31 1.88-.31h1.64v1.3zm4.68 5.45c-.17.43-.64.79-1 .79-.18 0-.45-.15-.67-.39-.32-.32-.45-.63-.82-2.08l-.9-3.39-.45-1.67h.76c.4 0 .75.02.75.05 0 .06 1.16 4.54 1.26 4.83.04.15.32-.7.73-2.3l.66-2.52.74-.04c.4-.02.73 0 .73.04 0 .14-1.67 6.38-1.8 6.68z"/>
+                                </svg>
+                            </div>
+                            <h3 class="card-title text-lg">DEV Community</h3>
+                        </div>
+                        <p class="text-base-content/70 text-sm mb-4">
+                            Developer blog platform with Python tag. Share tutorials, articles, and
+                            discussions with a growing community of developers.
+                        </p>
+                        <div class="text-xs text-base-content/60 mb-3">
+                            <div class="badge badge-sm badge-outline">Articles & Tutorials</div>
+                        </div>
+                        <div class="card-actions justify-end">
+                            <span class="text-python-blue group-hover:translate-x-1 transition-transform inline-flex items-center gap-1 text-sm">
+                                Read & Write
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="/community/lists/" class="card bg-base-200 shadow-lg hover:shadow-xl transition-all group" hx-boost="true">
+                    <div class="card-body">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-3 rounded-full bg-purple-500/10 group-hover:bg-purple-500/20 transition-colors">
+                                <svg class="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                </svg>
+                            </div>
+                            <h3 class="card-title text-lg">Mailing Lists</h3>
+                        </div>
+                        <p class="text-base-content/70 text-sm mb-4">
+                            Traditional email-based discussion lists for Python development, SIGs,
+                            and regional communities. Searchable archives.
+                        </p>
+                        <div class="text-xs text-base-content/60 mb-3">
+                            <div class="badge badge-sm badge-outline">Email-based</div>
+                        </div>
+                        <div class="card-actions justify-end">
+                            <span class="text-python-blue group-hover:translate-x-1 transition-transform inline-flex items-center gap-1 text-sm">
+                                View Lists
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-200 py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-python-blue mb-8 text-center">How to Ask Good Questions</h2>
+            <div class="card bg-base-100 shadow-lg">
+                <div class="card-body">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="font-bold text-lg mb-4 flex items-center gap-2">
+                                <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                Before Posting
+                            </h3>
+                            <ul class="space-y-3 text-base-content/80">
+                                <li class="flex items-start gap-2">
+                                    <span class="text-python-blue font-bold">1.</span>
+                                    <div>
+                                        <strong>Search first</strong> - Your question may already be answered
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-python-blue font-bold">2.</span>
+                                    <div>
+                                        <strong>Read the docs</strong> - Check official documentation and tutorials
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-python-blue font-bold">3.</span>
+                                    <div>
+                                        <strong>Try debugging</strong> - Use print statements, debugger, or error messages
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-python-blue font-bold">4.</span>
+                                    <div>
+                                        <strong>Create minimal example</strong> - Isolate the problem to smallest reproducible code
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg mb-4 flex items-center gap-2">
+                                <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                </svg>
+                                Writing Your Question
+                            </h3>
+                            <ul class="space-y-3 text-base-content/80">
+                                <li class="flex items-start gap-2">
+                                    <span class="text-python-blue font-bold">1.</span>
+                                    <div>
+                                        <strong>Clear title</strong> - Summarize the specific problem
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-python-blue font-bold">2.</span>
+                                    <div>
+                                        <strong>Context</strong> - What are you trying to achieve?
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-python-blue font-bold">3.</span>
+                                    <div>
+                                        <strong>Code samples</strong> - Include minimal, complete, verifiable example
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-python-blue font-bold">4.</span>
+                                    <div>
+                                        <strong>What you tried</strong> - Show your debugging efforts
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="alert alert-info">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <span>
+                            Good questions get better answers faster! Take time to formulate your question clearly.
+                            See Stack Overflow's
+                            <a href="https://stackoverflow.com/help/how-to-ask" target="_blank" rel="noopener" class="link font-semibold">
+                                How to Ask guide
+                            </a>
+                            for more tips.
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-python-blue mb-8 text-center">Forum Etiquette</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="card bg-base-200 shadow">
+                    <div class="card-body">
+                        <div class="flex items-center gap-2 mb-3">
+                            <svg class="w-6 h-6 text-python-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                            </svg>
+                            <h3 class="card-title text-lg">Be Respectful</h3>
+                        </div>
+                        <p class="text-base-content/70 text-sm">
+                            Treat everyone with kindness and respect. Remember, someone is volunteering their
+                            time to help you.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200 shadow">
+                    <div class="card-body">
+                        <div class="flex items-center gap-2 mb-3">
+                            <svg class="w-6 h-6 text-python-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <h3 class="card-title text-lg">Mark Solutions</h3>
+                        </div>
+                        <p class="text-base-content/70 text-sm">
+                            When you get a helpful answer, mark it as accepted or post your solution. Help
+                            future visitors with similar questions.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200 shadow">
+                    <div class="card-body">
+                        <div class="flex items-center gap-2 mb-3">
+                            <svg class="w-6 h-6 text-python-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                            </svg>
+                            <h3 class="card-title text-lg">Give Back</h3>
+                        </div>
+                        <p class="text-base-content/70 text-sm">
+                            Once you've learned, help others! Answer questions, share knowledge, and
+                            contribute to the community.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-gradient-to-br from-python-blue to-python-blue/80 text-white py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-4xl font-bold mb-4">Join the Conversation</h2>
+            <p class="text-xl opacity-90 mb-8">
+                Choose your preferred platform and connect with Python developers worldwide.
+            </p>
+            <div class="flex flex-wrap gap-4 justify-center">
+                <a href="https://discuss.python.org/" target="_blank" rel="noopener" class="btn btn-lg bg-white text-python-blue hover:bg-white/90 border-none">
+                    Official Forum
+                </a>
+                <a href="/community/" class="btn btn-lg btn-outline border-white text-white hover:bg-white/10" hx-boost="true">
+                    Explore Community
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

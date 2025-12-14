@@ -22,8 +22,9 @@ from pydotorg.domains.jobs.models import Job, JobCategory, JobReviewComment, Job
 from pydotorg.domains.minutes.models import Minutes  # noqa: F401
 from pydotorg.domains.nominations.models import Election, Nomination, Nominee  # noqa: F401
 from pydotorg.domains.pages.models import DocumentFile, Image, Page  # noqa: F401
-from pydotorg.domains.sponsors.models import Sponsor, Sponsorship, SponsorshipLevel  # noqa: F401
+from pydotorg.domains.sponsors.models import Contract, LegalClause, Sponsor, Sponsorship, SponsorshipLevel  # noqa: F401
 from pydotorg.domains.successstories.models import Story, StoryCategory  # noqa: F401
+from pydotorg.domains.users.api_keys import APIKey  # noqa: F401
 from pydotorg.domains.users.models import Membership, User, UserGroup  # noqa: F401
 from pydotorg.domains.work_groups.models import WorkGroup  # noqa: F401
 

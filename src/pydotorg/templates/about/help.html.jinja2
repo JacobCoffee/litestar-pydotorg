@@ -1,0 +1,334 @@
+{% extends "base.html.jinja2" %}
+
+{% block title %}Help & FAQ | Python.org{% endblock %}
+
+{% block meta_description %}Find answers to common Python questions, get help with installation, and connect with the Python community for support.{% endblock %}
+
+{% block content %}
+<section class="python-gradient text-white py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-5xl font-bold mb-6">Help & FAQ</h1>
+            <p class="text-xl opacity-90">
+                Find the help you need to get started and succeed with Python
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <div class="card bg-gradient-to-br from-python-blue/5 to-python-yellow/5 border-l-4 border-python-blue mb-8">
+                <div class="card-body">
+                    <div class="flex items-start gap-4">
+                        <div class="flex-shrink-0 hidden md:block">
+                            <svg class="w-12 h-12 text-python-blue/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-lg text-base-content/90 leading-relaxed">
+                                Whether you're just starting out or need advanced help, the <strong class="text-python-blue">Python community</strong>
+                                has resources and people ready to assist. Browse our FAQs, documentation, and community channels below.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-200 py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-python-blue mb-8">Frequently Asked Questions</h2>
+            <div class="join join-vertical w-full">
+                <div class="collapse collapse-arrow join-item border border-base-300 bg-base-100">
+                    <input type="radio" name="faq-accordion" checked="checked" />
+                    <div class="collapse-title text-lg font-medium">
+                        How do I get started with Python?
+                    </div>
+                    <div class="collapse-content">
+                        <p class="text-base-content/80 mb-3">
+                            Start by downloading Python from our <a href="/downloads/" class="link link-primary" hx-boost="true">downloads page</a>.
+                            Then, check out the <a href="https://docs.python.org/3/tutorial/" target="_blank" rel="noopener" class="link link-primary">official tutorial</a>
+                            to learn the basics. We also recommend the <a href="/about/gettingstarted/" class="link link-primary" hx-boost="true">Getting Started guide</a>
+                            for step-by-step instructions.
+                        </p>
+                    </div>
+                </div>
+                <div class="collapse collapse-arrow join-item border border-base-300 bg-base-100">
+                    <input type="radio" name="faq-accordion" />
+                    <div class="collapse-title text-lg font-medium">
+                        What version of Python should I use?
+                    </div>
+                    <div class="collapse-content">
+                        <p class="text-base-content/80 mb-3">
+                            We recommend using the latest stable version of Python 3. As of this writing, Python 3.12 is the latest release.
+                            Python 2 reached end-of-life on January 1, 2020, and is no longer supported.
+                        </p>
+                    </div>
+                </div>
+                <div class="collapse collapse-arrow join-item border border-base-300 bg-base-100">
+                    <input type="radio" name="faq-accordion" />
+                    <div class="collapse-title text-lg font-medium">
+                        Where can I find Python documentation?
+                    </div>
+                    <div class="collapse-content">
+                        <p class="text-base-content/80 mb-3">
+                            The official Python documentation is available at <a href="https://docs.python.org/" target="_blank" rel="noopener" class="link link-primary">docs.python.org</a>.
+                            It includes the tutorial, library reference, language reference, and more. You can also access documentation
+                            for older versions and download PDFs.
+                        </p>
+                    </div>
+                </div>
+                <div class="collapse collapse-arrow join-item border border-base-300 bg-base-100">
+                    <input type="radio" name="faq-accordion" />
+                    <div class="collapse-title text-lg font-medium">
+                        How do I install third-party packages?
+                    </div>
+                    <div class="collapse-content">
+                        <p class="text-base-content/80 mb-3">
+                            Python includes pip, the package installer. You can install packages from the Python Package Index (PyPI)
+                            using <code class="bg-base-300 px-2 py-1 rounded">pip install package-name</code>. Learn more at
+                            <a href="https://pypi.org/" target="_blank" rel="noopener" class="link link-primary">pypi.org</a>.
+                        </p>
+                    </div>
+                </div>
+                <div class="collapse collapse-arrow join-item border border-base-300 bg-base-100">
+                    <input type="radio" name="faq-accordion" />
+                    <div class="collapse-title text-lg font-medium">
+                        What IDE or editor should I use?
+                    </div>
+                    <div class="collapse-content">
+                        <p class="text-base-content/80 mb-3">
+                            Python works with many editors and IDEs. Popular choices include VS Code, PyCharm, Jupyter Notebooks,
+                            Sublime Text, and IDLE (included with Python). Choose based on your needs and preferences. Check our
+                            <a href="/about/gettingstarted/" class="link link-primary" hx-boost="true">Getting Started guide</a> for recommendations.
+                        </p>
+                    </div>
+                </div>
+                <div class="collapse collapse-arrow join-item border border-base-300 bg-base-100">
+                    <input type="radio" name="faq-accordion" />
+                    <div class="collapse-title text-lg font-medium">
+                        How can I contribute to Python?
+                    </div>
+                    <div class="collapse-content">
+                        <p class="text-base-content/80 mb-3">
+                            There are many ways to contribute: report bugs, submit patches, improve documentation, help others in the
+                            community, or create and maintain packages. Visit the
+                            <a href="https://devguide.python.org/" target="_blank" rel="noopener" class="link link-primary">Python Developer's Guide</a>
+                            to learn more about contributing to Python core.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-100 py-16">
+    <div class="section-container">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-3xl font-bold text-python-blue mb-8 text-center">Get Help & Support</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="card bg-base-200 shadow-lg border-t-4 border-python-blue">
+                    <div class="card-body">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-3 rounded-full bg-python-blue/10">
+                                <svg class="w-6 h-6 text-python-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                                </svg>
+                            </div>
+                            <h3 class="card-title text-xl">Documentation</h3>
+                        </div>
+                        <p class="text-base-content/80 mb-4">
+                            Comprehensive guides, tutorials, and references for all Python versions. Start with the tutorial
+                            and explore the standard library.
+                        </p>
+                        <a href="https://docs.python.org/" target="_blank" rel="noopener" class="link link-primary">
+                            Browse Docs →
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200 shadow-lg border-t-4 border-python-yellow">
+                    <div class="card-body">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-3 rounded-full bg-python-yellow/10">
+                                <svg class="w-6 h-6 text-python-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                                </svg>
+                            </div>
+                            <h3 class="card-title text-xl">Discussion Forums</h3>
+                        </div>
+                        <p class="text-base-content/80 mb-4">
+                            Ask questions and get help from experienced Python developers on Discourse, the official
+                            Python community forum.
+                        </p>
+                        <a href="https://discuss.python.org/" target="_blank" rel="noopener" class="link link-primary">
+                            Join Discussions →
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200 shadow-lg border-t-4 border-success">
+                    <div class="card-body">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-3 rounded-full bg-success/10">
+                                <svg class="w-6 h-6 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/>
+                                </svg>
+                            </div>
+                            <h3 class="card-title text-xl">IRC Chat</h3>
+                        </div>
+                        <p class="text-base-content/80 mb-4">
+                            Real-time chat with Python developers on Libera.Chat. Join #python for general help
+                            or specialized channels for specific topics.
+                        </p>
+                        <a href="https://web.libera.chat/#python" target="_blank" rel="noopener" class="link link-primary">
+                            Join IRC →
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200 shadow-lg border-t-4 border-secondary">
+                    <div class="card-body">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-3 rounded-full bg-secondary/10">
+                                <svg class="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                </svg>
+                            </div>
+                            <h3 class="card-title text-xl">Mailing Lists</h3>
+                        </div>
+                        <p class="text-base-content/80 mb-4">
+                            Subscribe to mailing lists for announcements, development discussions, and specialized topics.
+                            Great for staying informed.
+                        </p>
+                        <a href="https://www.python.org/community/lists/" target="_blank" rel="noopener" class="link link-primary">
+                            View Lists →
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200 shadow-lg border-t-4 border-info">
+                    <div class="card-body">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-3 rounded-full bg-info/10">
+                                <svg class="w-6 h-6 text-info" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                                </svg>
+                            </div>
+                            <h3 class="card-title text-xl">GitHub Issues</h3>
+                        </div>
+                        <p class="text-base-content/80 mb-4">
+                            Report bugs, suggest features, or track Python's development on GitHub. Search existing
+                            issues before creating new ones.
+                        </p>
+                        <a href="https://github.com/python/cpython/issues" target="_blank" rel="noopener" class="link link-primary">
+                            Browse Issues →
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200 shadow-lg border-t-4 border-warning">
+                    <div class="card-body">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-3 rounded-full bg-warning/10">
+                                <svg class="w-6 h-6 text-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                                </svg>
+                            </div>
+                            <h3 class="card-title text-xl">Learning Resources</h3>
+                        </div>
+                        <p class="text-base-content/80 mb-4">
+                            Free tutorials, books, videos, and courses for learning Python. From beginner to advanced,
+                            find resources that match your learning style.
+                        </p>
+                        <a href="/about/gettingstarted/" class="link link-primary" hx-boost="true">
+                            Start Learning →
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-base-200 py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-python-blue mb-8 text-center">Getting Started Resources</h2>
+            <div class="space-y-6">
+                <div class="card bg-base-100 shadow">
+                    <div class="card-body">
+                        <div class="flex items-start gap-4">
+                            <div class="flex items-center justify-center w-10 h-10 rounded-full bg-python-blue text-white font-bold flex-shrink-0">1</div>
+                            <div>
+                                <h3 class="font-bold text-lg mb-2">Installation Guide</h3>
+                                <p class="text-base-content/80 mb-3">
+                                    Download Python and set up your development environment. Follow our step-by-step guide for
+                                    Windows, macOS, and Linux.
+                                </p>
+                                <a href="/downloads/" class="link link-primary" hx-boost="true">Download Python</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card bg-base-100 shadow">
+                    <div class="card-body">
+                        <div class="flex items-start gap-4">
+                            <div class="flex items-center justify-center w-10 h-10 rounded-full bg-python-blue text-white font-bold flex-shrink-0">2</div>
+                            <div>
+                                <h3 class="font-bold text-lg mb-2">First Steps Tutorial</h3>
+                                <p class="text-base-content/80 mb-3">
+                                    Learn Python basics with the official tutorial. Start with "Hello, World!" and progress to
+                                    data structures, functions, and modules.
+                                </p>
+                                <a href="https://docs.python.org/3/tutorial/" target="_blank" rel="noopener" class="link link-primary">Start Tutorial</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card bg-base-100 shadow">
+                    <div class="card-body">
+                        <div class="flex items-start gap-4">
+                            <div class="flex items-center justify-center w-10 h-10 rounded-full bg-python-blue text-white font-bold flex-shrink-0">3</div>
+                            <div>
+                                <h3 class="font-bold text-lg mb-2">Join the Community</h3>
+                                <p class="text-base-content/80 mb-3">
+                                    Connect with other Python developers through user groups, forums, and events. Learning is
+                                    better together.
+                                </p>
+                                <a href="/community/" class="link link-primary" hx-boost="true">Explore Community</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-gradient-to-br from-python-blue to-python-blue/80 text-white py-16">
+    <div class="section-container">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-4xl font-bold mb-4">Still Need Help?</h2>
+            <p class="text-xl opacity-90 mb-8">
+                Our community is here to support you on your Python journey.
+            </p>
+            <div class="flex flex-wrap gap-4 justify-center">
+                <a href="https://discuss.python.org/" target="_blank" rel="noopener" class="btn btn-lg bg-white text-python-blue hover:bg-white/90 border-none">
+                    Ask a Question
+                </a>
+                <a href="/about/gettingstarted/" class="btn btn-lg btn-outline border-white text-white hover:bg-white/10" hx-boost="true">
+                    Getting Started Guide
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
