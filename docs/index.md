@@ -135,102 +135,28 @@ make test         # pytest with coverage
 ---
 
 ```{toctree}
-:maxdepth: 1
-:caption: Getting Started
+:maxdepth: 2
+:caption: Learn
 :hidden:
 
 getting-started/index
-getting-started/installation
-getting-started/quickstart
-```
-
-```{toctree}
-:maxdepth: 1
-:caption: Guides
-:hidden:
-
 guides/index
-guides/development
-guides/api-usage
-guides/authentication
-guides/testing
-guides/debugging
-guides/configuration
-guides/deployment
-guides/docker
-guides/feature-flags
-guides/troubleshooting
-guides/contributing
-```
-
-```{toctree}
-:maxdepth: 1
-:caption: Cookbook
-:hidden:
-
 cookbook/index
-cookbook/domain-patterns
-cookbook/authentication-recipes
-cookbook/database-recipes
-cookbook/testing-recipes
 ```
 
 ```{toctree}
-:maxdepth: 1
-:caption: Architecture
-:hidden:
-
-architecture/ARCHITECTURE
-architecture/DATABASE_SCHEMA
-architecture/DOMAIN_MODELS
-architecture/RATE_LIMITING_ARCHITECTURE
-architecture/RATE_LIMITING_QUICK_REF
-architecture/QUICK_START
-architecture/README
-```
-
-```{toctree}
-:maxdepth: 1
-:caption: API Reference
+:maxdepth: 2
+:caption: Reference
 :hidden:
 
 api/index
-api-getting-started
-api-authentication
-api-versioning
-architecture/API_TAGS_INDEX
-architecture/API_TAGS_STRUCTURE
-architecture/API_TAGS_IMPLEMENTATION
-architecture/API_TAGS_BEST_PRACTICES
-architecture/API_TAGS_QUICK_REF
-architecture/README_API_TAGS
+architecture/index
+changelog
 ```
 
 ```{toctree}
-:maxdepth: 1
-:caption: Resources
+:caption: Project
 :hidden:
 
-FEATURE_FLAGS
-FEATURE_FLAG_LIBRARY_ANALYSIS
-POSTMAN_GUIDE
-architecture/adr/001-litestar-framework
-architecture/adr/002-saq-background-tasks
-architecture/adr/template
+GitHub <https://github.com/JacobCoffee/litestar-pydotorg>
 ```
-
----
-
-## Links
-
-- [GitHub Repository](https://github.com/JacobCoffee/litestar-pydotorg)
-- [Litestar Documentation](https://docs.litestar.dev/)
-- [Python.org](https://python.org/)
-
----
-
-## Indices and Tables
-
-- {ref}`genindex`
-- {ref}`modindex`
-- {ref}`search`

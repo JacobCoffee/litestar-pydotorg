@@ -60,3 +60,11 @@ Before you begin, ensure you have the following installed:
 3. Explore the [Architecture](../architecture/ARCHITECTURE.md) to understand the codebase
 4. Check out the [Guides](../guides/index.md) for common development tasks
 
+```{toctree}
+:maxdepth: 1
+:hidden:
+
+installation
+quickstart
+```
+

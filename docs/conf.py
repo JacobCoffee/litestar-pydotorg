@@ -188,6 +188,7 @@ suppress_warnings = [
     "sphinx_autodoc_typehints.guarded_import",
     "ref.obj",
     "py.duplicate_object_description",
+    "toc.not_included",
 ]
 
 # Don't fail on missing references
