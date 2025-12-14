@@ -3,18 +3,15 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 from pydotorg.core.email.service import EmailService
-
-if TYPE_CHECKING:
-    from saq import Context
 
 logger = logging.getLogger(__name__)
 
 
 async def send_verification_email(
-    ctx: Context,
+    ctx: Any,
     *,
     to_email: str,
     username: str,
@@ -46,7 +43,7 @@ async def send_verification_email(
 
 
 async def send_password_reset_email(
-    ctx: Context,
+    ctx: Any,
     *,
     to_email: str,
     username: str,
@@ -78,7 +75,7 @@ async def send_password_reset_email(
 
 
 async def send_job_submitted_email(
-    ctx: Context,
+    ctx: Any,
     *,
     to_email: str,
     job_title: str,
@@ -181,7 +178,7 @@ Python Software Foundation
 
 
 async def send_job_approved_email(
-    ctx: Context,
+    ctx: Any,
     *,
     to_email: str,
     job_title: str,
@@ -279,7 +276,7 @@ Python Software Foundation
 
 
 async def send_job_rejected_email(
-    ctx: Context,
+    ctx: Any,
     *,
     to_email: str,
     job_title: str,
@@ -377,7 +374,7 @@ Python Software Foundation
 
 
 async def send_event_reminder_email(
-    ctx: Context,
+    ctx: Any,
     *,
     to_email: str,
     event_title: str,
@@ -482,7 +479,7 @@ Python Software Foundation
 
 
 async def send_event_created_email(
-    ctx: Context,
+    ctx: Any,
     *,
     to_email: str,
     event_title: str,
@@ -585,7 +582,7 @@ Python Software Foundation
 
 
 async def send_event_approved_email(
-    ctx: Context,
+    ctx: Any,
     *,
     to_email: str,
     event_title: str,
@@ -683,7 +680,7 @@ Python Software Foundation
 
 
 async def send_bulk_email(
-    ctx: Context,
+    ctx: Any,
     *,
     recipients: list[str],
     subject: str,
