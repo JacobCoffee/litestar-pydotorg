@@ -1,4 +1,4 @@
-# Contributing to litestar-pydotorg
+# Contribution Guide
 
 Welcome to the Python.org Litestar rewrite project! We appreciate your interest in contributing. This guide will help you get started with development, understand our codebase architecture, and ensure your contributions meet our quality standards.
 
