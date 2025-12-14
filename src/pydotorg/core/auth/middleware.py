@@ -95,9 +95,7 @@ class UserPopulationMiddleware(MiddlewareProtocol):
             db_session: AsyncSession
             key_hash = APIKey.hash_key(raw_key)
             result = await db_session.execute(
-                select(APIKey)
-                .where(APIKey.key_hash == key_hash, APIKey.is_active.is_(True))
-                .options()
+                select(APIKey).where(APIKey.key_hash == key_hash, APIKey.is_active.is_(True)).options()
             )
             api_key = result.scalar_one_or_none()
             if api_key is None:

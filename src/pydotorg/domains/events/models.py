@@ -35,6 +35,7 @@ class RecurrenceFrequency(IntEnum):
         }
         return labels[self.value]
 
+
 event_event_categories = Table(
     "event_event_categories",
     Base.metadata,

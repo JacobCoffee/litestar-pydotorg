@@ -369,13 +369,15 @@ class SponsorshipService(SQLAlchemyAsyncRepositoryService[Sponsorship]):
         Returns:
             The new renewal sponsorship instance.
         """
-        return await self.create({
-            "sponsor_id": previous_sponsorship.sponsor_id,
-            "level_id": level_id or previous_sponsorship.level_id,
-            "status": SponsorshipStatus.APPLIED,
-            "applied_on": datetime.datetime.now(tz=UTC).date(),
-            "renewal": True,
-        })
+        return await self.create(
+            {
+                "sponsor_id": previous_sponsorship.sponsor_id,
+                "level_id": level_id or previous_sponsorship.level_id,
+                "status": SponsorshipStatus.APPLIED,
+                "applied_on": datetime.datetime.now(tz=UTC).date(),
+                "renewal": True,
+            }
+        )
 
 
 class LegalClauseService(SQLAlchemyAsyncRepositoryService[LegalClause]):
@@ -438,12 +440,14 @@ class ContractService(SQLAlchemyAsyncRepositoryService[Contract]):
         if sponsor.primary_phone:
             sponsor_contact += f" | Phone: {sponsor.primary_phone}"
 
-        return await self.create({
-            "sponsorship_id": sponsorship_id,
-            "sponsor_info": sponsor_info,
-            "sponsor_contact": sponsor_contact,
-            "status": ContractStatus.DRAFT,
-        })
+        return await self.create(
+            {
+                "sponsorship_id": sponsorship_id,
+                "sponsor_info": sponsor_info,
+                "sponsor_contact": sponsor_contact,
+                "status": ContractStatus.DRAFT,
+            }
+        )
 
     async def get_by_sponsorship_id(self, sponsorship_id: UUID) -> Contract | None:
         """Get a contract by sponsorship ID.

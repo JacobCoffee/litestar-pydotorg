@@ -163,11 +163,7 @@ class APIKeyRepository(SQLAlchemyAsyncRepository[APIKey]):
         Returns:
             List of API keys.
         """
-        statement = (
-            select(APIKey)
-            .where(APIKey.user_id == user_id)
-            .order_by(APIKey.created_at.desc())
-        )
+        statement = select(APIKey).where(APIKey.user_id == user_id).order_by(APIKey.created_at.desc())
         result = await self.session.execute(statement)
         return list(result.scalars().all())
 
