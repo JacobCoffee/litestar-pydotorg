@@ -186,6 +186,7 @@ from pydotorg.domains.work_groups import (
     WorkGroupsPageController,
     get_work_groups_dependencies,
 )
+from pydotorg.lib.api_versioning import APIVersionMiddleware
 
 if TYPE_CHECKING:
     from collections.abc import AsyncGenerator
@@ -636,6 +637,7 @@ app = Litestar(
     plugins=[sqlalchemy_plugin, sqladmin_plugin, flash_plugin, structlog_plugin, saq_plugin, vite_plugin],
     middleware=[
         session_config.middleware,
+        APIVersionMiddleware,
         SitewideBannerMiddleware,
         APIBannerMiddleware,
         UserPopulationMiddleware,
