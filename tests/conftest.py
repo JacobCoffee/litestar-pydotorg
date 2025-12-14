@@ -119,40 +119,50 @@ async def async_engine(postgres_uri: str) -> AsyncIterator[AsyncEngine]:
     """Session-scoped async engine for integration tests.
 
     Provides a single engine instance to prevent connection pool exhaustion.
+    Creates tables once at the start of the session.
     """
-    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
-    yield engine
-    await engine.dispose()
-
-
-@pytest.fixture
-async def client(postgres_uri: str) -> AsyncIterator[AsyncTestClient]:
-    """Async test client with PostgreSQL database for integration tests.
-
-    Each test gets a fresh database with tables created. Tables are truncated
-    before each test to ensure isolation.
-    """
-    from litestar.middleware.session.client_side import CookieBackendConfig
-
-    from pydotorg.config import settings
-    from pydotorg.domains.users.auth_controller import AuthController
-    from pydotorg.main import _derive_session_secret, health_check
-
     engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
 
     async with engine.begin() as conn:
         await conn.run_sync(AuditBase.metadata.drop_all)
         await conn.run_sync(AuditBase.metadata.create_all)
 
+    yield engine
     await engine.dispose()
 
-    sqlalchemy_config = SQLAlchemyAsyncConfig(
+
+@pytest.fixture(scope="module")
+def _module_sqlalchemy_config(postgres_uri: str) -> SQLAlchemyAsyncConfig:
+    """Module-scoped SQLAlchemy config to prevent creating engines per test."""
+    return SQLAlchemyAsyncConfig(
         connection_string=postgres_uri,
         metadata=AuditBase.metadata,
         create_all=False,
         engine_config=EngineConfig(poolclass=NullPool),
     )
-    sqlalchemy_plugin = SQLAlchemyPlugin(config=sqlalchemy_config)
+
+
+@pytest.fixture
+async def client(
+    async_engine: AsyncEngine,
+    _module_sqlalchemy_config: SQLAlchemyAsyncConfig,
+) -> AsyncIterator[AsyncTestClient]:
+    """Async test client with PostgreSQL database for integration tests.
+
+    Uses session-scoped engine and truncates tables between tests for isolation.
+    """
+    from litestar.middleware.session.client_side import CookieBackendConfig
+    from sqlalchemy import text
+
+    from pydotorg.config import settings
+    from pydotorg.domains.users.auth_controller import AuthController
+    from pydotorg.main import _derive_session_secret, health_check
+
+    async with async_engine.begin() as conn:
+        for table in reversed(AuditBase.metadata.sorted_tables):
+            await conn.execute(text(f"TRUNCATE TABLE {table.name} CASCADE"))
+
+    sqlalchemy_plugin = SQLAlchemyPlugin(config=_module_sqlalchemy_config)
 
     session_config = CookieBackendConfig(
         secret=_derive_session_secret(settings.session_secret_key),
@@ -171,5 +181,3 @@ async def client(postgres_uri: str) -> AsyncIterator[AsyncTestClient]:
         base_url="http://testserver.local",
     ) as test_client:
         yield test_client
-
-    await sqlalchemy_config.get_engine().dispose()
