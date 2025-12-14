@@ -17,12 +17,13 @@ RUN bun run build && bun run css
 
 
 # Stage 2: Python Builder - Install Python dependencies
-FROM python:3.14-slim AS python-builder
+FROM python:3.13-slim AS python-builder
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     UV_COMPILE_BYTECODE=1 \
     UV_LINK_MODE=copy \
+    UV_PYTHON_PREFERENCE=only-system \
     UV_PROJECT_ENVIRONMENT=/app/.venv
 
 WORKDIR /app
@@ -47,10 +48,11 @@ RUN uv sync --frozen --no-dev
 
 
 # Stage 3: Runtime - Minimal production image
-FROM python:3.14-slim AS runtime
+FROM python:3.13-slim AS runtime
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
+    VIRTUAL_ENV=/app/.venv \
     PATH="/app/.venv/bin:$PATH" \
     APP_ENV=prod
 
@@ -68,6 +70,10 @@ COPY --from=python-builder --chmod=755 /app/.venv /app/.venv
 COPY --from=python-builder /app/src /app/src
 COPY --from=frontend-builder /app/static /app/static
 COPY alembic.ini ./
+
+# Fix venv Python symlink (uv creates symlinks that don't survive multi-stage copy)
+RUN ln -sf /usr/local/bin/python3 /app/.venv/bin/python && \
+    ln -sf /usr/local/bin/python3 /app/.venv/bin/python3
 
 # Set ownership for non-root user
 RUN chown -R appuser:appuser /app
