@@ -60,13 +60,17 @@
 - [x] **Fastly CDN** - ✅ Surrogate-Key middleware added, cache purging ready (needs Fastly API key config)
 - [x] **Notification emails** - ✅ Job/event notifications wired to SAQ email tasks
 
-### Documentation (Phase 9)
-- [ ] Generate SDK documentation
-- [ ] Update ARCHITECTURE.md
-- [ ] Create domain model documentation
-- [ ] Write deployment guide
-- [ ] Create contributing guide
-- [x] Write troubleshooting guide - docs/guides/troubleshooting.md
+### Documentation (Phase 9) ✅
+- [x] **Generate SDK documentation** - ✅ 244 autodoc files via sphinx autosummary (docs/api/core/, docs/api/domains/)
+- [x] **Update ARCHITECTURE.md** - ✅ Existing, linked in docs index
+- [x] **Create domain model documentation** - ✅ docs/architecture/DOMAIN_MODELS.md (1,392 lines, 17 domains, Mermaid ER diagrams)
+- [x] **Write deployment guide** - ✅ docs/guides/deployment.md
+- [x] **Create contributing guide** - ✅ docs/guides/contributing.md
+- [x] **Write troubleshooting guide** - ✅ docs/guides/troubleshooting.md
+- [x] **Getting started section** - ✅ docs/getting-started/ (index, installation, quickstart)
+- [x] **Cookbook section** - ✅ docs/cookbook/ (domain-patterns, authentication, database, testing recipes)
+- [x] **Guides section overhaul** - ✅ docs/guides/ (12 comprehensive guides)
+- [x] **Index.md modernization** - ✅ Grid cards, updated toctrees, sphinx-design integration
 
 ### Research TODO
 - [ ] Research Litestar patterns for internal API namespacing (`/api/admin/*` vs `/api/_internal/*`)
@@ -160,7 +164,7 @@
 | ~~GPG Signature Verification~~ | ~~Low~~ | ✅ SHA256, signature UI, verification info |
 | ~~Recurrence Rules~~ | ~~Medium~~ | ✅ dateutil.rrule for events, 29 tests |
 | ~~Calendar RSS/Atom~~ | ~~Low~~ | ✅ RSS 2.0 + Atom 1.0 feeds, 21 tests |
-| Developer Documentation | Medium | ARCHITECTURE.md, deployment guide |
+| ~~Developer Documentation~~ | ~~Medium~~ | ✅ Full docs overhaul: 244 API files, 12 guides, 5 cookbook recipes, domain models |
 | ~~Contract Management~~ | ~~Medium~~ | ✅ Full sponsor contract workflow, 24 tests |
 | ~~Template Refactor~~ | ~~Medium~~ | ✅ Moved 50 templates to domain folders, multi-directory support |
 
