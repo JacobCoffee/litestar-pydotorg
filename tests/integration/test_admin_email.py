@@ -106,8 +106,13 @@ async def admin_email_fixtures(
     from sqlalchemy import text
 
     async with async_engine.begin() as conn:
+        # Only truncate tables that exist - some plugin tables may not be created
+        result = await conn.execute(text("SELECT tablename FROM pg_tables WHERE schemaname = 'public'"))
+        existing_tables = {row[0] for row in result.fetchall()}
+
         for table in reversed(AuditBase.metadata.sorted_tables):
-            await conn.execute(text(f"TRUNCATE TABLE {table.name} CASCADE"))
+            if table.name in existing_tables:
+                await conn.execute(text(f"TRUNCATE TABLE {table.name} CASCADE"))
 
     async_session_factory = sessionmaker(async_engine, class_=AsyncSession, expire_on_commit=False)
 
@@ -953,8 +958,13 @@ async def csrf_test_fixtures(
     from pydotorg.config import settings
 
     async with async_engine.begin() as conn:
+        # Only truncate tables that exist - some plugin tables may not be created
+        result = await conn.execute(text("SELECT tablename FROM pg_tables WHERE schemaname = 'public'"))
+        existing_tables = {row[0] for row in result.fetchall()}
+
         for table in reversed(AuditBase.metadata.sorted_tables):
-            await conn.execute(text(f"TRUNCATE TABLE {table.name} CASCADE"))
+            if table.name in existing_tables:
+                await conn.execute(text(f"TRUNCATE TABLE {table.name} CASCADE"))
 
     async_session_factory = sessionmaker(async_engine, class_=AsyncSession, expire_on_commit=False)
 
