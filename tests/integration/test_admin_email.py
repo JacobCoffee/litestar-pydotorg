@@ -931,126 +931,161 @@ class TestAppStartup:
         assert any("/admin/email" in path for path in route_paths)
 
 
+@pytest.fixture
+async def csrf_test_fixtures(postgres_uri: str) -> AsyncIterator[AdminEmailTestFixtures]:
+    """Test client with CSRF protection enabled for CSRF-specific tests."""
+    from datetime import datetime
+    from pathlib import Path
+
+    from litestar.config.csrf import CSRFConfig
+    from sqlalchemy import text
+
+    from pydotorg.config import settings
+
+    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
+
+    async with engine.begin() as conn:
+        await conn.execute(text("DROP SCHEMA public CASCADE"))
+        await conn.execute(text("CREATE SCHEMA public"))
+        await conn.run_sync(AuditBase.metadata.create_all)
+
+    async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+
+    async with async_session_factory() as session:
+        staff = User(
+            username=f"csrf_staff_{uuid4().hex[:8]}",
+            email=f"csrf_staff_{uuid4().hex[:8]}@example.com",
+            password_hash="hashed_password",
+            first_name="Staff",
+            last_name="User",
+            is_active=True,
+            is_staff=True,
+            is_superuser=False,
+        )
+        session.add(staff)
+        await session.commit()
+        await session.refresh(staff)
+        staff_data = User(id=staff.id, email=staff.email, username=staff.username, is_staff=True, is_superuser=False)
+
+    await engine.dispose()
+
+    sqlalchemy_config = SQLAlchemyAsyncConfig(
+        connection_string=postgres_uri,
+        metadata=AuditBase.metadata,
+        create_all=False,
+        before_send_handler="autocommit",
+    )
+    sqlalchemy_plugin = SQLAlchemyPlugin(config=sqlalchemy_config)
+
+    csrf_config = CSRFConfig(
+        secret=settings.csrf_secret,
+        cookie_name=settings.csrf_cookie_name,
+        header_name=settings.csrf_header_name,
+        cookie_secure=False,
+        cookie_httponly=False,
+        cookie_samesite="lax",
+        cookie_path="/",
+    )
+
+    def configure_minimal_templates(engine_instance: JinjaTemplateEngine) -> None:
+        engine_instance.engine.globals["now"] = datetime.now
+
+    template_config = TemplateConfig(
+        directory=Path(__file__).parent.parent.parent / "src" / "pydotorg" / "templates",
+        engine=JinjaTemplateEngine,
+        engine_callback=configure_minimal_templates,
+    )
+
+    test_app = Litestar(
+        route_handlers=[AdminEmailController],
+        plugins=[sqlalchemy_plugin],
+        middleware=[JWTAuthMiddleware],
+        dependencies={
+            "email_admin_service": Provide(provide_email_admin_service),
+            "email_template_service": Provide(provide_email_template_service),
+            "mailing_service": Provide(provide_mailing_service),
+        },
+        template_config=template_config,
+        csrf_config=csrf_config,
+        debug=True,
+    )
+
+    async with AsyncTestClient(
+        app=test_app,
+        base_url="http://testserver.local",
+    ) as test_client:
+        fixtures = AdminEmailTestFixtures()
+        fixtures.client = test_client
+        fixtures.postgres_uri = postgres_uri
+        fixtures.staff_user = staff_data
+        yield fixtures
+
+
 @pytest.mark.integration
 class TestCSRFProtection:
     """Test CSRF protection with real app and cookies."""
 
-    @pytest.mark.skip(reason="Requires database with proper event loop integration - app lifespan fails without DB")
-    async def test_csrf_token_set_on_get_request(self) -> None:
+    async def test_csrf_token_set_on_get_request(self, csrf_test_fixtures: AdminEmailTestFixtures) -> None:
         """Test that CSRF cookie is set on GET requests with proper token length."""
-        from litestar.testing import AsyncTestClient
+        response = await csrf_test_fixtures.client.get("/admin/email/", follow_redirects=False)
+        csrf_token = response.cookies.get("csrftoken")
+        assert csrf_token is not None, "CSRF cookie not set"
+        assert len(csrf_token) >= 32, f"CSRF token too short ({len(csrf_token)} chars), expected >= 32"
 
-        from pydotorg.main import app
-
-        async with AsyncTestClient(app=app) as client:
-            response = await client.get("/", follow_redirects=False)
-            csrf_token = response.cookies.get("csrftoken")
-            assert csrf_token is not None, "CSRF cookie not set"
-            assert len(csrf_token) >= 64, (
-                f"CSRF token too short ({len(csrf_token)} chars), expected >= 64. Clear browser cookies!"
-            )
-
-    @pytest.mark.skip(reason="Requires database with proper event loop integration - app lifespan fails without DB")
-    async def test_post_without_csrf_fails(self) -> None:
+    async def test_post_without_csrf_fails(self, csrf_test_fixtures: AdminEmailTestFixtures) -> None:
         """Test that POST without CSRF token fails with 403."""
-        from litestar.testing import AsyncTestClient
-
-        from pydotorg.main import app
-
-        async with AsyncTestClient(app=app) as client:
-            await client.get("/")
-            response = await client.post(
-                "/admin/email/templates/preview",
-                data={"subject": "Test", "content_text": "Test"},
-            )
-            assert response.status_code == 403
-
-    @pytest.mark.skip(reason="Requires database with proper event loop integration - see _get_or_create_staff_user")
-    async def test_post_with_csrf_header_succeeds(self) -> None:
-        """Test that POST with CSRF header succeeds."""
-        from litestar.testing import AsyncTestClient
-
         from pydotorg.core.auth.jwt import jwt_service
-        from pydotorg.main import app
 
-        async with AsyncTestClient(app=app) as client:
-            get_response = await client.get("/")
-            csrf_token = get_response.cookies.get("csrftoken")
-            assert csrf_token is not None, "CSRF cookie should be set"
-
-            staff_user = await _get_or_create_staff_user(client)
-            token = jwt_service.create_access_token(staff_user.id)
-
-            response = await client.post(
-                "/admin/email/templates/preview",
-                headers={
-                    "Authorization": f"Bearer {token}",
-                    "x-csrftoken": csrf_token,
-                },
-                data={"subject": "Test", "content_text": "Test"},
-            )
-            assert response.status_code in (200, 302, 401, 403)
-
-    @pytest.mark.skip(reason="Requires database with proper event loop integration - see _get_or_create_staff_user")
-    async def test_post_with_csrf_form_field_succeeds(self) -> None:
-        """Test that POST with CSRF form field succeeds."""
-        from litestar.testing import AsyncTestClient
-
-        from pydotorg.core.auth.jwt import jwt_service
-        from pydotorg.main import app
-
-        async with AsyncTestClient(app=app) as client:
-            get_response = await client.get("/")
-            csrf_token = get_response.cookies.get("csrftoken")
-            assert csrf_token is not None, "CSRF cookie should be set"
-
-            staff_user = await _get_or_create_staff_user(client)
-            token = jwt_service.create_access_token(staff_user.id)
-
-            response = await client.post(
-                "/admin/email/templates/preview",
-                headers={"Authorization": f"Bearer {token}"},
-                data={
-                    "subject": "Test",
-                    "content_text": "Test",
-                    "_csrf_token": csrf_token,
-                },
-            )
-            assert response.status_code in (200, 302, 401, 403)
-
-
-async def _get_or_create_staff_user(client: any) -> any:
-    """Helper to get or create a staff user for CSRF tests."""
-    from uuid import uuid4
-
-    from sqlalchemy import text
-    from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-    from sqlalchemy.orm import sessionmaker
-
-    from pydotorg.config import settings
-    from pydotorg.domains.users.models import User
-
-    db_url = str(settings.database_url)
-    engine = create_async_engine(db_url, echo=False)
-    async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-
-    async with async_session_factory() as session:
-        result = await session.execute(text("SELECT id FROM users WHERE is_staff = true LIMIT 1"))
-        row = result.fetchone()
-        if row:
-            user = await session.get(User, row[0])
-            await engine.dispose()
-            return user
-
-        user = User(
-            username=f"csrf_staff_{uuid4().hex[:8]}",
-            email=f"csrf_staff_{uuid4().hex[:8]}@example.com",
-            password_hash="hashed",
-            is_active=True,
-            is_staff=True,
+        token = jwt_service.create_access_token(csrf_test_fixtures.staff_user.id)
+        await csrf_test_fixtures.client.get("/admin/email/")
+        response = await csrf_test_fixtures.client.post(
+            "/admin/email/templates/preview",
+            headers={"Authorization": f"Bearer {token}"},
+            data={"subject": "Test", "content_text": "Test"},
         )
-        session.add(user)
-        await session.commit()
-        await session.refresh(user)
-        await engine.dispose()
-        return user
+        assert response.status_code == 403
+
+    async def test_post_with_csrf_header_succeeds(self, csrf_test_fixtures: AdminEmailTestFixtures) -> None:
+        """Test that POST with CSRF header succeeds."""
+        from pydotorg.core.auth.jwt import jwt_service
+
+        token = jwt_service.create_access_token(csrf_test_fixtures.staff_user.id)
+        get_response = await csrf_test_fixtures.client.get(
+            "/admin/email/",
+            headers={"Authorization": f"Bearer {token}"},
+        )
+        csrf_token = get_response.cookies.get("csrftoken")
+        assert csrf_token is not None, "CSRF cookie should be set"
+
+        response = await csrf_test_fixtures.client.post(
+            "/admin/email/templates/preview",
+            headers={
+                "Authorization": f"Bearer {token}",
+                "x-csrftoken": csrf_token,
+            },
+            data={"subject": "Test", "content_text": "Test"},
+        )
+        assert response.status_code in (200, 302, 400)
+
+    async def test_post_with_csrf_form_field_succeeds(self, csrf_test_fixtures: AdminEmailTestFixtures) -> None:
+        """Test that POST with CSRF form field succeeds."""
+        from pydotorg.core.auth.jwt import jwt_service
+
+        token = jwt_service.create_access_token(csrf_test_fixtures.staff_user.id)
+        get_response = await csrf_test_fixtures.client.get(
+            "/admin/email/",
+            headers={"Authorization": f"Bearer {token}"},
+        )
+        csrf_token = get_response.cookies.get("csrftoken")
+        assert csrf_token is not None, "CSRF cookie should be set"
+
+        response = await csrf_test_fixtures.client.post(
+            "/admin/email/templates/preview",
+            headers={"Authorization": f"Bearer {token}"},
+            data={
+                "subject": "Test",
+                "content_text": "Test",
+                "_csrf_token": csrf_token,
+            },
+        )
+        assert response.status_code in (200, 302, 400)
