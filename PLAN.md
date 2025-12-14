@@ -162,7 +162,7 @@
 | ~~Calendar RSS/Atom~~ | ~~Low~~ | ✅ RSS 2.0 + Atom 1.0 feeds, 21 tests |
 | Developer Documentation | Medium | ARCHITECTURE.md, deployment guide |
 | ~~Contract Management~~ | ~~Medium~~ | ✅ Full sponsor contract workflow, 24 tests |
-| Template Refactor | Medium | Move templates into domain folders |
+| ~~Template Refactor~~ | ~~Medium~~ | ✅ Moved 50 templates to domain folders, multi-directory support |
 
 ---
 
