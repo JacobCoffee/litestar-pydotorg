@@ -135,7 +135,7 @@ make test         # pytest with coverage
 ---
 
 ```{toctree}
-:maxdepth: 2
+:maxdepth: 1
 :caption: Getting Started
 :hidden:
 
@@ -145,30 +145,24 @@ getting-started/quickstart
 ```
 
 ```{toctree}
-:maxdepth: 2
+:maxdepth: 1
 :caption: Guides
 :hidden:
 
-guides/index
 guides/development
-guides/feature-flags
 guides/api-usage
 guides/authentication
 guides/testing
-guides/debugging
 guides/configuration
 guides/deployment
-guides/docker
-guides/contributing
 guides/troubleshooting
 ```
 
 ```{toctree}
-:maxdepth: 2
+:maxdepth: 1
 :caption: Cookbook
 :hidden:
 
-cookbook/index
 cookbook/domain-patterns
 cookbook/authentication-recipes
 cookbook/database-recipes
@@ -176,61 +170,34 @@ cookbook/testing-recipes
 ```
 
 ```{toctree}
-:maxdepth: 2
+:maxdepth: 1
 :caption: Architecture
 :hidden:
 
 architecture/ARCHITECTURE
 architecture/DATABASE_SCHEMA
 architecture/DOMAIN_MODELS
-architecture/RATE_LIMITING_ARCHITECTURE
-architecture/RATE_LIMITING_QUICK_REF
-architecture/QUICK_START
-architecture/README
-```
-
-```{toctree}
-:maxdepth: 2
-:caption: API Documentation
-:hidden:
-
-api-getting-started
-api-authentication
-api-versioning
-architecture/API_TAGS_INDEX
-architecture/API_TAGS_STRUCTURE
-architecture/API_TAGS_IMPLEMENTATION
-architecture/API_TAGS_BEST_PRACTICES
-architecture/API_TAGS_QUICK_REF
-architecture/README_API_TAGS
-```
-
-```{toctree}
-:maxdepth: 2
-:caption: ADRs
-:hidden:
-
-architecture/adr/001-litestar-framework
-architecture/adr/002-saq-background-tasks
-architecture/adr/template
-```
-
-```{toctree}
-:maxdepth: 2
-:caption: SDK Reference
-:hidden:
-
-api/index
 ```
 
 ```{toctree}
 :maxdepth: 1
-:caption: Development
+:caption: API Reference
 :hidden:
 
-FEATURE_FLAGS
-FEATURE_FLAG_LIBRARY_ANALYSIS
+api/index
+api-getting-started
+api-authentication
+```
+
+```{toctree}
+:maxdepth: 1
+:caption: Resources
+:hidden:
+
+guides/contributing
 POSTMAN_GUIDE
+architecture/adr/001-litestar-framework
+architecture/adr/002-saq-background-tasks
 ```
 
 ---

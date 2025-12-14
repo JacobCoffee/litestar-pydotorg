@@ -61,17 +61,3 @@ Write and run tests for your code.
 - [Deployment Guide](deployment.md) - Production deployment strategies
 - [Docker Guide](docker.md) - Container-based development and deployment
 
-```{toctree}
-:maxdepth: 2
-:hidden:
-
-development
-feature-flags
-api-usage
-authentication
-testing
-debugging
-configuration
-deployment
-docker
-```

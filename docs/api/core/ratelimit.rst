@@ -5,14 +5,6 @@ Rate limiting infrastructure for API protection.
 
 .. module:: pydotorg.core.ratelimit
 
-Module Contents
----------------
-
-.. automodule:: pydotorg.core.ratelimit
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 Configuration
 -------------
 

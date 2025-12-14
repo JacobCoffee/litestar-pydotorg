@@ -36,12 +36,3 @@ Each domain follows a consistent structure:
    successstories
    users
    work_groups
-
-Module Overview
----------------
-
-.. autosummary::
-   :toctree: generated
-   :recursive:
-
-   pydotorg.domains

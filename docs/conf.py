@@ -64,7 +64,35 @@ autodoc_class_signature = "separated"
 autodoc_typehints = "description"
 autodoc_typehints_description_target = "documented"
 autodoc_inherit_docstrings = True
-autosummary_generate = True
+
+# Disable autosummary generation - use pre-generated stubs instead
+# This significantly speeds up builds (from 90s to ~15s)
+autosummary_generate = False
+
+# Mock heavy imports to speed up autodoc and avoid circular imports
+autodoc_mock_imports = [
+    "granian",
+    "saq",
+    "meilisearch",
+    "redis",
+    "asyncpg",
+    "httpx",
+    "aiosmtplib",
+    "posthog",
+    "sentry_sdk",
+    "pydotorg.core.auth",
+    "pydotorg.core.auth.guards",
+    "pydotorg.core.auth.jwt",
+    "pydotorg.core.auth.middleware",
+    "pydotorg.core.auth.oauth",
+    "pydotorg.core.auth.password",
+    "pydotorg.core.auth.schemas",
+    "pydotorg.core.auth.session",
+    "pydotorg.domains",
+    "pydotorg.domains.users",
+    "pydotorg.domains.users.controllers",
+    "pydotorg.domains.users.models",
+]
 
 napoleon_google_docstring = True
 napoleon_numpy_docstring = True

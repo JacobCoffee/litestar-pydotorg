@@ -56,12 +56,3 @@ Test fixtures, mocking, and integration testing.
 
 - [Testing Recipes](testing-recipes.md) - Common test patterns
 
-```{toctree}
-:maxdepth: 2
-:hidden:
-
-domain-patterns
-authentication-recipes
-database-recipes
-testing-recipes
-```

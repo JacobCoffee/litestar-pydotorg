@@ -22,12 +22,3 @@ Core infrastructure modules providing foundational services for the application.
    search
    security
    worker
-
-Module Overview
----------------
-
-.. autosummary::
-   :toctree: generated
-   :recursive:
-
-   pydotorg.core
