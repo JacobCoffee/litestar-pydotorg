@@ -36,6 +36,8 @@ from pydotorg.domains.users.models import User
 if TYPE_CHECKING:
     from collections.abc import AsyncIterator
 
+    from sqlalchemy.ext.asyncio import AsyncEngine
+
 
 async def _create_db_session(postgres_uri: str) -> tuple[AsyncSession, any]:
     """Helper to create a database session."""
@@ -92,22 +94,22 @@ class AdminEmailTestFixtures:
 
 
 @pytest.fixture
-async def admin_email_fixtures(postgres_uri: str) -> AsyncIterator[AdminEmailTestFixtures]:
+async def admin_email_fixtures(
+    async_engine: AsyncEngine,
+    postgres_uri: str,
+) -> AsyncIterator[AdminEmailTestFixtures]:
     """Async test client with AdminEmailController and test users.
 
-    Creates the database schema, test users, and client in the correct order
-    to ensure all tests have access to the same database state.
+    Uses session-scoped async_engine to prevent connection exhaustion.
+    Creates test users and client for admin email tests.
     """
     from sqlalchemy import text
 
-    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
+    async with async_engine.begin() as conn:
+        for table in reversed(AuditBase.metadata.sorted_tables):
+            await conn.execute(text(f"TRUNCATE TABLE {table.name} CASCADE"))
 
-    async with engine.begin() as conn:
-        await conn.execute(text("DROP SCHEMA public CASCADE"))
-        await conn.execute(text("CREATE SCHEMA public"))
-        await conn.run_sync(AuditBase.metadata.create_all)
-
-    async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+    async_session_factory = sessionmaker(async_engine, class_=AsyncSession, expire_on_commit=False)
 
     async with async_session_factory() as session:
         staff = User(
@@ -151,8 +153,6 @@ async def admin_email_fixtures(postgres_uri: str) -> AsyncIterator[AdminEmailTes
         )
         admin_data = User(id=admin.id, email=admin.email, username=admin.username, is_staff=True, is_superuser=True)
 
-    await engine.dispose()
-
     import sys
     from uuid import UUID
 
@@ -166,11 +166,14 @@ async def admin_email_fixtures(postgres_uri: str) -> AsyncIterator[AdminEmailTes
         email_module.UUID = UUID
         email_module.Request = Request
 
+    from advanced_alchemy.config import EngineConfig
+
     sqlalchemy_config = SQLAlchemyAsyncConfig(
         connection_string=postgres_uri,
         metadata=AuditBase.metadata,
         create_all=False,
         before_send_handler="autocommit",
+        engine_config=EngineConfig(poolclass=NullPool),
     )
     sqlalchemy_plugin = SQLAlchemyPlugin(config=sqlalchemy_config)
 
@@ -932,24 +935,28 @@ class TestAppStartup:
 
 
 @pytest.fixture
-async def csrf_test_fixtures(postgres_uri: str) -> AsyncIterator[AdminEmailTestFixtures]:
-    """Test client with CSRF protection enabled for CSRF-specific tests."""
+async def csrf_test_fixtures(
+    async_engine: AsyncEngine,
+    postgres_uri: str,
+) -> AsyncIterator[AdminEmailTestFixtures]:
+    """Test client with CSRF protection enabled for CSRF-specific tests.
+
+    Uses session-scoped async_engine to prevent connection exhaustion.
+    """
     from datetime import datetime
     from pathlib import Path
 
+    from advanced_alchemy.config import EngineConfig
     from litestar.config.csrf import CSRFConfig
     from sqlalchemy import text
 
     from pydotorg.config import settings
 
-    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
+    async with async_engine.begin() as conn:
+        for table in reversed(AuditBase.metadata.sorted_tables):
+            await conn.execute(text(f"TRUNCATE TABLE {table.name} CASCADE"))
 
-    async with engine.begin() as conn:
-        await conn.execute(text("DROP SCHEMA public CASCADE"))
-        await conn.execute(text("CREATE SCHEMA public"))
-        await conn.run_sync(AuditBase.metadata.create_all)
-
-    async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+    async_session_factory = sessionmaker(async_engine, class_=AsyncSession, expire_on_commit=False)
 
     async with async_session_factory() as session:
         staff = User(
@@ -967,13 +974,12 @@ async def csrf_test_fixtures(postgres_uri: str) -> AsyncIterator[AdminEmailTestF
         await session.refresh(staff)
         staff_data = User(id=staff.id, email=staff.email, username=staff.username, is_staff=True, is_superuser=False)
 
-    await engine.dispose()
-
     sqlalchemy_config = SQLAlchemyAsyncConfig(
         connection_string=postgres_uri,
         metadata=AuditBase.metadata,
         create_all=False,
         before_send_handler="autocommit",
+        engine_config=EngineConfig(poolclass=NullPool),
     )
     sqlalchemy_plugin = SQLAlchemyPlugin(config=sqlalchemy_config)
 
