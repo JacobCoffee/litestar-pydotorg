@@ -149,13 +149,18 @@ getting-started/quickstart
 :caption: Guides
 :hidden:
 
+guides/index
 guides/development
 guides/api-usage
 guides/authentication
 guides/testing
+guides/debugging
 guides/configuration
 guides/deployment
+guides/docker
+guides/feature-flags
 guides/troubleshooting
+guides/contributing
 ```
 
 ```{toctree}
@@ -163,6 +168,7 @@ guides/troubleshooting
 :caption: Cookbook
 :hidden:
 
+cookbook/index
 cookbook/domain-patterns
 cookbook/authentication-recipes
 cookbook/database-recipes
@@ -177,6 +183,10 @@ cookbook/testing-recipes
 architecture/ARCHITECTURE
 architecture/DATABASE_SCHEMA
 architecture/DOMAIN_MODELS
+architecture/RATE_LIMITING_ARCHITECTURE
+architecture/RATE_LIMITING_QUICK_REF
+architecture/QUICK_START
+architecture/README
 ```
 
 ```{toctree}
@@ -187,6 +197,13 @@ architecture/DOMAIN_MODELS
 api/index
 api-getting-started
 api-authentication
+api-versioning
+architecture/API_TAGS_INDEX
+architecture/API_TAGS_STRUCTURE
+architecture/API_TAGS_IMPLEMENTATION
+architecture/API_TAGS_BEST_PRACTICES
+architecture/API_TAGS_QUICK_REF
+architecture/README_API_TAGS
 ```
 
 ```{toctree}
@@ -194,10 +211,12 @@ api-authentication
 :caption: Resources
 :hidden:
 
-guides/contributing
+FEATURE_FLAGS
+FEATURE_FLAG_LIBRARY_ANALYSIS
 POSTMAN_GUIDE
 architecture/adr/001-litestar-framework
 architecture/adr/002-saq-background-tasks
+architecture/adr/template
 ```
 
 ---
