@@ -52,7 +52,8 @@ html_static_path = ["_static"]
 html_title = "litestar-pydotorg"
 
 html_theme_options = {
-    "accent_color": "violet",
+    "accent_color": "blue",
+    "dark_code": True,
     "github_url": "https://github.com/JacobCoffee/litestar-pydotorg",
     "nav_links": [
         {"title": "Litestar", "url": "https://litestar.dev/"},
