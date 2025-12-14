@@ -199,15 +199,18 @@ class Settings(BaseSettings):
 
         return v
 
-    @field_validator("database_url")
+    @field_validator("database_url", mode="before")
     @classmethod
-    def validate_database_url(cls, v: PostgresDsn) -> PostgresDsn:
-        """Ensure database URL is valid PostgreSQL."""
+    def validate_database_url(cls, v: str | PostgresDsn) -> str:
+        """Ensure database URL uses asyncpg driver."""
         url_str = str(v)
         if not url_str.startswith(("postgresql://", "postgresql+asyncpg://")):
             msg = "DATABASE_URL must be a valid PostgreSQL URL"
             raise ValueError(msg)
-        return v
+        # Auto-convert postgresql:// to postgresql+asyncpg:// for async support
+        if url_str.startswith("postgresql://") and "+asyncpg" not in url_str:
+            url_str = url_str.replace("postgresql://", "postgresql+asyncpg://", 1)
+        return url_str
 
     @model_validator(mode="after")
     def validate_production_config(self) -> Settings:
