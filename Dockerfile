@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1.9
 # Stage 1: Builder - Build frontend and install Python dependencies
 FROM oven/bun:1 AS frontend-builder
 
@@ -36,12 +37,12 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
 COPY pyproject.toml uv.lock README.md ./
 
-RUN --mount=type=cache,target=/root/.cache/uv \
+RUN --mount=type=cache,id=uv-cache,target=/root/.cache/uv \
     uv sync --frozen --no-dev --no-install-project
 
 COPY src/ ./src/
 
-RUN --mount=type=cache,target=/root/.cache/uv \
+RUN --mount=type=cache,id=uv-cache,target=/root/.cache/uv \
     uv sync --frozen --no-dev
 
 
@@ -75,5 +76,8 @@ EXPOSE 8000
 
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
     CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')" || exit 1
+
+# Use SIGINT for graceful shutdown
+STOPSIGNAL SIGINT
 
 CMD ["granian", "--interface", "asgi", "pydotorg.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "4"]
