@@ -73,10 +73,10 @@
 - [x] **Index.md modernization** - ✅ Grid cards, updated toctrees, sphinx-design integration
 
 ### Research TODO
-- [ ] Research Litestar patterns for internal API namespacing (`/api/admin/*` vs `/api/_internal/*`)
-- [ ] Evaluate authentication requirements for API docs visibility
-- [ ] Review Litestar's `OpenAPIConfig` for multiple spec generation
-- [ ] Consider `include_in_schema` per security level vs per route
+- [x] Research Litestar patterns for internal API namespacing (`/api/admin/*` vs `/api/_internal/*`) ✅ Using `/api/admin/docs/` for admin API docs
+- [x] Evaluate authentication requirements for API docs visibility ✅ Session auth guard (SSO with SQLAdmin)
+- [x] Review Litestar's `OpenAPIConfig` for multiple spec generation ✅ Separate AdminOpenAPIController generates full schema
+- [x] Consider `include_in_schema` per security level vs per route ✅ `include_in_schema=False` on admin controllers
 
 ### Page Implementations
 

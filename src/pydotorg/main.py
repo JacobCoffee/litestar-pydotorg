@@ -54,7 +54,7 @@ from pydotorg.core.dependencies import get_core_dependencies
 from pydotorg.core.exceptions import get_exception_handlers
 from pydotorg.core.features import FeatureFlags
 from pydotorg.core.logging import configure_structlog
-from pydotorg.core.openapi import get_openapi_plugins
+from pydotorg.core.openapi import AdminOpenAPIController, get_openapi_plugins
 from pydotorg.core.ratelimit import create_rate_limit_config, rate_limit_exception_handler
 from pydotorg.core.security.csrf import create_csrf_config
 from pydotorg.core.worker import saq_plugin
@@ -596,6 +596,7 @@ app = Litestar(
         index,
         health_check,
         AdminController,
+        AdminOpenAPIController,
         AdminAnalyticsController,
         AdminBannersController,
         AdminBlogsController,

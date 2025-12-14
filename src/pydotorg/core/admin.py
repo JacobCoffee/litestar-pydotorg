@@ -32,6 +32,7 @@ class AdminController(Controller):
     path = "/api/admin"
     tags = ["Admin"]
     guards = [require_admin_guard]
+    include_in_schema = False
 
     @get("/config")
     async def get_config(self) -> dict[str, Any]:
