@@ -4,13 +4,14 @@ This domain provides database-driven email templates and email sending
 functionality. Templates support Jinja2 syntax for dynamic content.
 
 Key Components:
-- EmailTemplate: Database model for email templates
-- EmailLog: Audit log for sent emails
-- MailingService: Service for sending emails via templates
-- EmailTemplateController: Admin API for template management
-- EmailLogController: Admin API for viewing email logs
+    - EmailTemplate: Database model for email templates
+    - EmailLog: Audit log for sent emails
+    - MailingService: Service for sending emails via templates
+    - EmailTemplateController: Admin API for template management
+    - EmailLogController: Admin API for viewing email logs
 
-Usage:
+Example::
+
     from pydotorg.domains.mailing import (
         EmailTemplate,
         EmailLog,

@@ -3,7 +3,6 @@ Configuration
 
 Application configuration and settings management.
 
-.. module:: pydotorg.config
 
 Module Contents
 ---------------

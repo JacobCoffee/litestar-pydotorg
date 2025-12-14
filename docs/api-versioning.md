@@ -1,3 +1,5 @@
+:orphan:
+
 # API Versioning
 
 The Litestar pydotorg rewrite includes a comprehensive API versioning system that supports multiple version negotiation strategies and provides deprecation warnings.

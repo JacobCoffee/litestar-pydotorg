@@ -3,7 +3,6 @@ Logging
 
 Structured logging configuration and utilities.
 
-.. module:: pydotorg.core.logging
 
 Module Contents
 ---------------

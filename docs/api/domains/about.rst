@@ -3,7 +3,6 @@ About
 
 About pages and informational content.
 
-.. module:: pydotorg.domains.about
 
 Module Contents
 ---------------

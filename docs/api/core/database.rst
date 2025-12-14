@@ -3,7 +3,6 @@ Database
 
 Database infrastructure and session management.
 
-.. module:: pydotorg.core.database
 
 Module Contents
 ---------------

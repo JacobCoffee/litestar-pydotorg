@@ -3,7 +3,6 @@ Search
 
 Full-text search infrastructure.
 
-.. module:: pydotorg.core.search
 
 Module Contents
 ---------------

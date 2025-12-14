@@ -3,7 +3,6 @@ Rate Limiting
 
 Rate limiting infrastructure for API protection.
 
-.. module:: pydotorg.core.ratelimit
 
 Configuration
 -------------

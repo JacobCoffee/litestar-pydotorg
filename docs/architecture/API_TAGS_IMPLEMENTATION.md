@@ -1,3 +1,5 @@
+:orphan:
+
 # API Tags Implementation Guide
 
 Step-by-step guide to implement the optimized tag structure in the Python.org Litestar API.

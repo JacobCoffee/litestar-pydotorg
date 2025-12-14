@@ -3,7 +3,6 @@ Email
 
 Email sending and template management.
 
-.. module:: pydotorg.core.email
 
 Module Contents
 ---------------

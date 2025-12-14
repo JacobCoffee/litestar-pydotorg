@@ -3,7 +3,6 @@ Admin
 
 Administrative interface and management.
 
-.. module:: pydotorg.domains.admin
 
 Module Contents
 ---------------

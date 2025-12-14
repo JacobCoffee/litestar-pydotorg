@@ -3,7 +3,6 @@ Background Worker
 
 SAQ background worker configuration.
 
-.. module:: pydotorg.core.worker
 
 Module Contents
 ---------------

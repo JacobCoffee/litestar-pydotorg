@@ -3,7 +3,6 @@ Success Stories
 
 Python success stories and case studies.
 
-.. module:: pydotorg.domains.successstories
 
 Module Contents
 ---------------

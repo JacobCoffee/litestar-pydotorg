@@ -3,7 +3,6 @@ Application Entry Point
 
 Main application factory and entry point.
 
-.. module:: pydotorg.main
 
 Module Contents
 ---------------

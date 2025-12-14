@@ -3,7 +3,6 @@ Feature Flags
 
 Feature flag system for controlling feature rollout.
 
-.. module:: pydotorg.core.features
 
 Module Contents
 ---------------

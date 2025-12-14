@@ -3,7 +3,6 @@ Library Utilities
 
 Shared library utilities and helpers.
 
-.. module:: pydotorg.lib
 
 Module Contents
 ---------------

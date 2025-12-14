@@ -1,3 +1,5 @@
+:orphan:
+
 # Architecture Documentation
 
 Welcome to the Litestar Python.org architecture documentation. This directory contains all architectural decisions, design documents, and technical specifications for migrating python.org from Django to Litestar.

@@ -3,8 +3,6 @@ Authentication
 
 Authentication and authorization infrastructure including JWT handling, OAuth, and session management.
 
-.. module:: pydotorg.core.auth
-
 Module Contents
 ---------------
 
@@ -12,6 +10,7 @@ Module Contents
    :members:
    :undoc-members:
    :show-inheritance:
+   :no-index:
 
 JWT Authentication
 ------------------

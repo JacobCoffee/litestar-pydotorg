@@ -3,7 +3,6 @@ Documentation
 
 Documentation redirects and links.
 
-.. module:: pydotorg.domains.docs
 
 Module Contents
 ---------------

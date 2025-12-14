@@ -3,8 +3,6 @@ Mailing Lists
 
 Mailing list management and subscriptions.
 
-.. module:: pydotorg.domains.mailing
-
 Module Contents
 ---------------
 
@@ -12,6 +10,7 @@ Module Contents
    :members:
    :undoc-members:
    :show-inheritance:
+   :no-index:
 
 Models
 ------
@@ -20,6 +19,7 @@ Models
    :members:
    :undoc-members:
    :show-inheritance:
+   :no-index:
 
 Schemas
 -------

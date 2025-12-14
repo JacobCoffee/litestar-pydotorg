@@ -3,7 +3,6 @@ Security
 
 Security utilities and CSRF protection.
 
-.. module:: pydotorg.core.security
 
 Module Contents
 ---------------

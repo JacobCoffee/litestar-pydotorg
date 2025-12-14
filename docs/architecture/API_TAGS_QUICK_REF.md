@@ -1,3 +1,5 @@
+:orphan:
+
 # API Tags - Quick Reference
 
 Mapping of Python.org API resources to recommended tag categories.

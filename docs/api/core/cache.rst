@@ -3,7 +3,6 @@ Caching
 
 Caching infrastructure for performance optimization.
 
-.. module:: pydotorg.core.cache
 
 Module Contents
 ---------------

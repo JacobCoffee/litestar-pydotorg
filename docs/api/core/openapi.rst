@@ -3,7 +3,6 @@ OpenAPI
 
 OpenAPI schema configuration and customization.
 
-.. module:: pydotorg.core.openapi
 
 Module Contents
 ---------------

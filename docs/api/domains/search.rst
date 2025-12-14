@@ -3,7 +3,6 @@ Search
 
 Site-wide search functionality.
 
-.. module:: pydotorg.domains.search
 
 Module Contents
 ---------------

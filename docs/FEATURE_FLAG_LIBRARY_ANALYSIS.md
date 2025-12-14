@@ -1,3 +1,5 @@
+:orphan:
+
 # Feature Flag Library for Litestar: Analysis & Recommendation
 
 > **Investigation Summary**: Should we create a standalone feature flag library for Litestar?

@@ -3,7 +3,6 @@ Background Tasks
 
 SAQ background task definitions for async processing.
 
-.. module:: pydotorg.tasks
 
 Module Contents
 ---------------

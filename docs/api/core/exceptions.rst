@@ -3,7 +3,6 @@ Exceptions
 
 Application exception classes and error handling.
 
-.. module:: pydotorg.core.exceptions
 
 Module Contents
 ---------------

@@ -1,3 +1,5 @@
+:orphan:
+
 # API Getting Started Guide
 
 Welcome to the Python.org API. This guide covers everything you need to start building applications that integrate with Python.org.

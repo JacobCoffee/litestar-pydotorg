@@ -3,7 +3,6 @@ Middleware
 
 HTTP middleware components.
 
-.. module:: pydotorg.core.middleware
 
 Module Contents
 ---------------

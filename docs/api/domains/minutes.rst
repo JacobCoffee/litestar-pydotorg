@@ -3,7 +3,6 @@ Minutes
 
 PSF board meeting minutes.
 
-.. module:: pydotorg.domains.minutes
 
 Module Contents
 ---------------

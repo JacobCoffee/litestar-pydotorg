@@ -3,7 +3,6 @@ SQLAdmin
 
 SQLAdmin integration for database administration.
 
-.. module:: pydotorg.domains.sqladmin
 
 Module Contents
 ---------------

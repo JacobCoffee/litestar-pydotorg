@@ -3,7 +3,6 @@ iCalendar
 
 iCalendar (ICS) feed generation for events.
 
-.. module:: pydotorg.core.ical
 
 Module Contents
 ---------------

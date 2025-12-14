@@ -3,8 +3,6 @@ Nominations
 
 PSF board nominations and elections.
 
-.. module:: pydotorg.domains.nominations
-
 Module Contents
 ---------------
 
@@ -12,6 +10,7 @@ Module Contents
    :members:
    :undoc-members:
    :show-inheritance:
+   :no-index:
 
 Models
 ------

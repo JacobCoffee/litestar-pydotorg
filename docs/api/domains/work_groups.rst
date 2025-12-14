@@ -3,7 +3,6 @@ Work Groups
 
 PSF work groups and special interest groups.
 
-.. module:: pydotorg.domains.work_groups
 
 Module Contents
 ---------------

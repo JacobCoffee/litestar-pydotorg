@@ -3,7 +3,6 @@ RSS/Atom Feeds
 
 RSS and Atom feed generation.
 
-.. module:: pydotorg.core.feeds
 
 Module Contents
 ---------------

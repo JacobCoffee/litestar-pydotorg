@@ -3,7 +3,6 @@ Code Samples
 
 Python code samples and examples displayed on the homepage.
 
-.. module:: pydotorg.domains.codesamples
 
 Module Contents
 ---------------

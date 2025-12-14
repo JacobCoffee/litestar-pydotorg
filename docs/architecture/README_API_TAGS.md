@@ -1,3 +1,5 @@
+:orphan:
+
 # API Tags Documentation
 
 Complete documentation for the Python.org API OpenAPI tag structure optimization.
