@@ -2,12 +2,20 @@
 
 from __future__ import annotations
 
+import logging
 import os
 import sys
 import warnings
 from datetime import datetime
 
 from sqlalchemy.exc import SAWarning
+
+# Suppress DEBUG logging during Sphinx build to prevent myst-parser debug spam
+# This must be set BEFORE importing any application modules
+os.environ.setdefault("APP_ENV", "prod")
+logging.getLogger().setLevel(logging.WARNING)
+logging.getLogger("markdown_it").setLevel(logging.WARNING)
+logging.getLogger("myst_parser").setLevel(logging.WARNING)
 
 # Filter SQLAlchemy warnings during autodoc
 warnings.filterwarnings("ignore", category=SAWarning)
