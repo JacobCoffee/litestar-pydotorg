@@ -7,8 +7,6 @@ from typing import TYPE_CHECKING
 from unittest.mock import MagicMock
 from uuid import uuid4
 
-import pytest
-
 from pydotorg.core.feeds import AtomFeedService, RSSFeedService
 
 if TYPE_CHECKING:

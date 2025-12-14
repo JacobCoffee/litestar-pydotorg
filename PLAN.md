@@ -54,7 +54,7 @@
 
 ### API Enhancements
 - [ ] **API versioning** - paths use /api/v1 but no version negotiation
-- [ ] **API keys** - JWT auth only, no API key support
+- [x] **API keys** - ✅ Full API key authentication: model, service, middleware, guards, endpoints, 21 unit tests
 
 ### Infrastructure
 - [x] **Fastly CDN** - ✅ Surrogate-Key middleware added, cache purging ready (needs Fastly API key config)
