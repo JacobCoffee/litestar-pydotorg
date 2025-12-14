@@ -253,6 +253,8 @@ def get_task_functions() -> list[Callable[..., Any]]:
     )
     from pydotorg.tasks.email import (  # noqa: PLC0415
         send_bulk_email,
+        send_event_approved_email,
+        send_event_created_email,
         send_event_reminder_email,
         send_job_approved_email,
         send_job_rejected_email,
@@ -314,6 +316,8 @@ def get_task_functions() -> list[Callable[..., Any]]:
         refresh_stale_feeds,
         remove_job_from_index,
         send_bulk_email,
+        send_event_approved_email,
+        send_event_created_email,
         send_event_reminder_email,
         send_job_approved_email,
         send_job_rejected_email,

@@ -481,6 +481,207 @@ Python Software Foundation
         }
 
 
+async def send_event_created_email(
+    ctx: Context,
+    *,
+    to_email: str,
+    event_title: str,
+    calendar_name: str,
+    event_id: str,
+    admin_url: str,
+) -> dict[str, Any]:
+    """Send event submission notification email to administrators.
+
+    Args:
+        ctx: SAQ job context
+        to_email: Admin email address
+        event_title: Title of submitted event
+        calendar_name: Calendar name
+        event_id: Event ID for reference
+        admin_url: URL to admin event review page
+
+    Returns:
+        Dict with success status and metadata
+    """
+    logger.info(
+        "Sending event created email",
+        extra={"to_email": to_email, "event_title": event_title, "calendar_name": calendar_name},
+    )
+
+    try:
+        email_service = EmailService()
+        subject = f"New Event Submission Requires Review - {calendar_name}"
+
+        html_content = f"""
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Event Submission - Python.org</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+    <div style="background-color: #f8f9fa; border-radius: 8px; padding: 30px; margin: 20px 0;">
+        <h1 style="color: #306998; margin-top: 0;">New Event Submitted</h1>
+        <p>A new event has been submitted and requires review:</p>
+        <div style="background-color: #e7f3ff; border-left: 4px solid #306998; padding: 15px; margin: 20px 0;">
+            <h2 style="margin: 0 0 10px 0; color: #306998;">{event_title}</h2>
+            <p style="margin: 0;"><strong>Calendar:</strong> {calendar_name}</p>
+            <p style="margin: 0; font-size: 12px; color: #666;">Event ID: {event_id}</p>
+        </div>
+        <div style="text-align: center; margin: 30px 0;">
+            <a href="{admin_url}"
+               style="background-color: #306998; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold;">
+                Review Event
+            </a>
+        </div>
+        <p style="color: #666; font-size: 14px;">
+            Please review this event and either approve or reject it.
+        </p>
+    </div>
+    <div style="text-align: center; color: #666; font-size: 12px; margin-top: 20px;">
+        <p>&copy; Python Software Foundation</p>
+    </div>
+</body>
+</html>
+"""
+
+        text_content = f"""
+New Event Submitted
+
+A new event has been submitted and requires review:
+
+Title: {event_title}
+Calendar: {calendar_name}
+Event ID: {event_id}
+
+Review the event: {admin_url}
+
+Please review this event and either approve or reject it.
+
+---
+Python Software Foundation
+"""
+
+        msg = email_service._create_message(to_email, subject, text_content, html_content)
+        email_service._send_email(msg)
+
+        logger.info("Event created email sent successfully", extra={"to_email": to_email, "event_title": event_title})
+        return {
+            "success": True,
+            "to_email": to_email,
+            "email_type": "event_created",
+            "event_title": event_title,
+        }
+
+    except Exception as e:
+        logger.exception("Failed to send event created email", extra={"to_email": to_email, "error": str(e)})
+        return {
+            "success": False,
+            "to_email": to_email,
+            "email_type": "event_created",
+            "error": str(e),
+        }
+
+
+async def send_event_approved_email(
+    ctx: Context,
+    *,
+    to_email: str,
+    event_title: str,
+    calendar_name: str,
+    event_url: str,
+) -> dict[str, Any]:
+    """Send event approval notification email.
+
+    Args:
+        ctx: SAQ job context
+        to_email: Recipient email address
+        event_title: Title of approved event
+        calendar_name: Calendar name
+        event_url: URL to view the event
+
+    Returns:
+        Dict with success status and metadata
+    """
+    logger.info(
+        "Sending event approved email",
+        extra={"to_email": to_email, "event_title": event_title, "calendar_name": calendar_name},
+    )
+
+    try:
+        email_service = EmailService()
+        subject = f"Your Event Has Been Approved - {event_title}"
+
+        html_content = f"""
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Approved - Python.org</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+    <div style="background-color: #f8f9fa; border-radius: 8px; padding: 30px; margin: 20px 0;">
+        <h1 style="color: #306998; margin-top: 0;">Event Approved!</h1>
+        <p>Congratulations!</p>
+        <p>Your event <strong>"{event_title}"</strong> in the <strong>{calendar_name}</strong> calendar has been approved and is now published on Python.org Events.</p>
+        <div style="text-align: center; margin: 30px 0;">
+            <a href="{event_url}"
+               style="background-color: #306998; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold;">
+                View Event
+            </a>
+        </div>
+        <p>Your event will be visible to the Python community worldwide.</p>
+        <p style="color: #666; font-size: 14px; margin-top: 30px;">
+            Thank you for contributing to the Python community!
+        </p>
+    </div>
+    <div style="text-align: center; color: #666; font-size: 12px; margin-top: 20px;">
+        <p>&copy; Python Software Foundation</p>
+    </div>
+</body>
+</html>
+"""
+
+        text_content = f"""
+Event Approved!
+
+Congratulations!
+
+Your event "{event_title}" in the {calendar_name} calendar has been approved and is now published on Python.org Events.
+
+View your event: {event_url}
+
+Your event will be visible to the Python community worldwide.
+
+Thank you for contributing to the Python community!
+
+---
+Python Software Foundation
+"""
+
+        msg = email_service._create_message(to_email, subject, text_content, html_content)
+        email_service._send_email(msg)
+
+        logger.info("Event approved email sent successfully", extra={"to_email": to_email, "event_title": event_title})
+        return {
+            "success": True,
+            "to_email": to_email,
+            "email_type": "event_approved",
+            "event_title": event_title,
+        }
+
+    except Exception as e:
+        logger.exception("Failed to send event approved email", extra={"to_email": to_email, "error": str(e)})
+        return {
+            "success": False,
+            "to_email": to_email,
+            "email_type": "event_approved",
+            "error": str(e),
+        }
+
+
 async def send_bulk_email(
     ctx: Context,
     *,
