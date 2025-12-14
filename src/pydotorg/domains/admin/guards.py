@@ -58,10 +58,10 @@ def require_permission(permission: AdminPermission) -> Callable[[ASGIConnection,
     Returns:
         A guard function that checks for the specified permission
 
-    Example:
+    Example::
+
         @get("/admin/users", guards=[require_permission(AdminPermission.MANAGE_USERS)])
-        async def manage_users(self) -> Template:
-            ...
+        async def manage_users(self) -> Template: ...
     """
 
     def guard(connection: ASGIConnection, _: BaseRouteHandler) -> None:

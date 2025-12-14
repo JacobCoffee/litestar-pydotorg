@@ -33,5 +33,5 @@ Views
 
 .. automodule:: pydotorg.domains.sqladmin.views
    :members:
-   :undoc-members:
    :show-inheritance:
+   :no-inherited-members:

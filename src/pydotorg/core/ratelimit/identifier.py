@@ -14,32 +14,34 @@ async def get_rate_limit_identifier(request: Request) -> str:
     """Generate a rate limit identifier based on user authentication status.
 
     Returns different identifier prefixes based on user role:
-    - `admin:{user_id}` for staff or superuser accounts
-    - `user:{user_id}` for authenticated regular users
-    - `anon:{ip_address}` for anonymous/unauthenticated users
+
+    - ``admin:{user_id}`` for staff or superuser accounts
+    - ``user:{user_id}`` for authenticated regular users
+    - ``anon:{ip_address}`` for anonymous/unauthenticated users
 
     The identifier is used to track rate limits per user/IP, allowing
     different rate limit configurations for different user types.
 
     Args:
         request: The incoming Litestar request object. User is populated by
-                UserPopulationMiddleware if authenticated.
+            UserPopulationMiddleware if authenticated.
 
     Returns:
-        String identifier in format `prefix:value` for rate limit tracking.
+        String identifier in format ``prefix:value`` for rate limit tracking.
 
-    Example:
-        >>> # Authenticated staff user
-        >>> identifier = await get_rate_limit_identifier(request)
-        >>> # Returns: "admin:550e8400-e29b-41d4-a716-446655440000"
+    Example::
 
-        >>> # Regular authenticated user
-        >>> identifier = await get_rate_limit_identifier(request)
-        >>> # Returns: "user:123e4567-e89b-12d3-a456-426614174000"
+        # Authenticated staff user
+        identifier = await get_rate_limit_identifier(request)
+        # Returns: "admin:550e8400-e29b-41d4-a716-446655440000"
 
-        >>> # Anonymous user from IP 192.168.1.1
-        >>> identifier = await get_rate_limit_identifier(request)
-        >>> # Returns: "anon:192.168.1.1"
+        # Regular authenticated user
+        identifier = await get_rate_limit_identifier(request)
+        # Returns: "user:123e4567-e89b-12d3-a456-426614174000"
+
+        # Anonymous user from IP 192.168.1.1
+        identifier = await get_rate_limit_identifier(request)
+        # Returns: "anon:192.168.1.1"
     """
     user: User | None = request.scope.get("user")
 

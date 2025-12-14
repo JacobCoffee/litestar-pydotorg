@@ -119,17 +119,18 @@ class ReleaseService(SQLAlchemyAsyncRepositoryService[Release]):
     async def get_releases_grouped_by_minor_version(self, limit: int = 500) -> dict[str, dict[str, list[Release]]]:
         """Get releases grouped by major and then minor version.
 
-        Returns a nested dict structure:
-        {
-            "3": {
-                "3.14": [releases...],
-                "3.13": [releases...],
-                ...
-            },
-            "2": {
-                "2.7": [releases...],
+        Returns a nested dict structure::
+
+            {
+                "3": {
+                    "3.14": [releases...],
+                    "3.13": [releases...],
+                    ...
+                },
+                "2": {
+                    "2.7": [releases...],
+                }
             }
-        }
 
         Args:
             limit: Maximum number of releases to fetch.

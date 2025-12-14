@@ -70,6 +70,7 @@ autodoc_typehints_format = "short"
 # Only mock external libraries that aren't installed or cause issues
 autodoc_mock_imports = [
     "granian",
+    "meilisearch_python_sdk",
 ]
 
 napoleon_google_docstring = True
@@ -109,3 +110,49 @@ intersphinx_mapping = {
 nitpicky = False
 add_module_names = False
 todo_include_todos = True
+
+# Suppress warnings for inherited docstrings from external libraries with RST issues
+suppress_warnings = [
+    "autodoc.import_object",
+    "sphinx_autodoc_typehints.forward_reference",
+    "sphinx_autodoc_typehints.guarded_import",
+]
+
+
+def autodoc_skip_member(app, what, name, obj, skip, options):
+    """Skip inherited attributes from SQLAdmin ModelView that have malformed docstrings."""
+    sqladmin_attrs = {
+        "column_list",
+        "column_searchable_list",
+        "column_sortable_list",
+        "column_default_sort",
+        "column_details_list",
+        "column_details_exclude_list",
+        "column_export_list",
+        "column_export_exclude_list",
+        "column_formatters",
+        "column_formatters_detail",
+        "column_formatters_export",
+        "column_type_formatters",
+        "column_labels",
+        "form_columns",
+        "form_excluded_columns",
+        "form_include_pk",
+        "form_widget_args",
+        "form_args",
+        "form_overrides",
+        "form_ajax_refs",
+        "form_rules",
+        "form_converter",
+        "form_base_class",
+        "form_create_rules",
+        "form_edit_rules",
+    }
+    if name in sqladmin_attrs:
+        return True
+    return skip
+
+
+def setup(app):
+    """Setup Sphinx app hooks."""
+    app.connect("autodoc-skip-member", autodoc_skip_member)
