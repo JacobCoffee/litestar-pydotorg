@@ -64,14 +64,13 @@ RUN apt-get update && \
 
 WORKDIR /app
 
-COPY --from=python-builder /app/.venv /app/.venv
+COPY --from=python-builder --chmod=755 /app/.venv /app/.venv
 COPY --from=python-builder /app/src /app/src
 COPY --from=frontend-builder /app/static /app/static
 COPY alembic.ini ./
 
-# Ensure venv binaries are executable and set ownership
-RUN chmod -R +x /app/.venv/bin && \
-    chown -R appuser:appuser /app
+# Set ownership for non-root user
+RUN chown -R appuser:appuser /app
 
 USER appuser
 
