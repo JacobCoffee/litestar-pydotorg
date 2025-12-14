@@ -227,3 +227,62 @@ class UserGroupRead(UserGroupBase):
     updated_at: datetime.datetime
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class APIKeyCreate(BaseModel):
+    """Schema for creating a new API key."""
+
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "name": "CI/CD Pipeline Key",
+                "description": "API key for automated deployments",
+                "expires_in_days": 365,
+            }
+        }
+    )
+
+    name: Annotated[str, Field(min_length=1, max_length=100)]
+    description: str = ""
+    expires_in_days: Annotated[int, Field(ge=1, le=3650)] | None = None
+
+
+class APIKeyRead(BaseModel):
+    """Schema for reading API key data (without the actual key)."""
+
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    user_id: UUID
+    name: str
+    key_prefix: str
+    description: str
+    is_active: bool
+    expires_at: datetime.datetime | None
+    last_used_at: datetime.datetime | None
+    created_at: datetime.datetime
+    updated_at: datetime.datetime
+
+
+class APIKeyCreated(APIKeyRead):
+    """Schema returned when creating a new API key (includes the raw key)."""
+
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "id": "550e8400-e29b-41d4-a716-446655440000",
+                "user_id": "550e8400-e29b-41d4-a716-446655440001",
+                "name": "CI/CD Pipeline Key",
+                "key": "pyorg_abc123xyz789...",
+                "key_prefix": "pyorg_abc123",
+                "description": "API key for automated deployments",
+                "is_active": True,
+                "expires_at": "2026-12-13T18:00:00Z",
+                "last_used_at": None,
+                "created_at": "2025-12-13T18:00:00Z",
+                "updated_at": "2025-12-13T18:00:00Z",
+            }
+        }
+    )
+
+    key: str
