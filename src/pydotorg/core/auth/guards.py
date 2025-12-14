@@ -14,6 +14,8 @@ if TYPE_CHECKING:
 
     from pydotorg.domains.users.models import User
 
+API_KEY_AUTH = "api_key"
+
 
 def require_authenticated(connection: ASGIConnection, _: BaseRouteHandler) -> None:
     if not connection.user:
@@ -50,3 +52,22 @@ def require_higher_membership(connection: ASGIConnection, _: BaseRouteHandler) -
 
     if user.membership and user.membership.membership_type == MembershipType.BASIC:
         raise PermissionDeniedException("Higher level PSF membership required")
+
+
+def require_api_key(connection: ASGIConnection, _: BaseRouteHandler) -> None:
+    """Require API key authentication (not session/JWT)."""
+    require_authenticated(connection, _)
+    if connection.auth != API_KEY_AUTH:
+        raise NotAuthorizedException("API key authentication required")
+
+
+def require_api_key_or_staff(connection: ASGIConnection, _: BaseRouteHandler) -> None:
+    """Require API key authentication OR staff user with any auth method."""
+    if not connection.user:
+        raise NotAuthorizedException("Authentication required")
+
+    user: User = connection.user
+    if connection.auth == API_KEY_AUTH or user.is_staff:
+        return
+
+    raise PermissionDeniedException("API key or staff privileges required")
