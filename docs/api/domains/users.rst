@@ -1,94 +1,35 @@
-Users
+users
 =====
 
-User accounts, authentication, and membership management.
-
-.. module:: pydotorg.domains.users
-
-Module Contents
----------------
-
 .. automodule:: pydotorg.domains.users
-   :members:
-   :undoc-members:
-   :show-inheritance:
+    :members:
 
-Models
+models
 ------
 
 .. automodule:: pydotorg.domains.users.models
-   :members:
-   :undoc-members:
-   :show-inheritance:
+    :members:
 
-Schemas
+schemas
 -------
 
 .. automodule:: pydotorg.domains.users.schemas
-   :members:
-   :undoc-members:
-   :show-inheritance:
+    :members:
 
-Repositories
-------------
-
-.. automodule:: pydotorg.domains.users.repositories
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Services
+services
 --------
 
 .. automodule:: pydotorg.domains.users.services
-   :members:
-   :undoc-members:
-   :show-inheritance:
+    :members:
 
-Controllers
+controllers
 -----------
 
 .. automodule:: pydotorg.domains.users.controllers
-   :members:
-   :undoc-members:
-   :show-inheritance:
+    :members:
 
-Auth Controller
----------------
-
-.. automodule:: pydotorg.domains.users.auth_controller
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Dependencies
+repositories
 ------------
 
-.. automodule:: pydotorg.domains.users.dependencies
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-API Keys
---------
-
-.. automodule:: pydotorg.domains.users.api_keys
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Security
---------
-
-.. automodule:: pydotorg.domains.users.security
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-URLs
-----
-
-.. automodule:: pydotorg.domains.users.urls
-   :members:
-   :undoc-members:
-   :show-inheritance:
+.. automodule:: pydotorg.domains.users.repositories
+    :members:

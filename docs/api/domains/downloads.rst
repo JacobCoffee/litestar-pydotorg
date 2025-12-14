@@ -1,70 +1,35 @@
-Downloads
+downloads
 =========
 
-Python releases, downloads, and release files management.
-
-.. module:: pydotorg.domains.downloads
-
-Module Contents
----------------
-
 .. automodule:: pydotorg.domains.downloads
-   :members:
-   :undoc-members:
-   :show-inheritance:
+    :members:
 
-Models
+models
 ------
 
 .. automodule:: pydotorg.domains.downloads.models
-   :members:
-   :undoc-members:
-   :show-inheritance:
+    :members:
 
-Schemas
+schemas
 -------
 
 .. automodule:: pydotorg.domains.downloads.schemas
-   :members:
-   :undoc-members:
-   :show-inheritance:
+    :members:
 
-Repositories
-------------
-
-.. automodule:: pydotorg.domains.downloads.repositories
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Services
+services
 --------
 
 .. automodule:: pydotorg.domains.downloads.services
-   :members:
-   :undoc-members:
-   :show-inheritance:
+    :members:
 
-Controllers
+controllers
 -----------
 
 .. automodule:: pydotorg.domains.downloads.controllers
-   :members:
-   :undoc-members:
-   :show-inheritance:
+    :members:
 
-Dependencies
+repositories
 ------------
 
-.. automodule:: pydotorg.domains.downloads.dependencies
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-URLs
-----
-
-.. automodule:: pydotorg.domains.downloads.urls
-   :members:
-   :undoc-members:
-   :show-inheritance:
+.. automodule:: pydotorg.domains.downloads.repositories
+    :members:

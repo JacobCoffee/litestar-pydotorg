@@ -1,62 +1,35 @@
-Blogs
+blogs
 =====
 
-Blog entries, feeds, and aggregation.
-
-.. module:: pydotorg.domains.blogs
-
-Module Contents
----------------
-
 .. automodule:: pydotorg.domains.blogs
-   :members:
-   :undoc-members:
-   :show-inheritance:
+    :members:
 
-Models
+models
 ------
 
 .. automodule:: pydotorg.domains.blogs.models
-   :members:
-   :undoc-members:
-   :show-inheritance:
+    :members:
 
-Schemas
+schemas
 -------
 
 .. automodule:: pydotorg.domains.blogs.schemas
-   :members:
-   :undoc-members:
-   :show-inheritance:
+    :members:
 
-Repositories
-------------
-
-.. automodule:: pydotorg.domains.blogs.repositories
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Services
+services
 --------
 
 .. automodule:: pydotorg.domains.blogs.services
-   :members:
-   :undoc-members:
-   :show-inheritance:
+    :members:
 
-Controllers
+controllers
 -----------
 
 .. automodule:: pydotorg.domains.blogs.controllers
-   :members:
-   :undoc-members:
-   :show-inheritance:
+    :members:
 
-Dependencies
+repositories
 ------------
 
-.. automodule:: pydotorg.domains.blogs.dependencies
-   :members:
-   :undoc-members:
-   :show-inheritance:
+.. automodule:: pydotorg.domains.blogs.repositories
+    :members:

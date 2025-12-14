@@ -1,54 +1,35 @@
-Sponsors
+sponsors
 ========
 
-PSF sponsors and sponsorship management.
-
-.. module:: pydotorg.domains.sponsors
-
-Module Contents
----------------
-
 .. automodule:: pydotorg.domains.sponsors
-   :members:
-   :undoc-members:
-   :show-inheritance:
+    :members:
 
-Models
+models
 ------
 
 .. automodule:: pydotorg.domains.sponsors.models
-   :members:
-   :undoc-members:
-   :show-inheritance:
+    :members:
 
-Schemas
+schemas
 -------
 
 .. automodule:: pydotorg.domains.sponsors.schemas
-   :members:
-   :undoc-members:
-   :show-inheritance:
+    :members:
 
-Repositories
-------------
-
-.. automodule:: pydotorg.domains.sponsors.repositories
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Services
+services
 --------
 
 .. automodule:: pydotorg.domains.sponsors.services
-   :members:
-   :undoc-members:
-   :show-inheritance:
+    :members:
 
-Controllers
+controllers
 -----------
 
 .. automodule:: pydotorg.domains.sponsors.controllers
-   :members:
-   :undoc-members:
-   :show-inheritance:
+    :members:
+
+repositories
+------------
+
+.. automodule:: pydotorg.domains.sponsors.repositories
+    :members:

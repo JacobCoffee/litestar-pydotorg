@@ -1,70 +1,35 @@
-Jobs
+jobs
 ====
 
-Python job board listings.
-
-.. module:: pydotorg.domains.jobs
-
-Module Contents
----------------
-
 .. automodule:: pydotorg.domains.jobs
-   :members:
-   :undoc-members:
-   :show-inheritance:
+    :members:
 
-Models
+models
 ------
 
 .. automodule:: pydotorg.domains.jobs.models
-   :members:
-   :undoc-members:
-   :show-inheritance:
+    :members:
 
-Schemas
+schemas
 -------
 
 .. automodule:: pydotorg.domains.jobs.schemas
-   :members:
-   :undoc-members:
-   :show-inheritance:
+    :members:
 
-Repositories
-------------
-
-.. automodule:: pydotorg.domains.jobs.repositories
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Services
+services
 --------
 
 .. automodule:: pydotorg.domains.jobs.services
-   :members:
-   :undoc-members:
-   :show-inheritance:
+    :members:
 
-Controllers
+controllers
 -----------
 
 .. automodule:: pydotorg.domains.jobs.controllers
-   :members:
-   :undoc-members:
-   :show-inheritance:
+    :members:
 
-Dependencies
+repositories
 ------------
 
-.. automodule:: pydotorg.domains.jobs.dependencies
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-URLs
-----
-
-.. automodule:: pydotorg.domains.jobs.urls
-   :members:
-   :undoc-members:
-   :show-inheritance:
+.. automodule:: pydotorg.domains.jobs.repositories
+    :members:

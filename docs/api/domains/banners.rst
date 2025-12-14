@@ -1,62 +1,35 @@
-Banners
+banners
 =======
 
-Site-wide banner management for announcements and alerts.
-
-.. module:: pydotorg.domains.banners
-
-Module Contents
----------------
-
 .. automodule:: pydotorg.domains.banners
-   :members:
-   :undoc-members:
-   :show-inheritance:
+    :members:
 
-Models
+models
 ------
 
 .. automodule:: pydotorg.domains.banners.models
-   :members:
-   :undoc-members:
-   :show-inheritance:
+    :members:
 
-Schemas
+schemas
 -------
 
 .. automodule:: pydotorg.domains.banners.schemas
-   :members:
-   :undoc-members:
-   :show-inheritance:
+    :members:
 
-Repositories
-------------
-
-.. automodule:: pydotorg.domains.banners.repositories
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Services
+services
 --------
 
 .. automodule:: pydotorg.domains.banners.services
-   :members:
-   :undoc-members:
-   :show-inheritance:
+    :members:
 
-Controllers
+controllers
 -----------
 
 .. automodule:: pydotorg.domains.banners.controllers
-   :members:
-   :undoc-members:
-   :show-inheritance:
+    :members:
 
-Dependencies
+repositories
 ------------
 
-.. automodule:: pydotorg.domains.banners.dependencies
-   :members:
-   :undoc-members:
-   :show-inheritance:
+.. automodule:: pydotorg.domains.banners.repositories
+    :members:
