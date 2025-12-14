@@ -144,9 +144,82 @@
 
 | Enhancement | Priority | Description |
 |-------------|----------|-------------|
+| **litestar-workflows integration** | MEDIUM | Workflow engine for sponsor/job/event approvals (see below) |
 | **Job auto-submit on creation** | LOW | Add `submit_immediately` flag to `create_job()` |
-| **Investigate litestar-workflows** | MEDIUM | For job/event approval workflows |
 | **Calendar detail pagination UI/UX** | LOW | Enhance with page dropdown, "Go to page" input |
+
+### Sponsor Admin UI Gaps
+
+Backend services complete, admin UI not wired up:
+
+| Task | Priority | Description |
+|------|----------|-------------|
+| [ ] **Contract management UI** | HIGH | View/send for signature/execute/nullify contracts |
+| [ ] **Contract detail template** | HIGH | `admin/sponsors/contract_detail.html.jinja2` |
+| [ ] **Expiring sponsorships dashboard** | MEDIUM | List sponsorships expiring in 90 days |
+| [ ] **Renewal workflow UI** | MEDIUM | Create renewal from expiring sponsorship |
+| [ ] **Legal clauses CRUD** | LOW | Admin for managing legal clause templates |
+
+### litestar-workflows Integration
+
+**Library**: [JacobCoffee/litestar-workflows](https://github.com/JacobCoffee/litestar-workflows) v0.3.1
+**Install**: `pip install litestar-workflows[db,ui]`
+
+**Key Features**:
+- Async-first with native `async/await` support
+- Hybrid tasks: `BaseMachineStep` (automated) + `BaseHumanStep` (approval)
+- Litestar DI integration, guards, plugin system
+- SQLAlchemy persistence backend
+- MermaidJS visualization
+- SAQ execution backend option (we already use SAQ)
+
+#### Workflow Mapping
+
+| Domain | Current Implementation | litestar-workflows Pattern |
+|--------|------------------------|---------------------------|
+| **Sponsor Contract** | `ContractStatus` enum + `ContractService` methods | `WorkflowDefinition` with DRAFT→send_for_signature (human)→AWAITING_SIGNATURE→execute (human)→EXECUTED |
+| **Sponsorship** | `SponsorshipStatus` enum + service methods | `WorkflowDefinition` with APPLIED→review (human)→APPROVED/REJECTED→finalize (human)→FINALIZED |
+| **Jobs** | `JobStatus` enum + `JobService` methods | `WorkflowDefinition` with DRAFT→submit (machine)→SUBMITTED→approve (human)→APPROVED→publish (machine)→PUBLISHED |
+| **Events** | Basic CRUD, no approval | Add `WorkflowDefinition` for community submissions with moderator approval |
+
+#### Integration Tasks
+
+- [x] Research litestar-workflows API and patterns ✅
+- [x] Evaluate fit for existing domain workflows ✅ Excellent fit - matches our existing state machine patterns
+- [ ] Add `litestar-workflows[db]` to dependencies
+- [ ] Create `src/pydotorg/core/workflows/` module
+- [ ] Implement `SponsorContractWorkflow` first (most complex, best test case)
+- [ ] Add workflow UI templates for human tasks
+- [ ] Wire email notifications to workflow transitions
+- [ ] Migrate jobs/events to workflow engine
+
+#### Example: Sponsor Contract Workflow
+
+```python
+from litestar_workflows import WorkflowDefinition, Edge, BaseMachineStep, BaseHumanStep
+
+class CreateContract(BaseMachineStep):
+    name = "create"
+    async def execute(self, context): ...
+
+class SendForSignature(BaseHumanStep):
+    name = "send_for_signature"
+    title = "Send Contract for Signature"
+    form_schema = {"properties": {"document_pdf": {"type": "string"}}}
+
+class ExecuteContract(BaseHumanStep):
+    name = "execute"
+    title = "Mark Contract as Executed"
+    form_schema = {"properties": {"signed_document": {"type": "string"}}}
+
+contract_workflow = WorkflowDefinition(
+    name="sponsor_contract",
+    steps={"create": CreateContract(), "send": SendForSignature(), "execute": ExecuteContract()},
+    edges=[Edge("create", "send"), Edge("send", "execute")],
+    initial_step="create",
+    terminal_steps={"execute"},
+)
+```
 
 ---
 
