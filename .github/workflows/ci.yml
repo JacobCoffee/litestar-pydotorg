@@ -141,10 +141,12 @@ jobs:
 
   # ==================================================================================== #
   # INTEGRATION TESTS (with PostgreSQL and Redis)
+  # Only run on PRs - main deployments use unit tests for speed
   # ==================================================================================== #
   test-integration:
     name: Integration Tests
     needs: [validate]
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -200,10 +202,12 @@ jobs:
 
   # ==================================================================================== #
   # E2E TESTS (Playwright)
+  # Only run on PRs - main deployments use unit tests for speed
   # ==================================================================================== #
   test-e2e:
     name: E2E Tests
     needs: [test-unit, test-integration]
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -262,10 +266,12 @@ jobs:
 
   # ==================================================================================== #
   # COVERAGE (runs after tests pass)
+  # Only run on PRs - main deployments use unit tests for speed
   # ==================================================================================== #
   coverage:
     name: Test Coverage
     needs: [test-unit, test-integration]
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -353,9 +359,18 @@ jobs:
           E2E_RESULT: ${{ needs.test-e2e.result }}
           COVERAGE_RESULT: ${{ needs.coverage.result }}
         run: |
-          for result in "${SECURITY_RESULT}" "${VALIDATE_RESULT}" "${FRONTEND_RESULT}" "${UNIT_RESULT}" "${INTEGRATION_RESULT}" "${E2E_RESULT}" "${COVERAGE_RESULT}"; do
+          # Required jobs must succeed
+          for result in "${SECURITY_RESULT}" "${VALIDATE_RESULT}" "${FRONTEND_RESULT}" "${UNIT_RESULT}"; do
             if [[ "${result}" != "success" ]]; then
-              echo "CI failed! Result: ${result}"
+              echo "Required job failed! Result: ${result}"
+              exit 1
+            fi
+          done
+
+          # PR-only jobs can be skipped on main pushes
+          for result in "${INTEGRATION_RESULT}" "${E2E_RESULT}" "${COVERAGE_RESULT}"; do
+            if [[ "${result}" != "success" && "${result}" != "skipped" ]]; then
+              echo "CI job failed! Result: ${result}"
               exit 1
             fi
           done
