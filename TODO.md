@@ -1,0 +1,6 @@
+- move from Pydantic to msgspec
+  - basesettings -> structs (?)
+- should be using AA svcs..
+  - not really using aa at all?
+- wire in meili for site wide user search
+- finalize sponsor intake workflow
