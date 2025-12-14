@@ -37,13 +37,13 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
 COPY pyproject.toml uv.lock README.md ./
 
-RUN --mount=type=cache,id=uv-cache,target=/root/.cache/uv \
-    uv sync --frozen --no-dev --no-install-project
+# Sync dependencies only (cached until uv.lock/pyproject.toml change)
+RUN uv sync --frozen --no-dev --no-install-project
 
 COPY src/ ./src/
 
-RUN --mount=type=cache,id=uv-cache,target=/root/.cache/uv \
-    uv sync --frozen --no-dev
+# Install application
+RUN uv sync --frozen --no-dev
 
 
 # Stage 3: Runtime - Minimal production image
