@@ -53,12 +53,12 @@
 - [x] **Annual sponsorship renewal** - Task 3.8 ✅ `approve_with_renewal()`, `get_previous_sponsorship()`, `list_expiring_soon()`, `create_renewal()` service methods, repository support
 
 ### API Enhancements
-- [ ] **API versioning** - paths use /api/v1 but no version negotiation
+- [x] **API versioning** - ✅ Version negotiation middleware (Accept header, URL path, query param), deprecation headers, 29 unit tests
 - [x] **API keys** - ✅ Full API key authentication: model, service, middleware, guards, endpoints, 21 unit tests
 
 ### Infrastructure
 - [x] **Fastly CDN** - ✅ Surrogate-Key middleware added, cache purging ready (needs Fastly API key config)
-- [ ] **Notification emails** - job/event notifications not wired
+- [x] **Notification emails** - ✅ Job/event notifications wired to SAQ email tasks
 
 ### Documentation (Phase 9)
 - [ ] Generate SDK documentation
