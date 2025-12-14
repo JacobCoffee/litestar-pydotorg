@@ -6,8 +6,6 @@ from typing import TYPE_CHECKING
 
 from litestar.exceptions import NotAuthorizedException, PermissionDeniedException
 
-from pydotorg.domains.users.models import MembershipType
-
 if TYPE_CHECKING:
     from litestar.connection import ASGIConnection
     from litestar.handlers.base import BaseRouteHandler
@@ -50,7 +48,7 @@ def require_higher_membership(connection: ASGIConnection, _: BaseRouteHandler) -
     require_membership(connection, _)
     user: User = connection.user
 
-    if user.membership and user.membership.membership_type == MembershipType.BASIC:
+    if user.membership and user.membership.membership_type == "basic":
         raise PermissionDeniedException("Higher level PSF membership required")
 
 
