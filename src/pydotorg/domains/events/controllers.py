@@ -1069,7 +1069,7 @@ class EventsPageController(Controller):
         view: Annotated[str | None, Parameter(description="View type (month/week/list)")] = None,
     ) -> Template:
         """Render a specific calendar's events with calendar grid."""
-        import calendar as cal  # noqa: PLC0415
+        import calendar as cal
 
         calendar_obj = await calendar_service.get_by_slug(slug)
         if not calendar_obj:

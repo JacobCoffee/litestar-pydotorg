@@ -239,7 +239,7 @@ class DownloadStatsService:
         Returns:
             Number of records flushed
         """
-        from pydotorg.domains.downloads.models import DownloadStatistic  # noqa: PLC0415
+        from pydotorg.domains.downloads.models import DownloadStatistic
 
         try:
             pattern = self._key("file", "*", "daily", "*")
@@ -255,7 +255,7 @@ class DownloadStatsService:
                     count = await self.redis.get(key)
                     if count and int(count) > 0:
                         try:
-                            from datetime import date as date_type  # noqa: PLC0415
+                            from datetime import date as date_type
 
                             day = date_type.fromisoformat(day_str)
                             stat = DownloadStatistic(
@@ -295,7 +295,7 @@ class DownloadStatsService:
                 parts = key_str.split(":")
                 if len(parts) >= _MIN_KEY_PARTS_DAILY:
                     try:
-                        from datetime import date as date_type  # noqa: PLC0415
+                        from datetime import date as date_type
 
                         day_str = parts[-1]
                         day = date_type.fromisoformat(day_str)
@@ -327,7 +327,7 @@ async def get_download_stats_service(ctx: dict[str, Any]) -> DownloadStatsServic
         return None
 
     if "download_stats_service" not in ctx:
-        from pydotorg.config import settings  # noqa: PLC0415
+        from pydotorg.config import settings
 
         namespace = getattr(settings, "redis_stats_namespace", "pydotorg")
         ctx["download_stats_service"] = DownloadStatsService(redis, namespace=namespace)

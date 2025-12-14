@@ -28,7 +28,7 @@ async def refresh_all_feeds(ctx: Mapping[str, Any]) -> dict[str, int]:
     Returns:
         Dict with success_count and error_count.
     """
-    from pydotorg.domains.blogs.services import FeedService  # noqa: PLC0415
+    from pydotorg.domains.blogs.services import FeedService
 
     session_maker = ctx["session_maker"]
 
@@ -77,7 +77,7 @@ async def refresh_stale_feeds(ctx: Mapping[str, Any], *, max_age_hours: int = 1)
     Returns:
         Dict with success_count, error_count, and cutoff_time.
     """
-    from pydotorg.domains.blogs.services import FeedService  # noqa: PLC0415
+    from pydotorg.domains.blogs.services import FeedService
 
     session_maker = ctx["session_maker"]
 
@@ -133,7 +133,7 @@ async def refresh_single_feed(ctx: Mapping[str, Any], *, feed_id: str) -> dict[s
     Returns:
         Dict with feed info and entry count.
     """
-    from pydotorg.domains.blogs.services import FeedService  # noqa: PLC0415
+    from pydotorg.domains.blogs.services import FeedService
 
     session_maker = ctx["session_maker"]
 

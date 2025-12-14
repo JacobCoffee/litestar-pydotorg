@@ -67,11 +67,13 @@ def extract_story_links(html: str) -> list[dict[str, str]]:
                 title = link.get_text(strip=True)
                 if title and len(title) > 3:
                     full_url = href if href.startswith("http") else f"{BASE_URL}{href}"
-                    stories.append({
-                        "title": title,
-                        "url": full_url,
-                        "category": category,
-                    })
+                    stories.append(
+                        {
+                            "title": title,
+                            "url": full_url,
+                            "category": category,
+                        }
+                    )
 
     if not stories:
         for li in soup.find_all("li"):
@@ -82,11 +84,13 @@ def extract_story_links(html: str) -> list[dict[str, str]]:
                     title = link.get_text(strip=True)
                     if title:
                         full_url = href if href.startswith("http") else f"{BASE_URL}{href}"
-                        stories.append({
-                            "title": title,
-                            "url": full_url,
-                            "category": "General",
-                        })
+                        stories.append(
+                            {
+                                "title": title,
+                                "url": full_url,
+                                "category": "General",
+                            }
+                        )
 
     return stories
 
@@ -159,9 +163,7 @@ def extract_story_content(html: str) -> dict[str, str | None]:
 async def get_or_create_category(session: AsyncSession, name: str) -> StoryCategory:
     """Get or create a story category."""
     slug = slugify(name)[:50]
-    result = await session.execute(
-        select(StoryCategory).where(StoryCategory.slug == slug)
-    )
+    result = await session.execute(select(StoryCategory).where(StoryCategory.slug == slug))
     category = result.scalar_one_or_none()
 
     if category is None:
@@ -300,7 +302,7 @@ async def import_stories(
     is_flag=True,
     help="Enable verbose logging",
 )
-def main(dry_run: bool, limit: int | None, verbose: bool) -> None:  # noqa: FBT001
+def main(dry_run: bool, limit: int | None, verbose: bool) -> None:
     """Import success stories from python.org."""
     if verbose:
         logging.getLogger().setLevel(logging.DEBUG)

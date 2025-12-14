@@ -24,7 +24,7 @@ def get_workflow_plugin() -> WorkflowPlugin:
         - Staff-only access to workflow API endpoints
     """
     # Import guard here to avoid circular import
-    from pydotorg.core.auth.guards import require_staff  # noqa: PLC0415
+    from pydotorg.core.auth.guards import require_staff
 
     engine = LocalExecutionEngine(registry=workflow_registry)
 

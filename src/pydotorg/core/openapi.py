@@ -46,7 +46,7 @@ def _require_admin_session(connection: ASGIConnection, _: BaseRouteHandler) -> N
 
     Checks for valid Litestar session with superuser privileges.
     """
-    from pydotorg.core.auth.session import SessionService  # noqa: PLC0415
+    from pydotorg.core.auth.session import SessionService
 
     session_service = SessionService()
 
@@ -69,7 +69,7 @@ def _generate_admin_schema(app: Any) -> dict[str, Any]:
     This creates a complete schema by iterating through all registered routes
     and including those marked with include_in_schema=False (admin routes).
     """
-    from litestar.openapi.spec import (  # noqa: PLC0415
+    from litestar.openapi.spec import (
         Components,
         Contact,
         ExternalDocumentation,

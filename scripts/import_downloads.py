@@ -23,17 +23,19 @@ import logging
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import click
 from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
+
+if TYPE_CHECKING:
+    from sqlalchemy.ext.asyncio import AsyncSession
 
 # Add src to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from pydotorg.core.database import get_async_session_factory, get_engine  # noqa: E402
-from pydotorg.domains.downloads.models import OS, PythonVersion, Release, ReleaseFile  # noqa: E402
+from pydotorg.core.database import get_async_session_factory, get_engine
+from pydotorg.domains.downloads.models import OS, PythonVersion, Release, ReleaseFile
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
@@ -75,6 +77,7 @@ def parse_datetime(dt_str: str | None) -> datetime | None:
 async def import_os_entries(
     session: AsyncSession,
     fixtures: list[dict[str, Any]],
+    *,
     dry_run: bool = False,
 ) -> dict[int, OS]:
     """Import OS entries and return mapping of old pk to new model."""
@@ -115,6 +118,7 @@ async def import_os_entries(
 async def import_releases(
     session: AsyncSession,
     fixtures: list[dict[str, Any]],
+    *,
     dry_run: bool = False,
 ) -> dict[int, Release]:
     """Import Release entries and return mapping of old pk to new model."""
@@ -172,6 +176,7 @@ async def import_release_files(
     fixtures: list[dict[str, Any]],
     os_map: dict[int, OS],
     release_map: dict[int, Release],
+    *,
     dry_run: bool = False,
 ) -> int:
     """Import ReleaseFile entries."""
@@ -242,7 +247,7 @@ async def import_release_files(
     return imported
 
 
-async def run_import(fixture_path: Path, dry_run: bool = False) -> None:
+async def run_import(fixture_path: Path, *, dry_run: bool = False) -> None:
     """Run the full import process."""
     logger.info(f"Loading fixtures from {fixture_path}")
 
@@ -262,9 +267,9 @@ async def run_import(fixture_path: Path, dry_run: bool = False) -> None:
     async with session_factory() as session:
         try:
             # Import in order: OS -> Release -> ReleaseFile
-            os_map = await import_os_entries(session, fixtures, dry_run)
-            release_map = await import_releases(session, fixtures, dry_run)
-            await import_release_files(session, fixtures, os_map, release_map, dry_run)
+            os_map = await import_os_entries(session, fixtures, dry_run=dry_run)
+            release_map = await import_releases(session, fixtures, dry_run=dry_run)
+            await import_release_files(session, fixtures, os_map, release_map, dry_run=dry_run)
 
             if not dry_run:
                 await session.commit()
@@ -295,7 +300,7 @@ async def run_import(fixture_path: Path, dry_run: bool = False) -> None:
 )
 def main(fixture_path: Path, dry_run: bool) -> None:
     """Import Python downloads data from Django fixtures."""
-    asyncio.run(run_import(fixture_path, dry_run))
+    asyncio.run(run_import(fixture_path, dry_run=dry_run))
 
 
 if __name__ == "__main__":

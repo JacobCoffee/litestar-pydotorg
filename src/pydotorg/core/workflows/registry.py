@@ -21,7 +21,7 @@ def register_all_workflows() -> None:
         - job_posting: Job submission (draft → submitted → approved → published) [TODO]
         - event_submission: Community event moderation (submitted → approved/rejected) [TODO]
     """
-    from pydotorg.core.workflows.definitions.sponsors import (  # noqa: PLC0415
+    from pydotorg.core.workflows.definitions.sponsors import (
         SponsorContractWorkflow,
         SponsorshipApprovalWorkflow,
     )

@@ -44,7 +44,7 @@ def get_queue() -> Queue:
     Returns:
         Configured SAQ Queue instance
     """
-    from pydotorg.tasks.worker import queue  # noqa: PLC0415
+    from pydotorg.tasks.worker import queue
 
     return queue
 

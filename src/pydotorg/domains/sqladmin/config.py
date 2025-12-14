@@ -152,7 +152,7 @@ class SQLAdminConfig(InitPluginProtocol):
 
     def on_app_init(self, app_config: AppConfig) -> AppConfig:
         """Register the admin panel with Litestar."""
-        from litestar import asgi  # noqa: PLC0415
+        from litestar import asgi
 
         mount_path = self.base_url.rstrip("/")
 

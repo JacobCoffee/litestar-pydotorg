@@ -284,7 +284,7 @@ sqladmin_plugin = create_sqladmin_plugin(
 
 def _derive_session_secret(key: str) -> bytes:
     """Derive a 32-byte secret key for session encryption."""
-    import hashlib  # noqa: PLC0415
+    import hashlib
 
     return hashlib.sha256(key.encode()).digest()
 
@@ -360,9 +360,9 @@ vite_plugin = VitePlugin(
 
 def configure_template_engine(engine: JinjaTemplateEngine) -> None:  # noqa: PLR0915
     """Configure the Jinja2 template engine with global context."""
-    from datetime import UTC, datetime  # noqa: PLC0415
+    from datetime import UTC, datetime
 
-    import cmarkgfm  # noqa: PLC0415
+    import cmarkgfm
 
     ms_threshold = 1e12
     minute = 60
@@ -380,9 +380,9 @@ def configure_template_engine(engine: JinjaTemplateEngine) -> None:  # noqa: PLR
         try:
             if isinstance(value, str):
                 if "T" in value:
-                    return datetime.fromisoformat(value.replace("Z", "+00:00"))  # noqa: FURB162
+                    return datetime.fromisoformat(value.replace("Z", "+00:00"))
                 return None
-            if isinstance(value, (int, float)):
+            if isinstance(value, int | float):
                 if value == 0:
                     return None
                 ts = float(value)
@@ -463,7 +463,7 @@ def configure_template_engine(engine: JinjaTemplateEngine) -> None:  # noqa: PLR
 
     def pretty_json(value: dict | list | str | None) -> str:
         """Format a value as pretty-printed JSON."""
-        import json  # noqa: PLC0415
+        import json
 
         if value is None:
             return "null"
@@ -473,7 +473,7 @@ def configure_template_engine(engine: JinjaTemplateEngine) -> None:  # noqa: PLR
                 return json.dumps(parsed, indent=2)
             except (json.JSONDecodeError, TypeError):
                 return value
-        if isinstance(value, (dict, list)):
+        if isinstance(value, dict | list):
             return json.dumps(value, indent=2, default=str)
         return str(value)
 
@@ -545,7 +545,7 @@ def on_app_init(app_config: AppConfig) -> AppConfig:
 @asynccontextmanager
 async def lifespan(app: Litestar) -> AsyncGenerator[None]:
     """Application lifespan hook for startup and shutdown tasks."""
-    import sys  # noqa: PLC0415
+    import sys
 
     try:
         validate_production_settings()

@@ -52,12 +52,12 @@ def extract_company_name(title: str) -> str:
     """
     if " at " in title:
         parts = title.rsplit(" at ", 1)
-        if len(parts) == 2:  # noqa: PLR2004
+        if len(parts) == 2:
             return parts[1].strip()
 
     if ", " in title:
         parts = title.rsplit(", ", 1)
-        if len(parts) == 2 and len(parts[1]) > 2:  # noqa: PLR2004
+        if len(parts) == 2 and len(parts[1]) > 2:
             return parts[1].strip()
 
     return "Company"
@@ -87,7 +87,7 @@ async def get_admin_user(session: AsyncSession) -> User:
     return user
 
 
-async def import_jobs(  # noqa: PLR0912, PLR0915
+async def import_jobs(
     session: AsyncSession,
     admin_user: User,
     *,
@@ -206,7 +206,7 @@ async def import_jobs(  # noqa: PLR0912, PLR0915
     is_flag=True,
     help="Enable verbose logging",
 )
-def main(dry_run: bool, limit: int | None, verbose: bool) -> None:  # noqa: FBT001
+def main(dry_run: bool, limit: int | None, verbose: bool) -> None:
     """Import job postings from python.org RSS feed."""
     if verbose:
         logging.getLogger().setLevel(logging.DEBUG)

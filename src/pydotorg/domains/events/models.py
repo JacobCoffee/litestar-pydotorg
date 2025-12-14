@@ -148,7 +148,7 @@ class RecurringRule(Base):
         Returns:
             rrule: Configured dateutil rrule object
         """
-        from dateutil.rrule import rrule as make_rrule  # noqa: PLC0415
+        from dateutil.rrule import rrule as make_rrule
 
         return make_rrule(
             freq=self.frequency.value,

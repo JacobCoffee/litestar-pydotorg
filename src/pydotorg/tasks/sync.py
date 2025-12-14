@@ -134,7 +134,7 @@ def _parse_location(location_str: str | None) -> tuple[str, str | None, str | No
 
 def _parse_datetime(dt_value: Any) -> datetime | None:
     """Parse iCalendar datetime to Python datetime."""
-    from datetime import date  # noqa: PLC0415
+    from datetime import date
 
     if dt_value is None:
         return None
@@ -153,7 +153,7 @@ def _parse_datetime(dt_value: Any) -> datetime | None:
 
 def _is_all_day(dt_value: Any) -> bool:
     """Check if the datetime represents an all-day event."""
-    from datetime import date  # noqa: PLC0415
+    from datetime import date
 
     if dt_value is None:
         return False

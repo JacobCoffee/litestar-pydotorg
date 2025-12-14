@@ -567,7 +567,7 @@ async def invalidate_page_response_cache(
 
     try:
         if page_path:
-            import hashlib  # noqa: PLC0415
+            import hashlib
 
             normalized_path = f"/{page_path.strip('/')}" if page_path else "/"
             raw_key = f"{normalized_path}:"

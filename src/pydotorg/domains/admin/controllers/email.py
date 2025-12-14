@@ -156,7 +156,7 @@ class AdminEmailController(Controller):
         Returns:
             Template preview partial
         """
-        from jinja2 import BaseLoader, Environment  # noqa: PLC0415
+        from jinja2 import BaseLoader, Environment
 
         form_data = await request.form()
         subject = str(form_data.get("subject", ""))

@@ -325,8 +325,8 @@ def validate_production_settings() -> None:
 
 def log_startup_banner() -> None:
     """Print application startup information directly to stdout."""
-    import os  # noqa: PLC0415
-    import sys  # noqa: PLC0415
+    import os
+    import sys
 
     cfg = get_settings()
     warnings = get_config_warnings()

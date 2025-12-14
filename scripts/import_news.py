@@ -96,9 +96,7 @@ async def ensure_feeds_exist(session: AsyncSession) -> list[Feed]:
     feeds = []
 
     for feed_data in OFFICIAL_FEEDS:
-        result = await session.execute(
-            select(Feed).where(Feed.feed_url == feed_data["feed_url"])
-        )
+        result = await session.execute(select(Feed).where(Feed.feed_url == feed_data["feed_url"]))
         feed = result.scalar_one_or_none()
 
         if feed is None:
@@ -147,9 +145,7 @@ async def import_feed_entries(
         content = get_entry_content(entry)
         pub_date = parse_date(entry)
 
-        result = await session.execute(
-            select(BlogEntry).where(BlogEntry.guid == guid)
-        )
+        result = await session.execute(select(BlogEntry).where(BlogEntry.guid == guid))
         existing = result.scalar_one_or_none()
 
         if existing:
@@ -227,7 +223,7 @@ async def import_all_feeds(
     is_flag=True,
     help="Enable verbose logging",
 )
-def main(dry_run: bool, refresh_all: bool, verbose: bool) -> None:  # noqa: FBT001
+def main(dry_run: bool, refresh_all: bool, verbose: bool) -> None:
     """Import blog entries from Python.org RSS feeds."""
     if verbose:
         logging.getLogger().setLevel(logging.DEBUG)

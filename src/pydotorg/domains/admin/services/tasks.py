@@ -14,14 +14,14 @@ logger = logging.getLogger(__name__)
 
 def _get_queue() -> Queue:
     """Get the SAQ queue lazily to avoid circular imports."""
-    from pydotorg.tasks.worker import queue  # noqa: PLC0415
+    from pydotorg.tasks.worker import queue
 
     return queue
 
 
 def _get_task_functions() -> list[Any]:
     """Get task functions lazily to avoid circular imports."""
-    from pydotorg.tasks.worker import get_task_functions  # noqa: PLC0415
+    from pydotorg.tasks.worker import get_task_functions
 
     return get_task_functions()
 
@@ -276,10 +276,10 @@ class TaskAdminService:
             Dict with complete, failed, retried counts
         """
         try:
-            from redis.asyncio import Redis  # noqa: PLC0415
+            from redis.asyncio import Redis
 
-            from pydotorg.config import settings  # noqa: PLC0415
-            from pydotorg.tasks.stats import TaskStatsService  # noqa: PLC0415
+            from pydotorg.config import settings
+            from pydotorg.tasks.stats import TaskStatsService
 
             redis = Redis.from_url(settings.redis_url, decode_responses=True)
             try:
@@ -302,7 +302,7 @@ class TaskAdminService:
         Returns:
             Job data as dictionary
         """
-        from datetime import UTC, datetime  # noqa: PLC0415
+        from datetime import UTC, datetime
 
         ms_threshold = 1e12
 
@@ -311,7 +311,7 @@ class TaskAdminService:
             if ts is None or ts == 0:
                 return None
             try:
-                if isinstance(ts, (int, float)):
+                if isinstance(ts, int | float):
                     ts_float = float(ts)
                     if ts_float > ms_threshold:
                         ts_float = ts_float / 1000

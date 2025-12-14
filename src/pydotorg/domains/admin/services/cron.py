@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 def _get_cron_jobs() -> list[CronJob]:
     """Get cron jobs lazily to avoid circular imports."""
-    from pydotorg.tasks.worker import get_cron_jobs  # noqa: PLC0415
+    from pydotorg.tasks.worker import get_cron_jobs
 
     return get_cron_jobs()
 
@@ -202,7 +202,7 @@ class CronJobService:
         if not self._redis:
             return {"complete": 0, "failed": 0, "retried": 0, "success_rate": 0.0}
 
-        from pydotorg.tasks.stats import TaskStatsService  # noqa: PLC0415
+        from pydotorg.tasks.stats import TaskStatsService
 
         try:
             stats_service = TaskStatsService(self._redis, namespace="pydotorg")

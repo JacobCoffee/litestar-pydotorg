@@ -182,7 +182,7 @@ async def get_stats_service(ctx: dict[str, Any]) -> TaskStatsService | None:
         return None
 
     if "stats_service" not in ctx:
-        from pydotorg.config import settings  # noqa: PLC0415
+        from pydotorg.config import settings
 
         namespace = getattr(settings, "redis_stats_namespace", "pydotorg")
         ctx["stats_service"] = TaskStatsService(redis, namespace=namespace)
