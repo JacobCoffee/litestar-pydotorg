@@ -142,14 +142,19 @@ jobs:
   # ==================================================================================== #
   # INTEGRATION TESTS (with PostgreSQL and Redis)
   # Only run on PRs - main deployments use unit tests for speed
+  # Parallelized with pytest-split across 4 runners for faster CI
   # ==================================================================================== #
   test-integration:
-    name: Integration Tests
+    name: Integration Tests (${{ matrix.group }}/4)
     needs: [validate]
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        group: [1, 2, 3, 4]
     services:
       postgres:
         image: postgres:16-alpine
@@ -195,11 +200,17 @@ jobs:
       - name: Install dependencies
         run: uv sync --all-extras --group test
 
-      - name: Run integration tests
+      - name: Run integration tests (group ${{ matrix.group }})
         env:
           DATABASE_URL: postgresql+asyncpg://postgres:postgres@localhost:5432/pydotorg_test
           REDIS_URL: redis://localhost:6379
-        run: uv run pytest tests/integration -v --tb=short -p no:randomly --maxfail=5
+        run: |
+          uv run pytest tests/integration \
+            --splits 4 \
+            --group ${{ matrix.group }} \
+            -v --tb=short \
+            -p no:randomly \
+            --maxfail=5
 
   # ==================================================================================== #
   # E2E TESTS (Playwright)
