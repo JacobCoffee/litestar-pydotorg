@@ -9,7 +9,10 @@ from typing import TYPE_CHECKING
 import pytest
 from advanced_alchemy.config import EngineConfig
 from advanced_alchemy.extensions.litestar import SQLAlchemyPlugin
-from advanced_alchemy.extensions.litestar.plugins.init.config.asyncio import SQLAlchemyAsyncConfig
+from advanced_alchemy.extensions.litestar.plugins.init.config.asyncio import (
+    SQLAlchemyAsyncConfig,
+    autocommit_before_send_handler,
+)
 from litestar import Litestar
 from litestar.testing import AsyncTestClient, TestClient
 from pytest_databases.docker.postgres import PostgresService
@@ -137,12 +140,18 @@ async def async_engine(postgres_uri: str) -> AsyncIterator[AsyncEngine]:
 
 @pytest.fixture(scope="module")
 def _module_sqlalchemy_config(postgres_uri: str) -> SQLAlchemyAsyncConfig:
-    """Module-scoped SQLAlchemy config to prevent creating engines per test."""
+    """Module-scoped SQLAlchemy config to prevent creating engines per test.
+
+    Uses autocommit_before_send_handler to ensure transactions are committed
+    before closing sessions, which fixes the issue where data created in one
+    request isn't visible in subsequent requests.
+    """
     return SQLAlchemyAsyncConfig(
         connection_string=postgres_uri,
         metadata=AuditBase.metadata,
         create_all=False,
         engine_config=EngineConfig(poolclass=NullPool),
+        before_send_handler=autocommit_before_send_handler,
     )
 
 
