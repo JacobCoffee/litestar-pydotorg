@@ -81,7 +81,7 @@ class StoryCategoryController(Controller):
     ) -> StoryCategoryRead:
         """Update a story category."""
         update_data = data.model_dump(exclude_unset=True)
-        category = await story_category_service.update(category_id, update_data)
+        category = await story_category_service.update(update_data, item_id=category_id)
         return StoryCategoryRead.model_validate(category)
 
     @delete("/{category_id:uuid}")
@@ -184,7 +184,7 @@ class StoryController(Controller):
     ) -> StoryRead:
         """Update a story."""
         update_data = data.model_dump(exclude_unset=True)
-        story = await story_service.update(story_id, update_data)
+        story = await story_service.update(update_data, item_id=story_id)
         return StoryRead.model_validate(story)
 
     @delete("/{story_id:uuid}")

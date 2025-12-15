@@ -101,7 +101,7 @@ class MinutesController(Controller):
     ) -> MinutesRead:
         """Update minutes."""
         update_data = data.model_dump(exclude_unset=True)
-        minutes = await minutes_service.update(minutes_id, update_data)
+        minutes = await minutes_service.update(update_data, item_id=minutes_id)
         return MinutesRead.model_validate(minutes)
 
     @delete("/{minutes_id:uuid}")

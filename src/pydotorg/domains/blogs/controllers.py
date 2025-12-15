@@ -87,7 +87,7 @@ class FeedController(Controller):
     ) -> FeedRead:
         """Update a feed."""
         update_data = data.model_dump(exclude_unset=True)
-        feed = await feed_service.update(feed_id, update_data)
+        feed = await feed_service.update(update_data, item_id=feed_id)
         return FeedRead.model_validate(feed)
 
     @delete("/{feed_id:uuid}")
@@ -182,7 +182,7 @@ class BlogEntryController(Controller):
     ) -> BlogEntryRead:
         """Update a blog entry."""
         update_data = data.model_dump(exclude_unset=True)
-        entry = await blog_entry_service.update(entry_id, update_data)
+        entry = await blog_entry_service.update(update_data, item_id=entry_id)
         return BlogEntryRead.model_validate(entry)
 
     @delete("/{entry_id:uuid}")
@@ -252,7 +252,7 @@ class FeedAggregateController(Controller):
     ) -> FeedAggregateRead:
         """Update a feed aggregate."""
         update_data = data.model_dump(exclude_unset=True, exclude={"feed_ids"})
-        aggregate = await feed_aggregate_service.update(aggregate_id, update_data)
+        aggregate = await feed_aggregate_service.update(update_data, item_id=aggregate_id)
         return FeedAggregateRead.model_validate(aggregate)
 
     @delete("/{aggregate_id:uuid}")
@@ -310,7 +310,7 @@ class RelatedBlogController(Controller):
     ) -> RelatedBlogRead:
         """Update a related blog."""
         update_data = data.model_dump(exclude_unset=True)
-        blog = await related_blog_service.update(blog_id, update_data)
+        blog = await related_blog_service.update(update_data, item_id=blog_id)
         return RelatedBlogRead.model_validate(blog)
 
     @delete("/{blog_id:uuid}")

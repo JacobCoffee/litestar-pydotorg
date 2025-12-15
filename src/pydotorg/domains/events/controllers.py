@@ -173,7 +173,7 @@ class CalendarController(Controller):
             NotFoundException: If no calendar with the given ID exists.
         """
         update_data = data.model_dump(exclude_unset=True)
-        calendar = await calendar_service.update(calendar_id, update_data)
+        calendar = await calendar_service.update(update_data, item_id=calendar_id)
         return CalendarRead.model_validate(calendar)
 
     @delete("/{calendar_id:uuid}")
@@ -470,7 +470,7 @@ class EventLocationController(Controller):
             NotFoundException: If no location with the given ID exists.
         """
         update_data = data.model_dump(exclude_unset=True)
-        location = await event_location_service.update(location_id, update_data)
+        location = await event_location_service.update(update_data, item_id=location_id)
         return EventLocationRead.model_validate(location)
 
     @delete("/{location_id:uuid}")
@@ -735,7 +735,7 @@ class EventController(Controller):
             NotFoundException: If no event with the given ID exists.
         """
         update_data = data.model_dump(exclude_unset=True, exclude={"category_ids"})
-        event = await event_service.update(event_id, update_data)
+        event = await event_service.update(update_data, item_id=event_id)
 
         if data.category_ids is not None:
             await event_service.add_categories(event_id, data.category_ids)
@@ -921,7 +921,7 @@ class EventOccurrenceController(Controller):
             NotFoundException: If no occurrence with the given ID exists.
         """
         update_data = data.model_dump(exclude_unset=True)
-        occurrence = await event_occurrence_service.update(occurrence_id, update_data)
+        occurrence = await event_occurrence_service.update(update_data, item_id=occurrence_id)
         return EventOccurrenceRead.model_validate(occurrence)
 
     @delete("/{occurrence_id:uuid}")

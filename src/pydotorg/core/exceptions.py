@@ -7,6 +7,21 @@ import logging
 from typing import TYPE_CHECKING
 from urllib.parse import quote
 
+from advanced_alchemy.exceptions import (
+    DuplicateKeyError as AADuplicateKeyError,
+)
+from advanced_alchemy.exceptions import (
+    ForeignKeyError as AAForeignKeyError,
+)
+from advanced_alchemy.exceptions import (
+    IntegrityError as AAIntegrityError,
+)
+from advanced_alchemy.exceptions import (
+    NotFoundError as AANotFoundError,
+)
+from advanced_alchemy.exceptions import (
+    RepositoryError as AARepositoryError,
+)
 from litestar.exceptions import (
     HTTPException,
     InternalServerException,
@@ -275,6 +290,75 @@ def internal_server_error_handler(request: Request, exc: InternalServerException
     )
 
 
+HTTP_409_CONFLICT = 409
+
+
+def repository_exception_handler(request: Request, exc: AARepositoryError) -> Response | Template:
+    """Handle advanced-alchemy repository exceptions.
+
+    Converts advanced-alchemy exceptions to appropriate HTTP responses:
+    - NotFoundError -> 404 Not Found
+    - DuplicateKeyError, IntegrityError, ForeignKeyError -> 409 Conflict
+    - Other RepositoryError -> 500 Internal Server Error
+
+    Args:
+        request: The incoming request
+        exc: The RepositoryError that was raised
+
+    Returns:
+        JSON response, HTMX toast response, or rendered error template
+    """
+    path = request.url.path
+    detail = str(exc.detail) if hasattr(exc, "detail") and exc.detail else str(exc)
+
+    if isinstance(exc, AANotFoundError):
+        status_code = HTTP_404_NOT_FOUND
+        logger.info("404 Not Found (Repository): %s - %s", path, detail)
+    elif isinstance(exc, AADuplicateKeyError | AAIntegrityError | AAForeignKeyError):
+        status_code = HTTP_409_CONFLICT
+        logger.warning("409 Conflict (Repository): %s - %s", path, detail)
+    else:
+        status_code = HTTP_500_INTERNAL_SERVER_ERROR
+        logger.error("500 Repository Error: %s - %s", path, detail)
+
+    if _is_api_request(request):
+        return _create_json_error_response(detail=detail, status_code=status_code)
+
+    friendly_name = path.strip("/").replace("/", " → ").replace("-", " ").title() or "Home"
+
+    if status_code == HTTP_404_NOT_FOUND:
+        friendly_detail = f"'{friendly_name}' could not be found."
+        template_name = "errors/404.html.jinja2"
+        title = "Not Found"
+    elif status_code == HTTP_409_CONFLICT:
+        friendly_detail = "A conflict occurred with the requested resource."
+        template_name = "errors/generic.html.jinja2"
+        title = "Conflict"
+    else:
+        friendly_detail = "An unexpected error occurred. Please try again later."
+        template_name = "errors/500.html.jinja2"
+        title = "Server Error"
+
+    if _is_htmx_request(request):
+        toast_type = "error" if status_code >= HTTP_500_INTERNAL_SERVER_ERROR else "warning"
+        return _create_toast_response(
+            message=friendly_detail,
+            toast_type=toast_type,
+            status_code=status_code,
+        )
+
+    return Template(
+        template_name=template_name,
+        context={
+            "title": title,
+            "message": friendly_detail,
+            "path": path,
+            "status_code": status_code,
+        },
+        status_code=status_code,
+    )
+
+
 def get_exception_handlers() -> dict:
     """Get all site-wide exception handlers.
 
@@ -282,6 +366,7 @@ def get_exception_handlers() -> dict:
         Dictionary mapping exception types to their handlers
     """
     return {
+        AARepositoryError: repository_exception_handler,
         NotFoundException: not_found_exception_handler,
         PermissionDeniedException: permission_denied_handler,
         InternalServerException: internal_server_error_handler,

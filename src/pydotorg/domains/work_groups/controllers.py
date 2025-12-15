@@ -88,7 +88,7 @@ class WorkGroupController(Controller):
     ) -> WorkGroupRead:
         """Update a work group."""
         update_data = data.model_dump(exclude_unset=True)
-        work_group = await work_group_service.update(work_group_id, update_data)
+        work_group = await work_group_service.update(update_data, item_id=work_group_id)
         return WorkGroupRead.model_validate(work_group)
 
     @delete("/{work_group_id:uuid}")

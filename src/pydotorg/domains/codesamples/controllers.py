@@ -88,7 +88,7 @@ class CodeSampleController(Controller):
     ) -> CodeSampleRead:
         """Update a code sample."""
         update_data = data.model_dump(exclude_unset=True)
-        sample = await code_sample_service.update(sample_id, update_data)
+        sample = await code_sample_service.update(update_data, item_id=sample_id)
         return CodeSampleRead.model_validate(sample)
 
     @delete("/{sample_id:uuid}")

@@ -93,7 +93,7 @@ class ElectionController(Controller):
     ) -> ElectionRead:
         """Update an election (staff only)."""
         update_data = data.model_dump(exclude_unset=True)
-        election = await election_service.update(election_id, update_data)
+        election = await election_service.update(update_data, item_id=election_id)
         return ElectionRead.model_validate(election)
 
     @delete("/{election_id:uuid}")

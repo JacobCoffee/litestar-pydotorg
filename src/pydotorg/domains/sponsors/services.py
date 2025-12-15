@@ -317,7 +317,7 @@ class SponsorshipService(SQLAlchemyAsyncRepositoryService[Sponsorship]):
         if sponsorship_fee is not None:
             update_data["sponsorship_fee"] = sponsorship_fee
 
-        return await self.update(sponsorship_id, update_data)
+        return await self.update(update_data, item_id=sponsorship_id)
 
     async def get_previous_sponsorship(self, sponsorship: Sponsorship) -> Sponsorship | None:
         """Get the previous sponsorship for the same sponsor.

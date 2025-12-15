@@ -141,7 +141,7 @@ class JobTypeController(Controller):
             NotFoundException: If no job type with the given ID exists.
         """
         update_data = data.model_dump(exclude_unset=True)
-        job_type = await job_type_service.update(job_type_id, update_data)
+        job_type = await job_type_service.update(update_data, item_id=job_type_id)
         return JobTypeRead.model_validate(job_type)
 
     @delete("/{job_type_id:uuid}")
@@ -269,7 +269,7 @@ class JobCategoryController(Controller):
             NotFoundException: If no job category with the given ID exists.
         """
         update_data = data.model_dump(exclude_unset=True)
-        job_category = await job_category_service.update(job_category_id, update_data)
+        job_category = await job_category_service.update(update_data, item_id=job_category_id)
         return JobCategoryRead.model_validate(job_category)
 
     @delete("/{job_category_id:uuid}")
@@ -478,9 +478,9 @@ class JobController(Controller):
         if data.job_type_ids is not None:
             job = await job_service.update_job_types(job_id, data.job_type_ids)
             if update_data:
-                job = await job_service.update(job_id, update_data)
+                job = await job_service.update(update_data, item_id=job_id)
         else:
-            job = await job_service.update(job_id, update_data)
+            job = await job_service.update(update_data, item_id=job_id)
 
         return JobRead.model_validate(job)
 

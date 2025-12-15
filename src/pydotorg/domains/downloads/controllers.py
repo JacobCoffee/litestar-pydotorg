@@ -380,7 +380,7 @@ class ReleaseController(Controller):
             NotFoundException: If no release with the given ID exists.
         """
         update_data = data.model_dump(exclude_unset=True)
-        release = await release_service.update(release_id, update_data)
+        release = await release_service.update(update_data, item_id=release_id)
         return ReleaseRead.model_validate(release)
 
     @delete("/{release_id:uuid}")

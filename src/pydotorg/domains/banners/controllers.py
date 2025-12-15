@@ -101,7 +101,7 @@ class BannerController(Controller):
     ) -> BannerRead:
         """Update a banner."""
         update_data = data.model_dump(exclude_unset=True)
-        banner = await banner_service.update(banner_id, update_data)
+        banner = await banner_service.update(update_data, item_id=banner_id)
         return BannerRead.model_validate(banner)
 
     @delete("/{banner_id:uuid}")

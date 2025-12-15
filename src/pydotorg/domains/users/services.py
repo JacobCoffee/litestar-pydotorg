@@ -87,7 +87,7 @@ class UserService(SQLAlchemyAsyncRepositoryService[User]):
         """
         user = await self.get(user_id)
         user.is_active = False
-        return await self.update(user_id, {"is_active": False})
+        return await self.update({"is_active": False}, item_id=user_id)
 
     async def reactivate(self, user_id: UUID) -> User:
         """Reactivate a user account.
@@ -100,7 +100,7 @@ class UserService(SQLAlchemyAsyncRepositoryService[User]):
         """
         user = await self.get(user_id)
         user.is_active = True
-        return await self.update(user_id, {"is_active": True})
+        return await self.update({"is_active": True}, item_id=user_id)
 
 
 class MembershipService(SQLAlchemyAsyncRepositoryService[Membership]):
@@ -181,7 +181,7 @@ class UserGroupService(SQLAlchemyAsyncRepositoryService[UserGroup]):
         Returns:
             The updated group instance.
         """
-        return await self.update(group_id, {"approved": True})
+        return await self.update({"approved": True}, item_id=group_id)
 
     async def revoke_approval(self, group_id: UUID) -> UserGroup:
         """Revoke approval of a user group.
@@ -192,7 +192,7 @@ class UserGroupService(SQLAlchemyAsyncRepositoryService[UserGroup]):
         Returns:
             The updated group instance.
         """
-        return await self.update(group_id, {"approved": False})
+        return await self.update({"approved": False}, item_id=group_id)
 
     async def mark_trusted(self, group_id: UUID) -> UserGroup:
         """Mark a user group as trusted.
@@ -203,7 +203,7 @@ class UserGroupService(SQLAlchemyAsyncRepositoryService[UserGroup]):
         Returns:
             The updated group instance.
         """
-        return await self.update(group_id, {"trusted": True})
+        return await self.update({"trusted": True}, item_id=group_id)
 
     async def revoke_trust(self, group_id: UUID) -> UserGroup:
         """Revoke trust of a user group.
@@ -214,7 +214,7 @@ class UserGroupService(SQLAlchemyAsyncRepositoryService[UserGroup]):
         Returns:
             The updated group instance.
         """
-        return await self.update(group_id, {"trusted": False})
+        return await self.update({"trusted": False}, item_id=group_id)
 
 
 class APIKeyService(SQLAlchemyAsyncRepositoryService[APIKey]):
@@ -273,7 +273,7 @@ class APIKeyService(SQLAlchemyAsyncRepositoryService[APIKey]):
         Returns:
             The revoked API key.
         """
-        return await self.update(key_id, {"is_active": False})
+        return await self.update({"is_active": False}, item_id=key_id)
 
     async def revoke_all_for_user(self, user_id: UUID) -> int:
         """Revoke all API keys for a user.

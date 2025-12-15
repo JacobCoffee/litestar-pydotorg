@@ -188,7 +188,7 @@ class SponsorshipLevelController(Controller):
             NotFoundException: If no sponsorship level with the given ID exists.
         """
         update_data = data.model_dump(exclude_unset=True)
-        level = await level_service.update(level_id, update_data)
+        level = await level_service.update(update_data, item_id=level_id)
         return SponsorshipLevelRead.model_validate(level)
 
     @delete("/{level_id:uuid}")
@@ -361,7 +361,7 @@ class SponsorController(Controller):
             NotFoundException: If no sponsor with the given ID exists.
         """
         update_data = data.model_dump(exclude_unset=True)
-        sponsor = await sponsor_service.update(sponsor_id, update_data)
+        sponsor = await sponsor_service.update(update_data, item_id=sponsor_id)
         return SponsorRead.model_validate(sponsor)
 
     @delete("/{sponsor_id:uuid}")
@@ -672,7 +672,7 @@ class SponsorshipController(Controller):
             NotFoundException: If no sponsorship with the given ID exists.
         """
         update_data = data.model_dump(exclude_unset=True)
-        sponsorship = await sponsorship_service.update(sponsorship_id, update_data)
+        sponsorship = await sponsorship_service.update(update_data, item_id=sponsorship_id)
         return SponsorshipRead.model_validate(sponsorship)
 
     @patch("/{sponsorship_id:uuid}/approve")

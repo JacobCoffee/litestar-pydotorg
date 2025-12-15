@@ -14,6 +14,7 @@ from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncEngine, async_sessionmaker
 
 from pydotorg.core.database.base import AuditBase
+from pydotorg.core.exceptions import get_exception_handlers
 from pydotorg.domains.users.controllers import MembershipController, UserController, UserGroupController
 from pydotorg.domains.users.dependencies import get_user_dependencies
 from pydotorg.domains.users.models import EmailPrivacy, Membership, MembershipType, SearchVisibility, User, UserGroup
@@ -148,6 +149,7 @@ async def users_fixtures(
         route_handlers=[UserController, MembershipController, UserGroupController],
         plugins=[sqlalchemy_plugin],
         dependencies=user_deps,
+        exception_handlers=get_exception_handlers(),
         debug=True,
     )
 

@@ -217,7 +217,7 @@ class UserController(Controller):
             ConflictError: If updated username or email conflicts with another user.
         """
         update_data = data.model_dump(exclude_unset=True)
-        user = await user_service.update(user_id, update_data)
+        user = await user_service.update(update_data, item_id=user_id)
         return UserRead.model_validate(user)
 
     @patch(
@@ -452,7 +452,7 @@ class MembershipController(Controller):
             NotFoundException: If no membership with the given ID exists.
         """
         update_data = data.model_dump(exclude_unset=True)
-        membership = await membership_service.update(membership_id, update_data)
+        membership = await membership_service.update(update_data, item_id=membership_id)
         return MembershipRead.model_validate(membership)
 
     @delete(
@@ -638,7 +638,7 @@ class UserGroupController(Controller):
             NotFoundException: If no user group with the given ID exists.
         """
         update_data = data.model_dump(exclude_unset=True)
-        group = await user_group_service.update(group_id, update_data)
+        group = await user_group_service.update(update_data, item_id=group_id)
         return UserGroupRead.model_validate(group)
 
     @patch("/{group_id:uuid}/approve")

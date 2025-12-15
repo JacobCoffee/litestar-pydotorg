@@ -214,7 +214,7 @@ class JobService(SQLAlchemyAsyncRepositoryService[Job]):
             msg = f"Job must be in DRAFT status to submit for review. Current status: {job.status}"
             raise ValueError(msg)
 
-        job = await self.update(job_id, {"status": JobStatus.REVIEW})
+        job = await self.update({"status": JobStatus.REVIEW}, item_id=job_id)
 
         admin_url = f"{settings.oauth_redirect_base_url}/admin/jobs/{job.id}/review"
         await enqueue_task(
@@ -245,7 +245,7 @@ class JobService(SQLAlchemyAsyncRepositoryService[Job]):
             msg = f"Job must be in REVIEW status to approve. Current status: {job.status}"
             raise ValueError(msg)
 
-        job = await self.update(job_id, {"status": JobStatus.APPROVED})
+        job = await self.update({"status": JobStatus.APPROVED}, item_id=job_id)
 
         job_url = f"{settings.oauth_redirect_base_url}/jobs/{job.slug}"
         await enqueue_task(
@@ -276,7 +276,7 @@ class JobService(SQLAlchemyAsyncRepositoryService[Job]):
             msg = f"Job must be in REVIEW status to reject. Current status: {job.status}"
             raise ValueError(msg)
 
-        job = await self.update(job_id, {"status": JobStatus.REJECTED})
+        job = await self.update({"status": JobStatus.REJECTED}, item_id=job_id)
 
         await enqueue_task(
             "send_job_rejected_email",
@@ -297,7 +297,7 @@ class JobService(SQLAlchemyAsyncRepositoryService[Job]):
         Returns:
             The updated job instance.
         """
-        return await self.update(job_id, {"status": JobStatus.ARCHIVED})
+        return await self.update({"status": JobStatus.ARCHIVED}, item_id=job_id)
 
     async def mark_expired_jobs(self) -> list[Job]:
         """Mark all expired jobs as EXPIRED.
@@ -309,7 +309,7 @@ class JobService(SQLAlchemyAsyncRepositoryService[Job]):
         updated_jobs = []
 
         for job in expired_jobs:
-            updated_job = await self.update(job.id, {"status": JobStatus.EXPIRED})
+            updated_job = await self.update({"status": JobStatus.EXPIRED}, item_id=job.id)
             updated_jobs.append(updated_job)
 
         return updated_jobs

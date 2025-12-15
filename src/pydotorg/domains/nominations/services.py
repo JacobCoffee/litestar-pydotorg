@@ -125,7 +125,7 @@ class NomineeService(SQLAlchemyAsyncRepositoryService[Nominee]):
             msg = "Nomination already accepted"
             raise ValueError(msg)
 
-        return await self.update(nominee_id, {"accepted": True})
+        return await self.update({"accepted": True}, item_id=nominee_id)
 
     async def decline_nomination(self, nominee_id: UUID) -> None:
         """Decline a nomination by deleting the nominee.

@@ -127,7 +127,7 @@ class PageService(SQLAlchemyAsyncRepositoryService[Page]):
         Returns:
             The updated page instance.
         """
-        return await self.update(page_id, {"is_published": True})
+        return await self.update({"is_published": True}, item_id=page_id)
 
     async def unpublish(self, page_id: UUID) -> Page:
         """Unpublish a page.
@@ -138,7 +138,7 @@ class PageService(SQLAlchemyAsyncRepositoryService[Page]):
         Returns:
             The updated page instance.
         """
-        return await self.update(page_id, {"is_published": False})
+        return await self.update({"is_published": False}, item_id=page_id)
 
     async def render_content(self, page: Page) -> str:
         """Render page content based on content type.

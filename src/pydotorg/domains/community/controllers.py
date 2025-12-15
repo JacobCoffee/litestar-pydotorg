@@ -96,7 +96,7 @@ class PostController(Controller):
     ) -> PostRead:
         """Update a post."""
         update_data = data.model_dump(exclude_unset=True)
-        post = await post_service.update(post_id, update_data)
+        post = await post_service.update(update_data, item_id=post_id)
         return PostRead.model_validate(post)
 
     @delete("/{post_id:uuid}")
@@ -154,7 +154,7 @@ class PhotoController(Controller):
     ) -> PhotoRead:
         """Update a photo."""
         update_data = data.model_dump(exclude_unset=True)
-        photo = await photo_service.update(photo_id, update_data)
+        photo = await photo_service.update(update_data, item_id=photo_id)
         return PhotoRead.model_validate(photo)
 
     @delete("/{photo_id:uuid}")
@@ -212,7 +212,7 @@ class VideoController(Controller):
     ) -> VideoRead:
         """Update a video."""
         update_data = data.model_dump(exclude_unset=True)
-        video = await video_service.update(video_id, update_data)
+        video = await video_service.update(update_data, item_id=video_id)
         return VideoRead.model_validate(video)
 
     @delete("/{video_id:uuid}")
@@ -270,7 +270,7 @@ class LinkController(Controller):
     ) -> LinkRead:
         """Update a link."""
         update_data = data.model_dump(exclude_unset=True)
-        link = await link_service.update(link_id, update_data)
+        link = await link_service.update(update_data, item_id=link_id)
         return LinkRead.model_validate(link)
 
     @delete("/{link_id:uuid}")
