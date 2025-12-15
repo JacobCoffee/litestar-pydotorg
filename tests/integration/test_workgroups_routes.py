@@ -152,7 +152,7 @@ class TestWorkGroupControllerRoutes:
             result = response.json()
             assert result["name"] == work_group.name
 
-    async def test_get_work_group_by_id_not_found(self, client: AsyncTestClient) -> None:
+    async def test_get_work_group_by_id_not_found(self, workgroups_fixtures: WorkGroupsTestFixtures) -> None:
         fake_id = str(uuid4())
         response = await workgroups_fixtures.client.get(f"/api/v1/work-groups/{fake_id}")
         assert response.status_code in (404, 500)
@@ -166,7 +166,7 @@ class TestWorkGroupControllerRoutes:
             result = response.json()
             assert result["slug"] == work_group.slug
 
-    async def test_get_work_group_by_slug_not_found(self, client: AsyncTestClient) -> None:
+    async def test_get_work_group_by_slug_not_found(self, workgroups_fixtures: WorkGroupsTestFixtures) -> None:
         response = await workgroups_fixtures.client.get("/api/v1/work-groups/slug/non-existent-slug")
         assert response.status_code in (404, 500)
 
@@ -208,6 +208,6 @@ class TestWorkGroupsValidation:
         response = await workgroups_fixtures.client.post("/api/v1/work-groups/", json=data)
         assert response.status_code in (400, 422, 500)
 
-    async def test_get_work_group_invalid_uuid(self, client: AsyncTestClient) -> None:
+    async def test_get_work_group_invalid_uuid(self, workgroups_fixtures: WorkGroupsTestFixtures) -> None:
         response = await workgroups_fixtures.client.get("/api/v1/work-groups/not-a-uuid")
         assert response.status_code in (400, 404, 422)

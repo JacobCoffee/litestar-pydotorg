@@ -710,7 +710,7 @@ class TestJobWorkflow:
 
                 search_response = await jobs_fixtures.client.post(
                     "/api/v1/jobs/search",
-                    json={"filters": {"status": "approved"}},
+                    json={"status": "approved"},
                 )
                 assert search_response.status_code in (200, 500)
                 if search_response.status_code == 200:
