@@ -303,7 +303,7 @@ class JobController(Controller):
     async def search_jobs(
         self,
         job_service: JobService,
-        filters: Annotated[JobSearchFilters, Body(title="Search Filters", description="Job search filters")],
+        data: Annotated[JobSearchFilters, Body(title="Search Filters", description="Job search filters")],
         limit: Annotated[int, Parameter(ge=1, le=1000)] = 100,
         offset: Annotated[int, Parameter(ge=0)] = 0,
     ) -> list[JobPublic]:
@@ -315,14 +315,14 @@ class JobController(Controller):
 
         Args:
             job_service: Service for job database operations.
-            filters: Search filters including keywords, location, type, and category.
+            data: Search filters including keywords, location, type, and category.
             limit: Maximum number of jobs to return (1-1000).
             offset: Number of jobs to skip for pagination.
 
         Returns:
             List of public job postings matching the search criteria.
         """
-        jobs = await job_service.search_jobs(filters, limit=limit, offset=offset)
+        jobs = await job_service.search_jobs(data, limit=limit, offset=offset)
         return [JobPublic.model_validate(job) for job in jobs]
 
     @get("/")
