@@ -41,7 +41,7 @@ class ValidationTestFixtures:
     session_factory: async_sessionmaker
 
 
-@pytest.fixture
+@pytest.fixture(scope="module")
 async def validation_fixtures(
     async_engine: AsyncEngine,
     async_session_factory: async_sessionmaker,
@@ -50,6 +50,7 @@ async def validation_fixtures(
     """Create test fixtures with exception handlers for validation testing.
 
     Uses session-scoped async_engine to prevent connection exhaustion.
+    Module-scoped to prevent creating multiple engines during test runs.
     """
     async with async_engine.begin() as conn:
         # Only truncate tables that exist - some plugin tables may not be created
