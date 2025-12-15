@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
-from unittest.mock import AsyncMock, patch
+from unittest.mock import patch
 
 import pytest
 from litestar.exceptions import NotAuthorizedException, PermissionDeniedException
@@ -143,18 +143,15 @@ class TestAuthMiddleware:
 
         assert response.status_code == 401
 
-    @patch("pydotorg.core.auth.middleware.JWTAuthMiddleware._get_user")
     async def test_middleware_database_error_handling(
         self,
-        mock_get_user: AsyncMock,
         client: AsyncTestClient,
         middleware_test_user: dict,
     ) -> None:
         """Test middleware handles database errors gracefully."""
         from sqlalchemy.exc import OperationalError
 
-        mock_get_user.side_effect = OperationalError("Database connection failed", None, None)
-
+        # Login first to get a valid token (before mocking)
         login_response = await client.post(
             "/api/auth/login",
             json={
@@ -164,10 +161,14 @@ class TestAuthMiddleware:
         )
         access_token = login_response.json()["access_token"]
 
-        response = await client.post(
-            "/api/auth/me",
-            headers={"Authorization": f"Bearer {access_token}"},
-        )
+        # Now mock _get_user to simulate database error during token validation
+        with patch("pydotorg.core.auth.middleware.JWTAuthMiddleware._get_user") as mock_get_user:
+            mock_get_user.side_effect = OperationalError("Database connection failed", None, None)
+
+            response = await client.post(
+                "/api/auth/me",
+                headers={"Authorization": f"Bearer {access_token}"},
+            )
 
         assert response.status_code == 500
 
