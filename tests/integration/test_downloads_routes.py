@@ -124,9 +124,13 @@ async def _create_release_file_via_db(
 async def downloads_fixtures(
     async_engine: AsyncEngine,
     async_session_factory: async_sessionmaker,
-    postgres_uri: str,
+    _module_sqlalchemy_config: SQLAlchemyAsyncConfig,
 ) -> AsyncIterator[DownloadsTestFixtures]:
-    """Create test fixtures using session-scoped engine to prevent connection exhaustion."""
+    """Create test fixtures using module-scoped config to prevent connection exhaustion.
+
+    Uses the shared _module_sqlalchemy_config from conftest.py instead of creating
+    a new SQLAlchemyAsyncConfig per test, which was causing TooManyConnectionsError.
+    """
     async with async_engine.begin() as conn:
         result = await conn.execute(text("SELECT tablename FROM pg_tables WHERE schemaname = 'public'"))
         existing_tables = {row[0] for row in result.fetchall()}
@@ -142,13 +146,7 @@ async def downloads_fixtures(
         """Provide limit offset pagination."""
         return LimitOffset(page_size, page_size * (current_page - 1))
 
-    sqlalchemy_config = SQLAlchemyAsyncConfig(
-        connection_string=postgres_uri,
-        metadata=AuditBase.metadata,
-        create_all=False,
-        before_send_handler="autocommit",
-    )
-    sqlalchemy_plugin = SQLAlchemyPlugin(config=sqlalchemy_config)
+    sqlalchemy_plugin = SQLAlchemyPlugin(config=_module_sqlalchemy_config)
 
     downloads_deps = get_downloads_dependencies()
     downloads_deps["limit_offset"] = provide_limit_offset
