@@ -507,9 +507,8 @@ class TestJobControllerRoutes:
 
         response = await jobs_fixtures.client.post(
             "/api/v1/jobs/search",
-            json={"filters": {"status": "approved"}},
+            json={"status": "approved"},
         )
-        # NOTE: Controller bug - filters should be Body() annotated but is parsed as query param
         assert response.status_code in (200, 400, 500)
         if response.status_code == 200:
             jobs = response.json()
@@ -534,10 +533,9 @@ class TestJobControllerRoutes:
 
         response = await jobs_fixtures.client.post(
             "/api/v1/jobs/search",
-            json={"filters": {"country": "United States", "status": "approved"}},
+            json={"country": "United States", "status": "approved"},
         )
-        # NOTE: Controller bug - filters should be Body() annotated but is parsed as query param
-        assert response.status_code in (200, 400, 500)
+        assert response.status_code == 200
         if response.status_code == 200:
             jobs = response.json()
             assert all(job.get("country") == "United States" for job in jobs if "country" in job)
@@ -559,10 +557,9 @@ class TestJobControllerRoutes:
 
         response = await jobs_fixtures.client.post(
             "/api/v1/jobs/search",
-            json={"filters": {"telecommuting": True, "status": "approved"}},
+            json={"telecommuting": True, "status": "approved"},
         )
-        # NOTE: Controller bug - filters should be Body() annotated but is parsed as query param
-        assert response.status_code in (200, 400, 500)
+        assert response.status_code == 200
         if response.status_code == 200:
             jobs = response.json()
             assert all(job.get("telecommuting") is True for job in jobs if "telecommuting" in job)
@@ -579,10 +576,9 @@ class TestJobControllerRoutes:
 
         response = await jobs_fixtures.client.post(
             "/api/v1/jobs/search?limit=3&offset=0",
-            json={"filters": {"status": "approved"}},
+            json={"status": "approved"},
         )
-        # NOTE: Controller bug - filters should be Body() annotated but is parsed as query param
-        assert response.status_code in (200, 400, 500)
+        assert response.status_code == 200
         if response.status_code == 200:
             jobs = response.json()
             assert len(jobs) <= 3
