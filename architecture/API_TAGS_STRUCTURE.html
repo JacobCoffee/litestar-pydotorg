@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="blue" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Optimal API Documentation Tag Structure - litestar-pydotorg</title><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=14737038" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=513f0650" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="Optimal API Documentation Tag Structure"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../index.html">
+      
+      
+      <strong>litestar-pydotorg</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"><ul><li class="link">
+          <a href="https://litestar.dev/">
+            <span>Litestar</span></a>
+        </li><li class="link">
+          <a href="https://python.org/">
+            <span>Python.org</span></a>
+        </li></ul></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials">
+  <a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started/index.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/quickstart.html">Quickstart</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/index.html">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/development.html">Development Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/contributing.html">Contribution Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/testing.html">Testing Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/debugging.html">Debugging Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/api-usage.html">API Usage Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/authentication.html">Authentication Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/feature-flags.html">Feature Flags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/configuration.html">Configuration Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/deployment.html">Deployment Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/docker.html">Docker Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/troubleshooting.html">Troubleshooting Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/index.html">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/domain-patterns.html">Domain Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/authentication-recipes.html">Authentication Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/database-recipes.html">Database Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/testing-recipes.html">Testing Recipes</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/core/index.html">Core Infrastructure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/auth.html">Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/cache.html">Caching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/database.html">Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/email.html">Email</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/exceptions.html">Exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/features.html">Feature Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/feeds.html">RSS/Atom Feeds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/ical.html">iCalendar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/middleware.html">Middleware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/openapi.html">OpenAPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/ratelimit.html">Rate Limiting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/security.html">Security</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/worker.html">Background Worker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/domains/index.html">Domain Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/about.html">About</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/admin.html">Admin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/banners.html">banners</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/blogs.html">blogs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/codesamples.html">Code Samples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/community.html">community</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/docs.html">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/downloads.html">downloads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/events.html">events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/jobs.html">jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/mailing.html">Mailing Lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/minutes.html">Minutes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/nominations.html">Nominations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/pages.html">pages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/sponsors.html">sponsors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/sqladmin.html">SQLAdmin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/successstories.html">Success Stories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/users.html">users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/work_groups.html">Work Groups</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/lib.html">Library Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/tasks.html">Background Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/config.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/main.html">Application Entry Point</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ARCHITECTURE.html">Litestar Python.org Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DATABASE_SCHEMA.html">Database Schema Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DOMAIN_MODELS.html">Domain Models Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="QUICK_START.html">Litestar Python.org Quick Start Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="API_TAGS_INDEX.html">API Tags Documentation Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RATE_LIMITING_ARCHITECTURE.html">Rate Limiting Architecture Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adr/001-litestar-framework.html">ADR-001: Use Litestar as Web Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adr/002-saq-background-tasks.html">ADR-002: Use SAQ for Background Task Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#design-principles">Design Principles</a></li>
+<li><a class="reference internal" href="#recommended-tag-structure">Recommended Tag Structure</a><ul>
+<li><a class="reference internal" href="#core-api-authentication-user-management">Core API (Authentication &amp; User Management)</a><ul>
+<li><a class="reference internal" href="#authentication">1. Authentication</a></li>
+<li><a class="reference internal" href="#users">2. Users</a></li>
+<li><a class="reference internal" href="#user-memberships">3. User Memberships</a></li>
+<li><a class="reference internal" href="#user-groups">4. User Groups</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#content-management">Content Management</a><ul>
+<li><a class="reference internal" href="#pages">5. Pages</a></li>
+<li><a class="reference internal" href="#documents">6. Documents</a></li>
+<li><a class="reference internal" href="#images">7. Images</a></li>
+<li><a class="reference internal" href="#banners">8. Banners</a></li>
+<li><a class="reference internal" href="#code-samples">9. Code Samples</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#downloads-releases">Downloads &amp; Releases</a><ul>
+<li><a class="reference internal" href="#operating-systems">10. Operating Systems</a></li>
+<li><a class="reference internal" href="#python-releases">11. Python Releases</a></li>
+<li><a class="reference internal" href="#release-files">12. Release Files</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#community-events">Community &amp; Events</a><ul>
+<li><a class="reference internal" href="#events">13. Events</a></li>
+<li><a class="reference internal" href="#event-calendars">14. Event Calendars</a></li>
+<li><a class="reference internal" href="#event-categories">15. Event Categories</a></li>
+<li><a class="reference internal" href="#event-locations">16. Event Locations</a></li>
+<li><a class="reference internal" href="#event-occurrences">17. Event Occurrences</a></li>
+<li><a class="reference internal" href="#user-groups-communities">18. User Groups &amp; Communities</a></li>
+<li><a class="reference internal" href="#community-content">19. Community Content</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#blogs-content-discovery">Blogs &amp; Content Discovery</a><ul>
+<li><a class="reference internal" href="#blogs">20. Blogs</a></li>
+<li><a class="reference internal" href="#blog-feeds">21. Blog Feeds</a></li>
+<li><a class="reference internal" href="#success-stories">22. Success Stories</a></li>
+<li><a class="reference internal" href="#success-story-categories">23. Success Story Categories</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#jobs-opportunities">Jobs &amp; Opportunities</a><ul>
+<li><a class="reference internal" href="#jobs">24. Jobs</a></li>
+<li><a class="reference internal" href="#job-types">25. Job Types</a></li>
+<li><a class="reference internal" href="#job-categories">26. Job Categories</a></li>
+<li><a class="reference internal" href="#job-review-comments">27. Job Review Comments</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#business-sponsorship">Business &amp; Sponsorship</a><ul>
+<li><a class="reference internal" href="#sponsors">28. Sponsors</a></li>
+<li><a class="reference internal" href="#sponsorship-levels">29. Sponsorship Levels</a></li>
+<li><a class="reference internal" href="#sponsorships">30. Sponsorships</a></li>
+<li><a class="reference internal" href="#companies">31. Companies</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#governance-meetings">Governance &amp; Meetings</a><ul>
+<li><a class="reference internal" href="#work-groups">32. Work Groups</a></li>
+<li><a class="reference internal" href="#meeting-minutes">33. Meeting Minutes</a></li>
+<li><a class="reference internal" href="#nominations">34. Nominations</a></li>
+<li><a class="reference internal" href="#nominees">35. Nominees</a></li>
+<li><a class="reference internal" href="#elections">36. Elections</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#discovery-search">Discovery &amp; Search</a><ul>
+<li><a class="reference internal" href="#search">37. Search</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#mailing-notifications">Mailing &amp; Notifications</a><ul>
+<li><a class="reference internal" href="#mailing-lists">38. Mailing Lists</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#administration-grouped-under-admin-umbrella">Administration (Grouped Under Admin Umbrella)</a><ul>
+<li><a class="reference internal" href="#admin-dashboard">39. Admin Dashboard</a></li>
+<li><a class="reference internal" href="#admin-users">40. Admin Users</a></li>
+<li><a class="reference internal" href="#admin-pages">41. Admin Pages</a></li>
+<li><a class="reference internal" href="#admin-events">42. Admin Events</a></li>
+<li><a class="reference internal" href="#admin-jobs">43. Admin Jobs</a></li>
+<li><a class="reference internal" href="#admin-sponsors">44. Admin Sponsors</a></li>
+<li><a class="reference internal" href="#admin-blogs">45. Admin Blogs</a></li>
+<li><a class="reference internal" href="#admin-logs">46. Admin Logs</a></li>
+<li><a class="reference internal" href="#admin-email-templates">47. Admin Email Templates</a></li>
+<li><a class="reference internal" href="#admin-email-logs">48. Admin Email Logs</a></li>
+<li><a class="reference internal" href="#admin-tasks">49. Admin Tasks</a></li>
+<li><a class="reference internal" href="#admin-settings">50. Admin Settings</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#implementation-guidelines">Implementation Guidelines</a><ul>
+<li><a class="reference internal" href="#openapi-tag-definition-structure">OpenAPI Tag Definition Structure</a></li>
+<li><a class="reference internal" href="#controller-implementation">Controller Implementation</a></li>
+<li><a class="reference internal" href="#hide-render-endpoints-from-public-api">Hide Render Endpoints from Public API</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ordering-strategy-for-scalar-ui">Ordering Strategy for Scalar UI</a></li>
+<li><a class="reference internal" href="#benefits-of-this-structure">Benefits of This Structure</a></li>
+<li><a class="reference internal" href="#migration-notes">Migration Notes</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../index.html"><span itemprop="name">litestar-pydotorg</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">Optimal API Documentation Tag Structure</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue dark-code" role="main">
+          <section id="optimal-api-documentation-tag-structure">
+<h1>Optimal API Documentation Tag Structure<a class="headerlink" href="#optimal-api-documentation-tag-structure" title="Link to this heading">¶</a></h1>
+<p>This document defines the recommended OpenAPI tag hierarchy for the <a class="reference external" href="http://Python.org">Python.org</a> API documentation, optimized for developer experience in Scalar UI.</p>
+<section id="design-principles">
+<h2>Design Principles<a class="headerlink" href="#design-principles" title="Link to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li><p><strong>Logical Grouping</strong>: Related endpoints organized into coherent, discoverable categories</p></li>
+<li><p><strong>User Journey</strong>: Tags ordered by typical developer workflow (auth → users → content → discovery)</p></li>
+<li><p><strong>Clarity</strong>: Consistent naming with Title Case spaces for maximum readability in Scalar</p></li>
+<li><p><strong>Admin Separation</strong>: Administrative endpoints clearly separated and lower priority</p></li>
+<li><p><strong>Exclusions</strong>: Render controllers excluded from public API documentation</p></li>
+</ol>
+</section>
+<section id="recommended-tag-structure">
+<h2>Recommended Tag Structure<a class="headerlink" href="#recommended-tag-structure" title="Link to this heading">¶</a></h2>
+<section id="core-api-authentication-user-management">
+<h3>Core API (Authentication &amp; User Management)<a class="headerlink" href="#core-api-authentication-user-management" title="Link to this heading">¶</a></h3>
+<section id="authentication">
+<h4>1. Authentication<a class="headerlink" href="#authentication" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: User authentication, login, registration, and token management</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">users/auth_controller.py</span></code></p></li>
+<li><p><strong>Endpoints</strong>: Login, register, token refresh, logout, password reset</p></li>
+</ul>
+</section>
+<section id="users">
+<h4>2. Users<a class="headerlink" href="#users" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: User account management, profiles, and account operations</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">users/controllers.py:UserController</span></code></p></li>
+<li><p><strong>Endpoints</strong>: List users, get user, create user, update user, deactivate/reactivate account</p></li>
+</ul>
+</section>
+<section id="user-memberships">
+<h4>3. User Memberships<a class="headerlink" href="#user-memberships" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: User membership types and membership status management</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">users/controllers.py:MembershipController</span></code></p></li>
+<li><p><strong>Endpoints</strong>: List memberships, get membership, create/update/delete membership</p></li>
+</ul>
+</section>
+<section id="user-groups">
+<h4>4. User Groups<a class="headerlink" href="#user-groups" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: User group management, approval, and trust status</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">users/controllers.py:UserGroupController</span></code></p></li>
+<li><p><strong>Endpoints</strong>: List groups, create/update/delete groups, approve/revoke approval, trust management</p></li>
+</ul>
+</section>
+</section>
+<section id="content-management">
+<h3>Content Management<a class="headerlink" href="#content-management" title="Link to this heading">¶</a></h3>
+<section id="pages">
+<h4>5. Pages<a class="headerlink" href="#pages" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: Static pages and page management</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">pages/controllers.py:PageController</span></code></p></li>
+<li><p><strong>Endpoints</strong>: List pages, get page by ID/slug, create/update/delete pages</p></li>
+</ul>
+</section>
+<section id="documents">
+<h4>6. Documents<a class="headerlink" href="#documents" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: Documentation files and document management</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">docs/controllers.py</span></code></p></li>
+<li><p><strong>Endpoints</strong>: List documents, get document, create/update/delete documents</p></li>
+</ul>
+</section>
+<section id="images">
+<h4>7. Images<a class="headerlink" href="#images" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: Image assets and image management</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">images/controllers.py</span></code> (if exists)</p></li>
+<li><p><strong>Endpoints</strong>: List images, upload, delete images</p></li>
+</ul>
+</section>
+<section id="banners">
+<h4>8. Banners<a class="headerlink" href="#banners" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: Website banners and promotional content</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">banners/controllers.py</span></code></p></li>
+<li><p><strong>Endpoints</strong>: List banners, get banner, create/update/delete banners</p></li>
+</ul>
+</section>
+<section id="code-samples">
+<h4>9. Code Samples<a class="headerlink" href="#code-samples" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: Code examples and sample snippets</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">codesamples/controllers.py</span></code></p></li>
+<li><p><strong>Endpoints</strong>: List samples, get sample, create/update/delete samples</p></li>
+</ul>
+</section>
+</section>
+<section id="downloads-releases">
+<h3>Downloads &amp; Releases<a class="headerlink" href="#downloads-releases" title="Link to this heading">¶</a></h3>
+<section id="operating-systems">
+<h4>10. Operating Systems<a class="headerlink" href="#operating-systems" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: Supported operating systems for Python downloads</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">downloads/controllers.py:OSController</span></code></p></li>
+<li><p><strong>Endpoints</strong>: List OS, get OS by ID/slug, create/delete OS</p></li>
+</ul>
+</section>
+<section id="python-releases">
+<h4>11. Python Releases<a class="headerlink" href="#python-releases" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: Python version releases and release information</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">downloads/controllers.py:ReleaseController</span></code></p></li>
+<li><p><strong>Endpoints</strong>: List releases, get release, create/update/delete releases, latest version endpoint</p></li>
+</ul>
+</section>
+<section id="release-files">
+<h4>12. Release Files<a class="headerlink" href="#release-files" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: Download files associated with Python releases</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">downloads/controllers.py:ReleaseFileController</span></code></p></li>
+<li><p><strong>Endpoints</strong>: List files, get file, upload/delete file</p></li>
+</ul>
+</section>
+</section>
+<section id="community-events">
+<h3>Community &amp; Events<a class="headerlink" href="#community-events" title="Link to this heading">¶</a></h3>
+<section id="events">
+<h4>13. Events<a class="headerlink" href="#events" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: Python events and conference information</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">events/controllers.py:EventController</span></code> (public endpoints)</p></li>
+<li><p><strong>Endpoints</strong>: List events, get event, upcoming events, event details</p></li>
+</ul>
+</section>
+<section id="event-calendars">
+<h4>14. Event Calendars<a class="headerlink" href="#event-calendars" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: Event calendars and calendar management</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">events/controllers.py:CalendarController</span></code></p></li>
+<li><p><strong>Endpoints</strong>: List calendars, get calendar by ID/slug, create/update/delete calendars</p></li>
+</ul>
+</section>
+<section id="event-categories">
+<h4>15. Event Categories<a class="headerlink" href="#event-categories" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: Event type categories and classifications</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">events/controllers.py:EventCategoryController</span></code></p></li>
+<li><p><strong>Endpoints</strong>: List categories, get category, create/update/delete categories</p></li>
+</ul>
+</section>
+<section id="event-locations">
+<h4>16. Event Locations<a class="headerlink" href="#event-locations" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: Physical venues and event locations</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">events/controllers.py:EventLocationController</span></code></p></li>
+<li><p><strong>Endpoints</strong>: List locations, get location, create/update/delete locations</p></li>
+</ul>
+</section>
+<section id="event-occurrences">
+<h4>17. Event Occurrences<a class="headerlink" href="#event-occurrences" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: Specific event instances and scheduling</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">events/controllers.py:EventOccurrenceController</span></code></p></li>
+<li><p><strong>Endpoints</strong>: List occurrences, get occurrence, create/update/delete occurrences</p></li>
+</ul>
+</section>
+<section id="user-groups-communities">
+<h4>18. User Groups &amp; Communities<a class="headerlink" href="#user-groups-communities" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: Community groups and member organizations</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">community/controllers.py</span></code></p></li>
+<li><p><strong>Endpoints</strong>: List groups, get group, community discovery</p></li>
+</ul>
+</section>
+<section id="community-content">
+<h4>19. Community Content<a class="headerlink" href="#community-content" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: Community-contributed content (posts, photos, videos, links)</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">community/controllers.py</span></code> (multiple sub-controllers)</p></li>
+<li><p><strong>Endpoints</strong>:</p>
+<ul>
+<li><p>Community Posts: List/create/delete posts</p></li>
+<li><p>Community Photos: List/upload/delete photos</p></li>
+<li><p>Community Videos: List/add/delete videos</p></li>
+<li><p>Community Links: List/submit/delete links</p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<section id="blogs-content-discovery">
+<h3>Blogs &amp; Content Discovery<a class="headerlink" href="#blogs-content-discovery" title="Link to this heading">¶</a></h3>
+<section id="blogs">
+<h4>20. Blogs<a class="headerlink" href="#blogs" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: Blog posts and blog entries</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">blogs/controllers.py</span></code></p></li>
+<li><p><strong>Endpoints</strong>: List blog entries, get entry, create/update/delete entries</p></li>
+</ul>
+</section>
+<section id="blog-feeds">
+<h4>21. Blog Feeds<a class="headerlink" href="#blog-feeds" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: RSS feeds and feed aggregation</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">blogs/controllers.py:FeedController</span></code></p></li>
+<li><p><strong>Endpoints</strong>: List feeds, get feed, create/update/delete feeds, feed aggregation</p></li>
+</ul>
+</section>
+<section id="success-stories">
+<h4>22. Success Stories<a class="headerlink" href="#success-stories" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: User success stories and testimonials</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">successstories/controllers.py</span></code></p></li>
+<li><p><strong>Endpoints</strong>: List stories, get story, create/update/delete stories</p></li>
+</ul>
+</section>
+<section id="success-story-categories">
+<h4>23. Success Story Categories<a class="headerlink" href="#success-story-categories" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: Success story categories and classifications</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">successstories/controllers.py</span></code></p></li>
+<li><p><strong>Endpoints</strong>: List categories, get category, create/update/delete categories</p></li>
+</ul>
+</section>
+</section>
+<section id="jobs-opportunities">
+<h3>Jobs &amp; Opportunities<a class="headerlink" href="#jobs-opportunities" title="Link to this heading">¶</a></h3>
+<section id="jobs">
+<h4>24. Jobs<a class="headerlink" href="#jobs" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: Python job listings and employment opportunities</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">jobs/controllers.py:JobController</span></code></p></li>
+<li><p><strong>Endpoints</strong>: List jobs, get job, search jobs, post job listing</p></li>
+</ul>
+</section>
+<section id="job-types">
+<h4>25. Job Types<a class="headerlink" href="#job-types" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: Job type categories (contract, full-time, part-time, etc.)</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">jobs/controllers.py:JobTypeController</span></code></p></li>
+<li><p><strong>Endpoints</strong>: List types, get type, create/update/delete types</p></li>
+</ul>
+</section>
+<section id="job-categories">
+<h4>26. Job Categories<a class="headerlink" href="#job-categories" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: Job industry and role categories</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">jobs/controllers.py:JobCategoryController</span></code></p></li>
+<li><p><strong>Endpoints</strong>: List categories, get category, create/update/delete categories</p></li>
+</ul>
+</section>
+<section id="job-review-comments">
+<h4>27. Job Review Comments<a class="headerlink" href="#job-review-comments" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: Job listing review comments and moderation</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">jobs/controllers.py:JobReviewCommentController</span></code></p></li>
+<li><p><strong>Endpoints</strong>: List comments, get comment, add/delete comments</p></li>
+</ul>
+</section>
+</section>
+<section id="business-sponsorship">
+<h3>Business &amp; Sponsorship<a class="headerlink" href="#business-sponsorship" title="Link to this heading">¶</a></h3>
+<section id="sponsors">
+<h4>28. Sponsors<a class="headerlink" href="#sponsors" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: Python organizations and sponsor information</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">sponsors/controllers.py:SponsorController</span></code></p></li>
+<li><p><strong>Endpoints</strong>: List sponsors, get sponsor, sponsor details</p></li>
+</ul>
+</section>
+<section id="sponsorship-levels">
+<h4>29. Sponsorship Levels<a class="headerlink" href="#sponsorship-levels" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: Sponsorship tier definitions and benefits</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">sponsors/controllers.py:SponsorshipLevelController</span></code></p></li>
+<li><p><strong>Endpoints</strong>: List levels, get level, create/update/delete levels</p></li>
+</ul>
+</section>
+<section id="sponsorships">
+<h4>30. Sponsorships<a class="headerlink" href="#sponsorships" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: Active sponsorship relationships and agreements</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">sponsors/controllers.py:SponsorshipController</span></code></p></li>
+<li><p><strong>Endpoints</strong>: List sponsorships, get sponsorship, create/update/delete sponsorships</p></li>
+</ul>
+</section>
+<section id="companies">
+<h4>31. Companies<a class="headerlink" href="#companies" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: Company profiles and organization data</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">companies/controllers.py</span></code></p></li>
+<li><p><strong>Endpoints</strong>: List companies, get company, company search</p></li>
+</ul>
+</section>
+</section>
+<section id="governance-meetings">
+<h3>Governance &amp; Meetings<a class="headerlink" href="#governance-meetings" title="Link to this heading">¶</a></h3>
+<section id="work-groups">
+<h4>32. Work Groups<a class="headerlink" href="#work-groups" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: Python Enhancement Proposal (PEP) work groups</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">work_groups/controllers.py</span></code></p></li>
+<li><p><strong>Endpoints</strong>: List groups, get group, group membership</p></li>
+</ul>
+</section>
+<section id="meeting-minutes">
+<h4>33. Meeting Minutes<a class="headerlink" href="#meeting-minutes" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: Meeting notes and minutes archives</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">minutes/controllers.py</span></code></p></li>
+<li><p><strong>Endpoints</strong>: List minutes, get minutes, upload/archive minutes</p></li>
+</ul>
+</section>
+<section id="nominations">
+<h4>34. Nominations<a class="headerlink" href="#nominations" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: Award nominations and election cycles</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">nominations/controllers.py:NominationController</span></code></p></li>
+<li><p><strong>Endpoints</strong>: List nominations, get nomination, submit nomination</p></li>
+</ul>
+</section>
+<section id="nominees">
+<h4>35. Nominees<a class="headerlink" href="#nominees" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: Nominated individuals and candidates</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">nominations/controllers.py:NomineeController</span></code></p></li>
+<li><p><strong>Endpoints</strong>: List nominees, get nominee details</p></li>
+</ul>
+</section>
+<section id="elections">
+<h4>36. Elections<a class="headerlink" href="#elections" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: Election information and voting</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">nominations/controllers.py:ElectionController</span></code></p></li>
+<li><p><strong>Endpoints</strong>: List elections, get election, voting endpoints (if applicable)</p></li>
+</ul>
+</section>
+</section>
+<section id="discovery-search">
+<h3>Discovery &amp; Search<a class="headerlink" href="#discovery-search" title="Link to this heading">¶</a></h3>
+<section id="search">
+<h4>37. Search<a class="headerlink" href="#search" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: Full-text and faceted search across platform</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">search/controllers.py:SearchController</span></code></p></li>
+<li><p><strong>Endpoints</strong>: Global search, faceted search, search suggestions, autocomplete</p></li>
+</ul>
+</section>
+</section>
+<section id="mailing-notifications">
+<h3>Mailing &amp; Notifications<a class="headerlink" href="#mailing-notifications" title="Link to this heading">¶</a></h3>
+<section id="mailing-lists">
+<h4>38. Mailing Lists<a class="headerlink" href="#mailing-lists" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: Email list subscriptions and management</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">mailing/controllers.py</span></code></p></li>
+<li><p><strong>Endpoints</strong>: Subscribe, unsubscribe, list info, preference management</p></li>
+</ul>
+</section>
+</section>
+<section id="administration-grouped-under-admin-umbrella">
+<h3>Administration (Grouped Under Admin Umbrella)<a class="headerlink" href="#administration-grouped-under-admin-umbrella" title="Link to this heading">¶</a></h3>
+<section id="admin-dashboard">
+<h4>39. Admin Dashboard<a class="headerlink" href="#admin-dashboard" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: Administrative dashboard and system overview</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">admin/controllers/dashboard.py</span></code></p></li>
+<li><p><strong>Endpoints</strong>: Dashboard stats, system health, overview data</p></li>
+</ul>
+</section>
+<section id="admin-users">
+<h4>40. Admin Users<a class="headerlink" href="#admin-users" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: Administrative user management</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">admin/controllers/users.py</span></code></p></li>
+<li><p><strong>Endpoints</strong>: List/manage users, view user activity, permissions</p></li>
+</ul>
+</section>
+<section id="admin-pages">
+<h4>41. Admin Pages<a class="headerlink" href="#admin-pages" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: Administrative page management</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">admin/controllers/pages.py</span></code></p></li>
+<li><p><strong>Endpoints</strong>: Manage pages, bulk operations, publication control</p></li>
+</ul>
+</section>
+<section id="admin-events">
+<h4>42. Admin Events<a class="headerlink" href="#admin-events" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: Administrative event management</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">admin/controllers/events.py</span></code></p></li>
+<li><p><strong>Endpoints</strong>: Manage events, approve submissions, moderate content</p></li>
+</ul>
+</section>
+<section id="admin-jobs">
+<h4>43. Admin Jobs<a class="headerlink" href="#admin-jobs" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: Administrative job listing management</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">admin/controllers/jobs.py</span></code></p></li>
+<li><p><strong>Endpoints</strong>: Moderate listings, approve jobs, manage postings</p></li>
+</ul>
+</section>
+<section id="admin-sponsors">
+<h4>44. Admin Sponsors<a class="headerlink" href="#admin-sponsors" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: Administrative sponsor management</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">admin/controllers/sponsors.py</span></code></p></li>
+<li><p><strong>Endpoints</strong>: Manage sponsors, sponsorships, agreements</p></li>
+</ul>
+</section>
+<section id="admin-blogs">
+<h4>45. Admin Blogs<a class="headerlink" href="#admin-blogs" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: Administrative blog management</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">admin/controllers/blogs.py</span></code></p></li>
+<li><p><strong>Endpoints</strong>: Manage blog entries, moderate comments, publishing control</p></li>
+</ul>
+</section>
+<section id="admin-logs">
+<h4>46. Admin Logs<a class="headerlink" href="#admin-logs" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: System logging and audit trails</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">admin/controllers/logs.py</span></code></p></li>
+<li><p><strong>Endpoints</strong>: View logs, audit trails, activity history</p></li>
+</ul>
+</section>
+<section id="admin-email-templates">
+<h4>47. Admin Email Templates<a class="headerlink" href="#admin-email-templates" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: Email template management and customization</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">admin/controllers/email_templates.py</span></code> (or via logs controller)</p></li>
+<li><p><strong>Endpoints</strong>: List templates, get template, create/update/delete templates, preview</p></li>
+</ul>
+</section>
+<section id="admin-email-logs">
+<h4>48. Admin Email Logs<a class="headerlink" href="#admin-email-logs" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: Email delivery logs and status tracking</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">admin/controllers/email_logs.py</span></code> (or via logs controller)</p></li>
+<li><p><strong>Endpoints</strong>: View email logs, delivery status, resend emails</p></li>
+</ul>
+</section>
+<section id="admin-tasks">
+<h4>49. Admin Tasks<a class="headerlink" href="#admin-tasks" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: Background task management and scheduling</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">admin/controllers/tasks.py</span></code></p></li>
+<li><p><strong>Endpoints</strong>: List tasks, get task status, trigger tasks, view results</p></li>
+</ul>
+</section>
+<section id="admin-settings">
+<h4>50. Admin Settings<a class="headerlink" href="#admin-settings" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Description</strong>: System configuration and application settings</p></li>
+<li><p><strong>Controllers</strong>: <code class="docutils literal notranslate"><span class="pre">admin/controllers/settings.py</span></code></p></li>
+<li><p><strong>Endpoints</strong>: Get settings, update settings, reset to defaults</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="implementation-guidelines">
+<h2>Implementation Guidelines<a class="headerlink" href="#implementation-guidelines" title="Link to this heading">¶</a></h2>
+<section id="openapi-tag-definition-structure">
+<h3>OpenAPI Tag Definition Structure<a class="headerlink" href="#openapi-tag-definition-structure" title="Link to this heading">¶</a></h3>
+<p>Each tag should be defined in the Litestar OpenAPI configuration with:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="2">    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Tag Name&quot;</span><span class="p">,</span>
+</span><span data-line="3">    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Concise description of what endpoints in this group do&quot;</span><span class="p">,</span>
+</span><span data-line="4">    <span class="n">external_docs</span><span class="o">=</span><span class="n">ExternalDocumentation</span><span class="p">(</span>
+</span><span data-line="5">        <span class="n">url</span><span class="o">=</span><span class="s2">&quot;https://docs.python.org/path/to/docs&quot;</span><span class="p">,</span>
+</span><span data-line="6">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Learn more about this feature&quot;</span>
+</span><span data-line="7">    <span class="p">)</span> <span class="k">if</span> <span class="n">applicable</span>
+</span><span data-line="8"><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="controller-implementation">
+<h3>Controller Implementation<a class="headerlink" href="#controller-implementation" title="Link to this heading">¶</a></h3>
+<p>Update controller tags from the current structure:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Before (too granular)</span>
+</span><span data-line="2"><span class="k">class</span><span class="w"> </span><span class="nc">JobTypeController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="3">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;job-types&quot;</span><span class="p">]</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="c1"># After (grouped under primary resource)</span>
+</span><span data-line="6"><span class="k">class</span><span class="w"> </span><span class="nc">JobTypeController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="7">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Job Types&quot;</span><span class="p">]</span>
+</span></pre></div>
+</div>
+</section>
+<section id="hide-render-endpoints-from-public-api">
+<h3>Hide Render Endpoints from Public API<a class="headerlink" href="#hide-render-endpoints-from-public-api" title="Link to this heading">¶</a></h3>
+<p>Mark render controllers to exclude from public documentation:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Render controllers should NOT appear in public API docs</span>
+</span><span data-line="2"><span class="k">class</span><span class="w"> </span><span class="nc">JobRenderController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="3">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;internal&quot;</span><span class="p">]</span>  <span class="c1"># or use OpenAPI exclude mechanism</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="ordering-strategy-for-scalar-ui">
+<h2>Ordering Strategy for Scalar UI<a class="headerlink" href="#ordering-strategy-for-scalar-ui" title="Link to this heading">¶</a></h2>
+<p>Tags are presented to users in the order they appear in the OpenAPI tags array. Recommended order:</p>
+<ol class="arabic simple">
+<li><p><strong>Authentication</strong> - Required first by developers</p></li>
+<li><p><strong>Users</strong> → <strong>User Memberships</strong> → <strong>User Groups</strong> - User management flow</p></li>
+<li><p><strong>Pages</strong> → <strong>Documents</strong> → <strong>Images</strong> → <strong>Banners</strong> → <strong>Code Samples</strong> - Content resources</p></li>
+<li><p><strong>Operating Systems</strong> → <strong>Python Releases</strong> → <strong>Release Files</strong> - Download-related</p></li>
+<li><p><strong>Events</strong> → <strong>Calendars</strong> → <strong>Categories</strong> → <strong>Locations</strong> → <strong>Occurrences</strong> - Event management flow</p></li>
+<li><p><strong>User Groups &amp; Communities</strong> → <strong>Community Content</strong> - Community discovery</p></li>
+<li><p><strong>Blogs</strong> → <strong>Blog Feeds</strong> → <strong>Success Stories</strong> - Content discovery</p></li>
+<li><p><strong>Jobs</strong> → <strong>Job Types</strong> → <strong>Job Categories</strong> → <strong>Job Review Comments</strong> - Job management</p></li>
+<li><p><strong>Sponsors</strong> → <strong>Sponsorship Levels</strong> → <strong>Sponsorships</strong> → <strong>Companies</strong> - Sponsorship flow</p></li>
+<li><p><strong>Work Groups</strong> → <strong>Meeting Minutes</strong> → <strong>Nominations</strong> → <strong>Nominees</strong> → <strong>Elections</strong> - Governance</p></li>
+<li><p><strong>Search</strong> - Aggregate discovery</p></li>
+<li><p><strong>Mailing Lists</strong> - Communication</p></li>
+<li><p><strong>Admin Dashboard</strong> → <strong>Admin Users</strong> → <strong>Admin Pages</strong> → … - Administrative tools</p></li>
+</ol>
+</section>
+<section id="benefits-of-this-structure">
+<h2>Benefits of This Structure<a class="headerlink" href="#benefits-of-this-structure" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Reduced Cognitive Load</strong>: Developers see 50 focused tags instead of 100+ fragmented ones</p></li>
+<li><p><strong>Logical Flow</strong>: Follows typical developer journey from auth → content → features</p></li>
+<li><p><strong>Related Grouping</strong>: Sub-resources (e.g., Event → Calendar → Category) are adjacent</p></li>
+<li><p><strong>Admin Isolated</strong>: Administrative endpoints clearly separated and deprioritized</p></li>
+<li><p><strong>Render Excluded</strong>: Internal render controllers hidden from public documentation</p></li>
+<li><p><strong>Scalable</strong>: Easy to add new tags to appropriate categories as platform grows</p></li>
+<li><p><strong>Readable</strong>: Title Case with spaces much more readable in Scalar UI than kebab-case</p></li>
+</ul>
+</section>
+<section id="migration-notes">
+<h2>Migration Notes<a class="headerlink" href="#migration-notes" title="Link to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Update all controller <code class="docutils literal notranslate"><span class="pre">tags</span></code> assignments to match this structure</p></li>
+<li><p>Configure OpenAPI tags list in main application config</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">include_in_schema=False</span></code> to render controllers or mark them “internal”</p></li>
+<li><p>Test in Scalar UI to verify grouping and ordering</p></li>
+<li><p>Consider adding brief external documentation links where applicable</p></li>
+<li><p>Monitor usage patterns to validate grouping logic</p></li>
+</ol>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Jacob Coffee</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+<a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+  <iconify-icon icon="simple-icons:github"></iconify-icon>
+</a></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=30646c52"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script src="../_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

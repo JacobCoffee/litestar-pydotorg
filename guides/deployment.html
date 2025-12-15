@@ -1,0 +1,1786 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="blue" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Deployment Guide - litestar-pydotorg</title><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Docker Guide" href="docker.html" /><link rel="prev" title="Configuration Guide" href="configuration.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=14737038" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=513f0650" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="Deployment Guide"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../index.html">
+      
+      
+      <strong>litestar-pydotorg</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"><ul><li class="link">
+          <a href="https://litestar.dev/">
+            <span>Litestar</span></a>
+        </li><li class="link">
+          <a href="https://python.org/">
+            <span>Python.org</span></a>
+        </li></ul></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials">
+  <a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting-started/index.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/quickstart.html">Quickstart</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="development.html">Development Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html">Contribution Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html">Testing Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="debugging.html">Debugging Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api-usage.html">API Usage Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="authentication.html">Authentication Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="feature-flags.html">Feature Flags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html">Configuration Guide</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Deployment Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docker.html">Docker Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="troubleshooting.html">Troubleshooting Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/index.html">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/domain-patterns.html">Domain Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/authentication-recipes.html">Authentication Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/database-recipes.html">Database Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/testing-recipes.html">Testing Recipes</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/core/index.html">Core Infrastructure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/auth.html">Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/cache.html">Caching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/database.html">Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/email.html">Email</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/exceptions.html">Exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/features.html">Feature Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/feeds.html">RSS/Atom Feeds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/ical.html">iCalendar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/middleware.html">Middleware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/openapi.html">OpenAPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/ratelimit.html">Rate Limiting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/security.html">Security</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/worker.html">Background Worker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/domains/index.html">Domain Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/about.html">About</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/admin.html">Admin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/banners.html">banners</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/blogs.html">blogs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/codesamples.html">Code Samples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/community.html">community</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/docs.html">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/downloads.html">downloads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/events.html">events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/jobs.html">jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/mailing.html">Mailing Lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/minutes.html">Minutes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/nominations.html">Nominations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/pages.html">pages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/sponsors.html">sponsors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/sqladmin.html">SQLAdmin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/successstories.html">Success Stories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/users.html">users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/work_groups.html">Work Groups</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/lib.html">Library Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/tasks.html">Background Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/config.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/main.html">Application Entry Point</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/ARCHITECTURE.html">Litestar Python.org Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/DATABASE_SCHEMA.html">Database Schema Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/DOMAIN_MODELS.html">Domain Models Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/QUICK_START.html">Litestar Python.org Quick Start Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/API_TAGS_INDEX.html">API Tags Documentation Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/RATE_LIMITING_ARCHITECTURE.html">Rate Limiting Architecture Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/adr/001-litestar-framework.html">ADR-001: Use Litestar as Web Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/adr/002-saq-background-tasks.html">ADR-002: Use SAQ for Background Task Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#prerequisites">Prerequisites</a><ul>
+<li><a class="reference internal" href="#required-software">Required Software</a></li>
+<li><a class="reference internal" href="#required-accounts-production">Required Accounts (Production)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#development-setup">Development Setup</a><ul>
+<li><a class="reference internal" href="#local-development-recommended-for-active-development">Local Development (Recommended for Active Development)</a></li>
+<li><a class="reference internal" href="#docker-development">Docker Development</a><ul>
+<li><a class="reference internal" href="#docker-profiles">Docker Profiles</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#environment-configuration">Environment Configuration</a><ul>
+<li><a class="reference internal" href="#environment-variables-reference">Environment Variables Reference</a><ul>
+<li><a class="reference internal" href="#core-settings">Core Settings</a></li>
+<li><a class="reference internal" href="#database">Database</a></li>
+<li><a class="reference internal" href="#redis">Redis</a></li>
+<li><a class="reference internal" href="#security">Security</a></li>
+<li><a class="reference internal" href="#oauth">OAuth</a></li>
+<li><a class="reference internal" href="#email-smtp">Email (SMTP)</a></li>
+<li><a class="reference internal" href="#search-meilisearch">Search (Meilisearch)</a></li>
+<li><a class="reference internal" href="#cdn-fastly">CDN (Fastly)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#generating-secrets">Generating Secrets</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#production-deployment">Production Deployment</a><ul>
+<li><a class="reference internal" href="#docker-compose-production">Docker Compose Production</a></li>
+<li><a class="reference internal" href="#production-dockerfile">Production Dockerfile</a></li>
+<li><a class="reference internal" href="#database-setup">Database Setup</a><ul>
+<li><a class="reference internal" href="#postgresql-configuration">PostgreSQL Configuration</a></li>
+<li><a class="reference internal" href="#running-migrations">Running Migrations</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#redis-configuration">Redis Configuration</a></li>
+<li><a class="reference internal" href="#background-worker-saq">Background Worker (SAQ)</a><ul>
+<li><a class="reference internal" href="#running-the-worker">Running the Worker</a></li>
+<li><a class="reference internal" href="#cron-jobs">Cron Jobs</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#reverse-proxy-configuration">Reverse Proxy Configuration</a><ul>
+<li><a class="reference internal" href="#nginx">Nginx</a></li>
+<li><a class="reference internal" href="#caddy">Caddy</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#kubernetes-deployment">Kubernetes Deployment</a><ul>
+<li><a class="reference internal" href="#convert-docker-compose-to-kubernetes">Convert Docker Compose to Kubernetes</a></li>
+<li><a class="reference internal" href="#kubernetes-manifests">Kubernetes Manifests</a><ul>
+<li><a class="reference internal" href="#deployment">Deployment</a></li>
+<li><a class="reference internal" href="#service">Service</a></li>
+<li><a class="reference internal" href="#ingress">Ingress</a></li>
+<li><a class="reference internal" href="#configmap-and-secret">ConfigMap and Secret</a></li>
+<li><a class="reference internal" href="#worker-deployment">Worker Deployment</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#helm-chart-optional">Helm Chart (Optional)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#health-checks">Health Checks</a><ul>
+<li><a class="reference internal" href="#endpoints">Endpoints</a></li>
+<li><a class="reference internal" href="#health-check-response">Health Check Response</a></li>
+<li><a class="reference internal" href="#docker-health-check">Docker Health Check</a></li>
+<li><a class="reference internal" href="#external-monitoring">External Monitoring</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#monitoring-and-logging">Monitoring and Logging</a><ul>
+<li><a class="reference internal" href="#structured-logging">Structured Logging</a></li>
+<li><a class="reference internal" href="#log-aggregation">Log Aggregation</a><ul>
+<li><a class="reference internal" href="#docker-logging">Docker Logging</a></li>
+<li><a class="reference internal" href="#loki-grafana-stack">Loki/Grafana Stack</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#prometheus-metrics">Prometheus Metrics</a></li>
+<li><a class="reference internal" href="#application-insights">Application Insights</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#backup-and-restore">Backup and Restore</a><ul>
+<li><a class="reference internal" href="#database-backup">Database Backup</a><ul>
+<li><a class="reference internal" href="#automated-backups">Automated Backups</a></li>
+<li><a class="reference internal" href="#manual-backup">Manual Backup</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#database-restore">Database Restore</a></li>
+<li><a class="reference internal" href="#redis-backup">Redis Backup</a></li>
+<li><a class="reference internal" href="#media-files-backup">Media Files Backup</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul>
+<li><a class="reference internal" href="#common-issues">Common Issues</a><ul>
+<li><a class="reference internal" href="#database-connection-failed">Database Connection Failed</a></li>
+<li><a class="reference internal" href="#migration-errors">Migration Errors</a></li>
+<li><a class="reference internal" href="#worker-not-processing-tasks">Worker Not Processing Tasks</a></li>
+<li><a class="reference internal" href="#out-of-memory">Out of Memory</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#debug-mode">Debug Mode</a></li>
+<li><a class="reference internal" href="#performance-profiling">Performance Profiling</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#security-checklist">Security Checklist</a></li>
+<li><a class="reference internal" href="#quick-reference">Quick Reference</a><ul>
+<li><a class="reference internal" href="#make-commands">Make Commands</a></li>
+<li><a class="reference internal" href="#port-reference">Port Reference</a></li>
+<li><a class="reference internal" href="#resource-requirements">Resource Requirements</a></li>
+</ul>
+</li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../index.html"><span itemprop="name">litestar-pydotorg</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="index.html"><span itemprop="name">Guides</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="2" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">Deployment Guide</strong>
+        <meta itemprop="position" content="3" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue dark-code" role="main">
+          <section id="deployment-guide">
+<h1>Deployment Guide<a class="headerlink" href="#deployment-guide" title="Link to this heading">¶</a></h1>
+<p>This guide covers deploying litestar-pydotorg from local development through to production.</p>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">¶</a></h2>
+<p>Before deploying, ensure you have:</p>
+<section id="required-software">
+<h3>Required Software<a class="headerlink" href="#required-software" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Tool</p></th>
+<th class="head"><p>Version</p></th>
+<th class="head"><p>Purpose</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Python</p></td>
+<td><p>3.13+</p></td>
+<td><p>Runtime</p></td>
+</tr>
+<tr class="row-odd"><td><p>PostgreSQL</p></td>
+<td><p>16+</p></td>
+<td><p>Database</p></td>
+</tr>
+<tr class="row-even"><td><p>Redis</p></td>
+<td><p>7+</p></td>
+<td><p>Cache, sessions, task queue</p></td>
+</tr>
+<tr class="row-odd"><td><p>Docker</p></td>
+<td><p>24+</p></td>
+<td><p>Containerization (optional)</p></td>
+</tr>
+<tr class="row-even"><td><p>uv</p></td>
+<td><p>Latest</p></td>
+<td><p>Python package manager</p></td>
+</tr>
+<tr class="row-odd"><td><p>Bun</p></td>
+<td><p>Latest</p></td>
+<td><p>Frontend build (or Node.js 20+)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="required-accounts-production">
+<h3>Required Accounts (Production)<a class="headerlink" href="#required-accounts-production" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>GitHub/Google OAuth</strong>: For social authentication</p></li>
+<li><p><strong>SendGrid/SMTP Provider</strong>: For transactional emails</p></li>
+<li><p><strong>Fastly CDN</strong> (optional): For edge caching and CDN</p></li>
+<li><p><strong>Container Registry</strong>: For Docker image storage (GitHub Container Registry, Docker Hub, etc.)</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="development-setup">
+<h2>Development Setup<a class="headerlink" href="#development-setup" title="Link to this heading">¶</a></h2>
+<section id="local-development-recommended-for-active-development">
+<h3>Local Development (Recommended for Active Development)<a class="headerlink" href="#local-development-recommended-for-active-development" title="Link to this heading">¶</a></h3>
+<ol class="arabic">
+<li><p><strong>Clone and Install</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">git<span class="w"> </span>clone<span class="w"> </span>https://github.com/JacobCoffee/litestar-pydotorg.git
+</span><span data-line="2"><span class="nb">cd</span><span class="w"> </span>litestar-pydotorg
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Install Python dependencies</span>
+</span><span data-line="5">make<span class="w"> </span>install
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Install frontend dependencies</span>
+</span><span data-line="8">make<span class="w"> </span>assets-install
+</span></pre></div>
+</div>
+</li>
+<li><p><strong>Configure Environment</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">cp<span class="w"> </span>.env.dev.example<span class="w"> </span>.env.dev
+</span></pre></div>
+</div>
+<p>The default development configuration works out of the box with local PostgreSQL and Redis.</p>
+</li>
+<li><p><strong>Start Infrastructure</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Start PostgreSQL and Redis containers</span>
+</span><span data-line="2">make<span class="w"> </span>infra-up
+</span></pre></div>
+</div>
+</li>
+<li><p><strong>Initialize Database</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Run migrations</span>
+</span><span data-line="2">make<span class="w"> </span>litestar-db-upgrade
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Seed with development data</span>
+</span><span data-line="5">make<span class="w"> </span>db-seed
+</span></pre></div>
+</div>
+</li>
+<li><p><strong>Start Development Servers</strong></p>
+<p>Option A - Separate terminals:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Terminal 1: Litestar API server with hot-reload</span>
+</span><span data-line="2">make<span class="w"> </span>serve
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Terminal 2: SAQ background worker</span>
+</span><span data-line="5">make<span class="w"> </span>worker
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Terminal 3: TailwindCSS watcher (optional)</span>
+</span><span data-line="8">make<span class="w"> </span>css-watch
+</span></pre></div>
+</div>
+<p>Option B - tmux (recommended):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">make<span class="w"> </span>dev-tmux
+</span><span data-line="2"><span class="c1"># Attach with: tmux attach -t pydotorg</span>
+</span></pre></div>
+</div>
+</li>
+<li><p><strong>Verify Installation</strong></p>
+<ul class="simple">
+<li><p>Application: <a class="reference external" href="http://localhost:8000">http://localhost:8000</a></p></li>
+<li><p>API Docs: <a class="reference external" href="http://localhost:8000/api/docs">http://localhost:8000/api/docs</a></p></li>
+<li><p>Admin Panel: <a class="reference external" href="http://localhost:8000/admin">http://localhost:8000/admin</a></p></li>
+<li><p>MailDev (email): <a class="reference external" href="http://localhost:1080">http://localhost:1080</a></p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="docker-development">
+<h3>Docker Development<a class="headerlink" href="#docker-development" title="Link to this heading">¶</a></h3>
+<p>For a fully containerized development experience:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Build and start all services</span>
+</span><span data-line="2">make<span class="w"> </span>docker-up
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># View logs</span>
+</span><span data-line="5">make<span class="w"> </span>docker-logs
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Stop services</span>
+</span><span data-line="8">make<span class="w"> </span>docker-down
+</span></pre></div>
+</div>
+<p>This starts:</p>
+<ul class="simple">
+<li><p>PostgreSQL (port 5432)</p></li>
+<li><p>Redis (port 6379)</p></li>
+<li><p>Litestar app with hot-reload (port 8000)</p></li>
+<li><p>SAQ background worker</p></li>
+<li><p>MailDev for email testing (ports 1025/1080)</p></li>
+</ul>
+<section id="docker-profiles">
+<h4>Docker Profiles<a class="headerlink" href="#docker-profiles" title="Link to this heading">¶</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Development profile (default)</span>
+</span><span data-line="2">docker<span class="w"> </span>compose<span class="w"> </span>--profile<span class="w"> </span>dev<span class="w"> </span>up<span class="w"> </span>-d
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Full profile (includes Meilisearch for search)</span>
+</span><span data-line="5">docker<span class="w"> </span>compose<span class="w"> </span>--profile<span class="w"> </span>full<span class="w"> </span>up<span class="w"> </span>-d
+</span><span data-line="6"><span class="c1"># or</span>
+</span><span data-line="7">make<span class="w"> </span>docker-full
+</span></pre></div>
+</div>
+</section>
+</section>
+</section>
+<hr class="docutils" />
+<section id="environment-configuration">
+<h2>Environment Configuration<a class="headerlink" href="#environment-configuration" title="Link to this heading">¶</a></h2>
+<section id="environment-variables-reference">
+<h3>Environment Variables Reference<a class="headerlink" href="#environment-variables-reference" title="Link to this heading">¶</a></h3>
+<section id="core-settings">
+<h4>Core Settings<a class="headerlink" href="#core-settings" title="Link to this heading">¶</a></h4>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Required in Prod</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">APP_ENV</span></code></p></td>
+<td><p>Environment (<code class="docutils literal notranslate"><span class="pre">dev</span></code>, <code class="docutils literal notranslate"><span class="pre">staging</span></code>, <code class="docutils literal notranslate"><span class="pre">prod</span></code>)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">dev</span></code></p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SECRET_KEY</span></code></p></td>
+<td><p>Application secret (32+ chars)</p></td>
+<td><p>-</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DEBUG</span></code></p></td>
+<td><p>Enable debug mode</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code> in dev</p></td>
+<td><p>No (auto-set)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="database">
+<h4>Database<a class="headerlink" href="#database" title="Link to this heading">¶</a></h4>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Default</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DATABASE_URL</span></code></p></td>
+<td><p>PostgreSQL connection string</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">postgresql+asyncpg://postgres:postgres&#64;localhost:5432/pydotorg</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DATABASE_POOL_SIZE</span></code></p></td>
+<td><p>Connection pool size</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">20</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DATABASE_MAX_OVERFLOW</span></code></p></td>
+<td><p>Max overflow connections</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">10</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="redis">
+<h4>Redis<a class="headerlink" href="#redis" title="Link to this heading">¶</a></h4>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Default</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">REDIS_URL</span></code></p></td>
+<td><p>Redis connection string</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">redis://localhost:6379/0</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="security">
+<h4>Security<a class="headerlink" href="#security" title="Link to this heading">¶</a></h4>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Required in Prod</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SESSION_SECRET_KEY</span></code></p></td>
+<td><p>Session encryption key (32+ chars)</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CSRF_SECRET</span></code></p></td>
+<td><p>CSRF token secret (32+ chars)</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">JWT_ALGORITHM</span></code></p></td>
+<td><p>JWT signing algorithm</p></td>
+<td><p>No (<code class="docutils literal notranslate"><span class="pre">HS256</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">JWT_EXPIRATION_MINUTES</span></code></p></td>
+<td><p>JWT token lifetime</p></td>
+<td><p>No (<code class="docutils literal notranslate"><span class="pre">10080</span></code>)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="oauth">
+<h4>OAuth<a class="headerlink" href="#oauth" title="Link to this heading">¶</a></h4>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">GITHUB_CLIENT_ID</span></code></p></td>
+<td><p>GitHub OAuth client ID</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GITHUB_CLIENT_SECRET</span></code></p></td>
+<td><p>GitHub OAuth client secret</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">GOOGLE_CLIENT_ID</span></code></p></td>
+<td><p>Google OAuth client ID</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GOOGLE_CLIENT_SECRET</span></code></p></td>
+<td><p>Google OAuth client secret</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">OAUTH_REDIRECT_BASE_URL</span></code></p></td>
+<td><p>OAuth callback base URL</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="email-smtp">
+<h4>Email (SMTP)<a class="headerlink" href="#email-smtp" title="Link to this heading">¶</a></h4>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Default</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SMTP_HOST</span></code></p></td>
+<td><p>SMTP server hostname</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">localhost</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SMTP_PORT</span></code></p></td>
+<td><p>SMTP server port</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">587</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SMTP_USER</span></code></p></td>
+<td><p>SMTP username</p></td>
+<td><p>-</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SMTP_PASSWORD</span></code></p></td>
+<td><p>SMTP password</p></td>
+<td><p>-</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SMTP_FROM_EMAIL</span></code></p></td>
+<td><p>Sender email address</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">noreply&#64;python.org</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SMTP_FROM_NAME</span></code></p></td>
+<td><p>Sender display name</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Python.org</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SMTP_USE_TLS</span></code></p></td>
+<td><p>Enable TLS</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="search-meilisearch">
+<h4>Search (Meilisearch)<a class="headerlink" href="#search-meilisearch" title="Link to this heading">¶</a></h4>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Default</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MEILISEARCH_URL</span></code></p></td>
+<td><p>Meilisearch server URL</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">http://127.0.0.1:7700</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">MEILISEARCH_API_KEY</span></code></p></td>
+<td><p>Meilisearch API key</p></td>
+<td><p>-</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MEILISEARCH_INDEX_PREFIX</span></code></p></td>
+<td><p>Index name prefix</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">pydotorg_</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="cdn-fastly">
+<h4>CDN (Fastly)<a class="headerlink" href="#cdn-fastly" title="Link to this heading">¶</a></h4>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FASTLY_API_KEY</span></code></p></td>
+<td><p>Fastly API key for cache invalidation</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="generating-secrets">
+<h3>Generating Secrets<a class="headerlink" href="#generating-secrets" title="Link to this heading">¶</a></h3>
+<p>Generate secure secrets for production:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Using Python</span>
+</span><span data-line="2">python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import secrets; print(secrets.token_urlsafe(32))&quot;</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Using OpenSSL</span>
+</span><span data-line="5">openssl<span class="w"> </span>rand<span class="w"> </span>-base64<span class="w"> </span><span class="m">32</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Using uv</span>
+</span><span data-line="8">uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import secrets; print(secrets.token_urlsafe(32))&quot;</span>
+</span></pre></div>
+</div>
+<p>Generate multiple secrets at once:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;SECRET_KEY=</span><span class="k">$(</span>openssl<span class="w"> </span>rand<span class="w"> </span>-base64<span class="w"> </span><span class="m">32</span><span class="k">)</span><span class="s2">&quot;</span>
+</span><span data-line="2"><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;SESSION_SECRET_KEY=</span><span class="k">$(</span>openssl<span class="w"> </span>rand<span class="w"> </span>-base64<span class="w"> </span><span class="m">32</span><span class="k">)</span><span class="s2">&quot;</span>
+</span><span data-line="3"><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;CSRF_SECRET=</span><span class="k">$(</span>openssl<span class="w"> </span>rand<span class="w"> </span>-base64<span class="w"> </span><span class="m">32</span><span class="k">)</span><span class="s2">&quot;</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="production-deployment">
+<h2>Production Deployment<a class="headerlink" href="#production-deployment" title="Link to this heading">¶</a></h2>
+<section id="docker-compose-production">
+<h3>Docker Compose Production<a class="headerlink" href="#docker-compose-production" title="Link to this heading">¶</a></h3>
+<ol class="arabic">
+<li><p><strong>Create Production Environment File</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">cp<span class="w"> </span>.env.prod.example<span class="w"> </span>.env.prod
+</span></pre></div>
+</div>
+<p>Edit <code class="docutils literal notranslate"><span class="pre">.env.prod</span></code> with production values:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Required - change these!</span>
+</span><span data-line="2"><span class="nv">APP_ENV</span><span class="o">=</span>prod
+</span><span data-line="3"><span class="nv">SECRET_KEY</span><span class="o">=</span>&lt;generate-secure-key&gt;
+</span><span data-line="4"><span class="nv">SESSION_SECRET_KEY</span><span class="o">=</span>&lt;generate-secure-key&gt;
+</span><span data-line="5"><span class="nv">CSRF_SECRET</span><span class="o">=</span>&lt;generate-secure-key&gt;
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Database</span>
+</span><span data-line="8"><span class="nv">DATABASE_URL</span><span class="o">=</span>postgresql+asyncpg://prod_user:secure_password@db.example.com:5432/pydotorg
+</span><span data-line="9"><span class="nv">DATABASE_POOL_SIZE</span><span class="o">=</span><span class="m">40</span>
+</span><span data-line="10"><span class="nv">DATABASE_MAX_OVERFLOW</span><span class="o">=</span><span class="m">20</span>
+</span><span data-line="11">
+</span><span data-line="12"><span class="c1"># Redis</span>
+</span><span data-line="13"><span class="nv">REDIS_URL</span><span class="o">=</span>redis://redis.example.com:6379/0
+</span><span data-line="14">
+</span><span data-line="15"><span class="c1"># OAuth (production URLs)</span>
+</span><span data-line="16"><span class="nv">OAUTH_REDIRECT_BASE_URL</span><span class="o">=</span>https://www.python.org
+</span><span data-line="17"><span class="nv">GITHUB_CLIENT_ID</span><span class="o">=</span>your-production-client-id
+</span><span data-line="18"><span class="nv">GITHUB_CLIENT_SECRET</span><span class="o">=</span>your-production-client-secret
+</span><span data-line="19">
+</span><span data-line="20"><span class="c1"># Email</span>
+</span><span data-line="21"><span class="nv">SMTP_HOST</span><span class="o">=</span>smtp.sendgrid.net
+</span><span data-line="22"><span class="nv">SMTP_PORT</span><span class="o">=</span><span class="m">587</span>
+</span><span data-line="23"><span class="nv">SMTP_USER</span><span class="o">=</span>apikey
+</span><span data-line="24"><span class="nv">SMTP_PASSWORD</span><span class="o">=</span>your-sendgrid-api-key
+</span></pre></div>
+</div>
+</li>
+<li><p><strong>Build Production Image</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>docker-compose.yml<span class="w"> </span>-f<span class="w"> </span>docker-compose.prod.yml<span class="w"> </span>build
+</span></pre></div>
+</div>
+</li>
+<li><p><strong>Start Production Stack</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">make<span class="w"> </span>docker-prod-up
+</span><span data-line="2"><span class="c1"># or</span>
+</span><span data-line="3">docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>docker-compose.yml<span class="w"> </span>-f<span class="w"> </span>docker-compose.prod.yml<span class="w"> </span>--profile<span class="w"> </span>dev<span class="w"> </span>up<span class="w"> </span>-d
+</span></pre></div>
+</div>
+</li>
+<li><p><strong>Run Migrations</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>pydotorg-app<span class="w"> </span>alembic<span class="w"> </span>upgrade<span class="w"> </span>head
+</span></pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="production-dockerfile">
+<h3>Production Dockerfile<a class="headerlink" href="#production-dockerfile" title="Link to this heading">¶</a></h3>
+<p>The production <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code> uses a multi-stage build:</p>
+<ol class="arabic simple">
+<li><p><strong>Frontend Builder</strong>: Compiles Vite/TailwindCSS assets using Bun</p></li>
+<li><p><strong>Python Builder</strong>: Installs dependencies with uv (no dev deps)</p></li>
+<li><p><strong>Runtime</strong>: Minimal image with compiled bytecode</p></li>
+</ol>
+<p>Key features:</p>
+<ul class="simple">
+<li><p>Non-root user (<code class="docutils literal notranslate"><span class="pre">appuser:appuser</span></code>, UID 1000)</p></li>
+<li><p>Compiled Python bytecode for faster startup</p></li>
+<li><p>4 Granian workers by default</p></li>
+<li><p>Health check endpoint monitoring</p></li>
+<li><p>Approximately 400MB final image size</p></li>
+</ul>
+</section>
+<section id="database-setup">
+<h3>Database Setup<a class="headerlink" href="#database-setup" title="Link to this heading">¶</a></h3>
+<section id="postgresql-configuration">
+<h4>PostgreSQL Configuration<a class="headerlink" href="#postgresql-configuration" title="Link to this heading">¶</a></h4>
+<p>Recommended production settings in <code class="docutils literal notranslate"><span class="pre">postgresql.conf</span></code>:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Connection settings</span>
+</span><span data-line="2"><span class="na">max_connections</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">200</span>
+</span><span data-line="3"><span class="na">shared_buffers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">2GB</span>
+</span><span data-line="4"><span class="na">effective_cache_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">6GB</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="c1"># Write-ahead logging</span>
+</span><span data-line="7"><span class="na">wal_level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">replica</span>
+</span><span data-line="8"><span class="na">max_wal_senders</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">3</span>
+</span><span data-line="9">
+</span><span data-line="10"><span class="c1"># Query optimization</span>
+</span><span data-line="11"><span class="na">random_page_cost</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">1.1</span>
+</span><span data-line="12"><span class="na">effective_io_concurrency</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">200</span>
+</span><span data-line="13">
+</span><span data-line="14"><span class="c1"># Logging</span>
+</span><span data-line="15"><span class="na">log_min_duration_statement</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">1000</span>
+</span><span data-line="16"><span class="na">log_checkpoints</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">on</span>
+</span><span data-line="17"><span class="na">log_connections</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">on</span>
+</span><span data-line="18"><span class="na">log_disconnections</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">on</span>
+</span></pre></div>
+</div>
+</section>
+<section id="running-migrations">
+<h4>Running Migrations<a class="headerlink" href="#running-migrations" title="Link to this heading">¶</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Using Litestar CLI (preferred)</span>
+</span><span data-line="2"><span class="nv">LITESTAR_APP</span><span class="o">=</span>pydotorg.main:app<span class="w"> </span>uv<span class="w"> </span>run<span class="w"> </span>litestar<span class="w"> </span>database<span class="w"> </span>upgrade
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Using Alembic directly</span>
+</span><span data-line="5">uv<span class="w"> </span>run<span class="w"> </span>alembic<span class="w"> </span>upgrade<span class="w"> </span>head
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># In Docker</span>
+</span><span data-line="8">docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>pydotorg-app<span class="w"> </span>alembic<span class="w"> </span>upgrade<span class="w"> </span>head
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="redis-configuration">
+<h3>Redis Configuration<a class="headerlink" href="#redis-configuration" title="Link to this heading">¶</a></h3>
+<p>Production Redis settings in <code class="docutils literal notranslate"><span class="pre">redis.conf</span></code>:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Persistence</span>
+</span><span data-line="2"><span class="na">save 900 1</span>
+</span><span data-line="3"><span class="na">save 300 10</span>
+</span><span data-line="4"><span class="na">save 60 10000</span>
+</span><span data-line="5"><span class="na">appendonly yes</span>
+</span><span data-line="6"><span class="na">appendfsync everysec</span>
+</span><span data-line="7">
+</span><span data-line="8"><span class="c1"># Memory management</span>
+</span><span data-line="9"><span class="na">maxmemory 1gb</span>
+</span><span data-line="10"><span class="na">maxmemory-policy allkeys-lru</span>
+</span><span data-line="11">
+</span><span data-line="12"><span class="c1"># Security</span>
+</span><span data-line="13"><span class="na">requirepass your-redis-password</span>
+</span><span data-line="14"><span class="na">protected-mode yes</span>
+</span><span data-line="15">
+</span><span data-line="16"><span class="c1"># Logging</span>
+</span><span data-line="17"><span class="na">loglevel warning</span>
+</span></pre></div>
+</div>
+</section>
+<section id="background-worker-saq">
+<h3>Background Worker (SAQ)<a class="headerlink" href="#background-worker-saq" title="Link to this heading">¶</a></h3>
+<p>The SAQ worker handles asynchronous tasks:</p>
+<ul class="simple">
+<li><p>Email sending</p></li>
+<li><p>Feed synchronization</p></li>
+<li><p>Search indexing</p></li>
+<li><p>Cache warming</p></li>
+<li><p>Event reminders</p></li>
+<li><p>Job expiration</p></li>
+</ul>
+<section id="running-the-worker">
+<h4>Running the Worker<a class="headerlink" href="#running-the-worker" title="Link to this heading">¶</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Local</span>
+</span><span data-line="2">make<span class="w"> </span>worker
+</span><span data-line="3"><span class="c1"># or</span>
+</span><span data-line="4">uv<span class="w"> </span>run<span class="w"> </span>saq<span class="w"> </span>pydotorg.tasks.worker.saq_settings
+</span><span data-line="5">
+</span><span data-line="6"><span class="c1"># Docker</span>
+</span><span data-line="7">docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>worker<span class="w"> </span>-d
+</span><span data-line="8">
+</span><span data-line="9"><span class="c1"># Multiple workers for high volume</span>
+</span><span data-line="10">docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>--scale<span class="w"> </span><span class="nv">worker</span><span class="o">=</span><span class="m">3</span><span class="w"> </span>-d
+</span></pre></div>
+</div>
+</section>
+<section id="cron-jobs">
+<h4>Cron Jobs<a class="headerlink" href="#cron-jobs" title="Link to this heading">¶</a></h4>
+<p>The worker includes scheduled tasks:</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Task</p></th>
+<th class="head"><p>Schedule</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">cron_refresh_feeds</span></code></p></td>
+<td><p>Every 15 min</p></td>
+<td><p>Refresh blog feeds</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">cron_event_reminders</span></code></p></td>
+<td><p>Daily</p></td>
+<td><p>Send event reminders</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">cron_expire_jobs</span></code></p></td>
+<td><p>Daily</p></td>
+<td><p>Expire old job listings</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">cron_rebuild_indexes</span></code></p></td>
+<td><p>Weekly</p></td>
+<td><p>Rebuild search indexes</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">cron_warm_homepage_cache</span></code></p></td>
+<td><p>Every 5 min</p></td>
+<td><p>Warm homepage cache</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">cron_sync_events</span></code></p></td>
+<td><p>Every 6 hours</p></td>
+<td><p>Sync external events</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">cron_sync_news</span></code></p></td>
+<td><p>Every hour</p></td>
+<td><p>Sync news feeds</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="reverse-proxy-configuration">
+<h3>Reverse Proxy Configuration<a class="headerlink" href="#reverse-proxy-configuration" title="Link to this heading">¶</a></h3>
+<section id="nginx">
+<h4>Nginx<a class="headerlink" href="#nginx" title="Link to this heading">¶</a></h4>
+<div class="highlight-nginx notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">upstream</span><span class="w"> </span><span class="s">pydotorg</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="2"><span class="w">    </span><span class="kn">server</span><span class="w"> </span><span class="n">127.0.0.1</span><span class="p">:</span><span class="mi">8000</span><span class="p">;</span>
+</span><span data-line="3"><span class="w">    </span><span class="kn">keepalive</span><span class="w"> </span><span class="mi">32</span><span class="p">;</span>
+</span><span data-line="4"><span class="p">}</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="k">server</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="7"><span class="w">    </span><span class="kn">listen</span><span class="w"> </span><span class="mi">80</span><span class="p">;</span>
+</span><span data-line="8"><span class="w">    </span><span class="kn">server_name</span><span class="w"> </span><span class="s">python.org</span><span class="w"> </span><span class="s">www.python.org</span><span class="p">;</span>
+</span><span data-line="9"><span class="w">    </span><span class="kn">return</span><span class="w"> </span><span class="mi">301</span><span class="w"> </span><span class="s">https://</span><span class="nv">$server_name$request_uri</span><span class="p">;</span>
+</span><span data-line="10"><span class="p">}</span>
+</span><span data-line="11">
+</span><span data-line="12"><span class="k">server</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="13"><span class="w">    </span><span class="kn">listen</span><span class="w"> </span><span class="mi">443</span><span class="w"> </span><span class="s">ssl</span><span class="w"> </span><span class="s">http2</span><span class="p">;</span>
+</span><span data-line="14"><span class="w">    </span><span class="kn">server_name</span><span class="w"> </span><span class="s">python.org</span><span class="w"> </span><span class="s">www.python.org</span><span class="p">;</span>
+</span><span data-line="15">
+</span><span data-line="16"><span class="w">    </span><span class="kn">ssl_certificate</span><span class="w"> </span><span class="s">/etc/letsencrypt/live/python.org/fullchain.pem</span><span class="p">;</span>
+</span><span data-line="17"><span class="w">    </span><span class="kn">ssl_certificate_key</span><span class="w"> </span><span class="s">/etc/letsencrypt/live/python.org/privkey.pem</span><span class="p">;</span>
+</span><span data-line="18"><span class="w">    </span><span class="kn">ssl_session_timeout</span><span class="w"> </span><span class="s">1d</span><span class="p">;</span>
+</span><span data-line="19"><span class="w">    </span><span class="kn">ssl_session_cache</span><span class="w"> </span><span class="s">shared:SSL:50m</span><span class="p">;</span>
+</span><span data-line="20"><span class="w">    </span><span class="kn">ssl_protocols</span><span class="w"> </span><span class="s">TLSv1.2</span><span class="w"> </span><span class="s">TLSv1.3</span><span class="p">;</span>
+</span><span data-line="21"><span class="w">    </span><span class="kn">ssl_ciphers</span><span class="w"> </span><span class="s">ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256</span><span class="p">;</span>
+</span><span data-line="22"><span class="w">    </span><span class="kn">ssl_prefer_server_ciphers</span><span class="w"> </span><span class="no">off</span><span class="p">;</span>
+</span><span data-line="23">
+</span><span data-line="24"><span class="w">    </span><span class="c1"># Security headers</span>
+</span><span data-line="25"><span class="w">    </span><span class="kn">add_header</span><span class="w"> </span><span class="s">X-Frame-Options</span><span class="w"> </span><span class="s">&quot;SAMEORIGIN&quot;</span><span class="w"> </span><span class="s">always</span><span class="p">;</span>
+</span><span data-line="26"><span class="w">    </span><span class="kn">add_header</span><span class="w"> </span><span class="s">X-Content-Type-Options</span><span class="w"> </span><span class="s">&quot;nosniff&quot;</span><span class="w"> </span><span class="s">always</span><span class="p">;</span>
+</span><span data-line="27"><span class="w">    </span><span class="kn">add_header</span><span class="w"> </span><span class="s">X-XSS-Protection</span><span class="w"> </span><span class="s">&quot;1</span><span class="p">;</span><span class="w"> </span><span class="kn">mode=block&quot;</span><span class="w"> </span><span class="s">always</span><span class="p">;</span>
+</span><span data-line="28"><span class="w">    </span><span class="kn">add_header</span><span class="w"> </span><span class="s">Strict-Transport-Security</span><span class="w"> </span><span class="s">&quot;max-age=31536000</span><span class="p">;</span><span class="w"> </span><span class="kn">includeSubDomains&quot;</span><span class="w"> </span><span class="s">always</span><span class="p">;</span>
+</span><span data-line="29">
+</span><span data-line="30"><span class="w">    </span><span class="c1"># Gzip compression</span>
+</span><span data-line="31"><span class="w">    </span><span class="kn">gzip</span><span class="w"> </span><span class="no">on</span><span class="p">;</span>
+</span><span data-line="32"><span class="w">    </span><span class="kn">gzip_types</span><span class="w"> </span><span class="s">text/plain</span><span class="w"> </span><span class="s">text/css</span><span class="w"> </span><span class="s">application/json</span><span class="w"> </span><span class="s">application/javascript</span><span class="w"> </span><span class="s">text/xml</span><span class="w"> </span><span class="s">application/xml</span><span class="p">;</span>
+</span><span data-line="33"><span class="w">    </span><span class="kn">gzip_min_length</span><span class="w"> </span><span class="mi">1000</span><span class="p">;</span>
+</span><span data-line="34">
+</span><span data-line="35"><span class="w">    </span><span class="c1"># Static files (if not using CDN)</span>
+</span><span data-line="36"><span class="w">    </span><span class="kn">location</span><span class="w"> </span><span class="s">/static/</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="37"><span class="w">        </span><span class="kn">alias</span><span class="w"> </span><span class="s">/var/www/pydotorg/static/</span><span class="p">;</span>
+</span><span data-line="38"><span class="w">        </span><span class="kn">expires</span><span class="w"> </span><span class="s">1y</span><span class="p">;</span>
+</span><span data-line="39"><span class="w">        </span><span class="kn">add_header</span><span class="w"> </span><span class="s">Cache-Control</span><span class="w"> </span><span class="s">&quot;public,</span><span class="w"> </span><span class="s">immutable&quot;</span><span class="p">;</span>
+</span><span data-line="40"><span class="w">    </span><span class="p">}</span>
+</span><span data-line="41">
+</span><span data-line="42"><span class="w">    </span><span class="c1"># Health check (no logging)</span>
+</span><span data-line="43"><span class="w">    </span><span class="kn">location</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">/health</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="44"><span class="w">        </span><span class="kn">proxy_pass</span><span class="w"> </span><span class="s">http://pydotorg</span><span class="p">;</span>
+</span><span data-line="45"><span class="w">        </span><span class="kn">access_log</span><span class="w"> </span><span class="no">off</span><span class="p">;</span>
+</span><span data-line="46"><span class="w">    </span><span class="p">}</span>
+</span><span data-line="47">
+</span><span data-line="48"><span class="w">    </span><span class="c1"># Application</span>
+</span><span data-line="49"><span class="w">    </span><span class="kn">location</span><span class="w"> </span><span class="s">/</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="50"><span class="w">        </span><span class="kn">proxy_pass</span><span class="w"> </span><span class="s">http://pydotorg</span><span class="p">;</span>
+</span><span data-line="51"><span class="w">        </span><span class="kn">proxy_http_version</span><span class="w"> </span><span class="mi">1</span><span class="s">.1</span><span class="p">;</span>
+</span><span data-line="52"><span class="w">        </span><span class="kn">proxy_set_header</span><span class="w"> </span><span class="s">Host</span><span class="w"> </span><span class="nv">$host</span><span class="p">;</span>
+</span><span data-line="53"><span class="w">        </span><span class="kn">proxy_set_header</span><span class="w"> </span><span class="s">X-Real-IP</span><span class="w"> </span><span class="nv">$remote_addr</span><span class="p">;</span>
+</span><span data-line="54"><span class="w">        </span><span class="kn">proxy_set_header</span><span class="w"> </span><span class="s">X-Forwarded-For</span><span class="w"> </span><span class="nv">$proxy_add_x_forwarded_for</span><span class="p">;</span>
+</span><span data-line="55"><span class="w">        </span><span class="kn">proxy_set_header</span><span class="w"> </span><span class="s">X-Forwarded-Proto</span><span class="w"> </span><span class="nv">$scheme</span><span class="p">;</span>
+</span><span data-line="56"><span class="w">        </span><span class="kn">proxy_set_header</span><span class="w"> </span><span class="s">Connection</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">;</span>
+</span><span data-line="57">
+</span><span data-line="58"><span class="w">        </span><span class="c1"># Timeouts</span>
+</span><span data-line="59"><span class="w">        </span><span class="kn">proxy_connect_timeout</span><span class="w"> </span><span class="s">30s</span><span class="p">;</span>
+</span><span data-line="60"><span class="w">        </span><span class="kn">proxy_send_timeout</span><span class="w"> </span><span class="s">60s</span><span class="p">;</span>
+</span><span data-line="61"><span class="w">        </span><span class="kn">proxy_read_timeout</span><span class="w"> </span><span class="s">60s</span><span class="p">;</span>
+</span><span data-line="62">
+</span><span data-line="63"><span class="w">        </span><span class="c1"># Buffering</span>
+</span><span data-line="64"><span class="w">        </span><span class="kn">proxy_buffering</span><span class="w"> </span><span class="no">on</span><span class="p">;</span>
+</span><span data-line="65"><span class="w">        </span><span class="kn">proxy_buffer_size</span><span class="w"> </span><span class="mi">8k</span><span class="p">;</span>
+</span><span data-line="66"><span class="w">        </span><span class="kn">proxy_buffers</span><span class="w"> </span><span class="mi">8</span><span class="w"> </span><span class="mi">32k</span><span class="p">;</span>
+</span><span data-line="67"><span class="w">    </span><span class="p">}</span>
+</span><span data-line="68"><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+<section id="caddy">
+<h4>Caddy<a class="headerlink" href="#caddy" title="Link to this heading">¶</a></h4>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span data-line="1">python.org, www.python.org {
+</span><span data-line="2">    # Static files
+</span><span data-line="3">    handle /static/* {
+</span><span data-line="4">        root * /var/www/pydotorg
+</span><span data-line="5">        file_server
+</span><span data-line="6">        header Cache-Control &quot;public, max-age=31536000, immutable&quot;
+</span><span data-line="7">    }
+</span><span data-line="8">
+</span><span data-line="9">    # Health check
+</span><span data-line="10">    handle /health {
+</span><span data-line="11">        reverse_proxy localhost:8000
+</span><span data-line="12">        log {
+</span><span data-line="13">            output discard
+</span><span data-line="14">        }
+</span><span data-line="15">    }
+</span><span data-line="16">
+</span><span data-line="17">    # Application
+</span><span data-line="18">    handle {
+</span><span data-line="19">        reverse_proxy localhost:8000 {
+</span><span data-line="20">            header_up X-Real-IP {remote_host}
+</span><span data-line="21">            header_up X-Forwarded-Proto {scheme}
+</span><span data-line="22">        }
+</span><span data-line="23">    }
+</span><span data-line="24">
+</span><span data-line="25">    # Security headers
+</span><span data-line="26">    header {
+</span><span data-line="27">        X-Frame-Options &quot;SAMEORIGIN&quot;
+</span><span data-line="28">        X-Content-Type-Options &quot;nosniff&quot;
+</span><span data-line="29">        X-XSS-Protection &quot;1; mode=block&quot;
+</span><span data-line="30">        Strict-Transport-Security &quot;max-age=31536000; includeSubDomains&quot;
+</span><span data-line="31">    }
+</span><span data-line="32">
+</span><span data-line="33">    # Compression
+</span><span data-line="34">    encode gzip
+</span><span data-line="35">
+</span><span data-line="36">    # Logging
+</span><span data-line="37">    log {
+</span><span data-line="38">        output file /var/log/caddy/pydotorg.log {
+</span><span data-line="39">            roll_size 100mb
+</span><span data-line="40">            roll_keep 5
+</span><span data-line="41">        }
+</span><span data-line="42">    }
+</span><span data-line="43">}
+</span></pre></div>
+</div>
+</section>
+</section>
+</section>
+<hr class="docutils" />
+<section id="kubernetes-deployment">
+<h2>Kubernetes Deployment<a class="headerlink" href="#kubernetes-deployment" title="Link to this heading">¶</a></h2>
+<section id="convert-docker-compose-to-kubernetes">
+<h3>Convert Docker Compose to Kubernetes<a class="headerlink" href="#convert-docker-compose-to-kubernetes" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Using Kompose</span>
+</span><span data-line="2">kompose<span class="w"> </span>convert<span class="w"> </span>-f<span class="w"> </span>docker-compose.yml<span class="w"> </span>-f<span class="w"> </span>docker-compose.prod.yml
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># This generates:</span>
+</span><span data-line="5"><span class="c1"># - app-deployment.yaml</span>
+</span><span data-line="6"><span class="c1"># - app-service.yaml</span>
+</span><span data-line="7"><span class="c1"># - worker-deployment.yaml</span>
+</span><span data-line="8"><span class="c1"># - postgres-deployment.yaml</span>
+</span><span data-line="9"><span class="c1"># - redis-deployment.yaml</span>
+</span><span data-line="10"><span class="c1"># - configmaps and secrets</span>
+</span></pre></div>
+</div>
+</section>
+<section id="kubernetes-manifests">
+<h3>Kubernetes Manifests<a class="headerlink" href="#kubernetes-manifests" title="Link to this heading">¶</a></h3>
+<section id="deployment">
+<h4>Deployment<a class="headerlink" href="#deployment" title="Link to this heading">¶</a></h4>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># k8s/app-deployment.yaml</span>
+</span><span data-line="2"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apps/v1</span>
+</span><span data-line="3"><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deployment</span>
+</span><span data-line="4"><span class="nt">metadata</span><span class="p">:</span>
+</span><span data-line="5"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pydotorg-app</span>
+</span><span data-line="6"><span class="w">  </span><span class="nt">labels</span><span class="p">:</span>
+</span><span data-line="7"><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pydotorg</span>
+</span><span data-line="8"><span class="w">    </span><span class="nt">component</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app</span>
+</span><span data-line="9"><span class="nt">spec</span><span class="p">:</span>
+</span><span data-line="10"><span class="w">  </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+</span><span data-line="11"><span class="w">  </span><span class="nt">selector</span><span class="p">:</span>
+</span><span data-line="12"><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
+</span><span data-line="13"><span class="w">      </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pydotorg</span>
+</span><span data-line="14"><span class="w">      </span><span class="nt">component</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app</span>
+</span><span data-line="15"><span class="w">  </span><span class="nt">template</span><span class="p">:</span>
+</span><span data-line="16"><span class="w">    </span><span class="nt">metadata</span><span class="p">:</span>
+</span><span data-line="17"><span class="w">      </span><span class="nt">labels</span><span class="p">:</span>
+</span><span data-line="18"><span class="w">        </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pydotorg</span>
+</span><span data-line="19"><span class="w">        </span><span class="nt">component</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app</span>
+</span><span data-line="20"><span class="w">    </span><span class="nt">spec</span><span class="p">:</span>
+</span><span data-line="21"><span class="w">      </span><span class="nt">containers</span><span class="p">:</span>
+</span><span data-line="22"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app</span>
+</span><span data-line="23"><span class="w">        </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ghcr.io/jacobcoffee/litestar-pydotorg:latest</span>
+</span><span data-line="24"><span class="w">        </span><span class="nt">ports</span><span class="p">:</span>
+</span><span data-line="25"><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8000</span>
+</span><span data-line="26"><span class="w">        </span><span class="nt">envFrom</span><span class="p">:</span>
+</span><span data-line="27"><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">secretRef</span><span class="p">:</span>
+</span><span data-line="28"><span class="w">            </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pydotorg-secrets</span>
+</span><span data-line="29"><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">configMapRef</span><span class="p">:</span>
+</span><span data-line="30"><span class="w">            </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pydotorg-config</span>
+</span><span data-line="31"><span class="w">        </span><span class="nt">resources</span><span class="p">:</span>
+</span><span data-line="32"><span class="w">          </span><span class="nt">requests</span><span class="p">:</span>
+</span><span data-line="33"><span class="w">            </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;512Mi&quot;</span>
+</span><span data-line="34"><span class="w">            </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;500m&quot;</span>
+</span><span data-line="35"><span class="w">          </span><span class="nt">limits</span><span class="p">:</span>
+</span><span data-line="36"><span class="w">            </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2Gi&quot;</span>
+</span><span data-line="37"><span class="w">            </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2000m&quot;</span>
+</span><span data-line="38"><span class="w">        </span><span class="nt">livenessProbe</span><span class="p">:</span>
+</span><span data-line="39"><span class="w">          </span><span class="nt">httpGet</span><span class="p">:</span>
+</span><span data-line="40"><span class="w">            </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/health</span>
+</span><span data-line="41"><span class="w">            </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8000</span>
+</span><span data-line="42"><span class="w">          </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span>
+</span><span data-line="43"><span class="w">          </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+</span><span data-line="44"><span class="w">        </span><span class="nt">readinessProbe</span><span class="p">:</span>
+</span><span data-line="45"><span class="w">          </span><span class="nt">httpGet</span><span class="p">:</span>
+</span><span data-line="46"><span class="w">            </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/health</span>
+</span><span data-line="47"><span class="w">            </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8000</span>
+</span><span data-line="48"><span class="w">          </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+</span><span data-line="49"><span class="w">          </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+</span></pre></div>
+</div>
+</section>
+<section id="service">
+<h4>Service<a class="headerlink" href="#service" title="Link to this heading">¶</a></h4>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># k8s/app-service.yaml</span>
+</span><span data-line="2"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+</span><span data-line="3"><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Service</span>
+</span><span data-line="4"><span class="nt">metadata</span><span class="p">:</span>
+</span><span data-line="5"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pydotorg-app</span>
+</span><span data-line="6"><span class="nt">spec</span><span class="p">:</span>
+</span><span data-line="7"><span class="w">  </span><span class="nt">selector</span><span class="p">:</span>
+</span><span data-line="8"><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pydotorg</span>
+</span><span data-line="9"><span class="w">    </span><span class="nt">component</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app</span>
+</span><span data-line="10"><span class="w">  </span><span class="nt">ports</span><span class="p">:</span>
+</span><span data-line="11"><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">80</span>
+</span><span data-line="12"><span class="w">    </span><span class="nt">targetPort</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8000</span>
+</span><span data-line="13"><span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterIP</span>
+</span></pre></div>
+</div>
+</section>
+<section id="ingress">
+<h4>Ingress<a class="headerlink" href="#ingress" title="Link to this heading">¶</a></h4>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># k8s/ingress.yaml</span>
+</span><span data-line="2"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">networking.k8s.io/v1</span>
+</span><span data-line="3"><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ingress</span>
+</span><span data-line="4"><span class="nt">metadata</span><span class="p">:</span>
+</span><span data-line="5"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pydotorg-ingress</span>
+</span><span data-line="6"><span class="w">  </span><span class="nt">annotations</span><span class="p">:</span>
+</span><span data-line="7"><span class="w">    </span><span class="nt">kubernetes.io/ingress.class</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx</span>
+</span><span data-line="8"><span class="w">    </span><span class="nt">cert-manager.io/cluster-issuer</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">letsencrypt-prod</span>
+</span><span data-line="9"><span class="nt">spec</span><span class="p">:</span>
+</span><span data-line="10"><span class="w">  </span><span class="nt">tls</span><span class="p">:</span>
+</span><span data-line="11"><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span>
+</span><span data-line="12"><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">python.org</span>
+</span><span data-line="13"><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">www.python.org</span>
+</span><span data-line="14"><span class="w">    </span><span class="nt">secretName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pydotorg-tls</span>
+</span><span data-line="15"><span class="w">  </span><span class="nt">rules</span><span class="p">:</span>
+</span><span data-line="16"><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">python.org</span>
+</span><span data-line="17"><span class="w">    </span><span class="nt">http</span><span class="p">:</span>
+</span><span data-line="18"><span class="w">      </span><span class="nt">paths</span><span class="p">:</span>
+</span><span data-line="19"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/</span>
+</span><span data-line="20"><span class="w">        </span><span class="nt">pathType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Prefix</span>
+</span><span data-line="21"><span class="w">        </span><span class="nt">backend</span><span class="p">:</span>
+</span><span data-line="22"><span class="w">          </span><span class="nt">service</span><span class="p">:</span>
+</span><span data-line="23"><span class="w">            </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pydotorg-app</span>
+</span><span data-line="24"><span class="w">            </span><span class="nt">port</span><span class="p">:</span>
+</span><span data-line="25"><span class="w">              </span><span class="nt">number</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">80</span>
+</span></pre></div>
+</div>
+</section>
+<section id="configmap-and-secret">
+<h4>ConfigMap and Secret<a class="headerlink" href="#configmap-and-secret" title="Link to this heading">¶</a></h4>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># k8s/configmap.yaml</span>
+</span><span data-line="2"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+</span><span data-line="3"><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
+</span><span data-line="4"><span class="nt">metadata</span><span class="p">:</span>
+</span><span data-line="5"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pydotorg-config</span>
+</span><span data-line="6"><span class="nt">data</span><span class="p">:</span>
+</span><span data-line="7"><span class="w">  </span><span class="nt">APP_ENV</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;prod&quot;</span>
+</span><span data-line="8"><span class="w">  </span><span class="nt">DATABASE_POOL_SIZE</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;40&quot;</span>
+</span><span data-line="9"><span class="w">  </span><span class="nt">SMTP_HOST</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;smtp.sendgrid.net&quot;</span>
+</span><span data-line="10"><span class="w">  </span><span class="nt">SMTP_PORT</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;587&quot;</span>
+</span><span data-line="11">
+</span><span data-line="12"><span class="nn">---</span>
+</span><span data-line="13"><span class="c1"># k8s/secret.yaml (use sealed-secrets or external-secrets in production)</span>
+</span><span data-line="14"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+</span><span data-line="15"><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Secret</span>
+</span><span data-line="16"><span class="nt">metadata</span><span class="p">:</span>
+</span><span data-line="17"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pydotorg-secrets</span>
+</span><span data-line="18"><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Opaque</span>
+</span><span data-line="19"><span class="nt">stringData</span><span class="p">:</span>
+</span><span data-line="20"><span class="w">  </span><span class="nt">SECRET_KEY</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;your-secret-key&quot;</span>
+</span><span data-line="21"><span class="w">  </span><span class="nt">SESSION_SECRET_KEY</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;your-session-secret&quot;</span>
+</span><span data-line="22"><span class="w">  </span><span class="nt">CSRF_SECRET</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;your-csrf-secret&quot;</span>
+</span><span data-line="23"><span class="w">  </span><span class="nt">DATABASE_URL</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;postgresql+asyncpg://...&quot;</span>
+</span><span data-line="24"><span class="w">  </span><span class="nt">REDIS_URL</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;redis://...&quot;</span>
+</span></pre></div>
+</div>
+</section>
+<section id="worker-deployment">
+<h4>Worker Deployment<a class="headerlink" href="#worker-deployment" title="Link to this heading">¶</a></h4>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># k8s/worker-deployment.yaml</span>
+</span><span data-line="2"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apps/v1</span>
+</span><span data-line="3"><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deployment</span>
+</span><span data-line="4"><span class="nt">metadata</span><span class="p">:</span>
+</span><span data-line="5"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pydotorg-worker</span>
+</span><span data-line="6"><span class="w">  </span><span class="nt">labels</span><span class="p">:</span>
+</span><span data-line="7"><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pydotorg</span>
+</span><span data-line="8"><span class="w">    </span><span class="nt">component</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">worker</span>
+</span><span data-line="9"><span class="nt">spec</span><span class="p">:</span>
+</span><span data-line="10"><span class="w">  </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+</span><span data-line="11"><span class="w">  </span><span class="nt">selector</span><span class="p">:</span>
+</span><span data-line="12"><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
+</span><span data-line="13"><span class="w">      </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pydotorg</span>
+</span><span data-line="14"><span class="w">      </span><span class="nt">component</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">worker</span>
+</span><span data-line="15"><span class="w">  </span><span class="nt">template</span><span class="p">:</span>
+</span><span data-line="16"><span class="w">    </span><span class="nt">metadata</span><span class="p">:</span>
+</span><span data-line="17"><span class="w">      </span><span class="nt">labels</span><span class="p">:</span>
+</span><span data-line="18"><span class="w">        </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pydotorg</span>
+</span><span data-line="19"><span class="w">        </span><span class="nt">component</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">worker</span>
+</span><span data-line="20"><span class="w">    </span><span class="nt">spec</span><span class="p">:</span>
+</span><span data-line="21"><span class="w">      </span><span class="nt">containers</span><span class="p">:</span>
+</span><span data-line="22"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">worker</span>
+</span><span data-line="23"><span class="w">        </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ghcr.io/jacobcoffee/litestar-pydotorg:latest</span>
+</span><span data-line="24"><span class="w">        </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;saq&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;pydotorg.tasks.worker.saq_settings&quot;</span><span class="p p-Indicator">]</span>
+</span><span data-line="25"><span class="w">        </span><span class="nt">envFrom</span><span class="p">:</span>
+</span><span data-line="26"><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">secretRef</span><span class="p">:</span>
+</span><span data-line="27"><span class="w">            </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pydotorg-secrets</span>
+</span><span data-line="28"><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">configMapRef</span><span class="p">:</span>
+</span><span data-line="29"><span class="w">            </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pydotorg-config</span>
+</span><span data-line="30"><span class="w">        </span><span class="nt">resources</span><span class="p">:</span>
+</span><span data-line="31"><span class="w">          </span><span class="nt">requests</span><span class="p">:</span>
+</span><span data-line="32"><span class="w">            </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;256Mi&quot;</span>
+</span><span data-line="33"><span class="w">            </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;250m&quot;</span>
+</span><span data-line="34"><span class="w">          </span><span class="nt">limits</span><span class="p">:</span>
+</span><span data-line="35"><span class="w">            </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1Gi&quot;</span>
+</span><span data-line="36"><span class="w">            </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1000m&quot;</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="helm-chart-optional">
+<h3>Helm Chart (Optional)<a class="headerlink" href="#helm-chart-optional" title="Link to this heading">¶</a></h3>
+<p>For more complex deployments, consider creating a Helm chart:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">helm<span class="w"> </span>create<span class="w"> </span>pydotorg
+</span></pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="health-checks">
+<h2>Health Checks<a class="headerlink" href="#health-checks" title="Link to this heading">¶</a></h2>
+<section id="endpoints">
+<h3>Endpoints<a class="headerlink" href="#endpoints" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Endpoint</p></th>
+<th class="head"><p>Purpose</p></th>
+<th class="head"><p>Response</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/health</span></code></p></td>
+<td><p>Application health</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{&quot;status&quot;:</span> <span class="pre">&quot;healthy&quot;,</span> <span class="pre">&quot;database&quot;:</span> <span class="pre">true}</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="health-check-response">
+<h3>Health Check Response<a class="headerlink" href="#health-check-response" title="Link to this heading">¶</a></h3>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;healthy&quot;</span><span class="p">,</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;database&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+</span><span data-line="4"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p>Unhealthy response (HTTP 503):</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;unhealthy&quot;</span><span class="p">,</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;database&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+</span><span data-line="4"><span class="w">  </span><span class="nt">&quot;error&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Connection refused&quot;</span>
+</span><span data-line="5"><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+<section id="docker-health-check">
+<h3>Docker Health Check<a class="headerlink" href="#docker-health-check" title="Link to this heading">¶</a></h3>
+<p>The production Dockerfile includes:</p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">HEALTHCHECK</span><span class="w"> </span>--interval<span class="o">=</span>30s<span class="w"> </span>--timeout<span class="o">=</span>10s<span class="w"> </span>--start-period<span class="o">=</span>40s<span class="w"> </span>--retries<span class="o">=</span><span class="m">3</span><span class="w"> </span><span class="se">\</span>
+</span><span data-line="2"><span class="w">    </span>CMD<span class="w"> </span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import urllib.request; urllib.request.urlopen(&#39;http://localhost:8000/health&#39;)&quot;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
+</span></pre></div>
+</div>
+</section>
+<section id="external-monitoring">
+<h3>External Monitoring<a class="headerlink" href="#external-monitoring" title="Link to this heading">¶</a></h3>
+<p>Configure uptime monitoring services to check:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">https://python.org/health</span></code> - Primary health check</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">https://python.org/</span></code> - Homepage renders</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">https://python.org/api/docs</span></code> - API documentation loads</p></li>
+</ol>
+</section>
+</section>
+<hr class="docutils" />
+<section id="monitoring-and-logging">
+<h2>Monitoring and Logging<a class="headerlink" href="#monitoring-and-logging" title="Link to this heading">¶</a></h2>
+<section id="structured-logging">
+<h3>Structured Logging<a class="headerlink" href="#structured-logging" title="Link to this heading">¶</a></h3>
+<p>The application uses structlog for structured JSON logging in production:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Production log format (JSON)</span>
+</span><span data-line="2"><span class="p">{</span>
+</span><span data-line="3">  <span class="s2">&quot;event&quot;</span><span class="p">:</span> <span class="s2">&quot;Request completed&quot;</span><span class="p">,</span>
+</span><span data-line="4">  <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span>
+</span><span data-line="5">  <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-01-15T10:30:00Z&quot;</span><span class="p">,</span>
+</span><span data-line="6">  <span class="s2">&quot;request_id&quot;</span><span class="p">:</span> <span class="s2">&quot;abc123&quot;</span><span class="p">,</span>
+</span><span data-line="7">  <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;GET&quot;</span><span class="p">,</span>
+</span><span data-line="8">  <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/&quot;</span><span class="p">,</span>
+</span><span data-line="9">  <span class="s2">&quot;status_code&quot;</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span>
+</span><span data-line="10">  <span class="s2">&quot;duration_ms&quot;</span><span class="p">:</span> <span class="mi">45</span>
+</span><span data-line="11"><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+<section id="log-aggregation">
+<h3>Log Aggregation<a class="headerlink" href="#log-aggregation" title="Link to this heading">¶</a></h3>
+<p>Configure log shipping to your preferred platform:</p>
+<section id="docker-logging">
+<h4>Docker Logging<a class="headerlink" href="#docker-logging" title="Link to this heading">¶</a></h4>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># docker-compose.prod.yml</span>
+</span><span data-line="2"><span class="nt">services</span><span class="p">:</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">app</span><span class="p">:</span>
+</span><span data-line="4"><span class="w">    </span><span class="nt">logging</span><span class="p">:</span>
+</span><span data-line="5"><span class="w">      </span><span class="nt">driver</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">json-file</span>
+</span><span data-line="6"><span class="w">      </span><span class="nt">options</span><span class="p">:</span>
+</span><span data-line="7"><span class="w">        </span><span class="nt">max-size</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;50m&quot;</span>
+</span><span data-line="8"><span class="w">        </span><span class="nt">max-file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;5&quot;</span>
+</span></pre></div>
+</div>
+</section>
+<section id="loki-grafana-stack">
+<h4>Loki/Grafana Stack<a class="headerlink" href="#loki-grafana-stack" title="Link to this heading">¶</a></h4>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># docker-compose.monitoring.yml</span>
+</span><span data-line="2"><span class="nt">services</span><span class="p">:</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">loki</span><span class="p">:</span>
+</span><span data-line="4"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">grafana/loki:latest</span>
+</span><span data-line="5"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+</span><span data-line="6"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;3100:3100&quot;</span>
+</span><span data-line="7"><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+</span><span data-line="8"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">loki_data:/loki</span>
+</span><span data-line="9">
+</span><span data-line="10"><span class="w">  </span><span class="nt">grafana</span><span class="p">:</span>
+</span><span data-line="11"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">grafana/grafana:latest</span>
+</span><span data-line="12"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+</span><span data-line="13"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;3000:3000&quot;</span>
+</span><span data-line="14"><span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+</span><span data-line="15"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GF_SECURITY_ADMIN_PASSWORD=admin</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="prometheus-metrics">
+<h3>Prometheus Metrics<a class="headerlink" href="#prometheus-metrics" title="Link to this heading">¶</a></h3>
+<p>For Prometheus integration, add to the application:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Custom metrics endpoint (if needed)</span>
+</span><span data-line="2"><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/metrics&quot;</span><span class="p">,</span> <span class="n">exclude_from_auth</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span data-line="3"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">metrics</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span data-line="4">    <span class="k">return</span> <span class="n">generate_prometheus_metrics</span><span class="p">()</span>
+</span></pre></div>
+</div>
+</section>
+<section id="application-insights">
+<h3>Application Insights<a class="headerlink" href="#application-insights" title="Link to this heading">¶</a></h3>
+<p>Key metrics to monitor:</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Metric</p></th>
+<th class="head"><p>Alert Threshold</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Response time (p95)</p></td>
+<td><p>&gt; 500ms</p></td>
+<td><p>Application latency</p></td>
+</tr>
+<tr class="row-odd"><td><p>Error rate</p></td>
+<td><p>&gt; 1%</p></td>
+<td><p>HTTP 5xx responses</p></td>
+</tr>
+<tr class="row-even"><td><p>Database connections</p></td>
+<td><p>&gt; 80% pool</p></td>
+<td><p>Connection pool usage</p></td>
+</tr>
+<tr class="row-odd"><td><p>Memory usage</p></td>
+<td><p>&gt; 80%</p></td>
+<td><p>Container memory</p></td>
+</tr>
+<tr class="row-even"><td><p>CPU usage</p></td>
+<td><p>&gt; 70% sustained</p></td>
+<td><p>Container CPU</p></td>
+</tr>
+<tr class="row-odd"><td><p>Queue depth</p></td>
+<td><p>&gt; 1000</p></td>
+<td><p>SAQ pending tasks</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="backup-and-restore">
+<h2>Backup and Restore<a class="headerlink" href="#backup-and-restore" title="Link to this heading">¶</a></h2>
+<section id="database-backup">
+<h3>Database Backup<a class="headerlink" href="#database-backup" title="Link to this heading">¶</a></h3>
+<section id="automated-backups">
+<h4>Automated Backups<a class="headerlink" href="#automated-backups" title="Link to this heading">¶</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="ch">#!/bin/bash</span>
+</span><span data-line="2"><span class="c1"># backup.sh - Run daily via cron</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="nv">BACKUP_DIR</span><span class="o">=</span><span class="s2">&quot;/backups/postgres&quot;</span>
+</span><span data-line="5"><span class="nv">DATE</span><span class="o">=</span><span class="k">$(</span>date<span class="w"> </span>+%Y%m%d_%H%M%S<span class="k">)</span>
+</span><span data-line="6"><span class="nv">BACKUP_FILE</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">BACKUP_DIR</span><span class="si">}</span><span class="s2">/pydotorg_</span><span class="si">${</span><span class="nv">DATE</span><span class="si">}</span><span class="s2">.sql.gz&quot;</span>
+</span><span data-line="7">
+</span><span data-line="8"><span class="c1"># Create backup</span>
+</span><span data-line="9">docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>pydotorg-postgres<span class="w"> </span>pg_dump<span class="w"> </span>-U<span class="w"> </span>postgres<span class="w"> </span>pydotorg<span class="w"> </span><span class="p">|</span><span class="w"> </span>gzip<span class="w"> </span>&gt;<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BACKUP_FILE</span><span class="s2">&quot;</span>
+</span><span data-line="10">
+</span><span data-line="11"><span class="c1"># Upload to S3 (optional)</span>
+</span><span data-line="12">aws<span class="w"> </span>s3<span class="w"> </span>cp<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BACKUP_FILE</span><span class="s2">&quot;</span><span class="w"> </span>s3://your-bucket/backups/
+</span><span data-line="13">
+</span><span data-line="14"><span class="c1"># Retain only last 30 days</span>
+</span><span data-line="15">find<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BACKUP_DIR</span><span class="s2">&quot;</span><span class="w"> </span>-name<span class="w"> </span><span class="s2">&quot;*.sql.gz&quot;</span><span class="w"> </span>-mtime<span class="w"> </span>+30<span class="w"> </span>-delete
+</span><span data-line="16">
+</span><span data-line="17"><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Backup completed: </span><span class="nv">$BACKUP_FILE</span><span class="s2">&quot;</span>
+</span></pre></div>
+</div>
+</section>
+<section id="manual-backup">
+<h4>Manual Backup<a class="headerlink" href="#manual-backup" title="Link to this heading">¶</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Plain SQL</span>
+</span><span data-line="2">docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>pydotorg-postgres<span class="w"> </span>pg_dump<span class="w"> </span>-U<span class="w"> </span>postgres<span class="w"> </span>pydotorg<span class="w"> </span>&gt;<span class="w"> </span>backup.sql
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Compressed</span>
+</span><span data-line="5">docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>pydotorg-postgres<span class="w"> </span>pg_dump<span class="w"> </span>-U<span class="w"> </span>postgres<span class="w"> </span>pydotorg<span class="w"> </span><span class="p">|</span><span class="w"> </span>gzip<span class="w"> </span>&gt;<span class="w"> </span>backup.sql.gz
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Custom format (parallel restore)</span>
+</span><span data-line="8">docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>pydotorg-postgres<span class="w"> </span>pg_dump<span class="w"> </span>-U<span class="w"> </span>postgres<span class="w"> </span>-Fc<span class="w"> </span>pydotorg<span class="w"> </span>&gt;<span class="w"> </span>backup.dump
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="database-restore">
+<h3>Database Restore<a class="headerlink" href="#database-restore" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># From SQL file</span>
+</span><span data-line="2">docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-i<span class="w"> </span>pydotorg-postgres<span class="w"> </span>psql<span class="w"> </span>-U<span class="w"> </span>postgres<span class="w"> </span>pydotorg<span class="w"> </span>&lt;<span class="w"> </span>backup.sql
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># From gzip</span>
+</span><span data-line="5">gunzip<span class="w"> </span>-c<span class="w"> </span>backup.sql.gz<span class="w"> </span><span class="p">|</span><span class="w"> </span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-i<span class="w"> </span>pydotorg-postgres<span class="w"> </span>psql<span class="w"> </span>-U<span class="w"> </span>postgres<span class="w"> </span>pydotorg
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># From custom format</span>
+</span><span data-line="8">docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-i<span class="w"> </span>pydotorg-postgres<span class="w"> </span>pg_restore<span class="w"> </span>-U<span class="w"> </span>postgres<span class="w"> </span>-d<span class="w"> </span>pydotorg<span class="w"> </span>&lt;<span class="w"> </span>backup.dump
+</span></pre></div>
+</div>
+</section>
+<section id="redis-backup">
+<h3>Redis Backup<a class="headerlink" href="#redis-backup" title="Link to this heading">¶</a></h3>
+<p>Redis data persists via RDB snapshots and AOF:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Manual backup</span>
+</span><span data-line="2">docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>pydotorg-redis<span class="w"> </span>redis-cli<span class="w"> </span>BGSAVE
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Copy dump file</span>
+</span><span data-line="5">docker<span class="w"> </span>cp<span class="w"> </span>pydotorg-redis:/data/dump.rdb<span class="w"> </span>./redis-backup.rdb
+</span></pre></div>
+</div>
+</section>
+<section id="media-files-backup">
+<h3>Media Files Backup<a class="headerlink" href="#media-files-backup" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Backup uploads/media directory</span>
+</span><span data-line="2">tar<span class="w"> </span>-czvf<span class="w"> </span>media-backup.tar.gz<span class="w"> </span>/path/to/media/
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Sync to S3</span>
+</span><span data-line="5">aws<span class="w"> </span>s3<span class="w"> </span>sync<span class="w"> </span>/path/to/media/<span class="w"> </span>s3://your-bucket/media/<span class="w"> </span>--delete
+</span></pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">¶</a></h2>
+<section id="common-issues">
+<h3>Common Issues<a class="headerlink" href="#common-issues" title="Link to this heading">¶</a></h3>
+<section id="database-connection-failed">
+<h4>Database Connection Failed<a class="headerlink" href="#database-connection-failed" title="Link to this heading">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">DATABASE</span> <span class="n">CONNECTION</span> <span class="n">FAILED</span>
+</span><span data-line="2"><span class="n">Connection</span> <span class="n">refused</span>
+</span></pre></div>
+</div>
+<p>Solution:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Check PostgreSQL is running</span>
+</span><span data-line="2">docker<span class="w"> </span>compose<span class="w"> </span>ps<span class="w"> </span>postgres
+</span><span data-line="3">docker<span class="w"> </span>compose<span class="w"> </span>logs<span class="w"> </span>postgres
+</span><span data-line="4">
+</span><span data-line="5"><span class="c1"># Start PostgreSQL</span>
+</span><span data-line="6">make<span class="w"> </span>infra-up
+</span></pre></div>
+</div>
+</section>
+<section id="migration-errors">
+<h4>Migration Errors<a class="headerlink" href="#migration-errors" title="Link to this heading">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">alembic</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">exc</span><span class="o">.</span><span class="n">CommandError</span><span class="p">:</span> <span class="n">Can</span><span class="s1">&#39;t locate revision</span>
+</span></pre></div>
+</div>
+<p>Solution:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Show current state</span>
+</span><span data-line="2">make<span class="w"> </span>litestar-db-current
+</span><span data-line="3">make<span class="w"> </span>litestar-db-history
+</span><span data-line="4">
+</span><span data-line="5"><span class="c1"># Reset if needed (development only)</span>
+</span><span data-line="6">make<span class="w"> </span>db-reset
+</span></pre></div>
+</div>
+</section>
+<section id="worker-not-processing-tasks">
+<h4>Worker Not Processing Tasks<a class="headerlink" href="#worker-not-processing-tasks" title="Link to this heading">¶</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Check worker status</span>
+</span><span data-line="2">docker<span class="w"> </span>compose<span class="w"> </span>logs<span class="w"> </span>worker
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Verify Redis connection</span>
+</span><span data-line="5">docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>pydotorg-redis<span class="w"> </span>redis-cli<span class="w"> </span>ping
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Check queue status</span>
+</span><span data-line="8">docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>pydotorg-app<span class="w"> </span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;</span>
+</span><span data-line="9"><span class="s2">from saq import Queue</span>
+</span><span data-line="10"><span class="s2">from pydotorg.config import settings</span>
+</span><span data-line="11"><span class="s2">import asyncio</span>
+</span><span data-line="12">
+</span><span data-line="13"><span class="s2">async def check():</span>
+</span><span data-line="14"><span class="s2">    q = Queue.from_url(settings.redis_url)</span>
+</span><span data-line="15"><span class="s2">    print(await q.stats())</span>
+</span><span data-line="16">
+</span><span data-line="17"><span class="s2">asyncio.run(check())</span>
+</span><span data-line="18"><span class="s2">&quot;</span>
+</span></pre></div>
+</div>
+</section>
+<section id="out-of-memory">
+<h4>Out of Memory<a class="headerlink" href="#out-of-memory" title="Link to this heading">¶</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Check container memory</span>
+</span><span data-line="2">docker<span class="w"> </span>stats<span class="w"> </span>pydotorg-app
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Increase limits in docker-compose.prod.yml</span>
+</span><span data-line="5">deploy:
+</span><span data-line="6"><span class="w">  </span>resources:
+</span><span data-line="7"><span class="w">    </span>limits:
+</span><span data-line="8"><span class="w">      </span>memory:<span class="w"> </span>4G
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="debug-mode">
+<h3>Debug Mode<a class="headerlink" href="#debug-mode" title="Link to this heading">¶</a></h3>
+<p>Enable debug logging temporarily:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Set log level</span>
+</span><span data-line="2"><span class="nv">PYDOTORG_LOG_LEVEL</span><span class="o">=</span>DEBUG<span class="w"> </span>make<span class="w"> </span>serve
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Or in Docker</span>
+</span><span data-line="5">docker<span class="w"> </span>compose<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span><span class="nv">DEBUG</span><span class="o">=</span><span class="nb">true</span><span class="w"> </span>-e<span class="w"> </span><span class="nv">PYDOTORG_LOG_LEVEL</span><span class="o">=</span>DEBUG<span class="w"> </span>app
+</span></pre></div>
+</div>
+</section>
+<section id="performance-profiling">
+<h3>Performance Profiling<a class="headerlink" href="#performance-profiling" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Run with profiling</span>
+</span><span data-line="2">uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>cProfile<span class="w"> </span>-o<span class="w"> </span>profile.stats<span class="w"> </span>-m<span class="w"> </span>granian<span class="w"> </span>...
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Analyze results</span>
+</span><span data-line="5">uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;</span>
+</span><span data-line="6"><span class="s2">import pstats</span>
+</span><span data-line="7"><span class="s2">p = pstats.Stats(&#39;profile.stats&#39;)</span>
+</span><span data-line="8"><span class="s2">p.sort_stats(&#39;cumulative&#39;).print_stats(20)</span>
+</span><span data-line="9"><span class="s2">&quot;</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="security-checklist">
+<h2>Security Checklist<a class="headerlink" href="#security-checklist" title="Link to this heading">¶</a></h2>
+<p>Before deploying to production:</p>
+<ul class="contains-task-list simple">
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> All secrets are unique, secure (32+ characters), and not defaults</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> <code class="docutils literal notranslate"><span class="pre">APP_ENV=prod</span></code> is set</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> <code class="docutils literal notranslate"><span class="pre">DEBUG=false</span></code> or unset (auto-disabled in prod)</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Database uses non-default credentials</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Database is not accessible from public internet</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Redis has password authentication</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> HTTPS is enforced via reverse proxy</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Security headers are configured</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> CORS is restricted to allowed origins</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> OAuth redirect URLs are production URLs</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Email credentials are production SMTP</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Container runs as non-root user</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> No sensitive data in logs</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> <code class="docutils literal notranslate"><span class="pre">.env.prod</span></code> is NOT committed to git</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Firewall rules restrict access to internal services</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="quick-reference">
+<h2>Quick Reference<a class="headerlink" href="#quick-reference" title="Link to this heading">¶</a></h2>
+<section id="make-commands">
+<h3>Make Commands<a class="headerlink" href="#make-commands" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Development</span>
+</span><span data-line="2">make<span class="w"> </span>install<span class="w">          </span><span class="c1"># Install dependencies</span>
+</span><span data-line="3">make<span class="w"> </span>serve<span class="w">            </span><span class="c1"># Run development server</span>
+</span><span data-line="4">make<span class="w"> </span>worker<span class="w">           </span><span class="c1"># Run SAQ worker</span>
+</span><span data-line="5">make<span class="w"> </span>infra-up<span class="w">         </span><span class="c1"># Start PostgreSQL + Redis</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Docker</span>
+</span><span data-line="8">make<span class="w"> </span>docker-up<span class="w">        </span><span class="c1"># Start dev stack</span>
+</span><span data-line="9">make<span class="w"> </span>docker-prod-up<span class="w">   </span><span class="c1"># Start production stack</span>
+</span><span data-line="10">make<span class="w"> </span>docker-logs<span class="w">      </span><span class="c1"># View logs</span>
+</span><span data-line="11">
+</span><span data-line="12"><span class="c1"># Database</span>
+</span><span data-line="13">make<span class="w"> </span>litestar-db-upgrade<span class="w">  </span><span class="c1"># Run migrations</span>
+</span><span data-line="14">make<span class="w"> </span>litestar-db-make<span class="w">     </span><span class="c1"># Create migration</span>
+</span><span data-line="15">make<span class="w"> </span>db-seed<span class="w">              </span><span class="c1"># Seed data</span>
+</span><span data-line="16">
+</span><span data-line="17"><span class="c1"># Quality</span>
+</span><span data-line="18">make<span class="w"> </span>ci<span class="w">               </span><span class="c1"># Run all checks</span>
+</span><span data-line="19">make<span class="w"> </span><span class="nb">test</span><span class="w">             </span><span class="c1"># Run tests</span>
+</span></pre></div>
+</div>
+</section>
+<section id="port-reference">
+<h3>Port Reference<a class="headerlink" href="#port-reference" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Service</p></th>
+<th class="head"><p>Port</p></th>
+<th class="head"><p>Development</p></th>
+<th class="head"><p>Production</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Litestar App</p></td>
+<td><p>8000</p></td>
+<td><p>Exposed</p></td>
+<td><p>Internal only</p></td>
+</tr>
+<tr class="row-odd"><td><p>PostgreSQL</p></td>
+<td><p>5432</p></td>
+<td><p>Exposed</p></td>
+<td><p>Internal only</p></td>
+</tr>
+<tr class="row-even"><td><p>Redis</p></td>
+<td><p>6379</p></td>
+<td><p>Exposed</p></td>
+<td><p>Internal only</p></td>
+</tr>
+<tr class="row-odd"><td><p>Meilisearch</p></td>
+<td><p>7700</p></td>
+<td><p>Exposed</p></td>
+<td><p>Internal only</p></td>
+</tr>
+<tr class="row-even"><td><p>MailDev</p></td>
+<td><p>1080</p></td>
+<td><p>Exposed</p></td>
+<td><p>N/A</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="resource-requirements">
+<h3>Resource Requirements<a class="headerlink" href="#resource-requirements" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Component</p></th>
+<th class="head"><p>Development</p></th>
+<th class="head"><p>Production (min)</p></th>
+<th class="head"><p>Production (recommended)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>App</p></td>
+<td><p>512MB / 0.5 CPU</p></td>
+<td><p>1GB / 1 CPU</p></td>
+<td><p>2GB / 2 CPU</p></td>
+</tr>
+<tr class="row-odd"><td><p>Worker</p></td>
+<td><p>256MB / 0.25 CPU</p></td>
+<td><p>512MB / 0.5 CPU</p></td>
+<td><p>1GB / 1 CPU</p></td>
+</tr>
+<tr class="row-even"><td><p>PostgreSQL</p></td>
+<td><p>256MB</p></td>
+<td><p>1GB</p></td>
+<td><p>4GB+</p></td>
+</tr>
+<tr class="row-odd"><td><p>Redis</p></td>
+<td><p>64MB</p></td>
+<td><p>256MB</p></td>
+<td><p>1GB</p></td>
+</tr>
+<tr class="row-even"><td><p>Meilisearch</p></td>
+<td><p>256MB</p></td>
+<td><p>512MB</p></td>
+<td><p>1GB+</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="configuration.html">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title">Configuration Guide</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="docker.html">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title">Docker Guide</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Jacob Coffee</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+<a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+  <iconify-icon icon="simple-icons:github"></iconify-icon>
+</a></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=30646c52"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script src="../_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

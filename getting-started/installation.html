@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="blue" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Installation - litestar-pydotorg</title><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Quickstart" href="quickstart.html" /><link rel="prev" title="Getting Started" href="index.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=14737038" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=513f0650" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="Installation"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../index.html">
+      
+      
+      <strong>litestar-pydotorg</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"><ul><li class="link">
+          <a href="https://litestar.dev/">
+            <span>Litestar</span></a>
+        </li><li class="link">
+          <a href="https://python.org/">
+            <span>Python.org</span></a>
+        </li></ul></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials">
+  <a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Getting Started</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/index.html">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/development.html">Development Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/contributing.html">Contribution Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/testing.html">Testing Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/debugging.html">Debugging Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/api-usage.html">API Usage Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/authentication.html">Authentication Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/feature-flags.html">Feature Flags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/configuration.html">Configuration Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/deployment.html">Deployment Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/docker.html">Docker Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/troubleshooting.html">Troubleshooting Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/index.html">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/domain-patterns.html">Domain Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/authentication-recipes.html">Authentication Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/database-recipes.html">Database Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/testing-recipes.html">Testing Recipes</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/core/index.html">Core Infrastructure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/auth.html">Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/cache.html">Caching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/database.html">Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/email.html">Email</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/exceptions.html">Exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/features.html">Feature Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/feeds.html">RSS/Atom Feeds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/ical.html">iCalendar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/middleware.html">Middleware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/openapi.html">OpenAPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/ratelimit.html">Rate Limiting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/security.html">Security</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/worker.html">Background Worker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/domains/index.html">Domain Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/about.html">About</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/admin.html">Admin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/banners.html">banners</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/blogs.html">blogs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/codesamples.html">Code Samples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/community.html">community</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/docs.html">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/downloads.html">downloads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/events.html">events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/jobs.html">jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/mailing.html">Mailing Lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/minutes.html">Minutes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/nominations.html">Nominations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/pages.html">pages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/sponsors.html">sponsors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/sqladmin.html">SQLAdmin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/successstories.html">Success Stories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/users.html">users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/work_groups.html">Work Groups</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/lib.html">Library Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/tasks.html">Background Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/config.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/main.html">Application Entry Point</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/ARCHITECTURE.html">Litestar Python.org Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/DATABASE_SCHEMA.html">Database Schema Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/DOMAIN_MODELS.html">Domain Models Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/QUICK_START.html">Litestar Python.org Quick Start Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/API_TAGS_INDEX.html">API Tags Documentation Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/RATE_LIMITING_ARCHITECTURE.html">Rate Limiting Architecture Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/adr/001-litestar-framework.html">ADR-001: Use Litestar as Web Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/adr/002-saq-background-tasks.html">ADR-002: Use SAQ for Background Task Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#install-uv">Install uv</a></li>
+<li><a class="reference internal" href="#clone-the-repository">Clone the Repository</a></li>
+<li><a class="reference internal" href="#set-up-python-environment">Set Up Python Environment</a></li>
+<li><a class="reference internal" href="#configure-environment">Configure Environment</a></li>
+<li><a class="reference internal" href="#start-infrastructure-services">Start Infrastructure Services</a><ul>
+<li><a class="reference internal" href="#option-1-docker-compose-recommended">Option 1: Docker Compose (Recommended)</a></li>
+<li><a class="reference internal" href="#option-2-local-installation">Option 2: Local Installation</a><ul>
+<li><a class="reference internal" href="#postgresql">PostgreSQL</a></li>
+<li><a class="reference internal" href="#redis">Redis</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#database-setup">Database Setup</a></li>
+<li><a class="reference internal" href="#verify-installation">Verify Installation</a></li>
+<li><a class="reference internal" href="#frontend-assets">Frontend Assets</a></li>
+<li><a class="reference internal" href="#common-issues">Common Issues</a><ul>
+<li><a class="reference internal" href="#database-connection-failed">Database Connection Failed</a></li>
+<li><a class="reference internal" href="#redis-connection-failed">Redis Connection Failed</a></li>
+<li><a class="reference internal" href="#import-errors">Import Errors</a></li>
+<li><a class="reference internal" href="#port-already-in-use">Port Already in Use</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#next-steps">Next Steps</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../index.html"><span itemprop="name">litestar-pydotorg</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="index.html"><span itemprop="name">Getting Started</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="2" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">Installation</strong>
+        <meta itemprop="position" content="3" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue dark-code" role="main">
+          <section id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h1>
+<p>This guide walks you through installing litestar-pydotorg for local development.</p>
+<section id="install-uv">
+<h2>Install uv<a class="headerlink" href="#install-uv" title="Link to this heading">¶</a></h2>
+<p><a class="reference external" href="https://github.com/astral-sh/uv">uv</a> is a fast Python package manager that we use for dependency management.</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-0" name="sd-tab-set-0" type="radio">
+<label class="sd-tab-label" for="sd-tab-item-0">
+macOS / Linux</label><div class="sd-tab-content docutils">
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">curl<span class="w"> </span>-LsSf<span class="w"> </span>https://astral.sh/uv/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh
+</span></pre></div>
+</div>
+</div>
+<input id="sd-tab-item-1" name="sd-tab-set-0" type="radio">
+<label class="sd-tab-label" for="sd-tab-item-1">
+Windows (PowerShell)</label><div class="sd-tab-content docutils">
+<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">powershell</span> <span class="n">-c</span> <span class="s2">&quot;irm https://astral.sh/uv/install.ps1 | iex&quot;</span>
+</span></pre></div>
+</div>
+</div>
+<input id="sd-tab-item-2" name="sd-tab-set-0" type="radio">
+<label class="sd-tab-label" for="sd-tab-item-2">
+Homebrew</label><div class="sd-tab-content docutils">
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">brew<span class="w"> </span>install<span class="w"> </span>uv
+</span></pre></div>
+</div>
+</div>
+</div>
+<p>Verify the installation:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">uv<span class="w"> </span>--version
+</span></pre></div>
+</div>
+</section>
+<section id="clone-the-repository">
+<h2>Clone the Repository<a class="headerlink" href="#clone-the-repository" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">git<span class="w"> </span>clone<span class="w"> </span>https://github.com/JacobCoffee/litestar-pydotorg.git
+</span><span data-line="2"><span class="nb">cd</span><span class="w"> </span>litestar-pydotorg
+</span></pre></div>
+</div>
+</section>
+<section id="set-up-python-environment">
+<h2>Set Up Python Environment<a class="headerlink" href="#set-up-python-environment" title="Link to this heading">¶</a></h2>
+<p>Create and activate a virtual environment:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Create virtual environment with uv</span>
+</span><span data-line="2">uv<span class="w"> </span>venv
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Activate virtual environment</span>
+</span><span data-line="5"><span class="c1"># macOS/Linux</span>
+</span><span data-line="6"><span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+</span><span data-line="7">
+</span><span data-line="8"><span class="c1"># Windows</span>
+</span><span data-line="9">.venv<span class="se">\S</span>cripts<span class="se">\a</span>ctivate
+</span></pre></div>
+</div>
+<p>Install dependencies:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Install all dependencies (production + development)</span>
+</span><span data-line="2">uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[dev]&quot;</span>
+</span></pre></div>
+</div>
+<p>Or use the Makefile:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">make<span class="w"> </span>install
+</span></pre></div>
+</div>
+</section>
+<section id="configure-environment">
+<h2>Configure Environment<a class="headerlink" href="#configure-environment" title="Link to this heading">¶</a></h2>
+<p>Copy the example environment file and configure your settings:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">cp<span class="w"> </span>.env.example<span class="w"> </span>.env
+</span></pre></div>
+</div>
+<p>Edit <code class="docutils literal notranslate"><span class="pre">.env</span></code> with your local settings. At minimum, configure:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Database connection</span>
+</span><span data-line="2"><span class="nv">DATABASE_URL</span><span class="o">=</span>postgresql+asyncpg://postgres:postgres@localhost:5432/pydotorg
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Redis connection</span>
+</span><span data-line="5"><span class="nv">REDIS_URL</span><span class="o">=</span>redis://localhost:6379/0
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Secret key (generate a secure one)</span>
+</span><span data-line="8"><span class="nv">SECRET_KEY</span><span class="o">=</span>your-secure-secret-key-here
+</span><span data-line="9">
+</span><span data-line="10"><span class="c1"># Debug mode (enable for development)</span>
+</span><span data-line="11"><span class="nv">DEBUG</span><span class="o">=</span><span class="nb">true</span>
+</span></pre></div>
+</div>
+<p>Generate a secure secret key:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import secrets; print(secrets.token_urlsafe(32))&quot;</span>
+</span></pre></div>
+</div>
+</section>
+<section id="start-infrastructure-services">
+<h2>Start Infrastructure Services<a class="headerlink" href="#start-infrastructure-services" title="Link to this heading">¶</a></h2>
+<section id="option-1-docker-compose-recommended">
+<h3>Option 1: Docker Compose (Recommended)<a class="headerlink" href="#option-1-docker-compose-recommended" title="Link to this heading">¶</a></h3>
+<p>Start PostgreSQL and Redis using Docker Compose:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Start all infrastructure services</span>
+</span><span data-line="2">make<span class="w"> </span>infra-up
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Or manually:</span>
+</span><span data-line="5">docker-compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>postgres<span class="w"> </span>redis
+</span></pre></div>
+</div>
+<p>Verify services are running:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">docker-compose<span class="w"> </span>ps
+</span></pre></div>
+</div>
+</section>
+<section id="option-2-local-installation">
+<h3>Option 2: Local Installation<a class="headerlink" href="#option-2-local-installation" title="Link to this heading">¶</a></h3>
+<p>If you prefer to install services locally:</p>
+<section id="postgresql">
+<h4>PostgreSQL<a class="headerlink" href="#postgresql" title="Link to this heading">¶</a></h4>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-3" name="sd-tab-set-1" type="radio">
+<label class="sd-tab-label" for="sd-tab-item-3">
+macOS (Homebrew)</label><div class="sd-tab-content docutils">
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">brew<span class="w"> </span>install<span class="w"> </span>postgresql@15
+</span><span data-line="2">brew<span class="w"> </span>services<span class="w"> </span>start<span class="w"> </span>postgresql@15
+</span><span data-line="3">createdb<span class="w"> </span>pydotorg
+</span></pre></div>
+</div>
+</div>
+<input id="sd-tab-item-4" name="sd-tab-set-1" type="radio">
+<label class="sd-tab-label" for="sd-tab-item-4">
+Ubuntu/Debian</label><div class="sd-tab-content docutils">
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>postgresql-15
+</span><span data-line="2">sudo<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>postgresql
+</span><span data-line="3">sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>createdb<span class="w"> </span>pydotorg
+</span></pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="redis">
+<h4>Redis<a class="headerlink" href="#redis" title="Link to this heading">¶</a></h4>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-5" name="sd-tab-set-2" type="radio">
+<label class="sd-tab-label" for="sd-tab-item-5">
+macOS (Homebrew)</label><div class="sd-tab-content docutils">
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">brew<span class="w"> </span>install<span class="w"> </span>redis
+</span><span data-line="2">brew<span class="w"> </span>services<span class="w"> </span>start<span class="w"> </span>redis
+</span></pre></div>
+</div>
+</div>
+<input id="sd-tab-item-6" name="sd-tab-set-2" type="radio">
+<label class="sd-tab-label" for="sd-tab-item-6">
+Ubuntu/Debian</label><div class="sd-tab-content docutils">
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>redis-server
+</span><span data-line="2">sudo<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>redis
+</span></pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="database-setup">
+<h2>Database Setup<a class="headerlink" href="#database-setup" title="Link to this heading">¶</a></h2>
+<p>Run database migrations:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Using Makefile</span>
+</span><span data-line="2">make<span class="w"> </span>litestar-db-upgrade
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Or directly with Litestar CLI</span>
+</span><span data-line="5"><span class="nv">LITESTAR_APP</span><span class="o">=</span>pydotorg.main:app<span class="w"> </span>uv<span class="w"> </span>run<span class="w"> </span>litestar<span class="w"> </span>database<span class="w"> </span>upgrade
+</span></pre></div>
+</div>
+<p>Optionally seed development data:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">make<span class="w"> </span>db-seed
+</span></pre></div>
+</div>
+</section>
+<section id="verify-installation">
+<h2>Verify Installation<a class="headerlink" href="#verify-installation" title="Link to this heading">¶</a></h2>
+<p>Start the development server:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">make<span class="w"> </span>serve
+</span><span data-line="2">
+</span><span data-line="3"><span class="c1"># Or directly:</span>
+</span><span data-line="4"><span class="nv">LITESTAR_APP</span><span class="o">=</span>pydotorg.main:app<span class="w"> </span>uv<span class="w"> </span>run<span class="w"> </span>litestar<span class="w"> </span>run<span class="w"> </span>--reload
+</span></pre></div>
+</div>
+<p>Visit <a class="reference external" href="http://localhost:8000">http://localhost:8000</a> in your browser.</p>
+<p>Check the API documentation at:</p>
+<ul class="simple">
+<li><p><strong>Scalar UI</strong>: <a class="reference external" href="http://localhost:8000/api/">http://localhost:8000/api/</a></p></li>
+<li><p><strong>Swagger UI</strong>: <a class="reference external" href="http://localhost:8000/api/swagger">http://localhost:8000/api/swagger</a></p></li>
+<li><p><strong>ReDoc</strong>: <a class="reference external" href="http://localhost:8000/api/redoc">http://localhost:8000/api/redoc</a></p></li>
+</ul>
+</section>
+<section id="frontend-assets">
+<h2>Frontend Assets<a class="headerlink" href="#frontend-assets" title="Link to this heading">¶</a></h2>
+<p>Install frontend dependencies and start the asset watcher:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Install frontend dependencies</span>
+</span><span data-line="2">make<span class="w"> </span>assets-install
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Start Vite dev server with hot module replacement</span>
+</span><span data-line="5">make<span class="w"> </span>assets-serve
+</span></pre></div>
+</div>
+<p>Or in a separate terminal while the backend is running:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">make<span class="w"> </span>frontend
+</span></pre></div>
+</div>
+</section>
+<section id="common-issues">
+<h2>Common Issues<a class="headerlink" href="#common-issues" title="Link to this heading">¶</a></h2>
+<section id="database-connection-failed">
+<h3>Database Connection Failed<a class="headerlink" href="#database-connection-failed" title="Link to this heading">¶</a></h3>
+<p>Ensure PostgreSQL is running and the connection string is correct:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Check PostgreSQL is running</span>
+</span><span data-line="2">docker-compose<span class="w"> </span>ps<span class="w"> </span>postgres
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Test connection</span>
+</span><span data-line="5">psql<span class="w"> </span><span class="nv">$DATABASE_URL</span><span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;SELECT 1&quot;</span>
+</span></pre></div>
+</div>
+</section>
+<section id="redis-connection-failed">
+<h3>Redis Connection Failed<a class="headerlink" href="#redis-connection-failed" title="Link to this heading">¶</a></h3>
+<p>Verify Redis is running:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Check Redis is running</span>
+</span><span data-line="2">docker-compose<span class="w"> </span>ps<span class="w"> </span>redis
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Test connection</span>
+</span><span data-line="5">redis-cli<span class="w"> </span>-u<span class="w"> </span><span class="nv">$REDIS_URL</span><span class="w"> </span>ping
+</span></pre></div>
+</div>
+</section>
+<section id="import-errors">
+<h3>Import Errors<a class="headerlink" href="#import-errors" title="Link to this heading">¶</a></h3>
+<p>Reinstall dependencies:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[dev]&quot;</span><span class="w"> </span>--force-reinstall
+</span><span data-line="2">
+</span><span data-line="3"><span class="c1"># Clear Python cache</span>
+</span><span data-line="4">find<span class="w"> </span>.<span class="w"> </span>-type<span class="w"> </span>d<span class="w"> </span>-name<span class="w"> </span><span class="s2">&quot;__pycache__&quot;</span><span class="w"> </span>-exec<span class="w"> </span>rm<span class="w"> </span>-rf<span class="w"> </span><span class="o">{}</span><span class="w"> </span>+<span class="w"> </span><span class="m">2</span>&gt;/dev/null
+</span><span data-line="5">find<span class="w"> </span>.<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span>-name<span class="w"> </span><span class="s2">&quot;*.pyc&quot;</span><span class="w"> </span>-delete
+</span></pre></div>
+</div>
+</section>
+<section id="port-already-in-use">
+<h3>Port Already in Use<a class="headerlink" href="#port-already-in-use" title="Link to this heading">¶</a></h3>
+<p>If port 8000 is in use:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Find the process using the port</span>
+</span><span data-line="2">lsof<span class="w"> </span>-i<span class="w"> </span>:8000
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Use a different port</span>
+</span><span data-line="5"><span class="nv">LITESTAR_APP</span><span class="o">=</span>pydotorg.main:app<span class="w"> </span>uv<span class="w"> </span>run<span class="w"> </span>litestar<span class="w"> </span>run<span class="w"> </span>--port<span class="w"> </span><span class="m">8001</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Continue to the <a class="reference internal" href="quickstart.html"><span class="std std-doc">Quickstart</span></a> to start developing</p></li>
+<li><p>Read the <a class="reference internal" href="../architecture/ARCHITECTURE.html"><span class="std std-doc">Architecture Overview</span></a> to understand the codebase structure</p></li>
+<li><p>Check the <a class="reference internal" href="../guides/development.html"><span class="std std-doc">Development Guide</span></a> for coding standards and workflows</p></li>
+</ul>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="index.html">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title">Getting Started</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="quickstart.html">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title">Quickstart</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Jacob Coffee</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+<a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+  <iconify-icon icon="simple-icons:github"></iconify-icon>
+</a></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=30646c52"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script src="../_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

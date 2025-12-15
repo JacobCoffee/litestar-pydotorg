@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="blue" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>pydotorg.domains.jobs.schemas - litestar-pydotorg</title><link rel="index" title="Index" href="../../../../genindex.html" /><link rel="search" title="Search" href="../../../../search.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/shibuya.css?v=14737038" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link media="print" rel="stylesheet" type="text/css" href="../../../../_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css?v=513f0650" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="pydotorg.domains.jobs.schemas"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../../../../index.html">
+      
+      
+      <strong>litestar-pydotorg</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"><ul><li class="link">
+          <a href="https://litestar.dev/">
+            <span>Litestar</span></a>
+        </li><li class="link">
+          <a href="https://python.org/">
+            <span>Python.org</span></a>
+        </li></ul></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../../../../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials">
+  <a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../getting-started/index.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../getting-started/installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../getting-started/quickstart.html">Quickstart</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../guides/index.html">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/development.html">Development Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/contributing.html">Contribution Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/testing.html">Testing Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/debugging.html">Debugging Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/api-usage.html">API Usage Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/authentication.html">Authentication Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/feature-flags.html">Feature Flags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/configuration.html">Configuration Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/deployment.html">Deployment Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/docker.html">Docker Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/troubleshooting.html">Troubleshooting Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cookbook/index.html">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../cookbook/domain-patterns.html">Domain Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../cookbook/authentication-recipes.html">Authentication Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../cookbook/database-recipes.html">Database Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../cookbook/testing-recipes.html">Testing Recipes</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/index.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/core/index.html">Core Infrastructure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/auth.html">Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/cache.html">Caching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/database.html">Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/email.html">Email</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/exceptions.html">Exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/features.html">Feature Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/feeds.html">RSS/Atom Feeds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/ical.html">iCalendar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/middleware.html">Middleware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/openapi.html">OpenAPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/ratelimit.html">Rate Limiting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/security.html">Security</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/worker.html">Background Worker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/domains/index.html">Domain Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/about.html">About</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/admin.html">Admin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/banners.html">banners</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/blogs.html">blogs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/codesamples.html">Code Samples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/community.html">community</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/docs.html">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/downloads.html">downloads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/events.html">events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/jobs.html">jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/mailing.html">Mailing Lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/minutes.html">Minutes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/nominations.html">Nominations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/pages.html">pages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/sponsors.html">sponsors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/sqladmin.html">SQLAdmin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/successstories.html">Success Stories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/users.html">users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/work_groups.html">Work Groups</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/lib.html">Library Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/tasks.html">Background Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/config.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/main.html">Application Entry Point</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../architecture/index.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/ARCHITECTURE.html">Litestar Python.org Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/DATABASE_SCHEMA.html">Database Schema Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/DOMAIN_MODELS.html">Domain Models Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/QUICK_START.html">Litestar Python.org Quick Start Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/API_TAGS_INDEX.html">API Tags Documentation Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/RATE_LIMITING_ARCHITECTURE.html">Rate Limiting Architecture Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/adr/001-litestar-framework.html">ADR-001: Use Litestar as Web Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/adr/002-saq-background-tasks.html">ADR-002: Use SAQ for Background Task Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../../../../index.html"><span itemprop="name">litestar-pydotorg</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../../../index.html"><span itemprop="name">Module code</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="2" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">pydotorg.domains.jobs.schemas</strong>
+        <meta itemprop="position" content="3" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue dark-code" role="main">
+          <h1>Source code for pydotorg.domains.jobs.schemas</h1><div class="highlight"><pre>
+<span></span><span data-line="1"><span class="sd">&quot;&quot;&quot;Jobs domain Pydantic schemas.&quot;&quot;&quot;</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
+</span><span data-line="6"><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Annotated</span>
+</span><span data-line="7"><span class="kn">from</span><span class="w"> </span><span class="nn">uuid</span><span class="w"> </span><span class="kn">import</span> <span class="n">UUID</span>
+</span><span data-line="8">
+</span><span data-line="9"><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">ConfigDict</span><span class="p">,</span> <span class="n">EmailStr</span><span class="p">,</span> <span class="n">Field</span><span class="p">,</span> <span class="n">HttpUrl</span>
+</span><span data-line="10">
+</span><span data-line="11"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.domains.jobs.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">JobStatus</span>
+</span><span data-line="12">
+</span><span data-line="13">
+<div class="viewcode-block" id="JobTypeBase">
+<a class="viewcode-back" href="../../../../api/domains/jobs.html#pydotorg.domains.jobs.schemas.JobTypeBase">[docs]</a>
+</span><span data-line="14"><span class="k">class</span><span class="w"> </span><span class="nc">JobTypeBase</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span data-line="15"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Base job type schema.&quot;&quot;&quot;</span>
+</span><span data-line="16">
+</span><span data-line="17">    <span class="n">name</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Field</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">)]</span></div>
+
+</span><span data-line="18">
+</span><span data-line="19">
+<div class="viewcode-block" id="JobTypeCreate">
+<a class="viewcode-back" href="../../../../api/domains/jobs.html#pydotorg.domains.jobs.schemas.JobTypeCreate">[docs]</a>
+</span><span data-line="20"><span class="k">class</span><span class="w"> </span><span class="nc">JobTypeCreate</span><span class="p">(</span><span class="n">JobTypeBase</span><span class="p">):</span>
+</span><span data-line="21"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Schema for creating a new job type.&quot;&quot;&quot;</span>
+</span><span data-line="22">
+</span><span data-line="23">    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span><span class="n">json_schema_extra</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Full-time&quot;</span><span class="p">,</span> <span class="s2">&quot;slug&quot;</span><span class="p">:</span> <span class="s2">&quot;full-time&quot;</span><span class="p">}})</span>
+</span><span data-line="24">
+</span><span data-line="25">    <span class="n">slug</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Field</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">)]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+</span><span data-line="26">
+</span><span data-line="27">
+<div class="viewcode-block" id="JobTypeUpdate">
+<a class="viewcode-back" href="../../../../api/domains/jobs.html#pydotorg.domains.jobs.schemas.JobTypeUpdate">[docs]</a>
+</span><span data-line="28"><span class="k">class</span><span class="w"> </span><span class="nc">JobTypeUpdate</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span data-line="29"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Schema for updating a job type.&quot;&quot;&quot;</span>
+</span><span data-line="30">
+</span><span data-line="31">    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span><span class="n">json_schema_extra</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Full-time Remote&quot;</span><span class="p">,</span> <span class="s2">&quot;slug&quot;</span><span class="p">:</span> <span class="s2">&quot;full-time-remote&quot;</span><span class="p">}})</span>
+</span><span data-line="32">
+</span><span data-line="33">    <span class="n">name</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Field</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">)]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="34">    <span class="n">slug</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Field</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">)]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+</span><span data-line="35">
+</span><span data-line="36">
+<div class="viewcode-block" id="JobTypeRead">
+<a class="viewcode-back" href="../../../../api/domains/jobs.html#pydotorg.domains.jobs.schemas.JobTypeRead">[docs]</a>
+</span><span data-line="37"><span class="k">class</span><span class="w"> </span><span class="nc">JobTypeRead</span><span class="p">(</span><span class="n">JobTypeBase</span><span class="p">):</span>
+</span><span data-line="38"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Schema for reading job type data.&quot;&quot;&quot;</span>
+</span><span data-line="39">
+</span><span data-line="40">    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span>
+</span><span data-line="41">        <span class="n">from_attributes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span data-line="42">        <span class="n">json_schema_extra</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="43">            <span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span data-line="44">                <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;550e8400-e29b-41d4-a716-446655440010&quot;</span><span class="p">,</span>
+</span><span data-line="45">                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Full-time&quot;</span><span class="p">,</span>
+</span><span data-line="46">                <span class="s2">&quot;slug&quot;</span><span class="p">:</span> <span class="s2">&quot;full-time&quot;</span><span class="p">,</span>
+</span><span data-line="47">            <span class="p">}</span>
+</span><span data-line="48">        <span class="p">},</span>
+</span><span data-line="49">    <span class="p">)</span>
+</span><span data-line="50">
+</span><span data-line="51">    <span class="nb">id</span><span class="p">:</span> <span class="n">UUID</span>
+</span><span data-line="52">    <span class="n">slug</span><span class="p">:</span> <span class="nb">str</span></div>
+
+</span><span data-line="53">
+</span><span data-line="54">
+<div class="viewcode-block" id="JobCategoryBase">
+<a class="viewcode-back" href="../../../../api/domains/jobs.html#pydotorg.domains.jobs.schemas.JobCategoryBase">[docs]</a>
+</span><span data-line="55"><span class="k">class</span><span class="w"> </span><span class="nc">JobCategoryBase</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span data-line="56"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Base job category schema.&quot;&quot;&quot;</span>
+</span><span data-line="57">
+</span><span data-line="58">    <span class="n">name</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Field</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">)]</span></div>
+
+</span><span data-line="59">
+</span><span data-line="60">
+<div class="viewcode-block" id="JobCategoryCreate">
+<a class="viewcode-back" href="../../../../api/domains/jobs.html#pydotorg.domains.jobs.schemas.JobCategoryCreate">[docs]</a>
+</span><span data-line="61"><span class="k">class</span><span class="w"> </span><span class="nc">JobCategoryCreate</span><span class="p">(</span><span class="n">JobCategoryBase</span><span class="p">):</span>
+</span><span data-line="62"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Schema for creating a new job category.&quot;&quot;&quot;</span>
+</span><span data-line="63">
+</span><span data-line="64">    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span><span class="n">json_schema_extra</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Engineering&quot;</span><span class="p">,</span> <span class="s2">&quot;slug&quot;</span><span class="p">:</span> <span class="s2">&quot;engineering&quot;</span><span class="p">}})</span>
+</span><span data-line="65">
+</span><span data-line="66">    <span class="n">slug</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Field</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">)]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+</span><span data-line="67">
+</span><span data-line="68">
+<div class="viewcode-block" id="JobCategoryUpdate">
+<a class="viewcode-back" href="../../../../api/domains/jobs.html#pydotorg.domains.jobs.schemas.JobCategoryUpdate">[docs]</a>
+</span><span data-line="69"><span class="k">class</span><span class="w"> </span><span class="nc">JobCategoryUpdate</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span data-line="70"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Schema for updating a job category.&quot;&quot;&quot;</span>
+</span><span data-line="71">
+</span><span data-line="72">    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span>
+</span><span data-line="73">        <span class="n">json_schema_extra</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Software Engineering&quot;</span><span class="p">,</span> <span class="s2">&quot;slug&quot;</span><span class="p">:</span> <span class="s2">&quot;software-engineering&quot;</span><span class="p">}}</span>
+</span><span data-line="74">    <span class="p">)</span>
+</span><span data-line="75">
+</span><span data-line="76">    <span class="n">name</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Field</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">)]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="77">    <span class="n">slug</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Field</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">)]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+</span><span data-line="78">
+</span><span data-line="79">
+<div class="viewcode-block" id="JobCategoryRead">
+<a class="viewcode-back" href="../../../../api/domains/jobs.html#pydotorg.domains.jobs.schemas.JobCategoryRead">[docs]</a>
+</span><span data-line="80"><span class="k">class</span><span class="w"> </span><span class="nc">JobCategoryRead</span><span class="p">(</span><span class="n">JobCategoryBase</span><span class="p">):</span>
+</span><span data-line="81"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Schema for reading job category data.&quot;&quot;&quot;</span>
+</span><span data-line="82">
+</span><span data-line="83">    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span>
+</span><span data-line="84">        <span class="n">from_attributes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span data-line="85">        <span class="n">json_schema_extra</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="86">            <span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span data-line="87">                <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;550e8400-e29b-41d4-a716-446655440001&quot;</span><span class="p">,</span>
+</span><span data-line="88">                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Engineering&quot;</span><span class="p">,</span>
+</span><span data-line="89">                <span class="s2">&quot;slug&quot;</span><span class="p">:</span> <span class="s2">&quot;engineering&quot;</span><span class="p">,</span>
+</span><span data-line="90">            <span class="p">}</span>
+</span><span data-line="91">        <span class="p">},</span>
+</span><span data-line="92">    <span class="p">)</span>
+</span><span data-line="93">
+</span><span data-line="94">    <span class="nb">id</span><span class="p">:</span> <span class="n">UUID</span>
+</span><span data-line="95">    <span class="n">slug</span><span class="p">:</span> <span class="nb">str</span></div>
+
+</span><span data-line="96">
+</span><span data-line="97">
+<div class="viewcode-block" id="JobBase">
+<a class="viewcode-back" href="../../../../api/domains/jobs.html#pydotorg.domains.jobs.schemas.JobBase">[docs]</a>
+</span><span data-line="98"><span class="k">class</span><span class="w"> </span><span class="nc">JobBase</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span data-line="99"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Base job schema with common fields.&quot;&quot;&quot;</span>
+</span><span data-line="100">
+</span><span data-line="101">    <span class="n">company_name</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Field</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">)]</span>
+</span><span data-line="102">    <span class="n">job_title</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Field</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">)]</span>
+</span><span data-line="103">    <span class="n">city</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Field</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="104">    <span class="n">region</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Field</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="105">    <span class="n">country</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Field</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)]</span>
+</span><span data-line="106">    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
+</span><span data-line="107">    <span class="n">requirements</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="108">    <span class="n">contact</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Field</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">)]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="109">    <span class="n">url</span><span class="p">:</span> <span class="n">HttpUrl</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="110">    <span class="n">email</span><span class="p">:</span> <span class="n">EmailStr</span>
+</span><span data-line="111">    <span class="n">telecommuting</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+</span><span data-line="112">    <span class="n">agencies</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+</span><span data-line="113">    <span class="n">expires</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+</span><span data-line="114">
+</span><span data-line="115">
+<div class="viewcode-block" id="JobCreate">
+<a class="viewcode-back" href="../../../../api/domains/jobs.html#pydotorg.domains.jobs.schemas.JobCreate">[docs]</a>
+</span><span data-line="116"><span class="k">class</span><span class="w"> </span><span class="nc">JobCreate</span><span class="p">(</span><span class="n">JobBase</span><span class="p">):</span>
+</span><span data-line="117"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Schema for creating a new job.&quot;&quot;&quot;</span>
+</span><span data-line="118">
+</span><span data-line="119">    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span>
+</span><span data-line="120">        <span class="n">json_schema_extra</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="121">            <span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span data-line="122">                <span class="s2">&quot;company_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Python Software Foundation&quot;</span><span class="p">,</span>
+</span><span data-line="123">                <span class="s2">&quot;job_title&quot;</span><span class="p">:</span> <span class="s2">&quot;Senior Python Developer&quot;</span><span class="p">,</span>
+</span><span data-line="124">                <span class="s2">&quot;city&quot;</span><span class="p">:</span> <span class="s2">&quot;Remote&quot;</span><span class="p">,</span>
+</span><span data-line="125">                <span class="s2">&quot;region&quot;</span><span class="p">:</span> <span class="s2">&quot;California&quot;</span><span class="p">,</span>
+</span><span data-line="126">                <span class="s2">&quot;country&quot;</span><span class="p">:</span> <span class="s2">&quot;USA&quot;</span><span class="p">,</span>
+</span><span data-line="127">                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;We are seeking an experienced Python developer to work on core Python infrastructure and tooling. You will collaborate with the PSF team to improve Python packaging, distribution, and developer experience.&quot;</span><span class="p">,</span>
+</span><span data-line="128">                <span class="s2">&quot;requirements&quot;</span><span class="p">:</span> <span class="s2">&quot;5+ years Python experience</span><span class="se">\n</span><span class="s2">Experience with async/await patterns</span><span class="se">\n</span><span class="s2">Knowledge of CPython internals preferred</span><span class="se">\n</span><span class="s2">Open source contributions welcome&quot;</span><span class="p">,</span>
+</span><span data-line="129">                <span class="s2">&quot;contact&quot;</span><span class="p">:</span> <span class="s2">&quot;Jane Smith, Engineering Manager&quot;</span><span class="p">,</span>
+</span><span data-line="130">                <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://python.org/jobs/senior-python-dev&quot;</span><span class="p">,</span>
+</span><span data-line="131">                <span class="s2">&quot;email&quot;</span><span class="p">:</span> <span class="s2">&quot;jobs@python.org&quot;</span><span class="p">,</span>
+</span><span data-line="132">                <span class="s2">&quot;telecommuting&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+</span><span data-line="133">                <span class="s2">&quot;agencies&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+</span><span data-line="134">                <span class="s2">&quot;expires&quot;</span><span class="p">:</span> <span class="s2">&quot;2025-12-31&quot;</span><span class="p">,</span>
+</span><span data-line="135">                <span class="s2">&quot;category_id&quot;</span><span class="p">:</span> <span class="s2">&quot;550e8400-e29b-41d4-a716-446655440001&quot;</span><span class="p">,</span>
+</span><span data-line="136">                <span class="s2">&quot;job_type_ids&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span data-line="137">                    <span class="s2">&quot;550e8400-e29b-41d4-a716-446655440010&quot;</span><span class="p">,</span>
+</span><span data-line="138">                    <span class="s2">&quot;550e8400-e29b-41d4-a716-446655440011&quot;</span><span class="p">,</span>
+</span><span data-line="139">                <span class="p">],</span>
+</span><span data-line="140">            <span class="p">}</span>
+</span><span data-line="141">        <span class="p">}</span>
+</span><span data-line="142">    <span class="p">)</span>
+</span><span data-line="143">
+</span><span data-line="144">    <span class="n">category_id</span><span class="p">:</span> <span class="n">UUID</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="145">    <span class="n">job_type_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">UUID</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span></div>
+
+</span><span data-line="146">
+</span><span data-line="147">
+<div class="viewcode-block" id="JobUpdate">
+<a class="viewcode-back" href="../../../../api/domains/jobs.html#pydotorg.domains.jobs.schemas.JobUpdate">[docs]</a>
+</span><span data-line="148"><span class="k">class</span><span class="w"> </span><span class="nc">JobUpdate</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span data-line="149"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Schema for updating a job.&quot;&quot;&quot;</span>
+</span><span data-line="150">
+</span><span data-line="151">    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span>
+</span><span data-line="152">        <span class="n">json_schema_extra</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="153">            <span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span data-line="154">                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Updated: We are seeking an experienced Python developer to work on core Python infrastructure, tooling, and community projects. You will collaborate with the PSF team to improve Python packaging, distribution, and developer experience.&quot;</span><span class="p">,</span>
+</span><span data-line="155">                <span class="s2">&quot;requirements&quot;</span><span class="p">:</span> <span class="s2">&quot;5+ years Python experience</span><span class="se">\n</span><span class="s2">Experience with async/await patterns</span><span class="se">\n</span><span class="s2">Knowledge of CPython internals preferred</span><span class="se">\n</span><span class="s2">Open source contributions required</span><span class="se">\n</span><span class="s2">Excellent communication skills&quot;</span><span class="p">,</span>
+</span><span data-line="156">                <span class="s2">&quot;telecommuting&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+</span><span data-line="157">                <span class="s2">&quot;expires&quot;</span><span class="p">:</span> <span class="s2">&quot;2026-01-31&quot;</span><span class="p">,</span>
+</span><span data-line="158">                <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;approved&quot;</span><span class="p">,</span>
+</span><span data-line="159">            <span class="p">}</span>
+</span><span data-line="160">        <span class="p">}</span>
+</span><span data-line="161">    <span class="p">)</span>
+</span><span data-line="162">
+</span><span data-line="163">    <span class="n">company_name</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Field</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">)]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="164">    <span class="n">job_title</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Field</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">)]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="165">    <span class="n">city</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Field</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="166">    <span class="n">region</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Field</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="167">    <span class="n">country</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Field</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="168">    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="169">    <span class="n">requirements</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="170">    <span class="n">contact</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Field</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">)]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="171">    <span class="n">url</span><span class="p">:</span> <span class="n">HttpUrl</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="172">    <span class="n">email</span><span class="p">:</span> <span class="n">EmailStr</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="173">    <span class="n">telecommuting</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="174">    <span class="n">agencies</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="175">    <span class="n">expires</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="176">    <span class="n">category_id</span><span class="p">:</span> <span class="n">UUID</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="177">    <span class="n">job_type_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">UUID</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="178">    <span class="n">status</span><span class="p">:</span> <span class="n">JobStatus</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+</span><span data-line="179">
+</span><span data-line="180">
+<div class="viewcode-block" id="JobRead">
+<a class="viewcode-back" href="../../../../api/domains/jobs.html#pydotorg.domains.jobs.schemas.JobRead">[docs]</a>
+</span><span data-line="181"><span class="k">class</span><span class="w"> </span><span class="nc">JobRead</span><span class="p">(</span><span class="n">JobBase</span><span class="p">):</span>
+</span><span data-line="182"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Schema for reading job data.&quot;&quot;&quot;</span>
+</span><span data-line="183">
+</span><span data-line="184">    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span>
+</span><span data-line="185">        <span class="n">from_attributes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span data-line="186">        <span class="n">json_schema_extra</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="187">            <span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span data-line="188">                <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;550e8400-e29b-41d4-a716-446655440020&quot;</span><span class="p">,</span>
+</span><span data-line="189">                <span class="s2">&quot;slug&quot;</span><span class="p">:</span> <span class="s2">&quot;senior-python-developer-psf&quot;</span><span class="p">,</span>
+</span><span data-line="190">                <span class="s2">&quot;company_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Python Software Foundation&quot;</span><span class="p">,</span>
+</span><span data-line="191">                <span class="s2">&quot;job_title&quot;</span><span class="p">:</span> <span class="s2">&quot;Senior Python Developer&quot;</span><span class="p">,</span>
+</span><span data-line="192">                <span class="s2">&quot;city&quot;</span><span class="p">:</span> <span class="s2">&quot;Remote&quot;</span><span class="p">,</span>
+</span><span data-line="193">                <span class="s2">&quot;region&quot;</span><span class="p">:</span> <span class="s2">&quot;California&quot;</span><span class="p">,</span>
+</span><span data-line="194">                <span class="s2">&quot;country&quot;</span><span class="p">:</span> <span class="s2">&quot;USA&quot;</span><span class="p">,</span>
+</span><span data-line="195">                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;We are seeking an experienced Python developer to work on core Python infrastructure and tooling.&quot;</span><span class="p">,</span>
+</span><span data-line="196">                <span class="s2">&quot;requirements&quot;</span><span class="p">:</span> <span class="s2">&quot;5+ years Python experience</span><span class="se">\n</span><span class="s2">Experience with async/await patterns</span><span class="se">\n</span><span class="s2">Knowledge of CPython internals preferred&quot;</span><span class="p">,</span>
+</span><span data-line="197">                <span class="s2">&quot;contact&quot;</span><span class="p">:</span> <span class="s2">&quot;Jane Smith, Engineering Manager&quot;</span><span class="p">,</span>
+</span><span data-line="198">                <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://python.org/jobs/senior-python-dev&quot;</span><span class="p">,</span>
+</span><span data-line="199">                <span class="s2">&quot;email&quot;</span><span class="p">:</span> <span class="s2">&quot;jobs@python.org&quot;</span><span class="p">,</span>
+</span><span data-line="200">                <span class="s2">&quot;telecommuting&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+</span><span data-line="201">                <span class="s2">&quot;agencies&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+</span><span data-line="202">                <span class="s2">&quot;expires&quot;</span><span class="p">:</span> <span class="s2">&quot;2025-12-31&quot;</span><span class="p">,</span>
+</span><span data-line="203">                <span class="s2">&quot;creator_id&quot;</span><span class="p">:</span> <span class="s2">&quot;550e8400-e29b-41d4-a716-446655440000&quot;</span><span class="p">,</span>
+</span><span data-line="204">                <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;approved&quot;</span><span class="p">,</span>
+</span><span data-line="205">                <span class="s2">&quot;category_id&quot;</span><span class="p">:</span> <span class="s2">&quot;550e8400-e29b-41d4-a716-446655440001&quot;</span><span class="p">,</span>
+</span><span data-line="206">                <span class="s2">&quot;created_at&quot;</span><span class="p">:</span> <span class="s2">&quot;2025-11-01T10:00:00Z&quot;</span><span class="p">,</span>
+</span><span data-line="207">                <span class="s2">&quot;updated_at&quot;</span><span class="p">:</span> <span class="s2">&quot;2025-11-15T14:30:00Z&quot;</span><span class="p">,</span>
+</span><span data-line="208">                <span class="s2">&quot;job_types&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span data-line="209">                    <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;550e8400-e29b-41d4-a716-446655440010&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Full-time&quot;</span><span class="p">,</span> <span class="s2">&quot;slug&quot;</span><span class="p">:</span> <span class="s2">&quot;full-time&quot;</span><span class="p">},</span>
+</span><span data-line="210">                    <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;550e8400-e29b-41d4-a716-446655440011&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Remote&quot;</span><span class="p">,</span> <span class="s2">&quot;slug&quot;</span><span class="p">:</span> <span class="s2">&quot;remote&quot;</span><span class="p">},</span>
+</span><span data-line="211">                <span class="p">],</span>
+</span><span data-line="212">                <span class="s2">&quot;category&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span data-line="213">                    <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;550e8400-e29b-41d4-a716-446655440001&quot;</span><span class="p">,</span>
+</span><span data-line="214">                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Engineering&quot;</span><span class="p">,</span>
+</span><span data-line="215">                    <span class="s2">&quot;slug&quot;</span><span class="p">:</span> <span class="s2">&quot;engineering&quot;</span><span class="p">,</span>
+</span><span data-line="216">                <span class="p">},</span>
+</span><span data-line="217">            <span class="p">}</span>
+</span><span data-line="218">        <span class="p">},</span>
+</span><span data-line="219">    <span class="p">)</span>
+</span><span data-line="220">
+</span><span data-line="221">    <span class="nb">id</span><span class="p">:</span> <span class="n">UUID</span>
+</span><span data-line="222">    <span class="n">slug</span><span class="p">:</span> <span class="nb">str</span>
+</span><span data-line="223">    <span class="n">creator_id</span><span class="p">:</span> <span class="n">UUID</span>
+</span><span data-line="224">    <span class="n">status</span><span class="p">:</span> <span class="n">JobStatus</span>
+</span><span data-line="225">    <span class="n">category_id</span><span class="p">:</span> <span class="n">UUID</span> <span class="o">|</span> <span class="kc">None</span>
+</span><span data-line="226">    <span class="n">created_at</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span>
+</span><span data-line="227">    <span class="n">updated_at</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span>
+</span><span data-line="228">    <span class="n">job_types</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">JobTypeRead</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span data-line="229">    <span class="n">category</span><span class="p">:</span> <span class="n">JobCategoryRead</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+</span><span data-line="230">
+</span><span data-line="231">
+<div class="viewcode-block" id="JobPublic">
+<a class="viewcode-back" href="../../../../api/domains/jobs.html#pydotorg.domains.jobs.schemas.JobPublic">[docs]</a>
+</span><span data-line="232"><span class="k">class</span><span class="w"> </span><span class="nc">JobPublic</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span data-line="233"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Public job schema for job listings.&quot;&quot;&quot;</span>
+</span><span data-line="234">
+</span><span data-line="235">    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span>
+</span><span data-line="236">        <span class="n">from_attributes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span data-line="237">        <span class="n">json_schema_extra</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="238">            <span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span data-line="239">                <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;550e8400-e29b-41d4-a716-446655440020&quot;</span><span class="p">,</span>
+</span><span data-line="240">                <span class="s2">&quot;slug&quot;</span><span class="p">:</span> <span class="s2">&quot;senior-python-developer-psf&quot;</span><span class="p">,</span>
+</span><span data-line="241">                <span class="s2">&quot;company_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Python Software Foundation&quot;</span><span class="p">,</span>
+</span><span data-line="242">                <span class="s2">&quot;job_title&quot;</span><span class="p">:</span> <span class="s2">&quot;Senior Python Developer&quot;</span><span class="p">,</span>
+</span><span data-line="243">                <span class="s2">&quot;city&quot;</span><span class="p">:</span> <span class="s2">&quot;Remote&quot;</span><span class="p">,</span>
+</span><span data-line="244">                <span class="s2">&quot;region&quot;</span><span class="p">:</span> <span class="s2">&quot;California&quot;</span><span class="p">,</span>
+</span><span data-line="245">                <span class="s2">&quot;country&quot;</span><span class="p">:</span> <span class="s2">&quot;USA&quot;</span><span class="p">,</span>
+</span><span data-line="246">                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;We are seeking an experienced Python developer...&quot;</span><span class="p">,</span>
+</span><span data-line="247">                <span class="s2">&quot;requirements&quot;</span><span class="p">:</span> <span class="s2">&quot;5+ years Python experience&quot;</span><span class="p">,</span>
+</span><span data-line="248">                <span class="s2">&quot;contact&quot;</span><span class="p">:</span> <span class="s2">&quot;Jane Smith&quot;</span><span class="p">,</span>
+</span><span data-line="249">                <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://python.org/jobs/senior-python-dev&quot;</span><span class="p">,</span>
+</span><span data-line="250">                <span class="s2">&quot;telecommuting&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+</span><span data-line="251">                <span class="s2">&quot;agencies&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+</span><span data-line="252">                <span class="s2">&quot;expires&quot;</span><span class="p">:</span> <span class="s2">&quot;2025-12-31&quot;</span><span class="p">,</span>
+</span><span data-line="253">                <span class="s2">&quot;category&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span data-line="254">                    <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;550e8400-e29b-41d4-a716-446655440001&quot;</span><span class="p">,</span>
+</span><span data-line="255">                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Engineering&quot;</span><span class="p">,</span>
+</span><span data-line="256">                    <span class="s2">&quot;slug&quot;</span><span class="p">:</span> <span class="s2">&quot;engineering&quot;</span><span class="p">,</span>
+</span><span data-line="257">                <span class="p">},</span>
+</span><span data-line="258">                <span class="s2">&quot;job_types&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;550e8400-e29b-41d4-a716-446655440010&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Full-time&quot;</span><span class="p">,</span> <span class="s2">&quot;slug&quot;</span><span class="p">:</span> <span class="s2">&quot;full-time&quot;</span><span class="p">}],</span>
+</span><span data-line="259">                <span class="s2">&quot;created_at&quot;</span><span class="p">:</span> <span class="s2">&quot;2025-11-01T10:00:00Z&quot;</span><span class="p">,</span>
+</span><span data-line="260">            <span class="p">}</span>
+</span><span data-line="261">        <span class="p">},</span>
+</span><span data-line="262">    <span class="p">)</span>
+</span><span data-line="263">
+</span><span data-line="264">    <span class="nb">id</span><span class="p">:</span> <span class="n">UUID</span>
+</span><span data-line="265">    <span class="n">slug</span><span class="p">:</span> <span class="nb">str</span>
+</span><span data-line="266">    <span class="n">company_name</span><span class="p">:</span> <span class="nb">str</span>
+</span><span data-line="267">    <span class="n">job_title</span><span class="p">:</span> <span class="nb">str</span>
+</span><span data-line="268">    <span class="n">city</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+</span><span data-line="269">    <span class="n">region</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+</span><span data-line="270">    <span class="n">country</span><span class="p">:</span> <span class="nb">str</span>
+</span><span data-line="271">    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
+</span><span data-line="272">    <span class="n">requirements</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+</span><span data-line="273">    <span class="n">contact</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+</span><span data-line="274">    <span class="n">url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+</span><span data-line="275">    <span class="n">telecommuting</span><span class="p">:</span> <span class="nb">bool</span>
+</span><span data-line="276">    <span class="n">agencies</span><span class="p">:</span> <span class="nb">bool</span>
+</span><span data-line="277">    <span class="n">expires</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span> <span class="o">|</span> <span class="kc">None</span>
+</span><span data-line="278">    <span class="n">category</span><span class="p">:</span> <span class="n">JobCategoryRead</span> <span class="o">|</span> <span class="kc">None</span>
+</span><span data-line="279">    <span class="n">job_types</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">JobTypeRead</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span data-line="280">    <span class="n">created_at</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span></div>
+
+</span><span data-line="281">
+</span><span data-line="282">
+<div class="viewcode-block" id="JobReviewCommentBase">
+<a class="viewcode-back" href="../../../../api/domains/jobs.html#pydotorg.domains.jobs.schemas.JobReviewCommentBase">[docs]</a>
+</span><span data-line="283"><span class="k">class</span><span class="w"> </span><span class="nc">JobReviewCommentBase</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span data-line="284"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Base job review comment schema.&quot;&quot;&quot;</span>
+</span><span data-line="285">
+</span><span data-line="286">    <span class="n">comment</span><span class="p">:</span> <span class="nb">str</span></div>
+
+</span><span data-line="287">
+</span><span data-line="288">
+<div class="viewcode-block" id="JobReviewCommentCreate">
+<a class="viewcode-back" href="../../../../api/domains/jobs.html#pydotorg.domains.jobs.schemas.JobReviewCommentCreate">[docs]</a>
+</span><span data-line="289"><span class="k">class</span><span class="w"> </span><span class="nc">JobReviewCommentCreate</span><span class="p">(</span><span class="n">JobReviewCommentBase</span><span class="p">):</span>
+</span><span data-line="290"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Schema for creating a new job review comment.&quot;&quot;&quot;</span>
+</span><span data-line="291">
+</span><span data-line="292">    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span>
+</span><span data-line="293">        <span class="n">json_schema_extra</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="294">            <span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span data-line="295">                <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;Please update the job description to include salary range.&quot;</span><span class="p">,</span>
+</span><span data-line="296">                <span class="s2">&quot;job_id&quot;</span><span class="p">:</span> <span class="s2">&quot;550e8400-e29b-41d4-a716-446655440020&quot;</span><span class="p">,</span>
+</span><span data-line="297">            <span class="p">}</span>
+</span><span data-line="298">        <span class="p">}</span>
+</span><span data-line="299">    <span class="p">)</span>
+</span><span data-line="300">
+</span><span data-line="301">    <span class="n">job_id</span><span class="p">:</span> <span class="n">UUID</span></div>
+
+</span><span data-line="302">
+</span><span data-line="303">
+<div class="viewcode-block" id="JobReviewCommentUpdate">
+<a class="viewcode-back" href="../../../../api/domains/jobs.html#pydotorg.domains.jobs.schemas.JobReviewCommentUpdate">[docs]</a>
+</span><span data-line="304"><span class="k">class</span><span class="w"> </span><span class="nc">JobReviewCommentUpdate</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span data-line="305"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Schema for updating a job review comment.&quot;&quot;&quot;</span>
+</span><span data-line="306">
+</span><span data-line="307">    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span>
+</span><span data-line="308">        <span class="n">json_schema_extra</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;Updated: The salary range has been added. Approved.&quot;</span><span class="p">}}</span>
+</span><span data-line="309">    <span class="p">)</span>
+</span><span data-line="310">
+</span><span data-line="311">    <span class="n">comment</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+</span><span data-line="312">
+</span><span data-line="313">
+<div class="viewcode-block" id="JobReviewCommentRead">
+<a class="viewcode-back" href="../../../../api/domains/jobs.html#pydotorg.domains.jobs.schemas.JobReviewCommentRead">[docs]</a>
+</span><span data-line="314"><span class="k">class</span><span class="w"> </span><span class="nc">JobReviewCommentRead</span><span class="p">(</span><span class="n">JobReviewCommentBase</span><span class="p">):</span>
+</span><span data-line="315"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Schema for reading job review comment data.&quot;&quot;&quot;</span>
+</span><span data-line="316">
+</span><span data-line="317">    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span>
+</span><span data-line="318">        <span class="n">from_attributes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span data-line="319">        <span class="n">json_schema_extra</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="320">            <span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span data-line="321">                <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;550e8400-e29b-41d4-a716-446655440030&quot;</span><span class="p">,</span>
+</span><span data-line="322">                <span class="s2">&quot;job_id&quot;</span><span class="p">:</span> <span class="s2">&quot;550e8400-e29b-41d4-a716-446655440020&quot;</span><span class="p">,</span>
+</span><span data-line="323">                <span class="s2">&quot;creator_id&quot;</span><span class="p">:</span> <span class="s2">&quot;550e8400-e29b-41d4-a716-446655440000&quot;</span><span class="p">,</span>
+</span><span data-line="324">                <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;Please update the job description to include salary range.&quot;</span><span class="p">,</span>
+</span><span data-line="325">                <span class="s2">&quot;created_at&quot;</span><span class="p">:</span> <span class="s2">&quot;2025-11-15T10:00:00Z&quot;</span><span class="p">,</span>
+</span><span data-line="326">                <span class="s2">&quot;updated_at&quot;</span><span class="p">:</span> <span class="s2">&quot;2025-11-15T10:00:00Z&quot;</span><span class="p">,</span>
+</span><span data-line="327">            <span class="p">}</span>
+</span><span data-line="328">        <span class="p">},</span>
+</span><span data-line="329">    <span class="p">)</span>
+</span><span data-line="330">
+</span><span data-line="331">    <span class="nb">id</span><span class="p">:</span> <span class="n">UUID</span>
+</span><span data-line="332">    <span class="n">job_id</span><span class="p">:</span> <span class="n">UUID</span>
+</span><span data-line="333">    <span class="n">creator_id</span><span class="p">:</span> <span class="n">UUID</span>
+</span><span data-line="334">    <span class="n">created_at</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span>
+</span><span data-line="335">    <span class="n">updated_at</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span></div>
+
+</span><span data-line="336">
+</span><span data-line="337">
+<div class="viewcode-block" id="JobSearchFilters">
+<a class="viewcode-back" href="../../../../api/domains/jobs.html#pydotorg.domains.jobs.schemas.JobSearchFilters">[docs]</a>
+</span><span data-line="338"><span class="k">class</span><span class="w"> </span><span class="nc">JobSearchFilters</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span data-line="339"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Schema for job search filters.&quot;&quot;&quot;</span>
+</span><span data-line="340">
+</span><span data-line="341">    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span>
+</span><span data-line="342">        <span class="n">json_schema_extra</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="343">            <span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span data-line="344">                <span class="s2">&quot;country&quot;</span><span class="p">:</span> <span class="s2">&quot;USA&quot;</span><span class="p">,</span>
+</span><span data-line="345">                <span class="s2">&quot;telecommuting&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+</span><span data-line="346">                <span class="s2">&quot;category_id&quot;</span><span class="p">:</span> <span class="s2">&quot;550e8400-e29b-41d4-a716-446655440001&quot;</span><span class="p">,</span>
+</span><span data-line="347">                <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;approved&quot;</span><span class="p">,</span>
+</span><span data-line="348">            <span class="p">}</span>
+</span><span data-line="349">        <span class="p">}</span>
+</span><span data-line="350">    <span class="p">)</span>
+</span><span data-line="351">
+</span><span data-line="352">    <span class="n">city</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="353">    <span class="n">region</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="354">    <span class="n">country</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="355">    <span class="n">telecommuting</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="356">    <span class="n">category_id</span><span class="p">:</span> <span class="n">UUID</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="357">    <span class="n">job_type_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">UUID</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="358">    <span class="n">status</span><span class="p">:</span> <span class="n">JobStatus</span> <span class="o">=</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">APPROVED</span></div>
+
+</span></pre></div>
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Jacob Coffee</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+<a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+  <iconify-icon icon="simple-icons:github"></iconify-icon>
+</a></div>
+    </div>
+  </div>
+</footer>
+      <script src="../../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../../_static/copybutton.js?v=30646c52"></script>
+      <script src="../../../../_static/design-tabs.js?v=f930bc37"></script>
+      <script src="../../../../_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

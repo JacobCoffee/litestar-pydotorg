@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="blue" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Troubleshooting Guide - litestar-pydotorg</title><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Cookbook" href="../cookbook/index.html" /><link rel="prev" title="Docker Guide" href="docker.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=14737038" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=513f0650" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="Troubleshooting Guide"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../index.html">
+      
+      
+      <strong>litestar-pydotorg</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"><ul><li class="link">
+          <a href="https://litestar.dev/">
+            <span>Litestar</span></a>
+        </li><li class="link">
+          <a href="https://python.org/">
+            <span>Python.org</span></a>
+        </li></ul></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials">
+  <a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting-started/index.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/quickstart.html">Quickstart</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="development.html">Development Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html">Contribution Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html">Testing Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="debugging.html">Debugging Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api-usage.html">API Usage Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="authentication.html">Authentication Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="feature-flags.html">Feature Flags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html">Configuration Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deployment.html">Deployment Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docker.html">Docker Guide</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Troubleshooting Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/index.html">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/domain-patterns.html">Domain Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/authentication-recipes.html">Authentication Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/database-recipes.html">Database Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/testing-recipes.html">Testing Recipes</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/core/index.html">Core Infrastructure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/auth.html">Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/cache.html">Caching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/database.html">Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/email.html">Email</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/exceptions.html">Exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/features.html">Feature Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/feeds.html">RSS/Atom Feeds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/ical.html">iCalendar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/middleware.html">Middleware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/openapi.html">OpenAPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/ratelimit.html">Rate Limiting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/security.html">Security</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/worker.html">Background Worker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/domains/index.html">Domain Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/about.html">About</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/admin.html">Admin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/banners.html">banners</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/blogs.html">blogs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/codesamples.html">Code Samples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/community.html">community</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/docs.html">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/downloads.html">downloads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/events.html">events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/jobs.html">jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/mailing.html">Mailing Lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/minutes.html">Minutes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/nominations.html">Nominations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/pages.html">pages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/sponsors.html">sponsors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/sqladmin.html">SQLAdmin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/successstories.html">Success Stories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/users.html">users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/work_groups.html">Work Groups</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/lib.html">Library Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/tasks.html">Background Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/config.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/main.html">Application Entry Point</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/ARCHITECTURE.html">Litestar Python.org Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/DATABASE_SCHEMA.html">Database Schema Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/DOMAIN_MODELS.html">Domain Models Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/QUICK_START.html">Litestar Python.org Quick Start Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/API_TAGS_INDEX.html">API Tags Documentation Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/RATE_LIMITING_ARCHITECTURE.html">Rate Limiting Architecture Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/adr/001-litestar-framework.html">ADR-001: Use Litestar as Web Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/adr/002-saq-background-tasks.html">ADR-002: Use SAQ for Background Task Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#table-of-contents">Table of Contents</a></li>
+<li><a class="reference internal" href="#setup-issues">Setup Issues</a><ul>
+<li><a class="reference internal" href="#database-connection-problems">Database Connection Problems</a><ul>
+<li><a class="reference internal" href="#symptom-connection-refused-on-startup">Symptom: &#8220;Connection refused&#8221; on startup</a></li>
+<li><a class="reference internal" href="#symptom-password-authentication-failed">Symptom: &#8220;password authentication failed&#8221;</a></li>
+<li><a class="reference internal" href="#symptom-database-does-not-exist">Symptom: &#8220;database does not exist&#8221;</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#redis-connection-issues">Redis Connection Issues</a><ul>
+<li><a class="reference internal" href="#symptom-connection-refused-to-redis">Symptom: &#8220;Connection refused&#8221; to Redis</a></li>
+<li><a class="reference internal" href="#symptom-saq-worker-fails-to-connect">Symptom: SAQ worker fails to connect</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#port-conflicts">Port Conflicts</a><ul>
+<li><a class="reference internal" href="#symptom-address-already-in-use-on-port-8000">Symptom: &#8220;Address already in use&#8221; on port 8000</a></li>
+<li><a class="reference internal" href="#symptom-postgresql-port-conflict-5432">Symptom: PostgreSQL port conflict (5432)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#development-issues">Development Issues</a><ul>
+<li><a class="reference internal" href="#migration-errors">Migration Errors</a><ul>
+<li><a class="reference internal" href="#symptom-target-database-is-not-up-to-date">Symptom: &#8220;Target database is not up to date&#8221;</a></li>
+<li><a class="reference internal" href="#symptom-cant-locate-revision-or-migration-conflicts">Symptom: &#8220;Can&#8217;t locate revision&#8221; or migration conflicts</a></li>
+<li><a class="reference internal" href="#symptom-no-changes-detected-when-creating-migration">Symptom: &#8220;No changes detected&#8221; when creating migration</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#type-checking-failures">Type Checking Failures</a><ul>
+<li><a class="reference internal" href="#symptom-ty-or-mypy-errors-with-pydantic-models">Symptom: ty (or mypy) errors with Pydantic models</a></li>
+<li><a class="reference internal" href="#symptom-type-checking-import-errors">Symptom: TYPE_CHECKING import errors</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#test-failures">Test Failures</a><ul>
+<li><a class="reference internal" href="#symptom-tests-fail-with-database-errors">Symptom: Tests fail with database errors</a></li>
+<li><a class="reference internal" href="#symptom-fixture-not-found-errors">Symptom: &#8220;fixture not found&#8221; errors</a></li>
+<li><a class="reference internal" href="#symptom-async-test-failures">Symptom: Async test failures</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#runtime-issues">Runtime Issues</a><ul>
+<li><a class="reference internal" href="#missinggreenlet-errors">MissingGreenlet Errors</a><ul>
+<li><a class="reference internal" href="#symptom-missinggreenlet-greenlet-spawn-has-not-been-called">Symptom: &#8220;MissingGreenlet: greenlet_spawn has not been called&#8221;</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#session-management-problems">Session Management Problems</a><ul>
+<li><a class="reference internal" href="#symptom-session-not-persisting-across-requests">Symptom: Session not persisting across requests</a></li>
+<li><a class="reference internal" href="#symptom-invalid-or-expired-session">Symptom: &#8220;Invalid or expired session&#8221;</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#background-task-failures">Background Task Failures</a><ul>
+<li><a class="reference internal" href="#symptom-saq-tasks-not-executing">Symptom: SAQ tasks not executing</a></li>
+<li><a class="reference internal" href="#symptom-task-fails-with-session-maker-not-in-context">Symptom: Task fails with &#8220;session_maker not in context&#8221;</a></li>
+<li><a class="reference internal" href="#symptom-meilisearch-indexing-fails">Symptom: Meilisearch indexing fails</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#performance-issues">Performance Issues</a><ul>
+<li><a class="reference internal" href="#slow-database-queries">Slow Database Queries</a><ul>
+<li><a class="reference internal" href="#symptom-page-loads-are-slow">Symptom: Page loads are slow</a></li>
+<li><a class="reference internal" href="#symptom-connection-pool-exhaustion">Symptom: Connection pool exhaustion</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#memory-usage">Memory Usage</a><ul>
+<li><a class="reference internal" href="#symptom-high-memory-usage-in-production">Symptom: High memory usage in production</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#deployment-issues">Deployment Issues</a><ul>
+<li><a class="reference internal" href="#symptom-production-validation-fails">Symptom: Production validation fails</a></li>
+<li><a class="reference internal" href="#symptom-static-files-not-loading">Symptom: Static files not loading</a></li>
+<li><a class="reference internal" href="#symptom-cors-errors-in-production">Symptom: CORS errors in production</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#faq">FAQ</a><ul>
+<li><a class="reference internal" href="#how-do-i-reset-everything-and-start-fresh">How do I reset everything and start fresh?</a></li>
+<li><a class="reference internal" href="#how-do-i-run-the-full-development-environment">How do I run the full development environment?</a></li>
+<li><a class="reference internal" href="#how-do-i-check-if-my-configuration-is-correct">How do I check if my configuration is correct?</a></li>
+<li><a class="reference internal" href="#how-do-i-debug-a-specific-route">How do I debug a specific route?</a></li>
+<li><a class="reference internal" href="#why-are-my-templates-not-updating">Why are my templates not updating?</a></li>
+<li><a class="reference internal" href="#how-do-i-test-email-sending-locally">How do I test email sending locally?</a></li>
+<li><a class="reference internal" href="#how-do-i-add-a-new-domain-feature">How do I add a new domain/feature?</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#getting-help">Getting Help</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../index.html"><span itemprop="name">litestar-pydotorg</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="index.html"><span itemprop="name">Guides</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="2" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">Troubleshooting Guide</strong>
+        <meta itemprop="position" content="3" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue dark-code" role="main">
+          <section id="troubleshooting-guide">
+<h1>Troubleshooting Guide<a class="headerlink" href="#troubleshooting-guide" title="Link to this heading">¶</a></h1>
+<p>This guide covers common issues you may encounter when developing, deploying, or running the pydotorg application, along with their solutions.</p>
+<hr class="docutils" />
+<section id="table-of-contents">
+<h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Link to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="#setup-issues">Setup Issues</a></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#database-connection-problems">Database Connection Problems</a></p></li>
+<li><p><a class="reference internal" href="#redis-connection-issues">Redis Connection Issues</a></p></li>
+<li><p><a class="reference internal" href="#port-conflicts">Port Conflicts</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#development-issues">Development Issues</a></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#migration-errors">Migration Errors</a></p></li>
+<li><p><a class="reference internal" href="#type-checking-failures">Type Checking Failures</a></p></li>
+<li><p><a class="reference internal" href="#test-failures">Test Failures</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#runtime-issues">Runtime Issues</a></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#missinggreenlet-errors">MissingGreenlet Errors</a></p></li>
+<li><p><a class="reference internal" href="#session-management-problems">Session Management Problems</a></p></li>
+<li><p><a class="reference internal" href="#background-task-failures">Background Task Failures</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#performance-issues">Performance Issues</a></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#slow-database-queries">Slow Database Queries</a></p></li>
+<li><p><a class="reference internal" href="#memory-usage">Memory Usage</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#deployment-issues">Deployment Issues</a></p></li>
+<li><p><a class="reference internal" href="#faq">FAQ</a></p></li>
+</ol>
+</section>
+<hr class="docutils" />
+<section id="setup-issues">
+<h2>Setup Issues<a class="headerlink" href="#setup-issues" title="Link to this heading">¶</a></h2>
+<section id="database-connection-problems">
+<h3>Database Connection Problems<a class="headerlink" href="#database-connection-problems" title="Link to this heading">¶</a></h3>
+<section id="symptom-connection-refused-on-startup">
+<h4>Symptom: “Connection refused” on startup<a class="headerlink" href="#symptom-connection-refused-on-startup" title="Link to this heading">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">DATABASE</span> <span class="n">CONNECTION</span> <span class="n">FAILED</span>
+</span><span data-line="2"><span class="n">PostgreSQL</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">running</span><span class="o">.</span>
+</span></pre></div>
+</div>
+<p><strong>Cause</strong>: PostgreSQL is not running or not accessible on the expected port.</p>
+<p><strong>Solution</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Start the infrastructure containers (PostgreSQL, Redis, etc.)</span>
+</span><span data-line="2">make<span class="w"> </span>infra-up
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Verify PostgreSQL is running</span>
+</span><span data-line="5">docker<span class="w"> </span>compose<span class="w"> </span>ps<span class="w"> </span>postgres
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Check logs if there are issues</span>
+</span><span data-line="8">docker<span class="w"> </span>compose<span class="w"> </span>logs<span class="w"> </span>postgres
+</span></pre></div>
+</div>
+</section>
+<section id="symptom-password-authentication-failed">
+<h4>Symptom: “password authentication failed”<a class="headerlink" href="#symptom-password-authentication-failed" title="Link to this heading">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">Database</span> <span class="n">authentication</span> <span class="n">failed</span><span class="o">.</span>
+</span></pre></div>
+</div>
+<p><strong>Cause</strong>: The DATABASE_URL credentials do not match the PostgreSQL configuration.</p>
+<p><strong>Solution</strong>:</p>
+<ol class="arabic">
+<li><p>Check your <code class="docutils literal notranslate"><span class="pre">.env</span></code> file for the correct DATABASE_URL:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="nv">DATABASE_URL</span><span class="o">=</span>postgresql+asyncpg://postgres:postgres@localhost:5432/pydotorg
+</span></pre></div>
+</div>
+</li>
+<li><p>If using Docker, ensure the postgres container environment matches:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># docker-compose.yml</span>
+</span><span data-line="2"><span class="nt">postgres</span><span class="p">:</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">environment</span><span class="p">:</span>
+</span><span data-line="4"><span class="w">    </span><span class="nt">POSTGRES_USER</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres</span>
+</span><span data-line="5"><span class="w">    </span><span class="nt">POSTGRES_PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres</span>
+</span><span data-line="6"><span class="w">    </span><span class="nt">POSTGRES_DB</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pydotorg</span>
+</span></pre></div>
+</div>
+</li>
+<li><p>Reset the database if needed:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">make<span class="w"> </span>infra-reset
+</span><span data-line="2">make<span class="w"> </span>litestar-db-upgrade
+</span></pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="symptom-database-does-not-exist">
+<h4>Symptom: “database does not exist”<a class="headerlink" href="#symptom-database-does-not-exist" title="Link to this heading">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">Database</span> <span class="n">does</span> <span class="ow">not</span> <span class="n">exist</span><span class="o">.</span>
+</span></pre></div>
+</div>
+<p><strong>Cause</strong>: The database has not been created or migrations have not been run.</p>
+<p><strong>Solution</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Create and migrate the database</span>
+</span><span data-line="2">make<span class="w"> </span>litestar-db-upgrade
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Or reset and reseed</span>
+</span><span data-line="5">make<span class="w"> </span>db-reset
+</span><span data-line="6">make<span class="w"> </span>db-seed
+</span></pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="redis-connection-issues">
+<h3>Redis Connection Issues<a class="headerlink" href="#redis-connection-issues" title="Link to this heading">¶</a></h3>
+<section id="symptom-connection-refused-to-redis">
+<h4>Symptom: “Connection refused” to Redis<a class="headerlink" href="#symptom-connection-refused-to-redis" title="Link to this heading">¶</a></h4>
+<p><strong>Cause</strong>: Redis is not running or is on a different port.</p>
+<p><strong>Solution</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Start Redis with infrastructure</span>
+</span><span data-line="2">make<span class="w"> </span>infra-up
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Verify Redis is running</span>
+</span><span data-line="5">docker<span class="w"> </span>compose<span class="w"> </span>ps<span class="w"> </span>redis
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Test Redis connection</span>
+</span><span data-line="8">docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span><span class="k">$(</span>docker<span class="w"> </span>compose<span class="w"> </span>ps<span class="w"> </span>-q<span class="w"> </span>redis<span class="k">)</span><span class="w"> </span>redis-cli<span class="w"> </span>ping
+</span><span data-line="9"><span class="c1"># Should return: PONG</span>
+</span></pre></div>
+</div>
+</section>
+<section id="symptom-saq-worker-fails-to-connect">
+<h4>Symptom: SAQ worker fails to connect<a class="headerlink" href="#symptom-saq-worker-fails-to-connect" title="Link to this heading">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">Could</span> <span class="ow">not</span> <span class="n">connect</span> <span class="n">to</span> <span class="n">Redis</span> <span class="n">at</span> <span class="n">localhost</span><span class="p">:</span><span class="mi">6379</span>
+</span></pre></div>
+</div>
+<p><strong>Cause</strong>: The REDIS_URL in your environment does not match the running Redis instance.</p>
+<p><strong>Solution</strong>:</p>
+<ol class="arabic">
+<li><p>Check your <code class="docutils literal notranslate"><span class="pre">.env</span></code> file:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="nv">REDIS_URL</span><span class="o">=</span>redis://localhost:6379/0
+</span></pre></div>
+</div>
+</li>
+<li><p>If Redis is running in Docker, ensure port mapping is correct:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="nt">redis</span><span class="p">:</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">ports</span><span class="p">:</span>
+</span><span data-line="3"><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;6379:6379&quot;</span>
+</span></pre></div>
+</div>
+</li>
+</ol>
+</section>
+</section>
+<hr class="docutils" />
+<section id="port-conflicts">
+<h3>Port Conflicts<a class="headerlink" href="#port-conflicts" title="Link to this heading">¶</a></h3>
+<section id="symptom-address-already-in-use-on-port-8000">
+<h4>Symptom: “Address already in use” on port 8000<a class="headerlink" href="#symptom-address-already-in-use-on-port-8000" title="Link to this heading">¶</a></h4>
+<p><strong>Cause</strong>: Another process is using port 8000.</p>
+<p><strong>Solution</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Find what&#39;s using the port</span>
+</span><span data-line="2">lsof<span class="w"> </span>-i<span class="w"> </span>:8000
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Kill the process if needed</span>
+</span><span data-line="5"><span class="nb">kill</span><span class="w"> </span>-9<span class="w"> </span>&lt;PID&gt;
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Or use a different port</span>
+</span><span data-line="8"><span class="nv">UV_RUN_PORT</span><span class="o">=</span><span class="m">8001</span><span class="w"> </span>make<span class="w"> </span>serve
+</span></pre></div>
+</div>
+</section>
+<section id="symptom-postgresql-port-conflict-5432">
+<h4>Symptom: PostgreSQL port conflict (5432)<a class="headerlink" href="#symptom-postgresql-port-conflict-5432" title="Link to this heading">¶</a></h4>
+<p><strong>Cause</strong>: Another PostgreSQL instance is running on port 5432.</p>
+<p><strong>Solution</strong>:</p>
+<ol class="arabic">
+<li><p>Stop the local PostgreSQL:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">brew<span class="w"> </span>services<span class="w"> </span>stop<span class="w"> </span>postgresql<span class="w">  </span><span class="c1"># macOS</span>
+</span><span data-line="2">sudo<span class="w"> </span>systemctl<span class="w"> </span>stop<span class="w"> </span>postgresql<span class="w">  </span><span class="c1"># Linux</span>
+</span></pre></div>
+</div>
+</li>
+<li><p>Or use a different port in docker-compose:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="nt">postgres</span><span class="p">:</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">ports</span><span class="p">:</span>
+</span><span data-line="3"><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;5433:5432&quot;</span>
+</span></pre></div>
+</div>
+<p>Then update DATABASE_URL accordingly.</p>
+</li>
+</ol>
+</section>
+</section>
+</section>
+<hr class="docutils" />
+<section id="development-issues">
+<h2>Development Issues<a class="headerlink" href="#development-issues" title="Link to this heading">¶</a></h2>
+<section id="migration-errors">
+<h3>Migration Errors<a class="headerlink" href="#migration-errors" title="Link to this heading">¶</a></h3>
+<section id="symptom-target-database-is-not-up-to-date">
+<h4>Symptom: “Target database is not up to date”<a class="headerlink" href="#symptom-target-database-is-not-up-to-date" title="Link to this heading">¶</a></h4>
+<p><strong>Cause</strong>: There are pending migrations that need to be applied.</p>
+<p><strong>Solution</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Check current revision</span>
+</span><span data-line="2">make<span class="w"> </span>litestar-db-current
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Apply pending migrations</span>
+</span><span data-line="5">make<span class="w"> </span>litestar-db-upgrade
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># View migration history</span>
+</span><span data-line="8">make<span class="w"> </span>litestar-db-history
+</span></pre></div>
+</div>
+</section>
+<section id="symptom-cant-locate-revision-or-migration-conflicts">
+<h4>Symptom: “Can’t locate revision” or migration conflicts<a class="headerlink" href="#symptom-cant-locate-revision-or-migration-conflicts" title="Link to this heading">¶</a></h4>
+<p><strong>Cause</strong>: Migration files are out of sync, possibly due to branch switching.</p>
+<p><strong>Solution</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Check database status</span>
+</span><span data-line="2">make<span class="w"> </span>litestar-db-check
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># If stuck, downgrade and re-upgrade</span>
+</span><span data-line="5">make<span class="w"> </span>litestar-db-downgrade
+</span><span data-line="6">make<span class="w"> </span>litestar-db-upgrade
+</span><span data-line="7">
+</span><span data-line="8"><span class="c1"># For severe conflicts, reset the database (WARNING: data loss)</span>
+</span><span data-line="9">make<span class="w"> </span>db-reset
+</span></pre></div>
+</div>
+</section>
+<section id="symptom-no-changes-detected-when-creating-migration">
+<h4>Symptom: “No changes detected” when creating migration<a class="headerlink" href="#symptom-no-changes-detected-when-creating-migration" title="Link to this heading">¶</a></h4>
+<p><strong>Cause</strong>: Alembic cannot detect model changes, possibly due to import issues.</p>
+<p><strong>Solution</strong>:</p>
+<ol class="arabic">
+<li><p>Ensure all models are imported in <code class="docutils literal notranslate"><span class="pre">src/pydotorg/db/migrations/env.py</span></code></p></li>
+<li><p>Check that model changes are properly annotated with <code class="docutils literal notranslate"><span class="pre">Mapped[]</span></code></p></li>
+<li><p>Run with verbose output:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="nv">LITESTAR_APP</span><span class="o">=</span>pydotorg.main:app<span class="w"> </span>uv<span class="w"> </span>run<span class="w"> </span>litestar<span class="w"> </span>database<span class="w"> </span>make-migrations<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;description&quot;</span>
+</span></pre></div>
+</div>
+</li>
+</ol>
+</section>
+</section>
+<hr class="docutils" />
+<section id="type-checking-failures">
+<h3>Type Checking Failures<a class="headerlink" href="#type-checking-failures" title="Link to this heading">¶</a></h3>
+<section id="symptom-ty-or-mypy-errors-with-pydantic-models">
+<h4>Symptom: ty (or mypy) errors with Pydantic models<a class="headerlink" href="#symptom-ty-or-mypy-errors-with-pydantic-models" title="Link to this heading">¶</a></h4>
+<p><strong>Cause</strong>: Missing type annotations or incorrect Pydantic schema definitions.</p>
+<p><strong>Solution</strong>:</p>
+<ol class="arabic">
+<li><p>Ensure all Pydantic models have proper type hints:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="k">class</span><span class="w"> </span><span class="nc">UserSchema</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span data-line="4">    <span class="nb">id</span><span class="p">:</span> <span class="n">UUID</span>
+</span><span data-line="5">    <span class="n">username</span><span class="p">:</span> <span class="nb">str</span>
+</span><span data-line="6">    <span class="n">email</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Use | None, not Optional</span>
+</span></pre></div>
+</div>
+</li>
+<li><p>For SQLAlchemy models, use <code class="docutils literal notranslate"><span class="pre">Mapped[]</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">class</span><span class="w"> </span><span class="nc">User</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+</span><span data-line="2">    <span class="nb">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">UUID</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span data-line="3">    <span class="n">username</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">150</span><span class="p">))</span>
+</span></pre></div>
+</div>
+</li>
+<li><p>Run type checking:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">make<span class="w"> </span>type-check
+</span></pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="symptom-type-checking-import-errors">
+<h4>Symptom: TYPE_CHECKING import errors<a class="headerlink" href="#symptom-type-checking-import-errors" title="Link to this heading">¶</a></h4>
+<p><strong>Cause</strong>: Circular imports or incorrect conditional imports.</p>
+<p><strong>Solution</strong>:</p>
+<p>Use <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">__future__</span> <span class="pre">import</span> <span class="pre">annotations</span></code> and TYPE_CHECKING properly:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+</span><span data-line="6">    <span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.domains.users.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">User</span>
+</span><span data-line="7">
+</span><span data-line="8"><span class="k">def</span><span class="w"> </span><span class="nf">get_user</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">User</span><span class="p">:</span>  <span class="c1"># Works due to PEP 563</span>
+</span><span data-line="9">    <span class="o">...</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="test-failures">
+<h3>Test Failures<a class="headerlink" href="#test-failures" title="Link to this heading">¶</a></h3>
+<section id="symptom-tests-fail-with-database-errors">
+<h4>Symptom: Tests fail with database errors<a class="headerlink" href="#symptom-tests-fail-with-database-errors" title="Link to this heading">¶</a></h4>
+<p><strong>Cause</strong>: Test database is not set up or fixtures are missing.</p>
+<p><strong>Solution</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Ensure test infrastructure is running</span>
+</span><span data-line="2">make<span class="w"> </span>infra-up
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Run unit tests only (no external deps)</span>
+</span><span data-line="5">make<span class="w"> </span><span class="nb">test</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Run integration tests (requires DB)</span>
+</span><span data-line="8">make<span class="w"> </span>test-integration
+</span></pre></div>
+</div>
+</section>
+<section id="symptom-fixture-not-found-errors">
+<h4>Symptom: “fixture not found” errors<a class="headerlink" href="#symptom-fixture-not-found-errors" title="Link to this heading">¶</a></h4>
+<p><strong>Cause</strong>: Missing <a class="reference external" href="http://conftest.py">conftest.py</a> or incorrect fixture scope.</p>
+<p><strong>Solution</strong>:</p>
+<ol class="arabic">
+<li><p>Ensure <code class="docutils literal notranslate"><span class="pre">conftest.py</span></code> exists in the test directory</p></li>
+<li><p>Check fixture imports and scope:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># tests/conftest.py</span>
+</span><span data-line="2"><span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.main</span><span class="w"> </span><span class="kn">import</span> <span class="n">app</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;function&quot;</span><span class="p">)</span>
+</span><span data-line="6"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">test_client</span><span class="p">():</span>
+</span><span data-line="7">    <span class="k">async</span> <span class="k">with</span> <span class="n">app</span><span class="o">.</span><span class="n">test_client</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+</span><span data-line="8">        <span class="k">yield</span> <span class="n">client</span>
+</span></pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="symptom-async-test-failures">
+<h4>Symptom: Async test failures<a class="headerlink" href="#symptom-async-test-failures" title="Link to this heading">¶</a></h4>
+<p><strong>Cause</strong>: Missing pytest-asyncio configuration.</p>
+<p><strong>Solution</strong>:</p>
+<p>Ensure <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> has:</p>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">[tool.pytest.ini_options]</span>
+</span><span data-line="2"><span class="n">asyncio_mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;auto&quot;</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+</section>
+<hr class="docutils" />
+<section id="runtime-issues">
+<h2>Runtime Issues<a class="headerlink" href="#runtime-issues" title="Link to this heading">¶</a></h2>
+<section id="missinggreenlet-errors">
+<h3>MissingGreenlet Errors<a class="headerlink" href="#missinggreenlet-errors" title="Link to this heading">¶</a></h3>
+<p>This was a HIGH priority issue that was fixed in the project.</p>
+<section id="symptom-missinggreenlet-greenlet-spawn-has-not-been-called">
+<h4>Symptom: “MissingGreenlet: greenlet_spawn has not been called”<a class="headerlink" href="#symptom-missinggreenlet-greenlet-spawn-has-not-been-called" title="Link to this heading">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">sqlalchemy</span><span class="o">.</span><span class="n">exc</span><span class="o">.</span><span class="n">MissingGreenlet</span><span class="p">:</span> <span class="n">greenlet_spawn</span> <span class="n">has</span> <span class="ow">not</span> <span class="n">been</span> <span class="n">called</span><span class="p">;</span>
+</span><span data-line="2"><span class="n">can</span><span class="s1">&#39;t call await_only() here.</span>
+</span></pre></div>
+</div>
+<p><strong>Cause</strong>: Accessing lazy-loaded relationships outside of an async context, typically in background tasks.</p>
+<p><strong>Solution (Applied Fix)</strong>:</p>
+<p>Add eager loading with <code class="docutils literal notranslate"><span class="pre">selectinload()</span></code> to queries that access relationships:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">selectinload</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="c1"># Before (causes MissingGreenlet):</span>
+</span><span data-line="4"><span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">Event</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Event</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">event_id</span><span class="p">)</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="c1"># After (fixed):</span>
+</span><span data-line="7"><span class="n">stmt</span> <span class="o">=</span> <span class="p">(</span>
+</span><span data-line="8">    <span class="n">select</span><span class="p">(</span><span class="n">Event</span><span class="p">)</span>
+</span><span data-line="9">    <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Event</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">event_id</span><span class="p">)</span>
+</span><span data-line="10">    <span class="o">.</span><span class="n">options</span><span class="p">(</span>
+</span><span data-line="11">        <span class="n">selectinload</span><span class="p">(</span><span class="n">Event</span><span class="o">.</span><span class="n">venue</span><span class="p">),</span>
+</span><span data-line="12">        <span class="n">selectinload</span><span class="p">(</span><span class="n">Event</span><span class="o">.</span><span class="n">occurrences</span><span class="p">),</span>
+</span><span data-line="13">        <span class="n">selectinload</span><span class="p">(</span><span class="n">Event</span><span class="o">.</span><span class="n">categories</span><span class="p">),</span>
+</span><span data-line="14">    <span class="p">)</span>
+</span><span data-line="15"><span class="p">)</span>
+</span></pre></div>
+</div>
+<p><strong>Reference</strong>: This fix was applied to:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">EventRepository.get_upcoming()</span></code> and <code class="docutils literal notranslate"><span class="pre">get_featured()</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tasks/search.py</span></code> for <code class="docutils literal notranslate"><span class="pre">index_event()</span></code> and <code class="docutils literal notranslate"><span class="pre">index_all_events()</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tasks/cache.py</span></code> for <code class="docutils literal notranslate"><span class="pre">warm_homepage_cache()</span></code></p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="session-management-problems">
+<h3>Session Management Problems<a class="headerlink" href="#session-management-problems" title="Link to this heading">¶</a></h3>
+<section id="symptom-session-not-persisting-across-requests">
+<h4>Symptom: Session not persisting across requests<a class="headerlink" href="#symptom-session-not-persisting-across-requests" title="Link to this heading">¶</a></h4>
+<p><strong>Cause</strong>: Session cookie configuration or CSRF issues.</p>
+<p><strong>Solution</strong>:</p>
+<ol class="arabic">
+<li><p>Check session configuration in <code class="docutils literal notranslate"><span class="pre">config.py</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">session_secret_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;change-me-in-production-session&quot;</span>
+</span><span data-line="2"><span class="n">session_expire_minutes</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">24</span> <span class="o">*</span> <span class="mi">7</span>  <span class="c1"># 7 days</span>
+</span><span data-line="3"><span class="n">session_cookie_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;session_id&quot;</span>
+</span></pre></div>
+</div>
+</li>
+<li><p>Ensure CSRF is properly configured:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># API routes should be excluded from CSRF</span>
+</span><span data-line="2"><span class="n">csrf_exclude_routes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;/api/*&quot;</span><span class="p">,</span> <span class="s2">&quot;/health&quot;</span><span class="p">]</span>
+</span></pre></div>
+</div>
+</li>
+<li><p>For development, check that cookies are being set:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">curl<span class="w"> </span>-c<span class="w"> </span>cookies.txt<span class="w"> </span>-b<span class="w"> </span>cookies.txt<span class="w"> </span>http://localhost:8000/auth/login
+</span></pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="symptom-invalid-or-expired-session">
+<h4>Symptom: “Invalid or expired session”<a class="headerlink" href="#symptom-invalid-or-expired-session" title="Link to this heading">¶</a></h4>
+<p><strong>Cause</strong>: Session has expired or secret key changed.</p>
+<p><strong>Solution</strong>:</p>
+<ol class="arabic">
+<li><p>Clear browser cookies</p></li>
+<li><p>Restart the server with consistent secret keys</p></li>
+<li><p>For Redis session store issues, flush the Redis database:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span><span class="k">$(</span>docker<span class="w"> </span>compose<span class="w"> </span>ps<span class="w"> </span>-q<span class="w"> </span>redis<span class="k">)</span><span class="w"> </span>redis-cli<span class="w"> </span>FLUSHDB
+</span></pre></div>
+</div>
+</li>
+</ol>
+</section>
+</section>
+<hr class="docutils" />
+<section id="background-task-failures">
+<h3>Background Task Failures<a class="headerlink" href="#background-task-failures" title="Link to this heading">¶</a></h3>
+<section id="symptom-saq-tasks-not-executing">
+<h4>Symptom: SAQ tasks not executing<a class="headerlink" href="#symptom-saq-tasks-not-executing" title="Link to this heading">¶</a></h4>
+<p><strong>Cause</strong>: Worker not running or queue misconfiguration.</p>
+<p><strong>Solution</strong>:</p>
+<ol class="arabic">
+<li><p>Ensure the worker is running:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">make<span class="w"> </span>worker
+</span></pre></div>
+</div>
+</li>
+<li><p>Check worker logs for errors:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># If using tmux</span>
+</span><span data-line="2">tmux<span class="w"> </span>attach<span class="w"> </span>-t<span class="w"> </span>pydotorg
+</span><span data-line="3"><span class="c1"># Switch to worker window</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="c1"># Or check log files</span>
+</span><span data-line="6">tail<span class="w"> </span>-f<span class="w"> </span>logs/worker.log
+</span></pre></div>
+</div>
+</li>
+<li><p>Verify Redis connectivity:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span><span class="k">$(</span>docker<span class="w"> </span>compose<span class="w"> </span>ps<span class="w"> </span>-q<span class="w"> </span>redis<span class="k">)</span><span class="w"> </span>redis-cli
+</span><span data-line="2">&gt;<span class="w"> </span>KEYS<span class="w"> </span>saq:*
+</span></pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="symptom-task-fails-with-session-maker-not-in-context">
+<h4>Symptom: Task fails with “session_maker not in context”<a class="headerlink" href="#symptom-task-fails-with-session-maker-not-in-context" title="Link to this heading">¶</a></h4>
+<p><strong>Cause</strong>: The SAQ context is not properly configured with database session.</p>
+<p><strong>Solution</strong>:</p>
+<p>Ensure the worker context includes session_maker:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># tasks/worker.py</span>
+</span><span data-line="2"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">startup</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="3">    <span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.main</span><span class="w"> </span><span class="kn">import</span> <span class="n">sqlalchemy_config</span>
+</span><span data-line="4">    <span class="n">ctx</span><span class="p">[</span><span class="s2">&quot;session_maker&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sqlalchemy_config</span><span class="o">.</span><span class="n">create_session_maker</span><span class="p">()</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">shutdown</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="7">    <span class="k">pass</span>
+</span><span data-line="8">
+</span><span data-line="9"><span class="n">saq_settings</span> <span class="o">=</span> <span class="p">{</span>
+</span><span data-line="10">    <span class="s2">&quot;queue&quot;</span><span class="p">:</span> <span class="n">queue</span><span class="p">,</span>
+</span><span data-line="11">    <span class="s2">&quot;functions&quot;</span><span class="p">:</span> <span class="n">get_task_functions</span><span class="p">(),</span>
+</span><span data-line="12">    <span class="s2">&quot;startup&quot;</span><span class="p">:</span> <span class="n">startup</span><span class="p">,</span>
+</span><span data-line="13">    <span class="s2">&quot;shutdown&quot;</span><span class="p">:</span> <span class="n">shutdown</span><span class="p">,</span>
+</span><span data-line="14"><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+<section id="symptom-meilisearch-indexing-fails">
+<h4>Symptom: Meilisearch indexing fails<a class="headerlink" href="#symptom-meilisearch-indexing-fails" title="Link to this heading">¶</a></h4>
+<p><strong>Cause</strong>: Meilisearch is not running or API key is incorrect.</p>
+<p><strong>Solution</strong>:</p>
+<ol class="arabic">
+<li><p>Start Meilisearch:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">make<span class="w"> </span>infra-up<span class="w">  </span><span class="c1"># Includes meilisearch</span>
+</span></pre></div>
+</div>
+</li>
+<li><p>Check configuration:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># .env</span>
+</span><span data-line="2"><span class="nv">MEILISEARCH_URL</span><span class="o">=</span>http://127.0.0.1:7700
+</span><span data-line="3"><span class="nv">MEILISEARCH_API_KEY</span><span class="o">=</span><span class="w">  </span><span class="c1"># Empty for development</span>
+</span></pre></div>
+</div>
+</li>
+<li><p>Verify Meilisearch is accessible:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">curl<span class="w"> </span>http://localhost:7700/health
+</span><span data-line="2"><span class="c1"># Should return: {&quot;status&quot;:&quot;available&quot;}</span>
+</span></pre></div>
+</div>
+</li>
+</ol>
+</section>
+</section>
+</section>
+<hr class="docutils" />
+<section id="performance-issues">
+<h2>Performance Issues<a class="headerlink" href="#performance-issues" title="Link to this heading">¶</a></h2>
+<section id="slow-database-queries">
+<h3>Slow Database Queries<a class="headerlink" href="#slow-database-queries" title="Link to this heading">¶</a></h3>
+<section id="symptom-page-loads-are-slow">
+<h4>Symptom: Page loads are slow<a class="headerlink" href="#symptom-page-loads-are-slow" title="Link to this heading">¶</a></h4>
+<p><strong>Cause</strong>: N+1 query problems or missing database indexes.</p>
+<p><strong>Solution</strong>:</p>
+<ol class="arabic">
+<li><p>Enable SQL logging to identify slow queries:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># In development, set in .env</span>
+</span><span data-line="2"><span class="n">DATABASE_ECHO</span><span class="o">=</span><span class="n">true</span>
+</span></pre></div>
+</div>
+</li>
+<li><p>Add eager loading for relationships:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">stmt</span> <span class="o">=</span> <span class="p">(</span>
+</span><span data-line="2">    <span class="n">select</span><span class="p">(</span><span class="n">Job</span><span class="p">)</span>
+</span><span data-line="3">    <span class="o">.</span><span class="n">options</span><span class="p">(</span>
+</span><span data-line="4">        <span class="n">selectinload</span><span class="p">(</span><span class="n">Job</span><span class="o">.</span><span class="n">job_types</span><span class="p">),</span>
+</span><span data-line="5">        <span class="n">selectinload</span><span class="p">(</span><span class="n">Job</span><span class="o">.</span><span class="n">categories</span><span class="p">),</span>
+</span><span data-line="6">    <span class="p">)</span>
+</span><span data-line="7">    <span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+</span><span data-line="8"><span class="p">)</span>
+</span></pre></div>
+</div>
+</li>
+<li><p>Ensure proper indexes exist:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">class</span><span class="w"> </span><span class="nc">Job</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+</span><span data-line="2">    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;jobs&quot;</span>
+</span><span data-line="3">
+</span><span data-line="4">    <span class="n">status</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span data-line="5">    <span class="n">created_at</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span data-line="6">
+</span><span data-line="7">    <span class="n">__table_args__</span> <span class="o">=</span> <span class="p">(</span>
+</span><span data-line="8">        <span class="n">Index</span><span class="p">(</span><span class="s1">&#39;ix_jobs_status_created&#39;</span><span class="p">,</span> <span class="s1">&#39;status&#39;</span><span class="p">,</span> <span class="s1">&#39;created_at&#39;</span><span class="p">),</span>
+</span><span data-line="9">    <span class="p">)</span>
+</span></pre></div>
+</div>
+</li>
+<li><p>Use pagination for large result sets:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/jobs&quot;</span><span class="p">)</span>
+</span><span data-line="2"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_jobs</span><span class="p">(</span>
+</span><span data-line="3">    <span class="n">limit_offset</span><span class="p">:</span> <span class="n">LimitOffset</span><span class="p">,</span>  <span class="c1"># Pagination dependency</span>
+</span><span data-line="4">    <span class="n">job_service</span><span class="p">:</span> <span class="n">JobService</span><span class="p">,</span>
+</span><span data-line="5"><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OffsetPagination</span><span class="p">[</span><span class="n">JobRead</span><span class="p">]:</span>
+</span><span data-line="6">    <span class="o">...</span>
+</span></pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="symptom-connection-pool-exhaustion">
+<h4>Symptom: Connection pool exhaustion<a class="headerlink" href="#symptom-connection-pool-exhaustion" title="Link to this heading">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">QueuePool</span> <span class="n">limit</span> <span class="n">reached</span>
+</span></pre></div>
+</div>
+<p><strong>Cause</strong>: Too many concurrent database connections.</p>
+<p><strong>Solution</strong>:</p>
+<ol class="arabic">
+<li><p>Adjust pool settings in <code class="docutils literal notranslate"><span class="pre">config.py</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">database_pool_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span>  <span class="c1"># Default connections</span>
+</span><span data-line="2"><span class="n">database_max_overflow</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># Extra connections when needed</span>
+</span></pre></div>
+</div>
+</li>
+<li><p>Ensure connections are properly released:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">async</span> <span class="k">with</span> <span class="n">session_maker</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+</span><span data-line="2">    <span class="c1"># Work with session</span>
+</span><span data-line="3">    <span class="o">...</span>
+</span><span data-line="4"><span class="c1"># Connection automatically released</span>
+</span></pre></div>
+</div>
+</li>
+</ol>
+</section>
+</section>
+<hr class="docutils" />
+<section id="memory-usage">
+<h3>Memory Usage<a class="headerlink" href="#memory-usage" title="Link to this heading">¶</a></h3>
+<section id="symptom-high-memory-usage-in-production">
+<h4>Symptom: High memory usage in production<a class="headerlink" href="#symptom-high-memory-usage-in-production" title="Link to this heading">¶</a></h4>
+<p><strong>Cause</strong>: Large result sets loaded into memory or memory leaks.</p>
+<p><strong>Solution</strong>:</p>
+<ol class="arabic">
+<li><p>Use streaming for large queries:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">async</span> <span class="k">for</span> <span class="n">job</span> <span class="ow">in</span> <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">stream_scalars</span><span class="p">(</span><span class="n">stmt</span><span class="p">):</span>
+</span><span data-line="2">    <span class="k">yield</span> <span class="n">job</span>
+</span></pre></div>
+</div>
+</li>
+<li><p>Limit result set sizes:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">BlogEntry</span><span class="p">)</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">offset</span><span class="p">(</span><span class="n">page</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</li>
+<li><p>Monitor with:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Check process memory</span>
+</span><span data-line="2">ps<span class="w"> </span>aux<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>granian
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Or use docker stats</span>
+</span><span data-line="5">docker<span class="w"> </span>stats
+</span></pre></div>
+</div>
+</li>
+</ol>
+</section>
+</section>
+</section>
+<hr class="docutils" />
+<section id="deployment-issues">
+<h2>Deployment Issues<a class="headerlink" href="#deployment-issues" title="Link to this heading">¶</a></h2>
+<section id="symptom-production-validation-fails">
+<h3>Symptom: Production validation fails<a class="headerlink" href="#symptom-production-validation-fails" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">SECRET_KEY</span> <span class="n">must</span> <span class="n">be</span> <span class="n">changed</span> <span class="ow">in</span> <span class="n">prod</span> <span class="n">environment</span>
+</span></pre></div>
+</div>
+<p><strong>Cause</strong>: Default/insecure secrets are being used in production.</p>
+<p><strong>Solution</strong>:</p>
+<p>Generate secure secrets for production:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Generate a secure secret key</span>
+</span><span data-line="2">python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import secrets; print(secrets.token_urlsafe(32))&quot;</span>
+</span></pre></div>
+</div>
+<p>Set in environment:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="nv">SECRET_KEY</span><span class="o">=</span>your-generated-secret-key-here
+</span><span data-line="2"><span class="nv">SESSION_SECRET_KEY</span><span class="o">=</span>another-generated-secret-key
+</span><span data-line="3"><span class="nv">CSRF_SECRET</span><span class="o">=</span>yet-another-secret-key
+</span></pre></div>
+</div>
+</section>
+<section id="symptom-static-files-not-loading">
+<h3>Symptom: Static files not loading<a class="headerlink" href="#symptom-static-files-not-loading" title="Link to this heading">¶</a></h3>
+<p><strong>Cause</strong>: Static files not built or path misconfiguration.</p>
+<p><strong>Solution</strong>:</p>
+<ol class="arabic">
+<li><p>Build frontend assets:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">make<span class="w"> </span>assets-build
+</span><span data-line="2"><span class="c1"># Or legacy:</span>
+</span><span data-line="3">make<span class="w"> </span>css
+</span></pre></div>
+</div>
+</li>
+<li><p>Check static file configuration:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">static_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;/static&quot;</span>
+</span><span data-line="2"><span class="n">static_dir</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">BASE_DIR</span> <span class="o">/</span> <span class="s2">&quot;static&quot;</span>
+</span></pre></div>
+</div>
+</li>
+<li><p>Verify files exist:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">ls<span class="w"> </span>-la<span class="w"> </span>static/css/tailwind.css
+</span></pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="symptom-cors-errors-in-production">
+<h3>Symptom: CORS errors in production<a class="headerlink" href="#symptom-cors-errors-in-production" title="Link to this heading">¶</a></h3>
+<p><strong>Cause</strong>: CORS not configured for production domain.</p>
+<p><strong>Solution</strong>:</p>
+<p>Update allowed hosts in <code class="docutils literal notranslate"><span class="pre">config.py</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">allowed_hosts</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+</span><span data-line="2">    <span class="s2">&quot;localhost&quot;</span><span class="p">,</span>
+</span><span data-line="3">    <span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span>
+</span><span data-line="4">    <span class="s2">&quot;python.org&quot;</span><span class="p">,</span>
+</span><span data-line="5">    <span class="s2">&quot;*.python.org&quot;</span><span class="p">,</span>
+</span><span data-line="6">    <span class="s2">&quot;your-domain.com&quot;</span><span class="p">,</span>
+</span><span data-line="7"><span class="p">]</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="faq">
+<h2>FAQ<a class="headerlink" href="#faq" title="Link to this heading">¶</a></h2>
+<section id="how-do-i-reset-everything-and-start-fresh">
+<h3>How do I reset everything and start fresh?<a class="headerlink" href="#how-do-i-reset-everything-and-start-fresh" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Stop all containers</span>
+</span><span data-line="2">make<span class="w"> </span>docker-down
+</span><span data-line="3">make<span class="w"> </span>infra-down
+</span><span data-line="4">
+</span><span data-line="5"><span class="c1"># Clean up</span>
+</span><span data-line="6">make<span class="w"> </span>clean
+</span><span data-line="7">docker<span class="w"> </span>volume<span class="w"> </span>prune<span class="w"> </span>-f
+</span><span data-line="8">
+</span><span data-line="9"><span class="c1"># Start fresh</span>
+</span><span data-line="10">make<span class="w"> </span>infra-up
+</span><span data-line="11">make<span class="w"> </span>litestar-db-upgrade
+</span><span data-line="12">make<span class="w"> </span>db-seed
+</span><span data-line="13">make<span class="w"> </span>serve
+</span></pre></div>
+</div>
+</section>
+<section id="how-do-i-run-the-full-development-environment">
+<h3>How do I run the full development environment?<a class="headerlink" href="#how-do-i-run-the-full-development-environment" title="Link to this heading">¶</a></h3>
+<p>The easiest way is with tmux:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">make<span class="w"> </span>dev-tmux
+</span><span data-line="2">tmux<span class="w"> </span>attach<span class="w"> </span>-t<span class="w"> </span>pydotorg
+</span></pre></div>
+</div>
+<p>This starts three windows:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">server</span></code>: Litestar web server</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">worker</span></code>: SAQ background worker</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">css</span></code>: TailwindCSS watcher</p></li>
+</ul>
+</section>
+<section id="how-do-i-check-if-my-configuration-is-correct">
+<h3>How do I check if my configuration is correct?<a class="headerlink" href="#how-do-i-check-if-my-configuration-is-correct" title="Link to this heading">¶</a></h3>
+<p>Start the server and check the startup banner:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">make<span class="w"> </span>serve
+</span></pre></div>
+</div>
+<p>The banner shows:</p>
+<ul class="simple">
+<li><p>Environment (dev/staging/prod)</p></li>
+<li><p>Database connection status</p></li>
+<li><p>Redis connection</p></li>
+<li><p>Feature flags</p></li>
+<li><p>Any configuration warnings</p></li>
+</ul>
+</section>
+<section id="how-do-i-debug-a-specific-route">
+<h3>How do I debug a specific route?<a class="headerlink" href="#how-do-i-debug-a-specific-route" title="Link to this heading">¶</a></h3>
+<ol class="arabic">
+<li><p>Add debug logging:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+</span><span data-line="2"><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/my-route&quot;</span><span class="p">)</span>
+</span><span data-line="5"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">my_route</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+</span><span data-line="6">    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Entering my_route&quot;</span><span class="p">)</span>
+</span><span data-line="7">    <span class="o">...</span>
+</span></pre></div>
+</div>
+</li>
+<li><p>Run with debug logging:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">make<span class="w"> </span>serve-debug
+</span></pre></div>
+</div>
+</li>
+<li><p>Check logs:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">tail<span class="w"> </span>-f<span class="w"> </span>logs/dev.log
+</span></pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="why-are-my-templates-not-updating">
+<h3>Why are my templates not updating?<a class="headerlink" href="#why-are-my-templates-not-updating" title="Link to this heading">¶</a></h3>
+<ol class="arabic">
+<li><p>Check you are running with reload enabled:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">make<span class="w"> </span>serve<span class="w">  </span><span class="c1"># Uses --reload flag</span>
+</span></pre></div>
+</div>
+</li>
+<li><p>Clear browser cache or hard refresh (Cmd+Shift+R / Ctrl+Shift+R)</p></li>
+<li><p>Template changes should hot-reload, but if not:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Restart the server</span>
+</span><span data-line="2"><span class="c1"># Ctrl+C then:</span>
+</span><span data-line="3">make<span class="w"> </span>serve
+</span></pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="how-do-i-test-email-sending-locally">
+<h3>How do I test email sending locally?<a class="headerlink" href="#how-do-i-test-email-sending-locally" title="Link to this heading">¶</a></h3>
+<p>The project uses MailDev for local email testing:</p>
+<ol class="arabic">
+<li><p>Ensure MailDev is running:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">make<span class="w"> </span>infra-up<span class="w">  </span><span class="c1"># Includes maildev</span>
+</span></pre></div>
+</div>
+</li>
+<li><p>Access the web interface:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">localhost</span><span class="p">:</span><span class="mi">1080</span>
+</span></pre></div>
+</div>
+</li>
+<li><p>Configure SMTP in <code class="docutils literal notranslate"><span class="pre">.env</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="nv">SMTP_HOST</span><span class="o">=</span>localhost
+</span><span data-line="2"><span class="nv">SMTP_PORT</span><span class="o">=</span><span class="m">1025</span>
+</span></pre></div>
+</div>
+</li>
+<li><p>All emails sent locally will appear in the MailDev interface.</p></li>
+</ol>
+</section>
+<section id="how-do-i-add-a-new-domain-feature">
+<h3>How do I add a new domain/feature?<a class="headerlink" href="#how-do-i-add-a-new-domain-feature" title="Link to this heading">¶</a></h3>
+<ol class="arabic">
+<li><p>Create the domain structure:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">src</span><span class="o">/</span><span class="n">pydotorg</span><span class="o">/</span><span class="n">domains</span><span class="o">/</span><span class="n">myfeature</span><span class="o">/</span>
+</span><span data-line="2"><span class="o">|--</span> <span class="fm">__init__</span><span class="o">.</span><span class="n">py</span>
+</span><span data-line="3"><span class="o">|--</span> <span class="n">models</span><span class="o">.</span><span class="n">py</span>
+</span><span data-line="4"><span class="o">|--</span> <span class="n">schemas</span><span class="o">.</span><span class="n">py</span>
+</span><span data-line="5"><span class="o">|--</span> <span class="n">repositories</span><span class="o">.</span><span class="n">py</span>
+</span><span data-line="6"><span class="o">|--</span> <span class="n">services</span><span class="o">.</span><span class="n">py</span>
+</span><span data-line="7"><span class="o">|--</span> <span class="n">controllers</span><span class="o">.</span><span class="n">py</span>
+</span><span data-line="8"><span class="o">|--</span> <span class="n">dependencies</span><span class="o">.</span><span class="n">py</span>
+</span></pre></div>
+</div>
+</li>
+<li><p>Create migrations:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">make<span class="w"> </span>litestar-db-make
+</span></pre></div>
+</div>
+</li>
+<li><p>Register controllers in <code class="docutils literal notranslate"><span class="pre">main.py</span></code></p></li>
+<li><p>Add tests in <code class="docutils literal notranslate"><span class="pre">tests/unit/domains/myfeature/</span></code></p></li>
+<li><p>Run CI to verify:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">make<span class="w"> </span>ci
+</span></pre></div>
+</div>
+</li>
+</ol>
+</section>
+</section>
+<hr class="docutils" />
+<section id="getting-help">
+<h2>Getting Help<a class="headerlink" href="#getting-help" title="Link to this heading">¶</a></h2>
+<p>If you encounter an issue not covered here:</p>
+<ol class="arabic simple">
+<li><p>Check the <a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/issues">GitHub Issues</a> for known issues</p></li>
+<li><p>Search existing GitHub issues</p></li>
+<li><p>Check the <a class="reference internal" href="../architecture/ARCHITECTURE.html"><span class="std std-doc">Architecture Documentation</span></a></p></li>
+<li><p>Review the <a class="reference internal" href="../api-getting-started.html"><span class="std std-doc">API Documentation</span></a></p></li>
+</ol>
+<p>For bugs, please file an issue with:</p>
+<ul class="simple">
+<li><p>Steps to reproduce</p></li>
+<li><p>Expected behavior</p></li>
+<li><p>Actual behavior</p></li>
+<li><p>Environment details (OS, Python version, etc.)</p></li>
+<li><p>Relevant log output</p></li>
+</ul>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="docker.html">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title">Docker Guide</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="../cookbook/index.html">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title">Cookbook</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Jacob Coffee</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+<a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+  <iconify-icon icon="simple-icons:github"></iconify-icon>
+</a></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=30646c52"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script src="../_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

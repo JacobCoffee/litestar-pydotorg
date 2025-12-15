@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="blue" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>API Tags Documentation Index - litestar-pydotorg</title><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Rate Limiting Architecture Design" href="RATE_LIMITING_ARCHITECTURE.html" /><link rel="prev" title="Litestar Python.org Quick Start Guide" href="QUICK_START.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=14737038" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=513f0650" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="API Tags Documentation Index"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../index.html">
+      
+      
+      <strong>litestar-pydotorg</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"><ul><li class="link">
+          <a href="https://litestar.dev/">
+            <span>Litestar</span></a>
+        </li><li class="link">
+          <a href="https://python.org/">
+            <span>Python.org</span></a>
+        </li></ul></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials">
+  <a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started/index.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/quickstart.html">Quickstart</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/index.html">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/development.html">Development Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/contributing.html">Contribution Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/testing.html">Testing Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/debugging.html">Debugging Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/api-usage.html">API Usage Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/authentication.html">Authentication Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/feature-flags.html">Feature Flags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/configuration.html">Configuration Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/deployment.html">Deployment Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/docker.html">Docker Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/troubleshooting.html">Troubleshooting Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/index.html">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/domain-patterns.html">Domain Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/authentication-recipes.html">Authentication Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/database-recipes.html">Database Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/testing-recipes.html">Testing Recipes</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/core/index.html">Core Infrastructure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/auth.html">Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/cache.html">Caching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/database.html">Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/email.html">Email</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/exceptions.html">Exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/features.html">Feature Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/feeds.html">RSS/Atom Feeds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/ical.html">iCalendar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/middleware.html">Middleware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/openapi.html">OpenAPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/ratelimit.html">Rate Limiting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/security.html">Security</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/worker.html">Background Worker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/domains/index.html">Domain Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/about.html">About</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/admin.html">Admin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/banners.html">banners</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/blogs.html">blogs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/codesamples.html">Code Samples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/community.html">community</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/docs.html">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/downloads.html">downloads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/events.html">events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/jobs.html">jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/mailing.html">Mailing Lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/minutes.html">Minutes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/nominations.html">Nominations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/pages.html">pages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/sponsors.html">sponsors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/sqladmin.html">SQLAdmin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/successstories.html">Success Stories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/users.html">users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/work_groups.html">Work Groups</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/lib.html">Library Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/tasks.html">Background Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/config.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/main.html">Application Entry Point</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Architecture</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ARCHITECTURE.html">Litestar Python.org Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DATABASE_SCHEMA.html">Database Schema Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DOMAIN_MODELS.html">Domain Models Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="QUICK_START.html">Litestar Python.org Quick Start Guide</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">API Tags Documentation Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RATE_LIMITING_ARCHITECTURE.html">Rate Limiting Architecture Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adr/001-litestar-framework.html">ADR-001: Use Litestar as Web Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adr/002-saq-background-tasks.html">ADR-002: Use SAQ for Background Task Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#core-problem-solved">Core Problem Solved</a></li>
+<li><a class="reference internal" href="#documentation-files">Documentation Files</a><ul>
+<li><a class="reference internal" href="#api-tags-structure-md-primary-reference">1. API_TAGS_STRUCTURE.md (Primary Reference)</a></li>
+<li><a class="reference internal" href="#api-tags-quick-ref-md-quick-lookup">2. API_TAGS_QUICK_REF.md (Quick Lookup)</a></li>
+<li><a class="reference internal" href="#api-tags-hierarchy-txt-visual-reference">3. API_TAGS_HIERARCHY.txt (Visual Reference)</a></li>
+<li><a class="reference internal" href="#api-tags-implementation-md-implementation-guide">4. API_TAGS_IMPLEMENTATION.md (Implementation Guide)</a></li>
+<li><a class="reference internal" href="#api-tags-best-practices-md-maintenance-guide">5. API_TAGS_BEST_PRACTICES.md (Maintenance Guide)</a></li>
+<li><a class="reference internal" href="#api-tags-index-md-this-file">6. API_TAGS_INDEX.md (This File)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#quick-start">Quick Start</a><ul>
+<li><a class="reference internal" href="#for-implementation">For Implementation</a></li>
+<li><a class="reference internal" href="#for-maintenance">For Maintenance</a></li>
+<li><a class="reference internal" href="#for-understanding">For Understanding</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tag-structure-summary">Tag Structure Summary</a><ul>
+<li><a class="reference internal" href="#tag-counts-by-category">Tag Counts by Category</a></li>
+<li><a class="reference internal" href="#design-principles">Design Principles</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#key-improvements-over-current-structure">Key Improvements Over Current Structure</a></li>
+<li><a class="reference internal" href="#implementation-status">Implementation Status</a><ul>
+<li><a class="reference internal" href="#current-as-of-this-documentation">Current (As of This Documentation)</a></li>
+<li><a class="reference internal" href="#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#recommended-reading-order">Recommended Reading Order</a><ul>
+<li><a class="reference internal" href="#for-different-audiences">For Different Audiences</a><ul>
+<li><a class="reference internal" href="#api-developers-implementing-changes">API Developers (Implementing Changes)</a></li>
+<li><a class="reference internal" href="#api-users-understanding-structure">API Users (Understanding Structure)</a></li>
+<li><a class="reference internal" href="#team-leads-decision-making">Team Leads (Decision Making)</a></li>
+<li><a class="reference internal" href="#architects-system-design">Architects (System Design)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#key-statistics">Key Statistics</a></li>
+<li><a class="reference internal" href="#faqs">FAQs</a><ul>
+<li><a class="reference internal" href="#q-why-50-tags-couldnt-we-have-fewer">Q: Why 50 tags? Couldn&#8217;t we have fewer?</a></li>
+<li><a class="reference internal" href="#q-what-about-future-growth">Q: What about future growth?</a></li>
+<li><a class="reference internal" href="#q-should-we-use-sub-tags-or-nested-categories">Q: Should we use sub-tags or nested categories?</a></li>
+<li><a class="reference internal" href="#q-how-do-we-exclude-render-controllers">Q: How do we exclude render controllers?</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#related-documentation">Related Documentation</a></li>
+<li><a class="reference internal" href="#document-history">Document History</a></li>
+<li><a class="reference internal" href="#contact-questions">Contact &amp; Questions</a></li>
+<li><a class="reference internal" href="#contributing">Contributing</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../index.html"><span itemprop="name">litestar-pydotorg</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="index.html"><span itemprop="name">Architecture</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="2" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">API Tags Documentation Index</strong>
+        <meta itemprop="position" content="3" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue dark-code" role="main">
+          <section id="api-tags-documentation-index">
+<h1>API Tags Documentation Index<a class="headerlink" href="#api-tags-documentation-index" title="Link to this heading">¶</a></h1>
+<p>Complete documentation for the <a class="reference external" href="http://Python.org">Python.org</a> API OpenAPI tag structure and organization.</p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>The <a class="reference external" href="http://Python.org">Python.org</a> API uses optimized OpenAPI tags to organize 50+ endpoints into logical, discoverable categories. This documentation provides complete guidance on the tag structure, implementation, and maintenance.</p>
+</section>
+<section id="core-problem-solved">
+<h2>Core Problem Solved<a class="headerlink" href="#core-problem-solved" title="Link to this heading">¶</a></h2>
+<p><strong>Before</strong>: 100+ fragmented tags making API documentation hard to navigate</p>
+<ul class="simple">
+<li><p>Developers struggled to find relevant endpoints</p></li>
+<li><p>Tag names were inconsistent (kebab-case vs Title Case)</p></li>
+<li><p>Related endpoints were scattered across different tag categories</p></li>
+<li><p>Render controllers polluted the public API documentation</p></li>
+</ul>
+<p><strong>After</strong>: 50 logically grouped tags organized by developer journey</p>
+<ul class="simple">
+<li><p>Clear, consistent naming (Title Case with spaces)</p></li>
+<li><p>Related resources grouped together</p></li>
+<li><p>Intuitive discovery flow (auth → users → content → features)</p></li>
+<li><p>Render controllers hidden from public docs</p></li>
+</ul>
+</section>
+<section id="documentation-files">
+<h2>Documentation Files<a class="headerlink" href="#documentation-files" title="Link to this heading">¶</a></h2>
+<section id="api-tags-structure-md-primary-reference">
+<h3>1. API_TAGS_STRUCTURE.md (Primary Reference)<a class="headerlink" href="#api-tags-structure-md-primary-reference" title="Link to this heading">¶</a></h3>
+<p><strong>Purpose</strong>: Detailed tag definitions and rationale</p>
+<p><strong>Contains</strong>:</p>
+<ul class="simple">
+<li><p>All 50 recommended tags with descriptions</p></li>
+<li><p>Which controllers should use each tag</p></li>
+<li><p>Design principles behind the structure</p></li>
+<li><p>Ordering strategy for Scalar UI</p></li>
+<li><p>Complete migration notes</p></li>
+</ul>
+<p><strong>When to Use</strong>: When you need to understand WHY a tag exists and what endpoints belong in it.</p>
+<p><strong>Size</strong>: 15 KB | <strong>Read Time</strong>: 15-20 minutes</p>
+</section>
+<hr class="docutils" />
+<section id="api-tags-quick-ref-md-quick-lookup">
+<h3>2. API_TAGS_QUICK_REF.md (Quick Lookup)<a class="headerlink" href="#api-tags-quick-ref-md-quick-lookup" title="Link to this heading">¶</a></h3>
+<p><strong>Purpose</strong>: Quick reference table for tag assignments</p>
+<p><strong>Contains</strong>:</p>
+<ul class="simple">
+<li><p>Reference table: Tag # → Name → Controllers → Key Endpoints</p></li>
+<li><p>Tag groups by category (Core, Content, Downloads, etc.)</p></li>
+<li><p>Render controllers to exclude from public API</p></li>
+<li><p>Implementation checklist</p></li>
+<li><p>Common migration examples</p></li>
+</ul>
+<p><strong>When to Use</strong>: When you need to quickly look up which tag to use for a controller or see the complete tag mapping.</p>
+<p><strong>Size</strong>: 8.1 KB | <strong>Read Time</strong>: 5-10 minutes</p>
+</section>
+<hr class="docutils" />
+<section id="api-tags-hierarchy-txt-visual-reference">
+<h3>3. API_TAGS_HIERARCHY.txt (Visual Reference)<a class="headerlink" href="#api-tags-hierarchy-txt-visual-reference" title="Link to this heading">¶</a></h3>
+<p><strong>Purpose</strong>: Visual hierarchy diagram of tag organization</p>
+<p><strong>Contains</strong>:</p>
+<ul class="simple">
+<li><p>ASCII art showing tag relationships</p></li>
+<li><p>Nesting structure (Events → Calendars → Categories)</p></li>
+<li><p>Core vs Admin separation</p></li>
+<li><p>Statistics and benefits</p></li>
+<li><p>Excluded render controllers clearly marked</p></li>
+</ul>
+<p><strong>When to Use</strong>: When you want to visualize how tags relate to each other and understand the overall structure at a glance.</p>
+<p><strong>Size</strong>: 21 KB | <strong>Read Time</strong>: 10-15 minutes</p>
+</section>
+<hr class="docutils" />
+<section id="api-tags-implementation-md-implementation-guide">
+<h3>4. API_TAGS_IMPLEMENTATION.md (Implementation Guide)<a class="headerlink" href="#api-tags-implementation-md-implementation-guide" title="Link to this heading">¶</a></h3>
+<p><strong>Purpose</strong>: Step-by-step implementation instructions</p>
+<p><strong>Contains</strong>:</p>
+<ul class="simple">
+<li><p>Phase 1: Audit current implementation</p></li>
+<li><p>Phase 2: Update controller tags (with examples for each domain)</p></li>
+<li><p>Phase 3: Configure OpenAPI tags</p></li>
+<li><p>Phase 4: Exclude render controllers</p></li>
+<li><p>Phase 5: Testing &amp; validation</p></li>
+<li><p>Phase 6: Documentation &amp; communication</p></li>
+<li><p>Complete checklist and rollback plan</p></li>
+</ul>
+<p><strong>When to Use</strong>: When you’re ready to implement the tag structure in the codebase.</p>
+<p><strong>Size</strong>: 18 KB | <strong>Read Time</strong>: 20-30 minutes</p>
+</section>
+<hr class="docutils" />
+<section id="api-tags-best-practices-md-maintenance-guide">
+<h3>5. API_TAGS_BEST_PRACTICES.md (Maintenance Guide)<a class="headerlink" href="#api-tags-best-practices-md-maintenance-guide" title="Link to this heading">¶</a></h3>
+<p><strong>Purpose</strong>: Guidelines for maintaining and extending the tag structure</p>
+<p><strong>Contains</strong>:</p>
+<ul class="simple">
+<li><p>Naming conventions (Title Case, concise, specific)</p></li>
+<li><p>Controller organization guidelines</p></li>
+<li><p>When and how to add new tags</p></li>
+<li><p>Tag refactoring checklist</p></li>
+<li><p>OpenAPI configuration best practices</p></li>
+<li><p>Testing tag assignments</p></li>
+<li><p>Common patterns and troubleshooting</p></li>
+<li><p>Future improvement ideas</p></li>
+</ul>
+<p><strong>When to Use</strong>: When you’re adding new controllers/tags or maintaining the existing structure.</p>
+<p><strong>Size</strong>: 15 KB | <strong>Read Time</strong>: 15-20 minutes</p>
+</section>
+<hr class="docutils" />
+<section id="api-tags-index-md-this-file">
+<h3>6. API_TAGS_INDEX.md (This File)<a class="headerlink" href="#api-tags-index-md-this-file" title="Link to this heading">¶</a></h3>
+<p><strong>Purpose</strong>: Navigation and overview of all tag documentation</p>
+<p><strong>Size</strong>: ~3 KB</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="quick-start">
+<h2>Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading">¶</a></h2>
+<section id="for-implementation">
+<h3>For Implementation<a class="headerlink" href="#for-implementation" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Start with <strong>API_TAGS_QUICK_REF.md</strong> to understand the current tag assignments</p></li>
+<li><p>Read <strong>API_TAGS_STRUCTURE.md</strong> to understand the rationale</p></li>
+<li><p>Follow <strong>API_TAGS_IMPLEMENTATION.md</strong> phase by phase</p></li>
+<li><p>Reference <strong>API_TAGS_BEST_PRACTICES.md</strong> during implementation</p></li>
+</ol>
+</section>
+<section id="for-maintenance">
+<h3>For Maintenance<a class="headerlink" href="#for-maintenance" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Check <strong>API_TAGS_BEST_PRACTICES.md</strong> for naming and organization guidelines</p></li>
+<li><p>Update <strong>API_TAGS_QUICK_REF.md</strong> when adding new tags</p></li>
+<li><p>Use the checklist in <strong>API_TAGS_BEST_PRACTICES.md</strong> for consistency</p></li>
+</ol>
+</section>
+<section id="for-understanding">
+<h3>For Understanding<a class="headerlink" href="#for-understanding" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Start with <strong>API_TAGS_HIERARCHY.txt</strong> for visual overview</p></li>
+<li><p>Read <strong>API_TAGS_STRUCTURE.md</strong> for detailed information</p></li>
+<li><p>Reference <strong>API_TAGS_QUICK_REF.md</strong> for specific tag mappings</p></li>
+</ol>
+</section>
+</section>
+<section id="tag-structure-summary">
+<h2>Tag Structure Summary<a class="headerlink" href="#tag-structure-summary" title="Link to this heading">¶</a></h2>
+<section id="tag-counts-by-category">
+<h3>Tag Counts by Category<a class="headerlink" href="#tag-counts-by-category" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Category</p></th>
+<th class="head"><p>Tags</p></th>
+<th class="head"><p>Examples</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Core API</p></td>
+<td><p>6</p></td>
+<td><p>Authentication, Users, User Memberships, User Groups, Search, Mailing</p></td>
+</tr>
+<tr class="row-odd"><td><p>Content</p></td>
+<td><p>5</p></td>
+<td><p>Pages, Documents, Images, Banners, Code Samples</p></td>
+</tr>
+<tr class="row-even"><td><p>Downloads</p></td>
+<td><p>3</p></td>
+<td><p>Operating Systems, Python Releases, Release Files</p></td>
+</tr>
+<tr class="row-odd"><td><p>Events</p></td>
+<td><p>5</p></td>
+<td><p>Events, Calendars, Categories, Locations, Occurrences</p></td>
+</tr>
+<tr class="row-even"><td><p>Community</p></td>
+<td><p>2</p></td>
+<td><p>User Groups &amp; Communities, Community Content</p></td>
+</tr>
+<tr class="row-odd"><td><p>Content Discovery</p></td>
+<td><p>4</p></td>
+<td><p>Blogs, Blog Feeds, Success Stories, Categories</p></td>
+</tr>
+<tr class="row-even"><td><p>Jobs</p></td>
+<td><p>4</p></td>
+<td><p>Jobs, Job Types, Job Categories, Review Comments</p></td>
+</tr>
+<tr class="row-odd"><td><p>Business</p></td>
+<td><p>4</p></td>
+<td><p>Sponsors, Sponsorship Levels, Sponsorships, Companies</p></td>
+</tr>
+<tr class="row-even"><td><p>Governance</p></td>
+<td><p>5</p></td>
+<td><p>Work Groups, Minutes, Nominations, Nominees, Elections</p></td>
+</tr>
+<tr class="row-odd"><td><p>Administration</p></td>
+<td><p>12</p></td>
+<td><p>Dashboard, Users, Pages, Events, Jobs, Sponsors, Blogs, Logs, Email, Tasks, Settings</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Total Public</strong></p></td>
+<td><p><strong>50</strong></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="design-principles">
+<h3>Design Principles<a class="headerlink" href="#design-principles" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Logical Grouping</strong>: Related endpoints organized into coherent categories</p></li>
+<li><p><strong>Developer Journey</strong>: Tags ordered by typical workflow (auth → content → features)</p></li>
+<li><p><strong>Consistency</strong>: Title Case with spaces throughout</p></li>
+<li><p><strong>Admin Isolation</strong>: Administrative endpoints clearly separated</p></li>
+<li><p><strong>Render Exclusion</strong>: HTML controllers hidden from public API docs</p></li>
+</ol>
+</section>
+</section>
+<section id="key-improvements-over-current-structure">
+<h2>Key Improvements Over Current Structure<a class="headerlink" href="#key-improvements-over-current-structure" title="Link to this heading">¶</a></h2>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Aspect</p></th>
+<th class="head"><p>Before</p></th>
+<th class="head"><p>After</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Total Tags</p></td>
+<td><p>100+</p></td>
+<td><p>50</p></td>
+</tr>
+<tr class="row-odd"><td><p>Naming Convention</p></td>
+<td><p>Mixed (kebab-case, Title Case)</p></td>
+<td><p>Consistent Title Case</p></td>
+</tr>
+<tr class="row-even"><td><p>Navigation</p></td>
+<td><p>Fragmented, hard to discover</p></td>
+<td><p>Logical, grouped by workflow</p></td>
+</tr>
+<tr class="row-odd"><td><p>Render Controllers</p></td>
+<td><p>Polluting public API</p></td>
+<td><p>Hidden (internal tag)</p></td>
+</tr>
+<tr class="row-even"><td><p>Admin Organization</p></td>
+<td><p>No clear grouping</p></td>
+<td><p>Grouped with “Admin” prefix</p></td>
+</tr>
+<tr class="row-odd"><td><p>Related Resources</p></td>
+<td><p>Scattered</p></td>
+<td><p>Adjacent for discovery</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="implementation-status">
+<h2>Implementation Status<a class="headerlink" href="#implementation-status" title="Link to this heading">¶</a></h2>
+<section id="current-as-of-this-documentation">
+<h3>Current (As of This Documentation)<a class="headerlink" href="#current-as-of-this-documentation" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Documentation created and organized</p></li>
+<li><p>50 tags defined with clear descriptions</p></li>
+<li><p>Tag hierarchy designed and documented</p></li>
+<li><p>Implementation guide prepared</p></li>
+</ul>
+</section>
+<section id="next-steps">
+<h3>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Review</strong>: Team reviews the proposed structure</p></li>
+<li><p><strong>Implement</strong>: Follow API_TAGS_IMPLEMENTATION.md phase by phase</p></li>
+<li><p><strong>Test</strong>: Verify in Scalar UI and run test suite</p></li>
+<li><p><strong>Deploy</strong>: Roll out to production</p></li>
+<li><p><strong>Monitor</strong>: Track developer feedback and usage patterns</p></li>
+</ol>
+</section>
+</section>
+<section id="recommended-reading-order">
+<h2>Recommended Reading Order<a class="headerlink" href="#recommended-reading-order" title="Link to this heading">¶</a></h2>
+<section id="for-different-audiences">
+<h3>For Different Audiences<a class="headerlink" href="#for-different-audiences" title="Link to this heading">¶</a></h3>
+<section id="api-developers-implementing-changes">
+<h4>API Developers (Implementing Changes)<a class="headerlink" href="#api-developers-implementing-changes" title="Link to this heading">¶</a></h4>
+<ol class="arabic simple">
+<li><p>API_TAGS_QUICK_REF.md (5 min)</p></li>
+<li><p>API_TAGS_IMPLEMENTATION.md (30 min)</p></li>
+<li><p>API_TAGS_BEST_PRACTICES.md (ref as needed)</p></li>
+</ol>
+</section>
+<section id="api-users-understanding-structure">
+<h4>API Users (Understanding Structure)<a class="headerlink" href="#api-users-understanding-structure" title="Link to this heading">¶</a></h4>
+<ol class="arabic simple">
+<li><p>API_TAGS_HIERARCHY.txt (10 min)</p></li>
+<li><p>API_TAGS_QUICK_REF.md (5 min)</p></li>
+<li><p>API_TAGS_STRUCTURE.md (details as needed)</p></li>
+</ol>
+</section>
+<section id="team-leads-decision-making">
+<h4>Team Leads (Decision Making)<a class="headerlink" href="#team-leads-decision-making" title="Link to this heading">¶</a></h4>
+<ol class="arabic simple">
+<li><p>This index and overview section (5 min)</p></li>
+<li><p>API_TAGS_STRUCTURE.md - “Benefits of This Structure” section (10 min)</p></li>
+<li><p>API_TAGS_IMPLEMENTATION.md - “Checklist” (5 min)</p></li>
+</ol>
+</section>
+<section id="architects-system-design">
+<h4>Architects (System Design)<a class="headerlink" href="#architects-system-design" title="Link to this heading">¶</a></h4>
+<ol class="arabic simple">
+<li><p>API_TAGS_STRUCTURE.md (20 min)</p></li>
+<li><p>API_TAGS_HIERARCHY.txt (15 min)</p></li>
+<li><p>API_TAGS_BEST_PRACTICES.md (20 min)</p></li>
+</ol>
+</section>
+</section>
+</section>
+<section id="key-statistics">
+<h2>Key Statistics<a class="headerlink" href="#key-statistics" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Total Documentation</strong>: ~77 KB</p></li>
+<li><p><strong>Total Tags</strong>: 50 public + 1 internal + 1 for render exclusion</p></li>
+<li><p><strong>Controller Files</strong>: 27 files to update</p></li>
+<li><p><strong>Documentation Files</strong>: 6 files (including this index)</p></li>
+<li><p><strong>Estimated Implementation Time</strong>: 4-6 hours</p></li>
+<li><p><strong>Estimated Testing Time</strong>: 2-3 hours</p></li>
+</ul>
+</section>
+<section id="faqs">
+<h2>FAQs<a class="headerlink" href="#faqs" title="Link to this heading">¶</a></h2>
+<section id="q-why-50-tags-couldnt-we-have-fewer">
+<h3>Q: Why 50 tags? Couldn’t we have fewer?<a class="headerlink" href="#q-why-50-tags-couldnt-we-have-fewer" title="Link to this heading">¶</a></h3>
+<p><strong>A</strong>: 50 tags represent a balance between:</p>
+<ul class="simple">
+<li><p>Too few (5-10): Developers can’t find specific endpoints</p></li>
+<li><p>Too many (100+): Overwhelming navigation, hard to discover</p></li>
+</ul>
+<p>50 tags group related endpoints while keeping categories distinct and discoverable.</p>
+</section>
+<section id="q-what-about-future-growth">
+<h3>Q: What about future growth?<a class="headerlink" href="#q-what-about-future-growth" title="Link to this heading">¶</a></h3>
+<p><strong>A</strong>: The structure is designed to scale. New tags can be added by:</p>
+<ol class="arabic simple">
+<li><p>Finding a logical parent category (e.g., add to “Community Content”)</p></li>
+<li><p>Creating a related tag if genuinely new (e.g., “Community Events”)</p></li>
+<li><p>Following naming conventions (Title Case, descriptive, concise)</p></li>
+</ol>
+<p>See API_TAGS_BEST_PRACTICES.md for detailed guidance.</p>
+</section>
+<section id="q-should-we-use-sub-tags-or-nested-categories">
+<h3>Q: Should we use sub-tags or nested categories?<a class="headerlink" href="#q-should-we-use-sub-tags-or-nested-categories" title="Link to this heading">¶</a></h3>
+<p><strong>A</strong>: No. OpenAPI spec doesn’t support nested tags. Instead:</p>
+<ul class="simple">
+<li><p>Use related prefixes (Event Calendars, Event Categories)</p></li>
+<li><p>Keep related tags adjacent in the list</p></li>
+<li><p>Update documentation to show relationships</p></li>
+</ul>
+</section>
+<section id="q-how-do-we-exclude-render-controllers">
+<h3>Q: How do we exclude render controllers?<a class="headerlink" href="#q-how-do-we-exclude-render-controllers" title="Link to this heading">¶</a></h3>
+<p><strong>A</strong>: Two options:</p>
+<ol class="arabic simple">
+<li><p>Mark with “internal” tag: <code class="docutils literal notranslate"><span class="pre">tags</span> <span class="pre">=</span> <span class="pre">[&quot;internal&quot;]</span></code></p></li>
+<li><p>Exclude from schema: <code class="docutils literal notranslate"><span class="pre">include_in_schema</span> <span class="pre">=</span> <span class="pre">False</span></code></p></li>
+</ol>
+<p>See API_TAGS_IMPLEMENTATION.md Phase 4 for details.</p>
+</section>
+</section>
+<section id="related-documentation">
+<h2>Related Documentation<a class="headerlink" href="#related-documentation" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>API Documentation</strong>: See main README for API overview</p></li>
+<li><p><strong>Architecture Guides</strong>: See docs/architecture/ for other architectural decisions</p></li>
+<li><p><strong>Contributing</strong>: See <a class="reference external" href="http://CONTRIBUTING.md">CONTRIBUTING.md</a> for development guidelines</p></li>
+<li><p><strong>Scalar UI</strong>: <a class="reference external" href="https://scalar.com/">https://scalar.com/</a> for API documentation frontend</p></li>
+<li><p><strong>Litestar OpenAPI</strong>: <a class="reference external" href="https://docs.litestar.dev/latest/features/openapi.html">https://docs.litestar.dev/latest/features/openapi.html</a></p></li>
+</ul>
+</section>
+<section id="document-history">
+<h2>Document History<a class="headerlink" href="#document-history" title="Link to this heading">¶</a></h2>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Version</p></th>
+<th class="head"><p>Date</p></th>
+<th class="head"><p>Changes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1.0</p></td>
+<td><p>2025-11-27</p></td>
+<td><p>Initial structure and documentation</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="contact-questions">
+<h2>Contact &amp; Questions<a class="headerlink" href="#contact-questions" title="Link to this heading">¶</a></h2>
+<p>For questions about the API tag structure:</p>
+<ol class="arabic simple">
+<li><p>Check the relevant documentation file (see “Quick Start” section above)</p></li>
+<li><p>Review “Best Practices” section for common patterns</p></li>
+<li><p>Consult “Troubleshooting” in API_TAGS_BEST_PRACTICES.md</p></li>
+</ol>
+</section>
+<section id="contributing">
+<h2>Contributing<a class="headerlink" href="#contributing" title="Link to this heading">¶</a></h2>
+<p>When adding new controllers or tags:</p>
+<ol class="arabic simple">
+<li><p>Follow naming conventions in API_TAGS_BEST_PRACTICES.md</p></li>
+<li><p>Update API_TAGS_QUICK_REF.md with new tag</p></li>
+<li><p>Update API_TAGS_STRUCTURE.md if adding new category</p></li>
+<li><p>Update API_TAGS_HIERARCHY.txt if structural change</p></li>
+<li><p>Reference these updates in your PR description</p></li>
+</ol>
+<hr class="docutils" />
+<p><strong>Total Documentation</strong>: 6 files | <strong>77 KB</strong> | <strong>~90 minutes</strong> read time (all files)</p>
+<p><strong>Quick Implementation</strong>: 4-6 hours from start to production deployment</p>
+<p><strong>Maintenance</strong>: 5-10 minutes per new tag following best practices</p>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="QUICK_START.html">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title">Litestar Python.org Quick Start Guide</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="RATE_LIMITING_ARCHITECTURE.html">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title">Rate Limiting Architecture Design</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Jacob Coffee</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+<a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+  <iconify-icon icon="simple-icons:github"></iconify-icon>
+</a></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=30646c52"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script src="../_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

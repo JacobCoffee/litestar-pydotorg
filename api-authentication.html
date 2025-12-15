@@ -1,0 +1,1516 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="blue" data-content_root="./">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>API Authentication Guide - litestar-pydotorg</title><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="_static/shibuya.css?v=14737038" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link media="print" rel="stylesheet" type="text/css" href="_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=513f0650" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="API Authentication Guide"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="index.html">
+      
+      
+      <strong>litestar-pydotorg</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"><ul><li class="link">
+          <a href="https://litestar.dev/">
+            <span>Litestar</span></a>
+        </li><li class="link">
+          <a href="https://python.org/">
+            <span>Python.org</span></a>
+        </li></ul></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials">
+  <a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting-started/index.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting-started/installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting-started/quickstart.html">Quickstart</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="guides/index.html">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="guides/development.html">Development Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/contributing.html">Contribution Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/testing.html">Testing Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/debugging.html">Debugging Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/api-usage.html">API Usage Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/authentication.html">Authentication Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/feature-flags.html">Feature Flags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/configuration.html">Configuration Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/deployment.html">Deployment Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/docker.html">Docker Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/troubleshooting.html">Troubleshooting Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cookbook/index.html">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cookbook/domain-patterns.html">Domain Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook/authentication-recipes.html">Authentication Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook/database-recipes.html">Database Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook/testing-recipes.html">Testing Recipes</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/core/index.html">Core Infrastructure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/core/auth.html">Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/cache.html">Caching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/database.html">Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/email.html">Email</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/exceptions.html">Exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/features.html">Feature Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/feeds.html">RSS/Atom Feeds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/ical.html">iCalendar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/middleware.html">Middleware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/openapi.html">OpenAPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/ratelimit.html">Rate Limiting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/security.html">Security</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/worker.html">Background Worker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/domains/index.html">Domain Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/about.html">About</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/admin.html">Admin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/banners.html">banners</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/blogs.html">blogs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/codesamples.html">Code Samples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/community.html">community</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/docs.html">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/downloads.html">downloads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/events.html">events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/jobs.html">jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/mailing.html">Mailing Lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/minutes.html">Minutes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/nominations.html">Nominations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/pages.html">pages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/sponsors.html">sponsors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/sqladmin.html">SQLAdmin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/successstories.html">Success Stories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/users.html">users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/work_groups.html">Work Groups</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/lib.html">Library Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/tasks.html">Background Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/config.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/main.html">Application Entry Point</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="architecture/index.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="architecture/ARCHITECTURE.html">Litestar Python.org Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/DATABASE_SCHEMA.html">Database Schema Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/DOMAIN_MODELS.html">Domain Models Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/QUICK_START.html">Litestar Python.org Quick Start Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/API_TAGS_INDEX.html">API Tags Documentation Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/RATE_LIMITING_ARCHITECTURE.html">Rate Limiting Architecture Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/adr/001-litestar-framework.html">ADR-001: Use Litestar as Web Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/adr/002-saq-background-tasks.html">ADR-002: Use SAQ for Background Task Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#authentication-methods">Authentication Methods</a><ul>
+<li><a class="reference internal" href="#jwt-authentication-recommended-for-apis">JWT Authentication (Recommended for APIs)</a><ul>
+<li><a class="reference internal" href="#token-types">Token Types</a></li>
+<li><a class="reference internal" href="#token-format">Token Format</a></li>
+<li><a class="reference internal" href="#register-a-new-user">Register a New User</a></li>
+<li><a class="reference internal" href="#login-with-credentials">Login with Credentials</a></li>
+<li><a class="reference internal" href="#refresh-access-token">Refresh Access Token</a></li>
+<li><a class="reference internal" href="#using-jwt-tokens">Using JWT Tokens</a></li>
+<li><a class="reference internal" href="#logout-jwt">Logout (JWT)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#session-based-authentication-for-web-apps">Session-Based Authentication (For Web Apps)</a><ul>
+<li><a class="reference internal" href="#configuration">Configuration</a></li>
+<li><a class="reference internal" href="#login-with-session">Login with Session</a></li>
+<li><a class="reference internal" href="#using-session-cookies">Using Session Cookies</a></li>
+<li><a class="reference internal" href="#logout-session">Logout (Session)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#oauth2-authentication">OAuth2 Authentication</a><ul>
+<li><a class="reference internal" href="#supported-providers">Supported Providers</a></li>
+<li><a class="reference internal" href="#oauth2-flow">OAuth2 Flow</a><ul>
+<li><a class="reference internal" href="#initiate-oauth-login">1. Initiate OAuth Login</a></li>
+<li><a class="reference internal" href="#oauth-callback">2. OAuth Callback</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#complete-oauth-example-python">Complete OAuth Example (Python)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#protected-endpoints">Protected Endpoints</a><ul>
+<li><a class="reference internal" href="#get-current-user">Get Current User</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#authorization-guards">Authorization Guards</a><ul>
+<li><a class="reference internal" href="#access-levels">Access Levels</a></li>
+<li><a class="reference internal" href="#guard-hierarchy">Guard Hierarchy</a></li>
+<li><a class="reference internal" href="#permission-errors">Permission Errors</a></li>
+<li><a class="reference internal" href="#checking-permissions">Checking Permissions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#email-verification">Email Verification</a><ul>
+<li><a class="reference internal" href="#send-verification-email">Send Verification Email</a></li>
+<li><a class="reference internal" href="#verify-email">Verify Email</a></li>
+<li><a class="reference internal" href="#resend-verification-authenticated">Resend Verification (Authenticated)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#password-management">Password Management</a><ul>
+<li><a class="reference internal" href="#forgot-password">Forgot Password</a></li>
+<li><a class="reference internal" href="#reset-password">Reset Password</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#error-handling">Error Handling</a><ul>
+<li><a class="reference internal" href="#common-status-codes">Common Status Codes</a></li>
+<li><a class="reference internal" href="#error-response-format">Error Response Format</a></li>
+<li><a class="reference internal" href="#token-expiration">Token Expiration</a></li>
+<li><a class="reference internal" href="#handling-expired-refresh-tokens">Handling Expired Refresh Tokens</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#best-practices">Best Practices</a><ul>
+<li><a class="reference internal" href="#security">Security</a></li>
+<li><a class="reference internal" href="#token-management">Token Management</a></li>
+<li><a class="reference internal" href="#rate-limiting">Rate Limiting</a></li>
+<li><a class="reference internal" href="#testing-authentication">Testing Authentication</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#migration-guide">Migration Guide</a><ul>
+<li><a class="reference internal" href="#from-session-to-jwt">From Session to JWT</a></li>
+<li><a class="reference internal" href="#from-oauth-to-standard-login">From OAuth to Standard Login</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#quick-reference">Quick Reference</a><ul>
+<li><a class="reference internal" href="#endpoints-summary">Endpoints Summary</a></li>
+<li><a class="reference internal" href="#token-lifetimes-quick-reference">Token Lifetimes Quick Reference</a></li>
+<li><a class="reference internal" href="#headers-quick-reference">Headers Quick Reference</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#support">Support</a></li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="index.html"><span itemprop="name">litestar-pydotorg</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">API Authentication Guide</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue dark-code" role="main">
+          <section id="api-authentication-guide">
+<h1>API Authentication Guide<a class="headerlink" href="#api-authentication-guide" title="Link to this heading">¶</a></h1>
+<p>Comprehensive guide to authenticating with the <a class="reference external" href="http://Python.org">Python.org</a> API.</p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>The <a class="reference external" href="http://Python.org">Python.org</a> API supports two authentication methods:</p>
+<ol class="arabic simple">
+<li><p><strong>JWT (JSON Web Tokens)</strong> - Stateless, token-based authentication ideal for API clients</p></li>
+<li><p><strong>Session-based</strong> - Cookie-based authentication backed by Redis, ideal for web applications</p></li>
+</ol>
+<p>Both methods provide the same level of access and security. Choose based on your use case.</p>
+</section>
+<section id="authentication-methods">
+<h2>Authentication Methods<a class="headerlink" href="#authentication-methods" title="Link to this heading">¶</a></h2>
+<section id="jwt-authentication-recommended-for-apis">
+<h3>JWT Authentication (Recommended for APIs)<a class="headerlink" href="#jwt-authentication-recommended-for-apis" title="Link to this heading">¶</a></h3>
+<p>JWT authentication uses Bearer tokens that are included in the <code class="docutils literal notranslate"><span class="pre">Authorization</span></code> header of your requests.</p>
+<section id="token-types">
+<h4>Token Types<a class="headerlink" href="#token-types" title="Link to this heading">¶</a></h4>
+<p>The system uses three types of JWT tokens:</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Token Type</p></th>
+<th class="head"><p>Purpose</p></th>
+<th class="head"><p>Default Lifetime</p></th>
+<th class="head"><p>Included Claims</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Access Token</p></td>
+<td><p>API access</p></td>
+<td><p>7 days (10,080 minutes)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sub</span></code> (user_id), <code class="docutils literal notranslate"><span class="pre">exp</span></code>, <code class="docutils literal notranslate"><span class="pre">iat</span></code>, <code class="docutils literal notranslate"><span class="pre">type:</span> <span class="pre">&quot;access&quot;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Refresh Token</p></td>
+<td><p>Renew access tokens</p></td>
+<td><p>30 days</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sub</span></code> (user_id), <code class="docutils literal notranslate"><span class="pre">exp</span></code>, <code class="docutils literal notranslate"><span class="pre">iat</span></code>, <code class="docutils literal notranslate"><span class="pre">type:</span> <span class="pre">&quot;refresh&quot;</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Verification Token</p></td>
+<td><p>Email verification</p></td>
+<td><p>24 hours</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sub</span></code> (user_id), <code class="docutils literal notranslate"><span class="pre">email</span></code>, <code class="docutils literal notranslate"><span class="pre">exp</span></code>, <code class="docutils literal notranslate"><span class="pre">iat</span></code>, <code class="docutils literal notranslate"><span class="pre">type:</span> <span class="pre">&quot;verify_email&quot;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Password Reset Token</p></td>
+<td><p>Password reset</p></td>
+<td><p>1 hour</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sub</span></code> (user_id), <code class="docutils literal notranslate"><span class="pre">email</span></code>, <code class="docutils literal notranslate"><span class="pre">exp</span></code>, <code class="docutils literal notranslate"><span class="pre">iat</span></code>, <code class="docutils literal notranslate"><span class="pre">type:</span> <span class="pre">&quot;password_reset&quot;</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="token-format">
+<h4>Token Format<a class="headerlink" href="#token-format" title="Link to this heading">¶</a></h4>
+<p>All tokens are signed using the HS256 algorithm. A typical JWT payload looks like:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;sub&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;550e8400-e29b-41d4-a716-446655440000&quot;</span><span class="p">,</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;exp&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1735689600</span><span class="p">,</span>
+</span><span data-line="4"><span class="w">  </span><span class="nt">&quot;iat&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1735084800</span><span class="p">,</span>
+</span><span data-line="5"><span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;access&quot;</span>
+</span><span data-line="6"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>Claims:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">sub</span></code>: User ID (UUID as string)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">exp</span></code>: Expiration timestamp (Unix epoch)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">iat</span></code>: Issued at timestamp (Unix epoch)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">type</span></code>: Token type (<code class="docutils literal notranslate"><span class="pre">access</span></code>, <code class="docutils literal notranslate"><span class="pre">refresh</span></code>, <code class="docutils literal notranslate"><span class="pre">verify_email</span></code>, or <code class="docutils literal notranslate"><span class="pre">password_reset</span></code>)</p></li>
+</ul>
+</section>
+<section id="register-a-new-user">
+<h4>Register a New User<a class="headerlink" href="#register-a-new-user" title="Link to this heading">¶</a></h4>
+<p>Create a new account and receive JWT tokens.</p>
+<p><strong>Endpoint:</strong> <code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/api/auth/register</span></code></p>
+<p><strong>Request:</strong></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;username&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;pythonista&quot;</span><span class="p">,</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;pythonista@example.com&quot;</span><span class="p">,</span>
+</span><span data-line="4"><span class="w">  </span><span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SecurePass123!&quot;</span><span class="p">,</span>
+</span><span data-line="5"><span class="w">  </span><span class="nt">&quot;first_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Guido&quot;</span><span class="p">,</span>
+</span><span data-line="6"><span class="w">  </span><span class="nt">&quot;last_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;van Rossum&quot;</span>
+</span><span data-line="7"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>Response:</strong> <code class="docutils literal notranslate"><span class="pre">200</span> <span class="pre">OK</span></code></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;access_token&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...&quot;</span><span class="p">,</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;refresh_token&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...&quot;</span><span class="p">,</span>
+</span><span data-line="4"><span class="w">  </span><span class="nt">&quot;token_type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bearer&quot;</span><span class="p">,</span>
+</span><span data-line="5"><span class="w">  </span><span class="nt">&quot;expires_in&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">604800</span>
+</span><span data-line="6"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>Notes:</strong></p>
+<ul class="simple">
+<li><p>Password must be at least 8 characters</p></li>
+<li><p>A verification email is sent automatically</p></li>
+<li><p>Tokens are issued immediately (email verification not required to use API)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">expires_in</span></code> is in seconds (604800 = 7 days)</p></li>
+</ul>
+<p><strong>Error Responses:</strong></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1">// 403 - Username taken</span>
+</span><span data-line="2"><span class="p">{</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Username already exists&quot;</span><span class="p">,</span>
+</span><span data-line="4"><span class="w">  </span><span class="nt">&quot;status_code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">403</span>
+</span><span data-line="5"><span class="p">}</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1">// 403 - Email taken</span>
+</span><span data-line="8"><span class="p">{</span>
+</span><span data-line="9"><span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Email already registered&quot;</span><span class="p">,</span>
+</span><span data-line="10"><span class="w">  </span><span class="nt">&quot;status_code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">403</span>
+</span><span data-line="11"><span class="p">}</span>
+</span><span data-line="12">
+</span><span data-line="13"><span class="c1">// 403 - Weak password</span>
+</span><span data-line="14"><span class="p">{</span>
+</span><span data-line="15"><span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Password does not meet requirements&quot;</span><span class="p">,</span>
+</span><span data-line="16"><span class="w">  </span><span class="nt">&quot;status_code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">403</span>
+</span><span data-line="17"><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+<section id="login-with-credentials">
+<h4>Login with Credentials<a class="headerlink" href="#login-with-credentials" title="Link to this heading">¶</a></h4>
+<p>Authenticate with username and password.</p>
+<p><strong>Endpoint:</strong> <code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/api/auth/login</span></code></p>
+<p><strong>Request:</strong></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;username&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;pythonista&quot;</span><span class="p">,</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SecurePass123!&quot;</span>
+</span><span data-line="4"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>Response:</strong> <code class="docutils literal notranslate"><span class="pre">200</span> <span class="pre">OK</span></code></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;access_token&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...&quot;</span><span class="p">,</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;refresh_token&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...&quot;</span><span class="p">,</span>
+</span><span data-line="4"><span class="w">  </span><span class="nt">&quot;token_type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bearer&quot;</span><span class="p">,</span>
+</span><span data-line="5"><span class="w">  </span><span class="nt">&quot;expires_in&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">604800</span>
+</span><span data-line="6"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>Error Responses:</strong></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1">// 403 - Invalid credentials</span>
+</span><span data-line="2"><span class="p">{</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Invalid credentials&quot;</span><span class="p">,</span>
+</span><span data-line="4"><span class="w">  </span><span class="nt">&quot;status_code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">403</span>
+</span><span data-line="5"><span class="p">}</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1">// 403 - OAuth account</span>
+</span><span data-line="8"><span class="p">{</span>
+</span><span data-line="9"><span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;This account uses github login&quot;</span><span class="p">,</span>
+</span><span data-line="10"><span class="w">  </span><span class="nt">&quot;status_code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">403</span>
+</span><span data-line="11"><span class="p">}</span>
+</span><span data-line="12">
+</span><span data-line="13"><span class="c1">// 403 - Inactive account</span>
+</span><span data-line="14"><span class="p">{</span>
+</span><span data-line="15"><span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Account is inactive&quot;</span><span class="p">,</span>
+</span><span data-line="16"><span class="w">  </span><span class="nt">&quot;status_code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">403</span>
+</span><span data-line="17"><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+<section id="refresh-access-token">
+<h4>Refresh Access Token<a class="headerlink" href="#refresh-access-token" title="Link to this heading">¶</a></h4>
+<p>Exchange a refresh token for new access and refresh tokens.</p>
+<p><strong>Endpoint:</strong> <code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/api/auth/refresh</span></code></p>
+<p><strong>Request:</strong></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;refresh_token&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...&quot;</span>
+</span><span data-line="3"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>Response:</strong> <code class="docutils literal notranslate"><span class="pre">200</span> <span class="pre">OK</span></code></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;access_token&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...&quot;</span><span class="p">,</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;refresh_token&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...&quot;</span><span class="p">,</span>
+</span><span data-line="4"><span class="w">  </span><span class="nt">&quot;token_type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bearer&quot;</span><span class="p">,</span>
+</span><span data-line="5"><span class="w">  </span><span class="nt">&quot;expires_in&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">604800</span>
+</span><span data-line="6"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>Error Responses:</strong></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1">// 403 - Invalid token</span>
+</span><span data-line="2"><span class="p">{</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Invalid refresh token&quot;</span><span class="p">,</span>
+</span><span data-line="4"><span class="w">  </span><span class="nt">&quot;status_code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">403</span>
+</span><span data-line="5"><span class="p">}</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1">// 403 - User not found/inactive</span>
+</span><span data-line="8"><span class="p">{</span>
+</span><span data-line="9"><span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;User not found or inactive&quot;</span><span class="p">,</span>
+</span><span data-line="10"><span class="w">  </span><span class="nt">&quot;status_code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">403</span>
+</span><span data-line="11"><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+<section id="using-jwt-tokens">
+<h4>Using JWT Tokens<a class="headerlink" href="#using-jwt-tokens" title="Link to this heading">¶</a></h4>
+<p>Include the access token in the <code class="docutils literal notranslate"><span class="pre">Authorization</span></code> header:</p>
+<p><strong>Python Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">import</span><span class="w"> </span><span class="nn">httpx</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="n">access_token</span> <span class="o">=</span> <span class="s2">&quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...&quot;</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+</span><span data-line="6">    <span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">access_token</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span data-line="7"><span class="p">}</span>
+</span><span data-line="8">
+</span><span data-line="9"><span class="n">response</span> <span class="o">=</span> <span class="n">httpx</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+</span><span data-line="10">    <span class="s2">&quot;https://python.org/api/auth/me&quot;</span><span class="p">,</span>
+</span><span data-line="11">    <span class="n">headers</span><span class="o">=</span><span class="n">headers</span>
+</span><span data-line="12"><span class="p">)</span>
+</span><span data-line="13">
+</span><span data-line="14"><span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
+</span></pre></div>
+</div>
+<p><strong>cURL Example:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>https://python.org/api/auth/me<span class="w"> </span><span class="se">\</span>
+</span><span data-line="2"><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...&quot;</span>
+</span></pre></div>
+</div>
+<p><strong>JavaScript Example:</strong></p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kd">const</span><span class="w"> </span><span class="nx">accessToken</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...&quot;</span><span class="p">;</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="kd">const</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">fetch</span><span class="p">(</span><span class="s2">&quot;https://python.org/api/auth/me&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="4"><span class="w">  </span><span class="nx">method</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
+</span><span data-line="5"><span class="w">  </span><span class="nx">headers</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="6"><span class="w">    </span><span class="s2">&quot;Authorization&quot;</span><span class="o">:</span><span class="w"> </span><span class="sb">`Bearer </span><span class="si">${</span><span class="nx">accessToken</span><span class="si">}</span><span class="sb">`</span>
+</span><span data-line="7"><span class="w">  </span><span class="p">}</span>
+</span><span data-line="8"><span class="p">});</span>
+</span><span data-line="9">
+</span><span data-line="10"><span class="kd">const</span><span class="w"> </span><span class="nx">userData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">();</span>
+</span><span data-line="11"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">userData</span><span class="p">);</span>
+</span></pre></div>
+</div>
+</section>
+<section id="logout-jwt">
+<h4>Logout (JWT)<a class="headerlink" href="#logout-jwt" title="Link to this heading">¶</a></h4>
+<p>Invalidate tokens (client-side action).</p>
+<p><strong>Endpoint:</strong> <code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/api/auth/logout</span></code></p>
+<p><strong>Request Headers:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">Authorization</span><span class="p">:</span> <span class="n">Bearer</span> <span class="n">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9</span><span class="o">...</span>
+</span></pre></div>
+</div>
+<p><strong>Response:</strong> <code class="docutils literal notranslate"><span class="pre">200</span> <span class="pre">OK</span></code></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Successfully logged out&quot;</span>
+</span><span data-line="3"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>Important:</strong> JWT tokens are stateless. The server cannot invalidate them before expiration. Clients should:</p>
+<ol class="arabic simple">
+<li><p>Delete stored tokens immediately</p></li>
+<li><p>Stop using the tokens in requests</p></li>
+<li><p>Consider implementing a token blacklist if needed</p></li>
+</ol>
+</section>
+</section>
+<hr class="docutils" />
+<section id="session-based-authentication-for-web-apps">
+<h3>Session-Based Authentication (For Web Apps)<a class="headerlink" href="#session-based-authentication-for-web-apps" title="Link to this heading">¶</a></h3>
+<p>Session authentication uses HTTP-only cookies backed by Redis. Sessions are automatically refreshed on each request.</p>
+<section id="configuration">
+<h4>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">¶</a></h4>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Setting</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Session Cookie Name</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">session_id</span></code></p></td>
+<td><p>Cookie name for session ID</p></td>
+</tr>
+<tr class="row-odd"><td><p>Session Lifetime</p></td>
+<td><p>7 days (10,080 minutes)</p></td>
+<td><p>Automatic expiration time</p></td>
+</tr>
+<tr class="row-even"><td><p>Cookie Security</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">httponly=True</span></code>, <code class="docutils literal notranslate"><span class="pre">samesite=lax</span></code></p></td>
+<td><p>Security flags</p></td>
+</tr>
+<tr class="row-odd"><td><p>Cookie Secure Flag</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code> in production, <code class="docutils literal notranslate"><span class="pre">False</span></code> in debug</p></td>
+<td><p>HTTPS-only in production</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="login-with-session">
+<h4>Login with Session<a class="headerlink" href="#login-with-session" title="Link to this heading">¶</a></h4>
+<p>Create a session-based login.</p>
+<p><strong>Endpoint:</strong> <code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/api/auth/session/login</span></code></p>
+<p><strong>Request:</strong></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;username&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;pythonista&quot;</span><span class="p">,</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SecurePass123!&quot;</span>
+</span><span data-line="4"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>Response:</strong> <code class="docutils literal notranslate"><span class="pre">200</span> <span class="pre">OK</span></code></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Successfully logged in&quot;</span>
+</span><span data-line="3"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>Response Headers:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">Set</span><span class="o">-</span><span class="n">Cookie</span><span class="p">:</span> <span class="n">session_id</span><span class="o">=</span><span class="mi">8</span><span class="n">yH3kL9mP2vN5qR7wX4jZ6fT1cB0dG3s</span><span class="p">;</span>
+</span><span data-line="2">            <span class="n">Max</span><span class="o">-</span><span class="n">Age</span><span class="o">=</span><span class="mi">604800</span><span class="p">;</span>
+</span><span data-line="3">            <span class="n">Path</span><span class="o">=/</span><span class="p">;</span>
+</span><span data-line="4">            <span class="n">HttpOnly</span><span class="p">;</span>
+</span><span data-line="5">            <span class="n">SameSite</span><span class="o">=</span><span class="n">Lax</span>
+</span></pre></div>
+</div>
+<p><strong>Python Example (with httpx):</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">import</span><span class="w"> </span><span class="nn">httpx</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="n">client</span> <span class="o">=</span> <span class="n">httpx</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+</span><span data-line="6">    <span class="s2">&quot;https://python.org/api/auth/session/login&quot;</span><span class="p">,</span>
+</span><span data-line="7">    <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="8">        <span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;pythonista&quot;</span><span class="p">,</span>
+</span><span data-line="9">        <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;SecurePass123!&quot;</span>
+</span><span data-line="10">    <span class="p">}</span>
+</span><span data-line="11"><span class="p">)</span>
+</span><span data-line="12">
+</span><span data-line="13"><span class="n">session_cookie</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">cookies</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;session_id&quot;</span><span class="p">)</span>
+</span><span data-line="14">
+</span><span data-line="15"><span class="n">protected_response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;https://python.org/api/auth/me&quot;</span><span class="p">)</span>
+</span><span data-line="16"><span class="nb">print</span><span class="p">(</span><span class="n">protected_response</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
+</span></pre></div>
+</div>
+</section>
+<section id="using-session-cookies">
+<h4>Using Session Cookies<a class="headerlink" href="#using-session-cookies" title="Link to this heading">¶</a></h4>
+<p>Once logged in, the session cookie is automatically sent with subsequent requests.</p>
+<p><strong>Characteristics:</strong></p>
+<ul class="simple">
+<li><p>Automatically included by browsers</p></li>
+<li><p>Refreshed on each request (rolling expiration)</p></li>
+<li><p>Stored in Redis with user ID</p></li>
+<li><p>Secure and httpOnly flags prevent XSS</p></li>
+</ul>
+</section>
+<section id="logout-session">
+<h4>Logout (Session)<a class="headerlink" href="#logout-session" title="Link to this heading">¶</a></h4>
+<p>Destroy the session and clear the cookie.</p>
+<p><strong>Endpoint:</strong> <code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/api/auth/session/logout</span></code></p>
+<p><strong>Request:</strong> (Session cookie automatically sent)</p>
+<p><strong>Response:</strong> <code class="docutils literal notranslate"><span class="pre">200</span> <span class="pre">OK</span></code></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Successfully logged out&quot;</span>
+</span><span data-line="3"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>Response Headers:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">Set</span><span class="o">-</span><span class="n">Cookie</span><span class="p">:</span> <span class="n">session_id</span><span class="o">=</span><span class="p">;</span> <span class="n">Path</span><span class="o">=/</span><span class="p">;</span> <span class="n">Max</span><span class="o">-</span><span class="n">Age</span><span class="o">=</span><span class="mi">0</span>
+</span></pre></div>
+</div>
+<p><strong>Server Actions:</strong></p>
+<ol class="arabic simple">
+<li><p>Deletes session from Redis</p></li>
+<li><p>Clears the session cookie</p></li>
+<li><p>User must log in again</p></li>
+</ol>
+</section>
+</section>
+</section>
+<hr class="docutils" />
+<section id="oauth2-authentication">
+<h2>OAuth2 Authentication<a class="headerlink" href="#oauth2-authentication" title="Link to this heading">¶</a></h2>
+<p>Authenticate using GitHub or Google OAuth2 providers.</p>
+<section id="supported-providers">
+<h3>Supported Providers<a class="headerlink" href="#supported-providers" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Provider</p></th>
+<th class="head"><p>Scopes</p></th>
+<th class="head"><p>User Data Retrieved</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>GitHub</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">user:email</span></code></p></td>
+<td><p>Profile, primary email, verification status</p></td>
+</tr>
+<tr class="row-odd"><td><p>Google</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">openid</span> <span class="pre">email</span> <span class="pre">profile</span></code></p></td>
+<td><p>Profile, email, verification status</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="oauth2-flow">
+<h3>OAuth2 Flow<a class="headerlink" href="#oauth2-flow" title="Link to this heading">¶</a></h3>
+<section id="initiate-oauth-login">
+<h4>1. Initiate OAuth Login<a class="headerlink" href="#initiate-oauth-login" title="Link to this heading">¶</a></h4>
+<p>Redirect the user to the OAuth provider.</p>
+<p><strong>Endpoint:</strong> <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/api/auth/oauth/{provider}</span></code></p>
+<p><strong>Providers:</strong> <code class="docutils literal notranslate"><span class="pre">github</span></code> or <code class="docutils literal notranslate"><span class="pre">google</span></code></p>
+<p><strong>Example:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Redirect user to:</span>
+</span><span data-line="2">https://python.org/api/auth/oauth/github
+</span></pre></div>
+</div>
+<p><strong>Server Actions:</strong></p>
+<ol class="arabic simple">
+<li><p>Generates secure state token</p></li>
+<li><p>Stores state in session</p></li>
+<li><p>Redirects to provider’s authorization URL</p></li>
+</ol>
+<p><strong>GitHub Authorization URL:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">https://github.com/login/oauth/authorize?
+</span><span data-line="2">  client_id=your_client_id&amp;
+</span><span data-line="3">  redirect_uri=https://python.org/api/auth/oauth/github/callback&amp;
+</span><span data-line="4">  response_type=code&amp;
+</span><span data-line="5">  scope=user:email&amp;
+</span><span data-line="6">  state=8yH3kL9mP2vN5qR7wX4jZ6fT1cB0dG3s
+</span></pre></div>
+</div>
+<p><strong>Google Authorization URL:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">https://accounts.google.com/o/oauth2/v2/auth?
+</span><span data-line="2">  client_id=your_client_id&amp;
+</span><span data-line="3">  redirect_uri=https://python.org/api/auth/oauth/google/callback&amp;
+</span><span data-line="4">  response_type=code&amp;
+</span><span data-line="5">  scope=openid+email+profile&amp;
+</span><span data-line="6">  state=8yH3kL9mP2vN5qR7wX4jZ6fT1cB0dG3s
+</span></pre></div>
+</div>
+</section>
+<section id="oauth-callback">
+<h4>2. OAuth Callback<a class="headerlink" href="#oauth-callback" title="Link to this heading">¶</a></h4>
+<p>After user authorizes, the provider redirects back with an authorization code.</p>
+<p><strong>Endpoint:</strong> <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/api/auth/oauth/{provider}/callback?code=...&amp;state=...</span></code></p>
+<p><strong>Query Parameters:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">code</span></code>: Authorization code from provider</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">state</span></code>: State token for CSRF protection</p></li>
+</ul>
+<p><strong>Response:</strong> <code class="docutils literal notranslate"><span class="pre">200</span> <span class="pre">OK</span></code></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;access_token&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...&quot;</span><span class="p">,</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;refresh_token&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...&quot;</span><span class="p">,</span>
+</span><span data-line="4"><span class="w">  </span><span class="nt">&quot;token_type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bearer&quot;</span><span class="p">,</span>
+</span><span data-line="5"><span class="w">  </span><span class="nt">&quot;expires_in&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">604800</span>
+</span><span data-line="6"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>Server Actions:</strong></p>
+<ol class="arabic simple">
+<li><p>Validates state token (CSRF protection)</p></li>
+<li><p>Exchanges code for access token</p></li>
+<li><p>Retrieves user profile from provider</p></li>
+<li><p>Creates or updates user account:</p>
+<ul class="simple">
+<li><p>Existing user: Links OAuth provider to account</p></li>
+<li><p>New user: Creates account with OAuth details</p></li>
+<li><p>Username conflicts: Appends random suffix</p></li>
+</ul>
+</li>
+<li><p>Marks email as verified (if provider confirms)</p></li>
+<li><p>Returns JWT tokens for API access</p></li>
+</ol>
+<p><strong>Account Linking Logic:</strong></p>
+<ul class="simple">
+<li><p>If OAuth email matches existing account without OAuth: Link provider</p></li>
+<li><p>If OAuth email matches account with different provider: Error</p></li>
+<li><p>If new user: Create account with <code class="docutils literal notranslate"><span class="pre">oauth_provider</span></code> and <code class="docutils literal notranslate"><span class="pre">oauth_id</span></code></p></li>
+<li><p>Password field is <code class="docutils literal notranslate"><span class="pre">null</span></code> for OAuth-only accounts</p></li>
+</ul>
+<p><strong>Error Responses:</strong></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1">// 403 - Invalid state (CSRF)</span>
+</span><span data-line="2"><span class="p">{</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Invalid OAuth state&quot;</span><span class="p">,</span>
+</span><span data-line="4"><span class="w">  </span><span class="nt">&quot;status_code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">403</span>
+</span><span data-line="5"><span class="p">}</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1">// 403 - Email conflict</span>
+</span><span data-line="8"><span class="p">{</span>
+</span><span data-line="9"><span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Email already registered with google&quot;</span><span class="p">,</span>
+</span><span data-line="10"><span class="w">  </span><span class="nt">&quot;status_code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">403</span>
+</span><span data-line="11"><span class="p">}</span>
+</span><span data-line="12">
+</span><span data-line="13"><span class="c1">// 403 - Provider mismatch</span>
+</span><span data-line="14"><span class="p">{</span>
+</span><span data-line="15"><span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;OAuth provider mismatch&quot;</span><span class="p">,</span>
+</span><span data-line="16"><span class="w">  </span><span class="nt">&quot;status_code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">403</span>
+</span><span data-line="17"><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="complete-oauth-example-python">
+<h3>Complete OAuth Example (Python)<a class="headerlink" href="#complete-oauth-example-python" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">import</span><span class="w"> </span><span class="nn">httpx</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">urllib.parse</span><span class="w"> </span><span class="kn">import</span> <span class="n">urlparse</span><span class="p">,</span> <span class="n">parse_qs</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="k">def</span><span class="w"> </span><span class="nf">oauth_login</span><span class="p">(</span><span class="n">provider</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;github&quot;</span><span class="p">):</span>
+</span><span data-line="5">    <span class="n">client</span> <span class="o">=</span> <span class="n">httpx</span><span class="o">.</span><span class="n">Client</span><span class="p">(</span><span class="n">follow_redirects</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span><span data-line="6">
+</span><span data-line="7">    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+</span><span data-line="8">        <span class="sa">f</span><span class="s2">&quot;https://python.org/api/auth/oauth/</span><span class="si">{</span><span class="n">provider</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span data-line="9">    <span class="p">)</span>
+</span><span data-line="10">
+</span><span data-line="11">    <span class="n">auth_url</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s2">&quot;location&quot;</span><span class="p">]</span>
+</span><span data-line="12">    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Visit this URL to authorize: </span><span class="si">{</span><span class="n">auth_url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span data-line="13">
+</span><span data-line="14">    <span class="n">callback_url</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Paste the callback URL here: &quot;</span><span class="p">)</span>
+</span><span data-line="15">
+</span><span data-line="16">    <span class="n">parsed</span> <span class="o">=</span> <span class="n">urlparse</span><span class="p">(</span><span class="n">callback_url</span><span class="p">)</span>
+</span><span data-line="17">    <span class="n">params</span> <span class="o">=</span> <span class="n">parse_qs</span><span class="p">(</span><span class="n">parsed</span><span class="o">.</span><span class="n">query</span><span class="p">)</span>
+</span><span data-line="18">    <span class="n">code</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;code&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+</span><span data-line="19">    <span class="n">state</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;state&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+</span><span data-line="20">
+</span><span data-line="21">    <span class="n">callback_response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+</span><span data-line="22">        <span class="sa">f</span><span class="s2">&quot;https://python.org/api/auth/oauth/</span><span class="si">{</span><span class="n">provider</span><span class="si">}</span><span class="s2">/callback&quot;</span><span class="p">,</span>
+</span><span data-line="23">        <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;code&quot;</span><span class="p">:</span> <span class="n">code</span><span class="p">,</span> <span class="s2">&quot;state&quot;</span><span class="p">:</span> <span class="n">state</span><span class="p">}</span>
+</span><span data-line="24">    <span class="p">)</span>
+</span><span data-line="25">
+</span><span data-line="26">    <span class="n">tokens</span> <span class="o">=</span> <span class="n">callback_response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+</span><span data-line="27">    <span class="k">return</span> <span class="n">tokens</span><span class="p">[</span><span class="s2">&quot;access_token&quot;</span><span class="p">]</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="protected-endpoints">
+<h2>Protected Endpoints<a class="headerlink" href="#protected-endpoints" title="Link to this heading">¶</a></h2>
+<section id="get-current-user">
+<h3>Get Current User<a class="headerlink" href="#get-current-user" title="Link to this heading">¶</a></h3>
+<p>Retrieve authenticated user information.</p>
+<p><strong>Endpoint:</strong> <code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/api/auth/me</span></code></p>
+<p><strong>Request Headers:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">Authorization</span><span class="p">:</span> <span class="n">Bearer</span> <span class="n">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9</span><span class="o">...</span>
+</span></pre></div>
+</div>
+<p><strong>Response:</strong> <code class="docutils literal notranslate"><span class="pre">200</span> <span class="pre">OK</span></code></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;550e8400-e29b-41d4-a716-446655440000&quot;</span><span class="p">,</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;username&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;pythonista&quot;</span><span class="p">,</span>
+</span><span data-line="4"><span class="w">  </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;pythonista@example.com&quot;</span><span class="p">,</span>
+</span><span data-line="5"><span class="w">  </span><span class="nt">&quot;first_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Guido&quot;</span><span class="p">,</span>
+</span><span data-line="6"><span class="w">  </span><span class="nt">&quot;last_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;van Rossum&quot;</span><span class="p">,</span>
+</span><span data-line="7"><span class="w">  </span><span class="nt">&quot;is_active&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span data-line="8"><span class="w">  </span><span class="nt">&quot;is_staff&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+</span><span data-line="9"><span class="w">  </span><span class="nt">&quot;is_superuser&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+</span><span data-line="10"><span class="w">  </span><span class="nt">&quot;email_verified&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span data-line="11"><span class="w">  </span><span class="nt">&quot;date_joined&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-01-01T00:00:00Z&quot;</span><span class="p">,</span>
+</span><span data-line="12"><span class="w">  </span><span class="nt">&quot;last_login&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-01-15T10:30:00Z&quot;</span><span class="p">,</span>
+</span><span data-line="13"><span class="w">  </span><span class="nt">&quot;has_membership&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span data-line="14"><span class="w">  </span><span class="nt">&quot;oauth_provider&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+</span><span data-line="15"><span class="w">  </span><span class="nt">&quot;oauth_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span>
+</span><span data-line="16"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>Error Response:</strong></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1">// 401 - Not authenticated</span>
+</span><span data-line="2"><span class="p">{</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Authentication required&quot;</span><span class="p">,</span>
+</span><span data-line="4"><span class="w">  </span><span class="nt">&quot;status_code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">401</span>
+</span><span data-line="5"><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="authorization-guards">
+<h2>Authorization Guards<a class="headerlink" href="#authorization-guards" title="Link to this heading">¶</a></h2>
+<p>The API uses role-based guards to control access to specific endpoints.</p>
+<section id="access-levels">
+<h3>Access Levels<a class="headerlink" href="#access-levels" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Guard</p></th>
+<th class="head"><p>Required Permissions</p></th>
+<th class="head"><p>Use Cases</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">require_authenticated</span></code></p></td>
+<td><p>Any authenticated user</p></td>
+<td><p>View profile, submit content</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">require_staff</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">is_staff=True</span></code></p></td>
+<td><p>Moderate content, manage users</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">require_admin</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">is_superuser=True</span></code></p></td>
+<td><p>Full system access, dangerous operations</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">require_membership</span></code></p></td>
+<td><p>Active PSF membership</p></td>
+<td><p>Member-only features, voting</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">require_higher_membership</span></code></p></td>
+<td><p>PSF membership (non-BASIC)</p></td>
+<td><p>Advanced member features</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="guard-hierarchy">
+<h3>Guard Hierarchy<a class="headerlink" href="#guard-hierarchy" title="Link to this heading">¶</a></h3>
+<p>Guards build on each other:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">require_staff</span></code> includes <code class="docutils literal notranslate"><span class="pre">require_authenticated</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">require_admin</span></code> includes <code class="docutils literal notranslate"><span class="pre">require_authenticated</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">require_higher_membership</span></code> includes <code class="docutils literal notranslate"><span class="pre">require_membership</span></code> includes <code class="docutils literal notranslate"><span class="pre">require_authenticated</span></code></p></li>
+</ul>
+</section>
+<section id="permission-errors">
+<h3>Permission Errors<a class="headerlink" href="#permission-errors" title="Link to this heading">¶</a></h3>
+<p><strong>401 Unauthorized:</strong></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Authentication required&quot;</span><span class="p">,</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;status_code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">401</span>
+</span><span data-line="4"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>403 Forbidden (Staff Required):</strong></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Staff privileges required&quot;</span><span class="p">,</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;status_code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">403</span>
+</span><span data-line="4"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>403 Forbidden (Admin Required):</strong></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Administrator privileges required&quot;</span><span class="p">,</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;status_code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">403</span>
+</span><span data-line="4"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>403 Forbidden (Membership Required):</strong></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;PSF membership required&quot;</span><span class="p">,</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;status_code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">403</span>
+</span><span data-line="4"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>403 Forbidden (Higher Membership Required):</strong></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Higher level PSF membership required&quot;</span><span class="p">,</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;status_code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">403</span>
+</span><span data-line="4"><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+<section id="checking-permissions">
+<h3>Checking Permissions<a class="headerlink" href="#checking-permissions" title="Link to this heading">¶</a></h3>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">/api/auth/me</span></code> endpoint to check your current permissions:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">import</span><span class="w"> </span><span class="nn">httpx</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="n">response</span> <span class="o">=</span> <span class="n">httpx</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+</span><span data-line="4">    <span class="s2">&quot;https://python.org/api/auth/me&quot;</span><span class="p">,</span>
+</span><span data-line="5">    <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">access_token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">}</span>
+</span><span data-line="6"><span class="p">)</span>
+</span><span data-line="7">
+</span><span data-line="8"><span class="n">user</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+</span><span data-line="9">
+</span><span data-line="10"><span class="k">if</span> <span class="n">user</span><span class="p">[</span><span class="s2">&quot;is_staff&quot;</span><span class="p">]:</span>
+</span><span data-line="11">    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;You have staff access&quot;</span><span class="p">)</span>
+</span><span data-line="12"><span class="k">if</span> <span class="n">user</span><span class="p">[</span><span class="s2">&quot;is_superuser&quot;</span><span class="p">]:</span>
+</span><span data-line="13">    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;You have admin access&quot;</span><span class="p">)</span>
+</span><span data-line="14"><span class="k">if</span> <span class="n">user</span><span class="p">[</span><span class="s2">&quot;has_membership&quot;</span><span class="p">]:</span>
+</span><span data-line="15">    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;You have PSF membership&quot;</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="email-verification">
+<h2>Email Verification<a class="headerlink" href="#email-verification" title="Link to this heading">¶</a></h2>
+<p>Email verification is optional for API usage but recommended for security.</p>
+<section id="send-verification-email">
+<h3>Send Verification Email<a class="headerlink" href="#send-verification-email" title="Link to this heading">¶</a></h3>
+<p>Request a new verification email.</p>
+<p><strong>Endpoint:</strong> <code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/api/auth/send-verification</span></code></p>
+<p><strong>Request:</strong></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;pythonista@example.com&quot;</span>
+</span><span data-line="3"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>Response:</strong> <code class="docutils literal notranslate"><span class="pre">200</span> <span class="pre">OK</span></code></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Verification email sent&quot;</span>
+</span><span data-line="3"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>Notes:</strong></p>
+<ul class="simple">
+<li><p>If email is already verified: Returns success message</p></li>
+<li><p>If user not found: Returns 404</p></li>
+<li><p>Verification link expires in 24 hours</p></li>
+</ul>
+</section>
+<section id="verify-email">
+<h3>Verify Email<a class="headerlink" href="#verify-email" title="Link to this heading">¶</a></h3>
+<p>Verify email address using token from email.</p>
+<p><strong>Endpoint:</strong> <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/api/auth/verify-email/{token}</span></code></p>
+<p><strong>Example:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">GET</span> <span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">auth</span><span class="o">/</span><span class="n">verify</span><span class="o">-</span><span class="n">email</span><span class="o">/</span><span class="n">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9</span><span class="o">...</span>
+</span></pre></div>
+</div>
+<p><strong>Response:</strong> <code class="docutils literal notranslate"><span class="pre">200</span> <span class="pre">OK</span></code></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Email verified successfully&quot;</span>
+</span><span data-line="3"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>Error Responses:</strong></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1">// 403 - Invalid/expired token</span>
+</span><span data-line="2"><span class="p">{</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Invalid or expired verification token&quot;</span><span class="p">,</span>
+</span><span data-line="4"><span class="w">  </span><span class="nt">&quot;status_code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">403</span>
+</span><span data-line="5"><span class="p">}</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1">// 404 - User not found</span>
+</span><span data-line="8"><span class="p">{</span>
+</span><span data-line="9"><span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;User not found&quot;</span><span class="p">,</span>
+</span><span data-line="10"><span class="w">  </span><span class="nt">&quot;status_code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">404</span>
+</span><span data-line="11"><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+<section id="resend-verification-authenticated">
+<h3>Resend Verification (Authenticated)<a class="headerlink" href="#resend-verification-authenticated" title="Link to this heading">¶</a></h3>
+<p>Resend verification email for current user.</p>
+<p><strong>Endpoint:</strong> <code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/api/auth/resend-verification</span></code></p>
+<p><strong>Request Headers:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">Authorization</span><span class="p">:</span> <span class="n">Bearer</span> <span class="n">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9</span><span class="o">...</span>
+</span></pre></div>
+</div>
+<p><strong>Response:</strong> <code class="docutils literal notranslate"><span class="pre">200</span> <span class="pre">OK</span></code></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Verification email sent&quot;</span>
+</span><span data-line="3"><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="password-management">
+<h2>Password Management<a class="headerlink" href="#password-management" title="Link to this heading">¶</a></h2>
+<section id="forgot-password">
+<h3>Forgot Password<a class="headerlink" href="#forgot-password" title="Link to this heading">¶</a></h3>
+<p>Request a password reset link.</p>
+<p><strong>Endpoint:</strong> <code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/api/auth/forgot-password</span></code></p>
+<p><strong>Request:</strong></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;pythonista@example.com&quot;</span>
+</span><span data-line="3"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>Response:</strong> <code class="docutils literal notranslate"><span class="pre">200</span> <span class="pre">OK</span></code></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;If an account exists with this email, you will receive a password reset link&quot;</span>
+</span><span data-line="3"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>Notes:</strong></p>
+<ul class="simple">
+<li><p>Always returns same message (prevents email enumeration)</p></li>
+<li><p>OAuth accounts do not receive reset emails</p></li>
+<li><p>Reset link expires in 1 hour</p></li>
+</ul>
+</section>
+<section id="reset-password">
+<h3>Reset Password<a class="headerlink" href="#reset-password" title="Link to this heading">¶</a></h3>
+<p>Set a new password using reset token.</p>
+<p><strong>Endpoint:</strong> <code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/api/auth/reset-password</span></code></p>
+<p><strong>Request:</strong></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;token&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...&quot;</span><span class="p">,</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;new_password&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;NewSecurePass456!&quot;</span>
+</span><span data-line="4"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>Response:</strong> <code class="docutils literal notranslate"><span class="pre">200</span> <span class="pre">OK</span></code></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Password reset successfully&quot;</span>
+</span><span data-line="3"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>Error Responses:</strong></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1">// 403 - Invalid token</span>
+</span><span data-line="2"><span class="p">{</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Invalid or expired reset token&quot;</span><span class="p">,</span>
+</span><span data-line="4"><span class="w">  </span><span class="nt">&quot;status_code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">403</span>
+</span><span data-line="5"><span class="p">}</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1">// 403 - OAuth account</span>
+</span><span data-line="8"><span class="p">{</span>
+</span><span data-line="9"><span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;This account uses github login. Password cannot be reset.&quot;</span><span class="p">,</span>
+</span><span data-line="10"><span class="w">  </span><span class="nt">&quot;status_code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">403</span>
+</span><span data-line="11"><span class="p">}</span>
+</span><span data-line="12">
+</span><span data-line="13"><span class="c1">// 403 - Weak password</span>
+</span><span data-line="14"><span class="p">{</span>
+</span><span data-line="15"><span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Password does not meet requirements&quot;</span><span class="p">,</span>
+</span><span data-line="16"><span class="w">  </span><span class="nt">&quot;status_code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">403</span>
+</span><span data-line="17"><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="error-handling">
+<h2>Error Handling<a class="headerlink" href="#error-handling" title="Link to this heading">¶</a></h2>
+<section id="common-status-codes">
+<h3>Common Status Codes<a class="headerlink" href="#common-status-codes" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Code</p></th>
+<th class="head"><p>Meaning</p></th>
+<th class="head"><p>When It Occurs</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>200</p></td>
+<td><p>OK</p></td>
+<td><p>Successful request</p></td>
+</tr>
+<tr class="row-odd"><td><p>401</p></td>
+<td><p>Unauthorized</p></td>
+<td><p>Missing or invalid authentication</p></td>
+</tr>
+<tr class="row-even"><td><p>403</p></td>
+<td><p>Forbidden</p></td>
+<td><p>Authenticated but lacking permissions</p></td>
+</tr>
+<tr class="row-odd"><td><p>404</p></td>
+<td><p>Not Found</p></td>
+<td><p>Resource doesn’t exist</p></td>
+</tr>
+<tr class="row-even"><td><p>422</p></td>
+<td><p>Unprocessable Entity</p></td>
+<td><p>Validation error in request data</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="error-response-format">
+<h3>Error Response Format<a class="headerlink" href="#error-response-format" title="Link to this heading">¶</a></h3>
+<p>All errors follow this structure:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Human-readable error message&quot;</span><span class="p">,</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;status_code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">403</span><span class="p">,</span>
+</span><span data-line="4"><span class="w">  </span><span class="nt">&quot;extra&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span>
+</span><span data-line="5"><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+<section id="token-expiration">
+<h3>Token Expiration<a class="headerlink" href="#token-expiration" title="Link to this heading">¶</a></h3>
+<p>When an access token expires:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Invalid token&quot;</span><span class="p">,</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;status_code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">403</span>
+</span><span data-line="4"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>Solution:</strong> Use your refresh token to get a new access token via <code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/api/auth/refresh</span></code>.</p>
+</section>
+<section id="handling-expired-refresh-tokens">
+<h3>Handling Expired Refresh Tokens<a class="headerlink" href="#handling-expired-refresh-tokens" title="Link to this heading">¶</a></h3>
+<p>If your refresh token expires, you must log in again:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">import</span><span class="w"> </span><span class="nn">httpx</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="k">def</span><span class="w"> </span><span class="nf">get_with_auto_refresh</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">access_token</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">refresh_token</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span><span data-line="4">    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">access_token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">}</span>
+</span><span data-line="5">    <span class="n">response</span> <span class="o">=</span> <span class="n">httpx</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+</span><span data-line="6">
+</span><span data-line="7">    <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">403</span><span class="p">:</span>
+</span><span data-line="8">        <span class="n">refresh_response</span> <span class="o">=</span> <span class="n">httpx</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+</span><span data-line="9">            <span class="s2">&quot;https://python.org/api/auth/refresh&quot;</span><span class="p">,</span>
+</span><span data-line="10">            <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;refresh_token&quot;</span><span class="p">:</span> <span class="n">refresh_token</span><span class="p">}</span>
+</span><span data-line="11">        <span class="p">)</span>
+</span><span data-line="12">
+</span><span data-line="13">        <span class="k">if</span> <span class="n">refresh_response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+</span><span data-line="14">            <span class="n">new_tokens</span> <span class="o">=</span> <span class="n">refresh_response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+</span><span data-line="15">            <span class="n">headers</span><span class="p">[</span><span class="s2">&quot;Authorization&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">new_tokens</span><span class="p">[</span><span class="s1">&#39;access_token&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span data-line="16">            <span class="n">response</span> <span class="o">=</span> <span class="n">httpx</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+</span><span data-line="17">        <span class="k">else</span><span class="p">:</span>
+</span><span data-line="18">            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Please log in again&quot;</span><span class="p">)</span>
+</span><span data-line="19">
+</span><span data-line="20">    <span class="k">return</span> <span class="n">response</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading">¶</a></h2>
+<section id="security">
+<h3>Security<a class="headerlink" href="#security" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Never commit tokens</strong> - Store in environment variables or secure vaults</p></li>
+<li><p><strong>Use HTTPS</strong> - All production traffic must use HTTPS</p></li>
+<li><p><strong>Rotate tokens</strong> - Refresh access tokens regularly</p></li>
+<li><p><strong>Validate on client</strong> - Check token expiration before requests</p></li>
+<li><p><strong>Secure storage</strong> - Use httpOnly cookies for web apps, secure storage for mobile</p></li>
+</ol>
+</section>
+<section id="token-management">
+<h3>Token Management<a class="headerlink" href="#token-management" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="k">class</span><span class="w"> </span><span class="nc">TokenManager</span><span class="p">:</span>
+</span><span data-line="5">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span data-line="6">        <span class="bp">self</span><span class="o">.</span><span class="n">access_token</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="7">        <span class="bp">self</span><span class="o">.</span><span class="n">refresh_token</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="8">        <span class="bp">self</span><span class="o">.</span><span class="n">expires_at</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="9">
+</span><span data-line="10">    <span class="k">def</span><span class="w"> </span><span class="nf">set_tokens</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token_response</span><span class="p">):</span>
+</span><span data-line="11">        <span class="bp">self</span><span class="o">.</span><span class="n">access_token</span> <span class="o">=</span> <span class="n">token_response</span><span class="p">[</span><span class="s2">&quot;access_token&quot;</span><span class="p">]</span>
+</span><span data-line="12">        <span class="bp">self</span><span class="o">.</span><span class="n">refresh_token</span> <span class="o">=</span> <span class="n">token_response</span><span class="p">[</span><span class="s2">&quot;refresh_token&quot;</span><span class="p">]</span>
+</span><span data-line="13">        <span class="bp">self</span><span class="o">.</span><span class="n">expires_at</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span>
+</span><span data-line="14">            <span class="n">seconds</span><span class="o">=</span><span class="n">token_response</span><span class="p">[</span><span class="s2">&quot;expires_in&quot;</span><span class="p">]</span>
+</span><span data-line="15">        <span class="p">)</span>
+</span><span data-line="16">
+</span><span data-line="17">    <span class="k">def</span><span class="w"> </span><span class="nf">is_expired</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span data-line="18">        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">expires_at</span><span class="p">:</span>
+</span><span data-line="19">            <span class="k">return</span> <span class="kc">True</span>
+</span><span data-line="20">        <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">expires_at</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</span><span data-line="21">
+</span><span data-line="22">    <span class="k">def</span><span class="w"> </span><span class="nf">get_access_token</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span data-line="23">        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_expired</span><span class="p">():</span>
+</span><span data-line="24">            <span class="bp">self</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
+</span><span data-line="25">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">access_token</span>
+</span><span data-line="26">
+</span><span data-line="27">    <span class="k">def</span><span class="w"> </span><span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span data-line="28">        <span class="kn">import</span><span class="w"> </span><span class="nn">httpx</span>
+</span><span data-line="29">        <span class="n">response</span> <span class="o">=</span> <span class="n">httpx</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+</span><span data-line="30">            <span class="s2">&quot;https://python.org/api/auth/refresh&quot;</span><span class="p">,</span>
+</span><span data-line="31">            <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;refresh_token&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">refresh_token</span><span class="p">}</span>
+</span><span data-line="32">        <span class="p">)</span>
+</span><span data-line="33">        <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+</span><span data-line="34">        <span class="bp">self</span><span class="o">.</span><span class="n">set_tokens</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
+</span></pre></div>
+</div>
+</section>
+<section id="rate-limiting">
+<h3>Rate Limiting<a class="headerlink" href="#rate-limiting" title="Link to this heading">¶</a></h3>
+<p>Be mindful of rate limits (details vary by endpoint). Best practices:</p>
+<ul class="simple">
+<li><p>Cache responses when possible</p></li>
+<li><p>Implement exponential backoff on failures</p></li>
+<li><p>Batch requests when available</p></li>
+<li><p>Respect <code class="docutils literal notranslate"><span class="pre">Retry-After</span></code> headers</p></li>
+</ul>
+</section>
+<section id="testing-authentication">
+<h3>Testing Authentication<a class="headerlink" href="#testing-authentication" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+</span><span data-line="2"><span class="kn">import</span><span class="w"> </span><span class="nn">httpx</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+</span><span data-line="5"><span class="k">def</span><span class="w"> </span><span class="nf">authenticated_client</span><span class="p">():</span>
+</span><span data-line="6">    <span class="n">client</span> <span class="o">=</span> <span class="n">httpx</span><span class="o">.</span><span class="n">Client</span><span class="p">(</span><span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://python.org&quot;</span><span class="p">)</span>
+</span><span data-line="7">
+</span><span data-line="8">    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/auth/login&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="9">        <span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;test_user&quot;</span><span class="p">,</span>
+</span><span data-line="10">        <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;test_password&quot;</span>
+</span><span data-line="11">    <span class="p">})</span>
+</span><span data-line="12">
+</span><span data-line="13">    <span class="n">tokens</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+</span><span data-line="14">    <span class="n">client</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s2">&quot;Authorization&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">tokens</span><span class="p">[</span><span class="s1">&#39;access_token&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span data-line="15">
+</span><span data-line="16">    <span class="k">yield</span> <span class="n">client</span>
+</span><span data-line="17">
+</span><span data-line="18">    <span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/auth/logout&quot;</span><span class="p">)</span>
+</span><span data-line="19">
+</span><span data-line="20">
+</span><span data-line="21"><span class="k">def</span><span class="w"> </span><span class="nf">test_protected_endpoint</span><span class="p">(</span><span class="n">authenticated_client</span><span class="p">):</span>
+</span><span data-line="22">    <span class="n">response</span> <span class="o">=</span> <span class="n">authenticated_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/auth/me&quot;</span><span class="p">)</span>
+</span><span data-line="23">    <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
+</span><span data-line="24">    <span class="k">assert</span> <span class="s2">&quot;username&quot;</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="migration-guide">
+<h2>Migration Guide<a class="headerlink" href="#migration-guide" title="Link to this heading">¶</a></h2>
+<section id="from-session-to-jwt">
+<h3>From Session to JWT<a class="headerlink" href="#from-session-to-jwt" title="Link to this heading">¶</a></h3>
+<p>If you’re switching from session-based to JWT authentication:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">import</span><span class="w"> </span><span class="nn">httpx</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="n">client</span> <span class="o">=</span> <span class="n">httpx</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;https://python.org/api/auth/session/login&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="6">    <span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;pythonista&quot;</span><span class="p">,</span>
+</span><span data-line="7">    <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;SecurePass123!&quot;</span>
+</span><span data-line="8"><span class="p">})</span>
+</span><span data-line="9">
+</span><span data-line="10"><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;https://python.org/api/auth/login&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="11">    <span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;pythonista&quot;</span><span class="p">,</span>
+</span><span data-line="12">    <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;SecurePass123!&quot;</span>
+</span><span data-line="13"><span class="p">})</span>
+</span><span data-line="14">
+</span><span data-line="15"><span class="n">tokens</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+</span><span data-line="16"><span class="n">access_token</span> <span class="o">=</span> <span class="n">tokens</span><span class="p">[</span><span class="s2">&quot;access_token&quot;</span><span class="p">]</span>
+</span><span data-line="17">
+</span><span data-line="18"><span class="n">client</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s2">&quot;Authorization&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">access_token</span><span class="si">}</span><span class="s2">&quot;</span>
+</span></pre></div>
+</div>
+</section>
+<section id="from-oauth-to-standard-login">
+<h3>From OAuth to Standard Login<a class="headerlink" href="#from-oauth-to-standard-login" title="Link to this heading">¶</a></h3>
+<p>OAuth accounts without passwords cannot use standard login. Users must:</p>
+<ol class="arabic simple">
+<li><p>Continue using OAuth, or</p></li>
+<li><p>Request password reset (which will fail for OAuth accounts)</p></li>
+</ol>
+<p>OAuth accounts are identified by:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">oauth_provider</span></code> is not null (<code class="docutils literal notranslate"><span class="pre">&quot;github&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;google&quot;</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">password_hash</span></code> is null</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="quick-reference">
+<h2>Quick Reference<a class="headerlink" href="#quick-reference" title="Link to this heading">¶</a></h2>
+<section id="endpoints-summary">
+<h3>Endpoints Summary<a class="headerlink" href="#endpoints-summary" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>Endpoint</p></th>
+<th class="head"><p>Auth Required</p></th>
+<th class="head"><p>Purpose</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>POST</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/api/auth/register</span></code></p></td>
+<td><p>No</p></td>
+<td><p>Create account</p></td>
+</tr>
+<tr class="row-odd"><td><p>POST</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/api/auth/login</span></code></p></td>
+<td><p>No</p></td>
+<td><p>JWT login</p></td>
+</tr>
+<tr class="row-even"><td><p>POST</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/api/auth/refresh</span></code></p></td>
+<td><p>No</p></td>
+<td><p>Refresh JWT</p></td>
+</tr>
+<tr class="row-odd"><td><p>POST</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/api/auth/logout</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>Logout (JWT)</p></td>
+</tr>
+<tr class="row-even"><td><p>POST</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/api/auth/session/login</span></code></p></td>
+<td><p>No</p></td>
+<td><p>Session login</p></td>
+</tr>
+<tr class="row-odd"><td><p>POST</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/api/auth/session/logout</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>Session logout</p></td>
+</tr>
+<tr class="row-even"><td><p>POST</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/api/auth/me</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>Get user info</p></td>
+</tr>
+<tr class="row-odd"><td><p>GET</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/api/auth/oauth/{provider}</span></code></p></td>
+<td><p>No</p></td>
+<td><p>Start OAuth</p></td>
+</tr>
+<tr class="row-even"><td><p>GET</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/api/auth/oauth/{provider}/callback</span></code></p></td>
+<td><p>No</p></td>
+<td><p>OAuth callback</p></td>
+</tr>
+<tr class="row-odd"><td><p>POST</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/api/auth/send-verification</span></code></p></td>
+<td><p>No</p></td>
+<td><p>Send verification</p></td>
+</tr>
+<tr class="row-even"><td><p>GET</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/api/auth/verify-email/{token}</span></code></p></td>
+<td><p>No</p></td>
+<td><p>Verify email</p></td>
+</tr>
+<tr class="row-odd"><td><p>POST</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/api/auth/resend-verification</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>Resend verification</p></td>
+</tr>
+<tr class="row-even"><td><p>POST</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/api/auth/forgot-password</span></code></p></td>
+<td><p>No</p></td>
+<td><p>Request reset</p></td>
+</tr>
+<tr class="row-odd"><td><p>POST</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/api/auth/reset-password</span></code></p></td>
+<td><p>No</p></td>
+<td><p>Reset password</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="token-lifetimes-quick-reference">
+<h3>Token Lifetimes Quick Reference<a class="headerlink" href="#token-lifetimes-quick-reference" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Token Type</p></th>
+<th class="head"><p>Lifetime</p></th>
+<th class="head"><p>Renewable</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Access Token</p></td>
+<td><p>7 days</p></td>
+<td><p>Yes (via refresh)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Refresh Token</p></td>
+<td><p>30 days</p></td>
+<td><p>Yes (new token on refresh)</p></td>
+</tr>
+<tr class="row-even"><td><p>Session</p></td>
+<td><p>7 days</p></td>
+<td><p>Yes (auto on each request)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Verification Token</p></td>
+<td><p>24 hours</p></td>
+<td><p>Yes (request new)</p></td>
+</tr>
+<tr class="row-even"><td><p>Reset Token</p></td>
+<td><p>1 hour</p></td>
+<td><p>Yes (request new)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="headers-quick-reference">
+<h3>Headers Quick Reference<a class="headerlink" href="#headers-quick-reference" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># JWT Authentication</span>
+</span><span data-line="2">Authorization:<span class="w"> </span>Bearer<span class="w"> </span>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Session Authentication (automatic via cookie)</span>
+</span><span data-line="5">Cookie:<span class="w"> </span><span class="nv">session_id</span><span class="o">=</span>8yH3kL9mP2vN5qR7wX4jZ6fT1cB0dG3s
+</span></pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="support">
+<h2>Support<a class="headerlink" href="#support" title="Link to this heading">¶</a></h2>
+<p>For issues or questions:</p>
+<ul class="simple">
+<li><p>GitHub Issues: <a class="reference external" href="https://github.com/python/pythondotorg/issues">https://github.com/python/pythondotorg/issues</a></p></li>
+<li><p>Security Issues: <a class="reference external" href="mailto:security&#37;&#52;&#48;python&#46;org">security<span>&#64;</span>python<span>&#46;</span>org</a></p></li>
+<li><p>General Questions: <a class="reference external" href="https://discuss.python.org/">https://discuss.python.org/</a></p></li>
+</ul>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="architecture/RATE_LIMITING_ARCHITECTURE.html"><span class="std std-doc">Rate Limiting Architecture</span></a></p></li>
+<li><p><a class="reference internal" href="architecture/API_TAGS_STRUCTURE.html"><span class="std std-doc">API Tags Structure</span></a></p></li>
+</ul>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Jacob Coffee</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+<a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+  <iconify-icon icon="simple-icons:github"></iconify-icon>
+</a></div>
+    </div>
+  </div>
+</footer>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=30646c52"></script>
+      <script src="_static/design-tabs.js?v=f930bc37"></script>
+      <script src="_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="blue" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Architecture Documentation - litestar-pydotorg</title><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=14737038" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=513f0650" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="Architecture Documentation"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../index.html">
+      
+      
+      <strong>litestar-pydotorg</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"><ul><li class="link">
+          <a href="https://litestar.dev/">
+            <span>Litestar</span></a>
+        </li><li class="link">
+          <a href="https://python.org/">
+            <span>Python.org</span></a>
+        </li></ul></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials">
+  <a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started/index.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/quickstart.html">Quickstart</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/index.html">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/development.html">Development Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/contributing.html">Contribution Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/testing.html">Testing Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/debugging.html">Debugging Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/api-usage.html">API Usage Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/authentication.html">Authentication Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/feature-flags.html">Feature Flags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/configuration.html">Configuration Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/deployment.html">Deployment Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/docker.html">Docker Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/troubleshooting.html">Troubleshooting Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/index.html">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/domain-patterns.html">Domain Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/authentication-recipes.html">Authentication Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/database-recipes.html">Database Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/testing-recipes.html">Testing Recipes</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/core/index.html">Core Infrastructure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/auth.html">Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/cache.html">Caching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/database.html">Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/email.html">Email</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/exceptions.html">Exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/features.html">Feature Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/feeds.html">RSS/Atom Feeds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/ical.html">iCalendar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/middleware.html">Middleware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/openapi.html">OpenAPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/ratelimit.html">Rate Limiting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/security.html">Security</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/worker.html">Background Worker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/domains/index.html">Domain Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/about.html">About</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/admin.html">Admin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/banners.html">banners</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/blogs.html">blogs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/codesamples.html">Code Samples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/community.html">community</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/docs.html">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/downloads.html">downloads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/events.html">events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/jobs.html">jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/mailing.html">Mailing Lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/minutes.html">Minutes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/nominations.html">Nominations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/pages.html">pages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/sponsors.html">sponsors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/sqladmin.html">SQLAdmin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/successstories.html">Success Stories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/users.html">users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/work_groups.html">Work Groups</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/lib.html">Library Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/tasks.html">Background Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/config.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/main.html">Application Entry Point</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ARCHITECTURE.html">Litestar Python.org Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DATABASE_SCHEMA.html">Database Schema Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DOMAIN_MODELS.html">Domain Models Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="QUICK_START.html">Litestar Python.org Quick Start Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="API_TAGS_INDEX.html">API Tags Documentation Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RATE_LIMITING_ARCHITECTURE.html">Rate Limiting Architecture Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adr/001-litestar-framework.html">ADR-001: Use Litestar as Web Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adr/002-saq-background-tasks.html">ADR-002: Use SAQ for Background Task Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#quick-links">Quick Links</a></li>
+<li><a class="reference internal" href="#document-index">Document Index</a><ul>
+<li><a class="reference internal" href="#core-architecture">Core Architecture</a></li>
+<li><a class="reference internal" href="#architecture-decision-records-adrs">Architecture Decision Records (ADRs)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#architecture-at-a-glance">Architecture at a Glance</a><ul>
+<li><a class="reference internal" href="#technology-stack">Technology Stack</a></li>
+<li><a class="reference internal" href="#domain-organization">Domain Organization</a></li>
+<li><a class="reference internal" href="#key-design-principles">Key Design Principles</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#migration-strategy">Migration Strategy</a><ul>
+<li><a class="reference internal" href="#phased-approach">Phased Approach</a></li>
+<li><a class="reference internal" href="#success-criteria">Success Criteria</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#key-architectural-patterns">Key Architectural Patterns</a><ul>
+<li><a class="reference internal" href="#domain-module-pattern">1. Domain Module Pattern</a></li>
+<li><a class="reference internal" href="#service-layer-pattern">2. Service Layer Pattern</a></li>
+<li><a class="reference internal" href="#repository-pattern-when-needed">3. Repository Pattern (When Needed)</a></li>
+<li><a class="reference internal" href="#dto-pattern">4. DTO Pattern</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#development-guidelines">Development Guidelines</a><ul>
+<li><a class="reference internal" href="#code-organization">Code Organization</a></li>
+<li><a class="reference internal" href="#testing-strategy">Testing Strategy</a></li>
+<li><a class="reference internal" href="#git-workflow">Git Workflow</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#performance-targets">Performance Targets</a><ul>
+<li><a class="reference internal" href="#response-times">Response Times</a></li>
+<li><a class="reference internal" href="#throughput">Throughput</a></li>
+<li><a class="reference internal" href="#scalability">Scalability</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#security-considerations">Security Considerations</a><ul>
+<li><a class="reference internal" href="#owasp-top-10-coverage">OWASP Top 10 Coverage</a></li>
+<li><a class="reference internal" href="#security-headers">Security Headers</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#monitoring-observability">Monitoring &amp; Observability</a><ul>
+<li><a class="reference internal" href="#metrics">Metrics</a></li>
+<li><a class="reference internal" href="#logging">Logging</a></li>
+<li><a class="reference internal" href="#tracing">Tracing</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#deployment-architecture">Deployment Architecture</a><ul>
+<li><a class="reference internal" href="#container-strategy">Container Strategy</a></li>
+<li><a class="reference internal" href="#orchestration">Orchestration</a></li>
+<li><a class="reference internal" href="#ci-cd-pipeline">CI/CD Pipeline</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#contributing-to-architecture">Contributing to Architecture</a><ul>
+<li><a class="reference internal" href="#proposing-changes">Proposing Changes</a></li>
+<li><a class="reference internal" href="#updating-documentation">Updating Documentation</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#resources">Resources</a><ul>
+<li><a class="reference internal" href="#external-documentation">External Documentation</a></li>
+<li><a class="reference internal" href="#internal-resources">Internal Resources</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#frequently-asked-questions">Frequently Asked Questions</a><ul>
+<li><a class="reference internal" href="#q-why-litestar-over-fastapi">Q: Why Litestar over FastAPI?</a></li>
+<li><a class="reference internal" href="#q-how-do-we-handle-djangos-signals">Q: How do we handle Django&#8217;s signals?</a></li>
+<li><a class="reference internal" href="#q-what-about-djangos-admin-interface">Q: What about Django&#8217;s admin interface?</a></li>
+<li><a class="reference internal" href="#q-how-do-we-migrate-data">Q: How do we migrate data?</a></li>
+<li><a class="reference internal" href="#q-what-about-existing-django-templates">Q: What about existing Django templates?</a></li>
+<li><a class="reference internal" href="#q-how-do-we-handle-file-uploads">Q: How do we handle file uploads?</a></li>
+<li><a class="reference internal" href="#q-whats-the-testing-strategy">Q: What&#8217;s the testing strategy?</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#glossary">Glossary</a></li>
+<li><a class="reference internal" href="#document-metadata">Document Metadata</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../index.html"><span itemprop="name">litestar-pydotorg</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">Architecture Documentation</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue dark-code" role="main">
+          <section id="architecture-documentation">
+<h1>Architecture Documentation<a class="headerlink" href="#architecture-documentation" title="Link to this heading">¶</a></h1>
+<p>Welcome to the Litestar <a class="reference external" href="http://Python.org">Python.org</a> architecture documentation. This directory contains all architectural decisions, design documents, and technical specifications for migrating <a class="reference external" href="http://python.org">python.org</a> from Django to Litestar.</p>
+<section id="quick-links">
+<h2>Quick Links<a class="headerlink" href="#quick-links" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="ARCHITECTURE.html"><span class="std std-doc">Main Architecture Document</span></a> - Comprehensive architecture overview</p></li>
+<li><p><a class="reference internal" href="QUICK_START.html"><span class="std std-doc">Quick Start Guide</span></a> - Get started developing quickly</p></li>
+<li><p><a class="reference internal" href="DATABASE_SCHEMA.html"><span class="std std-doc">Database Schema</span></a> - Detailed database design</p></li>
+<li><p>Architecture Decision Records - See ADRs below documenting key decisions</p></li>
+</ul>
+</section>
+<section id="document-index">
+<h2>Document Index<a class="headerlink" href="#document-index" title="Link to this heading">¶</a></h2>
+<section id="core-architecture">
+<h3>Core Architecture<a class="headerlink" href="#core-architecture" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Document</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Status</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="ARCHITECTURE.html"><span class="std std-doc">ARCHITECTURE.md</span></a></p></td>
+<td><p>Complete system architecture</p></td>
+<td><p>Current</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="DATABASE_SCHEMA.html"><span class="std std-doc">DATABASE_SCHEMA.md</span></a></p></td>
+<td><p>Database design and models</p></td>
+<td><p>Current</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="QUICK_START.html"><span class="std std-doc">QUICK_START.md</span></a></p></td>
+<td><p>Developer quick start guide</p></td>
+<td><p>Current</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="architecture-decision-records-adrs">
+<h3>Architecture Decision Records (ADRs)<a class="headerlink" href="#architecture-decision-records-adrs" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>ADR</p></th>
+<th class="head"><p>Title</p></th>
+<th class="head"><p>Status</p></th>
+<th class="head"><p>Date</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="adr/001-litestar-framework.html"><span class="std std-doc">ADR-001</span></a></p></td>
+<td><p>Use Litestar as Web Framework</p></td>
+<td><p>Accepted</p></td>
+<td><p>2025-11-25</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="adr/002-saq-background-tasks.html"><span class="std std-doc">ADR-002</span></a></p></td>
+<td><p>Use SAQ for Background Tasks</p></td>
+<td><p>Accepted</p></td>
+<td><p>2025-11-25</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="adr/template.html"><span class="std std-doc">Template</span></a></p></td>
+<td><p>ADR Template</p></td>
+<td><p>-</p></td>
+<td><p>-</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="architecture-at-a-glance">
+<h2>Architecture at a Glance<a class="headerlink" href="#architecture-at-a-glance" title="Link to this heading">¶</a></h2>
+<section id="technology-stack">
+<h3>Technology Stack<a class="headerlink" href="#technology-stack" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">┌─────────────────────────────────────────────────────┐
+</span><span data-line="2">│                   Presentation                       │
+</span><span data-line="3">│  Jinja2 Templates │ Static Assets │ CDN (Fastly)    │
+</span><span data-line="4">└─────────────────────────────────────────────────────┘
+</span><span data-line="5">                          │
+</span><span data-line="6">┌─────────────────────────────────────────────────────┐
+</span><span data-line="7">│                   Application                        │
+</span><span data-line="8">│  Litestar 2.x │ Controllers │ Services │ DTOs       │
+</span><span data-line="9">└─────────────────────────────────────────────────────┘
+</span><span data-line="10">                          │
+</span><span data-line="11">┌─────────────────────────────────────────────────────┐
+</span><span data-line="12">│                   Data Access                        │
+</span><span data-line="13">│  SQLAlchemy 2.0 │ Advanced Alchemy │ Alembic        │
+</span><span data-line="14">└─────────────────────────────────────────────────────┘
+</span><span data-line="15">                          │
+</span><span data-line="16">┌─────────────────────────────────────────────────────┐
+</span><span data-line="17">│                   Infrastructure                     │
+</span><span data-line="18">│  PostgreSQL │ Redis │ SAQ │ Meilisearch             │
+</span><span data-line="19">└─────────────────────────────────────────────────────┘
+</span></pre></div>
+</div>
+</section>
+<section id="domain-organization">
+<h3>Domain Organization<a class="headerlink" href="#domain-organization" title="Link to this heading">¶</a></h3>
+<p>The application is organized into <strong>17 domain modules</strong>, each representing a business capability:</p>
+<p><strong>Core Domains</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">users</span></code> - User authentication, profiles, membership</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pages</span></code> - CMS flat pages</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cms</span></code> - Base CMS functionality</p></li>
+</ul>
+<p><strong>Content Domains</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">downloads</span></code> - Python releases and downloads</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">events</span></code> - Community events and calendars</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">blogs</span></code> - Blog feed aggregation</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">boxes</span></code> - Reusable content widgets</p></li>
+</ul>
+<p><strong>Community Domains</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">jobs</span></code> - Job board</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">community</span></code> - Community posts and media</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">successstories</span></code> - Success story content</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sponsors</span></code> - Sponsorship management</p></li>
+</ul>
+<p><strong>Organization Domains</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nominations</span></code> - PSF nominations</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">minutes</span></code> - Board meeting minutes</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">work_groups</span></code> - PSF working groups</p></li>
+</ul>
+<p><strong>Support Domains</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">banners</span></code> - Site banners</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">codesamples</span></code> - Code examples</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">companies</span></code> - Company directory</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mailing</span></code> - Mailing list integration</p></li>
+</ul>
+</section>
+<section id="key-design-principles">
+<h3>Key Design Principles<a class="headerlink" href="#key-design-principles" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Async First</strong>: All I/O operations use async/await</p></li>
+<li><p><strong>Type Safe</strong>: Full type hints with Pydantic validation</p></li>
+<li><p><strong>Domain Driven</strong>: Clear domain boundaries with minimal coupling</p></li>
+<li><p><strong>Dependency Injection</strong>: Leveraging Litestar’s DI system</p></li>
+<li><p><strong>API Centric</strong>: REST API with automatic OpenAPI docs</p></li>
+<li><p><strong>Test Driven</strong>: Comprehensive test coverage at all levels</p></li>
+<li><p><strong>Cloud Native</strong>: Container-ready with proper health checks</p></li>
+</ol>
+</section>
+</section>
+<section id="migration-strategy">
+<h2>Migration Strategy<a class="headerlink" href="#migration-strategy" title="Link to this heading">¶</a></h2>
+<section id="phased-approach">
+<h3>Phased Approach<a class="headerlink" href="#phased-approach" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">Phase 1: Foundation (Weeks 1-2)
+</span><span data-line="2">  ├─ Project setup
+</span><span data-line="3">  ├─ Core infrastructure
+</span><span data-line="4">  └─ Testing framework
+</span><span data-line="5">
+</span><span data-line="6">Phase 2: Core Domains (Weeks 3-5)
+</span><span data-line="7">  ├─ users
+</span><span data-line="8">  ├─ cms
+</span><span data-line="9">  ├─ pages
+</span><span data-line="10">  └─ downloads
+</span><span data-line="11">
+</span><span data-line="12">Phase 3: Feature Domains (Weeks 6-9)
+</span><span data-line="13">  ├─ events
+</span><span data-line="14">  ├─ jobs
+</span><span data-line="15">  ├─ community
+</span><span data-line="16">  └─ sponsors
+</span><span data-line="17">
+</span><span data-line="18">Phase 4: Templates &amp; Frontend (Weeks 10-11)
+</span><span data-line="19">  └─ Django → Jinja2 conversion
+</span><span data-line="20">
+</span><span data-line="21">Phase 5: Background Tasks (Week 12)
+</span><span data-line="22">  └─ Celery → SAQ migration
+</span><span data-line="23">
+</span><span data-line="24">Phase 6: Testing &amp; Optimization (Weeks 13-14)
+</span><span data-line="25">  └─ Load testing, optimization
+</span><span data-line="26">
+</span><span data-line="27">Phase 7: Deployment (Weeks 15-16)
+</span><span data-line="28">  └─ Production rollout
+</span></pre></div>
+</div>
+</section>
+<section id="success-criteria">
+<h3>Success Criteria<a class="headerlink" href="#success-criteria" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>All Django functionality replicated</p></li>
+<li><p>API response time &lt; 100ms (p95)</p></li>
+<li><p>Throughput &gt; 10,000 requests/second</p></li>
+<li><p>Zero downtime deployment</p></li>
+<li><p>90%+ test coverage</p></li>
+<li><p>All security audits passed</p></li>
+</ul>
+</section>
+</section>
+<section id="key-architectural-patterns">
+<h2>Key Architectural Patterns<a class="headerlink" href="#key-architectural-patterns" title="Link to this heading">¶</a></h2>
+<section id="domain-module-pattern">
+<h3>1. Domain Module Pattern<a class="headerlink" href="#domain-module-pattern" title="Link to this heading">¶</a></h3>
+<p>Each domain follows a consistent structure:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">domains/example/
+</span><span data-line="2">├── __init__.py
+</span><span data-line="3">├── models.py           # SQLAlchemy models
+</span><span data-line="4">├── schemas.py          # Pydantic schemas
+</span><span data-line="5">├── services.py         # Business logic
+</span><span data-line="6">├── controllers.py      # HTTP handlers
+</span><span data-line="7">├── repositories.py     # Data access (optional)
+</span><span data-line="8">├── dependencies.py     # Domain-specific DI
+</span><span data-line="9">└── guards.py           # Domain-specific guards
+</span></pre></div>
+</div>
+</section>
+<section id="service-layer-pattern">
+<h3>2. Service Layer Pattern<a class="headerlink" href="#service-layer-pattern" title="Link to this heading">¶</a></h3>
+<p>Business logic is encapsulated in service classes:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">class</span><span class="w"> </span><span class="nc">UserService</span><span class="p">:</span>
+</span><span data-line="2">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session</span><span class="p">:</span> <span class="n">AsyncSession</span><span class="p">):</span>
+</span><span data-line="3">        <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">session</span>
+</span><span data-line="4">
+</span><span data-line="5">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">UserCreate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">User</span><span class="p">:</span>
+</span><span data-line="6">        <span class="c1"># Validation, business logic, persistence</span>
+</span><span data-line="7">        <span class="o">...</span>
+</span></pre></div>
+</div>
+</section>
+<section id="repository-pattern-when-needed">
+<h3>3. Repository Pattern (When Needed)<a class="headerlink" href="#repository-pattern-when-needed" title="Link to this heading">¶</a></h3>
+<p>Complex data access is abstracted:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">class</span><span class="w"> </span><span class="nc">ReleaseRepository</span><span class="p">:</span>
+</span><span data-line="2">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session</span><span class="p">:</span> <span class="n">AsyncSession</span><span class="p">):</span>
+</span><span data-line="3">        <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">session</span>
+</span><span data-line="4">
+</span><span data-line="5">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_latest_by_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">version</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Release</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="6">        <span class="c1"># Complex query logic</span>
+</span><span data-line="7">        <span class="o">...</span>
+</span></pre></div>
+</div>
+</section>
+<section id="dto-pattern">
+<h3>4. DTO Pattern<a class="headerlink" href="#dto-pattern" title="Link to this heading">¶</a></h3>
+<p>Data transfer between layers uses Pydantic schemas:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">class</span><span class="w"> </span><span class="nc">ReleaseRead</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span data-line="2"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Output schema for API responses.&quot;&quot;&quot;</span>
+</span><span data-line="3">    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span><span class="n">from_attributes</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span data-line="4">
+</span><span data-line="5">    <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span>
+</span><span data-line="6">    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+</span><span data-line="7">    <span class="n">is_latest</span><span class="p">:</span> <span class="nb">bool</span>
+</span><span data-line="8">
+</span><span data-line="9"><span class="k">class</span><span class="w"> </span><span class="nc">ReleaseCreate</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span data-line="10"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Input schema for creation.&quot;&quot;&quot;</span>
+</span><span data-line="11">    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">min_length</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</span><span data-line="12">    <span class="n">version</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="development-guidelines">
+<h2>Development Guidelines<a class="headerlink" href="#development-guidelines" title="Link to this heading">¶</a></h2>
+<section id="code-organization">
+<h3>Code Organization<a class="headerlink" href="#code-organization" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>One class per file</strong> for models, services, controllers</p></li>
+<li><p><strong>Flat module structure</strong> within domains</p></li>
+<li><p><strong>Explicit imports</strong> - no <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">module</span> <span class="pre">import</span> <span class="pre">*</span></code></p></li>
+<li><p><strong>Type hints everywhere</strong> - use mypy strict mode</p></li>
+</ul>
+</section>
+<section id="testing-strategy">
+<h3>Testing Strategy<a class="headerlink" href="#testing-strategy" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">tests/
+</span><span data-line="2">├── unit/              # Fast, isolated tests
+</span><span data-line="3">│   └── domains/
+</span><span data-line="4">│       └── users/
+</span><span data-line="5">│           ├── test_models.py
+</span><span data-line="6">│           ├── test_services.py
+</span><span data-line="7">│           └── test_schemas.py
+</span><span data-line="8">├── integration/       # Database, API tests
+</span><span data-line="9">│   └── domains/
+</span><span data-line="10">│       └── users/
+</span><span data-line="11">│           ├── test_controllers.py
+</span><span data-line="12">│           └── test_repositories.py
+</span><span data-line="13">└── e2e/              # Full user journey tests
+</span><span data-line="14">    └── test_user_registration.py
+</span></pre></div>
+</div>
+</section>
+<section id="git-workflow">
+<h3>Git Workflow<a class="headerlink" href="#git-workflow" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Create feature branch: <code class="docutils literal notranslate"><span class="pre">feature/domain-feature</span></code></p></li>
+<li><p>Implement with tests</p></li>
+<li><p>Run quality checks: <code class="docutils literal notranslate"><span class="pre">ruff</span> <span class="pre">check</span></code>, <code class="docutils literal notranslate"><span class="pre">mypy</span></code>, <code class="docutils literal notranslate"><span class="pre">pytest</span></code></p></li>
+<li><p>Create PR with description</p></li>
+<li><p>Pass CI checks</p></li>
+<li><p>Get review approval</p></li>
+<li><p>Squash and merge</p></li>
+</ol>
+</section>
+</section>
+<section id="performance-targets">
+<h2>Performance Targets<a class="headerlink" href="#performance-targets" title="Link to this heading">¶</a></h2>
+<section id="response-times">
+<h3>Response Times<a class="headerlink" href="#response-times" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Endpoint Type</p></th>
+<th class="head"><p>Target (p95)</p></th>
+<th class="head"><p>Target (p99)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Simple GET</p></td>
+<td><p>&lt; 50ms</p></td>
+<td><p>&lt; 100ms</p></td>
+</tr>
+<tr class="row-odd"><td><p>Complex GET</p></td>
+<td><p>&lt; 100ms</p></td>
+<td><p>&lt; 200ms</p></td>
+</tr>
+<tr class="row-even"><td><p>POST/PUT</p></td>
+<td><p>&lt; 100ms</p></td>
+<td><p>&lt; 250ms</p></td>
+</tr>
+<tr class="row-odd"><td><p>Background Task</p></td>
+<td><p>&lt; 1s</p></td>
+<td><p>&lt; 5s</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="throughput">
+<h3>Throughput<a class="headerlink" href="#throughput" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>API endpoints</strong>: 10,000+ req/s</p></li>
+<li><p><strong>Static assets</strong>: 50,000+ req/s (via CDN)</p></li>
+<li><p><strong>Database queries</strong>: &lt; 10ms average</p></li>
+<li><p><strong>Cache hit ratio</strong>: &gt; 90%</p></li>
+</ul>
+</section>
+<section id="scalability">
+<h3>Scalability<a class="headerlink" href="#scalability" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>Horizontal scaling</strong>: Stateless application servers</p></li>
+<li><p><strong>Database</strong>: Read replicas for scaling reads</p></li>
+<li><p><strong>Cache</strong>: Redis cluster for distributed cache</p></li>
+<li><p><strong>Tasks</strong>: Multiple SAQ workers</p></li>
+</ul>
+</section>
+</section>
+<section id="security-considerations">
+<h2>Security Considerations<a class="headerlink" href="#security-considerations" title="Link to this heading">¶</a></h2>
+<section id="owasp-top-10-coverage">
+<h3>OWASP Top 10 Coverage<a class="headerlink" href="#owasp-top-10-coverage" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Injection</strong>: Parameterized queries (SQLAlchemy)</p></li>
+<li><p><strong>Broken Authentication</strong>: Token-based auth with secure hashing</p></li>
+<li><p><strong>Sensitive Data Exposure</strong>: HTTPS, encrypted at rest</p></li>
+<li><p><strong>XML External Entities</strong>: Not applicable (JSON API)</p></li>
+<li><p><strong>Broken Access Control</strong>: Route guards and permissions</p></li>
+<li><p><strong>Security Misconfiguration</strong>: Security headers, CSP</p></li>
+<li><p><strong>XSS</strong>: Template auto-escaping, Content-Type headers</p></li>
+<li><p><strong>Insecure Deserialization</strong>: Pydantic validation</p></li>
+<li><p><strong>Known Vulnerabilities</strong>: Automated dependency scanning</p></li>
+<li><p><strong>Insufficient Logging</strong>: Structured logging, audit trails</p></li>
+</ol>
+</section>
+<section id="security-headers">
+<h3>Security Headers<a class="headerlink" href="#security-headers" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Strict-Transport-Security</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">X-Content-Type-Options:</span> <span class="pre">nosniff</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">X-Frame-Options:</span> <span class="pre">SAMEORIGIN</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Content-Security-Policy</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Referrer-Policy:</span> <span class="pre">strict-origin-when-cross-origin</span></code></p></li>
+</ul>
+</section>
+</section>
+<section id="monitoring-observability">
+<h2>Monitoring &amp; Observability<a class="headerlink" href="#monitoring-observability" title="Link to this heading">¶</a></h2>
+<section id="metrics">
+<h3>Metrics<a class="headerlink" href="#metrics" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>Application</strong>: Request rate, latency, error rate</p></li>
+<li><p><strong>Database</strong>: Query time, connection pool usage</p></li>
+<li><p><strong>Cache</strong>: Hit ratio, eviction rate</p></li>
+<li><p><strong>Tasks</strong>: Queue length, processing time, failure rate</p></li>
+</ul>
+</section>
+<section id="logging">
+<h3>Logging<a class="headerlink" href="#logging" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>Structured logging</strong> with JSON format</p></li>
+<li><p><strong>Log levels</strong>: DEBUG, INFO, WARNING, ERROR, CRITICAL</p></li>
+<li><p><strong>Correlation IDs</strong> for request tracing</p></li>
+<li><p><strong>Sensitive data masking</strong></p></li>
+</ul>
+</section>
+<section id="tracing">
+<h3>Tracing<a class="headerlink" href="#tracing" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Distributed tracing with OpenTelemetry</p></li>
+<li><p>Span correlation across services</p></li>
+<li><p>Performance bottleneck identification</p></li>
+</ul>
+</section>
+</section>
+<section id="deployment-architecture">
+<h2>Deployment Architecture<a class="headerlink" href="#deployment-architecture" title="Link to this heading">¶</a></h2>
+<section id="container-strategy">
+<h3>Container Strategy<a class="headerlink" href="#container-strategy" title="Link to this heading">¶</a></h3>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c"># Multi-stage build</span>
+</span><span data-line="2"><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.12-slim</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="s">builder</span>
+</span><span data-line="3"><span class="c"># ... build dependencies</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.12-slim</span>
+</span><span data-line="6"><span class="c"># ... runtime</span>
+</span></pre></div>
+</div>
+</section>
+<section id="orchestration">
+<h3>Orchestration<a class="headerlink" href="#orchestration" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>Development</strong>: Docker Compose</p></li>
+<li><p><strong>Production</strong>: Kubernetes</p></li>
+<li><p><strong>Health checks</strong>: <code class="docutils literal notranslate"><span class="pre">/health</span></code> endpoint</p></li>
+<li><p><strong>Graceful shutdown</strong>: 30s timeout</p></li>
+</ul>
+</section>
+<section id="ci-cd-pipeline">
+<h3>CI/CD Pipeline<a class="headerlink" href="#ci-cd-pipeline" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐
+</span><span data-line="2">│   Lint   │ -&gt; │   Test   │ -&gt; │  Build   │ -&gt; │  Deploy  │
+</span><span data-line="3">│  (Ruff)  │    │ (Pytest) │    │ (Docker) │    │   (K8s)  │
+</span><span data-line="4">└──────────┘    └──────────┘    └──────────┘    └──────────┘
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="contributing-to-architecture">
+<h2>Contributing to Architecture<a class="headerlink" href="#contributing-to-architecture" title="Link to this heading">¶</a></h2>
+<section id="proposing-changes">
+<h3>Proposing Changes<a class="headerlink" href="#proposing-changes" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Identify need for architectural decision</p></li>
+<li><p>Research alternatives</p></li>
+<li><p>Draft ADR using <a class="reference internal" href="adr/template.html"><span class="std std-doc">template</span></a></p></li>
+<li><p>Discuss with team</p></li>
+<li><p>Update ADR based on feedback</p></li>
+<li><p>Get approval and mark as “Accepted”</p></li>
+<li><p>Update relevant documentation</p></li>
+</ol>
+</section>
+<section id="updating-documentation">
+<h3>Updating Documentation<a class="headerlink" href="#updating-documentation" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Keep documentation in sync with code</p></li>
+<li><p>Update diagrams when structure changes</p></li>
+<li><p>Version control all architecture documents</p></li>
+<li><p>Regular architecture reviews (quarterly)</p></li>
+</ul>
+</section>
+</section>
+<section id="resources">
+<h2>Resources<a class="headerlink" href="#resources" title="Link to this heading">¶</a></h2>
+<section id="external-documentation">
+<h3>External Documentation<a class="headerlink" href="#external-documentation" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://docs.litestar.dev/">Litestar Docs</a></p></li>
+<li><p><a class="reference external" href="https://docs.sqlalchemy.org/">SQLAlchemy 2.0 Docs</a></p></li>
+<li><p><a class="reference external" href="https://docs.advanced-alchemy.litestar.dev/">Advanced Alchemy Docs</a></p></li>
+<li><p><a class="reference external" href="https://docs.pydantic.dev/">Pydantic V2 Docs</a></p></li>
+<li><p><a class="reference external" href="https://saq-py.readthedocs.io/">SAQ Docs</a></p></li>
+</ul>
+</section>
+<section id="internal-resources">
+<h3>Internal Resources<a class="headerlink" href="#internal-resources" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Project Wiki: <code class="docutils literal notranslate"><span class="pre">https://github.com/python/litestar-pydotorg/wiki</span></code></p></li>
+<li><p>Team Slack: <code class="docutils literal notranslate"><span class="pre">#pydotorg-litestar</span></code></p></li>
+<li><p>Mailing List: <code class="docutils literal notranslate"><span class="pre">pydotorg-www&#64;python.org</span></code></p></li>
+<li><p>Weekly Sync: Wednesdays 10am PT</p></li>
+</ul>
+</section>
+</section>
+<section id="frequently-asked-questions">
+<h2>Frequently Asked Questions<a class="headerlink" href="#frequently-asked-questions" title="Link to this heading">¶</a></h2>
+<section id="q-why-litestar-over-fastapi">
+<h3>Q: Why Litestar over FastAPI?<a class="headerlink" href="#q-why-litestar-over-fastapi" title="Link to this heading">¶</a></h3>
+<p><strong>A</strong>: See <a class="reference internal" href="adr/001-litestar-framework.html"><span class="std std-doc">ADR-001</span></a>. In summary: better SQLAlchemy integration, superior dependency injection, and more opinionated structure for large applications.</p>
+</section>
+<section id="q-how-do-we-handle-djangos-signals">
+<h3>Q: How do we handle Django’s signals?<a class="headerlink" href="#q-how-do-we-handle-djangos-signals" title="Link to this heading">¶</a></h3>
+<p><strong>A</strong>: Use SQLAlchemy event listeners or domain events pattern. Example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">event</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="nd">@event</span><span class="o">.</span><span class="n">listens_for</span><span class="p">(</span><span class="n">Release</span><span class="p">,</span> <span class="s1">&#39;after_insert&#39;</span><span class="p">)</span>
+</span><span data-line="4"><span class="k">def</span><span class="w"> </span><span class="nf">after_release_insert</span><span class="p">(</span><span class="n">mapper</span><span class="p">,</span> <span class="n">connection</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+</span><span data-line="5">    <span class="c1"># Trigger cache update</span>
+</span><span data-line="6">    <span class="o">...</span>
+</span></pre></div>
+</div>
+</section>
+<section id="q-what-about-djangos-admin-interface">
+<h3>Q: What about Django’s admin interface?<a class="headerlink" href="#q-what-about-djangos-admin-interface" title="Link to this heading">¶</a></h3>
+<p><strong>A</strong>: We’ll build a custom admin using Litestar Admin or similar. The Django admin is tightly coupled to Django ORM and not easily portable.</p>
+</section>
+<section id="q-how-do-we-migrate-data">
+<h3>Q: How do we migrate data?<a class="headerlink" href="#q-how-do-we-migrate-data" title="Link to this heading">¶</a></h3>
+<p><strong>A</strong>: See migration scripts in <code class="docutils literal notranslate"><span class="pre">/scripts/</span></code>. We’ll run parallel databases during transition, sync data, then cut over with minimal downtime.</p>
+</section>
+<section id="q-what-about-existing-django-templates">
+<h3>Q: What about existing Django templates?<a class="headerlink" href="#q-what-about-existing-django-templates" title="Link to this heading">¶</a></h3>
+<p><strong>A</strong>: Convert to Jinja2 (very similar syntax). Most templates require minimal changes. See <a class="reference internal" href="QUICK_START.html"><span class="std std-doc">QUICK_START.md</span></a> for details.</p>
+</section>
+<section id="q-how-do-we-handle-file-uploads">
+<h3>Q: How do we handle file uploads?<a class="headerlink" href="#q-how-do-we-handle-file-uploads" title="Link to this heading">¶</a></h3>
+<p><strong>A</strong>: Litestar has built-in file upload support. For large files, we’ll use direct-to-S3 uploads with pre-signed URLs.</p>
+</section>
+<section id="q-whats-the-testing-strategy">
+<h3>Q: What’s the testing strategy?<a class="headerlink" href="#q-whats-the-testing-strategy" title="Link to this heading">¶</a></h3>
+<p><strong>A</strong>: Comprehensive testing at all levels:</p>
+<ul class="simple">
+<li><p>Unit tests for models, services, schemas</p></li>
+<li><p>Integration tests for controllers, repositories</p></li>
+<li><p>E2E tests for critical user journeys</p></li>
+<li><p>Target: 90%+ coverage</p></li>
+</ul>
+</section>
+</section>
+<section id="glossary">
+<h2>Glossary<a class="headerlink" href="#glossary" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>ADR</strong>: Architecture Decision Record - documents architectural choices</p></li>
+<li><p><strong>ASGI</strong>: Async Server Gateway Interface - async version of WSGI</p></li>
+<li><p><strong>DTO</strong>: Data Transfer Object - object for transferring data between layers</p></li>
+<li><p><strong>DI</strong>: Dependency Injection - pattern for managing dependencies</p></li>
+<li><p><strong>ORM</strong>: Object-Relational Mapping - database abstraction layer</p></li>
+<li><p><strong>SAQ</strong>: Simple Async Queue - async task queue library</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="document-metadata">
+<h2>Document Metadata<a class="headerlink" href="#document-metadata" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Last Updated</strong>: 2025-11-25</p></li>
+<li><p><strong>Maintained By</strong>: <a class="reference external" href="http://Python.org">Python.org</a> Architecture Team</p></li>
+<li><p><strong>Review Cycle</strong>: Quarterly</p></li>
+<li><p><strong>Next Review</strong>: 2026-02-25</p></li>
+</ul>
+<hr class="docutils" />
+<p><strong>Location</strong>: <code class="docutils literal notranslate"><span class="pre">/Users/coffee/git/public/JacobCoffee/litestar-pydotorg/docs/architecture/README.md</span></code></p>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Jacob Coffee</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+<a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+  <iconify-icon icon="simple-icons:github"></iconify-icon>
+</a></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=30646c52"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script src="../_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

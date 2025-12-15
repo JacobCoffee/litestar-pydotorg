@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="blue" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>pydotorg.domains.users.controllers - litestar-pydotorg</title><link rel="index" title="Index" href="../../../../genindex.html" /><link rel="search" title="Search" href="../../../../search.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/shibuya.css?v=14737038" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link media="print" rel="stylesheet" type="text/css" href="../../../../_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css?v=513f0650" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="pydotorg.domains.users.controllers"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../../../../index.html">
+      
+      
+      <strong>litestar-pydotorg</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"><ul><li class="link">
+          <a href="https://litestar.dev/">
+            <span>Litestar</span></a>
+        </li><li class="link">
+          <a href="https://python.org/">
+            <span>Python.org</span></a>
+        </li></ul></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../../../../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials">
+  <a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../getting-started/index.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../getting-started/installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../getting-started/quickstart.html">Quickstart</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../guides/index.html">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/development.html">Development Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/contributing.html">Contribution Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/testing.html">Testing Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/debugging.html">Debugging Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/api-usage.html">API Usage Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/authentication.html">Authentication Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/feature-flags.html">Feature Flags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/configuration.html">Configuration Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/deployment.html">Deployment Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/docker.html">Docker Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/troubleshooting.html">Troubleshooting Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cookbook/index.html">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../cookbook/domain-patterns.html">Domain Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../cookbook/authentication-recipes.html">Authentication Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../cookbook/database-recipes.html">Database Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../cookbook/testing-recipes.html">Testing Recipes</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/index.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/core/index.html">Core Infrastructure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/auth.html">Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/cache.html">Caching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/database.html">Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/email.html">Email</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/exceptions.html">Exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/features.html">Feature Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/feeds.html">RSS/Atom Feeds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/ical.html">iCalendar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/middleware.html">Middleware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/openapi.html">OpenAPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/ratelimit.html">Rate Limiting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/security.html">Security</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/worker.html">Background Worker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/domains/index.html">Domain Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/about.html">About</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/admin.html">Admin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/banners.html">banners</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/blogs.html">blogs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/codesamples.html">Code Samples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/community.html">community</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/docs.html">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/downloads.html">downloads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/events.html">events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/jobs.html">jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/mailing.html">Mailing Lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/minutes.html">Minutes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/nominations.html">Nominations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/pages.html">pages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/sponsors.html">sponsors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/sqladmin.html">SQLAdmin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/successstories.html">Success Stories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/users.html">users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/work_groups.html">Work Groups</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/lib.html">Library Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/tasks.html">Background Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/config.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/main.html">Application Entry Point</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../architecture/index.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/ARCHITECTURE.html">Litestar Python.org Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/DATABASE_SCHEMA.html">Database Schema Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/DOMAIN_MODELS.html">Domain Models Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/QUICK_START.html">Litestar Python.org Quick Start Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/API_TAGS_INDEX.html">API Tags Documentation Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/RATE_LIMITING_ARCHITECTURE.html">Rate Limiting Architecture Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/adr/001-litestar-framework.html">ADR-001: Use Litestar as Web Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/adr/002-saq-background-tasks.html">ADR-002: Use SAQ for Background Task Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../../../../index.html"><span itemprop="name">litestar-pydotorg</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../../../index.html"><span itemprop="name">Module code</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="2" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">pydotorg.domains.users.controllers</strong>
+        <meta itemprop="position" content="3" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue dark-code" role="main">
+          <h1>Source code for pydotorg.domains.users.controllers</h1><div class="highlight"><pre>
+<span></span><span data-line="1"><span class="sd">&quot;&quot;&quot;User domain API controllers.&quot;&quot;&quot;</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Annotated</span>
+</span><span data-line="6"><span class="kn">from</span><span class="w"> </span><span class="nn">uuid</span><span class="w"> </span><span class="kn">import</span> <span class="n">UUID</span>
+</span><span data-line="7">
+</span><span data-line="8"><span class="kn">from</span><span class="w"> </span><span class="nn">advanced_alchemy.filters</span><span class="w"> </span><span class="kn">import</span> <span class="n">LimitOffset</span>
+</span><span data-line="9"><span class="kn">from</span><span class="w"> </span><span class="nn">litestar</span><span class="w"> </span><span class="kn">import</span> <span class="n">Controller</span><span class="p">,</span> <span class="n">Request</span><span class="p">,</span> <span class="n">delete</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">patch</span><span class="p">,</span> <span class="n">post</span><span class="p">,</span> <span class="n">put</span>
+</span><span data-line="10"><span class="kn">from</span><span class="w"> </span><span class="nn">litestar.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">NotFoundException</span>
+</span><span data-line="11"><span class="kn">from</span><span class="w"> </span><span class="nn">litestar.openapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">ResponseSpec</span>
+</span><span data-line="12"><span class="kn">from</span><span class="w"> </span><span class="nn">litestar.params</span><span class="w"> </span><span class="kn">import</span> <span class="n">Body</span><span class="p">,</span> <span class="n">Parameter</span>
+</span><span data-line="13">
+</span><span data-line="14"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.core.auth.guards</span><span class="w"> </span><span class="kn">import</span> <span class="n">require_authenticated</span>
+</span><span data-line="15"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.domains.users</span><span class="w"> </span><span class="kn">import</span> <span class="n">urls</span>
+</span><span data-line="16"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.domains.users.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">User</span>
+</span><span data-line="17"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.domains.users.schemas</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+</span><span data-line="18">    <span class="n">APIKeyCreate</span><span class="p">,</span>
+</span><span data-line="19">    <span class="n">APIKeyCreated</span><span class="p">,</span>
+</span><span data-line="20">    <span class="n">APIKeyRead</span><span class="p">,</span>
+</span><span data-line="21">    <span class="n">MembershipCreate</span><span class="p">,</span>
+</span><span data-line="22">    <span class="n">MembershipRead</span><span class="p">,</span>
+</span><span data-line="23">    <span class="n">MembershipUpdate</span><span class="p">,</span>
+</span><span data-line="24">    <span class="n">UserCreate</span><span class="p">,</span>
+</span><span data-line="25">    <span class="n">UserGroupCreate</span><span class="p">,</span>
+</span><span data-line="26">    <span class="n">UserGroupRead</span><span class="p">,</span>
+</span><span data-line="27">    <span class="n">UserGroupUpdate</span><span class="p">,</span>
+</span><span data-line="28">    <span class="n">UserPublic</span><span class="p">,</span>
+</span><span data-line="29">    <span class="n">UserRead</span><span class="p">,</span>
+</span><span data-line="30">    <span class="n">UserUpdate</span><span class="p">,</span>
+</span><span data-line="31"><span class="p">)</span>
+</span><span data-line="32"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.domains.users.services</span><span class="w"> </span><span class="kn">import</span> <span class="n">APIKeyService</span><span class="p">,</span> <span class="n">MembershipService</span><span class="p">,</span> <span class="n">UserGroupService</span><span class="p">,</span> <span class="n">UserService</span>
+</span><span data-line="33">
+</span><span data-line="34">
+<div class="viewcode-block" id="UserController">
+<a class="viewcode-back" href="../../../../api/domains/users.html#pydotorg.domains.users.controllers.UserController">[docs]</a>
+</span><span data-line="35"><span class="k">class</span><span class="w"> </span><span class="nc">UserController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="36"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Controller for User CRUD operations.&quot;&quot;&quot;</span>
+</span><span data-line="37">
+</span><span data-line="38">    <span class="n">path</span> <span class="o">=</span> <span class="n">urls</span><span class="o">.</span><span class="n">USERS</span>
+</span><span data-line="39">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Users&quot;</span><span class="p">]</span>
+</span><span data-line="40">
+</span><span data-line="41">    <span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+</span><span data-line="42">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_users</span><span class="p">(</span>
+</span><span data-line="43">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="44">        <span class="n">user_service</span><span class="p">:</span> <span class="n">UserService</span><span class="p">,</span>
+</span><span data-line="45">        <span class="n">limit_offset</span><span class="p">:</span> <span class="n">LimitOffset</span><span class="p">,</span>
+</span><span data-line="46">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">UserPublic</span><span class="p">]:</span>
+</span><span data-line="47"><span class="w">        </span><span class="sd">&quot;&quot;&quot;List all users with pagination.</span>
+</span><span data-line="48">
+</span><span data-line="49"><span class="sd">        Retrieves a paginated list of users from the database. Returns public user</span>
+</span><span data-line="50"><span class="sd">        information only, excluding sensitive fields like email addresses.</span>
+</span><span data-line="51">
+</span><span data-line="52"><span class="sd">        Args:</span>
+</span><span data-line="53"><span class="sd">            user_service: Service for user database operations.</span>
+</span><span data-line="54"><span class="sd">            limit_offset: Pagination parameters for limiting and offsetting results.</span>
+</span><span data-line="55">
+</span><span data-line="56"><span class="sd">        Returns:</span>
+</span><span data-line="57"><span class="sd">            List of public user profiles with basic information.</span>
+</span><span data-line="58"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="59">        <span class="n">users</span><span class="p">,</span> <span class="n">_total</span> <span class="o">=</span> <span class="k">await</span> <span class="n">user_service</span><span class="o">.</span><span class="n">list_and_count</span><span class="p">(</span><span class="n">limit_offset</span><span class="p">)</span>
+</span><span data-line="60">        <span class="k">return</span> <span class="p">[</span><span class="n">UserPublic</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">user</span><span class="p">)</span> <span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="n">users</span><span class="p">]</span>
+</span><span data-line="61">
+</span><span data-line="62">    <span class="nd">@get</span><span class="p">(</span>
+</span><span data-line="63">        <span class="s2">&quot;/{user_id:uuid}&quot;</span><span class="p">,</span>
+</span><span data-line="64">        <span class="n">responses</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="65">            <span class="mi">404</span><span class="p">:</span> <span class="n">ResponseSpec</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;User not found&quot;</span><span class="p">),</span>
+</span><span data-line="66">        <span class="p">},</span>
+</span><span data-line="67">    <span class="p">)</span>
+</span><span data-line="68">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_user</span><span class="p">(</span>
+</span><span data-line="69">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="70">        <span class="n">user_service</span><span class="p">:</span> <span class="n">UserService</span><span class="p">,</span>
+</span><span data-line="71">        <span class="n">user_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">UUID</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;User ID&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The user ID&quot;</span><span class="p">)],</span>
+</span><span data-line="72">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UserRead</span><span class="p">:</span>
+</span><span data-line="73"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve a specific user by their unique identifier.</span>
+</span><span data-line="74">
+</span><span data-line="75"><span class="sd">        Fetches complete user information from the database including all profile</span>
+</span><span data-line="76"><span class="sd">        fields. This endpoint returns full user details suitable for administrative</span>
+</span><span data-line="77"><span class="sd">        or authenticated contexts.</span>
+</span><span data-line="78">
+</span><span data-line="79"><span class="sd">        Args:</span>
+</span><span data-line="80"><span class="sd">            user_service: Service for user database operations.</span>
+</span><span data-line="81"><span class="sd">            user_id: The unique UUID identifier of the user.</span>
+</span><span data-line="82">
+</span><span data-line="83"><span class="sd">        Returns:</span>
+</span><span data-line="84"><span class="sd">            Complete user details including all profile fields.</span>
+</span><span data-line="85">
+</span><span data-line="86"><span class="sd">        Raises:</span>
+</span><span data-line="87"><span class="sd">            NotFoundException: If no user with the given ID exists.</span>
+</span><span data-line="88"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="89">        <span class="n">user</span> <span class="o">=</span> <span class="k">await</span> <span class="n">user_service</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+</span><span data-line="90">        <span class="k">return</span> <span class="n">UserRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+</span><span data-line="91">
+</span><span data-line="92">    <span class="nd">@get</span><span class="p">(</span>
+</span><span data-line="93">        <span class="s2">&quot;/username/{username:str}&quot;</span><span class="p">,</span>
+</span><span data-line="94">        <span class="n">responses</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="95">            <span class="mi">404</span><span class="p">:</span> <span class="n">ResponseSpec</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;User not found&quot;</span><span class="p">),</span>
+</span><span data-line="96">        <span class="p">},</span>
+</span><span data-line="97">    <span class="p">)</span>
+</span><span data-line="98">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_user_by_username</span><span class="p">(</span>
+</span><span data-line="99">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="100">        <span class="n">user_service</span><span class="p">:</span> <span class="n">UserService</span><span class="p">,</span>
+</span><span data-line="101">        <span class="n">username</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Username&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The username&quot;</span><span class="p">)],</span>
+</span><span data-line="102">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UserPublic</span><span class="p">:</span>
+</span><span data-line="103"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Look up a user by their username.</span>
+</span><span data-line="104">
+</span><span data-line="105"><span class="sd">        Searches for a user with the specified username and returns their public</span>
+</span><span data-line="106"><span class="sd">        profile. Usernames are case-sensitive and must match exactly.</span>
+</span><span data-line="107">
+</span><span data-line="108"><span class="sd">        Args:</span>
+</span><span data-line="109"><span class="sd">            user_service: Service for user database operations.</span>
+</span><span data-line="110"><span class="sd">            username: The exact username to search for.</span>
+</span><span data-line="111">
+</span><span data-line="112"><span class="sd">        Returns:</span>
+</span><span data-line="113"><span class="sd">            Public profile information for the matching user.</span>
+</span><span data-line="114">
+</span><span data-line="115"><span class="sd">        Raises:</span>
+</span><span data-line="116"><span class="sd">            ValueError: If no user with the given username exists.</span>
+</span><span data-line="117"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="118">        <span class="n">user</span> <span class="o">=</span> <span class="k">await</span> <span class="n">user_service</span><span class="o">.</span><span class="n">get_by_username</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
+</span><span data-line="119">        <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="p">:</span>
+</span><span data-line="120">            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;User with username </span><span class="si">{</span><span class="n">username</span><span class="si">}</span><span class="s2"> not found&quot;</span>
+</span><span data-line="121">            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</span><span data-line="122">        <span class="k">return</span> <span class="n">UserPublic</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+</span><span data-line="123">
+</span><span data-line="124">    <span class="nd">@get</span><span class="p">(</span>
+</span><span data-line="125">        <span class="s2">&quot;/email/{email:str}&quot;</span><span class="p">,</span>
+</span><span data-line="126">        <span class="n">responses</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="127">            <span class="mi">404</span><span class="p">:</span> <span class="n">ResponseSpec</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;User not found&quot;</span><span class="p">),</span>
+</span><span data-line="128">        <span class="p">},</span>
+</span><span data-line="129">    <span class="p">)</span>
+</span><span data-line="130">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_user_by_email</span><span class="p">(</span>
+</span><span data-line="131">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="132">        <span class="n">user_service</span><span class="p">:</span> <span class="n">UserService</span><span class="p">,</span>
+</span><span data-line="133">        <span class="n">email</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Email&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The email address&quot;</span><span class="p">)],</span>
+</span><span data-line="134">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UserRead</span><span class="p">:</span>
+</span><span data-line="135"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Look up a user by their email address.</span>
+</span><span data-line="136">
+</span><span data-line="137"><span class="sd">        Searches for a user with the specified email address and returns their</span>
+</span><span data-line="138"><span class="sd">        full profile. Email matching is case-insensitive. This endpoint returns</span>
+</span><span data-line="139"><span class="sd">        full user details and should be restricted to authenticated contexts.</span>
+</span><span data-line="140">
+</span><span data-line="141"><span class="sd">        Args:</span>
+</span><span data-line="142"><span class="sd">            user_service: Service for user database operations.</span>
+</span><span data-line="143"><span class="sd">            email: The email address to search for.</span>
+</span><span data-line="144">
+</span><span data-line="145"><span class="sd">        Returns:</span>
+</span><span data-line="146"><span class="sd">            Complete user details for the matching user.</span>
+</span><span data-line="147">
+</span><span data-line="148"><span class="sd">        Raises:</span>
+</span><span data-line="149"><span class="sd">            ValueError: If no user with the given email exists.</span>
+</span><span data-line="150"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="151">        <span class="n">user</span> <span class="o">=</span> <span class="k">await</span> <span class="n">user_service</span><span class="o">.</span><span class="n">get_by_email</span><span class="p">(</span><span class="n">email</span><span class="p">)</span>
+</span><span data-line="152">        <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="p">:</span>
+</span><span data-line="153">            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;User with email </span><span class="si">{</span><span class="n">email</span><span class="si">}</span><span class="s2"> not found&quot;</span>
+</span><span data-line="154">            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</span><span data-line="155">        <span class="k">return</span> <span class="n">UserRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+</span><span data-line="156">
+</span><span data-line="157">    <span class="nd">@post</span><span class="p">(</span>
+</span><span data-line="158">        <span class="s2">&quot;/&quot;</span><span class="p">,</span>
+</span><span data-line="159">        <span class="n">responses</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="160">            <span class="mi">422</span><span class="p">:</span> <span class="n">ResponseSpec</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Validation error&quot;</span><span class="p">),</span>
+</span><span data-line="161">        <span class="p">},</span>
+</span><span data-line="162">    <span class="p">)</span>
+</span><span data-line="163">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_user</span><span class="p">(</span>
+</span><span data-line="164">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="165">        <span class="n">user_service</span><span class="p">:</span> <span class="n">UserService</span><span class="p">,</span>
+</span><span data-line="166">        <span class="n">data</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">UserCreate</span><span class="p">,</span> <span class="n">Body</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;User&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;User to create&quot;</span><span class="p">)],</span>
+</span><span data-line="167">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UserRead</span><span class="p">:</span>
+</span><span data-line="168"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new user account.</span>
+</span><span data-line="169">
+</span><span data-line="170"><span class="sd">        Registers a new user in the system with the provided profile information.</span>
+</span><span data-line="171"><span class="sd">        The password will be securely hashed before storage. Username and email</span>
+</span><span data-line="172"><span class="sd">        must be unique across all users.</span>
+</span><span data-line="173">
+</span><span data-line="174"><span class="sd">        Args:</span>
+</span><span data-line="175"><span class="sd">            user_service: Service for user database operations.</span>
+</span><span data-line="176"><span class="sd">            data: User creation payload containing required profile fields.</span>
+</span><span data-line="177">
+</span><span data-line="178"><span class="sd">        Returns:</span>
+</span><span data-line="179"><span class="sd">            The newly created user with all profile fields.</span>
+</span><span data-line="180">
+</span><span data-line="181"><span class="sd">        Raises:</span>
+</span><span data-line="182"><span class="sd">            ValidationError: If required fields are missing or invalid.</span>
+</span><span data-line="183"><span class="sd">            ConflictError: If username or email already exists.</span>
+</span><span data-line="184"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="185">        <span class="n">user</span> <span class="o">=</span> <span class="k">await</span> <span class="n">user_service</span><span class="o">.</span><span class="n">create_user</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</span><span data-line="186">        <span class="k">return</span> <span class="n">UserRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+</span><span data-line="187">
+</span><span data-line="188">    <span class="nd">@put</span><span class="p">(</span>
+</span><span data-line="189">        <span class="s2">&quot;/{user_id:uuid}&quot;</span><span class="p">,</span>
+</span><span data-line="190">        <span class="n">responses</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="191">            <span class="mi">404</span><span class="p">:</span> <span class="n">ResponseSpec</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;User not found&quot;</span><span class="p">),</span>
+</span><span data-line="192">            <span class="mi">422</span><span class="p">:</span> <span class="n">ResponseSpec</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Validation error&quot;</span><span class="p">),</span>
+</span><span data-line="193">        <span class="p">},</span>
+</span><span data-line="194">    <span class="p">)</span>
+</span><span data-line="195">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">update_user</span><span class="p">(</span>
+</span><span data-line="196">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="197">        <span class="n">user_service</span><span class="p">:</span> <span class="n">UserService</span><span class="p">,</span>
+</span><span data-line="198">        <span class="n">data</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">UserUpdate</span><span class="p">,</span> <span class="n">Body</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;User&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;User data to update&quot;</span><span class="p">)],</span>
+</span><span data-line="199">        <span class="n">user_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">UUID</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;User ID&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The user ID&quot;</span><span class="p">)],</span>
+</span><span data-line="200">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UserRead</span><span class="p">:</span>
+</span><span data-line="201"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Update an existing user&#39;s profile.</span>
+</span><span data-line="202">
+</span><span data-line="203"><span class="sd">        Modifies user profile fields with the provided values. Only fields</span>
+</span><span data-line="204"><span class="sd">        included in the request body will be updated; omitted fields remain</span>
+</span><span data-line="205"><span class="sd">        unchanged. Password updates trigger re-hashing.</span>
+</span><span data-line="206">
+</span><span data-line="207"><span class="sd">        Args:</span>
+</span><span data-line="208"><span class="sd">            user_service: Service for user database operations.</span>
+</span><span data-line="209"><span class="sd">            data: Partial user update payload with fields to modify.</span>
+</span><span data-line="210"><span class="sd">            user_id: The unique UUID identifier of the user to update.</span>
+</span><span data-line="211">
+</span><span data-line="212"><span class="sd">        Returns:</span>
+</span><span data-line="213"><span class="sd">            The updated user with all current profile fields.</span>
+</span><span data-line="214">
+</span><span data-line="215"><span class="sd">        Raises:</span>
+</span><span data-line="216"><span class="sd">            NotFoundException: If no user with the given ID exists.</span>
+</span><span data-line="217"><span class="sd">            ConflictError: If updated username or email conflicts with another user.</span>
+</span><span data-line="218"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="219">        <span class="n">update_data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">model_dump</span><span class="p">(</span><span class="n">exclude_unset</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span data-line="220">        <span class="n">user</span> <span class="o">=</span> <span class="k">await</span> <span class="n">user_service</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">update_data</span><span class="p">,</span> <span class="n">item_id</span><span class="o">=</span><span class="n">user_id</span><span class="p">)</span>
+</span><span data-line="221">        <span class="k">return</span> <span class="n">UserRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+</span><span data-line="222">
+</span><span data-line="223">    <span class="nd">@patch</span><span class="p">(</span>
+</span><span data-line="224">        <span class="s2">&quot;/{user_id:uuid}/deactivate&quot;</span><span class="p">,</span>
+</span><span data-line="225">        <span class="n">responses</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="226">            <span class="mi">404</span><span class="p">:</span> <span class="n">ResponseSpec</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;User not found&quot;</span><span class="p">),</span>
+</span><span data-line="227">        <span class="p">},</span>
+</span><span data-line="228">    <span class="p">)</span>
+</span><span data-line="229">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">deactivate_user</span><span class="p">(</span>
+</span><span data-line="230">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="231">        <span class="n">user_service</span><span class="p">:</span> <span class="n">UserService</span><span class="p">,</span>
+</span><span data-line="232">        <span class="n">user_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">UUID</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;User ID&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The user ID&quot;</span><span class="p">)],</span>
+</span><span data-line="233">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UserRead</span><span class="p">:</span>
+</span><span data-line="234"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Deactivate a user account.</span>
+</span><span data-line="235">
+</span><span data-line="236"><span class="sd">        Marks a user account as inactive, preventing login and access to</span>
+</span><span data-line="237"><span class="sd">        authenticated features. The user data is preserved and can be</span>
+</span><span data-line="238"><span class="sd">        reactivated later. This is preferred over deletion for audit purposes.</span>
+</span><span data-line="239">
+</span><span data-line="240"><span class="sd">        Args:</span>
+</span><span data-line="241"><span class="sd">            user_service: Service for user database operations.</span>
+</span><span data-line="242"><span class="sd">            user_id: The unique UUID identifier of the user to deactivate.</span>
+</span><span data-line="243">
+</span><span data-line="244"><span class="sd">        Returns:</span>
+</span><span data-line="245"><span class="sd">            The deactivated user with updated status.</span>
+</span><span data-line="246">
+</span><span data-line="247"><span class="sd">        Raises:</span>
+</span><span data-line="248"><span class="sd">            NotFoundException: If no user with the given ID exists.</span>
+</span><span data-line="249"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="250">        <span class="n">user</span> <span class="o">=</span> <span class="k">await</span> <span class="n">user_service</span><span class="o">.</span><span class="n">deactivate</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+</span><span data-line="251">        <span class="k">return</span> <span class="n">UserRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+</span><span data-line="252">
+</span><span data-line="253">    <span class="nd">@patch</span><span class="p">(</span>
+</span><span data-line="254">        <span class="s2">&quot;/{user_id:uuid}/reactivate&quot;</span><span class="p">,</span>
+</span><span data-line="255">        <span class="n">responses</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="256">            <span class="mi">404</span><span class="p">:</span> <span class="n">ResponseSpec</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;User not found&quot;</span><span class="p">),</span>
+</span><span data-line="257">        <span class="p">},</span>
+</span><span data-line="258">    <span class="p">)</span>
+</span><span data-line="259">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">reactivate_user</span><span class="p">(</span>
+</span><span data-line="260">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="261">        <span class="n">user_service</span><span class="p">:</span> <span class="n">UserService</span><span class="p">,</span>
+</span><span data-line="262">        <span class="n">user_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">UUID</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;User ID&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The user ID&quot;</span><span class="p">)],</span>
+</span><span data-line="263">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UserRead</span><span class="p">:</span>
+</span><span data-line="264"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Reactivate a previously deactivated user account.</span>
+</span><span data-line="265">
+</span><span data-line="266"><span class="sd">        Restores access to a deactivated user account, allowing the user to</span>
+</span><span data-line="267"><span class="sd">        log in and use authenticated features again. All previous user data</span>
+</span><span data-line="268"><span class="sd">        and associations are preserved.</span>
+</span><span data-line="269">
+</span><span data-line="270"><span class="sd">        Args:</span>
+</span><span data-line="271"><span class="sd">            user_service: Service for user database operations.</span>
+</span><span data-line="272"><span class="sd">            user_id: The unique UUID identifier of the user to reactivate.</span>
+</span><span data-line="273">
+</span><span data-line="274"><span class="sd">        Returns:</span>
+</span><span data-line="275"><span class="sd">            The reactivated user with updated status.</span>
+</span><span data-line="276">
+</span><span data-line="277"><span class="sd">        Raises:</span>
+</span><span data-line="278"><span class="sd">            NotFoundException: If no user with the given ID exists.</span>
+</span><span data-line="279"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="280">        <span class="n">user</span> <span class="o">=</span> <span class="k">await</span> <span class="n">user_service</span><span class="o">.</span><span class="n">reactivate</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+</span><span data-line="281">        <span class="k">return</span> <span class="n">UserRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+</span><span data-line="282">
+</span><span data-line="283">    <span class="nd">@delete</span><span class="p">(</span>
+</span><span data-line="284">        <span class="s2">&quot;/{user_id:uuid}&quot;</span><span class="p">,</span>
+</span><span data-line="285">        <span class="n">responses</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="286">            <span class="mi">404</span><span class="p">:</span> <span class="n">ResponseSpec</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;User not found&quot;</span><span class="p">),</span>
+</span><span data-line="287">        <span class="p">},</span>
+</span><span data-line="288">    <span class="p">)</span>
+</span><span data-line="289">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">delete_user</span><span class="p">(</span>
+</span><span data-line="290">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="291">        <span class="n">user_service</span><span class="p">:</span> <span class="n">UserService</span><span class="p">,</span>
+</span><span data-line="292">        <span class="n">user_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">UUID</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;User ID&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The user ID&quot;</span><span class="p">)],</span>
+</span><span data-line="293">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="294"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Permanently delete a user account.</span>
+</span><span data-line="295">
+</span><span data-line="296"><span class="sd">        Removes a user and all associated data from the system. This action</span>
+</span><span data-line="297"><span class="sd">        is irreversible. Consider using deactivation instead for audit trail</span>
+</span><span data-line="298"><span class="sd">        preservation.</span>
+</span><span data-line="299">
+</span><span data-line="300"><span class="sd">        Args:</span>
+</span><span data-line="301"><span class="sd">            user_service: Service for user database operations.</span>
+</span><span data-line="302"><span class="sd">            user_id: The unique UUID identifier of the user to delete.</span>
+</span><span data-line="303">
+</span><span data-line="304"><span class="sd">        Raises:</span>
+</span><span data-line="305"><span class="sd">            NotFoundException: If no user with the given ID exists.</span>
+</span><span data-line="306"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="307">        <span class="k">await</span> <span class="n">user_service</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span></div>
+
+</span><span data-line="308">
+</span><span data-line="309">
+<div class="viewcode-block" id="MembershipController">
+<a class="viewcode-back" href="../../../../api/domains/users.html#pydotorg.domains.users.controllers.MembershipController">[docs]</a>
+</span><span data-line="310"><span class="k">class</span><span class="w"> </span><span class="nc">MembershipController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="311"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Controller for Membership CRUD operations.&quot;&quot;&quot;</span>
+</span><span data-line="312">
+</span><span data-line="313">    <span class="n">path</span> <span class="o">=</span> <span class="n">urls</span><span class="o">.</span><span class="n">MEMBERSHIPS</span>
+</span><span data-line="314">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Users&quot;</span><span class="p">]</span>
+</span><span data-line="315">
+</span><span data-line="316">    <span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+</span><span data-line="317">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_memberships</span><span class="p">(</span>
+</span><span data-line="318">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="319">        <span class="n">membership_service</span><span class="p">:</span> <span class="n">MembershipService</span><span class="p">,</span>
+</span><span data-line="320">        <span class="n">limit_offset</span><span class="p">:</span> <span class="n">LimitOffset</span><span class="p">,</span>
+</span><span data-line="321">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">MembershipRead</span><span class="p">]:</span>
+</span><span data-line="322"><span class="w">        </span><span class="sd">&quot;&quot;&quot;List all memberships with pagination.</span>
+</span><span data-line="323">
+</span><span data-line="324"><span class="sd">        Retrieves a paginated list of PSF memberships from the database.</span>
+</span><span data-line="325"><span class="sd">        Includes membership type, status, and associated user information.</span>
+</span><span data-line="326">
+</span><span data-line="327"><span class="sd">        Args:</span>
+</span><span data-line="328"><span class="sd">            membership_service: Service for membership database operations.</span>
+</span><span data-line="329"><span class="sd">            limit_offset: Pagination parameters for limiting and offsetting results.</span>
+</span><span data-line="330">
+</span><span data-line="331"><span class="sd">        Returns:</span>
+</span><span data-line="332"><span class="sd">            List of membership records with user associations.</span>
+</span><span data-line="333"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="334">        <span class="n">memberships</span><span class="p">,</span> <span class="n">_total</span> <span class="o">=</span> <span class="k">await</span> <span class="n">membership_service</span><span class="o">.</span><span class="n">list_and_count</span><span class="p">(</span><span class="n">limit_offset</span><span class="p">)</span>
+</span><span data-line="335">        <span class="k">return</span> <span class="p">[</span><span class="n">MembershipRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">memberships</span><span class="p">]</span>
+</span><span data-line="336">
+</span><span data-line="337">    <span class="nd">@get</span><span class="p">(</span>
+</span><span data-line="338">        <span class="s2">&quot;/{membership_id:uuid}&quot;</span><span class="p">,</span>
+</span><span data-line="339">        <span class="n">responses</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="340">            <span class="mi">404</span><span class="p">:</span> <span class="n">ResponseSpec</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Membership not found&quot;</span><span class="p">),</span>
+</span><span data-line="341">        <span class="p">},</span>
+</span><span data-line="342">    <span class="p">)</span>
+</span><span data-line="343">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_membership</span><span class="p">(</span>
+</span><span data-line="344">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="345">        <span class="n">membership_service</span><span class="p">:</span> <span class="n">MembershipService</span><span class="p">,</span>
+</span><span data-line="346">        <span class="n">membership_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">UUID</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Membership ID&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The membership ID&quot;</span><span class="p">)],</span>
+</span><span data-line="347">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MembershipRead</span><span class="p">:</span>
+</span><span data-line="348"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve a specific membership by its unique identifier.</span>
+</span><span data-line="349">
+</span><span data-line="350"><span class="sd">        Fetches complete membership information including type, status,</span>
+</span><span data-line="351"><span class="sd">        dates, and associated user details.</span>
+</span><span data-line="352">
+</span><span data-line="353"><span class="sd">        Args:</span>
+</span><span data-line="354"><span class="sd">            membership_service: Service for membership database operations.</span>
+</span><span data-line="355"><span class="sd">            membership_id: The unique UUID identifier of the membership.</span>
+</span><span data-line="356">
+</span><span data-line="357"><span class="sd">        Returns:</span>
+</span><span data-line="358"><span class="sd">            Complete membership details including user association.</span>
+</span><span data-line="359">
+</span><span data-line="360"><span class="sd">        Raises:</span>
+</span><span data-line="361"><span class="sd">            NotFoundException: If no membership with the given ID exists.</span>
+</span><span data-line="362"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="363">        <span class="n">membership</span> <span class="o">=</span> <span class="k">await</span> <span class="n">membership_service</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">membership_id</span><span class="p">)</span>
+</span><span data-line="364">        <span class="k">return</span> <span class="n">MembershipRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">membership</span><span class="p">)</span>
+</span><span data-line="365">
+</span><span data-line="366">    <span class="nd">@get</span><span class="p">(</span>
+</span><span data-line="367">        <span class="s2">&quot;/user/{user_id:uuid}&quot;</span><span class="p">,</span>
+</span><span data-line="368">        <span class="n">responses</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="369">            <span class="mi">404</span><span class="p">:</span> <span class="n">ResponseSpec</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Membership not found&quot;</span><span class="p">),</span>
+</span><span data-line="370">        <span class="p">},</span>
+</span><span data-line="371">    <span class="p">)</span>
+</span><span data-line="372">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_membership_by_user</span><span class="p">(</span>
+</span><span data-line="373">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="374">        <span class="n">membership_service</span><span class="p">:</span> <span class="n">MembershipService</span><span class="p">,</span>
+</span><span data-line="375">        <span class="n">user_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">UUID</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;User ID&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The user ID&quot;</span><span class="p">)],</span>
+</span><span data-line="376">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MembershipRead</span><span class="p">:</span>
+</span><span data-line="377"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Look up a membership by the associated user ID.</span>
+</span><span data-line="378">
+</span><span data-line="379"><span class="sd">        Retrieves the membership record for a specific user. Each user can</span>
+</span><span data-line="380"><span class="sd">        have at most one active membership at a time.</span>
+</span><span data-line="381">
+</span><span data-line="382"><span class="sd">        Args:</span>
+</span><span data-line="383"><span class="sd">            membership_service: Service for membership database operations.</span>
+</span><span data-line="384"><span class="sd">            user_id: The unique UUID identifier of the user.</span>
+</span><span data-line="385">
+</span><span data-line="386"><span class="sd">        Returns:</span>
+</span><span data-line="387"><span class="sd">            Membership details for the specified user.</span>
+</span><span data-line="388">
+</span><span data-line="389"><span class="sd">        Raises:</span>
+</span><span data-line="390"><span class="sd">            ValueError: If no membership exists for the given user.</span>
+</span><span data-line="391"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="392">        <span class="n">membership</span> <span class="o">=</span> <span class="k">await</span> <span class="n">membership_service</span><span class="o">.</span><span class="n">get_by_user_id</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+</span><span data-line="393">        <span class="k">if</span> <span class="ow">not</span> <span class="n">membership</span><span class="p">:</span>
+</span><span data-line="394">            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Membership for user </span><span class="si">{</span><span class="n">user_id</span><span class="si">}</span><span class="s2"> not found&quot;</span>
+</span><span data-line="395">            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</span><span data-line="396">        <span class="k">return</span> <span class="n">MembershipRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">membership</span><span class="p">)</span>
+</span><span data-line="397">
+</span><span data-line="398">    <span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+</span><span data-line="399">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_membership</span><span class="p">(</span>
+</span><span data-line="400">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="401">        <span class="n">membership_service</span><span class="p">:</span> <span class="n">MembershipService</span><span class="p">,</span>
+</span><span data-line="402">        <span class="n">data</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">MembershipCreate</span><span class="p">,</span> <span class="n">Body</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Membership&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Membership to create&quot;</span><span class="p">)],</span>
+</span><span data-line="403">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MembershipRead</span><span class="p">:</span>
+</span><span data-line="404"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new PSF membership for a user.</span>
+</span><span data-line="405">
+</span><span data-line="406"><span class="sd">        Associates a new membership record with an existing user account.</span>
+</span><span data-line="407"><span class="sd">        The membership type and initial status are set based on the provided data.</span>
+</span><span data-line="408">
+</span><span data-line="409"><span class="sd">        Args:</span>
+</span><span data-line="410"><span class="sd">            membership_service: Service for membership database operations.</span>
+</span><span data-line="411"><span class="sd">            data: Membership creation payload with user ID and membership details.</span>
+</span><span data-line="412">
+</span><span data-line="413"><span class="sd">        Returns:</span>
+</span><span data-line="414"><span class="sd">            The newly created membership record.</span>
+</span><span data-line="415">
+</span><span data-line="416"><span class="sd">        Raises:</span>
+</span><span data-line="417"><span class="sd">            NotFoundException: If the specified user does not exist.</span>
+</span><span data-line="418"><span class="sd">            ConflictError: If the user already has an active membership.</span>
+</span><span data-line="419"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="420">        <span class="n">membership_data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">model_dump</span><span class="p">()</span>
+</span><span data-line="421">        <span class="n">user_id</span> <span class="o">=</span> <span class="n">membership_data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;user_id&quot;</span><span class="p">)</span>
+</span><span data-line="422">        <span class="n">membership</span> <span class="o">=</span> <span class="k">await</span> <span class="n">membership_service</span><span class="o">.</span><span class="n">create_for_user</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">membership_data</span><span class="p">)</span>
+</span><span data-line="423">        <span class="k">return</span> <span class="n">MembershipRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">membership</span><span class="p">)</span>
+</span><span data-line="424">
+</span><span data-line="425">    <span class="nd">@put</span><span class="p">(</span>
+</span><span data-line="426">        <span class="s2">&quot;/{membership_id:uuid}&quot;</span><span class="p">,</span>
+</span><span data-line="427">        <span class="n">responses</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="428">            <span class="mi">404</span><span class="p">:</span> <span class="n">ResponseSpec</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Membership not found&quot;</span><span class="p">),</span>
+</span><span data-line="429">            <span class="mi">422</span><span class="p">:</span> <span class="n">ResponseSpec</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Validation error&quot;</span><span class="p">),</span>
+</span><span data-line="430">        <span class="p">},</span>
+</span><span data-line="431">    <span class="p">)</span>
+</span><span data-line="432">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">update_membership</span><span class="p">(</span>
+</span><span data-line="433">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="434">        <span class="n">membership_service</span><span class="p">:</span> <span class="n">MembershipService</span><span class="p">,</span>
+</span><span data-line="435">        <span class="n">data</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">MembershipUpdate</span><span class="p">,</span> <span class="n">Body</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Membership&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Membership data to update&quot;</span><span class="p">)],</span>
+</span><span data-line="436">        <span class="n">membership_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">UUID</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Membership ID&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The membership ID&quot;</span><span class="p">)],</span>
+</span><span data-line="437">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MembershipRead</span><span class="p">:</span>
+</span><span data-line="438"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Update an existing membership record.</span>
+</span><span data-line="439">
+</span><span data-line="440"><span class="sd">        Modifies membership fields with the provided values. Can be used to</span>
+</span><span data-line="441"><span class="sd">        change membership type, update status, or modify dates.</span>
+</span><span data-line="442">
+</span><span data-line="443"><span class="sd">        Args:</span>
+</span><span data-line="444"><span class="sd">            membership_service: Service for membership database operations.</span>
+</span><span data-line="445"><span class="sd">            data: Partial membership update payload with fields to modify.</span>
+</span><span data-line="446"><span class="sd">            membership_id: The unique UUID identifier of the membership to update.</span>
+</span><span data-line="447">
+</span><span data-line="448"><span class="sd">        Returns:</span>
+</span><span data-line="449"><span class="sd">            The updated membership with all current fields.</span>
+</span><span data-line="450">
+</span><span data-line="451"><span class="sd">        Raises:</span>
+</span><span data-line="452"><span class="sd">            NotFoundException: If no membership with the given ID exists.</span>
+</span><span data-line="453"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="454">        <span class="n">update_data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">model_dump</span><span class="p">(</span><span class="n">exclude_unset</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span data-line="455">        <span class="n">membership</span> <span class="o">=</span> <span class="k">await</span> <span class="n">membership_service</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">update_data</span><span class="p">,</span> <span class="n">item_id</span><span class="o">=</span><span class="n">membership_id</span><span class="p">)</span>
+</span><span data-line="456">        <span class="k">return</span> <span class="n">MembershipRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">membership</span><span class="p">)</span>
+</span><span data-line="457">
+</span><span data-line="458">    <span class="nd">@delete</span><span class="p">(</span>
+</span><span data-line="459">        <span class="s2">&quot;/{membership_id:uuid}&quot;</span><span class="p">,</span>
+</span><span data-line="460">        <span class="n">responses</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="461">            <span class="mi">404</span><span class="p">:</span> <span class="n">ResponseSpec</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Membership not found&quot;</span><span class="p">),</span>
+</span><span data-line="462">        <span class="p">},</span>
+</span><span data-line="463">    <span class="p">)</span>
+</span><span data-line="464">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">delete_membership</span><span class="p">(</span>
+</span><span data-line="465">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="466">        <span class="n">membership_service</span><span class="p">:</span> <span class="n">MembershipService</span><span class="p">,</span>
+</span><span data-line="467">        <span class="n">membership_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">UUID</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Membership ID&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The membership ID&quot;</span><span class="p">)],</span>
+</span><span data-line="468">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="469"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Delete a membership record.</span>
+</span><span data-line="470">
+</span><span data-line="471"><span class="sd">        Permanently removes a membership from the system. The associated user</span>
+</span><span data-line="472"><span class="sd">        account remains intact. This action is irreversible.</span>
+</span><span data-line="473">
+</span><span data-line="474"><span class="sd">        Args:</span>
+</span><span data-line="475"><span class="sd">            membership_service: Service for membership database operations.</span>
+</span><span data-line="476"><span class="sd">            membership_id: The unique UUID identifier of the membership to delete.</span>
+</span><span data-line="477">
+</span><span data-line="478"><span class="sd">        Raises:</span>
+</span><span data-line="479"><span class="sd">            NotFoundException: If no membership with the given ID exists.</span>
+</span><span data-line="480"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="481">        <span class="k">await</span> <span class="n">membership_service</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">membership_id</span><span class="p">)</span></div>
+
+</span><span data-line="482">
+</span><span data-line="483">
+<div class="viewcode-block" id="UserGroupController">
+<a class="viewcode-back" href="../../../../api/domains/users.html#pydotorg.domains.users.controllers.UserGroupController">[docs]</a>
+</span><span data-line="484"><span class="k">class</span><span class="w"> </span><span class="nc">UserGroupController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="485"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Controller for UserGroup CRUD operations.&quot;&quot;&quot;</span>
+</span><span data-line="486">
+</span><span data-line="487">    <span class="n">path</span> <span class="o">=</span> <span class="n">urls</span><span class="o">.</span><span class="n">USER_GROUPS</span>
+</span><span data-line="488">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Users&quot;</span><span class="p">]</span>
+</span><span data-line="489">
+</span><span data-line="490">    <span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+</span><span data-line="491">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_user_groups</span><span class="p">(</span>
+</span><span data-line="492">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="493">        <span class="n">user_group_service</span><span class="p">:</span> <span class="n">UserGroupService</span><span class="p">,</span>
+</span><span data-line="494">        <span class="n">limit_offset</span><span class="p">:</span> <span class="n">LimitOffset</span><span class="p">,</span>
+</span><span data-line="495">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">UserGroupRead</span><span class="p">]:</span>
+</span><span data-line="496"><span class="w">        </span><span class="sd">&quot;&quot;&quot;List all user groups with pagination.</span>
+</span><span data-line="497">
+</span><span data-line="498"><span class="sd">        Retrieves a paginated list of user groups including both approved</span>
+</span><span data-line="499"><span class="sd">        and pending groups. Groups organize users for permissions and features.</span>
+</span><span data-line="500">
+</span><span data-line="501"><span class="sd">        Args:</span>
+</span><span data-line="502"><span class="sd">            user_group_service: Service for user group database operations.</span>
+</span><span data-line="503"><span class="sd">            limit_offset: Pagination parameters for limiting and offsetting results.</span>
+</span><span data-line="504">
+</span><span data-line="505"><span class="sd">        Returns:</span>
+</span><span data-line="506"><span class="sd">            List of user groups with their metadata and status.</span>
+</span><span data-line="507"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="508">        <span class="n">groups</span><span class="p">,</span> <span class="n">_total</span> <span class="o">=</span> <span class="k">await</span> <span class="n">user_group_service</span><span class="o">.</span><span class="n">list_and_count</span><span class="p">(</span><span class="n">limit_offset</span><span class="p">)</span>
+</span><span data-line="509">        <span class="k">return</span> <span class="p">[</span><span class="n">UserGroupRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">groups</span><span class="p">]</span>
+</span><span data-line="510">
+</span><span data-line="511">    <span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/approved&quot;</span><span class="p">)</span>
+</span><span data-line="512">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_approved_groups</span><span class="p">(</span>
+</span><span data-line="513">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="514">        <span class="n">user_group_service</span><span class="p">:</span> <span class="n">UserGroupService</span><span class="p">,</span>
+</span><span data-line="515">        <span class="n">limit</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">1000</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+</span><span data-line="516">        <span class="n">offset</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span><span data-line="517">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">UserGroupRead</span><span class="p">]:</span>
+</span><span data-line="518"><span class="w">        </span><span class="sd">&quot;&quot;&quot;List only approved user groups.</span>
+</span><span data-line="519">
+</span><span data-line="520"><span class="sd">        Retrieves user groups that have been approved by administrators.</span>
+</span><span data-line="521"><span class="sd">        Approved groups are visible to users and can be joined.</span>
+</span><span data-line="522">
+</span><span data-line="523"><span class="sd">        Args:</span>
+</span><span data-line="524"><span class="sd">            user_group_service: Service for user group database operations.</span>
+</span><span data-line="525"><span class="sd">            limit: Maximum number of groups to return (1-1000).</span>
+</span><span data-line="526"><span class="sd">            offset: Number of groups to skip for pagination.</span>
+</span><span data-line="527">
+</span><span data-line="528"><span class="sd">        Returns:</span>
+</span><span data-line="529"><span class="sd">            List of approved user groups.</span>
+</span><span data-line="530"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="531">        <span class="n">groups</span> <span class="o">=</span> <span class="k">await</span> <span class="n">user_group_service</span><span class="o">.</span><span class="n">list_approved</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="n">limit</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">)</span>
+</span><span data-line="532">        <span class="k">return</span> <span class="p">[</span><span class="n">UserGroupRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">groups</span><span class="p">]</span>
+</span><span data-line="533">
+</span><span data-line="534">    <span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/trusted&quot;</span><span class="p">)</span>
+</span><span data-line="535">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_trusted_groups</span><span class="p">(</span>
+</span><span data-line="536">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="537">        <span class="n">user_group_service</span><span class="p">:</span> <span class="n">UserGroupService</span><span class="p">,</span>
+</span><span data-line="538">        <span class="n">limit</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">1000</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+</span><span data-line="539">        <span class="n">offset</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span><span data-line="540">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">UserGroupRead</span><span class="p">]:</span>
+</span><span data-line="541"><span class="w">        </span><span class="sd">&quot;&quot;&quot;List only trusted user groups.</span>
+</span><span data-line="542">
+</span><span data-line="543"><span class="sd">        Retrieves user groups marked as trusted. Trusted groups have elevated</span>
+</span><span data-line="544"><span class="sd">        privileges and are typically official Python community organizations.</span>
+</span><span data-line="545">
+</span><span data-line="546"><span class="sd">        Args:</span>
+</span><span data-line="547"><span class="sd">            user_group_service: Service for user group database operations.</span>
+</span><span data-line="548"><span class="sd">            limit: Maximum number of groups to return (1-1000).</span>
+</span><span data-line="549"><span class="sd">            offset: Number of groups to skip for pagination.</span>
+</span><span data-line="550">
+</span><span data-line="551"><span class="sd">        Returns:</span>
+</span><span data-line="552"><span class="sd">            List of trusted user groups.</span>
+</span><span data-line="553"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="554">        <span class="n">groups</span> <span class="o">=</span> <span class="k">await</span> <span class="n">user_group_service</span><span class="o">.</span><span class="n">list_trusted</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="n">limit</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">)</span>
+</span><span data-line="555">        <span class="k">return</span> <span class="p">[</span><span class="n">UserGroupRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">groups</span><span class="p">]</span>
+</span><span data-line="556">
+</span><span data-line="557">    <span class="nd">@get</span><span class="p">(</span>
+</span><span data-line="558">        <span class="s2">&quot;/{group_id:uuid}&quot;</span><span class="p">,</span>
+</span><span data-line="559">        <span class="n">responses</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="560">            <span class="mi">404</span><span class="p">:</span> <span class="n">ResponseSpec</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;User group not found&quot;</span><span class="p">),</span>
+</span><span data-line="561">        <span class="p">},</span>
+</span><span data-line="562">    <span class="p">)</span>
+</span><span data-line="563">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_user_group</span><span class="p">(</span>
+</span><span data-line="564">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="565">        <span class="n">user_group_service</span><span class="p">:</span> <span class="n">UserGroupService</span><span class="p">,</span>
+</span><span data-line="566">        <span class="n">group_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">UUID</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Group ID&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The user group ID&quot;</span><span class="p">)],</span>
+</span><span data-line="567">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UserGroupRead</span><span class="p">:</span>
+</span><span data-line="568"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve a specific user group by its unique identifier.</span>
+</span><span data-line="569">
+</span><span data-line="570"><span class="sd">        Fetches complete user group information including name, description,</span>
+</span><span data-line="571"><span class="sd">        approval status, and trust level.</span>
+</span><span data-line="572">
+</span><span data-line="573"><span class="sd">        Args:</span>
+</span><span data-line="574"><span class="sd">            user_group_service: Service for user group database operations.</span>
+</span><span data-line="575"><span class="sd">            group_id: The unique UUID identifier of the user group.</span>
+</span><span data-line="576">
+</span><span data-line="577"><span class="sd">        Returns:</span>
+</span><span data-line="578"><span class="sd">            Complete user group details.</span>
+</span><span data-line="579">
+</span><span data-line="580"><span class="sd">        Raises:</span>
+</span><span data-line="581"><span class="sd">            NotFoundException: If no user group with the given ID exists.</span>
+</span><span data-line="582"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="583">        <span class="n">group</span> <span class="o">=</span> <span class="k">await</span> <span class="n">user_group_service</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">group_id</span><span class="p">)</span>
+</span><span data-line="584">        <span class="k">return</span> <span class="n">UserGroupRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+</span><span data-line="585">
+</span><span data-line="586">    <span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+</span><span data-line="587">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_user_group</span><span class="p">(</span>
+</span><span data-line="588">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="589">        <span class="n">user_group_service</span><span class="p">:</span> <span class="n">UserGroupService</span><span class="p">,</span>
+</span><span data-line="590">        <span class="n">data</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">UserGroupCreate</span><span class="p">,</span> <span class="n">Body</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;User Group&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;User group to create&quot;</span><span class="p">)],</span>
+</span><span data-line="591">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UserGroupRead</span><span class="p">:</span>
+</span><span data-line="592"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new user group.</span>
+</span><span data-line="593">
+</span><span data-line="594"><span class="sd">        Creates a new user group in pending status. Groups must be approved</span>
+</span><span data-line="595"><span class="sd">        by administrators before becoming visible to users.</span>
+</span><span data-line="596">
+</span><span data-line="597"><span class="sd">        Args:</span>
+</span><span data-line="598"><span class="sd">            user_group_service: Service for user group database operations.</span>
+</span><span data-line="599"><span class="sd">            data: User group creation payload with name and description.</span>
+</span><span data-line="600">
+</span><span data-line="601"><span class="sd">        Returns:</span>
+</span><span data-line="602"><span class="sd">            The newly created user group in pending status.</span>
+</span><span data-line="603">
+</span><span data-line="604"><span class="sd">        Raises:</span>
+</span><span data-line="605"><span class="sd">            ConflictError: If a group with the same name already exists.</span>
+</span><span data-line="606"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="607">        <span class="n">group</span> <span class="o">=</span> <span class="k">await</span> <span class="n">user_group_service</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">model_dump</span><span class="p">())</span>
+</span><span data-line="608">        <span class="k">return</span> <span class="n">UserGroupRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+</span><span data-line="609">
+</span><span data-line="610">    <span class="nd">@put</span><span class="p">(</span>
+</span><span data-line="611">        <span class="s2">&quot;/{group_id:uuid}&quot;</span><span class="p">,</span>
+</span><span data-line="612">        <span class="n">responses</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="613">            <span class="mi">404</span><span class="p">:</span> <span class="n">ResponseSpec</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;User group not found&quot;</span><span class="p">),</span>
+</span><span data-line="614">            <span class="mi">422</span><span class="p">:</span> <span class="n">ResponseSpec</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Validation error&quot;</span><span class="p">),</span>
+</span><span data-line="615">        <span class="p">},</span>
+</span><span data-line="616">    <span class="p">)</span>
+</span><span data-line="617">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">update_user_group</span><span class="p">(</span>
+</span><span data-line="618">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="619">        <span class="n">user_group_service</span><span class="p">:</span> <span class="n">UserGroupService</span><span class="p">,</span>
+</span><span data-line="620">        <span class="n">data</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">UserGroupUpdate</span><span class="p">,</span> <span class="n">Body</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;User Group&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;User group data to update&quot;</span><span class="p">)],</span>
+</span><span data-line="621">        <span class="n">group_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">UUID</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Group ID&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The user group ID&quot;</span><span class="p">)],</span>
+</span><span data-line="622">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UserGroupRead</span><span class="p">:</span>
+</span><span data-line="623"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Update an existing user group.</span>
+</span><span data-line="624">
+</span><span data-line="625"><span class="sd">        Modifies user group fields with the provided values. Can update</span>
+</span><span data-line="626"><span class="sd">        name, description, and other metadata. Status changes should use</span>
+</span><span data-line="627"><span class="sd">        dedicated endpoints.</span>
+</span><span data-line="628">
+</span><span data-line="629"><span class="sd">        Args:</span>
+</span><span data-line="630"><span class="sd">            user_group_service: Service for user group database operations.</span>
+</span><span data-line="631"><span class="sd">            data: Partial user group update payload with fields to modify.</span>
+</span><span data-line="632"><span class="sd">            group_id: The unique UUID identifier of the user group to update.</span>
+</span><span data-line="633">
+</span><span data-line="634"><span class="sd">        Returns:</span>
+</span><span data-line="635"><span class="sd">            The updated user group with all current fields.</span>
+</span><span data-line="636">
+</span><span data-line="637"><span class="sd">        Raises:</span>
+</span><span data-line="638"><span class="sd">            NotFoundException: If no user group with the given ID exists.</span>
+</span><span data-line="639"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="640">        <span class="n">update_data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">model_dump</span><span class="p">(</span><span class="n">exclude_unset</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span data-line="641">        <span class="n">group</span> <span class="o">=</span> <span class="k">await</span> <span class="n">user_group_service</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">update_data</span><span class="p">,</span> <span class="n">item_id</span><span class="o">=</span><span class="n">group_id</span><span class="p">)</span>
+</span><span data-line="642">        <span class="k">return</span> <span class="n">UserGroupRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+</span><span data-line="643">
+</span><span data-line="644">    <span class="nd">@patch</span><span class="p">(</span><span class="s2">&quot;/{group_id:uuid}/approve&quot;</span><span class="p">)</span>
+</span><span data-line="645">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">approve_group</span><span class="p">(</span>
+</span><span data-line="646">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="647">        <span class="n">user_group_service</span><span class="p">:</span> <span class="n">UserGroupService</span><span class="p">,</span>
+</span><span data-line="648">        <span class="n">group_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">UUID</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Group ID&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The user group ID&quot;</span><span class="p">)],</span>
+</span><span data-line="649">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UserGroupRead</span><span class="p">:</span>
+</span><span data-line="650"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Approve a pending user group.</span>
+</span><span data-line="651">
+</span><span data-line="652"><span class="sd">        Marks a user group as approved, making it visible to users and</span>
+</span><span data-line="653"><span class="sd">        allowing membership. This action requires administrator privileges.</span>
+</span><span data-line="654">
+</span><span data-line="655"><span class="sd">        Args:</span>
+</span><span data-line="656"><span class="sd">            user_group_service: Service for user group database operations.</span>
+</span><span data-line="657"><span class="sd">            group_id: The unique UUID identifier of the user group to approve.</span>
+</span><span data-line="658">
+</span><span data-line="659"><span class="sd">        Returns:</span>
+</span><span data-line="660"><span class="sd">            The approved user group with updated status.</span>
+</span><span data-line="661">
+</span><span data-line="662"><span class="sd">        Raises:</span>
+</span><span data-line="663"><span class="sd">            NotFoundException: If no user group with the given ID exists.</span>
+</span><span data-line="664"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="665">        <span class="n">group</span> <span class="o">=</span> <span class="k">await</span> <span class="n">user_group_service</span><span class="o">.</span><span class="n">approve</span><span class="p">(</span><span class="n">group_id</span><span class="p">)</span>
+</span><span data-line="666">        <span class="k">return</span> <span class="n">UserGroupRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+</span><span data-line="667">
+</span><span data-line="668">    <span class="nd">@patch</span><span class="p">(</span><span class="s2">&quot;/{group_id:uuid}/revoke-approval&quot;</span><span class="p">)</span>
+</span><span data-line="669">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">revoke_approval</span><span class="p">(</span>
+</span><span data-line="670">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="671">        <span class="n">user_group_service</span><span class="p">:</span> <span class="n">UserGroupService</span><span class="p">,</span>
+</span><span data-line="672">        <span class="n">group_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">UUID</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Group ID&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The user group ID&quot;</span><span class="p">)],</span>
+</span><span data-line="673">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UserGroupRead</span><span class="p">:</span>
+</span><span data-line="674"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Revoke approval of a user group.</span>
+</span><span data-line="675">
+</span><span data-line="676"><span class="sd">        Removes approved status from a user group, hiding it from users</span>
+</span><span data-line="677"><span class="sd">        and preventing new memberships. Existing members are not removed.</span>
+</span><span data-line="678">
+</span><span data-line="679"><span class="sd">        Args:</span>
+</span><span data-line="680"><span class="sd">            user_group_service: Service for user group database operations.</span>
+</span><span data-line="681"><span class="sd">            group_id: The unique UUID identifier of the user group.</span>
+</span><span data-line="682">
+</span><span data-line="683"><span class="sd">        Returns:</span>
+</span><span data-line="684"><span class="sd">            The user group with revoked approval status.</span>
+</span><span data-line="685">
+</span><span data-line="686"><span class="sd">        Raises:</span>
+</span><span data-line="687"><span class="sd">            NotFoundException: If no user group with the given ID exists.</span>
+</span><span data-line="688"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="689">        <span class="n">group</span> <span class="o">=</span> <span class="k">await</span> <span class="n">user_group_service</span><span class="o">.</span><span class="n">revoke_approval</span><span class="p">(</span><span class="n">group_id</span><span class="p">)</span>
+</span><span data-line="690">        <span class="k">return</span> <span class="n">UserGroupRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+</span><span data-line="691">
+</span><span data-line="692">    <span class="nd">@patch</span><span class="p">(</span><span class="s2">&quot;/{group_id:uuid}/mark-trusted&quot;</span><span class="p">)</span>
+</span><span data-line="693">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">mark_trusted</span><span class="p">(</span>
+</span><span data-line="694">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="695">        <span class="n">user_group_service</span><span class="p">:</span> <span class="n">UserGroupService</span><span class="p">,</span>
+</span><span data-line="696">        <span class="n">group_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">UUID</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Group ID&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The user group ID&quot;</span><span class="p">)],</span>
+</span><span data-line="697">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UserGroupRead</span><span class="p">:</span>
+</span><span data-line="698"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Mark a user group as trusted.</span>
+</span><span data-line="699">
+</span><span data-line="700"><span class="sd">        Grants trusted status to a user group, providing elevated privileges.</span>
+</span><span data-line="701"><span class="sd">        Trusted groups are typically official Python community organizations.</span>
+</span><span data-line="702">
+</span><span data-line="703"><span class="sd">        Args:</span>
+</span><span data-line="704"><span class="sd">            user_group_service: Service for user group database operations.</span>
+</span><span data-line="705"><span class="sd">            group_id: The unique UUID identifier of the user group.</span>
+</span><span data-line="706">
+</span><span data-line="707"><span class="sd">        Returns:</span>
+</span><span data-line="708"><span class="sd">            The user group with trusted status enabled.</span>
+</span><span data-line="709">
+</span><span data-line="710"><span class="sd">        Raises:</span>
+</span><span data-line="711"><span class="sd">            NotFoundException: If no user group with the given ID exists.</span>
+</span><span data-line="712"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="713">        <span class="n">group</span> <span class="o">=</span> <span class="k">await</span> <span class="n">user_group_service</span><span class="o">.</span><span class="n">mark_trusted</span><span class="p">(</span><span class="n">group_id</span><span class="p">)</span>
+</span><span data-line="714">        <span class="k">return</span> <span class="n">UserGroupRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+</span><span data-line="715">
+</span><span data-line="716">    <span class="nd">@patch</span><span class="p">(</span><span class="s2">&quot;/{group_id:uuid}/revoke-trust&quot;</span><span class="p">)</span>
+</span><span data-line="717">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">revoke_trust</span><span class="p">(</span>
+</span><span data-line="718">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="719">        <span class="n">user_group_service</span><span class="p">:</span> <span class="n">UserGroupService</span><span class="p">,</span>
+</span><span data-line="720">        <span class="n">group_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">UUID</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Group ID&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The user group ID&quot;</span><span class="p">)],</span>
+</span><span data-line="721">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UserGroupRead</span><span class="p">:</span>
+</span><span data-line="722"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Revoke trusted status from a user group.</span>
+</span><span data-line="723">
+</span><span data-line="724"><span class="sd">        Removes trusted status from a user group, revoking elevated privileges.</span>
+</span><span data-line="725"><span class="sd">        The group remains approved and visible to users.</span>
+</span><span data-line="726">
+</span><span data-line="727"><span class="sd">        Args:</span>
+</span><span data-line="728"><span class="sd">            user_group_service: Service for user group database operations.</span>
+</span><span data-line="729"><span class="sd">            group_id: The unique UUID identifier of the user group.</span>
+</span><span data-line="730">
+</span><span data-line="731"><span class="sd">        Returns:</span>
+</span><span data-line="732"><span class="sd">            The user group with trusted status revoked.</span>
+</span><span data-line="733">
+</span><span data-line="734"><span class="sd">        Raises:</span>
+</span><span data-line="735"><span class="sd">            NotFoundException: If no user group with the given ID exists.</span>
+</span><span data-line="736"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="737">        <span class="n">group</span> <span class="o">=</span> <span class="k">await</span> <span class="n">user_group_service</span><span class="o">.</span><span class="n">revoke_trust</span><span class="p">(</span><span class="n">group_id</span><span class="p">)</span>
+</span><span data-line="738">        <span class="k">return</span> <span class="n">UserGroupRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+</span><span data-line="739">
+</span><span data-line="740">    <span class="nd">@delete</span><span class="p">(</span>
+</span><span data-line="741">        <span class="s2">&quot;/{group_id:uuid}&quot;</span><span class="p">,</span>
+</span><span data-line="742">        <span class="n">responses</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="743">            <span class="mi">404</span><span class="p">:</span> <span class="n">ResponseSpec</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;User group not found&quot;</span><span class="p">),</span>
+</span><span data-line="744">        <span class="p">},</span>
+</span><span data-line="745">    <span class="p">)</span>
+</span><span data-line="746">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">delete_user_group</span><span class="p">(</span>
+</span><span data-line="747">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="748">        <span class="n">user_group_service</span><span class="p">:</span> <span class="n">UserGroupService</span><span class="p">,</span>
+</span><span data-line="749">        <span class="n">group_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">UUID</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Group ID&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The user group ID&quot;</span><span class="p">)],</span>
+</span><span data-line="750">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="751"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Permanently delete a user group.</span>
+</span><span data-line="752">
+</span><span data-line="753"><span class="sd">        Removes a user group and all associated memberships from the system.</span>
+</span><span data-line="754"><span class="sd">        This action is irreversible. Consider revoking approval instead.</span>
+</span><span data-line="755">
+</span><span data-line="756"><span class="sd">        Args:</span>
+</span><span data-line="757"><span class="sd">            user_group_service: Service for user group database operations.</span>
+</span><span data-line="758"><span class="sd">            group_id: The unique UUID identifier of the user group to delete.</span>
+</span><span data-line="759">
+</span><span data-line="760"><span class="sd">        Raises:</span>
+</span><span data-line="761"><span class="sd">            NotFoundException: If no user group with the given ID exists.</span>
+</span><span data-line="762"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="763">        <span class="k">await</span> <span class="n">user_group_service</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">group_id</span><span class="p">)</span></div>
+
+</span><span data-line="764">
+</span><span data-line="765">
+<div class="viewcode-block" id="APIKeyController">
+<a class="viewcode-back" href="../../../../api/domains/users.html#pydotorg.domains.users.controllers.APIKeyController">[docs]</a>
+</span><span data-line="766"><span class="k">class</span><span class="w"> </span><span class="nc">APIKeyController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="767"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Controller for API key management.</span>
+</span><span data-line="768">
+</span><span data-line="769"><span class="sd">    API keys allow programmatic access to the API. Users can create multiple keys</span>
+</span><span data-line="770"><span class="sd">    with optional expiration dates. Keys are shown only once at creation time.</span>
+</span><span data-line="771"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="772">
+</span><span data-line="773">    <span class="n">path</span> <span class="o">=</span> <span class="n">urls</span><span class="o">.</span><span class="n">API_KEYS</span>
+</span><span data-line="774">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;API Keys&quot;</span><span class="p">]</span>
+</span><span data-line="775">    <span class="n">guards</span> <span class="o">=</span> <span class="p">[</span><span class="n">require_authenticated</span><span class="p">]</span>
+</span><span data-line="776">
+</span><span data-line="777">    <span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+</span><span data-line="778">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_api_keys</span><span class="p">(</span>
+</span><span data-line="779">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="780">        <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">[</span><span class="n">User</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">],</span>
+</span><span data-line="781">        <span class="n">api_key_service</span><span class="p">:</span> <span class="n">APIKeyService</span><span class="p">,</span>
+</span><span data-line="782">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">APIKeyRead</span><span class="p">]:</span>
+</span><span data-line="783"><span class="w">        </span><span class="sd">&quot;&quot;&quot;List all API keys for the authenticated user.</span>
+</span><span data-line="784">
+</span><span data-line="785"><span class="sd">        Returns all API keys (both active and revoked) for the current user.</span>
+</span><span data-line="786"><span class="sd">        The actual key values are not returned; only metadata is shown.</span>
+</span><span data-line="787">
+</span><span data-line="788"><span class="sd">        Args:</span>
+</span><span data-line="789"><span class="sd">            request: The HTTP request with authenticated user.</span>
+</span><span data-line="790"><span class="sd">            api_key_service: Service for API key operations.</span>
+</span><span data-line="791">
+</span><span data-line="792"><span class="sd">        Returns:</span>
+</span><span data-line="793"><span class="sd">            List of API keys with metadata.</span>
+</span><span data-line="794"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="795">        <span class="n">keys</span> <span class="o">=</span> <span class="k">await</span> <span class="n">api_key_service</span><span class="o">.</span><span class="n">list_by_user</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+</span><span data-line="796">        <span class="k">return</span> <span class="p">[</span><span class="n">APIKeyRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">]</span>
+</span><span data-line="797">
+</span><span data-line="798">    <span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/active&quot;</span><span class="p">)</span>
+</span><span data-line="799">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_active_api_keys</span><span class="p">(</span>
+</span><span data-line="800">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="801">        <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">[</span><span class="n">User</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">],</span>
+</span><span data-line="802">        <span class="n">api_key_service</span><span class="p">:</span> <span class="n">APIKeyService</span><span class="p">,</span>
+</span><span data-line="803">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">APIKeyRead</span><span class="p">]:</span>
+</span><span data-line="804"><span class="w">        </span><span class="sd">&quot;&quot;&quot;List only active API keys for the authenticated user.</span>
+</span><span data-line="805">
+</span><span data-line="806"><span class="sd">        Returns API keys that are currently active and not expired.</span>
+</span><span data-line="807">
+</span><span data-line="808"><span class="sd">        Args:</span>
+</span><span data-line="809"><span class="sd">            request: The HTTP request with authenticated user.</span>
+</span><span data-line="810"><span class="sd">            api_key_service: Service for API key operations.</span>
+</span><span data-line="811">
+</span><span data-line="812"><span class="sd">        Returns:</span>
+</span><span data-line="813"><span class="sd">            List of active API keys with metadata.</span>
+</span><span data-line="814"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="815">        <span class="n">keys</span> <span class="o">=</span> <span class="k">await</span> <span class="n">api_key_service</span><span class="o">.</span><span class="n">list_active_by_user</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+</span><span data-line="816">        <span class="k">return</span> <span class="p">[</span><span class="n">APIKeyRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">]</span>
+</span><span data-line="817">
+</span><span data-line="818">    <span class="nd">@get</span><span class="p">(</span>
+</span><span data-line="819">        <span class="s2">&quot;/{key_id:uuid}&quot;</span><span class="p">,</span>
+</span><span data-line="820">        <span class="n">responses</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="821">            <span class="mi">404</span><span class="p">:</span> <span class="n">ResponseSpec</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;API key not found&quot;</span><span class="p">),</span>
+</span><span data-line="822">        <span class="p">},</span>
+</span><span data-line="823">    <span class="p">)</span>
+</span><span data-line="824">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_api_key</span><span class="p">(</span>
+</span><span data-line="825">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="826">        <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">[</span><span class="n">User</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">],</span>
+</span><span data-line="827">        <span class="n">api_key_service</span><span class="p">:</span> <span class="n">APIKeyService</span><span class="p">,</span>
+</span><span data-line="828">        <span class="n">key_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">UUID</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Key ID&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The API key ID&quot;</span><span class="p">)],</span>
+</span><span data-line="829">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">APIKeyRead</span><span class="p">:</span>
+</span><span data-line="830"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a specific API key by ID.</span>
+</span><span data-line="831">
+</span><span data-line="832"><span class="sd">        Returns metadata for the specified API key. The actual key value</span>
+</span><span data-line="833"><span class="sd">        is not returned.</span>
+</span><span data-line="834">
+</span><span data-line="835"><span class="sd">        Args:</span>
+</span><span data-line="836"><span class="sd">            request: The HTTP request with authenticated user.</span>
+</span><span data-line="837"><span class="sd">            api_key_service: Service for API key operations.</span>
+</span><span data-line="838"><span class="sd">            key_id: The unique identifier of the API key.</span>
+</span><span data-line="839">
+</span><span data-line="840"><span class="sd">        Returns:</span>
+</span><span data-line="841"><span class="sd">            API key metadata.</span>
+</span><span data-line="842">
+</span><span data-line="843"><span class="sd">        Raises:</span>
+</span><span data-line="844"><span class="sd">            NotFoundException: If the key doesn&#39;t exist or belongs to another user.</span>
+</span><span data-line="845"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="846">        <span class="n">key</span> <span class="o">=</span> <span class="k">await</span> <span class="n">api_key_service</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key_id</span><span class="p">)</span>
+</span><span data-line="847">        <span class="k">if</span> <span class="n">key</span><span class="o">.</span><span class="n">user_id</span> <span class="o">!=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">:</span>
+</span><span data-line="848">            <span class="k">raise</span> <span class="n">NotFoundException</span><span class="p">(</span><span class="s2">&quot;API key not found&quot;</span><span class="p">)</span>
+</span><span data-line="849">        <span class="k">return</span> <span class="n">APIKeyRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+</span><span data-line="850">
+</span><span data-line="851">    <span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+</span><span data-line="852">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_api_key</span><span class="p">(</span>
+</span><span data-line="853">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="854">        <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">[</span><span class="n">User</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">],</span>
+</span><span data-line="855">        <span class="n">api_key_service</span><span class="p">:</span> <span class="n">APIKeyService</span><span class="p">,</span>
+</span><span data-line="856">        <span class="n">data</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">APIKeyCreate</span><span class="p">,</span> <span class="n">Body</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;API Key&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;API key to create&quot;</span><span class="p">)],</span>
+</span><span data-line="857">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">APIKeyCreated</span><span class="p">:</span>
+</span><span data-line="858"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new API key.</span>
+</span><span data-line="859">
+</span><span data-line="860"><span class="sd">        Generates a new API key for the authenticated user. The full key value</span>
+</span><span data-line="861"><span class="sd">        is returned ONLY in this response and cannot be retrieved later.</span>
+</span><span data-line="862"><span class="sd">        Store it securely!</span>
+</span><span data-line="863">
+</span><span data-line="864"><span class="sd">        Args:</span>
+</span><span data-line="865"><span class="sd">            request: The HTTP request with authenticated user.</span>
+</span><span data-line="866"><span class="sd">            api_key_service: Service for API key operations.</span>
+</span><span data-line="867"><span class="sd">            data: API key creation payload with name and optional expiration.</span>
+</span><span data-line="868">
+</span><span data-line="869"><span class="sd">        Returns:</span>
+</span><span data-line="870"><span class="sd">            The created API key including the raw key value.</span>
+</span><span data-line="871"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="872">        <span class="n">key</span><span class="p">,</span> <span class="n">raw_key</span> <span class="o">=</span> <span class="k">await</span> <span class="n">api_key_service</span><span class="o">.</span><span class="n">create_key</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+</span><span data-line="873">        <span class="n">result</span> <span class="o">=</span> <span class="n">APIKeyCreated</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+</span><span data-line="874">        <span class="n">result</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="n">raw_key</span>
+</span><span data-line="875">        <span class="k">return</span> <span class="n">result</span>
+</span><span data-line="876">
+</span><span data-line="877">    <span class="nd">@patch</span><span class="p">(</span>
+</span><span data-line="878">        <span class="s2">&quot;/{key_id:uuid}/revoke&quot;</span><span class="p">,</span>
+</span><span data-line="879">        <span class="n">responses</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="880">            <span class="mi">404</span><span class="p">:</span> <span class="n">ResponseSpec</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;API key not found&quot;</span><span class="p">),</span>
+</span><span data-line="881">        <span class="p">},</span>
+</span><span data-line="882">    <span class="p">)</span>
+</span><span data-line="883">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">revoke_api_key</span><span class="p">(</span>
+</span><span data-line="884">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="885">        <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">[</span><span class="n">User</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">],</span>
+</span><span data-line="886">        <span class="n">api_key_service</span><span class="p">:</span> <span class="n">APIKeyService</span><span class="p">,</span>
+</span><span data-line="887">        <span class="n">key_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">UUID</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Key ID&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The API key ID&quot;</span><span class="p">)],</span>
+</span><span data-line="888">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">APIKeyRead</span><span class="p">:</span>
+</span><span data-line="889"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Revoke an API key.</span>
+</span><span data-line="890">
+</span><span data-line="891"><span class="sd">        Deactivates the specified API key. The key cannot be reactivated;</span>
+</span><span data-line="892"><span class="sd">        create a new key if needed.</span>
+</span><span data-line="893">
+</span><span data-line="894"><span class="sd">        Args:</span>
+</span><span data-line="895"><span class="sd">            request: The HTTP request with authenticated user.</span>
+</span><span data-line="896"><span class="sd">            api_key_service: Service for API key operations.</span>
+</span><span data-line="897"><span class="sd">            key_id: The unique identifier of the API key to revoke.</span>
+</span><span data-line="898">
+</span><span data-line="899"><span class="sd">        Returns:</span>
+</span><span data-line="900"><span class="sd">            The revoked API key metadata.</span>
+</span><span data-line="901">
+</span><span data-line="902"><span class="sd">        Raises:</span>
+</span><span data-line="903"><span class="sd">            NotFoundException: If the key doesn&#39;t exist or belongs to another user.</span>
+</span><span data-line="904"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="905">        <span class="n">key</span> <span class="o">=</span> <span class="k">await</span> <span class="n">api_key_service</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key_id</span><span class="p">)</span>
+</span><span data-line="906">        <span class="k">if</span> <span class="n">key</span><span class="o">.</span><span class="n">user_id</span> <span class="o">!=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">:</span>
+</span><span data-line="907">            <span class="k">raise</span> <span class="n">NotFoundException</span><span class="p">(</span><span class="s2">&quot;API key not found&quot;</span><span class="p">)</span>
+</span><span data-line="908">        <span class="n">revoked</span> <span class="o">=</span> <span class="k">await</span> <span class="n">api_key_service</span><span class="o">.</span><span class="n">revoke</span><span class="p">(</span><span class="n">key_id</span><span class="p">)</span>
+</span><span data-line="909">        <span class="k">return</span> <span class="n">APIKeyRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">revoked</span><span class="p">)</span>
+</span><span data-line="910">
+</span><span data-line="911">    <span class="nd">@delete</span><span class="p">(</span>
+</span><span data-line="912">        <span class="s2">&quot;/{key_id:uuid}&quot;</span><span class="p">,</span>
+</span><span data-line="913">        <span class="n">responses</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="914">            <span class="mi">404</span><span class="p">:</span> <span class="n">ResponseSpec</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;API key not found&quot;</span><span class="p">),</span>
+</span><span data-line="915">        <span class="p">},</span>
+</span><span data-line="916">    <span class="p">)</span>
+</span><span data-line="917">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">delete_api_key</span><span class="p">(</span>
+</span><span data-line="918">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="919">        <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">[</span><span class="n">User</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">],</span>
+</span><span data-line="920">        <span class="n">api_key_service</span><span class="p">:</span> <span class="n">APIKeyService</span><span class="p">,</span>
+</span><span data-line="921">        <span class="n">key_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">UUID</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Key ID&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The API key ID&quot;</span><span class="p">)],</span>
+</span><span data-line="922">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="923"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Delete an API key.</span>
+</span><span data-line="924">
+</span><span data-line="925"><span class="sd">        Permanently removes an API key from the system. This action is irreversible.</span>
+</span><span data-line="926">
+</span><span data-line="927"><span class="sd">        Args:</span>
+</span><span data-line="928"><span class="sd">            request: The HTTP request with authenticated user.</span>
+</span><span data-line="929"><span class="sd">            api_key_service: Service for API key operations.</span>
+</span><span data-line="930"><span class="sd">            key_id: The unique identifier of the API key to delete.</span>
+</span><span data-line="931">
+</span><span data-line="932"><span class="sd">        Raises:</span>
+</span><span data-line="933"><span class="sd">            NotFoundException: If the key doesn&#39;t exist or belongs to another user.</span>
+</span><span data-line="934"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="935">        <span class="n">key</span> <span class="o">=</span> <span class="k">await</span> <span class="n">api_key_service</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key_id</span><span class="p">)</span>
+</span><span data-line="936">        <span class="k">if</span> <span class="n">key</span><span class="o">.</span><span class="n">user_id</span> <span class="o">!=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">:</span>
+</span><span data-line="937">            <span class="k">raise</span> <span class="n">NotFoundException</span><span class="p">(</span><span class="s2">&quot;API key not found&quot;</span><span class="p">)</span>
+</span><span data-line="938">        <span class="k">await</span> <span class="n">api_key_service</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">key_id</span><span class="p">)</span>
+</span><span data-line="939">
+</span><span data-line="940">    <span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/revoke-all&quot;</span><span class="p">,</span> <span class="n">status_code</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+</span><span data-line="941">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">revoke_all_api_keys</span><span class="p">(</span>
+</span><span data-line="942">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="943">        <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">[</span><span class="n">User</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">],</span>
+</span><span data-line="944">        <span class="n">api_key_service</span><span class="p">:</span> <span class="n">APIKeyService</span><span class="p">,</span>
+</span><span data-line="945">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+</span><span data-line="946"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Revoke all API keys for the authenticated user.</span>
+</span><span data-line="947">
+</span><span data-line="948"><span class="sd">        Deactivates all active API keys. This is useful when keys may have</span>
+</span><span data-line="949"><span class="sd">        been compromised.</span>
+</span><span data-line="950">
+</span><span data-line="951"><span class="sd">        Args:</span>
+</span><span data-line="952"><span class="sd">            request: The HTTP request with authenticated user.</span>
+</span><span data-line="953"><span class="sd">            api_key_service: Service for API key operations.</span>
+</span><span data-line="954">
+</span><span data-line="955"><span class="sd">        Returns:</span>
+</span><span data-line="956"><span class="sd">            Dictionary with count of revoked keys.</span>
+</span><span data-line="957"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="958">        <span class="n">count</span> <span class="o">=</span> <span class="k">await</span> <span class="n">api_key_service</span><span class="o">.</span><span class="n">revoke_all_for_user</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+</span><span data-line="959">        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;revoked&quot;</span><span class="p">:</span> <span class="n">count</span><span class="p">}</span></div>
+
+</span></pre></div>
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Jacob Coffee</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+<a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+  <iconify-icon icon="simple-icons:github"></iconify-icon>
+</a></div>
+    </div>
+  </div>
+</footer>
+      <script src="../../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../../_static/copybutton.js?v=30646c52"></script>
+      <script src="../../../../_static/design-tabs.js?v=f930bc37"></script>
+      <script src="../../../../_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="blue" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Rate Limiting Quick Reference - litestar-pydotorg</title><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=14737038" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=513f0650" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="Rate Limiting Quick Reference"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../index.html">
+      
+      
+      <strong>litestar-pydotorg</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"><ul><li class="link">
+          <a href="https://litestar.dev/">
+            <span>Litestar</span></a>
+        </li><li class="link">
+          <a href="https://python.org/">
+            <span>Python.org</span></a>
+        </li></ul></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials">
+  <a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started/index.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/quickstart.html">Quickstart</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/index.html">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/development.html">Development Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/contributing.html">Contribution Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/testing.html">Testing Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/debugging.html">Debugging Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/api-usage.html">API Usage Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/authentication.html">Authentication Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/feature-flags.html">Feature Flags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/configuration.html">Configuration Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/deployment.html">Deployment Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/docker.html">Docker Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/troubleshooting.html">Troubleshooting Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/index.html">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/domain-patterns.html">Domain Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/authentication-recipes.html">Authentication Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/database-recipes.html">Database Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/testing-recipes.html">Testing Recipes</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/core/index.html">Core Infrastructure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/auth.html">Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/cache.html">Caching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/database.html">Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/email.html">Email</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/exceptions.html">Exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/features.html">Feature Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/feeds.html">RSS/Atom Feeds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/ical.html">iCalendar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/middleware.html">Middleware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/openapi.html">OpenAPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/ratelimit.html">Rate Limiting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/security.html">Security</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/worker.html">Background Worker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/domains/index.html">Domain Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/about.html">About</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/admin.html">Admin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/banners.html">banners</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/blogs.html">blogs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/codesamples.html">Code Samples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/community.html">community</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/docs.html">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/downloads.html">downloads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/events.html">events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/jobs.html">jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/mailing.html">Mailing Lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/minutes.html">Minutes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/nominations.html">Nominations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/pages.html">pages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/sponsors.html">sponsors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/sqladmin.html">SQLAdmin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/successstories.html">Success Stories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/users.html">users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/work_groups.html">Work Groups</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/lib.html">Library Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/tasks.html">Background Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/config.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/main.html">Application Entry Point</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ARCHITECTURE.html">Litestar Python.org Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DATABASE_SCHEMA.html">Database Schema Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DOMAIN_MODELS.html">Domain Models Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="QUICK_START.html">Litestar Python.org Quick Start Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="API_TAGS_INDEX.html">API Tags Documentation Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RATE_LIMITING_ARCHITECTURE.html">Rate Limiting Architecture Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adr/001-litestar-framework.html">ADR-001: Use Litestar as Web Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adr/002-saq-background-tasks.html">ADR-002: Use SAQ for Background Task Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#developer-cheat-sheet">Developer Cheat Sheet</a><ul>
+<li><a class="reference internal" href="#quick-start">Quick Start</a></li>
+<li><a class="reference internal" href="#endpoint-tier-assignment">Endpoint Tier Assignment</a></li>
+<li><a class="reference internal" href="#override-rate-limit-for-specific-endpoint">Override Rate Limit for Specific Endpoint</a></li>
+<li><a class="reference internal" href="#exclude-endpoint-from-rate-limiting">Exclude Endpoint from Rate Limiting</a></li>
+<li><a class="reference internal" href="#testing-rate-limits">Testing Rate Limits</a></li>
+<li><a class="reference internal" href="#environment-variables">Environment Variables</a></li>
+<li><a class="reference internal" href="#monitoring-rate-limits">Monitoring Rate Limits</a></li>
+<li><a class="reference internal" href="#common-scenarios">Common Scenarios</a><ul>
+<li><a class="reference internal" href="#scenario-1-new-authentication-endpoint">Scenario 1: New Authentication Endpoint</a></li>
+<li><a class="reference internal" href="#scenario-2-new-read-only-api">Scenario 2: New Read-Only API</a></li>
+<li><a class="reference internal" href="#scenario-3-admin-only-endpoint">Scenario 3: Admin-Only Endpoint</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul>
+<li><a class="reference internal" href="#problem-getting-429-too-many-requests">Problem: Getting 429 Too Many Requests</a></li>
+<li><a class="reference internal" href="#problem-rate-limits-too-strict">Problem: Rate Limits Too Strict</a></li>
+<li><a class="reference internal" href="#problem-rate-limiting-not-working">Problem: Rate Limiting Not Working</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#response-headers">Response Headers</a></li>
+<li><a class="reference internal" href="#best-practices">Best Practices</a></li>
+<li><a class="reference internal" href="#architecture-files">Architecture Files</a></li>
+<li><a class="reference internal" href="#need-help">Need Help?</a></li>
+</ul>
+</li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../index.html"><span itemprop="name">litestar-pydotorg</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">Rate Limiting Quick Reference</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue dark-code" role="main">
+          <section id="rate-limiting-quick-reference">
+<h1>Rate Limiting Quick Reference<a class="headerlink" href="#rate-limiting-quick-reference" title="Link to this heading">¶</a></h1>
+<section id="developer-cheat-sheet">
+<h2>Developer Cheat Sheet<a class="headerlink" href="#developer-cheat-sheet" title="Link to this heading">¶</a></h2>
+<section id="quick-start">
+<h3>Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Rate limiting is automatically applied to all endpoints</span>
+</span><span data-line="2"><span class="c1"># No decorator or manual configuration needed!</span>
+</span></pre></div>
+</div>
+</section>
+<section id="endpoint-tier-assignment">
+<h3>Endpoint Tier Assignment<a class="headerlink" href="#endpoint-tier-assignment" title="Link to this heading">¶</a></h3>
+<p>When creating new endpoints, they are automatically assigned a tier based on path patterns:</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Tier</p></th>
+<th class="head"><p>Anonymous Limit</p></th>
+<th class="head"><p>Authenticated Limit</p></th>
+<th class="head"><p>Use Case</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>CRITICAL</p></td>
+<td><p>5 req/min</p></td>
+<td><p>20 req/min</p></td>
+<td><p>Auth, search, submissions</p></td>
+</tr>
+<tr class="row-odd"><td><p>HIGH</p></td>
+<td><p>20 req/min</p></td>
+<td><p>60 req/min</p></td>
+<td><p>Forms, job/event posts</p></td>
+</tr>
+<tr class="row-even"><td><p>MEDIUM</p></td>
+<td><p>60 req/min</p></td>
+<td><p>180 req/min</p></td>
+<td><p>Community content</p></td>
+</tr>
+<tr class="row-odd"><td><p>LOW</p></td>
+<td><p>120 req/min</p></td>
+<td><p>300 req/min</p></td>
+<td><p>Read-only operations</p></td>
+</tr>
+<tr class="row-even"><td><p>UNLIMITED</p></td>
+<td><p>∞</p></td>
+<td><p>∞</p></td>
+<td><p>Health, static, media</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="override-rate-limit-for-specific-endpoint">
+<h3>Override Rate Limit for Specific Endpoint<a class="headerlink" href="#override-rate-limit-for-specific-endpoint" title="Link to this heading">¶</a></h3>
+<p>If you need custom limits for a specific endpoint:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span><span class="w"> </span><span class="nn">litestar</span><span class="w"> </span><span class="kn">import</span> <span class="n">get</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">litestar.middleware.rate_limit</span><span class="w"> </span><span class="kn">import</span> <span class="n">RateLimitConfig</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="nd">@get</span><span class="p">(</span>
+</span><span data-line="5">    <span class="s2">&quot;/api/special/endpoint&quot;</span><span class="p">,</span>
+</span><span data-line="6">    <span class="n">middleware</span><span class="o">=</span><span class="p">[</span>
+</span><span data-line="7">        <span class="n">RateLimitConfig</span><span class="p">(</span>
+</span><span data-line="8">            <span class="n">rate_limit</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;minute&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>  <span class="c1"># 10 requests per minute</span>
+</span><span data-line="9">        <span class="p">)</span><span class="o">.</span><span class="n">middleware</span>
+</span><span data-line="10">    <span class="p">]</span>
+</span><span data-line="11"><span class="p">)</span>
+</span><span data-line="12"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">special_endpoint</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+</span><span data-line="13">    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Custom rate limited&quot;</span><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+<section id="exclude-endpoint-from-rate-limiting">
+<h3>Exclude Endpoint from Rate Limiting<a class="headerlink" href="#exclude-endpoint-from-rate-limiting" title="Link to this heading">¶</a></h3>
+<p>To completely exclude an endpoint:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Option 1: Add to exclude_paths in config</span>
+</span><span data-line="2"><span class="c1"># src/pydotorg/core/ratelimit/config.py</span>
+</span><span data-line="3"><span class="n">exclude_paths</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+</span><span data-line="4">    <span class="s2">&quot;/static/*&quot;</span><span class="p">,</span>
+</span><span data-line="5">    <span class="s2">&quot;/health&quot;</span><span class="p">,</span>
+</span><span data-line="6">    <span class="s2">&quot;/my-special-endpoint&quot;</span><span class="p">,</span>  <span class="c1"># Add here</span>
+</span><span data-line="7"><span class="p">]</span>
+</span><span data-line="8">
+</span><span data-line="9"><span class="c1"># Option 2: Add to UNLIMITED_ENDPOINTS</span>
+</span><span data-line="10"><span class="c1"># src/pydotorg/core/ratelimit/tiers.py</span>
+</span><span data-line="11"><span class="n">UNLIMITED_ENDPOINTS</span> <span class="o">=</span> <span class="p">{</span>
+</span><span data-line="12">    <span class="s2">&quot;/health&quot;</span><span class="p">,</span>
+</span><span data-line="13">    <span class="s2">&quot;/my-special-endpoint&quot;</span><span class="p">,</span>  <span class="c1"># Add here</span>
+</span><span data-line="14"><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+<section id="testing-rate-limits">
+<h3>Testing Rate Limits<a class="headerlink" href="#testing-rate-limits" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># tests/integration/test_my_feature.py</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+</span><span data-line="4"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">test_rate_limit_enforcement</span><span class="p">(</span><span class="n">test_client</span><span class="p">:</span> <span class="n">AsyncTestClient</span><span class="p">):</span>
+</span><span data-line="5">    <span class="c1"># Test that endpoint is rate limited after N requests</span>
+</span><span data-line="6">    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>  <span class="c1"># CRITICAL tier allows 5</span>
+</span><span data-line="7">        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">test_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/auth/login&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="o">...</span><span class="p">})</span>
+</span><span data-line="8">        <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">429</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Rate limited at request </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span data-line="9">
+</span><span data-line="10">    <span class="c1"># 6th request should be rate limited</span>
+</span><span data-line="11">    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">test_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/auth/login&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="o">...</span><span class="p">})</span>
+</span><span data-line="12">    <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">429</span>
+</span><span data-line="13">    <span class="k">assert</span> <span class="s2">&quot;Retry-After&quot;</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">headers</span>
+</span></pre></div>
+</div>
+</section>
+<section id="environment-variables">
+<h3>Environment Variables<a class="headerlink" href="#environment-variables" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># .env</span>
+</span><span data-line="2"><span class="nv">RATE_LIMIT_ENABLED</span><span class="o">=</span><span class="nb">true</span><span class="w">                    </span><span class="c1"># Enable/disable globally</span>
+</span><span data-line="3"><span class="nv">RATE_LIMIT_REDIS_NAMESPACE</span><span class="o">=</span>ratelimit<span class="w">       </span><span class="c1"># Redis key prefix</span>
+</span><span data-line="4"><span class="nv">RATE_LIMIT_CRITICAL_REQUESTS</span><span class="o">=</span><span class="m">5</span><span class="w">             </span><span class="c1"># Override critical tier</span>
+</span><span data-line="5"><span class="nv">RATE_LIMIT_CRITICAL_WINDOW</span><span class="o">=</span><span class="m">60</span><span class="w">              </span><span class="c1"># Override critical window</span>
+</span></pre></div>
+</div>
+</section>
+<section id="monitoring-rate-limits">
+<h3>Monitoring Rate Limits<a class="headerlink" href="#monitoring-rate-limits" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Check Redis keys</span>
+</span><span data-line="2">redis-cli<span class="w"> </span>KEYS<span class="w"> </span><span class="s2">&quot;ratelimit:*&quot;</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Get current count for an identifier</span>
+</span><span data-line="5">redis-cli<span class="w"> </span>GET<span class="w"> </span><span class="s2">&quot;ratelimit:ip:192.168.1.100:critical&quot;</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Check TTL (time to reset)</span>
+</span><span data-line="8">redis-cli<span class="w"> </span>TTL<span class="w"> </span><span class="s2">&quot;ratelimit:ip:192.168.1.100:critical&quot;</span>
+</span></pre></div>
+</div>
+</section>
+<section id="common-scenarios">
+<h3>Common Scenarios<a class="headerlink" href="#common-scenarios" title="Link to this heading">¶</a></h3>
+<section id="scenario-1-new-authentication-endpoint">
+<h4>Scenario 1: New Authentication Endpoint<a class="headerlink" href="#scenario-1-new-authentication-endpoint" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Automatically CRITICAL tier (5 req/min anonymous)</span>
+</span><span data-line="2"><span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/api/auth/new-login-method&quot;</span><span class="p">)</span>
+</span><span data-line="3"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">new_auth</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">LoginData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TokenResponse</span><span class="p">:</span>
+</span><span data-line="4">    <span class="c1"># Rate limit automatically applied</span>
+</span><span data-line="5">    <span class="k">pass</span>
+</span></pre></div>
+</div>
+</section>
+<section id="scenario-2-new-read-only-api">
+<h4>Scenario 2: New Read-Only API<a class="headerlink" href="#scenario-2-new-read-only-api" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Automatically LOW tier (120 req/min anonymous)</span>
+</span><span data-line="2"><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/api/stats/summary&quot;</span><span class="p">)</span>
+</span><span data-line="3"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_stats</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+</span><span data-line="4">    <span class="c1"># Higher limits for read operations</span>
+</span><span data-line="5">    <span class="k">pass</span>
+</span></pre></div>
+</div>
+</section>
+<section id="scenario-3-admin-only-endpoint">
+<h4>Scenario 3: Admin-Only Endpoint<a class="headerlink" href="#scenario-3-admin-only-endpoint" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Staff users get 5x multiplier automatically</span>
+</span><span data-line="2"><span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/api/admin/bulk-operation&quot;</span><span class="p">,</span> <span class="n">guards</span><span class="o">=</span><span class="p">[</span><span class="n">require_superuser</span><span class="p">])</span>
+</span><span data-line="3"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">bulk_op</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+</span><span data-line="4">    <span class="c1"># Staff: 20 req/min × 5 = 100 req/min</span>
+</span><span data-line="5">    <span class="k">pass</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="troubleshooting">
+<h3>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">¶</a></h3>
+<section id="problem-getting-429-too-many-requests">
+<h4>Problem: Getting 429 Too Many Requests<a class="headerlink" href="#problem-getting-429-too-many-requests" title="Link to this heading">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">Cause</span><span class="p">:</span> <span class="n">Exceeded</span> <span class="n">rate</span> <span class="n">limit</span> <span class="k">for</span> <span class="n">your</span> <span class="n">tier</span>
+</span><span data-line="2"><span class="n">Solution</span><span class="p">:</span>
+</span><span data-line="3"><span class="mf">1.</span> <span class="n">Wait</span> <span class="k">for</span> <span class="n">Retry</span><span class="o">-</span><span class="n">After</span> <span class="n">seconds</span> <span class="p">(</span><span class="n">check</span> <span class="n">header</span><span class="p">)</span>
+</span><span data-line="4"><span class="mf">2.</span> <span class="n">Log</span> <span class="ow">in</span> <span class="k">for</span> <span class="n">higher</span> <span class="n">limits</span> <span class="p">(</span><span class="mi">4</span><span class="n">x</span> <span class="n">increase</span><span class="p">)</span>
+</span><span data-line="5"><span class="mf">3.</span> <span class="n">Contact</span> <span class="n">admin</span> <span class="k">if</span> <span class="n">you</span> <span class="n">need</span> <span class="n">API</span> <span class="n">access</span>
+</span></pre></div>
+</div>
+</section>
+<section id="problem-rate-limits-too-strict">
+<h4>Problem: Rate Limits Too Strict<a class="headerlink" href="#problem-rate-limits-too-strict" title="Link to this heading">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">Solution</span><span class="p">:</span>
+</span><span data-line="2"><span class="mf">1.</span> <span class="n">Update</span> <span class="n">limits</span> <span class="ow">in</span> <span class="n">RateLimitConfig</span><span class="o">.</span><span class="n">for_environment</span><span class="p">()</span>
+</span><span data-line="3"><span class="mf">2.</span> <span class="n">Consider</span> <span class="k">if</span> <span class="n">endpoint</span> <span class="n">should</span> <span class="n">be</span> <span class="ow">in</span> <span class="n">different</span> <span class="n">tier</span>
+</span><span data-line="4"><span class="mf">3.</span> <span class="n">Use</span> <span class="n">environment</span> <span class="n">variables</span> <span class="k">for</span> <span class="n">temporary</span> <span class="n">override</span>
+</span></pre></div>
+</div>
+</section>
+<section id="problem-rate-limiting-not-working">
+<h4>Problem: Rate Limiting Not Working<a class="headerlink" href="#problem-rate-limiting-not-working" title="Link to this heading">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">Check</span><span class="p">:</span>
+</span><span data-line="2"><span class="mf">1.</span> <span class="n">RATE_LIMIT_ENABLED</span><span class="o">=</span><span class="n">true</span> <span class="ow">in</span> <span class="o">.</span><span class="n">env</span>
+</span><span data-line="3"><span class="mf">2.</span> <span class="n">Redis</span> <span class="ow">is</span> <span class="n">running</span> <span class="ow">and</span> <span class="n">accessible</span>
+</span><span data-line="4"><span class="mf">3.</span> <span class="n">Endpoint</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">UNLIMITED_ENDPOINTS</span>
+</span><span data-line="5"><span class="mf">4.</span> <span class="n">Check</span> <span class="n">logs</span> <span class="k">for</span> <span class="n">middleware</span> <span class="n">errors</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="response-headers">
+<h3>Response Headers<a class="headerlink" href="#response-headers" title="Link to this heading">¶</a></h3>
+<p>All rate-limited responses include:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">RateLimit</span><span class="o">-</span><span class="n">Policy</span><span class="p">:</span> <span class="mi">5</span><span class="p">;</span><span class="n">w</span><span class="o">=</span><span class="mi">60</span>         <span class="c1"># 5 requests per 60 seconds</span>
+</span><span data-line="2"><span class="n">RateLimit</span><span class="o">-</span><span class="n">Remaining</span><span class="p">:</span> <span class="mi">3</span>           <span class="c1"># 3 requests remaining</span>
+</span><span data-line="3"><span class="n">RateLimit</span><span class="o">-</span><span class="n">Reset</span><span class="p">:</span> <span class="mi">1234567890</span>      <span class="c1"># Unix timestamp for reset</span>
+</span><span data-line="4"><span class="n">RateLimit</span><span class="o">-</span><span class="n">Limit</span><span class="p">:</span> <span class="mi">5</span>               <span class="c1"># Total requests allowed</span>
+</span></pre></div>
+</div>
+<p>When rate limited (429):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">Retry</span><span class="o">-</span><span class="n">After</span><span class="p">:</span> <span class="mi">45</span>                  <span class="c1"># Seconds until reset</span>
+</span></pre></div>
+</div>
+</section>
+<section id="best-practices">
+<h3>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Don’t bypass rate limits</strong> - They protect the application</p></li>
+<li><p><strong>Test with realistic load</strong> - Don’t artificially inflate limits</p></li>
+<li><p><strong>Log in users</strong> - Authenticated users get higher limits</p></li>
+<li><p><strong>Monitor metrics</strong> - Watch for false positives</p></li>
+<li><p><strong>Document custom limits</strong> - Explain why if you override</p></li>
+<li><p><strong>Consider user experience</strong> - Don’t make limits too strict</p></li>
+<li><p><strong>Use retry logic</strong> - Implement exponential backoff in clients</p></li>
+</ol>
+</section>
+<section id="architecture-files">
+<h3>Architecture Files<a class="headerlink" href="#architecture-files" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Configuration: <code class="docutils literal notranslate"><span class="pre">/Users/coffee/git/public/JacobCoffee/litestar-pydotorg/src/pydotorg/core/ratelimit/config.py</span></code></p></li>
+<li><p>Tier Assignments: <code class="docutils literal notranslate"><span class="pre">/Users/coffee/git/public/JacobCoffee/litestar-pydotorg/src/pydotorg/core/ratelimit/tiers.py</span></code></p></li>
+<li><p>Identifier Logic: <code class="docutils literal notranslate"><span class="pre">/Users/coffee/git/public/JacobCoffee/litestar-pydotorg/src/pydotorg/core/ratelimit/identifier.py</span></code></p></li>
+<li><p>Main Integration: <code class="docutils literal notranslate"><span class="pre">/Users/coffee/git/public/JacobCoffee/litestar-pydotorg/src/pydotorg/main.py</span></code></p></li>
+</ul>
+</section>
+<section id="need-help">
+<h3>Need Help?<a class="headerlink" href="#need-help" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Full Architecture: <code class="docutils literal notranslate"><span class="pre">/Users/coffee/git/public/JacobCoffee/litestar-pydotorg/docs/architecture/RATE_LIMITING_ARCHITECTURE.md</span></code></p></li>
+<li><p>Visual Diagram: <code class="docutils literal notranslate"><span class="pre">/Users/coffee/git/public/JacobCoffee/litestar-pydotorg/docs/architecture/rate_limiting_diagram.txt</span></code></p></li>
+<li><p>Litestar Docs: <a class="reference external" href="https://docs.litestar.dev/latest/usage/middleware/rate-limit.html">https://docs.litestar.dev/latest/usage/middleware/rate-limit.html</a></p></li>
+</ul>
+</section>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Jacob Coffee</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+<a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+  <iconify-icon icon="simple-icons:github"></iconify-icon>
+</a></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=30646c52"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script src="../_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

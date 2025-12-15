@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="blue" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>pydotorg.domains.sponsors.controllers - litestar-pydotorg</title><link rel="index" title="Index" href="../../../../genindex.html" /><link rel="search" title="Search" href="../../../../search.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/shibuya.css?v=14737038" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link media="print" rel="stylesheet" type="text/css" href="../../../../_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css?v=513f0650" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="pydotorg.domains.sponsors.controllers"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../../../../index.html">
+      
+      
+      <strong>litestar-pydotorg</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"><ul><li class="link">
+          <a href="https://litestar.dev/">
+            <span>Litestar</span></a>
+        </li><li class="link">
+          <a href="https://python.org/">
+            <span>Python.org</span></a>
+        </li></ul></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../../../../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials">
+  <a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../getting-started/index.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../getting-started/installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../getting-started/quickstart.html">Quickstart</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../guides/index.html">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/development.html">Development Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/contributing.html">Contribution Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/testing.html">Testing Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/debugging.html">Debugging Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/api-usage.html">API Usage Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/authentication.html">Authentication Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/feature-flags.html">Feature Flags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/configuration.html">Configuration Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/deployment.html">Deployment Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/docker.html">Docker Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/troubleshooting.html">Troubleshooting Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cookbook/index.html">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../cookbook/domain-patterns.html">Domain Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../cookbook/authentication-recipes.html">Authentication Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../cookbook/database-recipes.html">Database Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../cookbook/testing-recipes.html">Testing Recipes</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/index.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/core/index.html">Core Infrastructure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/auth.html">Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/cache.html">Caching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/database.html">Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/email.html">Email</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/exceptions.html">Exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/features.html">Feature Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/feeds.html">RSS/Atom Feeds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/ical.html">iCalendar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/middleware.html">Middleware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/openapi.html">OpenAPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/ratelimit.html">Rate Limiting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/security.html">Security</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/worker.html">Background Worker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/domains/index.html">Domain Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/about.html">About</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/admin.html">Admin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/banners.html">banners</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/blogs.html">blogs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/codesamples.html">Code Samples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/community.html">community</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/docs.html">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/downloads.html">downloads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/events.html">events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/jobs.html">jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/mailing.html">Mailing Lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/minutes.html">Minutes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/nominations.html">Nominations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/pages.html">pages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/sponsors.html">sponsors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/sqladmin.html">SQLAdmin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/successstories.html">Success Stories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/users.html">users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/work_groups.html">Work Groups</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/lib.html">Library Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/tasks.html">Background Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/config.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/main.html">Application Entry Point</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../architecture/index.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/ARCHITECTURE.html">Litestar Python.org Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/DATABASE_SCHEMA.html">Database Schema Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/DOMAIN_MODELS.html">Domain Models Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/QUICK_START.html">Litestar Python.org Quick Start Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/API_TAGS_INDEX.html">API Tags Documentation Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/RATE_LIMITING_ARCHITECTURE.html">Rate Limiting Architecture Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/adr/001-litestar-framework.html">ADR-001: Use Litestar as Web Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/adr/002-saq-background-tasks.html">ADR-002: Use SAQ for Background Task Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../../../../index.html"><span itemprop="name">litestar-pydotorg</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../../../index.html"><span itemprop="name">Module code</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="2" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">pydotorg.domains.sponsors.controllers</strong>
+        <meta itemprop="position" content="3" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue dark-code" role="main">
+          <h1>Source code for pydotorg.domains.sponsors.controllers</h1><div class="highlight"><pre>
+<span></span><span data-line="1"><span class="sd">&quot;&quot;&quot;Sponsors domain API controllers.&quot;&quot;&quot;</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
+</span><span data-line="6"><span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+</span><span data-line="7"><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Annotated</span>
+</span><span data-line="8"><span class="kn">from</span><span class="w"> </span><span class="nn">uuid</span><span class="w"> </span><span class="kn">import</span> <span class="n">UUID</span>
+</span><span data-line="9">
+</span><span data-line="10"><span class="kn">from</span><span class="w"> </span><span class="nn">advanced_alchemy.filters</span><span class="w"> </span><span class="kn">import</span> <span class="n">LimitOffset</span>
+</span><span data-line="11"><span class="kn">from</span><span class="w"> </span><span class="nn">litestar</span><span class="w"> </span><span class="kn">import</span> <span class="n">Controller</span><span class="p">,</span> <span class="n">delete</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">patch</span><span class="p">,</span> <span class="n">post</span><span class="p">,</span> <span class="n">put</span>
+</span><span data-line="12"><span class="kn">from</span><span class="w"> </span><span class="nn">litestar.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">NotFoundException</span>
+</span><span data-line="13"><span class="kn">from</span><span class="w"> </span><span class="nn">litestar.params</span><span class="w"> </span><span class="kn">import</span> <span class="n">Body</span><span class="p">,</span> <span class="n">Parameter</span>
+</span><span data-line="14"><span class="kn">from</span><span class="w"> </span><span class="nn">litestar.response</span><span class="w"> </span><span class="kn">import</span> <span class="n">Template</span>
+</span><span data-line="15">
+</span><span data-line="16"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.domains.sponsors.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">SponsorshipStatus</span>
+</span><span data-line="17"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.domains.sponsors.schemas</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+</span><span data-line="18">    <span class="n">SponsorApplicationCreate</span><span class="p">,</span>
+</span><span data-line="19">    <span class="n">SponsorCreate</span><span class="p">,</span>
+</span><span data-line="20">    <span class="n">SponsorPublic</span><span class="p">,</span>
+</span><span data-line="21">    <span class="n">SponsorRead</span><span class="p">,</span>
+</span><span data-line="22">    <span class="n">SponsorshipCreate</span><span class="p">,</span>
+</span><span data-line="23">    <span class="n">SponsorshipLevelCreate</span><span class="p">,</span>
+</span><span data-line="24">    <span class="n">SponsorshipLevelRead</span><span class="p">,</span>
+</span><span data-line="25">    <span class="n">SponsorshipLevelUpdate</span><span class="p">,</span>
+</span><span data-line="26">    <span class="n">SponsorshipPublic</span><span class="p">,</span>
+</span><span data-line="27">    <span class="n">SponsorshipRead</span><span class="p">,</span>
+</span><span data-line="28">    <span class="n">SponsorshipUpdate</span><span class="p">,</span>
+</span><span data-line="29">    <span class="n">SponsorUpdate</span><span class="p">,</span>
+</span><span data-line="30"><span class="p">)</span>
+</span><span data-line="31"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.domains.sponsors.services</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+</span><span data-line="32">    <span class="n">SponsorService</span><span class="p">,</span>
+</span><span data-line="33">    <span class="n">SponsorshipLevelService</span><span class="p">,</span>
+</span><span data-line="34">    <span class="n">SponsorshipService</span><span class="p">,</span>
+</span><span data-line="35"><span class="p">)</span>
+</span><span data-line="36">
+</span><span data-line="37">
+<div class="viewcode-block" id="SponsorshipLevelController">
+<a class="viewcode-back" href="../../../../api/domains/sponsors.html#pydotorg.domains.sponsors.SponsorshipLevelController">[docs]</a>
+</span><span data-line="38"><span class="k">class</span><span class="w"> </span><span class="nc">SponsorshipLevelController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="39"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Controller for SponsorshipLevel CRUD operations.&quot;&quot;&quot;</span>
+</span><span data-line="40">
+</span><span data-line="41">    <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;/api/v1/sponsorship-levels&quot;</span>
+</span><span data-line="42">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Sponsors&quot;</span><span class="p">]</span>
+</span><span data-line="43">
+</span><span data-line="44">    <span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+</span><span data-line="45">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_levels</span><span class="p">(</span>
+</span><span data-line="46">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="47">        <span class="n">level_service</span><span class="p">:</span> <span class="n">SponsorshipLevelService</span><span class="p">,</span>
+</span><span data-line="48">        <span class="n">limit_offset</span><span class="p">:</span> <span class="n">LimitOffset</span><span class="p">,</span>
+</span><span data-line="49">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">SponsorshipLevelRead</span><span class="p">]:</span>
+</span><span data-line="50"><span class="w">        </span><span class="sd">&quot;&quot;&quot;List all sponsorship levels with pagination.</span>
+</span><span data-line="51">
+</span><span data-line="52"><span class="sd">        Retrieves a paginated list of sponsorship tiers available for sponsors.</span>
+</span><span data-line="53"><span class="sd">        Levels define benefits, pricing, and visibility for each sponsorship tier.</span>
+</span><span data-line="54">
+</span><span data-line="55"><span class="sd">        Args:</span>
+</span><span data-line="56"><span class="sd">            level_service: Service for sponsorship level database operations.</span>
+</span><span data-line="57"><span class="sd">            limit_offset: Pagination parameters for limiting and offsetting results.</span>
+</span><span data-line="58">
+</span><span data-line="59"><span class="sd">        Returns:</span>
+</span><span data-line="60"><span class="sd">            List of sponsorship levels with benefits and pricing.</span>
+</span><span data-line="61"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="62">        <span class="n">levels</span><span class="p">,</span> <span class="n">_total</span> <span class="o">=</span> <span class="k">await</span> <span class="n">level_service</span><span class="o">.</span><span class="n">list_and_count</span><span class="p">(</span><span class="n">limit_offset</span><span class="p">)</span>
+</span><span data-line="63">        <span class="k">return</span> <span class="p">[</span><span class="n">SponsorshipLevelRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">level</span><span class="p">)</span> <span class="k">for</span> <span class="n">level</span> <span class="ow">in</span> <span class="n">levels</span><span class="p">]</span>
+</span><span data-line="64">
+</span><span data-line="65">    <span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/ordered&quot;</span><span class="p">)</span>
+</span><span data-line="66">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_ordered_levels</span><span class="p">(</span>
+</span><span data-line="67">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="68">        <span class="n">level_service</span><span class="p">:</span> <span class="n">SponsorshipLevelService</span><span class="p">,</span>
+</span><span data-line="69">        <span class="n">limit</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">1000</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+</span><span data-line="70">        <span class="n">offset</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span><span data-line="71">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">SponsorshipLevelRead</span><span class="p">]:</span>
+</span><span data-line="72"><span class="w">        </span><span class="sd">&quot;&quot;&quot;List sponsorship levels in display order.</span>
+</span><span data-line="73">
+</span><span data-line="74"><span class="sd">        Retrieves sponsorship levels sorted by their display order field.</span>
+</span><span data-line="75"><span class="sd">        Useful for rendering sponsor tiers in the correct hierarchy.</span>
+</span><span data-line="76">
+</span><span data-line="77"><span class="sd">        Args:</span>
+</span><span data-line="78"><span class="sd">            level_service: Service for sponsorship level database operations.</span>
+</span><span data-line="79"><span class="sd">            limit: Maximum number of levels to return (1-1000).</span>
+</span><span data-line="80"><span class="sd">            offset: Number of levels to skip for pagination.</span>
+</span><span data-line="81">
+</span><span data-line="82"><span class="sd">        Returns:</span>
+</span><span data-line="83"><span class="sd">            List of sponsorship levels sorted by display order.</span>
+</span><span data-line="84"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="85">        <span class="n">levels</span> <span class="o">=</span> <span class="k">await</span> <span class="n">level_service</span><span class="o">.</span><span class="n">list_ordered</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="n">limit</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">)</span>
+</span><span data-line="86">        <span class="k">return</span> <span class="p">[</span><span class="n">SponsorshipLevelRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">level</span><span class="p">)</span> <span class="k">for</span> <span class="n">level</span> <span class="ow">in</span> <span class="n">levels</span><span class="p">]</span>
+</span><span data-line="87">
+</span><span data-line="88">    <span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/{level_id:uuid}&quot;</span><span class="p">)</span>
+</span><span data-line="89">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_level</span><span class="p">(</span>
+</span><span data-line="90">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="91">        <span class="n">level_service</span><span class="p">:</span> <span class="n">SponsorshipLevelService</span><span class="p">,</span>
+</span><span data-line="92">        <span class="n">level_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">UUID</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Level ID&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The level ID&quot;</span><span class="p">)],</span>
+</span><span data-line="93">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SponsorshipLevelRead</span><span class="p">:</span>
+</span><span data-line="94"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve a specific sponsorship level by its unique identifier.</span>
+</span><span data-line="95">
+</span><span data-line="96"><span class="sd">        Fetches complete sponsorship level information including name, benefits,</span>
+</span><span data-line="97"><span class="sd">        pricing, and display order.</span>
+</span><span data-line="98">
+</span><span data-line="99"><span class="sd">        Args:</span>
+</span><span data-line="100"><span class="sd">            level_service: Service for sponsorship level database operations.</span>
+</span><span data-line="101"><span class="sd">            level_id: The unique UUID identifier of the sponsorship level.</span>
+</span><span data-line="102">
+</span><span data-line="103"><span class="sd">        Returns:</span>
+</span><span data-line="104"><span class="sd">            Complete sponsorship level details.</span>
+</span><span data-line="105">
+</span><span data-line="106"><span class="sd">        Raises:</span>
+</span><span data-line="107"><span class="sd">            NotFoundException: If no sponsorship level with the given ID exists.</span>
+</span><span data-line="108"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="109">        <span class="n">level</span> <span class="o">=</span> <span class="k">await</span> <span class="n">level_service</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">level_id</span><span class="p">)</span>
+</span><span data-line="110">        <span class="k">return</span> <span class="n">SponsorshipLevelRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">level</span><span class="p">)</span>
+</span><span data-line="111">
+</span><span data-line="112">    <span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/by-slug/{slug:str}&quot;</span><span class="p">)</span>
+</span><span data-line="113">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_level_by_slug</span><span class="p">(</span>
+</span><span data-line="114">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="115">        <span class="n">level_service</span><span class="p">:</span> <span class="n">SponsorshipLevelService</span><span class="p">,</span>
+</span><span data-line="116">        <span class="n">slug</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Slug&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The level slug&quot;</span><span class="p">)],</span>
+</span><span data-line="117">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SponsorshipLevelRead</span><span class="p">:</span>
+</span><span data-line="118"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Look up a sponsorship level by its URL slug.</span>
+</span><span data-line="119">
+</span><span data-line="120"><span class="sd">        Searches for a sponsorship level with the specified slug (e.g., &quot;gold&quot;,</span>
+</span><span data-line="121"><span class="sd">        &quot;platinum&quot;) and returns its complete details.</span>
+</span><span data-line="122">
+</span><span data-line="123"><span class="sd">        Args:</span>
+</span><span data-line="124"><span class="sd">            level_service: Service for sponsorship level database operations.</span>
+</span><span data-line="125"><span class="sd">            slug: The URL-friendly slug identifier.</span>
+</span><span data-line="126">
+</span><span data-line="127"><span class="sd">        Returns:</span>
+</span><span data-line="128"><span class="sd">            Complete sponsorship level details.</span>
+</span><span data-line="129">
+</span><span data-line="130"><span class="sd">        Raises:</span>
+</span><span data-line="131"><span class="sd">            NotFoundException: If no sponsorship level with the given slug exists.</span>
+</span><span data-line="132"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="133">        <span class="n">level</span> <span class="o">=</span> <span class="k">await</span> <span class="n">level_service</span><span class="o">.</span><span class="n">get_by_slug</span><span class="p">(</span><span class="n">slug</span><span class="p">)</span>
+</span><span data-line="134">        <span class="k">if</span> <span class="ow">not</span> <span class="n">level</span><span class="p">:</span>
+</span><span data-line="135">            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Sponsorship level with slug </span><span class="si">{</span><span class="n">slug</span><span class="si">}</span><span class="s2"> not found&quot;</span>
+</span><span data-line="136">            <span class="k">raise</span> <span class="n">NotFoundException</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</span><span data-line="137">        <span class="k">return</span> <span class="n">SponsorshipLevelRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">level</span><span class="p">)</span>
+</span><span data-line="138">
+</span><span data-line="139">    <span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+</span><span data-line="140">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_level</span><span class="p">(</span>
+</span><span data-line="141">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="142">        <span class="n">level_service</span><span class="p">:</span> <span class="n">SponsorshipLevelService</span><span class="p">,</span>
+</span><span data-line="143">        <span class="n">data</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+</span><span data-line="144">            <span class="n">SponsorshipLevelCreate</span><span class="p">,</span> <span class="n">Body</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Sponsorship Level&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Sponsorship level to create&quot;</span><span class="p">)</span>
+</span><span data-line="145">        <span class="p">],</span>
+</span><span data-line="146">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SponsorshipLevelRead</span><span class="p">:</span>
+</span><span data-line="147"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new sponsorship level tier.</span>
+</span><span data-line="148">
+</span><span data-line="149"><span class="sd">        Creates a new sponsorship tier with the specified name, benefits,</span>
+</span><span data-line="150"><span class="sd">        pricing, and display order. Levels organize sponsors by contribution.</span>
+</span><span data-line="151">
+</span><span data-line="152"><span class="sd">        Args:</span>
+</span><span data-line="153"><span class="sd">            level_service: Service for sponsorship level database operations.</span>
+</span><span data-line="154"><span class="sd">            data: Sponsorship level creation payload with tier details.</span>
+</span><span data-line="155">
+</span><span data-line="156"><span class="sd">        Returns:</span>
+</span><span data-line="157"><span class="sd">            The newly created sponsorship level.</span>
+</span><span data-line="158">
+</span><span data-line="159"><span class="sd">        Raises:</span>
+</span><span data-line="160"><span class="sd">            ConflictError: If a level with the same slug exists.</span>
+</span><span data-line="161"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="162">        <span class="n">level</span> <span class="o">=</span> <span class="k">await</span> <span class="n">level_service</span><span class="o">.</span><span class="n">create_level</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</span><span data-line="163">        <span class="k">return</span> <span class="n">SponsorshipLevelRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">level</span><span class="p">)</span>
+</span><span data-line="164">
+</span><span data-line="165">    <span class="nd">@put</span><span class="p">(</span><span class="s2">&quot;/{level_id:uuid}&quot;</span><span class="p">)</span>
+</span><span data-line="166">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">update_level</span><span class="p">(</span>
+</span><span data-line="167">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="168">        <span class="n">level_service</span><span class="p">:</span> <span class="n">SponsorshipLevelService</span><span class="p">,</span>
+</span><span data-line="169">        <span class="n">data</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+</span><span data-line="170">            <span class="n">SponsorshipLevelUpdate</span><span class="p">,</span> <span class="n">Body</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Sponsorship Level&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Sponsorship level data to update&quot;</span><span class="p">)</span>
+</span><span data-line="171">        <span class="p">],</span>
+</span><span data-line="172">        <span class="n">level_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">UUID</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Level ID&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The level ID&quot;</span><span class="p">)],</span>
+</span><span data-line="173">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SponsorshipLevelRead</span><span class="p">:</span>
+</span><span data-line="174"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Update an existing sponsorship level.</span>
+</span><span data-line="175">
+</span><span data-line="176"><span class="sd">        Modifies sponsorship level fields with the provided values. Can update</span>
+</span><span data-line="177"><span class="sd">        name, benefits, pricing, and display order.</span>
+</span><span data-line="178">
+</span><span data-line="179"><span class="sd">        Args:</span>
+</span><span data-line="180"><span class="sd">            level_service: Service for sponsorship level database operations.</span>
+</span><span data-line="181"><span class="sd">            data: Partial level update payload with fields to modify.</span>
+</span><span data-line="182"><span class="sd">            level_id: The unique UUID identifier of the level to update.</span>
+</span><span data-line="183">
+</span><span data-line="184"><span class="sd">        Returns:</span>
+</span><span data-line="185"><span class="sd">            The updated sponsorship level with all current fields.</span>
+</span><span data-line="186">
+</span><span data-line="187"><span class="sd">        Raises:</span>
+</span><span data-line="188"><span class="sd">            NotFoundException: If no sponsorship level with the given ID exists.</span>
+</span><span data-line="189"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="190">        <span class="n">update_data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">model_dump</span><span class="p">(</span><span class="n">exclude_unset</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span data-line="191">        <span class="n">level</span> <span class="o">=</span> <span class="k">await</span> <span class="n">level_service</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">update_data</span><span class="p">,</span> <span class="n">item_id</span><span class="o">=</span><span class="n">level_id</span><span class="p">)</span>
+</span><span data-line="192">        <span class="k">return</span> <span class="n">SponsorshipLevelRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">level</span><span class="p">)</span>
+</span><span data-line="193">
+</span><span data-line="194">    <span class="nd">@delete</span><span class="p">(</span><span class="s2">&quot;/{level_id:uuid}&quot;</span><span class="p">)</span>
+</span><span data-line="195">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">delete_level</span><span class="p">(</span>
+</span><span data-line="196">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="197">        <span class="n">level_service</span><span class="p">:</span> <span class="n">SponsorshipLevelService</span><span class="p">,</span>
+</span><span data-line="198">        <span class="n">level_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">UUID</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Level ID&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The level ID&quot;</span><span class="p">)],</span>
+</span><span data-line="199">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="200"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Delete a sponsorship level.</span>
+</span><span data-line="201">
+</span><span data-line="202"><span class="sd">        Permanently removes a sponsorship level from the system. Existing</span>
+</span><span data-line="203"><span class="sd">        sponsorships using this level should be reassigned first.</span>
+</span><span data-line="204">
+</span><span data-line="205"><span class="sd">        Args:</span>
+</span><span data-line="206"><span class="sd">            level_service: Service for sponsorship level database operations.</span>
+</span><span data-line="207"><span class="sd">            level_id: The unique UUID identifier of the level to delete.</span>
+</span><span data-line="208">
+</span><span data-line="209"><span class="sd">        Raises:</span>
+</span><span data-line="210"><span class="sd">            NotFoundException: If no sponsorship level with the given ID exists.</span>
+</span><span data-line="211"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="212">        <span class="k">await</span> <span class="n">level_service</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">level_id</span><span class="p">)</span></div>
+
+</span><span data-line="213">
+</span><span data-line="214">
+<div class="viewcode-block" id="SponsorController">
+<a class="viewcode-back" href="../../../../api/domains/sponsors.html#pydotorg.domains.sponsors.SponsorController">[docs]</a>
+</span><span data-line="215"><span class="k">class</span><span class="w"> </span><span class="nc">SponsorController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="216"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Controller for Sponsor CRUD operations.&quot;&quot;&quot;</span>
+</span><span data-line="217">
+</span><span data-line="218">    <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;/api/v1/sponsors&quot;</span>
+</span><span data-line="219">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Sponsors&quot;</span><span class="p">]</span>
+</span><span data-line="220">
+</span><span data-line="221">    <span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+</span><span data-line="222">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_sponsors</span><span class="p">(</span>
+</span><span data-line="223">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="224">        <span class="n">sponsor_service</span><span class="p">:</span> <span class="n">SponsorService</span><span class="p">,</span>
+</span><span data-line="225">        <span class="n">limit_offset</span><span class="p">:</span> <span class="n">LimitOffset</span><span class="p">,</span>
+</span><span data-line="226">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">SponsorRead</span><span class="p">]:</span>
+</span><span data-line="227"><span class="w">        </span><span class="sd">&quot;&quot;&quot;List all sponsors with pagination.</span>
+</span><span data-line="228">
+</span><span data-line="229"><span class="sd">        Retrieves a paginated list of all sponsor organizations including</span>
+</span><span data-line="230"><span class="sd">        those with active and inactive sponsorships.</span>
+</span><span data-line="231">
+</span><span data-line="232"><span class="sd">        Args:</span>
+</span><span data-line="233"><span class="sd">            sponsor_service: Service for sponsor database operations.</span>
+</span><span data-line="234"><span class="sd">            limit_offset: Pagination parameters for limiting and offsetting results.</span>
+</span><span data-line="235">
+</span><span data-line="236"><span class="sd">        Returns:</span>
+</span><span data-line="237"><span class="sd">            List of sponsors with organization details.</span>
+</span><span data-line="238"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="239">        <span class="n">sponsors</span><span class="p">,</span> <span class="n">_total</span> <span class="o">=</span> <span class="k">await</span> <span class="n">sponsor_service</span><span class="o">.</span><span class="n">list_and_count</span><span class="p">(</span><span class="n">limit_offset</span><span class="p">)</span>
+</span><span data-line="240">        <span class="k">return</span> <span class="p">[</span><span class="n">SponsorRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">sponsor</span><span class="p">)</span> <span class="k">for</span> <span class="n">sponsor</span> <span class="ow">in</span> <span class="n">sponsors</span><span class="p">]</span>
+</span><span data-line="241">
+</span><span data-line="242">    <span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/active&quot;</span><span class="p">)</span>
+</span><span data-line="243">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_active_sponsors</span><span class="p">(</span>
+</span><span data-line="244">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="245">        <span class="n">sponsor_service</span><span class="p">:</span> <span class="n">SponsorService</span><span class="p">,</span>
+</span><span data-line="246">        <span class="n">limit</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">1000</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+</span><span data-line="247">        <span class="n">offset</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span><span data-line="248">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">SponsorPublic</span><span class="p">]:</span>
+</span><span data-line="249"><span class="w">        </span><span class="sd">&quot;&quot;&quot;List sponsors with currently active sponsorships.</span>
+</span><span data-line="250">
+</span><span data-line="251"><span class="sd">        Retrieves only sponsors that have at least one active sponsorship.</span>
+</span><span data-line="252"><span class="sd">        Useful for displaying current supporters on the website.</span>
+</span><span data-line="253">
+</span><span data-line="254"><span class="sd">        Args:</span>
+</span><span data-line="255"><span class="sd">            sponsor_service: Service for sponsor database operations.</span>
+</span><span data-line="256"><span class="sd">            limit: Maximum number of sponsors to return (1-1000).</span>
+</span><span data-line="257"><span class="sd">            offset: Number of sponsors to skip for pagination.</span>
+</span><span data-line="258">
+</span><span data-line="259"><span class="sd">        Returns:</span>
+</span><span data-line="260"><span class="sd">            List of public sponsor profiles with active sponsorships.</span>
+</span><span data-line="261"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="262">        <span class="n">sponsors</span> <span class="o">=</span> <span class="k">await</span> <span class="n">sponsor_service</span><span class="o">.</span><span class="n">list_with_active_sponsorships</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="n">limit</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">)</span>
+</span><span data-line="263">        <span class="k">return</span> <span class="p">[</span><span class="n">SponsorPublic</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">sponsor</span><span class="p">)</span> <span class="k">for</span> <span class="n">sponsor</span> <span class="ow">in</span> <span class="n">sponsors</span><span class="p">]</span>
+</span><span data-line="264">
+</span><span data-line="265">    <span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/{sponsor_id:uuid}&quot;</span><span class="p">)</span>
+</span><span data-line="266">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_sponsor</span><span class="p">(</span>
+</span><span data-line="267">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="268">        <span class="n">sponsor_service</span><span class="p">:</span> <span class="n">SponsorService</span><span class="p">,</span>
+</span><span data-line="269">        <span class="n">sponsor_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">UUID</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Sponsor ID&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The sponsor ID&quot;</span><span class="p">)],</span>
+</span><span data-line="270">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SponsorRead</span><span class="p">:</span>
+</span><span data-line="271"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve a specific sponsor by their unique identifier.</span>
+</span><span data-line="272">
+</span><span data-line="273"><span class="sd">        Fetches complete sponsor information including organization name,</span>
+</span><span data-line="274"><span class="sd">        description, logo, website, and contact details.</span>
+</span><span data-line="275">
+</span><span data-line="276"><span class="sd">        Args:</span>
+</span><span data-line="277"><span class="sd">            sponsor_service: Service for sponsor database operations.</span>
+</span><span data-line="278"><span class="sd">            sponsor_id: The unique UUID identifier of the sponsor.</span>
+</span><span data-line="279">
+</span><span data-line="280"><span class="sd">        Returns:</span>
+</span><span data-line="281"><span class="sd">            Complete sponsor details.</span>
+</span><span data-line="282">
+</span><span data-line="283"><span class="sd">        Raises:</span>
+</span><span data-line="284"><span class="sd">            NotFoundException: If no sponsor with the given ID exists.</span>
+</span><span data-line="285"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="286">        <span class="n">sponsor</span> <span class="o">=</span> <span class="k">await</span> <span class="n">sponsor_service</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">sponsor_id</span><span class="p">)</span>
+</span><span data-line="287">        <span class="k">return</span> <span class="n">SponsorRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">sponsor</span><span class="p">)</span>
+</span><span data-line="288">
+</span><span data-line="289">    <span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/by-slug/{slug:str}&quot;</span><span class="p">)</span>
+</span><span data-line="290">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_sponsor_by_slug</span><span class="p">(</span>
+</span><span data-line="291">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="292">        <span class="n">sponsor_service</span><span class="p">:</span> <span class="n">SponsorService</span><span class="p">,</span>
+</span><span data-line="293">        <span class="n">slug</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Slug&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The sponsor slug&quot;</span><span class="p">)],</span>
+</span><span data-line="294">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SponsorPublic</span><span class="p">:</span>
+</span><span data-line="295"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Look up a sponsor by their URL slug.</span>
+</span><span data-line="296">
+</span><span data-line="297"><span class="sd">        Searches for a sponsor with the specified slug and returns their</span>
+</span><span data-line="298"><span class="sd">        public profile information.</span>
+</span><span data-line="299">
+</span><span data-line="300"><span class="sd">        Args:</span>
+</span><span data-line="301"><span class="sd">            sponsor_service: Service for sponsor database operations.</span>
+</span><span data-line="302"><span class="sd">            slug: The URL-friendly slug identifier.</span>
+</span><span data-line="303">
+</span><span data-line="304"><span class="sd">        Returns:</span>
+</span><span data-line="305"><span class="sd">            Public sponsor profile information.</span>
+</span><span data-line="306">
+</span><span data-line="307"><span class="sd">        Raises:</span>
+</span><span data-line="308"><span class="sd">            NotFoundException: If no sponsor with the given slug exists.</span>
+</span><span data-line="309"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="310">        <span class="n">sponsor</span> <span class="o">=</span> <span class="k">await</span> <span class="n">sponsor_service</span><span class="o">.</span><span class="n">get_by_slug</span><span class="p">(</span><span class="n">slug</span><span class="p">)</span>
+</span><span data-line="311">        <span class="k">if</span> <span class="ow">not</span> <span class="n">sponsor</span><span class="p">:</span>
+</span><span data-line="312">            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Sponsor with slug </span><span class="si">{</span><span class="n">slug</span><span class="si">}</span><span class="s2"> not found&quot;</span>
+</span><span data-line="313">            <span class="k">raise</span> <span class="n">NotFoundException</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</span><span data-line="314">        <span class="k">return</span> <span class="n">SponsorPublic</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">sponsor</span><span class="p">)</span>
+</span><span data-line="315">
+</span><span data-line="316">    <span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+</span><span data-line="317">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_sponsor</span><span class="p">(</span>
+</span><span data-line="318">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="319">        <span class="n">sponsor_service</span><span class="p">:</span> <span class="n">SponsorService</span><span class="p">,</span>
+</span><span data-line="320">        <span class="n">data</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">SponsorCreate</span><span class="p">,</span> <span class="n">Body</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Sponsor&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Sponsor to create&quot;</span><span class="p">)],</span>
+</span><span data-line="321">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SponsorRead</span><span class="p">:</span>
+</span><span data-line="322"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new sponsor organization.</span>
+</span><span data-line="323">
+</span><span data-line="324"><span class="sd">        Creates a new sponsor record with organization details including</span>
+</span><span data-line="325"><span class="sd">        name, description, logo, and contact information.</span>
+</span><span data-line="326">
+</span><span data-line="327"><span class="sd">        Args:</span>
+</span><span data-line="328"><span class="sd">            sponsor_service: Service for sponsor database operations.</span>
+</span><span data-line="329"><span class="sd">            data: Sponsor creation payload with organization details.</span>
+</span><span data-line="330">
+</span><span data-line="331"><span class="sd">        Returns:</span>
+</span><span data-line="332"><span class="sd">            The newly created sponsor.</span>
+</span><span data-line="333">
+</span><span data-line="334"><span class="sd">        Raises:</span>
+</span><span data-line="335"><span class="sd">            ConflictError: If a sponsor with the same slug exists.</span>
+</span><span data-line="336"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="337">        <span class="n">sponsor</span> <span class="o">=</span> <span class="k">await</span> <span class="n">sponsor_service</span><span class="o">.</span><span class="n">create_sponsor</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</span><span data-line="338">        <span class="k">return</span> <span class="n">SponsorRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">sponsor</span><span class="p">)</span>
+</span><span data-line="339">
+</span><span data-line="340">    <span class="nd">@put</span><span class="p">(</span><span class="s2">&quot;/{sponsor_id:uuid}&quot;</span><span class="p">)</span>
+</span><span data-line="341">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">update_sponsor</span><span class="p">(</span>
+</span><span data-line="342">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="343">        <span class="n">sponsor_service</span><span class="p">:</span> <span class="n">SponsorService</span><span class="p">,</span>
+</span><span data-line="344">        <span class="n">data</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">SponsorUpdate</span><span class="p">,</span> <span class="n">Body</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Sponsor&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Sponsor data to update&quot;</span><span class="p">)],</span>
+</span><span data-line="345">        <span class="n">sponsor_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">UUID</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Sponsor ID&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The sponsor ID&quot;</span><span class="p">)],</span>
+</span><span data-line="346">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SponsorRead</span><span class="p">:</span>
+</span><span data-line="347"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Update an existing sponsor&#39;s information.</span>
+</span><span data-line="348">
+</span><span data-line="349"><span class="sd">        Modifies sponsor fields with the provided values. Can update</span>
+</span><span data-line="350"><span class="sd">        organization name, description, logo, and contact details.</span>
+</span><span data-line="351">
+</span><span data-line="352"><span class="sd">        Args:</span>
+</span><span data-line="353"><span class="sd">            sponsor_service: Service for sponsor database operations.</span>
+</span><span data-line="354"><span class="sd">            data: Partial sponsor update payload with fields to modify.</span>
+</span><span data-line="355"><span class="sd">            sponsor_id: The unique UUID identifier of the sponsor to update.</span>
+</span><span data-line="356">
+</span><span data-line="357"><span class="sd">        Returns:</span>
+</span><span data-line="358"><span class="sd">            The updated sponsor with all current fields.</span>
+</span><span data-line="359">
+</span><span data-line="360"><span class="sd">        Raises:</span>
+</span><span data-line="361"><span class="sd">            NotFoundException: If no sponsor with the given ID exists.</span>
+</span><span data-line="362"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="363">        <span class="n">update_data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">model_dump</span><span class="p">(</span><span class="n">exclude_unset</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span data-line="364">        <span class="n">sponsor</span> <span class="o">=</span> <span class="k">await</span> <span class="n">sponsor_service</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">update_data</span><span class="p">,</span> <span class="n">item_id</span><span class="o">=</span><span class="n">sponsor_id</span><span class="p">)</span>
+</span><span data-line="365">        <span class="k">return</span> <span class="n">SponsorRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">sponsor</span><span class="p">)</span>
+</span><span data-line="366">
+</span><span data-line="367">    <span class="nd">@delete</span><span class="p">(</span><span class="s2">&quot;/{sponsor_id:uuid}&quot;</span><span class="p">)</span>
+</span><span data-line="368">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">delete_sponsor</span><span class="p">(</span>
+</span><span data-line="369">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="370">        <span class="n">sponsor_service</span><span class="p">:</span> <span class="n">SponsorService</span><span class="p">,</span>
+</span><span data-line="371">        <span class="n">sponsor_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">UUID</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Sponsor ID&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The sponsor ID&quot;</span><span class="p">)],</span>
+</span><span data-line="372">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="373"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Permanently delete a sponsor organization.</span>
+</span><span data-line="374">
+</span><span data-line="375"><span class="sd">        Removes a sponsor and disassociates their sponsorships from the</span>
+</span><span data-line="376"><span class="sd">        system. This action is irreversible.</span>
+</span><span data-line="377">
+</span><span data-line="378"><span class="sd">        Args:</span>
+</span><span data-line="379"><span class="sd">            sponsor_service: Service for sponsor database operations.</span>
+</span><span data-line="380"><span class="sd">            sponsor_id: The unique UUID identifier of the sponsor to delete.</span>
+</span><span data-line="381">
+</span><span data-line="382"><span class="sd">        Raises:</span>
+</span><span data-line="383"><span class="sd">            NotFoundException: If no sponsor with the given ID exists.</span>
+</span><span data-line="384"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="385">        <span class="k">await</span> <span class="n">sponsor_service</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">sponsor_id</span><span class="p">)</span>
+</span><span data-line="386">
+</span><span data-line="387">    <span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/apply&quot;</span><span class="p">)</span>
+</span><span data-line="388">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">apply_for_sponsorship</span><span class="p">(</span>
+</span><span data-line="389">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="390">        <span class="n">sponsor_service</span><span class="p">:</span> <span class="n">SponsorService</span><span class="p">,</span>
+</span><span data-line="391">        <span class="n">sponsorship_service</span><span class="p">:</span> <span class="n">SponsorshipService</span><span class="p">,</span>
+</span><span data-line="392">        <span class="n">sponsorship_level_service</span><span class="p">:</span> <span class="n">SponsorshipLevelService</span><span class="p">,</span>
+</span><span data-line="393">        <span class="n">data</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+</span><span data-line="394">            <span class="n">SponsorApplicationCreate</span><span class="p">,</span> <span class="n">Body</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Sponsor Application&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Sponsorship application data&quot;</span><span class="p">)</span>
+</span><span data-line="395">        <span class="p">],</span>
+</span><span data-line="396">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+</span><span data-line="397"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Submit a sponsorship application.</span>
+</span><span data-line="398">
+</span><span data-line="399"><span class="sd">        Creates a new sponsor record and sponsorship application with APPLIED status.</span>
+</span><span data-line="400">
+</span><span data-line="401"><span class="sd">        Args:</span>
+</span><span data-line="402"><span class="sd">            sponsor_service: Service for sponsor database operations.</span>
+</span><span data-line="403"><span class="sd">            sponsorship_service: Service for sponsorship database operations.</span>
+</span><span data-line="404"><span class="sd">            sponsorship_level_service: Service for sponsorship level database operations.</span>
+</span><span data-line="405"><span class="sd">            data: Application form data including company info and contact details.</span>
+</span><span data-line="406">
+</span><span data-line="407"><span class="sd">        Returns:</span>
+</span><span data-line="408"><span class="sd">            Success confirmation message with sponsor ID.</span>
+</span><span data-line="409"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="410">        <span class="n">slug</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[^a-z0-9]+&quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">company_name</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)</span>
+</span><span data-line="411">
+</span><span data-line="412">        <span class="n">sponsor_data</span> <span class="o">=</span> <span class="n">SponsorCreate</span><span class="p">(</span>
+</span><span data-line="413">            <span class="n">name</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">company_name</span><span class="p">,</span>
+</span><span data-line="414">            <span class="n">slug</span><span class="o">=</span><span class="n">slug</span><span class="p">,</span>
+</span><span data-line="415">            <span class="n">description</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">description</span><span class="p">,</span>
+</span><span data-line="416">            <span class="n">landing_page_url</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">website</span><span class="p">,</span>
+</span><span data-line="417">            <span class="n">twitter_handle</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">twitter_handle</span><span class="p">,</span>
+</span><span data-line="418">            <span class="n">linked_in_page_url</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">linkedin_url</span><span class="p">,</span>
+</span><span data-line="419">            <span class="n">primary_phone</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">contact_phone</span><span class="p">,</span>
+</span><span data-line="420">            <span class="n">mailing_address_line_1</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">mailing_address</span><span class="p">,</span>
+</span><span data-line="421">            <span class="n">city</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">city</span><span class="p">,</span>
+</span><span data-line="422">            <span class="n">state</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">state</span><span class="p">,</span>
+</span><span data-line="423">            <span class="n">postal_code</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">postal_code</span><span class="p">,</span>
+</span><span data-line="424">            <span class="n">country</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">country</span><span class="p">,</span>
+</span><span data-line="425">        <span class="p">)</span>
+</span><span data-line="426">        <span class="n">sponsor</span> <span class="o">=</span> <span class="k">await</span> <span class="n">sponsor_service</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">sponsor_data</span><span class="o">.</span><span class="n">model_dump</span><span class="p">(</span><span class="n">exclude_unset</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</span><span data-line="427">
+</span><span data-line="428">        <span class="n">level</span> <span class="o">=</span> <span class="k">await</span> <span class="n">sponsorship_level_service</span><span class="o">.</span><span class="n">get_by_slug</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">sponsorship_level</span><span class="p">)</span>
+</span><span data-line="429">        <span class="k">if</span> <span class="ow">not</span> <span class="n">level</span><span class="p">:</span>
+</span><span data-line="430">            <span class="n">levels</span> <span class="o">=</span> <span class="k">await</span> <span class="n">sponsorship_level_service</span><span class="o">.</span><span class="n">list_ordered</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</span><span data-line="431">            <span class="n">level</span> <span class="o">=</span> <span class="n">levels</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">levels</span> <span class="k">else</span> <span class="kc">None</span>
+</span><span data-line="432">
+</span><span data-line="433">        <span class="k">if</span> <span class="n">level</span><span class="p">:</span>
+</span><span data-line="434">            <span class="n">today</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">UTC</span><span class="p">)</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
+</span><span data-line="435">            <span class="n">sponsorship_data</span> <span class="o">=</span> <span class="n">SponsorshipCreate</span><span class="p">(</span>
+</span><span data-line="436">                <span class="n">sponsor_id</span><span class="o">=</span><span class="n">sponsor</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+</span><span data-line="437">                <span class="n">level_id</span><span class="o">=</span><span class="n">level</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+</span><span data-line="438">                <span class="n">status</span><span class="o">=</span><span class="n">SponsorshipStatus</span><span class="o">.</span><span class="n">APPLIED</span><span class="p">,</span>
+</span><span data-line="439">                <span class="n">applied_on</span><span class="o">=</span><span class="n">today</span><span class="p">,</span>
+</span><span data-line="440">                <span class="n">year</span><span class="o">=</span><span class="n">today</span><span class="o">.</span><span class="n">year</span><span class="p">,</span>
+</span><span data-line="441">            <span class="p">)</span>
+</span><span data-line="442">            <span class="k">await</span> <span class="n">sponsorship_service</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">sponsorship_data</span><span class="o">.</span><span class="n">model_dump</span><span class="p">(</span><span class="n">exclude_unset</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</span><span data-line="443">
+</span><span data-line="444">        <span class="k">return</span> <span class="p">{</span>
+</span><span data-line="445">            <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Thank you for your interest in sponsoring Python! Your application has been received and will be reviewed by our team within 5-7 business days.&quot;</span><span class="p">,</span>
+</span><span data-line="446">            <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;success&quot;</span><span class="p">,</span>
+</span><span data-line="447">            <span class="s2">&quot;sponsor_id&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">sponsor</span><span class="o">.</span><span class="n">id</span><span class="p">),</span>
+</span><span data-line="448">        <span class="p">}</span></div>
+
+</span><span data-line="449">
+</span><span data-line="450">
+<div class="viewcode-block" id="SponsorshipController">
+<a class="viewcode-back" href="../../../../api/domains/sponsors.html#pydotorg.domains.sponsors.SponsorshipController">[docs]</a>
+</span><span data-line="451"><span class="k">class</span><span class="w"> </span><span class="nc">SponsorshipController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="452"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Controller for Sponsorship CRUD operations.&quot;&quot;&quot;</span>
+</span><span data-line="453">
+</span><span data-line="454">    <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;/api/v1/sponsorships&quot;</span>
+</span><span data-line="455">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Sponsors&quot;</span><span class="p">]</span>
+</span><span data-line="456">
+</span><span data-line="457">    <span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+</span><span data-line="458">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_sponsorships</span><span class="p">(</span>
+</span><span data-line="459">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="460">        <span class="n">sponsorship_service</span><span class="p">:</span> <span class="n">SponsorshipService</span><span class="p">,</span>
+</span><span data-line="461">        <span class="n">limit_offset</span><span class="p">:</span> <span class="n">LimitOffset</span><span class="p">,</span>
+</span><span data-line="462">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">SponsorshipRead</span><span class="p">]:</span>
+</span><span data-line="463"><span class="w">        </span><span class="sd">&quot;&quot;&quot;List all sponsorships with pagination.</span>
+</span><span data-line="464">
+</span><span data-line="465"><span class="sd">        Retrieves a paginated list of all sponsorship agreements including</span>
+</span><span data-line="466"><span class="sd">        pending, active, and expired sponsorships.</span>
+</span><span data-line="467">
+</span><span data-line="468"><span class="sd">        Args:</span>
+</span><span data-line="469"><span class="sd">            sponsorship_service: Service for sponsorship database operations.</span>
+</span><span data-line="470"><span class="sd">            limit_offset: Pagination parameters for limiting and offsetting results.</span>
+</span><span data-line="471">
+</span><span data-line="472"><span class="sd">        Returns:</span>
+</span><span data-line="473"><span class="sd">            List of sponsorships with status and term details.</span>
+</span><span data-line="474"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="475">        <span class="n">sponsorships</span><span class="p">,</span> <span class="n">_total</span> <span class="o">=</span> <span class="k">await</span> <span class="n">sponsorship_service</span><span class="o">.</span><span class="n">list_and_count</span><span class="p">(</span><span class="n">limit_offset</span><span class="p">)</span>
+</span><span data-line="476">        <span class="k">return</span> <span class="p">[</span><span class="n">SponsorshipRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">sponsorship</span><span class="p">)</span> <span class="k">for</span> <span class="n">sponsorship</span> <span class="ow">in</span> <span class="n">sponsorships</span><span class="p">]</span>
+</span><span data-line="477">
+</span><span data-line="478">    <span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/active&quot;</span><span class="p">)</span>
+</span><span data-line="479">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_active_sponsorships</span><span class="p">(</span>
+</span><span data-line="480">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="481">        <span class="n">sponsorship_service</span><span class="p">:</span> <span class="n">SponsorshipService</span><span class="p">,</span>
+</span><span data-line="482">        <span class="n">limit</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">1000</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+</span><span data-line="483">        <span class="n">offset</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span><span data-line="484">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">SponsorshipPublic</span><span class="p">]:</span>
+</span><span data-line="485"><span class="w">        </span><span class="sd">&quot;&quot;&quot;List currently active sponsorships.</span>
+</span><span data-line="486">
+</span><span data-line="487"><span class="sd">        Retrieves only sponsorships that are currently active and within</span>
+</span><span data-line="488"><span class="sd">        their term dates. Useful for displaying current supporters.</span>
+</span><span data-line="489">
+</span><span data-line="490"><span class="sd">        Args:</span>
+</span><span data-line="491"><span class="sd">            sponsorship_service: Service for sponsorship database operations.</span>
+</span><span data-line="492"><span class="sd">            limit: Maximum number of sponsorships to return (1-1000).</span>
+</span><span data-line="493"><span class="sd">            offset: Number of sponsorships to skip for pagination.</span>
+</span><span data-line="494">
+</span><span data-line="495"><span class="sd">        Returns:</span>
+</span><span data-line="496"><span class="sd">            List of active public sponsorship information.</span>
+</span><span data-line="497"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="498">        <span class="n">sponsorships</span> <span class="o">=</span> <span class="k">await</span> <span class="n">sponsorship_service</span><span class="o">.</span><span class="n">list_active</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="n">limit</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">)</span>
+</span><span data-line="499">        <span class="k">return</span> <span class="p">[</span><span class="n">SponsorshipPublic</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">sponsorship</span><span class="p">)</span> <span class="k">for</span> <span class="n">sponsorship</span> <span class="ow">in</span> <span class="n">sponsorships</span><span class="p">]</span>
+</span><span data-line="500">
+</span><span data-line="501">    <span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/by-sponsor/{sponsor_id:uuid}&quot;</span><span class="p">)</span>
+</span><span data-line="502">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_by_sponsor</span><span class="p">(</span>
+</span><span data-line="503">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="504">        <span class="n">sponsorship_service</span><span class="p">:</span> <span class="n">SponsorshipService</span><span class="p">,</span>
+</span><span data-line="505">        <span class="n">sponsor_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">UUID</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Sponsor ID&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The sponsor ID&quot;</span><span class="p">)],</span>
+</span><span data-line="506">        <span class="n">limit</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">1000</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+</span><span data-line="507">        <span class="n">offset</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span><span data-line="508">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">SponsorshipRead</span><span class="p">]:</span>
+</span><span data-line="509"><span class="w">        </span><span class="sd">&quot;&quot;&quot;List all sponsorships for a specific sponsor.</span>
+</span><span data-line="510">
+</span><span data-line="511"><span class="sd">        Retrieves the sponsorship history for an organization, including</span>
+</span><span data-line="512"><span class="sd">        past, current, and pending sponsorships.</span>
+</span><span data-line="513">
+</span><span data-line="514"><span class="sd">        Args:</span>
+</span><span data-line="515"><span class="sd">            sponsorship_service: Service for sponsorship database operations.</span>
+</span><span data-line="516"><span class="sd">            sponsor_id: The unique UUID identifier of the sponsor.</span>
+</span><span data-line="517"><span class="sd">            limit: Maximum number of sponsorships to return (1-1000).</span>
+</span><span data-line="518"><span class="sd">            offset: Number of sponsorships to skip for pagination.</span>
+</span><span data-line="519">
+</span><span data-line="520"><span class="sd">        Returns:</span>
+</span><span data-line="521"><span class="sd">            List of sponsorships for the specified sponsor.</span>
+</span><span data-line="522"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="523">        <span class="n">sponsorships</span> <span class="o">=</span> <span class="k">await</span> <span class="n">sponsorship_service</span><span class="o">.</span><span class="n">list_by_sponsor_id</span><span class="p">(</span>
+</span><span data-line="524">            <span class="n">sponsor_id</span><span class="p">,</span>
+</span><span data-line="525">            <span class="n">limit</span><span class="o">=</span><span class="n">limit</span><span class="p">,</span>
+</span><span data-line="526">            <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span>
+</span><span data-line="527">        <span class="p">)</span>
+</span><span data-line="528">        <span class="k">return</span> <span class="p">[</span><span class="n">SponsorshipRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">sponsorship</span><span class="p">)</span> <span class="k">for</span> <span class="n">sponsorship</span> <span class="ow">in</span> <span class="n">sponsorships</span><span class="p">]</span>
+</span><span data-line="529">
+</span><span data-line="530">    <span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/by-level/{level_id:uuid}&quot;</span><span class="p">)</span>
+</span><span data-line="531">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_by_level</span><span class="p">(</span>
+</span><span data-line="532">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="533">        <span class="n">sponsorship_service</span><span class="p">:</span> <span class="n">SponsorshipService</span><span class="p">,</span>
+</span><span data-line="534">        <span class="n">level_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">UUID</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Level ID&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The level ID&quot;</span><span class="p">)],</span>
+</span><span data-line="535">        <span class="n">limit</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">1000</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+</span><span data-line="536">        <span class="n">offset</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span><span data-line="537">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">SponsorshipRead</span><span class="p">]:</span>
+</span><span data-line="538"><span class="w">        </span><span class="sd">&quot;&quot;&quot;List all sponsorships at a specific tier level.</span>
+</span><span data-line="539">
+</span><span data-line="540"><span class="sd">        Retrieves sponsorships grouped by their sponsorship tier (e.g.,</span>
+</span><span data-line="541"><span class="sd">        all Gold sponsors or all Platinum sponsors).</span>
+</span><span data-line="542">
+</span><span data-line="543"><span class="sd">        Args:</span>
+</span><span data-line="544"><span class="sd">            sponsorship_service: Service for sponsorship database operations.</span>
+</span><span data-line="545"><span class="sd">            level_id: The unique UUID identifier of the sponsorship level.</span>
+</span><span data-line="546"><span class="sd">            limit: Maximum number of sponsorships to return (1-1000).</span>
+</span><span data-line="547"><span class="sd">            offset: Number of sponsorships to skip for pagination.</span>
+</span><span data-line="548">
+</span><span data-line="549"><span class="sd">        Returns:</span>
+</span><span data-line="550"><span class="sd">            List of sponsorships at the specified tier level.</span>
+</span><span data-line="551"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="552">        <span class="n">sponsorships</span> <span class="o">=</span> <span class="k">await</span> <span class="n">sponsorship_service</span><span class="o">.</span><span class="n">list_by_level_id</span><span class="p">(</span>
+</span><span data-line="553">            <span class="n">level_id</span><span class="p">,</span>
+</span><span data-line="554">            <span class="n">limit</span><span class="o">=</span><span class="n">limit</span><span class="p">,</span>
+</span><span data-line="555">            <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span>
+</span><span data-line="556">        <span class="p">)</span>
+</span><span data-line="557">        <span class="k">return</span> <span class="p">[</span><span class="n">SponsorshipRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">sponsorship</span><span class="p">)</span> <span class="k">for</span> <span class="n">sponsorship</span> <span class="ow">in</span> <span class="n">sponsorships</span><span class="p">]</span>
+</span><span data-line="558">
+</span><span data-line="559">    <span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/by-status/{status:str}&quot;</span><span class="p">)</span>
+</span><span data-line="560">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_by_status</span><span class="p">(</span>
+</span><span data-line="561">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="562">        <span class="n">sponsorship_service</span><span class="p">:</span> <span class="n">SponsorshipService</span><span class="p">,</span>
+</span><span data-line="563">        <span class="n">status</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Status&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The sponsorship status&quot;</span><span class="p">)],</span>
+</span><span data-line="564">        <span class="n">limit</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">1000</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+</span><span data-line="565">        <span class="n">offset</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span><span data-line="566">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">SponsorshipRead</span><span class="p">]:</span>
+</span><span data-line="567"><span class="w">        </span><span class="sd">&quot;&quot;&quot;List sponsorships filtered by status.</span>
+</span><span data-line="568">
+</span><span data-line="569"><span class="sd">        Retrieves sponsorships with a specific status such as pending,</span>
+</span><span data-line="570"><span class="sd">        approved, active, or expired.</span>
+</span><span data-line="571">
+</span><span data-line="572"><span class="sd">        Args:</span>
+</span><span data-line="573"><span class="sd">            sponsorship_service: Service for sponsorship database operations.</span>
+</span><span data-line="574"><span class="sd">            status: The sponsorship status to filter by.</span>
+</span><span data-line="575"><span class="sd">            limit: Maximum number of sponsorships to return (1-1000).</span>
+</span><span data-line="576"><span class="sd">            offset: Number of sponsorships to skip for pagination.</span>
+</span><span data-line="577">
+</span><span data-line="578"><span class="sd">        Returns:</span>
+</span><span data-line="579"><span class="sd">            List of sponsorships with the specified status.</span>
+</span><span data-line="580">
+</span><span data-line="581"><span class="sd">        Raises:</span>
+</span><span data-line="582"><span class="sd">            ValueError: If the provided status is not a valid status value.</span>
+</span><span data-line="583"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="584">        <span class="k">try</span><span class="p">:</span>
+</span><span data-line="585">            <span class="n">status_enum</span> <span class="o">=</span> <span class="n">SponsorshipStatus</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+</span><span data-line="586">        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span><span data-line="587">            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Invalid status: </span><span class="si">{</span><span class="n">status</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span data-line="588">            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+</span><span data-line="589">
+</span><span data-line="590">        <span class="n">sponsorships</span> <span class="o">=</span> <span class="k">await</span> <span class="n">sponsorship_service</span><span class="o">.</span><span class="n">list_by_status</span><span class="p">(</span>
+</span><span data-line="591">            <span class="n">status_enum</span><span class="p">,</span>
+</span><span data-line="592">            <span class="n">limit</span><span class="o">=</span><span class="n">limit</span><span class="p">,</span>
+</span><span data-line="593">            <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span>
+</span><span data-line="594">        <span class="p">)</span>
+</span><span data-line="595">        <span class="k">return</span> <span class="p">[</span><span class="n">SponsorshipRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">sponsorship</span><span class="p">)</span> <span class="k">for</span> <span class="n">sponsorship</span> <span class="ow">in</span> <span class="n">sponsorships</span><span class="p">]</span>
+</span><span data-line="596">
+</span><span data-line="597">    <span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/{sponsorship_id:uuid}&quot;</span><span class="p">)</span>
+</span><span data-line="598">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_sponsorship</span><span class="p">(</span>
+</span><span data-line="599">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="600">        <span class="n">sponsorship_service</span><span class="p">:</span> <span class="n">SponsorshipService</span><span class="p">,</span>
+</span><span data-line="601">        <span class="n">sponsorship_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+</span><span data-line="602">            <span class="n">UUID</span><span class="p">,</span>
+</span><span data-line="603">            <span class="n">Parameter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Sponsorship ID&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The sponsorship ID&quot;</span><span class="p">),</span>
+</span><span data-line="604">        <span class="p">],</span>
+</span><span data-line="605">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SponsorshipRead</span><span class="p">:</span>
+</span><span data-line="606"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve a specific sponsorship by its unique identifier.</span>
+</span><span data-line="607">
+</span><span data-line="608"><span class="sd">        Fetches complete sponsorship information including sponsor, level,</span>
+</span><span data-line="609"><span class="sd">        status, term dates, and benefits.</span>
+</span><span data-line="610">
+</span><span data-line="611"><span class="sd">        Args:</span>
+</span><span data-line="612"><span class="sd">            sponsorship_service: Service for sponsorship database operations.</span>
+</span><span data-line="613"><span class="sd">            sponsorship_id: The unique UUID identifier of the sponsorship.</span>
+</span><span data-line="614">
+</span><span data-line="615"><span class="sd">        Returns:</span>
+</span><span data-line="616"><span class="sd">            Complete sponsorship details.</span>
+</span><span data-line="617">
+</span><span data-line="618"><span class="sd">        Raises:</span>
+</span><span data-line="619"><span class="sd">            NotFoundException: If no sponsorship with the given ID exists.</span>
+</span><span data-line="620"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="621">        <span class="n">sponsorship</span> <span class="o">=</span> <span class="k">await</span> <span class="n">sponsorship_service</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">sponsorship_id</span><span class="p">)</span>
+</span><span data-line="622">        <span class="k">return</span> <span class="n">SponsorshipRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">sponsorship</span><span class="p">)</span>
+</span><span data-line="623">
+</span><span data-line="624">    <span class="nd">@post</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+</span><span data-line="625">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_sponsorship</span><span class="p">(</span>
+</span><span data-line="626">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="627">        <span class="n">sponsorship_service</span><span class="p">:</span> <span class="n">SponsorshipService</span><span class="p">,</span>
+</span><span data-line="628">        <span class="n">data</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">SponsorshipCreate</span><span class="p">,</span> <span class="n">Body</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Sponsorship&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Sponsorship to create&quot;</span><span class="p">)],</span>
+</span><span data-line="629">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SponsorshipRead</span><span class="p">:</span>
+</span><span data-line="630"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new sponsorship agreement.</span>
+</span><span data-line="631">
+</span><span data-line="632"><span class="sd">        Creates a new sponsorship record associating a sponsor with a</span>
+</span><span data-line="633"><span class="sd">        sponsorship level. Initially created in pending status.</span>
+</span><span data-line="634">
+</span><span data-line="635"><span class="sd">        Args:</span>
+</span><span data-line="636"><span class="sd">            sponsorship_service: Service for sponsorship database operations.</span>
+</span><span data-line="637"><span class="sd">            data: Sponsorship creation payload with sponsor and level IDs.</span>
+</span><span data-line="638">
+</span><span data-line="639"><span class="sd">        Returns:</span>
+</span><span data-line="640"><span class="sd">            The newly created sponsorship in pending status.</span>
+</span><span data-line="641">
+</span><span data-line="642"><span class="sd">        Raises:</span>
+</span><span data-line="643"><span class="sd">            NotFoundException: If the sponsor or level does not exist.</span>
+</span><span data-line="644"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="645">        <span class="n">sponsorship</span> <span class="o">=</span> <span class="k">await</span> <span class="n">sponsorship_service</span><span class="o">.</span><span class="n">create_sponsorship</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</span><span data-line="646">        <span class="k">return</span> <span class="n">SponsorshipRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">sponsorship</span><span class="p">)</span>
+</span><span data-line="647">
+</span><span data-line="648">    <span class="nd">@put</span><span class="p">(</span><span class="s2">&quot;/{sponsorship_id:uuid}&quot;</span><span class="p">)</span>
+</span><span data-line="649">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">update_sponsorship</span><span class="p">(</span>
+</span><span data-line="650">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="651">        <span class="n">sponsorship_service</span><span class="p">:</span> <span class="n">SponsorshipService</span><span class="p">,</span>
+</span><span data-line="652">        <span class="n">data</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">SponsorshipUpdate</span><span class="p">,</span> <span class="n">Body</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Sponsorship&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Sponsorship data to update&quot;</span><span class="p">)],</span>
+</span><span data-line="653">        <span class="n">sponsorship_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+</span><span data-line="654">            <span class="n">UUID</span><span class="p">,</span>
+</span><span data-line="655">            <span class="n">Parameter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Sponsorship ID&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The sponsorship ID&quot;</span><span class="p">),</span>
+</span><span data-line="656">        <span class="p">],</span>
+</span><span data-line="657">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SponsorshipRead</span><span class="p">:</span>
+</span><span data-line="658"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Update an existing sponsorship.</span>
+</span><span data-line="659">
+</span><span data-line="660"><span class="sd">        Modifies sponsorship fields with the provided values. Can update</span>
+</span><span data-line="661"><span class="sd">        level, term dates, and other agreement details.</span>
+</span><span data-line="662">
+</span><span data-line="663"><span class="sd">        Args:</span>
+</span><span data-line="664"><span class="sd">            sponsorship_service: Service for sponsorship database operations.</span>
+</span><span data-line="665"><span class="sd">            data: Partial sponsorship update payload with fields to modify.</span>
+</span><span data-line="666"><span class="sd">            sponsorship_id: The unique UUID identifier of the sponsorship.</span>
+</span><span data-line="667">
+</span><span data-line="668"><span class="sd">        Returns:</span>
+</span><span data-line="669"><span class="sd">            The updated sponsorship with all current fields.</span>
+</span><span data-line="670">
+</span><span data-line="671"><span class="sd">        Raises:</span>
+</span><span data-line="672"><span class="sd">            NotFoundException: If no sponsorship with the given ID exists.</span>
+</span><span data-line="673"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="674">        <span class="n">update_data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">model_dump</span><span class="p">(</span><span class="n">exclude_unset</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span data-line="675">        <span class="n">sponsorship</span> <span class="o">=</span> <span class="k">await</span> <span class="n">sponsorship_service</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">update_data</span><span class="p">,</span> <span class="n">item_id</span><span class="o">=</span><span class="n">sponsorship_id</span><span class="p">)</span>
+</span><span data-line="676">        <span class="k">return</span> <span class="n">SponsorshipRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">sponsorship</span><span class="p">)</span>
+</span><span data-line="677">
+</span><span data-line="678">    <span class="nd">@patch</span><span class="p">(</span><span class="s2">&quot;/{sponsorship_id:uuid}/approve&quot;</span><span class="p">)</span>
+</span><span data-line="679">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">approve_sponsorship</span><span class="p">(</span>
+</span><span data-line="680">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="681">        <span class="n">sponsorship_service</span><span class="p">:</span> <span class="n">SponsorshipService</span><span class="p">,</span>
+</span><span data-line="682">        <span class="n">sponsorship_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+</span><span data-line="683">            <span class="n">UUID</span><span class="p">,</span>
+</span><span data-line="684">            <span class="n">Parameter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Sponsorship ID&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The sponsorship ID&quot;</span><span class="p">),</span>
+</span><span data-line="685">        <span class="p">],</span>
+</span><span data-line="686">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SponsorshipRead</span><span class="p">:</span>
+</span><span data-line="687"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Approve a pending sponsorship application.</span>
+</span><span data-line="688">
+</span><span data-line="689"><span class="sd">        Transitions a sponsorship from pending to approved status. Approved</span>
+</span><span data-line="690"><span class="sd">        sponsorships can then be activated when the term begins.</span>
+</span><span data-line="691">
+</span><span data-line="692"><span class="sd">        Args:</span>
+</span><span data-line="693"><span class="sd">            sponsorship_service: Service for sponsorship database operations.</span>
+</span><span data-line="694"><span class="sd">            sponsorship_id: The unique UUID identifier of the sponsorship.</span>
+</span><span data-line="695">
+</span><span data-line="696"><span class="sd">        Returns:</span>
+</span><span data-line="697"><span class="sd">            The sponsorship with approved status.</span>
+</span><span data-line="698">
+</span><span data-line="699"><span class="sd">        Raises:</span>
+</span><span data-line="700"><span class="sd">            NotFoundException: If no sponsorship with the given ID exists.</span>
+</span><span data-line="701"><span class="sd">            ValidationError: If the sponsorship is not in pending status.</span>
+</span><span data-line="702"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="703">        <span class="n">sponsorship</span> <span class="o">=</span> <span class="k">await</span> <span class="n">sponsorship_service</span><span class="o">.</span><span class="n">approve</span><span class="p">(</span><span class="n">sponsorship_id</span><span class="p">)</span>
+</span><span data-line="704">        <span class="k">return</span> <span class="n">SponsorshipRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">sponsorship</span><span class="p">)</span>
+</span><span data-line="705">
+</span><span data-line="706">    <span class="nd">@patch</span><span class="p">(</span><span class="s2">&quot;/{sponsorship_id:uuid}/reject&quot;</span><span class="p">)</span>
+</span><span data-line="707">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">reject_sponsorship</span><span class="p">(</span>
+</span><span data-line="708">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="709">        <span class="n">sponsorship_service</span><span class="p">:</span> <span class="n">SponsorshipService</span><span class="p">,</span>
+</span><span data-line="710">        <span class="n">sponsorship_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+</span><span data-line="711">            <span class="n">UUID</span><span class="p">,</span>
+</span><span data-line="712">            <span class="n">Parameter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Sponsorship ID&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The sponsorship ID&quot;</span><span class="p">),</span>
+</span><span data-line="713">        <span class="p">],</span>
+</span><span data-line="714">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SponsorshipRead</span><span class="p">:</span>
+</span><span data-line="715"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Reject a pending sponsorship application.</span>
+</span><span data-line="716">
+</span><span data-line="717"><span class="sd">        Transitions a sponsorship from pending to rejected status. The</span>
+</span><span data-line="718"><span class="sd">        sponsor will be notified of the rejection.</span>
+</span><span data-line="719">
+</span><span data-line="720"><span class="sd">        Args:</span>
+</span><span data-line="721"><span class="sd">            sponsorship_service: Service for sponsorship database operations.</span>
+</span><span data-line="722"><span class="sd">            sponsorship_id: The unique UUID identifier of the sponsorship.</span>
+</span><span data-line="723">
+</span><span data-line="724"><span class="sd">        Returns:</span>
+</span><span data-line="725"><span class="sd">            The sponsorship with rejected status.</span>
+</span><span data-line="726">
+</span><span data-line="727"><span class="sd">        Raises:</span>
+</span><span data-line="728"><span class="sd">            NotFoundException: If no sponsorship with the given ID exists.</span>
+</span><span data-line="729"><span class="sd">            ValidationError: If the sponsorship is not in pending status.</span>
+</span><span data-line="730"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="731">        <span class="n">sponsorship</span> <span class="o">=</span> <span class="k">await</span> <span class="n">sponsorship_service</span><span class="o">.</span><span class="n">reject</span><span class="p">(</span><span class="n">sponsorship_id</span><span class="p">)</span>
+</span><span data-line="732">        <span class="k">return</span> <span class="n">SponsorshipRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">sponsorship</span><span class="p">)</span>
+</span><span data-line="733">
+</span><span data-line="734">    <span class="nd">@patch</span><span class="p">(</span><span class="s2">&quot;/{sponsorship_id:uuid}/finalize&quot;</span><span class="p">)</span>
+</span><span data-line="735">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">finalize_sponsorship</span><span class="p">(</span>
+</span><span data-line="736">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="737">        <span class="n">sponsorship_service</span><span class="p">:</span> <span class="n">SponsorshipService</span><span class="p">,</span>
+</span><span data-line="738">        <span class="n">sponsorship_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+</span><span data-line="739">            <span class="n">UUID</span><span class="p">,</span>
+</span><span data-line="740">            <span class="n">Parameter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Sponsorship ID&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The sponsorship ID&quot;</span><span class="p">),</span>
+</span><span data-line="741">        <span class="p">],</span>
+</span><span data-line="742">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SponsorshipRead</span><span class="p">:</span>
+</span><span data-line="743"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Finalize and activate an approved sponsorship.</span>
+</span><span data-line="744">
+</span><span data-line="745"><span class="sd">        Transitions an approved sponsorship to active status, making it</span>
+</span><span data-line="746"><span class="sd">        visible on the sponsors page and activating benefits.</span>
+</span><span data-line="747">
+</span><span data-line="748"><span class="sd">        Args:</span>
+</span><span data-line="749"><span class="sd">            sponsorship_service: Service for sponsorship database operations.</span>
+</span><span data-line="750"><span class="sd">            sponsorship_id: The unique UUID identifier of the sponsorship.</span>
+</span><span data-line="751">
+</span><span data-line="752"><span class="sd">        Returns:</span>
+</span><span data-line="753"><span class="sd">            The sponsorship with active status.</span>
+</span><span data-line="754">
+</span><span data-line="755"><span class="sd">        Raises:</span>
+</span><span data-line="756"><span class="sd">            NotFoundException: If no sponsorship with the given ID exists.</span>
+</span><span data-line="757"><span class="sd">            ValidationError: If the sponsorship is not in approved status.</span>
+</span><span data-line="758"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="759">        <span class="n">sponsorship</span> <span class="o">=</span> <span class="k">await</span> <span class="n">sponsorship_service</span><span class="o">.</span><span class="n">finalize</span><span class="p">(</span><span class="n">sponsorship_id</span><span class="p">)</span>
+</span><span data-line="760">        <span class="k">return</span> <span class="n">SponsorshipRead</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">sponsorship</span><span class="p">)</span>
+</span><span data-line="761">
+</span><span data-line="762">    <span class="nd">@delete</span><span class="p">(</span><span class="s2">&quot;/{sponsorship_id:uuid}&quot;</span><span class="p">)</span>
+</span><span data-line="763">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">delete_sponsorship</span><span class="p">(</span>
+</span><span data-line="764">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="765">        <span class="n">sponsorship_service</span><span class="p">:</span> <span class="n">SponsorshipService</span><span class="p">,</span>
+</span><span data-line="766">        <span class="n">sponsorship_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+</span><span data-line="767">            <span class="n">UUID</span><span class="p">,</span>
+</span><span data-line="768">            <span class="n">Parameter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Sponsorship ID&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The sponsorship ID&quot;</span><span class="p">),</span>
+</span><span data-line="769">        <span class="p">],</span>
+</span><span data-line="770">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="771"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Permanently delete a sponsorship record.</span>
+</span><span data-line="772">
+</span><span data-line="773"><span class="sd">        Removes a sponsorship from the system. This action is irreversible.</span>
+</span><span data-line="774"><span class="sd">        The sponsor organization record remains intact.</span>
+</span><span data-line="775">
+</span><span data-line="776"><span class="sd">        Args:</span>
+</span><span data-line="777"><span class="sd">            sponsorship_service: Service for sponsorship database operations.</span>
+</span><span data-line="778"><span class="sd">            sponsorship_id: The unique UUID identifier of the sponsorship.</span>
+</span><span data-line="779">
+</span><span data-line="780"><span class="sd">        Raises:</span>
+</span><span data-line="781"><span class="sd">            NotFoundException: If no sponsorship with the given ID exists.</span>
+</span><span data-line="782"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="783">        <span class="k">await</span> <span class="n">sponsorship_service</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">sponsorship_id</span><span class="p">)</span></div>
+
+</span><span data-line="784">
+</span><span data-line="785">
+<div class="viewcode-block" id="SponsorRenderController">
+<a class="viewcode-back" href="../../../../api/domains/sponsors.html#pydotorg.domains.sponsors.SponsorRenderController">[docs]</a>
+</span><span data-line="786"><span class="k">class</span><span class="w"> </span><span class="nc">SponsorRenderController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="787"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Controller for rendering sponsor pages as HTML.&quot;&quot;&quot;</span>
+</span><span data-line="788">
+</span><span data-line="789">    <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;/sponsors&quot;</span>
+</span><span data-line="790">    <span class="n">include_in_schema</span> <span class="o">=</span> <span class="kc">False</span>
+</span><span data-line="791">
+</span><span data-line="792">    <span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+</span><span data-line="793">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">render_sponsors_list</span><span class="p">(</span>
+</span><span data-line="794">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="795">        <span class="n">sponsor_service</span><span class="p">:</span> <span class="n">SponsorService</span><span class="p">,</span>
+</span><span data-line="796">        <span class="n">sponsorship_service</span><span class="p">:</span> <span class="n">SponsorshipService</span><span class="p">,</span>
+</span><span data-line="797">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Template</span><span class="p">:</span>
+</span><span data-line="798"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Render sponsors list page.&quot;&quot;&quot;</span>
+</span><span data-line="799">        <span class="n">sponsors</span> <span class="o">=</span> <span class="k">await</span> <span class="n">sponsor_service</span><span class="o">.</span><span class="n">list_with_active_sponsorships</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+</span><span data-line="800">        <span class="n">active_sponsorships</span> <span class="o">=</span> <span class="k">await</span> <span class="n">sponsorship_service</span><span class="o">.</span><span class="n">list_active</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+</span><span data-line="801">
+</span><span data-line="802">        <span class="k">return</span> <span class="n">Template</span><span class="p">(</span>
+</span><span data-line="803">            <span class="n">template_name</span><span class="o">=</span><span class="s2">&quot;sponsors/list.html.jinja2&quot;</span><span class="p">,</span>
+</span><span data-line="804">            <span class="n">context</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="805">                <span class="s2">&quot;sponsors&quot;</span><span class="p">:</span> <span class="n">sponsors</span><span class="p">,</span>
+</span><span data-line="806">                <span class="s2">&quot;active_sponsorships&quot;</span><span class="p">:</span> <span class="n">active_sponsorships</span><span class="p">,</span>
+</span><span data-line="807">                <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Our Sponsors&quot;</span><span class="p">,</span>
+</span><span data-line="808">                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Companies and organizations that support Python&quot;</span><span class="p">,</span>
+</span><span data-line="809">            <span class="p">},</span>
+</span><span data-line="810">        <span class="p">)</span>
+</span><span data-line="811">
+</span><span data-line="812">    <span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/{slug:str}&quot;</span><span class="p">)</span>
+</span><span data-line="813">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">render_sponsor_detail</span><span class="p">(</span>
+</span><span data-line="814">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="815">        <span class="n">sponsor_service</span><span class="p">:</span> <span class="n">SponsorService</span><span class="p">,</span>
+</span><span data-line="816">        <span class="n">sponsorship_service</span><span class="p">:</span> <span class="n">SponsorshipService</span><span class="p">,</span>
+</span><span data-line="817">        <span class="n">slug</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Slug&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The sponsor slug&quot;</span><span class="p">)],</span>
+</span><span data-line="818">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Template</span><span class="p">:</span>
+</span><span data-line="819"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Render a sponsor detail page.&quot;&quot;&quot;</span>
+</span><span data-line="820">        <span class="n">sponsor</span> <span class="o">=</span> <span class="k">await</span> <span class="n">sponsor_service</span><span class="o">.</span><span class="n">get_by_slug</span><span class="p">(</span><span class="n">slug</span><span class="p">)</span>
+</span><span data-line="821">        <span class="k">if</span> <span class="ow">not</span> <span class="n">sponsor</span><span class="p">:</span>
+</span><span data-line="822">            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Sponsor with slug </span><span class="si">{</span><span class="n">slug</span><span class="si">}</span><span class="s2"> not found&quot;</span>
+</span><span data-line="823">            <span class="k">raise</span> <span class="n">NotFoundException</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</span><span data-line="824">
+</span><span data-line="825">        <span class="n">sponsorships</span> <span class="o">=</span> <span class="k">await</span> <span class="n">sponsorship_service</span><span class="o">.</span><span class="n">list_by_sponsor_id</span><span class="p">(</span><span class="n">sponsor</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+</span><span data-line="826">
+</span><span data-line="827">        <span class="k">return</span> <span class="n">Template</span><span class="p">(</span>
+</span><span data-line="828">            <span class="n">template_name</span><span class="o">=</span><span class="s2">&quot;sponsors/detail.html.jinja2&quot;</span><span class="p">,</span>
+</span><span data-line="829">            <span class="n">context</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="830">                <span class="s2">&quot;sponsor&quot;</span><span class="p">:</span> <span class="n">sponsor</span><span class="p">,</span>
+</span><span data-line="831">                <span class="s2">&quot;sponsorships&quot;</span><span class="p">:</span> <span class="n">sponsorships</span><span class="p">,</span>
+</span><span data-line="832">                <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">sponsor</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+</span><span data-line="833">                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">sponsor</span><span class="o">.</span><span class="n">description</span><span class="p">,</span>
+</span><span data-line="834">            <span class="p">},</span>
+</span><span data-line="835">        <span class="p">)</span>
+</span><span data-line="836">
+</span><span data-line="837">    <span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/apply/&quot;</span><span class="p">)</span>
+</span><span data-line="838">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">render_apply_form</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Template</span><span class="p">:</span>
+</span><span data-line="839"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Render sponsor application form.&quot;&quot;&quot;</span>
+</span><span data-line="840">        <span class="k">return</span> <span class="n">Template</span><span class="p">(</span>
+</span><span data-line="841">            <span class="n">template_name</span><span class="o">=</span><span class="s2">&quot;sponsors/apply.html.jinja2&quot;</span><span class="p">,</span>
+</span><span data-line="842">            <span class="n">context</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="843">                <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Become a Sponsor&quot;</span><span class="p">,</span>
+</span><span data-line="844">                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Support the Python community by becoming a sponsor&quot;</span><span class="p">,</span>
+</span><span data-line="845">            <span class="p">},</span>
+</span><span data-line="846">        <span class="p">)</span></div>
+
+</span></pre></div>
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Jacob Coffee</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+<a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+  <iconify-icon icon="simple-icons:github"></iconify-icon>
+</a></div>
+    </div>
+  </div>
+</footer>
+      <script src="../../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../../_static/copybutton.js?v=30646c52"></script>
+      <script src="../../../../_static/design-tabs.js?v=f930bc37"></script>
+      <script src="../../../../_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

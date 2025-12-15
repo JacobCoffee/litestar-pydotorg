@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="blue" data-content_root="./">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Feature Flag Library for Litestar: Analysis &amp; Recommendation - litestar-pydotorg</title><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="_static/shibuya.css?v=14737038" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link media="print" rel="stylesheet" type="text/css" href="_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=513f0650" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="Feature Flag Library for Litestar: Analysis &amp; Recommendation"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="index.html">
+      
+      
+      <strong>litestar-pydotorg</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"><ul><li class="link">
+          <a href="https://litestar.dev/">
+            <span>Litestar</span></a>
+        </li><li class="link">
+          <a href="https://python.org/">
+            <span>Python.org</span></a>
+        </li></ul></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials">
+  <a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting-started/index.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting-started/installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting-started/quickstart.html">Quickstart</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="guides/index.html">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="guides/development.html">Development Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/contributing.html">Contribution Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/testing.html">Testing Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/debugging.html">Debugging Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/api-usage.html">API Usage Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/authentication.html">Authentication Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/feature-flags.html">Feature Flags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/configuration.html">Configuration Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/deployment.html">Deployment Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/docker.html">Docker Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/troubleshooting.html">Troubleshooting Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cookbook/index.html">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cookbook/domain-patterns.html">Domain Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook/authentication-recipes.html">Authentication Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook/database-recipes.html">Database Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook/testing-recipes.html">Testing Recipes</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/core/index.html">Core Infrastructure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/core/auth.html">Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/cache.html">Caching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/database.html">Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/email.html">Email</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/exceptions.html">Exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/features.html">Feature Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/feeds.html">RSS/Atom Feeds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/ical.html">iCalendar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/middleware.html">Middleware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/openapi.html">OpenAPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/ratelimit.html">Rate Limiting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/security.html">Security</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/worker.html">Background Worker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/domains/index.html">Domain Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/about.html">About</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/admin.html">Admin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/banners.html">banners</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/blogs.html">blogs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/codesamples.html">Code Samples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/community.html">community</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/docs.html">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/downloads.html">downloads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/events.html">events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/jobs.html">jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/mailing.html">Mailing Lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/minutes.html">Minutes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/nominations.html">Nominations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/pages.html">pages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/sponsors.html">sponsors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/sqladmin.html">SQLAdmin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/successstories.html">Success Stories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/users.html">users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/work_groups.html">Work Groups</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/lib.html">Library Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/tasks.html">Background Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/config.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/main.html">Application Entry Point</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="architecture/index.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="architecture/ARCHITECTURE.html">Litestar Python.org Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/DATABASE_SCHEMA.html">Database Schema Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/DOMAIN_MODELS.html">Domain Models Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/QUICK_START.html">Litestar Python.org Quick Start Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/API_TAGS_INDEX.html">API Tags Documentation Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/RATE_LIMITING_ARCHITECTURE.html">Rate Limiting Architecture Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/adr/001-litestar-framework.html">ADR-001: Use Litestar as Web Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/adr/002-saq-background-tasks.html">ADR-002: Use SAQ for Background Task Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#executive-summary">Executive Summary</a></li>
+<li><a class="reference internal" href="#current-implementation">Current Implementation</a><ul>
+<li><a class="reference internal" href="#files">Files</a></li>
+<li><a class="reference internal" href="#features">Features</a></li>
+<li><a class="reference internal" href="#code-example">Code Example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#python-feature-flag-ecosystem">Python Feature Flag Ecosystem</a><ul>
+<li><a class="reference internal" href="#existing-solutions">Existing Solutions</a></li>
+<li><a class="reference internal" href="#key-finding">Key Finding</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#build-vs-keep-analysis">Build vs. Keep Analysis</a><ul>
+<li><a class="reference internal" href="#option-1-build-a-library">Option 1: Build a Library</a></li>
+<li><a class="reference internal" href="#option-2-keep-current-implementation">Option 2: Keep Current Implementation</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#framework-comparison">Framework Comparison</a></li>
+<li><a class="reference internal" href="#recommendation">Recommendation</a><ul>
+<li><a class="reference internal" href="#primary-keep-in-project-implementation">Primary: Keep In-Project Implementation</a></li>
+<li><a class="reference internal" href="#secondary-document-the-pattern">Secondary: Document the Pattern</a></li>
+<li><a class="reference internal" href="#what-not-to-do">What NOT to Do</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#when-to-consider-a-library">When TO Consider a Library</a></li>
+<li><a class="reference internal" href="#proposed-documentation-structure">Proposed Documentation Structure</a><ul>
+<li><a class="reference internal" href="#sample-documentation-content">Sample Documentation Content</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#conclusion">Conclusion</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="index.html"><span itemprop="name">litestar-pydotorg</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">Feature Flag Library for Litestar: Analysis &amp; Recommendation</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue dark-code" role="main">
+          <section id="feature-flag-library-for-litestar-analysis-recommendation">
+<h1>Feature Flag Library for Litestar: Analysis &amp; Recommendation<a class="headerlink" href="#feature-flag-library-for-litestar-analysis-recommendation" title="Link to this heading">¶</a></h1>
+<blockquote>
+<div><p><strong>Investigation Summary</strong>: Should we create a standalone feature flag library for Litestar?</p>
+</div></blockquote>
+<section id="executive-summary">
+<h2>Executive Summary<a class="headerlink" href="#executive-summary" title="Link to this heading">¶</a></h2>
+<p><strong>Recommendation: DO NOT BUILD A SEPARATE LIBRARY</strong></p>
+<p>After comprehensive analysis of the current implementation, Python ecosystem, and community needs, we recommend keeping feature flags as an in-project pattern rather than extracting to a library.</p>
+</section>
+<hr class="docutils" />
+<section id="current-implementation">
+<h2>Current Implementation<a class="headerlink" href="#current-implementation" title="Link to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">litestar-pydotorg</span></code> project contains a well-designed feature flag system in ~107 lines of code:</p>
+<section id="files">
+<h3>Files<a class="headerlink" href="#files" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>File</p></th>
+<th class="head"><p>Purpose</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">src/pydotorg/core/features.py</span></code></p></td>
+<td><p>Core <code class="docutils literal notranslate"><span class="pre">FeatureFlags</span></code> class + <code class="docutils literal notranslate"><span class="pre">require_feature()</span></code> guard</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">src/pydotorg/config.py</span></code></p></td>
+<td><p>Pydantic <code class="docutils literal notranslate"><span class="pre">FeatureFlagsConfig</span></code> integration</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">src/pydotorg/core/dependencies.py</span></code></p></td>
+<td><p>Dependency injection provider</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">src/pydotorg/main.py</span></code></p></td>
+<td><p>Template context + app state integration</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">tests/core/test_features.py</span></code></p></td>
+<td><p>Comprehensive test coverage</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">docs/FEATURE_FLAGS.md</span></code></p></td>
+<td><p>Usage documentation</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="features">
+<h3>Features<a class="headerlink" href="#features" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>5 boolean flags</strong>: <code class="docutils literal notranslate"><span class="pre">enable_oauth</span></code>, <code class="docutils literal notranslate"><span class="pre">enable_jobs</span></code>, <code class="docutils literal notranslate"><span class="pre">enable_sponsors</span></code>, <code class="docutils literal notranslate"><span class="pre">enable_search</span></code>, <code class="docutils literal notranslate"><span class="pre">maintenance_mode</span></code></p></li>
+<li><p><strong>Litestar-native guards</strong>: <code class="docutils literal notranslate"><span class="pre">require_feature(&quot;flag_name&quot;)</span></code> factory</p></li>
+<li><p><strong>Pydantic configuration</strong>: Environment variable driven (<code class="docutils literal notranslate"><span class="pre">FEATURES__FLAG_NAME</span></code>)</p></li>
+<li><p><strong>Template integration</strong>: Flags available in Jinja2 context</p></li>
+<li><p><strong>Dependency injection</strong>: <code class="docutils literal notranslate"><span class="pre">FeatureFlags</span></code> injectable into handlers</p></li>
+<li><p><strong>App state</strong>: Accessible via <code class="docutils literal notranslate"><span class="pre">request.app.state.feature_flags</span></code></p></li>
+</ul>
+</section>
+<section id="code-example">
+<h3>Code Example<a class="headerlink" href="#code-example" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span><span class="w"> </span><span class="nn">litestar</span><span class="w"> </span><span class="kn">import</span> <span class="n">get</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.core.features</span><span class="w"> </span><span class="kn">import</span> <span class="n">require_feature</span><span class="p">,</span> <span class="n">FeatureFlags</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/oauth/login&quot;</span><span class="p">,</span> <span class="n">guards</span><span class="o">=</span><span class="p">[</span><span class="n">require_feature</span><span class="p">(</span><span class="s2">&quot;enable_oauth&quot;</span><span class="p">)])</span>
+</span><span data-line="5"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">oauth_login</span><span class="p">(</span><span class="n">feature_flags</span><span class="p">:</span> <span class="n">FeatureFlags</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+</span><span data-line="6">    <span class="c1"># Guard ensures this only executes if enable_oauth is True</span>
+</span><span data-line="7">    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;oauth_enabled&quot;</span><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="python-feature-flag-ecosystem">
+<h2>Python Feature Flag Ecosystem<a class="headerlink" href="#python-feature-flag-ecosystem" title="Link to this heading">¶</a></h2>
+<section id="existing-solutions">
+<h3>Existing Solutions<a class="headerlink" href="#existing-solutions" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Library</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Litestar Support</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>LaunchDarkly</strong></p></td>
+<td><p>Enterprise SaaS</p></td>
+<td><p>None</p></td>
+<td><p>$$$, overkill for simple needs</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Unleash</strong></p></td>
+<td><p>Open Source + SaaS</p></td>
+<td><p>None</p></td>
+<td><p>Requires server infrastructure</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Flagsmith</strong></p></td>
+<td><p>Open Source + SaaS</p></td>
+<td><p>None</p></td>
+<td><p>Self-hostable, but complex</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>GrowthBook</strong></p></td>
+<td><p>Data Warehouse Native</p></td>
+<td><p>None</p></td>
+<td><p>Analytics-focused</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Django-Waffle</strong></p></td>
+<td><p>Django-specific</p></td>
+<td><p>N/A</p></td>
+<td><p>Django ORM coupled</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>fastapi-featureflags</strong></p></td>
+<td><p>FastAPI-specific</p></td>
+<td><p>N/A</p></td>
+<td><p>~85 stars, basic features</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>flipper-client</strong></p></td>
+<td><p>Generic Python</p></td>
+<td><p>None</p></td>
+<td><p>Lightweight, no framework integration</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="key-finding">
+<h3>Key Finding<a class="headerlink" href="#key-finding" title="Link to this heading">¶</a></h3>
+<p><strong>No existing library has Litestar-specific integrations</strong> (guards, DI, middleware).</p>
+<p>However, this gap doesn’t justify a new library because:</p>
+<ol class="arabic simple">
+<li><p>The current in-project implementation fills this need adequately</p></li>
+<li><p>Advanced use cases should use purpose-built services</p></li>
+<li><p>Simple use cases can copy the existing pattern</p></li>
+</ol>
+</section>
+</section>
+<hr class="docutils" />
+<section id="build-vs-keep-analysis">
+<h2>Build vs. Keep Analysis<a class="headerlink" href="#build-vs-keep-analysis" title="Link to this heading">¶</a></h2>
+<section id="option-1-build-a-library">
+<h3>Option 1: Build a Library<a class="headerlink" href="#option-1-build-a-library" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Factor</p></th>
+<th class="head"><p>Assessment</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Development effort</p></td>
+<td><p>40-80 hours initial</p></td>
+</tr>
+<tr class="row-odd"><td><p>Ongoing maintenance</p></td>
+<td><p>5-10 hours/month</p></td>
+</tr>
+<tr class="row-even"><td><p>Adoption likelihood</p></td>
+<td><p>Low (~85 stars based on fastapi-featureflags)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Abandonment risk</p></td>
+<td><p>High</p></td>
+</tr>
+<tr class="row-even"><td><p>Value added</p></td>
+<td><p>Saves ~50-100 LOC per project</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Verdict</strong>: High effort, low reward.</p>
+</section>
+<section id="option-2-keep-current-implementation">
+<h3>Option 2: Keep Current Implementation<a class="headerlink" href="#option-2-keep-current-implementation" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Factor</p></th>
+<th class="head"><p>Assessment</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Fits pythondotorg needs</p></td>
+<td><p>100%</p></td>
+</tr>
+<tr class="row-odd"><td><p>Code volume</p></td>
+<td><p>~107 LOC</p></td>
+</tr>
+<tr class="row-even"><td><p>External dependencies</p></td>
+<td><p>Zero</p></td>
+</tr>
+<tr class="row-odd"><td><p>Maintenance burden</p></td>
+<td><p>None (in-project)</p></td>
+</tr>
+<tr class="row-even"><td><p>Flexibility</p></td>
+<td><p>Full control</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Verdict</strong>: Already optimal.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="framework-comparison">
+<h2>Framework Comparison<a class="headerlink" href="#framework-comparison" title="Link to this heading">¶</a></h2>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Framework</p></th>
+<th class="head"><p>Built-in Feature Flags?</p></th>
+<th class="head"><p>Ecosystem Approach</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Django</p></td>
+<td><p>No</p></td>
+<td><p>Third-party (django-waffle)</p></td>
+</tr>
+<tr class="row-odd"><td><p>FastAPI</p></td>
+<td><p>No</p></td>
+<td><p>Generic Python libs or custom</p></td>
+</tr>
+<tr class="row-even"><td><p>Flask</p></td>
+<td><p>No</p></td>
+<td><p>Generic Python libs or custom</p></td>
+</tr>
+<tr class="row-odd"><td><p>Rails</p></td>
+<td><p>No</p></td>
+<td><p>Third-party (flipper gem)</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Litestar</strong></p></td>
+<td><p>No</p></td>
+<td><p><strong>Should follow same pattern</strong></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Feature flags are <strong>application infrastructure</strong>, not <strong>framework infrastructure</strong>.</p>
+</section>
+<hr class="docutils" />
+<section id="recommendation">
+<h2>Recommendation<a class="headerlink" href="#recommendation" title="Link to this heading">¶</a></h2>
+<section id="primary-keep-in-project-implementation">
+<h3>Primary: Keep In-Project Implementation<a class="headerlink" href="#primary-keep-in-project-implementation" title="Link to this heading">¶</a></h3>
+<p>The current code is:</p>
+<ul class="simple">
+<li><p>Appropriately simple for the use case</p></li>
+<li><p>Well-documented and tested</p></li>
+<li><p>Zero external dependencies</p></li>
+<li><p>Litestar-native patterns</p></li>
+</ul>
+</section>
+<section id="secondary-document-the-pattern">
+<h3>Secondary: Document the Pattern<a class="headerlink" href="#secondary-document-the-pattern" title="Link to this heading">¶</a></h3>
+<p>Instead of a library, contribute to Litestar documentation:</p>
+<ol class="arabic simple">
+<li><p><strong>Add to Litestar Docs</strong> - “Feature Flags” recipe/how-to guide</p></li>
+<li><p><strong>Create Template</strong> - Include in <code class="docutils literal notranslate"><span class="pre">litestar-fullstack</span></code> or similar starters</p></li>
+<li><p><strong>Publish Gist</strong> - Standalone copy-paste module</p></li>
+</ol>
+</section>
+<section id="what-not-to-do">
+<h3>What NOT to Do<a class="headerlink" href="#what-not-to-do" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Do NOT extract to a separate <code class="docutils literal notranslate"><span class="pre">litestar-flags</span></code> package</p></li>
+<li><p>Do NOT add advanced features (percentage rollouts, A/B testing, user segmentation)</p></li>
+<li><p>Do NOT integrate with external services for simple boolean flags</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="when-to-consider-a-library">
+<h2>When TO Consider a Library<a class="headerlink" href="#when-to-consider-a-library" title="Link to this heading">¶</a></h2>
+<p>A library might be warranted if:</p>
+<ol class="arabic simple">
+<li><p><strong>Multiple Litestar projects</strong> in an organization need shared feature flags</p></li>
+<li><p><strong>Community demand</strong> emerges (GitHub issues, Discord requests)</p></li>
+<li><p><strong>Advanced features</strong> become common requirements:</p>
+<ul class="simple">
+<li><p>Percentage-based rollouts</p></li>
+<li><p>User/group targeting</p></li>
+<li><p>A/B testing</p></li>
+<li><p>Dynamic runtime updates</p></li>
+<li><p>Admin UI</p></li>
+</ul>
+</li>
+</ol>
+<p>Until then, the pattern approach is sufficient.</p>
+</section>
+<hr class="docutils" />
+<section id="proposed-documentation-structure">
+<h2>Proposed Documentation Structure<a class="headerlink" href="#proposed-documentation-structure" title="Link to this heading">¶</a></h2>
+<p>If contributing to Litestar docs, suggested structure:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">docs</span><span class="o">/</span>
+</span><span data-line="2">  <span class="n">usage</span><span class="o">/</span>
+</span><span data-line="3">    <span class="n">recipes</span><span class="o">/</span>
+</span><span data-line="4">      <span class="n">feature</span><span class="o">-</span><span class="n">flags</span><span class="o">.</span><span class="n">rst</span>
+</span><span data-line="5">        <span class="o">-</span> <span class="n">Overview</span>
+</span><span data-line="6">        <span class="o">-</span> <span class="n">Basic</span> <span class="n">Implementation</span>
+</span><span data-line="7">        <span class="o">-</span> <span class="n">Configuration</span> <span class="k">with</span> <span class="n">Pydantic</span>
+</span><span data-line="8">        <span class="o">-</span> <span class="n">Route</span> <span class="n">Guards</span>
+</span><span data-line="9">        <span class="o">-</span> <span class="n">Template</span> <span class="n">Integration</span>
+</span><span data-line="10">        <span class="o">-</span> <span class="n">Testing</span> <span class="n">Patterns</span>
+</span><span data-line="11">        <span class="o">-</span> <span class="n">When</span> <span class="n">to</span> <span class="n">Use</span> <span class="n">External</span> <span class="n">Services</span>
+</span></pre></div>
+</div>
+<section id="sample-documentation-content">
+<h3>Sample Documentation Content<a class="headerlink" href="#sample-documentation-content" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Feature Flags with Litestar</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="sd">&quot;&quot;&quot;Simple feature flag implementation using Litestar guards.&quot;&quot;&quot;</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+</span><span data-line="6"><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
+</span><span data-line="7"><span class="kn">from</span><span class="w"> </span><span class="nn">litestar.connection</span><span class="w"> </span><span class="kn">import</span> <span class="n">ASGIConnection</span>
+</span><span data-line="8"><span class="kn">from</span><span class="w"> </span><span class="nn">litestar.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">HTTPException</span>
+</span><span data-line="9"><span class="kn">from</span><span class="w"> </span><span class="nn">litestar.handlers</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseRouteHandler</span>
+</span><span data-line="10">
+</span><span data-line="11"><span class="nd">@dataclass</span>
+</span><span data-line="12"><span class="k">class</span><span class="w"> </span><span class="nc">FeatureFlags</span><span class="p">:</span>
+</span><span data-line="13">    <span class="n">enable_feature_a</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+</span><span data-line="14">    <span class="n">enable_feature_b</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+</span><span data-line="15">    <span class="n">maintenance_mode</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+</span><span data-line="16">
+</span><span data-line="17">    <span class="k">def</span><span class="w"> </span><span class="nf">is_enabled</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feature</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span data-line="18">        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">maintenance_mode</span><span class="p">:</span>
+</span><span data-line="19">            <span class="k">return</span> <span class="kc">False</span>
+</span><span data-line="20">        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feature</span><span class="p">)</span>
+</span><span data-line="21">
+</span><span data-line="22"><span class="k">def</span><span class="w"> </span><span class="nf">require_feature</span><span class="p">(</span><span class="n">feature</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span><span data-line="23"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Guard factory for feature flag protection.&quot;&quot;&quot;</span>
+</span><span data-line="24">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">guard</span><span class="p">(</span>
+</span><span data-line="25">        <span class="n">connection</span><span class="p">:</span> <span class="n">ASGIConnection</span><span class="p">,</span>
+</span><span data-line="26">        <span class="n">_</span><span class="p">:</span> <span class="n">BaseRouteHandler</span><span class="p">,</span>
+</span><span data-line="27">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="28">        <span class="n">flags</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">feature_flags</span>
+</span><span data-line="29">        <span class="k">if</span> <span class="ow">not</span> <span class="n">flags</span><span class="o">.</span><span class="n">is_enabled</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>
+</span><span data-line="30">            <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">503</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Feature unavailable&quot;</span><span class="p">)</span>
+</span><span data-line="31">    <span class="k">return</span> <span class="n">guard</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="conclusion">
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Link to this heading">¶</a></h2>
+<p>The current feature flag implementation in <code class="docutils literal notranslate"><span class="pre">litestar-pydotorg</span></code> represents a <strong>well-designed, appropriately-scoped solution</strong> that should serve as a <strong>documented pattern</strong> rather than a standalone library.</p>
+<p><strong>Key Reasons</strong>:</p>
+<ul class="simple">
+<li><p>~107 LOC solves the problem completely</p></li>
+<li><p>Zero external dependencies</p></li>
+<li><p>Litestar-native patterns (guards, DI, templates)</p></li>
+<li><p>Low community demand for a library</p></li>
+<li><p>High maintenance burden for marginal value</p></li>
+</ul>
+<p><strong>Action Items</strong>:</p>
+<ol class="arabic simple">
+<li><p>Keep current implementation in pythondotorg</p></li>
+<li><p>Propose documentation PR to Litestar</p></li>
+<li><p>Consider template inclusion in litestar-fullstack</p></li>
+</ol>
+<hr class="docutils" />
+<p><em>Analysis conducted via hive mind investigation with specialized agents: Researcher, Analyst, Architect, Reviewer</em></p>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Jacob Coffee</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+<a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+  <iconify-icon icon="simple-icons:github"></iconify-icon>
+</a></div>
+    </div>
+  </div>
+</footer>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=30646c52"></script>
+      <script src="_static/design-tabs.js?v=f930bc37"></script>
+      <script src="_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

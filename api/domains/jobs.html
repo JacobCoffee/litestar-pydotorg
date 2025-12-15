@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="blue" data-content_root="../../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>jobs - litestar-pydotorg</title><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Mailing Lists" href="mailing.html" /><link rel="prev" title="events" href="events.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="../../_static/shibuya.css?v=14737038" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link media="print" rel="stylesheet" type="text/css" href="../../_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=513f0650" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="jobs"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../../index.html">
+      
+      
+      <strong>litestar-pydotorg</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"><ul><li class="link">
+          <a href="https://litestar.dev/">
+            <span>Litestar</span></a>
+        </li><li class="link">
+          <a href="https://python.org/">
+            <span>Python.org</span></a>
+        </li></ul></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials">
+  <a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started/index.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../getting-started/installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting-started/quickstart.html">Quickstart</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/index.html">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/development.html">Development Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/contributing.html">Contribution Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/testing.html">Testing Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/debugging.html">Debugging Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/api-usage.html">API Usage Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/authentication.html">Authentication Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/feature-flags.html">Feature Flags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/configuration.html">Configuration Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/deployment.html">Deployment Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/docker.html">Docker Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/troubleshooting.html">Troubleshooting Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../cookbook/index.html">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../cookbook/domain-patterns.html">Domain Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cookbook/authentication-recipes.html">Authentication Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cookbook/database-recipes.html">Database Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cookbook/testing-recipes.html">Testing Recipes</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../core/index.html">Core Infrastructure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../core/auth.html">Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/cache.html">Caching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/database.html">Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/email.html">Email</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/exceptions.html">Exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/features.html">Feature Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/feeds.html">RSS/Atom Feeds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/ical.html">iCalendar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/middleware.html">Middleware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/openapi.html">OpenAPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/ratelimit.html">Rate Limiting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/security.html">Security</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/worker.html">Background Worker</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Domain Modules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="about.html">About</a></li>
+<li class="toctree-l3"><a class="reference internal" href="admin.html">Admin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="banners.html">banners</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blogs.html">blogs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="codesamples.html">Code Samples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="community.html">community</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs.html">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="downloads.html">downloads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="events.html">events</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mailing.html">Mailing Lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="minutes.html">Minutes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nominations.html">Nominations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pages.html">pages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sponsors.html">sponsors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqladmin.html">SQLAdmin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="successstories.html">Success Stories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="users.html">users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="work_groups.html">Work Groups</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../lib.html">Library Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tasks.html">Background Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../config.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../main.html">Application Entry Point</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../architecture/index.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../architecture/ARCHITECTURE.html">Litestar Python.org Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../architecture/DATABASE_SCHEMA.html">Database Schema Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../architecture/DOMAIN_MODELS.html">Domain Models Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../architecture/QUICK_START.html">Litestar Python.org Quick Start Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../architecture/API_TAGS_INDEX.html">API Tags Documentation Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../architecture/RATE_LIMITING_ARCHITECTURE.html">Rate Limiting Architecture Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../architecture/adr/001-litestar-framework.html">ADR-001: Use Litestar as Web Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../architecture/adr/002-saq-background-tasks.html">ADR-002: Use SAQ for Background Task Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#module-pydotorg.domains.jobs.models">models</a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.models.JobStatus"><code class="docutils literal notranslate"><span class="pre">JobStatus</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.models.JobStatus.__new__"><code class="docutils literal notranslate">__new__()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.models.JobType"><code class="docutils literal notranslate"><span class="pre">JobType</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.models.JobType.__init__"><code class="docutils literal notranslate">__init__()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.models.JobType.id"><code class="docutils literal notranslate">id</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.models.JobType.name"><code class="docutils literal notranslate">name</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.models.JobType.slug"><code class="docutils literal notranslate">slug</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.models.JobCategory"><code class="docutils literal notranslate"><span class="pre">JobCategory</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.models.JobCategory.__init__"><code class="docutils literal notranslate">__init__()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.models.JobCategory.id"><code class="docutils literal notranslate">id</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.models.JobCategory.name"><code class="docutils literal notranslate">name</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.models.JobCategory.slug"><code class="docutils literal notranslate">slug</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.models.Job"><code class="docutils literal notranslate"><span class="pre">Job</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.models.Job.__init__"><code class="docutils literal notranslate">__init__()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.models.Job.created_at"><code class="docutils literal notranslate">created_at</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.models.Job.id"><code class="docutils literal notranslate">id</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.models.Job.updated_at"><code class="docutils literal notranslate">updated_at</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.models.JobReviewComment"><code class="docutils literal notranslate"><span class="pre">JobReviewComment</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.models.JobReviewComment.__init__"><code class="docutils literal notranslate">__init__()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.models.JobReviewComment.created_at"><code class="docutils literal notranslate">created_at</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.models.JobReviewComment.id"><code class="docutils literal notranslate">id</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.models.JobReviewComment.updated_at"><code class="docutils literal notranslate">updated_at</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pydotorg.domains.jobs.schemas">schemas</a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobTypeBase"><code class="docutils literal notranslate"><span class="pre">JobTypeBase</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobTypeBase.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobTypeCreate"><code class="docutils literal notranslate"><span class="pre">JobTypeCreate</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobTypeCreate.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobTypeUpdate"><code class="docutils literal notranslate"><span class="pre">JobTypeUpdate</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobTypeUpdate.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobTypeRead"><code class="docutils literal notranslate"><span class="pre">JobTypeRead</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobTypeRead.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobCategoryBase"><code class="docutils literal notranslate"><span class="pre">JobCategoryBase</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobCategoryBase.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobCategoryCreate"><code class="docutils literal notranslate"><span class="pre">JobCategoryCreate</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobCategoryCreate.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobCategoryUpdate"><code class="docutils literal notranslate"><span class="pre">JobCategoryUpdate</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobCategoryUpdate.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobCategoryRead"><code class="docutils literal notranslate"><span class="pre">JobCategoryRead</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobCategoryRead.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobBase"><code class="docutils literal notranslate"><span class="pre">JobBase</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobBase.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobCreate"><code class="docutils literal notranslate"><span class="pre">JobCreate</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobCreate.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobUpdate"><code class="docutils literal notranslate"><span class="pre">JobUpdate</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobUpdate.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobRead"><code class="docutils literal notranslate"><span class="pre">JobRead</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobRead.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobPublic"><code class="docutils literal notranslate"><span class="pre">JobPublic</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobPublic.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobReviewCommentBase"><code class="docutils literal notranslate"><span class="pre">JobReviewCommentBase</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobReviewCommentBase.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobReviewCommentCreate"><code class="docutils literal notranslate"><span class="pre">JobReviewCommentCreate</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobReviewCommentCreate.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobReviewCommentUpdate"><code class="docutils literal notranslate"><span class="pre">JobReviewCommentUpdate</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobReviewCommentUpdate.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobReviewCommentRead"><code class="docutils literal notranslate"><span class="pre">JobReviewCommentRead</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobReviewCommentRead.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobSearchFilters"><code class="docutils literal notranslate"><span class="pre">JobSearchFilters</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobSearchFilters.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#services">services</a></li>
+<li><a class="reference internal" href="#controllers">controllers</a></li>
+<li><a class="reference internal" href="#repositories">repositories</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../../index.html"><span itemprop="name">litestar-pydotorg</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../index.html"><span itemprop="name">API Reference</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="2" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="index.html"><span itemprop="name">Domain Modules</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="3" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">jobs</strong>
+        <meta itemprop="position" content="4" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue dark-code" role="main">
+          <section id="jobs">
+<h1>jobs<a class="headerlink" href="#jobs" title="Link to this heading">¶</a></h1>
+<section id="module-pydotorg.domains.jobs.models">
+<span id="models"></span><h2>models<a class="headerlink" href="#module-pydotorg.domains.jobs.models" title="Link to this heading">¶</a></h2>
+<p>Jobs domain models.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.models.JobStatus">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">JobStatus</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/jobs/models.html#JobStatus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.jobs.models.JobStatus" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.StrEnum" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">StrEnum</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.models.JobStatus.__new__">
+<span class="sig-name descname"><span class="pre">__new__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydotorg.domains.jobs.models.JobStatus.__new__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.models.JobType">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">JobType</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/jobs/models.html#JobType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.jobs.models.JobType" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../core/database.html#pydotorg.core.database.base.Base" title="pydotorg.core.database.base.Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Base</span></code></a>, <a class="reference internal" href="../core/database.html#pydotorg.core.database.base.NameSlugMixin" title="pydotorg.core.database.base.NameSlugMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">NameSlugMixin</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.models.JobType.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydotorg.domains.jobs.models.JobType.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>A simple constructor that allows initialization from kwargs.</p>
+<p>Sets attributes on the constructed instance using the names and
+values in <code class="docutils literal notranslate"><span class="pre">kwargs</span></code>.</p>
+<p>Only keys that are present as
+attributes of the instance’s class are allowed. These could be,
+for example, any mapped columns or relationships.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.models.JobType.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped[UUID]</span></em><a class="headerlink" href="#pydotorg.domains.jobs.models.JobType.id" title="Link to this definition">¶</a></dt>
+<dd><p>UUID Primary key column.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.models.JobType.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped[str]</span></em><a class="headerlink" href="#pydotorg.domains.jobs.models.JobType.name" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.models.JobType.slug">
+<span class="sig-name descname"><span class="pre">slug</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped[str]</span></em><a class="headerlink" href="#pydotorg.domains.jobs.models.JobType.slug" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.models.JobCategory">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">JobCategory</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/jobs/models.html#JobCategory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.jobs.models.JobCategory" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../core/database.html#pydotorg.core.database.base.Base" title="pydotorg.core.database.base.Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Base</span></code></a>, <a class="reference internal" href="../core/database.html#pydotorg.core.database.base.NameSlugMixin" title="pydotorg.core.database.base.NameSlugMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">NameSlugMixin</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.models.JobCategory.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydotorg.domains.jobs.models.JobCategory.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>A simple constructor that allows initialization from kwargs.</p>
+<p>Sets attributes on the constructed instance using the names and
+values in <code class="docutils literal notranslate"><span class="pre">kwargs</span></code>.</p>
+<p>Only keys that are present as
+attributes of the instance’s class are allowed. These could be,
+for example, any mapped columns or relationships.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.models.JobCategory.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped[UUID]</span></em><a class="headerlink" href="#pydotorg.domains.jobs.models.JobCategory.id" title="Link to this definition">¶</a></dt>
+<dd><p>UUID Primary key column.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.models.JobCategory.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped[str]</span></em><a class="headerlink" href="#pydotorg.domains.jobs.models.JobCategory.name" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.models.JobCategory.slug">
+<span class="sig-name descname"><span class="pre">slug</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped[str]</span></em><a class="headerlink" href="#pydotorg.domains.jobs.models.JobCategory.slug" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.models.Job">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Job</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/jobs/models.html#Job"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.jobs.models.Job" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../core/database.html#pydotorg.core.database.base.AuditBase" title="pydotorg.core.database.base.AuditBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">AuditBase</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.models.Job.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydotorg.domains.jobs.models.Job.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>A simple constructor that allows initialization from kwargs.</p>
+<p>Sets attributes on the constructed instance using the names and
+values in <code class="docutils literal notranslate"><span class="pre">kwargs</span></code>.</p>
+<p>Only keys that are present as
+attributes of the instance’s class are allowed. These could be,
+for example, any mapped columns or relationships.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.models.Job.created_at">
+<span class="sig-name descname"><span class="pre">created_at</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped[datetime.datetime]</span></em><a class="headerlink" href="#pydotorg.domains.jobs.models.Job.created_at" title="Link to this definition">¶</a></dt>
+<dd><p>Date/time of instance creation.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.models.Job.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped[UUID]</span></em><a class="headerlink" href="#pydotorg.domains.jobs.models.Job.id" title="Link to this definition">¶</a></dt>
+<dd><p>UUID Primary key column.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.models.Job.updated_at">
+<span class="sig-name descname"><span class="pre">updated_at</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped[datetime.datetime]</span></em><a class="headerlink" href="#pydotorg.domains.jobs.models.Job.updated_at" title="Link to this definition">¶</a></dt>
+<dd><p>Date/time of instance last update.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.models.JobReviewComment">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">JobReviewComment</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/jobs/models.html#JobReviewComment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.jobs.models.JobReviewComment" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../core/database.html#pydotorg.core.database.base.AuditBase" title="pydotorg.core.database.base.AuditBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">AuditBase</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.models.JobReviewComment.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydotorg.domains.jobs.models.JobReviewComment.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>A simple constructor that allows initialization from kwargs.</p>
+<p>Sets attributes on the constructed instance using the names and
+values in <code class="docutils literal notranslate"><span class="pre">kwargs</span></code>.</p>
+<p>Only keys that are present as
+attributes of the instance’s class are allowed. These could be,
+for example, any mapped columns or relationships.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.models.JobReviewComment.created_at">
+<span class="sig-name descname"><span class="pre">created_at</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped[datetime.datetime]</span></em><a class="headerlink" href="#pydotorg.domains.jobs.models.JobReviewComment.created_at" title="Link to this definition">¶</a></dt>
+<dd><p>Date/time of instance creation.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.models.JobReviewComment.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped[UUID]</span></em><a class="headerlink" href="#pydotorg.domains.jobs.models.JobReviewComment.id" title="Link to this definition">¶</a></dt>
+<dd><p>UUID Primary key column.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.models.JobReviewComment.updated_at">
+<span class="sig-name descname"><span class="pre">updated_at</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped[datetime.datetime]</span></em><a class="headerlink" href="#pydotorg.domains.jobs.models.JobReviewComment.updated_at" title="Link to this definition">¶</a></dt>
+<dd><p>Date/time of instance last update.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pydotorg.domains.jobs.schemas">
+<span id="schemas"></span><h2>schemas<a class="headerlink" href="#module-pydotorg.domains.jobs.schemas" title="Link to this heading">¶</a></h2>
+<p>Jobs domain Pydantic schemas.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.schemas.JobTypeBase">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">JobTypeBase</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/jobs/schemas.html#JobTypeBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.jobs.schemas.JobTypeBase" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Base job type schema.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.schemas.JobTypeBase.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pydotorg.domains.jobs.schemas.JobTypeBase.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.schemas.JobTypeCreate">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">JobTypeCreate</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/jobs/schemas.html#JobTypeCreate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.jobs.schemas.JobTypeCreate" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobTypeBase" title="pydotorg.domains.jobs.schemas.JobTypeBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">JobTypeBase</span></code></a></p>
+<p>Schema for creating a new job type.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.schemas.JobTypeCreate.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'json_schema_extra':</span> <span class="pre">{'example':</span> <span class="pre">{'name':</span> <span class="pre">'Full-time',</span> <span class="pre">'slug':</span> <span class="pre">'full-time'}}}</span></em><a class="headerlink" href="#pydotorg.domains.jobs.schemas.JobTypeCreate.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.schemas.JobTypeUpdate">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">JobTypeUpdate</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/jobs/schemas.html#JobTypeUpdate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.jobs.schemas.JobTypeUpdate" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Schema for updating a job type.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.schemas.JobTypeUpdate.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'json_schema_extra':</span> <span class="pre">{'example':</span> <span class="pre">{'name':</span> <span class="pre">'Full-time</span> <span class="pre">Remote',</span> <span class="pre">'slug':</span> <span class="pre">'full-time-remote'}}}</span></em><a class="headerlink" href="#pydotorg.domains.jobs.schemas.JobTypeUpdate.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.schemas.JobTypeRead">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">JobTypeRead</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/jobs/schemas.html#JobTypeRead"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.jobs.schemas.JobTypeRead" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobTypeBase" title="pydotorg.domains.jobs.schemas.JobTypeBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">JobTypeBase</span></code></a></p>
+<p>Schema for reading job type data.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.schemas.JobTypeRead.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'from_attributes':</span> <span class="pre">True,</span> <span class="pre">'json_schema_extra':</span> <span class="pre">{'example':</span> <span class="pre">{'id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440010',</span> <span class="pre">'name':</span> <span class="pre">'Full-time',</span> <span class="pre">'slug':</span> <span class="pre">'full-time'}}}</span></em><a class="headerlink" href="#pydotorg.domains.jobs.schemas.JobTypeRead.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.schemas.JobCategoryBase">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">JobCategoryBase</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/jobs/schemas.html#JobCategoryBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.jobs.schemas.JobCategoryBase" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Base job category schema.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.schemas.JobCategoryBase.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pydotorg.domains.jobs.schemas.JobCategoryBase.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.schemas.JobCategoryCreate">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">JobCategoryCreate</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/jobs/schemas.html#JobCategoryCreate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.jobs.schemas.JobCategoryCreate" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobCategoryBase" title="pydotorg.domains.jobs.schemas.JobCategoryBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">JobCategoryBase</span></code></a></p>
+<p>Schema for creating a new job category.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.schemas.JobCategoryCreate.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'json_schema_extra':</span> <span class="pre">{'example':</span> <span class="pre">{'name':</span> <span class="pre">'Engineering',</span> <span class="pre">'slug':</span> <span class="pre">'engineering'}}}</span></em><a class="headerlink" href="#pydotorg.domains.jobs.schemas.JobCategoryCreate.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.schemas.JobCategoryUpdate">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">JobCategoryUpdate</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/jobs/schemas.html#JobCategoryUpdate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.jobs.schemas.JobCategoryUpdate" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Schema for updating a job category.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.schemas.JobCategoryUpdate.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'json_schema_extra':</span> <span class="pre">{'example':</span> <span class="pre">{'name':</span> <span class="pre">'Software</span> <span class="pre">Engineering',</span> <span class="pre">'slug':</span> <span class="pre">'software-engineering'}}}</span></em><a class="headerlink" href="#pydotorg.domains.jobs.schemas.JobCategoryUpdate.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.schemas.JobCategoryRead">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">JobCategoryRead</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/jobs/schemas.html#JobCategoryRead"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.jobs.schemas.JobCategoryRead" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobCategoryBase" title="pydotorg.domains.jobs.schemas.JobCategoryBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">JobCategoryBase</span></code></a></p>
+<p>Schema for reading job category data.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.schemas.JobCategoryRead.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'from_attributes':</span> <span class="pre">True,</span> <span class="pre">'json_schema_extra':</span> <span class="pre">{'example':</span> <span class="pre">{'id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440001',</span> <span class="pre">'name':</span> <span class="pre">'Engineering',</span> <span class="pre">'slug':</span> <span class="pre">'engineering'}}}</span></em><a class="headerlink" href="#pydotorg.domains.jobs.schemas.JobCategoryRead.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.schemas.JobBase">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">JobBase</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/jobs/schemas.html#JobBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.jobs.schemas.JobBase" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Base job schema with common fields.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.schemas.JobBase.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pydotorg.domains.jobs.schemas.JobBase.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.schemas.JobCreate">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">JobCreate</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/jobs/schemas.html#JobCreate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.jobs.schemas.JobCreate" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobBase" title="pydotorg.domains.jobs.schemas.JobBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">JobBase</span></code></a></p>
+<p>Schema for creating a new job.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.schemas.JobCreate.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'json_schema_extra':</span> <span class="pre">{'example':</span> <span class="pre">{'agencies':</span> <span class="pre">False,</span> <span class="pre">'category_id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440001',</span> <span class="pre">'city':</span> <span class="pre">'Remote',</span> <span class="pre">'company_name':</span> <span class="pre">'Python</span> <span class="pre">Software</span> <span class="pre">Foundation',</span> <span class="pre">'contact':</span> <span class="pre">'Jane</span> <span class="pre">Smith,</span> <span class="pre">Engineering</span> <span class="pre">Manager',</span> <span class="pre">'country':</span> <span class="pre">'USA',</span> <span class="pre">'description':</span> <span class="pre">'We</span> <span class="pre">are</span> <span class="pre">seeking</span> <span class="pre">an</span> <span class="pre">experienced</span> <span class="pre">Python</span> <span class="pre">developer</span> <span class="pre">to</span> <span class="pre">work</span> <span class="pre">on</span> <span class="pre">core</span> <span class="pre">Python</span> <span class="pre">infrastructure</span> <span class="pre">and</span> <span class="pre">tooling.</span> <span class="pre">You</span> <span class="pre">will</span> <span class="pre">collaborate</span> <span class="pre">with</span> <span class="pre">the</span> <span class="pre">PSF</span> <span class="pre">team</span> <span class="pre">to</span> <span class="pre">improve</span> <span class="pre">Python</span> <span class="pre">packaging,</span> <span class="pre">distribution,</span> <span class="pre">and</span> <span class="pre">developer</span> <span class="pre">experience.',</span> <span class="pre">'email':</span> <span class="pre">'jobs&#64;python.org',</span> <span class="pre">'expires':</span> <span class="pre">'2025-12-31',</span> <span class="pre">'job_title':</span> <span class="pre">'Senior</span> <span class="pre">Python</span> <span class="pre">Developer',</span> <span class="pre">'job_type_ids':</span> <span class="pre">['550e8400-e29b-41d4-a716-446655440010',</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440011'],</span> <span class="pre">'region':</span> <span class="pre">'California',</span> <span class="pre">'requirements':</span> <span class="pre">'5+</span> <span class="pre">years</span> <span class="pre">Python</span> <span class="pre">experience\nExperience</span> <span class="pre">with</span> <span class="pre">async/await</span> <span class="pre">patterns\nKnowledge</span> <span class="pre">of</span> <span class="pre">CPython</span> <span class="pre">internals</span> <span class="pre">preferred\nOpen</span> <span class="pre">source</span> <span class="pre">contributions</span> <span class="pre">welcome',</span> <span class="pre">'telecommuting':</span> <span class="pre">True,</span> <span class="pre">'url':</span> <span class="pre">'https://python.org/jobs/senior-python-dev'}}}</span></em><a class="headerlink" href="#pydotorg.domains.jobs.schemas.JobCreate.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.schemas.JobUpdate">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">JobUpdate</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/jobs/schemas.html#JobUpdate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.jobs.schemas.JobUpdate" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Schema for updating a job.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.schemas.JobUpdate.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'json_schema_extra':</span> <span class="pre">{'example':</span> <span class="pre">{'description':</span> <span class="pre">'Updated:</span> <span class="pre">We</span> <span class="pre">are</span> <span class="pre">seeking</span> <span class="pre">an</span> <span class="pre">experienced</span> <span class="pre">Python</span> <span class="pre">developer</span> <span class="pre">to</span> <span class="pre">work</span> <span class="pre">on</span> <span class="pre">core</span> <span class="pre">Python</span> <span class="pre">infrastructure,</span> <span class="pre">tooling,</span> <span class="pre">and</span> <span class="pre">community</span> <span class="pre">projects.</span> <span class="pre">You</span> <span class="pre">will</span> <span class="pre">collaborate</span> <span class="pre">with</span> <span class="pre">the</span> <span class="pre">PSF</span> <span class="pre">team</span> <span class="pre">to</span> <span class="pre">improve</span> <span class="pre">Python</span> <span class="pre">packaging,</span> <span class="pre">distribution,</span> <span class="pre">and</span> <span class="pre">developer</span> <span class="pre">experience.',</span> <span class="pre">'expires':</span> <span class="pre">'2026-01-31',</span> <span class="pre">'requirements':</span> <span class="pre">'5+</span> <span class="pre">years</span> <span class="pre">Python</span> <span class="pre">experience\nExperience</span> <span class="pre">with</span> <span class="pre">async/await</span> <span class="pre">patterns\nKnowledge</span> <span class="pre">of</span> <span class="pre">CPython</span> <span class="pre">internals</span> <span class="pre">preferred\nOpen</span> <span class="pre">source</span> <span class="pre">contributions</span> <span class="pre">required\nExcellent</span> <span class="pre">communication</span> <span class="pre">skills',</span> <span class="pre">'status':</span> <span class="pre">'approved',</span> <span class="pre">'telecommuting':</span> <span class="pre">True}}}</span></em><a class="headerlink" href="#pydotorg.domains.jobs.schemas.JobUpdate.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.schemas.JobRead">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">JobRead</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/jobs/schemas.html#JobRead"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.jobs.schemas.JobRead" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobBase" title="pydotorg.domains.jobs.schemas.JobBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">JobBase</span></code></a></p>
+<p>Schema for reading job data.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.schemas.JobRead.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'from_attributes':</span> <span class="pre">True,</span> <span class="pre">'json_schema_extra':</span> <span class="pre">{'example':</span> <span class="pre">{'agencies':</span> <span class="pre">False,</span> <span class="pre">'category':</span> <span class="pre">{'id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440001',</span> <span class="pre">'name':</span> <span class="pre">'Engineering',</span> <span class="pre">'slug':</span> <span class="pre">'engineering'},</span> <span class="pre">'category_id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440001',</span> <span class="pre">'city':</span> <span class="pre">'Remote',</span> <span class="pre">'company_name':</span> <span class="pre">'Python</span> <span class="pre">Software</span> <span class="pre">Foundation',</span> <span class="pre">'contact':</span> <span class="pre">'Jane</span> <span class="pre">Smith,</span> <span class="pre">Engineering</span> <span class="pre">Manager',</span> <span class="pre">'country':</span> <span class="pre">'USA',</span> <span class="pre">'created_at':</span> <span class="pre">'2025-11-01T10:00:00Z',</span> <span class="pre">'creator_id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440000',</span> <span class="pre">'description':</span> <span class="pre">'We</span> <span class="pre">are</span> <span class="pre">seeking</span> <span class="pre">an</span> <span class="pre">experienced</span> <span class="pre">Python</span> <span class="pre">developer</span> <span class="pre">to</span> <span class="pre">work</span> <span class="pre">on</span> <span class="pre">core</span> <span class="pre">Python</span> <span class="pre">infrastructure</span> <span class="pre">and</span> <span class="pre">tooling.',</span> <span class="pre">'email':</span> <span class="pre">'jobs&#64;python.org',</span> <span class="pre">'expires':</span> <span class="pre">'2025-12-31',</span> <span class="pre">'id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440020',</span> <span class="pre">'job_title':</span> <span class="pre">'Senior</span> <span class="pre">Python</span> <span class="pre">Developer',</span> <span class="pre">'job_types':</span> <span class="pre">[{'id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440010',</span> <span class="pre">'name':</span> <span class="pre">'Full-time',</span> <span class="pre">'slug':</span> <span class="pre">'full-time'},</span> <span class="pre">{'id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440011',</span> <span class="pre">'name':</span> <span class="pre">'Remote',</span> <span class="pre">'slug':</span> <span class="pre">'remote'}],</span> <span class="pre">'region':</span> <span class="pre">'California',</span> <span class="pre">'requirements':</span> <span class="pre">'5+</span> <span class="pre">years</span> <span class="pre">Python</span> <span class="pre">experience\nExperience</span> <span class="pre">with</span> <span class="pre">async/await</span> <span class="pre">patterns\nKnowledge</span> <span class="pre">of</span> <span class="pre">CPython</span> <span class="pre">internals</span> <span class="pre">preferred',</span> <span class="pre">'slug':</span> <span class="pre">'senior-python-developer-psf',</span> <span class="pre">'status':</span> <span class="pre">'approved',</span> <span class="pre">'telecommuting':</span> <span class="pre">True,</span> <span class="pre">'updated_at':</span> <span class="pre">'2025-11-15T14:30:00Z',</span> <span class="pre">'url':</span> <span class="pre">'https://python.org/jobs/senior-python-dev'}}}</span></em><a class="headerlink" href="#pydotorg.domains.jobs.schemas.JobRead.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.schemas.JobPublic">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">JobPublic</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/jobs/schemas.html#JobPublic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.jobs.schemas.JobPublic" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Public job schema for job listings.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.schemas.JobPublic.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'from_attributes':</span> <span class="pre">True,</span> <span class="pre">'json_schema_extra':</span> <span class="pre">{'example':</span> <span class="pre">{'agencies':</span> <span class="pre">False,</span> <span class="pre">'category':</span> <span class="pre">{'id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440001',</span> <span class="pre">'name':</span> <span class="pre">'Engineering',</span> <span class="pre">'slug':</span> <span class="pre">'engineering'},</span> <span class="pre">'city':</span> <span class="pre">'Remote',</span> <span class="pre">'company_name':</span> <span class="pre">'Python</span> <span class="pre">Software</span> <span class="pre">Foundation',</span> <span class="pre">'contact':</span> <span class="pre">'Jane</span> <span class="pre">Smith',</span> <span class="pre">'country':</span> <span class="pre">'USA',</span> <span class="pre">'created_at':</span> <span class="pre">'2025-11-01T10:00:00Z',</span> <span class="pre">'description':</span> <span class="pre">'We</span> <span class="pre">are</span> <span class="pre">seeking</span> <span class="pre">an</span> <span class="pre">experienced</span> <span class="pre">Python</span> <span class="pre">developer...',</span> <span class="pre">'expires':</span> <span class="pre">'2025-12-31',</span> <span class="pre">'id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440020',</span> <span class="pre">'job_title':</span> <span class="pre">'Senior</span> <span class="pre">Python</span> <span class="pre">Developer',</span> <span class="pre">'job_types':</span> <span class="pre">[{'id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440010',</span> <span class="pre">'name':</span> <span class="pre">'Full-time',</span> <span class="pre">'slug':</span> <span class="pre">'full-time'}],</span> <span class="pre">'region':</span> <span class="pre">'California',</span> <span class="pre">'requirements':</span> <span class="pre">'5+</span> <span class="pre">years</span> <span class="pre">Python</span> <span class="pre">experience',</span> <span class="pre">'slug':</span> <span class="pre">'senior-python-developer-psf',</span> <span class="pre">'telecommuting':</span> <span class="pre">True,</span> <span class="pre">'url':</span> <span class="pre">'https://python.org/jobs/senior-python-dev'}}}</span></em><a class="headerlink" href="#pydotorg.domains.jobs.schemas.JobPublic.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.schemas.JobReviewCommentBase">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">JobReviewCommentBase</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/jobs/schemas.html#JobReviewCommentBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.jobs.schemas.JobReviewCommentBase" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Base job review comment schema.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.schemas.JobReviewCommentBase.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pydotorg.domains.jobs.schemas.JobReviewCommentBase.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.schemas.JobReviewCommentCreate">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">JobReviewCommentCreate</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/jobs/schemas.html#JobReviewCommentCreate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.jobs.schemas.JobReviewCommentCreate" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobReviewCommentBase" title="pydotorg.domains.jobs.schemas.JobReviewCommentBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">JobReviewCommentBase</span></code></a></p>
+<p>Schema for creating a new job review comment.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.schemas.JobReviewCommentCreate.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'json_schema_extra':</span> <span class="pre">{'example':</span> <span class="pre">{'comment':</span> <span class="pre">'Please</span> <span class="pre">update</span> <span class="pre">the</span> <span class="pre">job</span> <span class="pre">description</span> <span class="pre">to</span> <span class="pre">include</span> <span class="pre">salary</span> <span class="pre">range.',</span> <span class="pre">'job_id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440020'}}}</span></em><a class="headerlink" href="#pydotorg.domains.jobs.schemas.JobReviewCommentCreate.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.schemas.JobReviewCommentUpdate">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">JobReviewCommentUpdate</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/jobs/schemas.html#JobReviewCommentUpdate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.jobs.schemas.JobReviewCommentUpdate" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Schema for updating a job review comment.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.schemas.JobReviewCommentUpdate.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'json_schema_extra':</span> <span class="pre">{'example':</span> <span class="pre">{'comment':</span> <span class="pre">'Updated:</span> <span class="pre">The</span> <span class="pre">salary</span> <span class="pre">range</span> <span class="pre">has</span> <span class="pre">been</span> <span class="pre">added.</span> <span class="pre">Approved.'}}}</span></em><a class="headerlink" href="#pydotorg.domains.jobs.schemas.JobReviewCommentUpdate.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.schemas.JobReviewCommentRead">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">JobReviewCommentRead</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/jobs/schemas.html#JobReviewCommentRead"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.jobs.schemas.JobReviewCommentRead" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pydotorg.domains.jobs.schemas.JobReviewCommentBase" title="pydotorg.domains.jobs.schemas.JobReviewCommentBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">JobReviewCommentBase</span></code></a></p>
+<p>Schema for reading job review comment data.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.schemas.JobReviewCommentRead.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'from_attributes':</span> <span class="pre">True,</span> <span class="pre">'json_schema_extra':</span> <span class="pre">{'example':</span> <span class="pre">{'comment':</span> <span class="pre">'Please</span> <span class="pre">update</span> <span class="pre">the</span> <span class="pre">job</span> <span class="pre">description</span> <span class="pre">to</span> <span class="pre">include</span> <span class="pre">salary</span> <span class="pre">range.',</span> <span class="pre">'created_at':</span> <span class="pre">'2025-11-15T10:00:00Z',</span> <span class="pre">'creator_id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440000',</span> <span class="pre">'id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440030',</span> <span class="pre">'job_id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440020',</span> <span class="pre">'updated_at':</span> <span class="pre">'2025-11-15T10:00:00Z'}}}</span></em><a class="headerlink" href="#pydotorg.domains.jobs.schemas.JobReviewCommentRead.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.schemas.JobSearchFilters">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">JobSearchFilters</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/jobs/schemas.html#JobSearchFilters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.jobs.schemas.JobSearchFilters" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Schema for job search filters.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.jobs.schemas.JobSearchFilters.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'json_schema_extra':</span> <span class="pre">{'example':</span> <span class="pre">{'category_id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440001',</span> <span class="pre">'country':</span> <span class="pre">'USA',</span> <span class="pre">'status':</span> <span class="pre">'approved',</span> <span class="pre">'telecommuting':</span> <span class="pre">True}}}</span></em><a class="headerlink" href="#pydotorg.domains.jobs.schemas.JobSearchFilters.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="services">
+<h2>services<a class="headerlink" href="#services" title="Link to this heading">¶</a></h2>
+</section>
+<section id="controllers">
+<h2>controllers<a class="headerlink" href="#controllers" title="Link to this heading">¶</a></h2>
+</section>
+<section id="repositories">
+<h2>repositories<a class="headerlink" href="#repositories" title="Link to this heading">¶</a></h2>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="events.html">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title">events</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="mailing.html">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title">Mailing Lists</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Jacob Coffee</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+<a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+  <iconify-icon icon="simple-icons:github"></iconify-icon>
+</a></div>
+    </div>
+  </div>
+</footer>
+      <script src="../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=30646c52"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+      <script src="../../_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

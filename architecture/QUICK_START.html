@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="blue" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Litestar Python.org Quick Start Guide - litestar-pydotorg</title><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="API Tags Documentation Index" href="API_TAGS_INDEX.html" /><link rel="prev" title="Domain Models Reference" href="DOMAIN_MODELS.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=14737038" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=513f0650" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="Litestar Python.org Quick Start Guide"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../index.html">
+      
+      
+      <strong>litestar-pydotorg</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"><ul><li class="link">
+          <a href="https://litestar.dev/">
+            <span>Litestar</span></a>
+        </li><li class="link">
+          <a href="https://python.org/">
+            <span>Python.org</span></a>
+        </li></ul></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials">
+  <a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started/index.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/quickstart.html">Quickstart</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/index.html">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/development.html">Development Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/contributing.html">Contribution Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/testing.html">Testing Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/debugging.html">Debugging Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/api-usage.html">API Usage Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/authentication.html">Authentication Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/feature-flags.html">Feature Flags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/configuration.html">Configuration Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/deployment.html">Deployment Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/docker.html">Docker Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/troubleshooting.html">Troubleshooting Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/index.html">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/domain-patterns.html">Domain Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/authentication-recipes.html">Authentication Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/database-recipes.html">Database Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/testing-recipes.html">Testing Recipes</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/core/index.html">Core Infrastructure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/auth.html">Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/cache.html">Caching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/database.html">Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/email.html">Email</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/exceptions.html">Exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/features.html">Feature Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/feeds.html">RSS/Atom Feeds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/ical.html">iCalendar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/middleware.html">Middleware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/openapi.html">OpenAPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/ratelimit.html">Rate Limiting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/security.html">Security</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/worker.html">Background Worker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/domains/index.html">Domain Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/about.html">About</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/admin.html">Admin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/banners.html">banners</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/blogs.html">blogs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/codesamples.html">Code Samples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/community.html">community</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/docs.html">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/downloads.html">downloads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/events.html">events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/jobs.html">jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/mailing.html">Mailing Lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/minutes.html">Minutes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/nominations.html">Nominations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/pages.html">pages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/sponsors.html">sponsors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/sqladmin.html">SQLAdmin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/successstories.html">Success Stories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/users.html">users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/work_groups.html">Work Groups</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/lib.html">Library Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/tasks.html">Background Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/config.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/main.html">Application Entry Point</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Architecture</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ARCHITECTURE.html">Litestar Python.org Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DATABASE_SCHEMA.html">Database Schema Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DOMAIN_MODELS.html">Domain Models Reference</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Litestar Python.org Quick Start Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="API_TAGS_INDEX.html">API Tags Documentation Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RATE_LIMITING_ARCHITECTURE.html">Rate Limiting Architecture Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adr/001-litestar-framework.html">ADR-001: Use Litestar as Web Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adr/002-saq-background-tasks.html">ADR-002: Use SAQ for Background Task Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#for-developers">For Developers</a></li>
+<li><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li><a class="reference internal" href="#initial-setup">Initial Setup</a><ul>
+<li><a class="reference internal" href="#install-uv">1. Install uv</a></li>
+<li><a class="reference internal" href="#clone-repository">2. Clone Repository</a></li>
+<li><a class="reference internal" href="#set-up-python-environment">3. Set Up Python Environment</a></li>
+<li><a class="reference internal" href="#configure-environment">4. Configure Environment</a></li>
+<li><a class="reference internal" href="#start-services-docker-compose">5. Start Services (Docker Compose)</a></li>
+<li><a class="reference internal" href="#database-setup">6. Database Setup</a></li>
+<li><a class="reference internal" href="#run-development-server">7. Run Development Server</a></li>
+<li><a class="reference internal" href="#access-documentation">8. Access Documentation</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#project-structure-at-a-glance">Project Structure at a Glance</a></li>
+<li><a class="reference internal" href="#common-development-tasks">Common Development Tasks</a><ul>
+<li><a class="reference internal" href="#create-a-new-domain">Create a New Domain</a></li>
+<li><a class="reference internal" href="#create-a-database-migration">Create a Database Migration</a></li>
+<li><a class="reference internal" href="#run-tests">Run Tests</a></li>
+<li><a class="reference internal" href="#code-quality-checks">Code Quality Checks</a></li>
+<li><a class="reference internal" href="#background-tasks">Background Tasks</a></li>
+<li><a class="reference internal" href="#database-shell">Database Shell</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#development-workflow">Development Workflow</a><ul>
+<li><a class="reference internal" href="#adding-a-new-feature">Adding a New Feature</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#debugging">Debugging</a><ul>
+<li><a class="reference internal" href="#enable-debug-mode">Enable Debug Mode</a></li>
+<li><a class="reference internal" href="#debug-logging">Debug Logging</a></li>
+<li><a class="reference internal" href="#ipython-debugger">IPython Debugger</a></li>
+<li><a class="reference internal" href="#database-query-logging">Database Query Logging</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul>
+<li><a class="reference internal" href="#database-connection-issues">Database Connection Issues</a></li>
+<li><a class="reference internal" href="#redis-connection-issues">Redis Connection Issues</a></li>
+<li><a class="reference internal" href="#migration-conflicts">Migration Conflicts</a></li>
+<li><a class="reference internal" href="#import-errors">Import Errors</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ide-setup">IDE Setup</a><ul>
+<li><a class="reference internal" href="#vs-code">VS Code</a></li>
+<li><a class="reference internal" href="#pycharm">PyCharm</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#docker-development">Docker Development</a><ul>
+<li><a class="reference internal" href="#full-docker-development-environment">Full Docker Development Environment</a></li>
+<li><a class="reference internal" href="#update-dependencies-in-docker">Update Dependencies in Docker</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#useful-commands-reference">Useful Commands Reference</a></li>
+<li><a class="reference internal" href="#getting-help">Getting Help</a></li>
+<li><a class="reference internal" href="#next-steps">Next Steps</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../index.html"><span itemprop="name">litestar-pydotorg</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="index.html"><span itemprop="name">Architecture</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="2" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">Litestar Python.org Quick Start Guide</strong>
+        <meta itemprop="position" content="3" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue dark-code" role="main">
+          <section id="litestar-python-org-quick-start-guide">
+<h1>Litestar <a class="reference external" href="http://Python.org">Python.org</a> Quick Start Guide<a class="headerlink" href="#litestar-python-org-quick-start-guide" title="Link to this heading">¶</a></h1>
+<section id="for-developers">
+<h2>For Developers<a class="headerlink" href="#for-developers" title="Link to this heading">¶</a></h2>
+<p>This guide helps you get started with the Litestar <a class="reference external" href="http://python.org">python.org</a> project quickly.</p>
+</section>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Python 3.12+</p></li>
+<li><p>PostgreSQL 15+</p></li>
+<li><p>Redis 7+</p></li>
+<li><p>uv (Python package manager)</p></li>
+<li><p>Git</p></li>
+</ul>
+</section>
+<section id="initial-setup">
+<h2>Initial Setup<a class="headerlink" href="#initial-setup" title="Link to this heading">¶</a></h2>
+<section id="install-uv">
+<h3>1. Install uv<a class="headerlink" href="#install-uv" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># macOS/Linux</span>
+</span><span data-line="2">curl<span class="w"> </span>-LsSf<span class="w"> </span>https://astral.sh/uv/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Windows (PowerShell)</span>
+</span><span data-line="5">powershell<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;irm https://astral.sh/uv/install.ps1 | iex&quot;</span>
+</span></pre></div>
+</div>
+</section>
+<section id="clone-repository">
+<h3>2. Clone Repository<a class="headerlink" href="#clone-repository" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">git<span class="w"> </span>clone<span class="w"> </span>https://github.com/python/litestar-pydotorg.git
+</span><span data-line="2"><span class="nb">cd</span><span class="w"> </span>litestar-pydotorg
+</span></pre></div>
+</div>
+</section>
+<section id="set-up-python-environment">
+<h3>3. Set Up Python Environment<a class="headerlink" href="#set-up-python-environment" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Create virtual environment with uv</span>
+</span><span data-line="2">uv<span class="w"> </span>venv
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Activate virtual environment</span>
+</span><span data-line="5"><span class="c1"># macOS/Linux</span>
+</span><span data-line="6"><span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+</span><span data-line="7">
+</span><span data-line="8"><span class="c1"># Windows</span>
+</span><span data-line="9">.venv<span class="se">\S</span>cripts<span class="se">\a</span>ctivate
+</span><span data-line="10">
+</span><span data-line="11"><span class="c1"># Install dependencies</span>
+</span><span data-line="12">uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[dev]&quot;</span>
+</span></pre></div>
+</div>
+</section>
+<section id="configure-environment">
+<h3>4. Configure Environment<a class="headerlink" href="#configure-environment" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Copy example environment file</span>
+</span><span data-line="2">cp<span class="w"> </span>.env.example<span class="w"> </span>.env
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Edit .env with your settings</span>
+</span><span data-line="5"><span class="c1"># Minimum required:</span>
+</span><span data-line="6"><span class="c1"># - DATABASE_URL</span>
+</span><span data-line="7"><span class="c1"># - REDIS_URL</span>
+</span><span data-line="8"><span class="c1"># - SECRET_KEY (generate with: python -c &quot;import secrets; print(secrets.token_urlsafe(32))&quot;)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="start-services-docker-compose">
+<h3>5. Start Services (Docker Compose)<a class="headerlink" href="#start-services-docker-compose" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Start PostgreSQL and Redis</span>
+</span><span data-line="2">docker-compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>postgres<span class="w"> </span>redis
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Optionally start Meilisearch</span>
+</span><span data-line="5">docker-compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>meilisearch
+</span></pre></div>
+</div>
+</section>
+<section id="database-setup">
+<h3>6. Database Setup<a class="headerlink" href="#database-setup" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Run migrations</span>
+</span><span data-line="2">alembic<span class="w"> </span>upgrade<span class="w"> </span>head
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Optionally load fixtures</span>
+</span><span data-line="5">uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/load_fixtures.py
+</span></pre></div>
+</div>
+</section>
+<section id="run-development-server">
+<h3>7. Run Development Server<a class="headerlink" href="#run-development-server" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Start Litestar development server</span>
+</span><span data-line="2">litestar<span class="w"> </span>run<span class="w"> </span>--reload
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Server will be available at http://localhost:8000</span>
+</span></pre></div>
+</div>
+</section>
+<section id="access-documentation">
+<h3>8. Access Documentation<a class="headerlink" href="#access-documentation" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>API Docs: <a class="reference external" href="http://localhost:8000/schema">http://localhost:8000/schema</a></p></li>
+<li><p>Swagger UI: <a class="reference external" href="http://localhost:8000/schema/swagger">http://localhost:8000/schema/swagger</a></p></li>
+<li><p>ReDoc: <a class="reference external" href="http://localhost:8000/schema/redoc">http://localhost:8000/schema/redoc</a></p></li>
+</ul>
+</section>
+</section>
+<section id="project-structure-at-a-glance">
+<h2>Project Structure at a Glance<a class="headerlink" href="#project-structure-at-a-glance" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">litestar-pydotorg/
+</span><span data-line="2">├── src/pydotorg/          # Main application code
+</span><span data-line="3">│   ├── main.py            # Application entry point
+</span><span data-line="4">│   ├── config.py          # Configuration
+</span><span data-line="5">│   ├── core/              # Core infrastructure
+</span><span data-line="6">│   ├── domains/           # Business domains (users, pages, etc.)
+</span><span data-line="7">│   ├── lib/               # Shared utilities
+</span><span data-line="8">│   └── tasks/             # Background tasks
+</span><span data-line="9">├── migrations/            # Alembic migrations
+</span><span data-line="10">├── templates/             # Jinja2 templates
+</span><span data-line="11">├── static/                # Static assets
+</span><span data-line="12">└── tests/                 # Test suite
+</span></pre></div>
+</div>
+</section>
+<section id="common-development-tasks">
+<h2>Common Development Tasks<a class="headerlink" href="#common-development-tasks" title="Link to this heading">¶</a></h2>
+<section id="create-a-new-domain">
+<h3>Create a New Domain<a class="headerlink" href="#create-a-new-domain" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Use the domain template generator</span>
+</span><span data-line="2">uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/create_domain.py<span class="w"> </span>my_domain
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># This creates:</span>
+</span><span data-line="5"><span class="c1"># - src/pydotorg/domains/my_domain/</span>
+</span><span data-line="6"><span class="c1"># - migrations/versions/xxxx_create_my_domain.py</span>
+</span><span data-line="7"><span class="c1"># - tests/unit/domains/my_domain/</span>
+</span></pre></div>
+</div>
+</section>
+<section id="create-a-database-migration">
+<h3>Create a Database Migration<a class="headerlink" href="#create-a-database-migration" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Auto-generate migration from model changes</span>
+</span><span data-line="2">alembic<span class="w"> </span>revision<span class="w"> </span>--autogenerate<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Add new field to User&quot;</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Review the generated migration in migrations/versions/</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="c1"># Apply migration</span>
+</span><span data-line="7">alembic<span class="w"> </span>upgrade<span class="w"> </span>head
+</span><span data-line="8">
+</span><span data-line="9"><span class="c1"># Rollback last migration</span>
+</span><span data-line="10">alembic<span class="w"> </span>downgrade<span class="w"> </span>-1
+</span></pre></div>
+</div>
+</section>
+<section id="run-tests">
+<h3>Run Tests<a class="headerlink" href="#run-tests" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Run all tests</span>
+</span><span data-line="2">pytest
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Run specific test file</span>
+</span><span data-line="5">pytest<span class="w"> </span>tests/unit/domains/users/test_models.py
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Run with coverage</span>
+</span><span data-line="8">pytest<span class="w"> </span>--cov<span class="o">=</span>pydotorg<span class="w"> </span>--cov-report<span class="o">=</span>html
+</span><span data-line="9">
+</span><span data-line="10"><span class="c1"># Run only unit tests</span>
+</span><span data-line="11">pytest<span class="w"> </span>tests/unit
+</span><span data-line="12">
+</span><span data-line="13"><span class="c1"># Run only integration tests</span>
+</span><span data-line="14">pytest<span class="w"> </span>tests/integration
+</span></pre></div>
+</div>
+</section>
+<section id="code-quality-checks">
+<h3>Code Quality Checks<a class="headerlink" href="#code-quality-checks" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Format code</span>
+</span><span data-line="2">ruff<span class="w"> </span>format<span class="w"> </span>.
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Lint code</span>
+</span><span data-line="5">ruff<span class="w"> </span>check<span class="w"> </span>.
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Fix auto-fixable issues</span>
+</span><span data-line="8">ruff<span class="w"> </span>check<span class="w"> </span>--fix<span class="w"> </span>.
+</span><span data-line="9">
+</span><span data-line="10"><span class="c1"># Type check</span>
+</span><span data-line="11">mypy<span class="w"> </span>src/pydotorg
+</span></pre></div>
+</div>
+</section>
+<section id="background-tasks">
+<h3>Background Tasks<a class="headerlink" href="#background-tasks" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Start SAQ worker in separate terminal</span>
+</span><span data-line="2">uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>saq<span class="w"> </span>worker<span class="w"> </span>pydotorg.tasks.base.worker
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Enqueue a task manually</span>
+</span><span data-line="5">uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/enqueue_task.py<span class="w"> </span>update_download_boxes
+</span></pre></div>
+</div>
+</section>
+<section id="database-shell">
+<h3>Database Shell<a class="headerlink" href="#database-shell" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># PostgreSQL shell</span>
+</span><span data-line="2">psql<span class="w"> </span><span class="nv">$DATABASE_URL</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Python shell with app context</span>
+</span><span data-line="5">uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/shell.py
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="development-workflow">
+<h2>Development Workflow<a class="headerlink" href="#development-workflow" title="Link to this heading">¶</a></h2>
+<section id="adding-a-new-feature">
+<h3>Adding a New Feature<a class="headerlink" href="#adding-a-new-feature" title="Link to this heading">¶</a></h3>
+<ol class="arabic">
+<li><p><strong>Create Feature Branch</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </span>feature/my-feature
+</span></pre></div>
+</div>
+</li>
+<li><p><strong>Write Models</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># src/pydotorg/domains/my_domain/models.py</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.core.database</span><span class="w"> </span><span class="kn">import</span> <span class="n">Base</span><span class="p">,</span> <span class="n">TimestampMixin</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="k">class</span><span class="w"> </span><span class="nc">MyModel</span><span class="p">(</span><span class="n">Base</span><span class="p">,</span> <span class="n">TimestampMixin</span><span class="p">):</span>
+</span><span data-line="5">    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;my_models&quot;</span>
+</span><span data-line="6">    <span class="c1"># ... fields</span>
+</span></pre></div>
+</div>
+</li>
+<li><p><strong>Create Migration</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">alembic<span class="w"> </span>revision<span class="w"> </span>--autogenerate<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Add MyModel&quot;</span>
+</span><span data-line="2">alembic<span class="w"> </span>upgrade<span class="w"> </span>head
+</span></pre></div>
+</div>
+</li>
+<li><p><strong>Write Schemas</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># src/pydotorg/domains/my_domain/schemas.py</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="k">class</span><span class="w"> </span><span class="nc">MyModelRead</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span data-line="5">    <span class="c1"># ... fields</span>
+</span></pre></div>
+</div>
+</li>
+<li><p><strong>Implement Service</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># src/pydotorg/domains/my_domain/services.py</span>
+</span><span data-line="2"><span class="k">class</span><span class="w"> </span><span class="nc">MyModelService</span><span class="p">:</span>
+</span><span data-line="3">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">MyModelCreate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MyModel</span><span class="p">:</span>
+</span><span data-line="4">        <span class="c1"># ... logic</span>
+</span></pre></div>
+</div>
+</li>
+<li><p><strong>Create Controller</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># src/pydotorg/domains/my_domain/controllers.py</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">litestar</span><span class="w"> </span><span class="kn">import</span> <span class="n">Controller</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">post</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="k">class</span><span class="w"> </span><span class="nc">MyModelController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="5">    <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;/my-models&quot;</span>
+</span><span data-line="6">    <span class="c1"># ... endpoints</span>
+</span></pre></div>
+</div>
+</li>
+<li><p><strong>Write Tests</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># tests/unit/domains/my_domain/test_services.py</span>
+</span><span data-line="2"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">test_create_my_model</span><span class="p">(</span><span class="n">db_session</span><span class="p">):</span>
+</span><span data-line="3">    <span class="c1"># ... test</span>
+</span></pre></div>
+</div>
+</li>
+<li><p><strong>Run Tests &amp; Quality Checks</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">pytest
+</span><span data-line="2">ruff<span class="w"> </span>check<span class="w"> </span>.
+</span><span data-line="3">mypy<span class="w"> </span>src/pydotorg
+</span></pre></div>
+</div>
+</li>
+<li><p><strong>Commit &amp; Push</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">git<span class="w"> </span>add<span class="w"> </span>.
+</span><span data-line="2">git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;feat: add my feature&quot;</span>
+</span><span data-line="3">git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>feature/my-feature
+</span></pre></div>
+</div>
+</li>
+<li><p><strong>Create Pull Request</strong></p>
+<ul class="simple">
+<li><p>Go to GitHub</p></li>
+<li><p>Create PR from your branch</p></li>
+<li><p>Fill out PR template</p></li>
+<li><p>Request review</p></li>
+</ul>
+</li>
+</ol>
+</section>
+</section>
+<section id="debugging">
+<h2>Debugging<a class="headerlink" href="#debugging" title="Link to this heading">¶</a></h2>
+<section id="enable-debug-mode">
+<h3>Enable Debug Mode<a class="headerlink" href="#enable-debug-mode" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># In .env</span>
+</span><span data-line="2"><span class="nv">DEBUG</span><span class="o">=</span><span class="nb">true</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># This enables:</span>
+</span><span data-line="5"><span class="c1"># - Detailed error pages</span>
+</span><span data-line="6"><span class="c1"># - SQL query logging</span>
+</span><span data-line="7"><span class="c1"># - Debug toolbar (if installed)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="debug-logging">
+<h3>Debug Logging<a class="headerlink" href="#debug-logging" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># In your code</span>
+</span><span data-line="2"><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Detailed debug info&quot;</span><span class="p">)</span>
+</span><span data-line="7"><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;General information&quot;</span><span class="p">)</span>
+</span><span data-line="8"><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Warning message&quot;</span><span class="p">)</span>
+</span><span data-line="9"><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Error occurred&quot;</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="ipython-debugger">
+<h3>IPython Debugger<a class="headerlink" href="#ipython-debugger" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Add breakpoint in code</span>
+</span><span data-line="2"><span class="kn">import</span><span class="w"> </span><span class="nn">ipdb</span><span class="p">;</span> <span class="n">ipdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Or use built-in breakpoint()</span>
+</span><span data-line="5"><span class="nb">breakpoint</span><span class="p">()</span>
+</span></pre></div>
+</div>
+</section>
+<section id="database-query-logging">
+<h3>Database Query Logging<a class="headerlink" href="#database-query-logging" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># In .env</span>
+</span><span data-line="2"><span class="nv">DATABASE_ECHO</span><span class="o">=</span><span class="nb">true</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># All SQL queries will be logged to console</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">¶</a></h2>
+<section id="database-connection-issues">
+<h3>Database Connection Issues<a class="headerlink" href="#database-connection-issues" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Check PostgreSQL is running</span>
+</span><span data-line="2">docker-compose<span class="w"> </span>ps<span class="w"> </span>postgres
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Check connection</span>
+</span><span data-line="5">psql<span class="w"> </span><span class="nv">$DATABASE_URL</span><span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;SELECT 1&quot;</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Reset database (CAUTION: destroys data)</span>
+</span><span data-line="8">alembic<span class="w"> </span>downgrade<span class="w"> </span>base
+</span><span data-line="9">alembic<span class="w"> </span>upgrade<span class="w"> </span>head
+</span></pre></div>
+</div>
+</section>
+<section id="redis-connection-issues">
+<h3>Redis Connection Issues<a class="headerlink" href="#redis-connection-issues" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Check Redis is running</span>
+</span><span data-line="2">docker-compose<span class="w"> </span>ps<span class="w"> </span>redis
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Test connection</span>
+</span><span data-line="5">redis-cli<span class="w"> </span>-u<span class="w"> </span><span class="nv">$REDIS_URL</span><span class="w"> </span>ping
+</span></pre></div>
+</div>
+</section>
+<section id="migration-conflicts">
+<h3>Migration Conflicts<a class="headerlink" href="#migration-conflicts" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># If you have migration conflicts</span>
+</span><span data-line="2">alembic<span class="w"> </span>heads<span class="w">  </span><span class="c1"># Show multiple heads</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Merge migrations</span>
+</span><span data-line="5">alembic<span class="w"> </span>merge<span class="w"> </span>heads<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;merge migrations&quot;</span>
+</span></pre></div>
+</div>
+</section>
+<section id="import-errors">
+<h3>Import Errors<a class="headerlink" href="#import-errors" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Reinstall dependencies</span>
+</span><span data-line="2">uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[dev]&quot;</span><span class="w"> </span>--force-reinstall
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Clear Python cache</span>
+</span><span data-line="5">find<span class="w"> </span>.<span class="w"> </span>-type<span class="w"> </span>d<span class="w"> </span>-name<span class="w"> </span><span class="s2">&quot;__pycache__&quot;</span><span class="w"> </span>-exec<span class="w"> </span>rm<span class="w"> </span>-rf<span class="w"> </span><span class="o">{}</span><span class="w"> </span>+
+</span><span data-line="6">find<span class="w"> </span>.<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span>-name<span class="w"> </span><span class="s2">&quot;*.pyc&quot;</span><span class="w"> </span>-delete
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="ide-setup">
+<h2>IDE Setup<a class="headerlink" href="#ide-setup" title="Link to this heading">¶</a></h2>
+<section id="vs-code">
+<h3>VS Code<a class="headerlink" href="#vs-code" title="Link to this heading">¶</a></h3>
+<p>Install recommended extensions:</p>
+<ul class="simple">
+<li><p>Python</p></li>
+<li><p>Pylance</p></li>
+<li><p>Ruff</p></li>
+<li><p>Even Better TOML</p></li>
+<li><p>REST Client</p></li>
+</ul>
+<p>Workspace settings are in <code class="docutils literal notranslate"><span class="pre">.vscode/settings.json</span></code></p>
+</section>
+<section id="pycharm">
+<h3>PyCharm<a class="headerlink" href="#pycharm" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Set Python interpreter to <code class="docutils literal notranslate"><span class="pre">.venv/bin/python</span></code></p></li>
+<li><p>Mark <code class="docutils literal notranslate"><span class="pre">src</span></code> as Sources Root</p></li>
+<li><p>Enable pytest as test runner</p></li>
+<li><p>Configure Ruff as external tool</p></li>
+</ol>
+</section>
+</section>
+<section id="docker-development">
+<h2>Docker Development<a class="headerlink" href="#docker-development" title="Link to this heading">¶</a></h2>
+<section id="full-docker-development-environment">
+<h3>Full Docker Development Environment<a class="headerlink" href="#full-docker-development-environment" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Build and start all services</span>
+</span><span data-line="2">docker-compose<span class="w"> </span>up<span class="w"> </span>--build
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># The app will be available at http://localhost:8000</span>
+</span></pre></div>
+</div>
+</section>
+<section id="update-dependencies-in-docker">
+<h3>Update Dependencies in Docker<a class="headerlink" href="#update-dependencies-in-docker" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Rebuild after dependency changes</span>
+</span><span data-line="2">docker-compose<span class="w"> </span>build<span class="w"> </span>web
+</span><span data-line="3">docker-compose<span class="w"> </span>up<span class="w"> </span>web
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="useful-commands-reference">
+<h2>Useful Commands Reference<a class="headerlink" href="#useful-commands-reference" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Development server</span>
+</span><span data-line="2">litestar<span class="w"> </span>run<span class="w"> </span>--reload
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Run tests</span>
+</span><span data-line="5">pytest
+</span><span data-line="6">pytest<span class="w"> </span>-v<span class="w">                    </span><span class="c1"># Verbose</span>
+</span><span data-line="7">pytest<span class="w"> </span>-x<span class="w">                    </span><span class="c1"># Stop on first failure</span>
+</span><span data-line="8">pytest<span class="w"> </span>--lf<span class="w">                  </span><span class="c1"># Run last failed</span>
+</span><span data-line="9">pytest<span class="w"> </span>-k<span class="w"> </span><span class="s2">&quot;test_user&quot;</span><span class="w">        </span><span class="c1"># Run matching tests</span>
+</span><span data-line="10">
+</span><span data-line="11"><span class="c1"># Database</span>
+</span><span data-line="12">alembic<span class="w"> </span>upgrade<span class="w"> </span>head<span class="w">         </span><span class="c1"># Apply migrations</span>
+</span><span data-line="13">alembic<span class="w"> </span>downgrade<span class="w"> </span>-1<span class="w">         </span><span class="c1"># Rollback one</span>
+</span><span data-line="14">alembic<span class="w"> </span><span class="nb">history</span><span class="w">              </span><span class="c1"># Show migration history</span>
+</span><span data-line="15">alembic<span class="w"> </span>current<span class="w">              </span><span class="c1"># Show current revision</span>
+</span><span data-line="16">
+</span><span data-line="17"><span class="c1"># Code quality</span>
+</span><span data-line="18">ruff<span class="w"> </span>format<span class="w"> </span>.<span class="w">                </span><span class="c1"># Format code</span>
+</span><span data-line="19">ruff<span class="w"> </span>check<span class="w"> </span>.<span class="w">                 </span><span class="c1"># Lint code</span>
+</span><span data-line="20">mypy<span class="w"> </span>src/pydotorg<span class="w">           </span><span class="c1"># Type check</span>
+</span><span data-line="21">
+</span><span data-line="22"><span class="c1"># Dependencies</span>
+</span><span data-line="23">uv<span class="w"> </span>pip<span class="w"> </span>list<span class="w">                  </span><span class="c1"># List installed packages</span>
+</span><span data-line="24">uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>package<span class="w">       </span><span class="c1"># Install package</span>
+</span><span data-line="25">uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[dev]&quot;</span><span class="w">  </span><span class="c1"># Install in editable mode</span>
+</span><span data-line="26">
+</span><span data-line="27"><span class="c1"># Background tasks</span>
+</span><span data-line="28">saq<span class="w"> </span>worker<span class="w"> </span>pydotorg.tasks.base.worker
+</span></pre></div>
+</div>
+</section>
+<section id="getting-help">
+<h2>Getting Help<a class="headerlink" href="#getting-help" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Documentation: <code class="docutils literal notranslate"><span class="pre">/docs/</span></code></p></li>
+<li><p>API Reference: <a class="reference external" href="http://localhost:8000/schema">http://localhost:8000/schema</a></p></li>
+<li><p>GitHub Issues: <a class="reference external" href="https://github.com/python/litestar-pydotorg/issues">https://github.com/python/litestar-pydotorg/issues</a></p></li>
+<li><p>Mailing List: <a class="reference external" href="mailto:pydotorg-www&#37;&#52;&#48;python&#46;org">pydotorg-www<span>&#64;</span>python<span>&#46;</span>org</a></p></li>
+</ul>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Read the <a class="reference internal" href="ARCHITECTURE.html"><span class="std std-doc">Architecture Document</span></a></p></li>
+<li><p>Review <a class="reference internal" href="DATABASE_SCHEMA.html"><span class="std std-doc">Database Schema</span></a></p></li>
+<li><p>Look at example implementations in <code class="docutils literal notranslate"><span class="pre">src/pydotorg/domains/</span></code></p></li>
+<li><p>Start with a small feature or bug fix</p></li>
+</ol>
+<hr class="docutils" />
+<p><strong>Document Path</strong>: <code class="docutils literal notranslate"><span class="pre">/Users/coffee/git/public/JacobCoffee/litestar-pydotorg/docs/architecture/QUICK_START.md</span></code></p>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="DOMAIN_MODELS.html">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title">Domain Models Reference</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="API_TAGS_INDEX.html">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title">API Tags Documentation Index</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Jacob Coffee</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+<a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+  <iconify-icon icon="simple-icons:github"></iconify-icon>
+</a></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=30646c52"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script src="../_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

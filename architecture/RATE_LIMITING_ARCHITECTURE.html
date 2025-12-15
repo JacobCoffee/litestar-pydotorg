@@ -1,0 +1,1515 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="blue" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Rate Limiting Architecture Design - litestar-pydotorg</title><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="ADR-001: Use Litestar as Web Framework" href="adr/001-litestar-framework.html" /><link rel="prev" title="API Tags Documentation Index" href="API_TAGS_INDEX.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=14737038" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=513f0650" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="Rate Limiting Architecture Design"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../index.html">
+      
+      
+      <strong>litestar-pydotorg</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"><ul><li class="link">
+          <a href="https://litestar.dev/">
+            <span>Litestar</span></a>
+        </li><li class="link">
+          <a href="https://python.org/">
+            <span>Python.org</span></a>
+        </li></ul></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials">
+  <a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started/index.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/quickstart.html">Quickstart</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/index.html">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/development.html">Development Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/contributing.html">Contribution Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/testing.html">Testing Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/debugging.html">Debugging Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/api-usage.html">API Usage Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/authentication.html">Authentication Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/feature-flags.html">Feature Flags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/configuration.html">Configuration Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/deployment.html">Deployment Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/docker.html">Docker Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/troubleshooting.html">Troubleshooting Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/index.html">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/domain-patterns.html">Domain Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/authentication-recipes.html">Authentication Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/database-recipes.html">Database Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/testing-recipes.html">Testing Recipes</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/core/index.html">Core Infrastructure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/auth.html">Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/cache.html">Caching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/database.html">Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/email.html">Email</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/exceptions.html">Exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/features.html">Feature Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/feeds.html">RSS/Atom Feeds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/ical.html">iCalendar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/middleware.html">Middleware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/openapi.html">OpenAPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/ratelimit.html">Rate Limiting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/security.html">Security</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/worker.html">Background Worker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/domains/index.html">Domain Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/about.html">About</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/admin.html">Admin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/banners.html">banners</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/blogs.html">blogs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/codesamples.html">Code Samples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/community.html">community</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/docs.html">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/downloads.html">downloads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/events.html">events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/jobs.html">jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/mailing.html">Mailing Lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/minutes.html">Minutes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/nominations.html">Nominations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/pages.html">pages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/sponsors.html">sponsors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/sqladmin.html">SQLAdmin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/successstories.html">Success Stories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/users.html">users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/work_groups.html">Work Groups</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/lib.html">Library Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/tasks.html">Background Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/config.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/main.html">Application Entry Point</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Architecture</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ARCHITECTURE.html">Litestar Python.org Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DATABASE_SCHEMA.html">Database Schema Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DOMAIN_MODELS.html">Domain Models Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="QUICK_START.html">Litestar Python.org Quick Start Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="API_TAGS_INDEX.html">API Tags Documentation Index</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Rate Limiting Architecture Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adr/001-litestar-framework.html">ADR-001: Use Litestar as Web Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adr/002-saq-background-tasks.html">ADR-002: Use SAQ for Background Task Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#executive-summary">Executive Summary</a></li>
+<li><a class="reference internal" href="#architecture-decision-record-adr">Architecture Decision Record (ADR)</a><ul>
+<li><a class="reference internal" href="#adr-001-rate-limiting-strategy">ADR-001: Rate Limiting Strategy</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#technical-specification">Technical Specification</a><ul>
+<li><a class="reference internal" href="#configuration-schema">1. Configuration Schema</a><ul>
+<li><a class="reference internal" href="#rate-limit-configuration-model">1.1 Rate Limit Configuration Model</a></li>
+<li><a class="reference internal" href="#settings-integration">1.2 Settings Integration</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#endpoint-classification">2. Endpoint Classification</a><ul>
+<li><a class="reference internal" href="#tier-assignments-by-risk-profile">2.1 Tier Assignments by Risk Profile</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#user-aware-identifier-function">3. User-Aware Identifier Function</a></li>
+<li><a class="reference internal" href="#redis-store-integration">4. Redis Store Integration</a></li>
+<li><a class="reference internal" href="#custom-429-exception-handler">5. Custom 429 Exception Handler</a></li>
+<li><a class="reference internal" href="#main-application-integration">6. Main Application Integration</a></li>
+<li><a class="reference internal" href="#error-template">7. Error Template</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#file-structure">File Structure</a></li>
+<li><a class="reference internal" href="#implementation-plan">Implementation Plan</a><ul>
+<li><a class="reference internal" href="#phase-1-core-infrastructure-week-1">Phase 1: Core Infrastructure (Week 1)</a></li>
+<li><a class="reference internal" href="#phase-2-tier-classification-week-1">Phase 2: Tier Classification (Week 1)</a></li>
+<li><a class="reference internal" href="#phase-3-middleware-handlers-week-2">Phase 3: Middleware &amp; Handlers (Week 2)</a></li>
+<li><a class="reference internal" href="#phase-4-application-integration-week-2">Phase 4: Application Integration (Week 2)</a></li>
+<li><a class="reference internal" href="#phase-5-monitoring-tuning-week-3">Phase 5: Monitoring &amp; Tuning (Week 3)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#testing-strategy">Testing Strategy</a><ul>
+<li><a class="reference internal" href="#unit-tests">Unit Tests</a></li>
+<li><a class="reference internal" href="#integration-tests">Integration Tests</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#monitoring-observability">Monitoring &amp; Observability</a><ul>
+<li><a class="reference internal" href="#metrics">Metrics</a></li>
+<li><a class="reference internal" href="#admin-dashboard">Admin Dashboard</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#security-considerations">Security Considerations</a></li>
+<li><a class="reference internal" href="#performance-impact">Performance Impact</a><ul>
+<li><a class="reference internal" href="#expected-overhead">Expected Overhead</a></li>
+<li><a class="reference internal" href="#optimization-strategies">Optimization Strategies</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#migration-rollout">Migration &amp; Rollout</a><ul>
+<li><a class="reference internal" href="#pre-deployment">Pre-Deployment</a></li>
+<li><a class="reference internal" href="#deployment">Deployment</a></li>
+<li><a class="reference internal" href="#rollback-plan">Rollback Plan</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#summary">Summary</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../index.html"><span itemprop="name">litestar-pydotorg</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="index.html"><span itemprop="name">Architecture</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="2" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">Rate Limiting Architecture Design</strong>
+        <meta itemprop="position" content="3" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue dark-code" role="main">
+          <section id="rate-limiting-architecture-design">
+<h1>Rate Limiting Architecture Design<a class="headerlink" href="#rate-limiting-architecture-design" title="Link to this heading">¶</a></h1>
+<section id="executive-summary">
+<h2>Executive Summary<a class="headerlink" href="#executive-summary" title="Link to this heading">¶</a></h2>
+<p>This document defines the comprehensive rate limiting architecture for pydotorg, a Litestar 2.14+ application with 383 endpoints across 29 controllers. The design leverages Litestar’s native <code class="docutils literal notranslate"><span class="pre">RateLimitMiddleware</span></code> with Redis backend to protect against abuse while maintaining excellent user experience.</p>
+<p><strong>Current State</strong>: CRITICAL - No rate limiting protection across 383 endpoints
+<strong>Risk Level</strong>: HIGH - Vulnerable to DoS, credential stuffing, scraping, spam
+<strong>Solution</strong>: Tiered rate limiting with user-aware identification and Redis persistence</p>
+</section>
+<hr class="docutils" />
+<section id="architecture-decision-record-adr">
+<h2>Architecture Decision Record (ADR)<a class="headerlink" href="#architecture-decision-record-adr" title="Link to this heading">¶</a></h2>
+<section id="adr-001-rate-limiting-strategy">
+<h3>ADR-001: Rate Limiting Strategy<a class="headerlink" href="#adr-001-rate-limiting-strategy" title="Link to this heading">¶</a></h3>
+<p><strong>Status</strong>: Proposed</p>
+<p><strong>Context</strong>:</p>
+<ul class="simple">
+<li><p>383 endpoints across 17 domain controllers currently unprotected</p></li>
+<li><p>Redis infrastructure already available (sessions, cache, SAQ workers)</p></li>
+<li><p>Mix of read-heavy, write-heavy, and authentication endpoints</p></li>
+<li><p>Need to balance security with legitimate user experience</p></li>
+<li><p>HTMX-powered UI requires special handling for toast notifications</p></li>
+</ul>
+<p><strong>Decision</strong>:
+Implement tiered rate limiting using Litestar’s <code class="docutils literal notranslate"><span class="pre">RateLimitMiddleware</span></code> with:</p>
+<ol class="arabic simple">
+<li><p>RedisStore backend for distributed rate limiting</p></li>
+<li><p>Custom identifier function for user-aware vs IP-based limiting</p></li>
+<li><p>Four-tier rate limit strategy (CRITICAL, HIGH, MEDIUM, LOW)</p></li>
+<li><p>Custom 429 exception handler with Retry-After header</p></li>
+<li><p>Configuration-driven approach for environment-specific limits</p></li>
+</ol>
+<p><strong>Consequences</strong>:</p>
+<p>Positive:</p>
+<ul class="simple">
+<li><p>Protection against DoS, brute force, and abuse</p></li>
+<li><p>Leverages existing Redis infrastructure</p></li>
+<li><p>Native Litestar middleware (no external dependencies)</p></li>
+<li><p>Environment-specific limits (dev/staging/prod)</p></li>
+<li><p>User-aware limiting rewards authenticated users</p></li>
+<li><p>Automatic rate limit headers (RFC 6585)</p></li>
+</ul>
+<p>Negative:</p>
+<ul class="simple">
+<li><p>Redis becomes single point of failure for rate limiting</p></li>
+<li><p>Requires careful tuning to avoid false positives</p></li>
+<li><p>Additional Redis memory consumption</p></li>
+<li><p>Performance overhead (minimal with Redis)</p></li>
+</ul>
+<p><strong>Alternatives Considered</strong>:</p>
+<ol class="arabic simple">
+<li><p><strong>No Rate Limiting</strong>: Rejected - HIGH security risk</p></li>
+<li><p><strong>Per-Endpoint Decorators</strong>: Rejected - Not scalable for 383 endpoints</p></li>
+<li><p><strong>External Service (Cloudflare)</strong>: Rejected - Adds dependency, cost</p></li>
+<li><p><strong>In-Memory Store</strong>: Rejected - Not distributed, loses data on restart</p></li>
+</ol>
+</section>
+</section>
+<hr class="docutils" />
+<section id="technical-specification">
+<h2>Technical Specification<a class="headerlink" href="#technical-specification" title="Link to this heading">¶</a></h2>
+<section id="configuration-schema">
+<h3>1. Configuration Schema<a class="headerlink" href="#configuration-schema" title="Link to this heading">¶</a></h3>
+<section id="rate-limit-configuration-model">
+<h4>1.1 Rate Limit Configuration Model<a class="headerlink" href="#rate-limit-configuration-model" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># src/pydotorg/core/ratelimit/config.py</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
+</span><span data-line="4"><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
+</span><span data-line="7">
+</span><span data-line="8"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">Environment</span>
+</span><span data-line="9">
+</span><span data-line="10">
+</span><span data-line="11"><span class="k">class</span><span class="w"> </span><span class="nc">RateLimitTier</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+</span><span data-line="12"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Rate limit tier classifications.&quot;&quot;&quot;</span>
+</span><span data-line="13">    <span class="n">CRITICAL</span> <span class="o">=</span> <span class="s2">&quot;critical&quot;</span>
+</span><span data-line="14">    <span class="n">HIGH</span> <span class="o">=</span> <span class="s2">&quot;high&quot;</span>
+</span><span data-line="15">    <span class="n">MEDIUM</span> <span class="o">=</span> <span class="s2">&quot;medium&quot;</span>
+</span><span data-line="16">    <span class="n">LOW</span> <span class="o">=</span> <span class="s2">&quot;low&quot;</span>
+</span><span data-line="17">    <span class="n">UNLIMITED</span> <span class="o">=</span> <span class="s2">&quot;unlimited&quot;</span>
+</span><span data-line="18">
+</span><span data-line="19">
+</span><span data-line="20"><span class="k">class</span><span class="w"> </span><span class="nc">TierLimits</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span data-line="21"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Rate limits for a specific tier.&quot;&quot;&quot;</span>
+</span><span data-line="22">    <span class="n">requests</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Number of requests allowed&quot;</span><span class="p">)</span>
+</span><span data-line="23">    <span class="n">window_seconds</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Time window in seconds&quot;</span><span class="p">)</span>
+</span><span data-line="24">
+</span><span data-line="25">    <span class="nd">@property</span>
+</span><span data-line="26">    <span class="k">def</span><span class="w"> </span><span class="nf">per_minute</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+</span><span data-line="27"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate requests per minute for display.&quot;&quot;&quot;</span>
+</span><span data-line="28">        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">requests</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">window_seconds</span><span class="p">)</span> <span class="o">*</span> <span class="mi">60</span>
+</span><span data-line="29">
+</span><span data-line="30">
+</span><span data-line="31"><span class="k">class</span><span class="w"> </span><span class="nc">RateLimitConfig</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span data-line="32"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Rate limiting configuration with environment-specific tiers.&quot;&quot;&quot;</span>
+</span><span data-line="33">
+</span><span data-line="34">    <span class="n">enabled</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+</span><span data-line="35">        <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span data-line="36">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Enable/disable rate limiting globally&quot;</span>
+</span><span data-line="37">    <span class="p">)</span>
+</span><span data-line="38">
+</span><span data-line="39">    <span class="n">set_headers</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+</span><span data-line="40">        <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span data-line="41">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Include rate limit headers in responses&quot;</span>
+</span><span data-line="42">    <span class="p">)</span>
+</span><span data-line="43">
+</span><span data-line="44">    <span class="n">redis_namespace</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+</span><span data-line="45">        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;ratelimit&quot;</span><span class="p">,</span>
+</span><span data-line="46">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Redis key prefix for rate limit data&quot;</span>
+</span><span data-line="47">    <span class="p">)</span>
+</span><span data-line="48">
+</span><span data-line="49">    <span class="n">use_user_aware</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+</span><span data-line="50">        <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span data-line="51">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Use user-aware rate limiting (higher limits for authenticated users)&quot;</span>
+</span><span data-line="52">    <span class="p">)</span>
+</span><span data-line="53">
+</span><span data-line="54">    <span class="c1"># Tier Definitions - Anonymous Users</span>
+</span><span data-line="55">    <span class="n">anonymous_critical</span><span class="p">:</span> <span class="n">TierLimits</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+</span><span data-line="56">        <span class="n">default</span><span class="o">=</span><span class="n">TierLimits</span><span class="p">(</span><span class="n">requests</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">window_seconds</span><span class="o">=</span><span class="mi">60</span><span class="p">),</span>
+</span><span data-line="57">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Auth endpoints, search, submissions (5 req/min)&quot;</span>
+</span><span data-line="58">    <span class="p">)</span>
+</span><span data-line="59">
+</span><span data-line="60">    <span class="n">anonymous_high</span><span class="p">:</span> <span class="n">TierLimits</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+</span><span data-line="61">        <span class="n">default</span><span class="o">=</span><span class="n">TierLimits</span><span class="p">(</span><span class="n">requests</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">window_seconds</span><span class="o">=</span><span class="mi">60</span><span class="p">),</span>
+</span><span data-line="62">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Forms, job/event submissions (20 req/min)&quot;</span>
+</span><span data-line="63">    <span class="p">)</span>
+</span><span data-line="64">
+</span><span data-line="65">    <span class="n">anonymous_medium</span><span class="p">:</span> <span class="n">TierLimits</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+</span><span data-line="66">        <span class="n">default</span><span class="o">=</span><span class="n">TierLimits</span><span class="p">(</span><span class="n">requests</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">window_seconds</span><span class="o">=</span><span class="mi">60</span><span class="p">),</span>
+</span><span data-line="67">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Community posts, blog entries (60 req/min)&quot;</span>
+</span><span data-line="68">    <span class="p">)</span>
+</span><span data-line="69">
+</span><span data-line="70">    <span class="n">anonymous_low</span><span class="p">:</span> <span class="n">TierLimits</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+</span><span data-line="71">        <span class="n">default</span><span class="o">=</span><span class="n">TierLimits</span><span class="p">(</span><span class="n">requests</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span> <span class="n">window_seconds</span><span class="o">=</span><span class="mi">60</span><span class="p">),</span>
+</span><span data-line="72">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Read-only endpoints (120 req/min)&quot;</span>
+</span><span data-line="73">    <span class="p">)</span>
+</span><span data-line="74">
+</span><span data-line="75">    <span class="c1"># Tier Definitions - Authenticated Users</span>
+</span><span data-line="76">    <span class="n">authenticated_critical</span><span class="p">:</span> <span class="n">TierLimits</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+</span><span data-line="77">        <span class="n">default</span><span class="o">=</span><span class="n">TierLimits</span><span class="p">(</span><span class="n">requests</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">window_seconds</span><span class="o">=</span><span class="mi">60</span><span class="p">),</span>
+</span><span data-line="78">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Auth endpoints, search, submissions (20 req/min)&quot;</span>
+</span><span data-line="79">    <span class="p">)</span>
+</span><span data-line="80">
+</span><span data-line="81">    <span class="n">authenticated_high</span><span class="p">:</span> <span class="n">TierLimits</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+</span><span data-line="82">        <span class="n">default</span><span class="o">=</span><span class="n">TierLimits</span><span class="p">(</span><span class="n">requests</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">window_seconds</span><span class="o">=</span><span class="mi">60</span><span class="p">),</span>
+</span><span data-line="83">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Forms, job/event submissions (60 req/min)&quot;</span>
+</span><span data-line="84">    <span class="p">)</span>
+</span><span data-line="85">
+</span><span data-line="86">    <span class="n">authenticated_medium</span><span class="p">:</span> <span class="n">TierLimits</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+</span><span data-line="87">        <span class="n">default</span><span class="o">=</span><span class="n">TierLimits</span><span class="p">(</span><span class="n">requests</span><span class="o">=</span><span class="mi">180</span><span class="p">,</span> <span class="n">window_seconds</span><span class="o">=</span><span class="mi">60</span><span class="p">),</span>
+</span><span data-line="88">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Community posts, blog entries (180 req/min)&quot;</span>
+</span><span data-line="89">    <span class="p">)</span>
+</span><span data-line="90">
+</span><span data-line="91">    <span class="n">authenticated_low</span><span class="p">:</span> <span class="n">TierLimits</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+</span><span data-line="92">        <span class="n">default</span><span class="o">=</span><span class="n">TierLimits</span><span class="p">(</span><span class="n">requests</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">window_seconds</span><span class="o">=</span><span class="mi">60</span><span class="p">),</span>
+</span><span data-line="93">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Read-only endpoints (300 req/min)&quot;</span>
+</span><span data-line="94">    <span class="p">)</span>
+</span><span data-line="95">
+</span><span data-line="96">    <span class="c1"># Admin/Staff overrides</span>
+</span><span data-line="97">    <span class="n">staff_multiplier</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+</span><span data-line="98">        <span class="n">default</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span>
+</span><span data-line="99">        <span class="n">ge</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+</span><span data-line="100">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Multiplier for staff users (5x normal limits)&quot;</span>
+</span><span data-line="101">    <span class="p">)</span>
+</span><span data-line="102">
+</span><span data-line="103">    <span class="c1"># Development/Testing overrides</span>
+</span><span data-line="104">    <span class="n">dev_mode_unlimited</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+</span><span data-line="105">        <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+</span><span data-line="106">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Disable rate limiting in development (not recommended)&quot;</span>
+</span><span data-line="107">    <span class="p">)</span>
+</span><span data-line="108">
+</span><span data-line="109">    <span class="c1"># Exclude patterns</span>
+</span><span data-line="110">    <span class="n">exclude_paths</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+</span><span data-line="111">        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">[</span>
+</span><span data-line="112">            <span class="s2">&quot;/static/*&quot;</span><span class="p">,</span>
+</span><span data-line="113">            <span class="s2">&quot;/media/*&quot;</span><span class="p">,</span>
+</span><span data-line="114">            <span class="s2">&quot;/health&quot;</span><span class="p">,</span>
+</span><span data-line="115">            <span class="s2">&quot;/api/docs/*&quot;</span><span class="p">,</span>
+</span><span data-line="116">        <span class="p">],</span>
+</span><span data-line="117">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Paths excluded from rate limiting&quot;</span>
+</span><span data-line="118">    <span class="p">)</span>
+</span><span data-line="119">
+</span><span data-line="120">    <span class="nd">@classmethod</span>
+</span><span data-line="121">    <span class="k">def</span><span class="w"> </span><span class="nf">for_environment</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">env</span><span class="p">:</span> <span class="n">Environment</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;RateLimitConfig&quot;</span><span class="p">:</span>
+</span><span data-line="122"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create environment-specific rate limit configuration.&quot;&quot;&quot;</span>
+</span><span data-line="123">        <span class="k">if</span> <span class="n">env</span> <span class="o">==</span> <span class="n">Environment</span><span class="o">.</span><span class="n">DEV</span><span class="p">:</span>
+</span><span data-line="124">            <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+</span><span data-line="125">                <span class="n">enabled</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span data-line="126">                <span class="n">dev_mode_unlimited</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>  <span class="c1"># Keep enabled even in dev for testing</span>
+</span><span data-line="127">                <span class="n">anonymous_critical</span><span class="o">=</span><span class="n">TierLimits</span><span class="p">(</span><span class="n">requests</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">window_seconds</span><span class="o">=</span><span class="mi">60</span><span class="p">),</span>
+</span><span data-line="128">                <span class="n">anonymous_high</span><span class="o">=</span><span class="n">TierLimits</span><span class="p">(</span><span class="n">requests</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">window_seconds</span><span class="o">=</span><span class="mi">60</span><span class="p">),</span>
+</span><span data-line="129">                <span class="n">anonymous_medium</span><span class="o">=</span><span class="n">TierLimits</span><span class="p">(</span><span class="n">requests</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">window_seconds</span><span class="o">=</span><span class="mi">60</span><span class="p">),</span>
+</span><span data-line="130">                <span class="n">anonymous_low</span><span class="o">=</span><span class="n">TierLimits</span><span class="p">(</span><span class="n">requests</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">window_seconds</span><span class="o">=</span><span class="mi">60</span><span class="p">),</span>
+</span><span data-line="131">            <span class="p">)</span>
+</span><span data-line="132">        <span class="k">elif</span> <span class="n">env</span> <span class="o">==</span> <span class="n">Environment</span><span class="o">.</span><span class="n">STAGING</span><span class="p">:</span>
+</span><span data-line="133">            <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+</span><span data-line="134">                <span class="n">enabled</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span data-line="135">                <span class="n">anonymous_critical</span><span class="o">=</span><span class="n">TierLimits</span><span class="p">(</span><span class="n">requests</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">window_seconds</span><span class="o">=</span><span class="mi">60</span><span class="p">),</span>
+</span><span data-line="136">                <span class="n">anonymous_high</span><span class="o">=</span><span class="n">TierLimits</span><span class="p">(</span><span class="n">requests</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">window_seconds</span><span class="o">=</span><span class="mi">60</span><span class="p">),</span>
+</span><span data-line="137">                <span class="n">anonymous_medium</span><span class="o">=</span><span class="n">TierLimits</span><span class="p">(</span><span class="n">requests</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">window_seconds</span><span class="o">=</span><span class="mi">60</span><span class="p">),</span>
+</span><span data-line="138">                <span class="n">anonymous_low</span><span class="o">=</span><span class="n">TierLimits</span><span class="p">(</span><span class="n">requests</span><span class="o">=</span><span class="mi">180</span><span class="p">,</span> <span class="n">window_seconds</span><span class="o">=</span><span class="mi">60</span><span class="p">),</span>
+</span><span data-line="139">            <span class="p">)</span>
+</span><span data-line="140">        <span class="k">else</span><span class="p">:</span>  <span class="c1"># PROD</span>
+</span><span data-line="141">            <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+</span><span data-line="142">                <span class="n">enabled</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span data-line="143">                <span class="n">anonymous_critical</span><span class="o">=</span><span class="n">TierLimits</span><span class="p">(</span><span class="n">requests</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">window_seconds</span><span class="o">=</span><span class="mi">60</span><span class="p">),</span>
+</span><span data-line="144">                <span class="n">anonymous_high</span><span class="o">=</span><span class="n">TierLimits</span><span class="p">(</span><span class="n">requests</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">window_seconds</span><span class="o">=</span><span class="mi">60</span><span class="p">),</span>
+</span><span data-line="145">                <span class="n">anonymous_medium</span><span class="o">=</span><span class="n">TierLimits</span><span class="p">(</span><span class="n">requests</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">window_seconds</span><span class="o">=</span><span class="mi">60</span><span class="p">),</span>
+</span><span data-line="146">                <span class="n">anonymous_low</span><span class="o">=</span><span class="n">TierLimits</span><span class="p">(</span><span class="n">requests</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span> <span class="n">window_seconds</span><span class="o">=</span><span class="mi">60</span><span class="p">),</span>
+</span><span data-line="147">            <span class="p">)</span>
+</span><span data-line="148">
+</span><span data-line="149">    <span class="k">def</span><span class="w"> </span><span class="nf">get_tier_limits</span><span class="p">(</span>
+</span><span data-line="150">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="151">        <span class="n">tier</span><span class="p">:</span> <span class="n">RateLimitTier</span><span class="p">,</span>
+</span><span data-line="152">        <span class="n">is_authenticated</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+</span><span data-line="153">        <span class="n">is_staff</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+</span><span data-line="154">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TierLimits</span><span class="p">:</span>
+</span><span data-line="155"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get rate limits for a specific tier and user type.&quot;&quot;&quot;</span>
+</span><span data-line="156">        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dev_mode_unlimited</span><span class="p">:</span>
+</span><span data-line="157">            <span class="k">return</span> <span class="n">TierLimits</span><span class="p">(</span><span class="n">requests</span><span class="o">=</span><span class="mi">999999</span><span class="p">,</span> <span class="n">window_seconds</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+</span><span data-line="158">
+</span><span data-line="159">        <span class="k">if</span> <span class="n">tier</span> <span class="o">==</span> <span class="n">RateLimitTier</span><span class="o">.</span><span class="n">UNLIMITED</span><span class="p">:</span>
+</span><span data-line="160">            <span class="k">return</span> <span class="n">TierLimits</span><span class="p">(</span><span class="n">requests</span><span class="o">=</span><span class="mi">999999</span><span class="p">,</span> <span class="n">window_seconds</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+</span><span data-line="161">
+</span><span data-line="162">        <span class="c1"># Select base tier</span>
+</span><span data-line="163">        <span class="n">tier_map</span> <span class="o">=</span> <span class="p">{</span>
+</span><span data-line="164">            <span class="n">RateLimitTier</span><span class="o">.</span><span class="n">CRITICAL</span><span class="p">:</span> <span class="p">(</span>
+</span><span data-line="165">                <span class="bp">self</span><span class="o">.</span><span class="n">authenticated_critical</span> <span class="k">if</span> <span class="n">is_authenticated</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">anonymous_critical</span>
+</span><span data-line="166">            <span class="p">),</span>
+</span><span data-line="167">            <span class="n">RateLimitTier</span><span class="o">.</span><span class="n">HIGH</span><span class="p">:</span> <span class="p">(</span>
+</span><span data-line="168">                <span class="bp">self</span><span class="o">.</span><span class="n">authenticated_high</span> <span class="k">if</span> <span class="n">is_authenticated</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">anonymous_high</span>
+</span><span data-line="169">            <span class="p">),</span>
+</span><span data-line="170">            <span class="n">RateLimitTier</span><span class="o">.</span><span class="n">MEDIUM</span><span class="p">:</span> <span class="p">(</span>
+</span><span data-line="171">                <span class="bp">self</span><span class="o">.</span><span class="n">authenticated_medium</span> <span class="k">if</span> <span class="n">is_authenticated</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">anonymous_medium</span>
+</span><span data-line="172">            <span class="p">),</span>
+</span><span data-line="173">            <span class="n">RateLimitTier</span><span class="o">.</span><span class="n">LOW</span><span class="p">:</span> <span class="p">(</span>
+</span><span data-line="174">                <span class="bp">self</span><span class="o">.</span><span class="n">authenticated_low</span> <span class="k">if</span> <span class="n">is_authenticated</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">anonymous_low</span>
+</span><span data-line="175">            <span class="p">),</span>
+</span><span data-line="176">        <span class="p">}</span>
+</span><span data-line="177">
+</span><span data-line="178">        <span class="n">limits</span> <span class="o">=</span> <span class="n">tier_map</span><span class="p">[</span><span class="n">tier</span><span class="p">]</span>
+</span><span data-line="179">
+</span><span data-line="180">        <span class="c1"># Apply staff multiplier</span>
+</span><span data-line="181">        <span class="k">if</span> <span class="n">is_staff</span><span class="p">:</span>
+</span><span data-line="182">            <span class="k">return</span> <span class="n">TierLimits</span><span class="p">(</span>
+</span><span data-line="183">                <span class="n">requests</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">limits</span><span class="o">.</span><span class="n">requests</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">staff_multiplier</span><span class="p">),</span>
+</span><span data-line="184">                <span class="n">window_seconds</span><span class="o">=</span><span class="n">limits</span><span class="o">.</span><span class="n">window_seconds</span><span class="p">,</span>
+</span><span data-line="185">            <span class="p">)</span>
+</span><span data-line="186">
+</span><span data-line="187">        <span class="k">return</span> <span class="n">limits</span>
+</span><span data-line="188">
+</span><span data-line="189">
+</span><span data-line="190"><span class="k">def</span><span class="w"> </span><span class="nf">get_rate_limit_config</span><span class="p">(</span><span class="n">env</span><span class="p">:</span> <span class="n">Environment</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RateLimitConfig</span><span class="p">:</span>
+</span><span data-line="191"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Get rate limit configuration for the current environment.&quot;&quot;&quot;</span>
+</span><span data-line="192">    <span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">settings</span>
+</span><span data-line="193">
+</span><span data-line="194">    <span class="n">target_env</span> <span class="o">=</span> <span class="n">env</span> <span class="ow">or</span> <span class="n">settings</span><span class="o">.</span><span class="n">environment</span>
+</span><span data-line="195">    <span class="k">return</span> <span class="n">RateLimitConfig</span><span class="o">.</span><span class="n">for_environment</span><span class="p">(</span><span class="n">target_env</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="settings-integration">
+<h4>1.2 Settings Integration<a class="headerlink" href="#settings-integration" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># src/pydotorg/config.py (additions)</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="k">class</span><span class="w"> </span><span class="nc">Settings</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
+</span><span data-line="4">    <span class="c1"># ... existing fields ...</span>
+</span><span data-line="5">
+</span><span data-line="6">    <span class="c1"># Rate Limiting Configuration</span>
+</span><span data-line="7">    <span class="n">rate_limit_enabled</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+</span><span data-line="8">        <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span data-line="9">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Enable rate limiting middleware&quot;</span>
+</span><span data-line="10">    <span class="p">)</span>
+</span><span data-line="11">    <span class="n">rate_limit_redis_namespace</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+</span><span data-line="12">        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;ratelimit&quot;</span><span class="p">,</span>
+</span><span data-line="13">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Redis namespace for rate limit storage&quot;</span>
+</span><span data-line="14">    <span class="p">)</span>
+</span><span data-line="15">
+</span><span data-line="16">    <span class="c1"># Override specific tier limits via environment variables</span>
+</span><span data-line="17">    <span class="n">rate_limit_critical_requests</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+</span><span data-line="18">        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+</span><span data-line="19">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Override critical tier request limit&quot;</span>
+</span><span data-line="20">    <span class="p">)</span>
+</span><span data-line="21">    <span class="n">rate_limit_critical_window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+</span><span data-line="22">        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+</span><span data-line="23">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Override critical tier window (seconds)&quot;</span>
+</span><span data-line="24">    <span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="endpoint-classification">
+<h3>2. Endpoint Classification<a class="headerlink" href="#endpoint-classification" title="Link to this heading">¶</a></h3>
+<section id="tier-assignments-by-risk-profile">
+<h4>2.1 Tier Assignments by Risk Profile<a class="headerlink" href="#tier-assignments-by-risk-profile" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># src/pydotorg/core/ratelimit/tiers.py</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.core.ratelimit.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">RateLimitTier</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="c1"># CRITICAL: Auth, Search, Content Submissions (5 req/min anon, 20 req/min auth)</span>
+</span><span data-line="6"><span class="n">CRITICAL_ENDPOINTS</span> <span class="o">=</span> <span class="p">{</span>
+</span><span data-line="7">    <span class="c1"># Authentication (brute force protection)</span>
+</span><span data-line="8">    <span class="s2">&quot;/api/auth/register&quot;</span><span class="p">,</span>
+</span><span data-line="9">    <span class="s2">&quot;/api/auth/login&quot;</span><span class="p">,</span>
+</span><span data-line="10">    <span class="s2">&quot;/api/auth/reset-password&quot;</span><span class="p">,</span>
+</span><span data-line="11">    <span class="s2">&quot;/api/auth/verify-email&quot;</span><span class="p">,</span>
+</span><span data-line="12">    <span class="s2">&quot;/api/auth/forgot-password&quot;</span><span class="p">,</span>
+</span><span data-line="13">
+</span><span data-line="14">    <span class="c1"># Search (expensive queries)</span>
+</span><span data-line="15">    <span class="s2">&quot;/api/v1/search/&quot;</span><span class="p">,</span>
+</span><span data-line="16">    <span class="s2">&quot;/search/results&quot;</span><span class="p">,</span>
+</span><span data-line="17">    <span class="s2">&quot;/api/v1/search/autocomplete&quot;</span><span class="p">,</span>
+</span><span data-line="18">
+</span><span data-line="19">    <span class="c1"># Admin authentication</span>
+</span><span data-line="20">    <span class="s2">&quot;/admin/api/auth/*&quot;</span><span class="p">,</span>
+</span><span data-line="21"><span class="p">}</span>
+</span><span data-line="22">
+</span><span data-line="23"><span class="c1"># HIGH: Forms, Job/Event/Sponsor Submissions (20 req/min anon, 60 req/min auth)</span>
+</span><span data-line="24"><span class="n">HIGH_ENDPOINTS</span> <span class="o">=</span> <span class="p">{</span>
+</span><span data-line="25">    <span class="c1"># Job submissions</span>
+</span><span data-line="26">    <span class="s2">&quot;/api/jobs&quot;</span><span class="p">,</span>
+</span><span data-line="27">    <span class="s2">&quot;/api/jobs/*/apply&quot;</span><span class="p">,</span>
+</span><span data-line="28">
+</span><span data-line="29">    <span class="c1"># Event submissions</span>
+</span><span data-line="30">    <span class="s2">&quot;/api/events&quot;</span><span class="p">,</span>
+</span><span data-line="31">    <span class="s2">&quot;/api/events/*/register&quot;</span><span class="p">,</span>
+</span><span data-line="32">
+</span><span data-line="33">    <span class="c1"># Sponsor inquiries</span>
+</span><span data-line="34">    <span class="s2">&quot;/api/sponsors/inquiry&quot;</span><span class="p">,</span>
+</span><span data-line="35">
+</span><span data-line="36">    <span class="c1"># Feed fetching</span>
+</span><span data-line="37">    <span class="s2">&quot;/api/feeds&quot;</span><span class="p">,</span>
+</span><span data-line="38">    <span class="s2">&quot;/api/feeds/aggregate&quot;</span><span class="p">,</span>
+</span><span data-line="39">
+</span><span data-line="40">    <span class="c1"># User profile updates</span>
+</span><span data-line="41">    <span class="s2">&quot;/api/users/*/profile&quot;</span><span class="p">,</span>
+</span><span data-line="42">    <span class="s2">&quot;/api/users/*/password&quot;</span><span class="p">,</span>
+</span><span data-line="43"><span class="p">}</span>
+</span><span data-line="44">
+</span><span data-line="45"><span class="c1"># MEDIUM: Community Content, Blog Entries (60 req/min anon, 180 req/min auth)</span>
+</span><span data-line="46"><span class="n">MEDIUM_ENDPOINTS</span> <span class="o">=</span> <span class="p">{</span>
+</span><span data-line="47">    <span class="c1"># Community posts</span>
+</span><span data-line="48">    <span class="s2">&quot;/api/community/posts&quot;</span><span class="p">,</span>
+</span><span data-line="49">    <span class="s2">&quot;/api/community/photos&quot;</span><span class="p">,</span>
+</span><span data-line="50">    <span class="s2">&quot;/api/community/videos&quot;</span><span class="p">,</span>
+</span><span data-line="51">
+</span><span data-line="52">    <span class="c1"># Blog entries</span>
+</span><span data-line="53">    <span class="s2">&quot;/api/blogs/entries&quot;</span><span class="p">,</span>
+</span><span data-line="54">
+</span><span data-line="55">    <span class="c1"># Comments</span>
+</span><span data-line="56">    <span class="s2">&quot;/api/jobs/*/comments&quot;</span><span class="p">,</span>
+</span><span data-line="57">
+</span><span data-line="58">    <span class="c1"># File uploads</span>
+</span><span data-line="59">    <span class="s2">&quot;/api/pages/*/images&quot;</span><span class="p">,</span>
+</span><span data-line="60">    <span class="s2">&quot;/api/pages/*/documents&quot;</span><span class="p">,</span>
+</span><span data-line="61"><span class="p">}</span>
+</span><span data-line="62">
+</span><span data-line="63"><span class="c1"># LOW: Read-Only Operations (120 req/min anon, 300 req/min auth)</span>
+</span><span data-line="64"><span class="n">LOW_ENDPOINTS</span> <span class="o">=</span> <span class="p">{</span>
+</span><span data-line="65">    <span class="c1"># All GET requests not in other tiers</span>
+</span><span data-line="66">    <span class="s2">&quot;GET:/api/*&quot;</span><span class="p">,</span>
+</span><span data-line="67">
+</span><span data-line="68">    <span class="c1"># Public pages</span>
+</span><span data-line="69">    <span class="s2">&quot;/&quot;</span><span class="p">,</span>
+</span><span data-line="70">    <span class="s2">&quot;/about&quot;</span><span class="p">,</span>
+</span><span data-line="71">    <span class="s2">&quot;/docs/*&quot;</span><span class="p">,</span>
+</span><span data-line="72">    <span class="s2">&quot;/downloads&quot;</span><span class="p">,</span>
+</span><span data-line="73">    <span class="s2">&quot;/community&quot;</span><span class="p">,</span>
+</span><span data-line="74">    <span class="s2">&quot;/success-stories&quot;</span><span class="p">,</span>
+</span><span data-line="75"><span class="p">}</span>
+</span><span data-line="76">
+</span><span data-line="77"><span class="c1"># UNLIMITED: Health checks, static assets</span>
+</span><span data-line="78"><span class="n">UNLIMITED_ENDPOINTS</span> <span class="o">=</span> <span class="p">{</span>
+</span><span data-line="79">    <span class="s2">&quot;/health&quot;</span><span class="p">,</span>
+</span><span data-line="80">    <span class="s2">&quot;/static/*&quot;</span><span class="p">,</span>
+</span><span data-line="81">    <span class="s2">&quot;/media/*&quot;</span><span class="p">,</span>
+</span><span data-line="82">    <span class="s2">&quot;/api/docs/*&quot;</span><span class="p">,</span>
+</span><span data-line="83">    <span class="s2">&quot;/api/openapi.json&quot;</span><span class="p">,</span>
+</span><span data-line="84"><span class="p">}</span>
+</span><span data-line="85">
+</span><span data-line="86">
+</span><span data-line="87"><span class="k">def</span><span class="w"> </span><span class="nf">get_endpoint_tier</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RateLimitTier</span><span class="p">:</span>
+</span><span data-line="88"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Determine rate limit tier for an endpoint.</span>
+</span><span data-line="89">
+</span><span data-line="90"><span class="sd">    Args:</span>
+</span><span data-line="91"><span class="sd">        path: Request path</span>
+</span><span data-line="92"><span class="sd">        method: HTTP method</span>
+</span><span data-line="93">
+</span><span data-line="94"><span class="sd">    Returns:</span>
+</span><span data-line="95"><span class="sd">        Rate limit tier classification</span>
+</span><span data-line="96"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="97">    <span class="kn">from</span><span class="w"> </span><span class="nn">fnmatch</span><span class="w"> </span><span class="kn">import</span> <span class="n">fnmatch</span>
+</span><span data-line="98">
+</span><span data-line="99">    <span class="c1"># Check unlimited first</span>
+</span><span data-line="100">    <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">UNLIMITED_ENDPOINTS</span><span class="p">:</span>
+</span><span data-line="101">        <span class="k">if</span> <span class="n">fnmatch</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">pattern</span><span class="p">):</span>
+</span><span data-line="102">            <span class="k">return</span> <span class="n">RateLimitTier</span><span class="o">.</span><span class="n">UNLIMITED</span>
+</span><span data-line="103">
+</span><span data-line="104">    <span class="c1"># Check critical</span>
+</span><span data-line="105">    <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">CRITICAL_ENDPOINTS</span><span class="p">:</span>
+</span><span data-line="106">        <span class="k">if</span> <span class="n">fnmatch</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">pattern</span><span class="p">):</span>
+</span><span data-line="107">            <span class="k">return</span> <span class="n">RateLimitTier</span><span class="o">.</span><span class="n">CRITICAL</span>
+</span><span data-line="108">
+</span><span data-line="109">    <span class="c1"># Check high</span>
+</span><span data-line="110">    <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">HIGH_ENDPOINTS</span><span class="p">:</span>
+</span><span data-line="111">        <span class="k">if</span> <span class="n">fnmatch</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">pattern</span><span class="p">):</span>
+</span><span data-line="112">            <span class="k">return</span> <span class="n">RateLimitTier</span><span class="o">.</span><span class="n">HIGH</span>
+</span><span data-line="113">
+</span><span data-line="114">    <span class="c1"># Check medium</span>
+</span><span data-line="115">    <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">MEDIUM_ENDPOINTS</span><span class="p">:</span>
+</span><span data-line="116">        <span class="k">if</span> <span class="n">fnmatch</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">pattern</span><span class="p">):</span>
+</span><span data-line="117">            <span class="k">return</span> <span class="n">RateLimitTier</span><span class="o">.</span><span class="n">MEDIUM</span>
+</span><span data-line="118">
+</span><span data-line="119">    <span class="c1"># Check low (with method prefix)</span>
+</span><span data-line="120">    <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">LOW_ENDPOINTS</span><span class="p">:</span>
+</span><span data-line="121">        <span class="k">if</span> <span class="s2">&quot;:&quot;</span> <span class="ow">in</span> <span class="n">pattern</span><span class="p">:</span>
+</span><span data-line="122">            <span class="n">pattern_method</span><span class="p">,</span> <span class="n">pattern_path</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span><span data-line="123">            <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="n">pattern_method</span> <span class="ow">and</span> <span class="n">fnmatch</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">pattern_path</span><span class="p">):</span>
+</span><span data-line="124">                <span class="k">return</span> <span class="n">RateLimitTier</span><span class="o">.</span><span class="n">LOW</span>
+</span><span data-line="125">        <span class="k">elif</span> <span class="n">fnmatch</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">pattern</span><span class="p">):</span>
+</span><span data-line="126">            <span class="k">return</span> <span class="n">RateLimitTier</span><span class="o">.</span><span class="n">LOW</span>
+</span><span data-line="127">
+</span><span data-line="128">    <span class="c1"># Default to MEDIUM for safety</span>
+</span><span data-line="129">    <span class="k">return</span> <span class="n">RateLimitTier</span><span class="o">.</span><span class="n">MEDIUM</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="user-aware-identifier-function">
+<h3>3. User-Aware Identifier Function<a class="headerlink" href="#user-aware-identifier-function" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># src/pydotorg/core/ratelimit/identifier.py</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">litestar</span><span class="w"> </span><span class="kn">import</span> <span class="n">Request</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.core.logging</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_logger</span>
+</span><span data-line="6"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.domains.users.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">User</span>
+</span><span data-line="7">
+</span><span data-line="8"><span class="n">logger</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+</span><span data-line="9">
+</span><span data-line="10">
+</span><span data-line="11"><span class="k">def</span><span class="w"> </span><span class="nf">get_rate_limit_identifier</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span data-line="12"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate rate limit identifier based on authentication status.</span>
+</span><span data-line="13">
+</span><span data-line="14"><span class="sd">    Strategy:</span>
+</span><span data-line="15"><span class="sd">    1. Authenticated users: Use user_id (higher limits)</span>
+</span><span data-line="16"><span class="sd">    2. Anonymous users: Use IP address (lower limits)</span>
+</span><span data-line="17"><span class="sd">    3. Admin/Staff: Apply multiplier to limits</span>
+</span><span data-line="18">
+</span><span data-line="19"><span class="sd">    Args:</span>
+</span><span data-line="20"><span class="sd">        request: Litestar request object</span>
+</span><span data-line="21">
+</span><span data-line="22"><span class="sd">    Returns:</span>
+</span><span data-line="23"><span class="sd">        Unique identifier string for rate limiting</span>
+</span><span data-line="24"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="25">    <span class="n">user</span><span class="p">:</span> <span class="n">User</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
+</span><span data-line="26">
+</span><span data-line="27">    <span class="k">if</span> <span class="n">user</span> <span class="ow">and</span> <span class="n">user</span><span class="o">.</span><span class="n">is_active</span><span class="p">:</span>
+</span><span data-line="28">        <span class="c1"># Authenticated user - use user ID</span>
+</span><span data-line="29">        <span class="n">identifier</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;user:</span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span data-line="30">
+</span><span data-line="31">        <span class="c1"># Tag staff for special handling</span>
+</span><span data-line="32">        <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">is_staff</span> <span class="ow">or</span> <span class="n">user</span><span class="o">.</span><span class="n">is_superuser</span><span class="p">:</span>
+</span><span data-line="33">            <span class="n">identifier</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;staff:</span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span data-line="34">
+</span><span data-line="35">        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+</span><span data-line="36">            <span class="s2">&quot;Rate limit identifier&quot;</span><span class="p">,</span>
+</span><span data-line="37">            <span class="n">identifier</span><span class="o">=</span><span class="n">identifier</span><span class="p">,</span>
+</span><span data-line="38">            <span class="n">user_id</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">),</span>
+</span><span data-line="39">            <span class="n">is_staff</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">is_staff</span><span class="p">,</span>
+</span><span data-line="40">        <span class="p">)</span>
+</span><span data-line="41">        <span class="k">return</span> <span class="n">identifier</span>
+</span><span data-line="42">
+</span><span data-line="43">    <span class="c1"># Anonymous user - use IP address with fallback</span>
+</span><span data-line="44">    <span class="n">ip_address</span> <span class="o">=</span> <span class="p">(</span>
+</span><span data-line="45">        <span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;X-Forwarded-For&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+</span><span data-line="46">        <span class="ow">or</span> <span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;X-Real-IP&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+</span><span data-line="47">        <span class="ow">or</span> <span class="n">request</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">host</span>
+</span><span data-line="48">        <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">client</span>
+</span><span data-line="49">        <span class="k">else</span> <span class="s2">&quot;unknown&quot;</span>
+</span><span data-line="50">    <span class="p">)</span>
+</span><span data-line="51">
+</span><span data-line="52">    <span class="n">identifier</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;ip:</span><span class="si">{</span><span class="n">ip_address</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span data-line="53">    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Rate limit identifier&quot;</span><span class="p">,</span> <span class="n">identifier</span><span class="o">=</span><span class="n">identifier</span><span class="p">,</span> <span class="n">ip</span><span class="o">=</span><span class="n">ip_address</span><span class="p">)</span>
+</span><span data-line="54">
+</span><span data-line="55">    <span class="k">return</span> <span class="n">identifier</span>
+</span><span data-line="56">
+</span><span data-line="57">
+</span><span data-line="58"><span class="k">def</span><span class="w"> </span><span class="nf">should_check_rate_limit</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span data-line="59"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Determine if rate limiting should be checked for this request.</span>
+</span><span data-line="60">
+</span><span data-line="61"><span class="sd">    Allows bypassing rate limits for:</span>
+</span><span data-line="62"><span class="sd">    - Health checks</span>
+</span><span data-line="63"><span class="sd">    - Static assets</span>
+</span><span data-line="64"><span class="sd">    - Specific user groups (e.g., trusted partners)</span>
+</span><span data-line="65">
+</span><span data-line="66"><span class="sd">    Args:</span>
+</span><span data-line="67"><span class="sd">        request: Litestar request object</span>
+</span><span data-line="68">
+</span><span data-line="69"><span class="sd">    Returns:</span>
+</span><span data-line="70"><span class="sd">        True if rate limiting should be applied</span>
+</span><span data-line="71"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="72">    <span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.core.ratelimit.tiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_endpoint_tier</span><span class="p">,</span> <span class="n">RateLimitTier</span>
+</span><span data-line="73">
+</span><span data-line="74">    <span class="n">tier</span> <span class="o">=</span> <span class="n">get_endpoint_tier</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span><span class="p">)</span>
+</span><span data-line="75">
+</span><span data-line="76">    <span class="c1"># Don&#39;t rate limit unlimited tier</span>
+</span><span data-line="77">    <span class="k">if</span> <span class="n">tier</span> <span class="o">==</span> <span class="n">RateLimitTier</span><span class="o">.</span><span class="n">UNLIMITED</span><span class="p">:</span>
+</span><span data-line="78">        <span class="k">return</span> <span class="kc">False</span>
+</span><span data-line="79">
+</span><span data-line="80">    <span class="c1"># Check for bypass header (for internal services)</span>
+</span><span data-line="81">    <span class="n">bypass_token</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;X-RateLimit-Bypass&quot;</span><span class="p">)</span>
+</span><span data-line="82">    <span class="k">if</span> <span class="n">bypass_token</span><span class="p">:</span>
+</span><span data-line="83">        <span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">settings</span>
+</span><span data-line="84">        <span class="k">if</span> <span class="n">bypass_token</span> <span class="o">==</span> <span class="n">settings</span><span class="o">.</span><span class="n">secret_key</span><span class="p">:</span>  <span class="c1"># In production, use separate bypass key</span>
+</span><span data-line="85">            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+</span><span data-line="86">                <span class="s2">&quot;Rate limit bypassed via header&quot;</span><span class="p">,</span>
+</span><span data-line="87">                <span class="n">path</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="o">.</span><span class="n">path</span><span class="p">,</span>
+</span><span data-line="88">                <span class="n">ip</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">host</span> <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">client</span> <span class="k">else</span> <span class="s2">&quot;unknown&quot;</span><span class="p">,</span>
+</span><span data-line="89">            <span class="p">)</span>
+</span><span data-line="90">            <span class="k">return</span> <span class="kc">False</span>
+</span><span data-line="91">
+</span><span data-line="92">    <span class="k">return</span> <span class="kc">True</span>
+</span></pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="redis-store-integration">
+<h3>4. Redis Store Integration<a class="headerlink" href="#redis-store-integration" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># src/pydotorg/core/ratelimit/store.py</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">litestar.stores.redis</span><span class="w"> </span><span class="kn">import</span> <span class="n">RedisStore</span>
+</span><span data-line="4"><span class="kn">from</span><span class="w"> </span><span class="nn">redis.asyncio</span><span class="w"> </span><span class="kn">import</span> <span class="n">Redis</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">settings</span>
+</span><span data-line="7"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.core.logging</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_logger</span>
+</span><span data-line="8">
+</span><span data-line="9"><span class="n">logger</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+</span><span data-line="10">
+</span><span data-line="11">
+</span><span data-line="12"><span class="k">def</span><span class="w"> </span><span class="nf">create_rate_limit_store</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">RedisStore</span><span class="p">:</span>
+</span><span data-line="13"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Create Redis store for rate limiting.</span>
+</span><span data-line="14">
+</span><span data-line="15"><span class="sd">    Returns:</span>
+</span><span data-line="16"><span class="sd">        Configured RedisStore instance</span>
+</span><span data-line="17"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="18">    <span class="n">redis_client</span> <span class="o">=</span> <span class="n">Redis</span><span class="o">.</span><span class="n">from_url</span><span class="p">(</span>
+</span><span data-line="19">        <span class="n">settings</span><span class="o">.</span><span class="n">redis_url</span><span class="p">,</span>
+</span><span data-line="20">        <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">,</span>
+</span><span data-line="21">        <span class="n">decode_responses</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span data-line="22">        <span class="n">socket_connect_timeout</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+</span><span data-line="23">        <span class="n">socket_keepalive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span data-line="24">    <span class="p">)</span>
+</span><span data-line="25">
+</span><span data-line="26">    <span class="n">store</span> <span class="o">=</span> <span class="n">RedisStore</span><span class="p">(</span>
+</span><span data-line="27">        <span class="n">redis</span><span class="o">=</span><span class="n">redis_client</span><span class="p">,</span>
+</span><span data-line="28">        <span class="n">namespace</span><span class="o">=</span><span class="n">settings</span><span class="o">.</span><span class="n">rate_limit_redis_namespace</span><span class="p">,</span>
+</span><span data-line="29">        <span class="n">handle_client_shutdown</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span data-line="30">    <span class="p">)</span>
+</span><span data-line="31">
+</span><span data-line="32">    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+</span><span data-line="33">        <span class="s2">&quot;Rate limit Redis store created&quot;</span><span class="p">,</span>
+</span><span data-line="34">        <span class="n">redis_url</span><span class="o">=</span><span class="n">settings</span><span class="o">.</span><span class="n">redis_url</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;@&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>  <span class="c1"># Hide credentials</span>
+</span><span data-line="35">        <span class="n">namespace</span><span class="o">=</span><span class="n">settings</span><span class="o">.</span><span class="n">rate_limit_redis_namespace</span><span class="p">,</span>
+</span><span data-line="36">    <span class="p">)</span>
+</span><span data-line="37">
+</span><span data-line="38">    <span class="k">return</span> <span class="n">store</span>
+</span></pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="custom-429-exception-handler">
+<h3>5. Custom 429 Exception Handler<a class="headerlink" href="#custom-429-exception-handler" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># src/pydotorg/core/ratelimit/exceptions.py</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+</span><span data-line="4"><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="kn">from</span><span class="w"> </span><span class="nn">litestar.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">TooManyRequestsException</span>
+</span><span data-line="7"><span class="kn">from</span><span class="w"> </span><span class="nn">litestar.response</span><span class="w"> </span><span class="kn">import</span> <span class="n">Response</span><span class="p">,</span> <span class="n">Template</span>
+</span><span data-line="8"><span class="kn">from</span><span class="w"> </span><span class="nn">litestar.status_codes</span><span class="w"> </span><span class="kn">import</span> <span class="n">HTTP_429_TOO_MANY_REQUESTS</span>
+</span><span data-line="9">
+</span><span data-line="10"><span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+</span><span data-line="11">    <span class="kn">from</span><span class="w"> </span><span class="nn">litestar</span><span class="w"> </span><span class="kn">import</span> <span class="n">Request</span>
+</span><span data-line="12">
+</span><span data-line="13"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.core.logging</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_logger</span>
+</span><span data-line="14">
+</span><span data-line="15"><span class="n">logger</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+</span><span data-line="16">
+</span><span data-line="17">
+</span><span data-line="18"><span class="k">def</span><span class="w"> </span><span class="nf">rate_limit_exception_handler</span><span class="p">(</span>
+</span><span data-line="19">    <span class="n">request</span><span class="p">:</span> <span class="s2">&quot;Request&quot;</span><span class="p">,</span>
+</span><span data-line="20">    <span class="n">exc</span><span class="p">:</span> <span class="n">TooManyRequestsException</span><span class="p">,</span>
+</span><span data-line="21"><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span> <span class="o">|</span> <span class="n">Template</span><span class="p">:</span>
+</span><span data-line="22"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Handle 429 Too Many Requests with Retry-After header.</span>
+</span><span data-line="23">
+</span><span data-line="24"><span class="sd">    Features:</span>
+</span><span data-line="25"><span class="sd">    - Retry-After header with seconds until reset</span>
+</span><span data-line="26"><span class="sd">    - HTMX-aware toast notifications</span>
+</span><span data-line="27"><span class="sd">    - User-friendly error messages</span>
+</span><span data-line="28"><span class="sd">    - Logging for monitoring</span>
+</span><span data-line="29">
+</span><span data-line="30"><span class="sd">    Args:</span>
+</span><span data-line="31"><span class="sd">        request: Litestar request object</span>
+</span><span data-line="32"><span class="sd">        exc: Rate limit exception</span>
+</span><span data-line="33">
+</span><span data-line="34"><span class="sd">    Returns:</span>
+</span><span data-line="35"><span class="sd">        Response or Template with appropriate error messaging</span>
+</span><span data-line="36"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="37">    <span class="n">retry_after</span> <span class="o">=</span> <span class="mi">60</span>  <span class="c1"># Default to 60 seconds</span>
+</span><span data-line="38">
+</span><span data-line="39">    <span class="c1"># Extract retry-after from exception if available</span>
+</span><span data-line="40">    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">exc</span><span class="p">,</span> <span class="s2">&quot;extra&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">exc</span><span class="o">.</span><span class="n">extra</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+</span><span data-line="41">        <span class="n">retry_after</span> <span class="o">=</span> <span class="n">exc</span><span class="o">.</span><span class="n">extra</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;retry_after&quot;</span><span class="p">,</span> <span class="n">retry_after</span><span class="p">)</span>
+</span><span data-line="42">
+</span><span data-line="43">    <span class="n">message</span> <span class="o">=</span> <span class="p">(</span>
+</span><span data-line="44">        <span class="sa">f</span><span class="s2">&quot;Rate limit exceeded. Please try again in </span><span class="si">{</span><span class="n">retry_after</span><span class="si">}</span><span class="s2"> seconds. &quot;</span>
+</span><span data-line="45">        <span class="s2">&quot;Authenticated users have higher rate limits.&quot;</span>
+</span><span data-line="46">    <span class="p">)</span>
+</span><span data-line="47">
+</span><span data-line="48">    <span class="c1"># Log rate limit hit</span>
+</span><span data-line="49">    <span class="n">user_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span> <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span> <span class="k">else</span> <span class="s2">&quot;anonymous&quot;</span>
+</span><span data-line="50">    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+</span><span data-line="51">        <span class="s2">&quot;Rate limit exceeded&quot;</span><span class="p">,</span>
+</span><span data-line="52">        <span class="n">path</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="o">.</span><span class="n">path</span><span class="p">,</span>
+</span><span data-line="53">        <span class="n">method</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">method</span><span class="p">,</span>
+</span><span data-line="54">        <span class="n">user_id</span><span class="o">=</span><span class="n">user_id</span><span class="p">,</span>
+</span><span data-line="55">        <span class="n">ip</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">host</span> <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">client</span> <span class="k">else</span> <span class="s2">&quot;unknown&quot;</span><span class="p">,</span>
+</span><span data-line="56">        <span class="n">retry_after</span><span class="o">=</span><span class="n">retry_after</span><span class="p">,</span>
+</span><span data-line="57">    <span class="p">)</span>
+</span><span data-line="58">
+</span><span data-line="59">    <span class="c1"># HTMX request - return toast notification</span>
+</span><span data-line="60">    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;HX-Request&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span><span class="p">:</span>
+</span><span data-line="61">        <span class="n">toast_event</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
+</span><span data-line="62">            <span class="s2">&quot;showToast&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span data-line="63">                <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="n">message</span><span class="p">,</span>
+</span><span data-line="64">                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;warning&quot;</span><span class="p">,</span>
+</span><span data-line="65">            <span class="p">}</span>
+</span><span data-line="66">        <span class="p">})</span>
+</span><span data-line="67">        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span>
+</span><span data-line="68">            <span class="n">content</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+</span><span data-line="69">            <span class="n">status_code</span><span class="o">=</span><span class="n">HTTP_429_TOO_MANY_REQUESTS</span><span class="p">,</span>
+</span><span data-line="70">            <span class="n">headers</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="71">                <span class="s2">&quot;Retry-After&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">retry_after</span><span class="p">),</span>
+</span><span data-line="72">                <span class="s2">&quot;HX-Trigger&quot;</span><span class="p">:</span> <span class="n">toast_event</span><span class="p">,</span>
+</span><span data-line="73">                <span class="s2">&quot;HX-Reswap&quot;</span><span class="p">:</span> <span class="s2">&quot;none&quot;</span><span class="p">,</span>
+</span><span data-line="74">            <span class="p">},</span>
+</span><span data-line="75">        <span class="p">)</span>
+</span><span data-line="76">
+</span><span data-line="77">    <span class="c1"># API request - return JSON</span>
+</span><span data-line="78">    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;/api/&quot;</span><span class="p">):</span>
+</span><span data-line="79">        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span>
+</span><span data-line="80">            <span class="n">content</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="81">                <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="s2">&quot;rate_limit_exceeded&quot;</span><span class="p">,</span>
+</span><span data-line="82">                <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="n">message</span><span class="p">,</span>
+</span><span data-line="83">                <span class="s2">&quot;retry_after&quot;</span><span class="p">:</span> <span class="n">retry_after</span><span class="p">,</span>
+</span><span data-line="84">            <span class="p">},</span>
+</span><span data-line="85">            <span class="n">status_code</span><span class="o">=</span><span class="n">HTTP_429_TOO_MANY_REQUESTS</span><span class="p">,</span>
+</span><span data-line="86">            <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Retry-After&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">retry_after</span><span class="p">)},</span>
+</span><span data-line="87">        <span class="p">)</span>
+</span><span data-line="88">
+</span><span data-line="89">    <span class="c1"># Regular web request - return template</span>
+</span><span data-line="90">    <span class="k">return</span> <span class="n">Template</span><span class="p">(</span>
+</span><span data-line="91">        <span class="n">template_name</span><span class="o">=</span><span class="s2">&quot;errors/429.html.jinja2&quot;</span><span class="p">,</span>
+</span><span data-line="92">        <span class="n">context</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="93">            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Too Many Requests&quot;</span><span class="p">,</span>
+</span><span data-line="94">            <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="n">message</span><span class="p">,</span>
+</span><span data-line="95">            <span class="s2">&quot;retry_after&quot;</span><span class="p">:</span> <span class="n">retry_after</span><span class="p">,</span>
+</span><span data-line="96">        <span class="p">},</span>
+</span><span data-line="97">        <span class="n">status_code</span><span class="o">=</span><span class="n">HTTP_429_TOO_MANY_REQUESTS</span><span class="p">,</span>
+</span><span data-line="98">        <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Retry-After&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">retry_after</span><span class="p">)},</span>
+</span><span data-line="99">    <span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="main-application-integration">
+<h3>6. Main Application Integration<a class="headerlink" href="#main-application-integration" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># src/pydotorg/core/ratelimit/__init__.py</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="sd">&quot;&quot;&quot;Rate limiting module for pydotorg.&quot;&quot;&quot;</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.core.ratelimit.config</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+</span><span data-line="6">    <span class="n">RateLimitConfig</span><span class="p">,</span>
+</span><span data-line="7">    <span class="n">RateLimitTier</span><span class="p">,</span>
+</span><span data-line="8">    <span class="n">TierLimits</span><span class="p">,</span>
+</span><span data-line="9">    <span class="n">get_rate_limit_config</span><span class="p">,</span>
+</span><span data-line="10"><span class="p">)</span>
+</span><span data-line="11"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.core.ratelimit.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">rate_limit_exception_handler</span>
+</span><span data-line="12"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.core.ratelimit.identifier</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+</span><span data-line="13">    <span class="n">get_rate_limit_identifier</span><span class="p">,</span>
+</span><span data-line="14">    <span class="n">should_check_rate_limit</span><span class="p">,</span>
+</span><span data-line="15"><span class="p">)</span>
+</span><span data-line="16"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.core.ratelimit.middleware</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_rate_limit_middleware</span>
+</span><span data-line="17"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.core.ratelimit.store</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_rate_limit_store</span>
+</span><span data-line="18"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.core.ratelimit.tiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_endpoint_tier</span>
+</span><span data-line="19">
+</span><span data-line="20"><span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+</span><span data-line="21">    <span class="s2">&quot;RateLimitConfig&quot;</span><span class="p">,</span>
+</span><span data-line="22">    <span class="s2">&quot;RateLimitTier&quot;</span><span class="p">,</span>
+</span><span data-line="23">    <span class="s2">&quot;TierLimits&quot;</span><span class="p">,</span>
+</span><span data-line="24">    <span class="s2">&quot;get_rate_limit_config&quot;</span><span class="p">,</span>
+</span><span data-line="25">    <span class="s2">&quot;rate_limit_exception_handler&quot;</span><span class="p">,</span>
+</span><span data-line="26">    <span class="s2">&quot;get_rate_limit_identifier&quot;</span><span class="p">,</span>
+</span><span data-line="27">    <span class="s2">&quot;should_check_rate_limit&quot;</span><span class="p">,</span>
+</span><span data-line="28">    <span class="s2">&quot;create_rate_limit_middleware&quot;</span><span class="p">,</span>
+</span><span data-line="29">    <span class="s2">&quot;create_rate_limit_store&quot;</span><span class="p">,</span>
+</span><span data-line="30">    <span class="s2">&quot;get_endpoint_tier&quot;</span><span class="p">,</span>
+</span><span data-line="31"><span class="p">]</span>
+</span></pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># src/pydotorg/core/ratelimit/middleware.py</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="sd">&quot;&quot;&quot;Rate limiting middleware configuration.&quot;&quot;&quot;</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="kn">from</span><span class="w"> </span><span class="nn">litestar.middleware.rate_limit</span><span class="w"> </span><span class="kn">import</span> <span class="n">RateLimitConfig</span> <span class="k">as</span> <span class="n">LitestarRateLimitConfig</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">settings</span>
+</span><span data-line="8"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.core.logging</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_logger</span>
+</span><span data-line="9"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.core.ratelimit.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_rate_limit_config</span>
+</span><span data-line="10"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.core.ratelimit.identifier</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+</span><span data-line="11">    <span class="n">get_rate_limit_identifier</span><span class="p">,</span>
+</span><span data-line="12">    <span class="n">should_check_rate_limit</span><span class="p">,</span>
+</span><span data-line="13"><span class="p">)</span>
+</span><span data-line="14">
+</span><span data-line="15"><span class="n">logger</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+</span><span data-line="16">
+</span><span data-line="17">
+</span><span data-line="18"><span class="k">def</span><span class="w"> </span><span class="nf">create_rate_limit_middleware</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">LitestarRateLimitConfig</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="19"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Create rate limiting middleware configuration.</span>
+</span><span data-line="20">
+</span><span data-line="21"><span class="sd">    Returns:</span>
+</span><span data-line="22"><span class="sd">        Litestar RateLimitConfig or None if disabled</span>
+</span><span data-line="23"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="24">    <span class="n">config</span> <span class="o">=</span> <span class="n">get_rate_limit_config</span><span class="p">()</span>
+</span><span data-line="25">
+</span><span data-line="26">    <span class="k">if</span> <span class="ow">not</span> <span class="n">config</span><span class="o">.</span><span class="n">enabled</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">settings</span><span class="o">.</span><span class="n">rate_limit_enabled</span><span class="p">:</span>
+</span><span data-line="27">        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Rate limiting is DISABLED&quot;</span><span class="p">)</span>
+</span><span data-line="28">        <span class="k">return</span> <span class="kc">None</span>
+</span><span data-line="29">
+</span><span data-line="30">    <span class="c1"># Use the lowest tier (anonymous_low) as baseline</span>
+</span><span data-line="31">    <span class="c1"># Dynamic per-endpoint limits handled by check_throttle_handler</span>
+</span><span data-line="32">    <span class="n">baseline</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">anonymous_low</span>
+</span><span data-line="33">
+</span><span data-line="34">    <span class="n">middleware_config</span> <span class="o">=</span> <span class="n">LitestarRateLimitConfig</span><span class="p">(</span>
+</span><span data-line="35">        <span class="n">rate_limit</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;second&quot;</span><span class="p">,</span> <span class="n">baseline</span><span class="o">.</span><span class="n">window_seconds</span><span class="p">),</span>
+</span><span data-line="36">        <span class="n">exclude</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">exclude_paths</span><span class="p">,</span>
+</span><span data-line="37">        <span class="n">identifier_for_request</span><span class="o">=</span><span class="n">get_rate_limit_identifier</span><span class="p">,</span>
+</span><span data-line="38">        <span class="n">check_throttle_handler</span><span class="o">=</span><span class="n">should_check_rate_limit</span><span class="p">,</span>
+</span><span data-line="39">        <span class="n">set_rate_limit_headers</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">set_headers</span><span class="p">,</span>
+</span><span data-line="40">        <span class="n">store</span><span class="o">=</span><span class="s2">&quot;rate_limit&quot;</span><span class="p">,</span>  <span class="c1"># Store name registered in app</span>
+</span><span data-line="41">    <span class="p">)</span>
+</span><span data-line="42">
+</span><span data-line="43">    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+</span><span data-line="44">        <span class="s2">&quot;Rate limiting middleware configured&quot;</span><span class="p">,</span>
+</span><span data-line="45">        <span class="n">enabled</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span data-line="46">        <span class="n">baseline_requests</span><span class="o">=</span><span class="n">baseline</span><span class="o">.</span><span class="n">requests</span><span class="p">,</span>
+</span><span data-line="47">        <span class="n">baseline_window</span><span class="o">=</span><span class="n">baseline</span><span class="o">.</span><span class="n">window_seconds</span><span class="p">,</span>
+</span><span data-line="48">        <span class="n">user_aware</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">use_user_aware</span><span class="p">,</span>
+</span><span data-line="49">    <span class="p">)</span>
+</span><span data-line="50">
+</span><span data-line="51">    <span class="k">return</span> <span class="n">middleware_config</span>
+</span></pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># src/pydotorg/main.py (modifications)</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">litestar.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">TooManyRequestsException</span>
+</span><span data-line="4"><span class="kn">from</span><span class="w"> </span><span class="nn">litestar.stores.registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">StoreRegistry</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.core.ratelimit</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+</span><span data-line="7">    <span class="n">create_rate_limit_middleware</span><span class="p">,</span>
+</span><span data-line="8">    <span class="n">create_rate_limit_store</span><span class="p">,</span>
+</span><span data-line="9">    <span class="n">rate_limit_exception_handler</span><span class="p">,</span>
+</span><span data-line="10"><span class="p">)</span>
+</span><span data-line="11">
+</span><span data-line="12"><span class="c1"># ... existing imports ...</span>
+</span><span data-line="13">
+</span><span data-line="14"><span class="c1"># Create rate limit store</span>
+</span><span data-line="15"><span class="n">rate_limit_store</span> <span class="o">=</span> <span class="n">create_rate_limit_store</span><span class="p">()</span>
+</span><span data-line="16">
+</span><span data-line="17"><span class="c1"># Create rate limit middleware config</span>
+</span><span data-line="18"><span class="n">rate_limit_config</span> <span class="o">=</span> <span class="n">create_rate_limit_middleware</span><span class="p">()</span>
+</span><span data-line="19">
+</span><span data-line="20"><span class="n">app</span> <span class="o">=</span> <span class="n">Litestar</span><span class="p">(</span>
+</span><span data-line="21">    <span class="n">route_handlers</span><span class="o">=</span><span class="p">[</span><span class="o">...</span><span class="p">],</span>  <span class="c1"># existing handlers</span>
+</span><span data-line="22">    <span class="n">dependencies</span><span class="o">=</span><span class="n">get_all_dependencies</span><span class="p">(),</span>
+</span><span data-line="23">    <span class="n">exception_handlers</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="24">        <span class="o">**</span><span class="n">get_exception_handlers</span><span class="p">(),</span>
+</span><span data-line="25">        <span class="n">TooManyRequestsException</span><span class="p">:</span> <span class="n">rate_limit_exception_handler</span><span class="p">,</span>  <span class="c1"># Add this</span>
+</span><span data-line="26">    <span class="p">},</span>
+</span><span data-line="27">    <span class="n">plugins</span><span class="o">=</span><span class="p">[</span><span class="o">...</span><span class="p">],</span>  <span class="c1"># existing plugins</span>
+</span><span data-line="28">    <span class="n">middleware</span><span class="o">=</span><span class="p">[</span>
+</span><span data-line="29">        <span class="n">session_config</span><span class="o">.</span><span class="n">middleware</span><span class="p">,</span>
+</span><span data-line="30">        <span class="n">UserPopulationMiddleware</span><span class="p">,</span>
+</span><span data-line="31">        <span class="n">JWTAuthMiddleware</span><span class="p">,</span>
+</span><span data-line="32">    <span class="p">]</span> <span class="o">+</span> <span class="p">([</span><span class="n">rate_limit_config</span><span class="o">.</span><span class="n">middleware</span><span class="p">]</span> <span class="k">if</span> <span class="n">rate_limit_config</span> <span class="k">else</span> <span class="p">[]),</span>  <span class="c1"># Add conditionally</span>
+</span><span data-line="33">    <span class="n">stores</span><span class="o">=</span><span class="n">StoreRegistry</span><span class="p">(</span>
+</span><span data-line="34">        <span class="p">{</span>
+</span><span data-line="35">            <span class="s2">&quot;rate_limit&quot;</span><span class="p">:</span> <span class="n">rate_limit_store</span><span class="p">,</span>
+</span><span data-line="36">        <span class="p">}</span>
+</span><span data-line="37">    <span class="p">),</span>
+</span><span data-line="38">    <span class="c1"># ... rest of config ...</span>
+</span><span data-line="39"><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="error-template">
+<h3>7. Error Template<a class="headerlink" href="#error-template" title="Link to this heading">¶</a></h3>
+<div class="highlight-html+jinja notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c">{# templates/errors/429.html.jinja2 #}</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="cp">{%</span> <span class="k">extends</span> <span class="s2">&quot;base.html.jinja2&quot;</span> <span class="cp">%}</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="cp">{%</span> <span class="k">block</span> <span class="nv">title</span> <span class="cp">%}</span>Too Many Requests - <span class="cp">{{</span> <span class="nv">site_name</span> <span class="cp">}}{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span>
+</span><span data-line="8"><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8&quot;</span><span class="p">&gt;</span>
+</span><span data-line="9">    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;max-w-md w-full space-y-8&quot;</span><span class="p">&gt;</span>
+</span><span data-line="10">        <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span data-line="11">            <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;mx-auto flex items-center justify-center h-24 w-24 rounded-full bg-yellow-100&quot;</span><span class="p">&gt;</span>
+</span><span data-line="12">                <span class="p">&lt;</span><span class="nt">svg</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;h-16 w-16 text-yellow-600&quot;</span> <span class="na">fill</span><span class="o">=</span><span class="s">&quot;none&quot;</span> <span class="na">viewBox</span><span class="o">=</span><span class="s">&quot;0 0 24 24&quot;</span> <span class="na">stroke</span><span class="o">=</span><span class="s">&quot;currentColor&quot;</span><span class="p">&gt;</span>
+</span><span data-line="13">                    <span class="p">&lt;</span><span class="nt">path</span> <span class="na">stroke-linecap</span><span class="o">=</span><span class="s">&quot;round&quot;</span> <span class="na">stroke-linejoin</span><span class="o">=</span><span class="s">&quot;round&quot;</span> <span class="na">stroke-width</span><span class="o">=</span><span class="s">&quot;2&quot;</span> <span class="na">d</span><span class="o">=</span><span class="s">&quot;M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z&quot;</span> <span class="p">/&gt;</span>
+</span><span data-line="14">                <span class="p">&lt;/</span><span class="nt">svg</span><span class="p">&gt;</span>
+</span><span data-line="15">            <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span data-line="16">            <span class="p">&lt;</span><span class="nt">h2</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;mt-6 text-center text-3xl font-extrabold text-gray-900&quot;</span><span class="p">&gt;</span>
+</span><span data-line="17">                Rate Limit Exceeded
+</span><span data-line="18">            <span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+</span><span data-line="19">            <span class="p">&lt;</span><span class="nt">p</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;mt-2 text-center text-sm text-gray-600&quot;</span><span class="p">&gt;</span>
+</span><span data-line="20">                <span class="cp">{{</span> <span class="nv">message</span> <span class="cp">}}</span>
+</span><span data-line="21">            <span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span><span data-line="22">        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span data-line="23">
+</span><span data-line="24">        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;rounded-md bg-yellow-50 p-4&quot;</span><span class="p">&gt;</span>
+</span><span data-line="25">            <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;flex&quot;</span><span class="p">&gt;</span>
+</span><span data-line="26">                <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;flex-shrink-0&quot;</span><span class="p">&gt;</span>
+</span><span data-line="27">                    <span class="p">&lt;</span><span class="nt">svg</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;h-5 w-5 text-yellow-400&quot;</span> <span class="na">viewBox</span><span class="o">=</span><span class="s">&quot;0 0 20 20&quot;</span> <span class="na">fill</span><span class="o">=</span><span class="s">&quot;currentColor&quot;</span><span class="p">&gt;</span>
+</span><span data-line="28">                        <span class="p">&lt;</span><span class="nt">path</span> <span class="na">fill-rule</span><span class="o">=</span><span class="s">&quot;evenodd&quot;</span> <span class="na">d</span><span class="o">=</span><span class="s">&quot;M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z&quot;</span> <span class="na">clip-rule</span><span class="o">=</span><span class="s">&quot;evenodd&quot;</span> <span class="p">/&gt;</span>
+</span><span data-line="29">                    <span class="p">&lt;/</span><span class="nt">svg</span><span class="p">&gt;</span>
+</span><span data-line="30">                <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span data-line="31">                <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;ml-3&quot;</span><span class="p">&gt;</span>
+</span><span data-line="32">                    <span class="p">&lt;</span><span class="nt">h3</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;text-sm font-medium text-yellow-800&quot;</span><span class="p">&gt;</span>
+</span><span data-line="33">                        Why did this happen?
+</span><span data-line="34">                    <span class="p">&lt;/</span><span class="nt">h3</span><span class="p">&gt;</span>
+</span><span data-line="35">                    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;mt-2 text-sm text-yellow-700&quot;</span><span class="p">&gt;</span>
+</span><span data-line="36">                        <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Rate limits protect Python.org from abuse. You can:<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span><span data-line="37">                        <span class="p">&lt;</span><span class="nt">ul</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;list-disc pl-5 space-y-1 mt-2&quot;</span><span class="p">&gt;</span>
+</span><span data-line="38">                            <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>Wait <span class="cp">{{</span> <span class="nv">retry_after</span> <span class="cp">}}</span> seconds and try again<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+</span><span data-line="39">                            <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>Log in for higher rate limits<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+</span><span data-line="40">                            <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>Slow down your requests<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+</span><span data-line="41">                            <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>Contact us if you need API access<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+</span><span data-line="42">                        <span class="p">&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
+</span><span data-line="43">                    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span data-line="44">                <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span data-line="45">            <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span data-line="46">        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span data-line="47">
+</span><span data-line="48">        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;flex space-x-4&quot;</span><span class="p">&gt;</span>
+</span><span data-line="49">            <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;javascript:history.back()&quot;</span>
+</span><span data-line="50">               <span class="na">class</span><span class="o">=</span><span class="s">&quot;flex-1 flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500&quot;</span><span class="p">&gt;</span>
+</span><span data-line="51">                Go Back
+</span><span data-line="52">            <span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+</span><span data-line="53">            <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;/&quot;</span>
+</span><span data-line="54">               <span class="na">class</span><span class="o">=</span><span class="s">&quot;flex-1 flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500&quot;</span><span class="p">&gt;</span>
+</span><span data-line="55">                Home
+</span><span data-line="56">            <span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+</span><span data-line="57">        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span data-line="58">
+</span><span data-line="59">        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;text-center text-xs text-gray-500&quot;</span><span class="p">&gt;</span>
+</span><span data-line="60">            <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Retry after: <span class="cp">{{</span> <span class="nv">retry_after</span> <span class="cp">}}</span> seconds<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span><span data-line="61">        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span data-line="62">    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span data-line="63"><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span data-line="64"><span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="file-structure">
+<h2>File Structure<a class="headerlink" href="#file-structure" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">src/pydotorg/
+</span><span data-line="2">├── core/
+</span><span data-line="3">│   └── ratelimit/
+</span><span data-line="4">│       ├── __init__.py              # Public API exports
+</span><span data-line="5">│       ├── config.py                # RateLimitConfig, TierLimits
+</span><span data-line="6">│       ├── tiers.py                 # Endpoint tier classifications
+</span><span data-line="7">│       ├── identifier.py            # User-aware identifier function
+</span><span data-line="8">│       ├── store.py                 # Redis store creation
+</span><span data-line="9">│       ├── middleware.py            # Middleware configuration
+</span><span data-line="10">│       └── exceptions.py            # 429 exception handler
+</span><span data-line="11">├── config.py                        # Settings additions (rate_limit_enabled, etc)
+</span><span data-line="12">└── main.py                          # App integration
+</span><span data-line="13">
+</span><span data-line="14">templates/
+</span><span data-line="15">└── errors/
+</span><span data-line="16">    └── 429.html.jinja2              # Rate limit error page
+</span></pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="implementation-plan">
+<h2>Implementation Plan<a class="headerlink" href="#implementation-plan" title="Link to this heading">¶</a></h2>
+<section id="phase-1-core-infrastructure-week-1">
+<h3>Phase 1: Core Infrastructure (Week 1)<a class="headerlink" href="#phase-1-core-infrastructure-week-1" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Create <code class="docutils literal notranslate"><span class="pre">core/ratelimit/</span></code> module structure</p></li>
+<li><p>Implement <code class="docutils literal notranslate"><span class="pre">config.py</span></code> with RateLimitConfig and TierLimits</p></li>
+<li><p>Implement <code class="docutils literal notranslate"><span class="pre">store.py</span></code> with Redis integration</p></li>
+<li><p>Add configuration to <code class="docutils literal notranslate"><span class="pre">config.py</span></code> (Settings)</p></li>
+<li><p>Write unit tests for config and store</p></li>
+</ol>
+<p><strong>Deliverable</strong>: Rate limiting configuration and Redis store ready</p>
+</section>
+<section id="phase-2-tier-classification-week-1">
+<h3>Phase 2: Tier Classification (Week 1)<a class="headerlink" href="#phase-2-tier-classification-week-1" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Implement <code class="docutils literal notranslate"><span class="pre">tiers.py</span></code> with endpoint classifications</p></li>
+<li><p>Audit all 383 endpoints and assign tiers</p></li>
+<li><p>Implement <code class="docutils literal notranslate"><span class="pre">get_endpoint_tier()</span></code> function with pattern matching</p></li>
+<li><p>Write tests for tier assignments</p></li>
+<li><p>Document tier rationale for each domain</p></li>
+</ol>
+<p><strong>Deliverable</strong>: All endpoints classified into tiers</p>
+</section>
+<section id="phase-3-middleware-handlers-week-2">
+<h3>Phase 3: Middleware &amp; Handlers (Week 2)<a class="headerlink" href="#phase-3-middleware-handlers-week-2" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Implement <code class="docutils literal notranslate"><span class="pre">identifier.py</span></code> with user-aware logic</p></li>
+<li><p>Implement <code class="docutils literal notranslate"><span class="pre">middleware.py</span></code> with Litestar integration</p></li>
+<li><p>Implement <code class="docutils literal notranslate"><span class="pre">exceptions.py</span></code> with 429 handler</p></li>
+<li><p>Create 429 error template</p></li>
+<li><p>Write integration tests</p></li>
+</ol>
+<p><strong>Deliverable</strong>: Functional rate limiting middleware</p>
+</section>
+<section id="phase-4-application-integration-week-2">
+<h3>Phase 4: Application Integration (Week 2)<a class="headerlink" href="#phase-4-application-integration-week-2" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Modify <code class="docutils literal notranslate"><span class="pre">main.py</span></code> to register store and middleware</p></li>
+<li><p>Add exception handler to app config</p></li>
+<li><p>Update startup logging to show rate limit status</p></li>
+<li><p>Test with real controllers</p></li>
+<li><p>Performance testing with load tool</p></li>
+</ol>
+<p><strong>Deliverable</strong>: Rate limiting live in development</p>
+</section>
+<section id="phase-5-monitoring-tuning-week-3">
+<h3>Phase 5: Monitoring &amp; Tuning (Week 3)<a class="headerlink" href="#phase-5-monitoring-tuning-week-3" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Add Prometheus metrics for rate limit hits</p></li>
+<li><p>Implement admin dashboard for rate limit stats</p></li>
+<li><p>Add alerts for excessive rate limiting</p></li>
+<li><p>Tune limits based on real traffic</p></li>
+<li><p>Document operational procedures</p></li>
+</ol>
+<p><strong>Deliverable</strong>: Production-ready rate limiting with observability</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="testing-strategy">
+<h2>Testing Strategy<a class="headerlink" href="#testing-strategy" title="Link to this heading">¶</a></h2>
+<section id="unit-tests">
+<h3>Unit Tests<a class="headerlink" href="#unit-tests" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># tests/unit/core/ratelimit/test_config.py</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">Environment</span>
+</span><span data-line="6"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.core.ratelimit.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">RateLimitConfig</span><span class="p">,</span> <span class="n">RateLimitTier</span>
+</span><span data-line="7">
+</span><span data-line="8">
+</span><span data-line="9"><span class="k">def</span><span class="w"> </span><span class="nf">test_tier_limits_per_minute</span><span class="p">():</span>
+</span><span data-line="10">    <span class="n">limits</span> <span class="o">=</span> <span class="n">TierLimits</span><span class="p">(</span><span class="n">requests</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">window_seconds</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+</span><span data-line="11">    <span class="k">assert</span> <span class="n">limits</span><span class="o">.</span><span class="n">per_minute</span> <span class="o">==</span> <span class="mf">60.0</span>
+</span><span data-line="12">
+</span><span data-line="13">    <span class="n">limits</span> <span class="o">=</span> <span class="n">TierLimits</span><span class="p">(</span><span class="n">requests</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">window_seconds</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+</span><span data-line="14">    <span class="k">assert</span> <span class="n">limits</span><span class="o">.</span><span class="n">per_minute</span> <span class="o">==</span> <span class="mf">30.0</span>
+</span><span data-line="15">
+</span><span data-line="16">
+</span><span data-line="17"><span class="k">def</span><span class="w"> </span><span class="nf">test_environment_specific_config</span><span class="p">():</span>
+</span><span data-line="18">    <span class="n">dev_config</span> <span class="o">=</span> <span class="n">RateLimitConfig</span><span class="o">.</span><span class="n">for_environment</span><span class="p">(</span><span class="n">Environment</span><span class="o">.</span><span class="n">DEV</span><span class="p">)</span>
+</span><span data-line="19">    <span class="n">prod_config</span> <span class="o">=</span> <span class="n">RateLimitConfig</span><span class="o">.</span><span class="n">for_environment</span><span class="p">(</span><span class="n">Environment</span><span class="o">.</span><span class="n">PROD</span><span class="p">)</span>
+</span><span data-line="20">
+</span><span data-line="21">    <span class="k">assert</span> <span class="n">dev_config</span><span class="o">.</span><span class="n">anonymous_critical</span><span class="o">.</span><span class="n">requests</span> <span class="o">&gt;</span> <span class="n">prod_config</span><span class="o">.</span><span class="n">anonymous_critical</span><span class="o">.</span><span class="n">requests</span>
+</span><span data-line="22">    <span class="k">assert</span> <span class="n">dev_config</span><span class="o">.</span><span class="n">enabled</span> <span class="ow">is</span> <span class="kc">True</span>
+</span><span data-line="23">    <span class="k">assert</span> <span class="n">prod_config</span><span class="o">.</span><span class="n">enabled</span> <span class="ow">is</span> <span class="kc">True</span>
+</span><span data-line="24">
+</span><span data-line="25">
+</span><span data-line="26"><span class="k">def</span><span class="w"> </span><span class="nf">test_get_tier_limits_anonymous</span><span class="p">():</span>
+</span><span data-line="27">    <span class="n">config</span> <span class="o">=</span> <span class="n">RateLimitConfig</span><span class="o">.</span><span class="n">for_environment</span><span class="p">(</span><span class="n">Environment</span><span class="o">.</span><span class="n">PROD</span><span class="p">)</span>
+</span><span data-line="28">
+</span><span data-line="29">    <span class="n">limits</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_tier_limits</span><span class="p">(</span><span class="n">RateLimitTier</span><span class="o">.</span><span class="n">CRITICAL</span><span class="p">,</span> <span class="n">is_authenticated</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span><span data-line="30">    <span class="k">assert</span> <span class="n">limits</span><span class="o">.</span><span class="n">requests</span> <span class="o">==</span> <span class="mi">5</span>
+</span><span data-line="31">    <span class="k">assert</span> <span class="n">limits</span><span class="o">.</span><span class="n">window_seconds</span> <span class="o">==</span> <span class="mi">60</span>
+</span><span data-line="32">
+</span><span data-line="33">
+</span><span data-line="34"><span class="k">def</span><span class="w"> </span><span class="nf">test_get_tier_limits_authenticated</span><span class="p">():</span>
+</span><span data-line="35">    <span class="n">config</span> <span class="o">=</span> <span class="n">RateLimitConfig</span><span class="o">.</span><span class="n">for_environment</span><span class="p">(</span><span class="n">Environment</span><span class="o">.</span><span class="n">PROD</span><span class="p">)</span>
+</span><span data-line="36">
+</span><span data-line="37">    <span class="n">limits</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_tier_limits</span><span class="p">(</span><span class="n">RateLimitTier</span><span class="o">.</span><span class="n">CRITICAL</span><span class="p">,</span> <span class="n">is_authenticated</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span data-line="38">    <span class="k">assert</span> <span class="n">limits</span><span class="o">.</span><span class="n">requests</span> <span class="o">==</span> <span class="mi">20</span>
+</span><span data-line="39">    <span class="k">assert</span> <span class="n">limits</span><span class="o">.</span><span class="n">window_seconds</span> <span class="o">==</span> <span class="mi">60</span>
+</span><span data-line="40">
+</span><span data-line="41">
+</span><span data-line="42"><span class="k">def</span><span class="w"> </span><span class="nf">test_staff_multiplier</span><span class="p">():</span>
+</span><span data-line="43">    <span class="n">config</span> <span class="o">=</span> <span class="n">RateLimitConfig</span><span class="o">.</span><span class="n">for_environment</span><span class="p">(</span><span class="n">Environment</span><span class="o">.</span><span class="n">PROD</span><span class="p">)</span>
+</span><span data-line="44">
+</span><span data-line="45">    <span class="n">limits</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_tier_limits</span><span class="p">(</span>
+</span><span data-line="46">        <span class="n">RateLimitTier</span><span class="o">.</span><span class="n">CRITICAL</span><span class="p">,</span>
+</span><span data-line="47">        <span class="n">is_authenticated</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span data-line="48">        <span class="n">is_staff</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span data-line="49">    <span class="p">)</span>
+</span><span data-line="50">    <span class="k">assert</span> <span class="n">limits</span><span class="o">.</span><span class="n">requests</span> <span class="o">==</span> <span class="mi">20</span> <span class="o">*</span> <span class="mi">5</span>  <span class="c1"># 5x multiplier</span>
+</span></pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># tests/unit/core/ratelimit/test_tiers.py</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.core.ratelimit.tiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_endpoint_tier</span><span class="p">,</span> <span class="n">RateLimitTier</span>
+</span><span data-line="4">
+</span><span data-line="5">
+</span><span data-line="6"><span class="k">def</span><span class="w"> </span><span class="nf">test_critical_endpoints</span><span class="p">():</span>
+</span><span data-line="7">    <span class="k">assert</span> <span class="n">get_endpoint_tier</span><span class="p">(</span><span class="s2">&quot;/api/auth/login&quot;</span><span class="p">,</span> <span class="s2">&quot;POST&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="n">RateLimitTier</span><span class="o">.</span><span class="n">CRITICAL</span>
+</span><span data-line="8">    <span class="k">assert</span> <span class="n">get_endpoint_tier</span><span class="p">(</span><span class="s2">&quot;/api/v1/search/&quot;</span><span class="p">,</span> <span class="s2">&quot;POST&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="n">RateLimitTier</span><span class="o">.</span><span class="n">CRITICAL</span>
+</span><span data-line="9">    <span class="k">assert</span> <span class="n">get_endpoint_tier</span><span class="p">(</span><span class="s2">&quot;/api/auth/register&quot;</span><span class="p">,</span> <span class="s2">&quot;POST&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="n">RateLimitTier</span><span class="o">.</span><span class="n">CRITICAL</span>
+</span><span data-line="10">
+</span><span data-line="11">
+</span><span data-line="12"><span class="k">def</span><span class="w"> </span><span class="nf">test_high_endpoints</span><span class="p">():</span>
+</span><span data-line="13">    <span class="k">assert</span> <span class="n">get_endpoint_tier</span><span class="p">(</span><span class="s2">&quot;/api/jobs&quot;</span><span class="p">,</span> <span class="s2">&quot;POST&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="n">RateLimitTier</span><span class="o">.</span><span class="n">HIGH</span>
+</span><span data-line="14">    <span class="k">assert</span> <span class="n">get_endpoint_tier</span><span class="p">(</span><span class="s2">&quot;/api/events&quot;</span><span class="p">,</span> <span class="s2">&quot;POST&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="n">RateLimitTier</span><span class="o">.</span><span class="n">HIGH</span>
+</span><span data-line="15">
+</span><span data-line="16">
+</span><span data-line="17"><span class="k">def</span><span class="w"> </span><span class="nf">test_unlimited_endpoints</span><span class="p">():</span>
+</span><span data-line="18">    <span class="k">assert</span> <span class="n">get_endpoint_tier</span><span class="p">(</span><span class="s2">&quot;/health&quot;</span><span class="p">,</span> <span class="s2">&quot;GET&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="n">RateLimitTier</span><span class="o">.</span><span class="n">UNLIMITED</span>
+</span><span data-line="19">    <span class="k">assert</span> <span class="n">get_endpoint_tier</span><span class="p">(</span><span class="s2">&quot;/static/css/main.css&quot;</span><span class="p">,</span> <span class="s2">&quot;GET&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="n">RateLimitTier</span><span class="o">.</span><span class="n">UNLIMITED</span>
+</span></pre></div>
+</div>
+</section>
+<section id="integration-tests">
+<h3>Integration Tests<a class="headerlink" href="#integration-tests" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># tests/integration/test_rate_limiting.py</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+</span><span data-line="4"><span class="kn">from</span><span class="w"> </span><span class="nn">litestar.status_codes</span><span class="w"> </span><span class="kn">import</span> <span class="n">HTTP_200_OK</span><span class="p">,</span> <span class="n">HTTP_429_TOO_MANY_REQUESTS</span>
+</span><span data-line="5"><span class="kn">from</span><span class="w"> </span><span class="nn">litestar.testing</span><span class="w"> </span><span class="kn">import</span> <span class="n">AsyncTestClient</span>
+</span><span data-line="6">
+</span><span data-line="7">
+</span><span data-line="8"><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+</span><span data-line="9"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">test_rate_limit_anonymous_user</span><span class="p">(</span><span class="n">test_client</span><span class="p">:</span> <span class="n">AsyncTestClient</span><span class="p">):</span>
+</span><span data-line="10">    <span class="c1"># Should allow first 5 requests to critical endpoint</span>
+</span><span data-line="11">    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+</span><span data-line="12">        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">test_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/auth/login&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="13">            <span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span>
+</span><span data-line="14">            <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;wrong&quot;</span><span class="p">,</span>
+</span><span data-line="15">        <span class="p">})</span>
+</span><span data-line="16">        <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="ow">in</span> <span class="p">[</span><span class="n">HTTP_200_OK</span><span class="p">,</span> <span class="mi">401</span><span class="p">]</span>  <span class="c1"># Auth may fail, but not rate limited</span>
+</span><span data-line="17">
+</span><span data-line="18">    <span class="c1"># 6th request should be rate limited</span>
+</span><span data-line="19">    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">test_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/auth/login&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="20">        <span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span>
+</span><span data-line="21">        <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;wrong&quot;</span><span class="p">,</span>
+</span><span data-line="22">    <span class="p">})</span>
+</span><span data-line="23">    <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="n">HTTP_429_TOO_MANY_REQUESTS</span>
+</span><span data-line="24">    <span class="k">assert</span> <span class="s2">&quot;Retry-After&quot;</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">headers</span>
+</span><span data-line="25">
+</span><span data-line="26">
+</span><span data-line="27"><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+</span><span data-line="28"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">test_rate_limit_authenticated_user</span><span class="p">(</span><span class="n">test_client</span><span class="p">:</span> <span class="n">AsyncTestClient</span><span class="p">,</span> <span class="n">auth_headers</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+</span><span data-line="29">    <span class="c1"># Authenticated users should have higher limits</span>
+</span><span data-line="30">    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">):</span>
+</span><span data-line="31">        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">test_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/api/users/me&quot;</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">auth_headers</span><span class="p">)</span>
+</span><span data-line="32">        <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="n">HTTP_200_OK</span>
+</span><span data-line="33">
+</span><span data-line="34">    <span class="c1"># Should still be rate limited eventually</span>
+</span><span data-line="35">    <span class="c1"># (would need 21st request)</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="monitoring-observability">
+<h2>Monitoring &amp; Observability<a class="headerlink" href="#monitoring-observability" title="Link to this heading">¶</a></h2>
+<section id="metrics">
+<h3>Metrics<a class="headerlink" href="#metrics" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># src/pydotorg/core/ratelimit/metrics.py</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">prometheus_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span><span class="p">,</span> <span class="n">Histogram</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="n">rate_limit_hits</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span>
+</span><span data-line="6">    <span class="s2">&quot;pydotorg_rate_limit_hits_total&quot;</span><span class="p">,</span>
+</span><span data-line="7">    <span class="s2">&quot;Total rate limit hits&quot;</span><span class="p">,</span>
+</span><span data-line="8">    <span class="p">[</span><span class="s2">&quot;tier&quot;</span><span class="p">,</span> <span class="s2">&quot;endpoint&quot;</span><span class="p">,</span> <span class="s2">&quot;user_type&quot;</span><span class="p">],</span>
+</span><span data-line="9"><span class="p">)</span>
+</span><span data-line="10">
+</span><span data-line="11"><span class="n">rate_limit_duration</span> <span class="o">=</span> <span class="n">Histogram</span><span class="p">(</span>
+</span><span data-line="12">    <span class="s2">&quot;pydotorg_rate_limit_check_seconds&quot;</span><span class="p">,</span>
+</span><span data-line="13">    <span class="s2">&quot;Time spent checking rate limits&quot;</span><span class="p">,</span>
+</span><span data-line="14">    <span class="p">[</span><span class="s2">&quot;tier&quot;</span><span class="p">],</span>
+</span><span data-line="15"><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="admin-dashboard">
+<h3>Admin Dashboard<a class="headerlink" href="#admin-dashboard" title="Link to this heading">¶</a></h3>
+<p>Add rate limiting statistics to admin dashboard:</p>
+<ul class="simple">
+<li><p>Current rate limit hits by tier</p></li>
+<li><p>Top rate-limited endpoints</p></li>
+<li><p>Top rate-limited IPs/users</p></li>
+<li><p>Rate limit configuration overview</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="security-considerations">
+<h2>Security Considerations<a class="headerlink" href="#security-considerations" title="Link to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li><p><strong>Bypass Protection</strong>: Ensure bypass tokens are cryptographically secure</p></li>
+<li><p><strong>Redis Security</strong>: Use Redis AUTH and encryption in production</p></li>
+<li><p><strong>IP Spoofing</strong>: Trust proxy headers only from known proxies</p></li>
+<li><p><strong>DDoS</strong>: Rate limiting is first line of defense, not complete protection</p></li>
+<li><p><strong>Key Exhaustion</strong>: Monitor Redis key count to prevent memory exhaustion</p></li>
+</ol>
+</section>
+<hr class="docutils" />
+<section id="performance-impact">
+<h2>Performance Impact<a class="headerlink" href="#performance-impact" title="Link to this heading">¶</a></h2>
+<section id="expected-overhead">
+<h3>Expected Overhead<a class="headerlink" href="#expected-overhead" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>Redis latency</strong>: ~1-3ms per request</p></li>
+<li><p><strong>Identifier computation</strong>: &lt;0.1ms</p></li>
+<li><p><strong>Total overhead</strong>: ~1-5ms per request</p></li>
+</ul>
+</section>
+<section id="optimization-strategies">
+<h3>Optimization Strategies<a class="headerlink" href="#optimization-strategies" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Use Redis pipelining for bulk operations</p></li>
+<li><p>Cache tier assignments for common patterns</p></li>
+<li><p>Monitor Redis connection pool usage</p></li>
+<li><p>Consider local cache for non-distributed scenarios</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="migration-rollout">
+<h2>Migration &amp; Rollout<a class="headerlink" href="#migration-rollout" title="Link to this heading">¶</a></h2>
+<section id="pre-deployment">
+<h3>Pre-Deployment<a class="headerlink" href="#pre-deployment" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Test in staging with production-like traffic</p></li>
+<li><p>Tune limits based on historical traffic data</p></li>
+<li><p>Create runbook for handling false positives</p></li>
+<li><p>Set up monitoring and alerting</p></li>
+</ol>
+</section>
+<section id="deployment">
+<h3>Deployment<a class="headerlink" href="#deployment" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Deploy with <code class="docutils literal notranslate"><span class="pre">rate_limit_enabled=False</span></code> initially</p></li>
+<li><p>Enable in dev/staging first</p></li>
+<li><p>Gradual rollout to production (10% → 50% → 100%)</p></li>
+<li><p>Monitor metrics closely for first 48 hours</p></li>
+</ol>
+</section>
+<section id="rollback-plan">
+<h3>Rollback Plan<a class="headerlink" href="#rollback-plan" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Set <code class="docutils literal notranslate"><span class="pre">rate_limit_enabled=False</span></code> via environment variable</p></li>
+<li><p>No code changes required</p></li>
+<li><p>Restart application to disable</p></li>
+</ol>
+</section>
+</section>
+<hr class="docutils" />
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading">¶</a></h2>
+<p>This architecture provides:</p>
+<ul class="simple">
+<li><p><strong>4-tier rate limiting</strong> (Critical/High/Medium/Low)</p></li>
+<li><p><strong>User-aware limits</strong> (5x higher for authenticated, 5x multiplier for staff)</p></li>
+<li><p><strong>Environment-specific</strong> configuration (dev/staging/prod)</p></li>
+<li><p><strong>Redis-backed</strong> distributed rate limiting</p></li>
+<li><p><strong>HTMX-aware</strong> error handling with toast notifications</p></li>
+<li><p><strong>Zero external dependencies</strong> (native Litestar)</p></li>
+<li><p><strong>Production-ready</strong> monitoring and observability</p></li>
+</ul>
+<p><strong>Key Files</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">/Users/coffee/git/public/JacobCoffee/litestar-pydotorg/src/pydotorg/core/ratelimit/config.py</span></code> - Configuration model</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/Users/coffee/git/public/JacobCoffee/litestar-pydotorg/src/pydotorg/core/ratelimit/tiers.py</span></code> - Endpoint classifications</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/Users/coffee/git/public/JacobCoffee/litestar-pydotorg/src/pydotorg/core/ratelimit/middleware.py</span></code> - Middleware setup</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/Users/coffee/git/public/JacobCoffee/litestar-pydotorg/src/pydotorg/main.py</span></code> - Application integration</p></li>
+</ul>
+<p><strong>Next Steps</strong>: Proceed with Phase 1 implementation (core infrastructure)</p>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="API_TAGS_INDEX.html">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title">API Tags Documentation Index</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="adr/001-litestar-framework.html">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title">ADR-001: Use Litestar as Web Framework</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Jacob Coffee</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+<a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+  <iconify-icon icon="simple-icons:github"></iconify-icon>
+</a></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=30646c52"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script src="../_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="blue" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>API Tags - Quick Reference - litestar-pydotorg</title><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=14737038" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=513f0650" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="API Tags - Quick Reference"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../index.html">
+      
+      
+      <strong>litestar-pydotorg</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"><ul><li class="link">
+          <a href="https://litestar.dev/">
+            <span>Litestar</span></a>
+        </li><li class="link">
+          <a href="https://python.org/">
+            <span>Python.org</span></a>
+        </li></ul></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials">
+  <a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started/index.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/quickstart.html">Quickstart</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/index.html">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/development.html">Development Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/contributing.html">Contribution Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/testing.html">Testing Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/debugging.html">Debugging Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/api-usage.html">API Usage Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/authentication.html">Authentication Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/feature-flags.html">Feature Flags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/configuration.html">Configuration Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/deployment.html">Deployment Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/docker.html">Docker Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/troubleshooting.html">Troubleshooting Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/index.html">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/domain-patterns.html">Domain Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/authentication-recipes.html">Authentication Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/database-recipes.html">Database Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/testing-recipes.html">Testing Recipes</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/core/index.html">Core Infrastructure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/auth.html">Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/cache.html">Caching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/database.html">Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/email.html">Email</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/exceptions.html">Exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/features.html">Feature Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/feeds.html">RSS/Atom Feeds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/ical.html">iCalendar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/middleware.html">Middleware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/openapi.html">OpenAPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/ratelimit.html">Rate Limiting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/security.html">Security</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/worker.html">Background Worker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/domains/index.html">Domain Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/about.html">About</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/admin.html">Admin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/banners.html">banners</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/blogs.html">blogs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/codesamples.html">Code Samples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/community.html">community</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/docs.html">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/downloads.html">downloads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/events.html">events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/jobs.html">jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/mailing.html">Mailing Lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/minutes.html">Minutes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/nominations.html">Nominations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/pages.html">pages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/sponsors.html">sponsors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/sqladmin.html">SQLAdmin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/successstories.html">Success Stories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/users.html">users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/work_groups.html">Work Groups</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/lib.html">Library Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/tasks.html">Background Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/config.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/main.html">Application Entry Point</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ARCHITECTURE.html">Litestar Python.org Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DATABASE_SCHEMA.html">Database Schema Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DOMAIN_MODELS.html">Domain Models Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="QUICK_START.html">Litestar Python.org Quick Start Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="API_TAGS_INDEX.html">API Tags Documentation Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RATE_LIMITING_ARCHITECTURE.html">Rate Limiting Architecture Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adr/001-litestar-framework.html">ADR-001: Use Litestar as Web Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adr/002-saq-background-tasks.html">ADR-002: Use SAQ for Background Task Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#tag-reference-table">Tag Reference Table</a></li>
+<li><a class="reference internal" href="#render-controllers-exclude-from-public-api-docs">Render Controllers (Exclude from Public API Docs)</a></li>
+<li><a class="reference internal" href="#tag-groups-by-category">Tag Groups by Category</a><ul>
+<li><a class="reference internal" href="#core-6-tags">Core (6 tags)</a></li>
+<li><a class="reference internal" href="#content-4-tags">Content (4 tags)</a></li>
+<li><a class="reference internal" href="#downloads-3-tags">Downloads (3 tags)</a></li>
+<li><a class="reference internal" href="#events-5-tags">Events (5 tags)</a></li>
+<li><a class="reference internal" href="#community-2-tags">Community (2 tags)</a></li>
+<li><a class="reference internal" href="#content-discovery-3-tags">Content Discovery (3 tags)</a></li>
+<li><a class="reference internal" href="#jobs-4-tags">Jobs (4 tags)</a></li>
+<li><a class="reference internal" href="#business-4-tags">Business (4 tags)</a></li>
+<li><a class="reference internal" href="#governance-5-tags">Governance (5 tags)</a></li>
+<li><a class="reference internal" href="#administration-12-tags">Administration (12 tags)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#implementation-checklist">Implementation Checklist</a></li>
+<li><a class="reference internal" href="#common-migration-examples">Common Migration Examples</a></li>
+<li><a class="reference internal" href="#notes">Notes</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../index.html"><span itemprop="name">litestar-pydotorg</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">API Tags - Quick Reference</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue dark-code" role="main">
+          <section id="api-tags-quick-reference">
+<h1>API Tags - Quick Reference<a class="headerlink" href="#api-tags-quick-reference" title="Link to this heading">¶</a></h1>
+<p>Mapping of <a class="reference external" href="http://Python.org">Python.org</a> API resources to recommended tag categories.</p>
+<section id="tag-reference-table">
+<h2>Tag Reference Table<a class="headerlink" href="#tag-reference-table" title="Link to this heading">¶</a></h2>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>#</p></th>
+<th class="head"><p>Tag Name</p></th>
+<th class="head"><p>Resource Controllers</p></th>
+<th class="head"><p>Key Endpoints</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>Authentication</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">users/auth_controller.py</span></code></p></td>
+<td><p>Login, register, token, password reset</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>Users</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">users/controllers.py:UserController</span></code></p></td>
+<td><p>List, get, create, update, deactivate user</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>User Memberships</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">users/controllers.py:MembershipController</span></code></p></td>
+<td><p>List, get, create, update membership</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>User Groups</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">users/controllers.py:UserGroupController</span></code></p></td>
+<td><p>List, create, approve, trust management</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>Pages</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">pages/controllers.py</span></code></p></td>
+<td><p>List, get page, create, update, delete</p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>Documents</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">docs/controllers.py</span></code></p></td>
+<td><p>List, get, upload, delete documents</p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p>Images</p></td>
+<td><p>Image controllers</p></td>
+<td><p>List, upload, delete images</p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>Banners</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">banners/controllers.py</span></code></p></td>
+<td><p>List, get, create, update banners</p></td>
+</tr>
+<tr class="row-even"><td><p>9</p></td>
+<td><p>Code Samples</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">codesamples/controllers.py</span></code></p></td>
+<td><p>List, create, delete code samples</p></td>
+</tr>
+<tr class="row-odd"><td><p>10</p></td>
+<td><p>Operating Systems</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">downloads/controllers.py:OSController</span></code></p></td>
+<td><p>List OS, get by slug</p></td>
+</tr>
+<tr class="row-even"><td><p>11</p></td>
+<td><p>Python Releases</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">downloads/controllers.py:ReleaseController</span></code></p></td>
+<td><p>List, get release, latest version</p></td>
+</tr>
+<tr class="row-odd"><td><p>12</p></td>
+<td><p>Release Files</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">downloads/controllers.py:ReleaseFileController</span></code></p></td>
+<td><p>List, get, upload files</p></td>
+</tr>
+<tr class="row-even"><td><p>13</p></td>
+<td><p>Events</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">events/controllers.py:EventController</span></code></p></td>
+<td><p>List, get, upcoming events</p></td>
+</tr>
+<tr class="row-odd"><td><p>14</p></td>
+<td><p>Event Calendars</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">events/controllers.py:CalendarController</span></code></p></td>
+<td><p>List, get calendar, create, update</p></td>
+</tr>
+<tr class="row-even"><td><p>15</p></td>
+<td><p>Event Categories</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">events/controllers.py:EventCategoryController</span></code></p></td>
+<td><p>List, create, update categories</p></td>
+</tr>
+<tr class="row-odd"><td><p>16</p></td>
+<td><p>Event Locations</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">events/controllers.py:EventLocationController</span></code></p></td>
+<td><p>List, get, create, update locations</p></td>
+</tr>
+<tr class="row-even"><td><p>17</p></td>
+<td><p>Event Occurrences</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">events/controllers.py:EventOccurrenceController</span></code></p></td>
+<td><p>List, get, create occurrences</p></td>
+</tr>
+<tr class="row-odd"><td><p>18</p></td>
+<td><p>User Groups &amp; Communities</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">community/controllers.py</span></code></p></td>
+<td><p>List groups, discovery</p></td>
+</tr>
+<tr class="row-even"><td><p>19</p></td>
+<td><p>Community Content</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">community/controllers.py</span></code> (sub)</p></td>
+<td><p>Posts, photos, videos, links</p></td>
+</tr>
+<tr class="row-odd"><td><p>20</p></td>
+<td><p>Blogs</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">blogs/controllers.py</span></code></p></td>
+<td><p>List, get, create blog entries</p></td>
+</tr>
+<tr class="row-even"><td><p>21</p></td>
+<td><p>Blog Feeds</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">blogs/controllers.py:FeedController</span></code></p></td>
+<td><p>List, create, manage feeds</p></td>
+</tr>
+<tr class="row-odd"><td><p>22</p></td>
+<td><p>Success Stories</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">successstories/controllers.py</span></code></p></td>
+<td><p>List, get, create stories</p></td>
+</tr>
+<tr class="row-even"><td><p>23</p></td>
+<td><p>Success Story Categories</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">successstories/controllers.py</span></code></p></td>
+<td><p>List, manage categories</p></td>
+</tr>
+<tr class="row-odd"><td><p>24</p></td>
+<td><p>Jobs</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">jobs/controllers.py:JobController</span></code></p></td>
+<td><p>List, get, search, post jobs</p></td>
+</tr>
+<tr class="row-even"><td><p>25</p></td>
+<td><p>Job Types</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">jobs/controllers.py:JobTypeController</span></code></p></td>
+<td><p>List, create job types</p></td>
+</tr>
+<tr class="row-odd"><td><p>26</p></td>
+<td><p>Job Categories</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">jobs/controllers.py:JobCategoryController</span></code></p></td>
+<td><p>List, create categories</p></td>
+</tr>
+<tr class="row-even"><td><p>27</p></td>
+<td><p>Job Review Comments</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">jobs/controllers.py:JobReviewCommentController</span></code></p></td>
+<td><p>List, add, delete comments</p></td>
+</tr>
+<tr class="row-odd"><td><p>28</p></td>
+<td><p>Sponsors</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sponsors/controllers.py:SponsorController</span></code></p></td>
+<td><p>List, get sponsor info</p></td>
+</tr>
+<tr class="row-even"><td><p>29</p></td>
+<td><p>Sponsorship Levels</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sponsors/controllers.py:SponsorshipLevelController</span></code></p></td>
+<td><p>List, manage levels</p></td>
+</tr>
+<tr class="row-odd"><td><p>30</p></td>
+<td><p>Sponsorships</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sponsors/controllers.py:SponsorshipController</span></code></p></td>
+<td><p>List, manage sponsorships</p></td>
+</tr>
+<tr class="row-even"><td><p>31</p></td>
+<td><p>Companies</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">companies/controllers.py</span></code></p></td>
+<td><p>List, get, search companies</p></td>
+</tr>
+<tr class="row-odd"><td><p>32</p></td>
+<td><p>Work Groups</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">work_groups/controllers.py</span></code></p></td>
+<td><p>List, get group info</p></td>
+</tr>
+<tr class="row-even"><td><p>33</p></td>
+<td><p>Meeting Minutes</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">minutes/controllers.py</span></code></p></td>
+<td><p>List, get, archive minutes</p></td>
+</tr>
+<tr class="row-odd"><td><p>34</p></td>
+<td><p>Nominations</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">nominations/controllers.py:NominationController</span></code></p></td>
+<td><p>List, submit nominations</p></td>
+</tr>
+<tr class="row-even"><td><p>35</p></td>
+<td><p>Nominees</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">nominations/controllers.py:NomineeController</span></code></p></td>
+<td><p>List, get nominee details</p></td>
+</tr>
+<tr class="row-odd"><td><p>36</p></td>
+<td><p>Elections</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">nominations/controllers.py:ElectionController</span></code></p></td>
+<td><p>List, get election info</p></td>
+</tr>
+<tr class="row-even"><td><p>37</p></td>
+<td><p>Search</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">search/controllers.py</span></code></p></td>
+<td><p>Search, facets, suggestions</p></td>
+</tr>
+<tr class="row-odd"><td><p>38</p></td>
+<td><p>Mailing Lists</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">mailing/controllers.py</span></code></p></td>
+<td><p>Subscribe, manage preferences</p></td>
+</tr>
+<tr class="row-even"><td><p>39</p></td>
+<td><p>Admin Dashboard</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">admin/controllers/dashboard.py</span></code></p></td>
+<td><p>Stats, health, overview</p></td>
+</tr>
+<tr class="row-odd"><td><p>40</p></td>
+<td><p>Admin Users</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">admin/controllers/users.py</span></code></p></td>
+<td><p>Manage users, permissions</p></td>
+</tr>
+<tr class="row-even"><td><p>41</p></td>
+<td><p>Admin Pages</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">admin/controllers/pages.py</span></code></p></td>
+<td><p>Manage, bulk operations</p></td>
+</tr>
+<tr class="row-odd"><td><p>42</p></td>
+<td><p>Admin Events</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">admin/controllers/events.py</span></code></p></td>
+<td><p>Approve, moderate</p></td>
+</tr>
+<tr class="row-even"><td><p>43</p></td>
+<td><p>Admin Jobs</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">admin/controllers/jobs.py</span></code></p></td>
+<td><p>Moderate, approve, manage</p></td>
+</tr>
+<tr class="row-odd"><td><p>44</p></td>
+<td><p>Admin Sponsors</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">admin/controllers/sponsors.py</span></code></p></td>
+<td><p>Manage sponsorships</p></td>
+</tr>
+<tr class="row-even"><td><p>45</p></td>
+<td><p>Admin Blogs</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">admin/controllers/blogs.py</span></code></p></td>
+<td><p>Manage, moderate</p></td>
+</tr>
+<tr class="row-odd"><td><p>46</p></td>
+<td><p>Admin Logs</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">admin/controllers/logs.py</span></code></p></td>
+<td><p>View logs, audit trails</p></td>
+</tr>
+<tr class="row-even"><td><p>47</p></td>
+<td><p>Admin Email Templates</p></td>
+<td><p>Email template controller</p></td>
+<td><p>Manage templates</p></td>
+</tr>
+<tr class="row-odd"><td><p>48</p></td>
+<td><p>Admin Email Logs</p></td>
+<td><p>Email log controller</p></td>
+<td><p>View delivery logs</p></td>
+</tr>
+<tr class="row-even"><td><p>49</p></td>
+<td><p>Admin Tasks</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">admin/controllers/tasks.py</span></code></p></td>
+<td><p>Manage background tasks</p></td>
+</tr>
+<tr class="row-odd"><td><p>50</p></td>
+<td><p>Admin Settings</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">admin/controllers/settings.py</span></code></p></td>
+<td><p>System configuration</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="render-controllers-exclude-from-public-api-docs">
+<h2>Render Controllers (Exclude from Public API Docs)<a class="headerlink" href="#render-controllers-exclude-from-public-api-docs" title="Link to this heading">¶</a></h2>
+<p>These controllers serve HTML pages and should NOT appear in the public API documentation:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">jobs/controllers.py:JobRenderController</span></code> → tags = “internal”</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nominations/controllers.py:NominationRenderController</span></code> → tags = “internal”</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pages/controllers.py:PageRenderController</span></code> → tags = “internal”</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">search/controllers.py:SearchRenderController</span></code> → tags = “internal”</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sponsors/controllers.py:SponsorRenderController</span></code> → tags = “internal”</p></li>
+</ul>
+</section>
+<section id="tag-groups-by-category">
+<h2>Tag Groups by Category<a class="headerlink" href="#tag-groups-by-category" title="Link to this heading">¶</a></h2>
+<section id="core-6-tags">
+<h3>Core (6 tags)<a class="headerlink" href="#core-6-tags" title="Link to this heading">¶</a></h3>
+<p>Authentication, Users, User Memberships, User Groups, Search, Mailing Lists</p>
+</section>
+<section id="content-4-tags">
+<h3>Content (4 tags)<a class="headerlink" href="#content-4-tags" title="Link to this heading">¶</a></h3>
+<p>Pages, Documents, Images, Banners, Code Samples</p>
+</section>
+<section id="downloads-3-tags">
+<h3>Downloads (3 tags)<a class="headerlink" href="#downloads-3-tags" title="Link to this heading">¶</a></h3>
+<p>Operating Systems, Python Releases, Release Files</p>
+</section>
+<section id="events-5-tags">
+<h3>Events (5 tags)<a class="headerlink" href="#events-5-tags" title="Link to this heading">¶</a></h3>
+<p>Events, Event Calendars, Event Categories, Event Locations, Event Occurrences</p>
+</section>
+<section id="community-2-tags">
+<h3>Community (2 tags)<a class="headerlink" href="#community-2-tags" title="Link to this heading">¶</a></h3>
+<p>User Groups &amp; Communities, Community Content</p>
+</section>
+<section id="content-discovery-3-tags">
+<h3>Content Discovery (3 tags)<a class="headerlink" href="#content-discovery-3-tags" title="Link to this heading">¶</a></h3>
+<p>Blogs, Blog Feeds, Success Stories, Success Story Categories</p>
+</section>
+<section id="jobs-4-tags">
+<h3>Jobs (4 tags)<a class="headerlink" href="#jobs-4-tags" title="Link to this heading">¶</a></h3>
+<p>Jobs, Job Types, Job Categories, Job Review Comments</p>
+</section>
+<section id="business-4-tags">
+<h3>Business (4 tags)<a class="headerlink" href="#business-4-tags" title="Link to this heading">¶</a></h3>
+<p>Sponsors, Sponsorship Levels, Sponsorships, Companies</p>
+</section>
+<section id="governance-5-tags">
+<h3>Governance (5 tags)<a class="headerlink" href="#governance-5-tags" title="Link to this heading">¶</a></h3>
+<p>Work Groups, Meeting Minutes, Nominations, Nominees, Elections</p>
+</section>
+<section id="administration-12-tags">
+<h3>Administration (12 tags)<a class="headerlink" href="#administration-12-tags" title="Link to this heading">¶</a></h3>
+<p>Admin Dashboard, Admin Users, Admin Pages, Admin Events, Admin Jobs, Admin Sponsors, Admin Blogs, Admin Logs, Admin Email Templates, Admin Email Logs, Admin Tasks, Admin Settings</p>
+</section>
+</section>
+<section id="implementation-checklist">
+<h2>Implementation Checklist<a class="headerlink" href="#implementation-checklist" title="Link to this heading">¶</a></h2>
+<ul class="contains-task-list simple">
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Review tag structure with team</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Update all controller <code class="docutils literal notranslate"><span class="pre">tags</span> <span class="pre">=</span> <span class="pre">[&quot;old-tag&quot;]</span></code> to <code class="docutils literal notranslate"><span class="pre">tags</span> <span class="pre">=</span> <span class="pre">[&quot;New</span> <span class="pre">Tag</span> <span class="pre">Name&quot;]</span></code></p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Configure OpenAPI tags in main application</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Add exclude mechanism for render controllers</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Test in Scalar UI with live API</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Update API documentation</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Brief developers on new structure</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Monitor analytics for usage patterns</p></li>
+</ul>
+</section>
+<section id="common-migration-examples">
+<h2>Common Migration Examples<a class="headerlink" href="#common-migration-examples" title="Link to this heading">¶</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span data-line="1"># Before                           After
+</span><span data-line="2">tags = [&quot;users&quot;]                   tags = [&quot;Users&quot;]
+</span><span data-line="3">tags = [&quot;memberships&quot;]             tags = [&quot;User Memberships&quot;]
+</span><span data-line="4">tags = [&quot;user-groups&quot;]             tags = [&quot;User Groups&quot;]
+</span><span data-line="5">tags = [&quot;releases&quot;]                tags = [&quot;Python Releases&quot;]
+</span><span data-line="6">tags = [&quot;release-files&quot;]           tags = [&quot;Release Files&quot;]
+</span><span data-line="7">tags = [&quot;job-types&quot;]               tags = [&quot;Job Types&quot;]
+</span><span data-line="8">tags = [&quot;job-categories&quot;]          tags = [&quot;Job Categories&quot;]
+</span><span data-line="9">tags = [&quot;job-review-comments&quot;]     tags = [&quot;Job Review Comments&quot;]
+</span><span data-line="10">tags = [&quot;event-categories&quot;]        tags = [&quot;Event Categories&quot;]
+</span><span data-line="11">tags = [&quot;event-locations&quot;]         tags = [&quot;Event Locations&quot;]
+</span><span data-line="12">tags = [&quot;event-occurrences&quot;]       tags = [&quot;Event Occurrences&quot;]
+</span><span data-line="13">tags = [&quot;blog-entries&quot;]            tags = [&quot;Blogs&quot;]
+</span><span data-line="14">tags = [&quot;feed-aggregates&quot;]         tags = [&quot;Blog Feeds&quot;]
+</span><span data-line="15">tags = [&quot;community-posts&quot;]         tags = [&quot;Community Content&quot;]
+</span><span data-line="16">tags = [&quot;community-photos&quot;]        tags = [&quot;Community Content&quot;]
+</span><span data-line="17">tags = [&quot;success-stories&quot;]         tags = [&quot;Success Stories&quot;]
+</span><span data-line="18">tags = [&quot;sponsorship-levels&quot;]      tags = [&quot;Sponsorship Levels&quot;]
+</span><span data-line="19">tags = [&quot;code-samples&quot;]            tags = [&quot;Code Samples&quot;]
+</span><span data-line="20">tags = [&quot;jobs-render&quot;]             tags = [&quot;internal&quot;] (exclude)
+</span><span data-line="21">tags = [&quot;page-render&quot;]             tags = [&quot;internal&quot;] (exclude)
+</span><span data-line="22">tags = [&quot;search-render&quot;]           tags = [&quot;internal&quot;] (exclude)
+</span></pre></div>
+</div>
+</section>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>All tags use Title Case with Spaces (more readable in Scalar UI)</p></li>
+<li><p>Render controllers use “internal” tag and should be excluded from public schema</p></li>
+<li><p>Admin tags are grouped under “Admin *” prefix for easy filtering</p></li>
+<li><p>Related resources are adjacent in the list for logical discovery</p></li>
+<li><p>Total of 50 public tags (down from 100+), much more navigable</p></li>
+</ul>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Jacob Coffee</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+<a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+  <iconify-icon icon="simple-icons:github"></iconify-icon>
+</a></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=30646c52"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script src="../_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

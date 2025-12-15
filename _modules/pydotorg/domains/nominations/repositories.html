@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="blue" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>pydotorg.domains.nominations.repositories - litestar-pydotorg</title><link rel="index" title="Index" href="../../../../genindex.html" /><link rel="search" title="Search" href="../../../../search.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/shibuya.css?v=14737038" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link media="print" rel="stylesheet" type="text/css" href="../../../../_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css?v=513f0650" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="pydotorg.domains.nominations.repositories"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../../../../index.html">
+      
+      
+      <strong>litestar-pydotorg</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"><ul><li class="link">
+          <a href="https://litestar.dev/">
+            <span>Litestar</span></a>
+        </li><li class="link">
+          <a href="https://python.org/">
+            <span>Python.org</span></a>
+        </li></ul></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../../../../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials">
+  <a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../getting-started/index.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../getting-started/installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../getting-started/quickstart.html">Quickstart</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../guides/index.html">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/development.html">Development Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/contributing.html">Contribution Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/testing.html">Testing Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/debugging.html">Debugging Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/api-usage.html">API Usage Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/authentication.html">Authentication Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/feature-flags.html">Feature Flags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/configuration.html">Configuration Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/deployment.html">Deployment Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/docker.html">Docker Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/troubleshooting.html">Troubleshooting Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cookbook/index.html">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../cookbook/domain-patterns.html">Domain Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../cookbook/authentication-recipes.html">Authentication Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../cookbook/database-recipes.html">Database Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../cookbook/testing-recipes.html">Testing Recipes</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/index.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/core/index.html">Core Infrastructure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/auth.html">Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/cache.html">Caching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/database.html">Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/email.html">Email</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/exceptions.html">Exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/features.html">Feature Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/feeds.html">RSS/Atom Feeds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/ical.html">iCalendar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/middleware.html">Middleware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/openapi.html">OpenAPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/ratelimit.html">Rate Limiting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/security.html">Security</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/worker.html">Background Worker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/domains/index.html">Domain Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/about.html">About</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/admin.html">Admin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/banners.html">banners</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/blogs.html">blogs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/codesamples.html">Code Samples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/community.html">community</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/docs.html">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/downloads.html">downloads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/events.html">events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/jobs.html">jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/mailing.html">Mailing Lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/minutes.html">Minutes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/nominations.html">Nominations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/pages.html">pages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/sponsors.html">sponsors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/sqladmin.html">SQLAdmin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/successstories.html">Success Stories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/users.html">users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/work_groups.html">Work Groups</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/lib.html">Library Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/tasks.html">Background Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/config.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/main.html">Application Entry Point</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../architecture/index.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/ARCHITECTURE.html">Litestar Python.org Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/DATABASE_SCHEMA.html">Database Schema Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/DOMAIN_MODELS.html">Domain Models Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/QUICK_START.html">Litestar Python.org Quick Start Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/API_TAGS_INDEX.html">API Tags Documentation Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/RATE_LIMITING_ARCHITECTURE.html">Rate Limiting Architecture Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/adr/001-litestar-framework.html">ADR-001: Use Litestar as Web Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/adr/002-saq-background-tasks.html">ADR-002: Use SAQ for Background Task Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../../../../index.html"><span itemprop="name">litestar-pydotorg</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../../../index.html"><span itemprop="name">Module code</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="2" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">pydotorg.domains.nominations.repositories</strong>
+        <meta itemprop="position" content="3" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue dark-code" role="main">
+          <h1>Source code for pydotorg.domains.nominations.repositories</h1><div class="highlight"><pre>
+<span></span><span data-line="1"><span class="sd">&quot;&quot;&quot;Nominations domain repositories for database access.&quot;&quot;&quot;</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
+</span><span data-line="6"><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
+</span><span data-line="7">
+</span><span data-line="8"><span class="kn">from</span><span class="w"> </span><span class="nn">advanced_alchemy.repository</span><span class="w"> </span><span class="kn">import</span> <span class="n">SQLAlchemyAsyncRepository</span>
+</span><span data-line="9"><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">select</span>
+</span><span data-line="10">
+</span><span data-line="11"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.domains.nominations.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Election</span><span class="p">,</span> <span class="n">ElectionStatus</span><span class="p">,</span> <span class="n">Nomination</span><span class="p">,</span> <span class="n">Nominee</span>
+</span><span data-line="12">
+</span><span data-line="13"><span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+</span><span data-line="14">    <span class="kn">from</span><span class="w"> </span><span class="nn">uuid</span><span class="w"> </span><span class="kn">import</span> <span class="n">UUID</span>
+</span><span data-line="15">
+</span><span data-line="16">
+<div class="viewcode-block" id="ElectionRepository">
+<a class="viewcode-back" href="../../../../api/domains/nominations.html#pydotorg.domains.nominations.ElectionRepository">[docs]</a>
+</span><span data-line="17"><span class="k">class</span><span class="w"> </span><span class="nc">ElectionRepository</span><span class="p">(</span><span class="n">SQLAlchemyAsyncRepository</span><span class="p">[</span><span class="n">Election</span><span class="p">]):</span>
+</span><span data-line="18"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Repository for Election database operations.&quot;&quot;&quot;</span>
+</span><span data-line="19">
+</span><span data-line="20">    <span class="n">model_type</span> <span class="o">=</span> <span class="n">Election</span>
+</span><span data-line="21">
+<div class="viewcode-block" id="ElectionRepository.get_by_slug">
+<a class="viewcode-back" href="../../../../api/domains/nominations.html#pydotorg.domains.nominations.ElectionRepository.get_by_slug">[docs]</a>
+</span><span data-line="22">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_by_slug</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slug</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Election</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="23"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get an election by slug.</span>
+</span><span data-line="24">
+</span><span data-line="25"><span class="sd">        Args:</span>
+</span><span data-line="26"><span class="sd">            slug: The slug to search for.</span>
+</span><span data-line="27">
+</span><span data-line="28"><span class="sd">        Returns:</span>
+</span><span data-line="29"><span class="sd">            The election if found, None otherwise.</span>
+</span><span data-line="30"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="31">        <span class="n">statement</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">Election</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Election</span><span class="o">.</span><span class="n">slug</span> <span class="o">==</span> <span class="n">slug</span><span class="p">)</span>
+</span><span data-line="32">        <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">statement</span><span class="p">)</span>
+</span><span data-line="33">        <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="n">scalar_one_or_none</span><span class="p">()</span></div>
+
+</span><span data-line="34">
+<div class="viewcode-block" id="ElectionRepository.get_active_elections">
+<a class="viewcode-back" href="../../../../api/domains/nominations.html#pydotorg.domains.nominations.ElectionRepository.get_active_elections">[docs]</a>
+</span><span data-line="35">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_active_elections</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Election</span><span class="p">]:</span>
+</span><span data-line="36"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get elections that are currently active.</span>
+</span><span data-line="37">
+</span><span data-line="38"><span class="sd">        Args:</span>
+</span><span data-line="39"><span class="sd">            limit: Maximum number of elections to return.</span>
+</span><span data-line="40"><span class="sd">            offset: Number of elections to skip.</span>
+</span><span data-line="41">
+</span><span data-line="42"><span class="sd">        Returns:</span>
+</span><span data-line="43"><span class="sd">            List of active elections.</span>
+</span><span data-line="44"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="45">        <span class="n">today</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">UTC</span><span class="p">)</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
+</span><span data-line="46">        <span class="n">statement</span> <span class="o">=</span> <span class="p">(</span>
+</span><span data-line="47">            <span class="n">select</span><span class="p">(</span><span class="n">Election</span><span class="p">)</span>
+</span><span data-line="48">            <span class="o">.</span><span class="n">where</span><span class="p">(</span>
+</span><span data-line="49">                <span class="n">Election</span><span class="o">.</span><span class="n">nominations_open</span> <span class="o">&lt;=</span> <span class="n">today</span><span class="p">,</span>
+</span><span data-line="50">                <span class="n">Election</span><span class="o">.</span><span class="n">voting_close</span> <span class="o">&gt;=</span> <span class="n">today</span><span class="p">,</span>
+</span><span data-line="51">            <span class="p">)</span>
+</span><span data-line="52">            <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">Election</span><span class="o">.</span><span class="n">created_at</span><span class="o">.</span><span class="n">desc</span><span class="p">())</span>
+</span><span data-line="53">            <span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">limit</span><span class="p">)</span>
+</span><span data-line="54">            <span class="o">.</span><span class="n">offset</span><span class="p">(</span><span class="n">offset</span><span class="p">)</span>
+</span><span data-line="55">        <span class="p">)</span>
+</span><span data-line="56">        <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">statement</span><span class="p">)</span>
+</span><span data-line="57">        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">scalars</span><span class="p">()</span><span class="o">.</span><span class="n">all</span><span class="p">())</span></div>
+
+</span><span data-line="58">
+<div class="viewcode-block" id="ElectionRepository.get_by_status">
+<a class="viewcode-back" href="../../../../api/domains/nominations.html#pydotorg.domains.nominations.ElectionRepository.get_by_status">[docs]</a>
+</span><span data-line="59">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_by_status</span><span class="p">(</span>
+</span><span data-line="60">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="61">        <span class="n">status</span><span class="p">:</span> <span class="n">ElectionStatus</span><span class="p">,</span>
+</span><span data-line="62">        <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+</span><span data-line="63">        <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span><span data-line="64">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Election</span><span class="p">]:</span>
+</span><span data-line="65"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get elections by status.</span>
+</span><span data-line="66">
+</span><span data-line="67"><span class="sd">        Args:</span>
+</span><span data-line="68"><span class="sd">            status: The election status to filter by.</span>
+</span><span data-line="69"><span class="sd">            limit: Maximum number of elections to return.</span>
+</span><span data-line="70"><span class="sd">            offset: Number of elections to skip.</span>
+</span><span data-line="71">
+</span><span data-line="72"><span class="sd">        Returns:</span>
+</span><span data-line="73"><span class="sd">            List of elections with the specified status.</span>
+</span><span data-line="74"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="75">        <span class="n">today</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">UTC</span><span class="p">)</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
+</span><span data-line="76">        <span class="n">statement</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">Election</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">Election</span><span class="o">.</span><span class="n">created_at</span><span class="o">.</span><span class="n">desc</span><span class="p">())</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">limit</span><span class="p">)</span><span class="o">.</span><span class="n">offset</span><span class="p">(</span><span class="n">offset</span><span class="p">)</span>
+</span><span data-line="77">
+</span><span data-line="78">        <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="n">ElectionStatus</span><span class="o">.</span><span class="n">UPCOMING</span><span class="p">:</span>
+</span><span data-line="79">            <span class="n">statement</span> <span class="o">=</span> <span class="n">statement</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Election</span><span class="o">.</span><span class="n">nominations_open</span> <span class="o">&gt;</span> <span class="n">today</span><span class="p">)</span>
+</span><span data-line="80">        <span class="k">elif</span> <span class="n">status</span> <span class="o">==</span> <span class="n">ElectionStatus</span><span class="o">.</span><span class="n">NOMINATIONS_OPEN</span><span class="p">:</span>
+</span><span data-line="81">            <span class="n">statement</span> <span class="o">=</span> <span class="n">statement</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+</span><span data-line="82">                <span class="n">Election</span><span class="o">.</span><span class="n">nominations_open</span> <span class="o">&lt;=</span> <span class="n">today</span><span class="p">,</span>
+</span><span data-line="83">                <span class="n">Election</span><span class="o">.</span><span class="n">nominations_close</span> <span class="o">&gt;=</span> <span class="n">today</span><span class="p">,</span>
+</span><span data-line="84">            <span class="p">)</span>
+</span><span data-line="85">        <span class="k">elif</span> <span class="n">status</span> <span class="o">==</span> <span class="n">ElectionStatus</span><span class="o">.</span><span class="n">VOTING_OPEN</span><span class="p">:</span>
+</span><span data-line="86">            <span class="n">statement</span> <span class="o">=</span> <span class="n">statement</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+</span><span data-line="87">                <span class="n">Election</span><span class="o">.</span><span class="n">voting_open</span> <span class="o">&lt;=</span> <span class="n">today</span><span class="p">,</span>
+</span><span data-line="88">                <span class="n">Election</span><span class="o">.</span><span class="n">voting_close</span> <span class="o">&gt;=</span> <span class="n">today</span><span class="p">,</span>
+</span><span data-line="89">            <span class="p">)</span>
+</span><span data-line="90">        <span class="k">elif</span> <span class="n">status</span> <span class="o">==</span> <span class="n">ElectionStatus</span><span class="o">.</span><span class="n">CLOSED</span><span class="p">:</span>
+</span><span data-line="91">            <span class="n">statement</span> <span class="o">=</span> <span class="n">statement</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Election</span><span class="o">.</span><span class="n">voting_close</span> <span class="o">&lt;</span> <span class="n">today</span><span class="p">)</span>
+</span><span data-line="92">
+</span><span data-line="93">        <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">statement</span><span class="p">)</span>
+</span><span data-line="94">        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">scalars</span><span class="p">()</span><span class="o">.</span><span class="n">all</span><span class="p">())</span></div>
+</div>
+
+</span><span data-line="95">
+</span><span data-line="96">
+<div class="viewcode-block" id="NomineeRepository">
+<a class="viewcode-back" href="../../../../api/domains/nominations.html#pydotorg.domains.nominations.NomineeRepository">[docs]</a>
+</span><span data-line="97"><span class="k">class</span><span class="w"> </span><span class="nc">NomineeRepository</span><span class="p">(</span><span class="n">SQLAlchemyAsyncRepository</span><span class="p">[</span><span class="n">Nominee</span><span class="p">]):</span>
+</span><span data-line="98"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Repository for Nominee database operations.&quot;&quot;&quot;</span>
+</span><span data-line="99">
+</span><span data-line="100">    <span class="n">model_type</span> <span class="o">=</span> <span class="n">Nominee</span>
+</span><span data-line="101">
+<div class="viewcode-block" id="NomineeRepository.get_by_election">
+<a class="viewcode-back" href="../../../../api/domains/nominations.html#pydotorg.domains.nominations.NomineeRepository.get_by_election">[docs]</a>
+</span><span data-line="102">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_by_election</span><span class="p">(</span>
+</span><span data-line="103">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="104">        <span class="n">election_id</span><span class="p">:</span> <span class="n">UUID</span><span class="p">,</span>
+</span><span data-line="105">        <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+</span><span data-line="106">        <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span><span data-line="107">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Nominee</span><span class="p">]:</span>
+</span><span data-line="108"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get nominees for an election.</span>
+</span><span data-line="109">
+</span><span data-line="110"><span class="sd">        Args:</span>
+</span><span data-line="111"><span class="sd">            election_id: The election ID.</span>
+</span><span data-line="112"><span class="sd">            limit: Maximum number of nominees to return.</span>
+</span><span data-line="113"><span class="sd">            offset: Number of nominees to skip.</span>
+</span><span data-line="114">
+</span><span data-line="115"><span class="sd">        Returns:</span>
+</span><span data-line="116"><span class="sd">            List of nominees for the election.</span>
+</span><span data-line="117"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="118">        <span class="n">statement</span> <span class="o">=</span> <span class="p">(</span>
+</span><span data-line="119">            <span class="n">select</span><span class="p">(</span><span class="n">Nominee</span><span class="p">)</span>
+</span><span data-line="120">            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Nominee</span><span class="o">.</span><span class="n">election_id</span> <span class="o">==</span> <span class="n">election_id</span><span class="p">)</span>
+</span><span data-line="121">            <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">Nominee</span><span class="o">.</span><span class="n">created_at</span><span class="o">.</span><span class="n">desc</span><span class="p">())</span>
+</span><span data-line="122">            <span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">limit</span><span class="p">)</span>
+</span><span data-line="123">            <span class="o">.</span><span class="n">offset</span><span class="p">(</span><span class="n">offset</span><span class="p">)</span>
+</span><span data-line="124">        <span class="p">)</span>
+</span><span data-line="125">        <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">statement</span><span class="p">)</span>
+</span><span data-line="126">        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">scalars</span><span class="p">()</span><span class="o">.</span><span class="n">all</span><span class="p">())</span></div>
+
+</span><span data-line="127">
+<div class="viewcode-block" id="NomineeRepository.get_by_user">
+<a class="viewcode-back" href="../../../../api/domains/nominations.html#pydotorg.domains.nominations.NomineeRepository.get_by_user">[docs]</a>
+</span><span data-line="128">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_by_user</span><span class="p">(</span>
+</span><span data-line="129">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="130">        <span class="n">user_id</span><span class="p">:</span> <span class="n">UUID</span><span class="p">,</span>
+</span><span data-line="131">        <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+</span><span data-line="132">        <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span><span data-line="133">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Nominee</span><span class="p">]:</span>
+</span><span data-line="134"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get nominees by user.</span>
+</span><span data-line="135">
+</span><span data-line="136"><span class="sd">        Args:</span>
+</span><span data-line="137"><span class="sd">            user_id: The user ID.</span>
+</span><span data-line="138"><span class="sd">            limit: Maximum number of nominees to return.</span>
+</span><span data-line="139"><span class="sd">            offset: Number of nominees to skip.</span>
+</span><span data-line="140">
+</span><span data-line="141"><span class="sd">        Returns:</span>
+</span><span data-line="142"><span class="sd">            List of nominees for the user.</span>
+</span><span data-line="143"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="144">        <span class="n">statement</span> <span class="o">=</span> <span class="p">(</span>
+</span><span data-line="145">            <span class="n">select</span><span class="p">(</span><span class="n">Nominee</span><span class="p">)</span>
+</span><span data-line="146">            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Nominee</span><span class="o">.</span><span class="n">user_id</span> <span class="o">==</span> <span class="n">user_id</span><span class="p">)</span>
+</span><span data-line="147">            <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">Nominee</span><span class="o">.</span><span class="n">created_at</span><span class="o">.</span><span class="n">desc</span><span class="p">())</span>
+</span><span data-line="148">            <span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">limit</span><span class="p">)</span>
+</span><span data-line="149">            <span class="o">.</span><span class="n">offset</span><span class="p">(</span><span class="n">offset</span><span class="p">)</span>
+</span><span data-line="150">        <span class="p">)</span>
+</span><span data-line="151">        <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">statement</span><span class="p">)</span>
+</span><span data-line="152">        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">scalars</span><span class="p">()</span><span class="o">.</span><span class="n">all</span><span class="p">())</span></div>
+
+</span><span data-line="153">
+<div class="viewcode-block" id="NomineeRepository.get_accepted_nominees">
+<a class="viewcode-back" href="../../../../api/domains/nominations.html#pydotorg.domains.nominations.NomineeRepository.get_accepted_nominees">[docs]</a>
+</span><span data-line="154">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_accepted_nominees</span><span class="p">(</span>
+</span><span data-line="155">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="156">        <span class="n">election_id</span><span class="p">:</span> <span class="n">UUID</span><span class="p">,</span>
+</span><span data-line="157">        <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+</span><span data-line="158">        <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span><span data-line="159">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Nominee</span><span class="p">]:</span>
+</span><span data-line="160"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get accepted nominees for an election.</span>
+</span><span data-line="161">
+</span><span data-line="162"><span class="sd">        Args:</span>
+</span><span data-line="163"><span class="sd">            election_id: The election ID.</span>
+</span><span data-line="164"><span class="sd">            limit: Maximum number of nominees to return.</span>
+</span><span data-line="165"><span class="sd">            offset: Number of nominees to skip.</span>
+</span><span data-line="166">
+</span><span data-line="167"><span class="sd">        Returns:</span>
+</span><span data-line="168"><span class="sd">            List of accepted nominees.</span>
+</span><span data-line="169"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="170">        <span class="n">statement</span> <span class="o">=</span> <span class="p">(</span>
+</span><span data-line="171">            <span class="n">select</span><span class="p">(</span><span class="n">Nominee</span><span class="p">)</span>
+</span><span data-line="172">            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Nominee</span><span class="o">.</span><span class="n">election_id</span> <span class="o">==</span> <span class="n">election_id</span><span class="p">,</span> <span class="n">Nominee</span><span class="o">.</span><span class="n">accepted</span><span class="o">.</span><span class="n">is_</span><span class="p">(</span><span class="kc">True</span><span class="p">))</span>
+</span><span data-line="173">            <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">Nominee</span><span class="o">.</span><span class="n">created_at</span><span class="o">.</span><span class="n">desc</span><span class="p">())</span>
+</span><span data-line="174">            <span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">limit</span><span class="p">)</span>
+</span><span data-line="175">            <span class="o">.</span><span class="n">offset</span><span class="p">(</span><span class="n">offset</span><span class="p">)</span>
+</span><span data-line="176">        <span class="p">)</span>
+</span><span data-line="177">        <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">statement</span><span class="p">)</span>
+</span><span data-line="178">        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">scalars</span><span class="p">()</span><span class="o">.</span><span class="n">all</span><span class="p">())</span></div>
+
+</span><span data-line="179">
+<div class="viewcode-block" id="NomineeRepository.get_by_election_and_user">
+<a class="viewcode-back" href="../../../../api/domains/nominations.html#pydotorg.domains.nominations.NomineeRepository.get_by_election_and_user">[docs]</a>
+</span><span data-line="180">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_by_election_and_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">election_id</span><span class="p">:</span> <span class="n">UUID</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="n">UUID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Nominee</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="181"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a nominee by election and user.</span>
+</span><span data-line="182">
+</span><span data-line="183"><span class="sd">        Args:</span>
+</span><span data-line="184"><span class="sd">            election_id: The election ID.</span>
+</span><span data-line="185"><span class="sd">            user_id: The user ID.</span>
+</span><span data-line="186">
+</span><span data-line="187"><span class="sd">        Returns:</span>
+</span><span data-line="188"><span class="sd">            The nominee if found, None otherwise.</span>
+</span><span data-line="189"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="190">        <span class="n">statement</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">Nominee</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Nominee</span><span class="o">.</span><span class="n">election_id</span> <span class="o">==</span> <span class="n">election_id</span><span class="p">,</span> <span class="n">Nominee</span><span class="o">.</span><span class="n">user_id</span> <span class="o">==</span> <span class="n">user_id</span><span class="p">)</span>
+</span><span data-line="191">        <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">statement</span><span class="p">)</span>
+</span><span data-line="192">        <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="n">scalar_one_or_none</span><span class="p">()</span></div>
+</div>
+
+</span><span data-line="193">
+</span><span data-line="194">
+<div class="viewcode-block" id="NominationRepository">
+<a class="viewcode-back" href="../../../../api/domains/nominations.html#pydotorg.domains.nominations.NominationRepository">[docs]</a>
+</span><span data-line="195"><span class="k">class</span><span class="w"> </span><span class="nc">NominationRepository</span><span class="p">(</span><span class="n">SQLAlchemyAsyncRepository</span><span class="p">[</span><span class="n">Nomination</span><span class="p">]):</span>
+</span><span data-line="196"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Repository for Nomination database operations.&quot;&quot;&quot;</span>
+</span><span data-line="197">
+</span><span data-line="198">    <span class="n">model_type</span> <span class="o">=</span> <span class="n">Nomination</span>
+</span><span data-line="199">
+<div class="viewcode-block" id="NominationRepository.get_by_nominee">
+<a class="viewcode-back" href="../../../../api/domains/nominations.html#pydotorg.domains.nominations.NominationRepository.get_by_nominee">[docs]</a>
+</span><span data-line="200">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_by_nominee</span><span class="p">(</span>
+</span><span data-line="201">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="202">        <span class="n">nominee_id</span><span class="p">:</span> <span class="n">UUID</span><span class="p">,</span>
+</span><span data-line="203">        <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+</span><span data-line="204">        <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span><span data-line="205">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Nomination</span><span class="p">]:</span>
+</span><span data-line="206"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get nominations for a nominee.</span>
+</span><span data-line="207">
+</span><span data-line="208"><span class="sd">        Args:</span>
+</span><span data-line="209"><span class="sd">            nominee_id: The nominee ID.</span>
+</span><span data-line="210"><span class="sd">            limit: Maximum number of nominations to return.</span>
+</span><span data-line="211"><span class="sd">            offset: Number of nominations to skip.</span>
+</span><span data-line="212">
+</span><span data-line="213"><span class="sd">        Returns:</span>
+</span><span data-line="214"><span class="sd">            List of nominations for the nominee.</span>
+</span><span data-line="215"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="216">        <span class="n">statement</span> <span class="o">=</span> <span class="p">(</span>
+</span><span data-line="217">            <span class="n">select</span><span class="p">(</span><span class="n">Nomination</span><span class="p">)</span>
+</span><span data-line="218">            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Nomination</span><span class="o">.</span><span class="n">nominee_id</span> <span class="o">==</span> <span class="n">nominee_id</span><span class="p">)</span>
+</span><span data-line="219">            <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">Nomination</span><span class="o">.</span><span class="n">created_at</span><span class="o">.</span><span class="n">desc</span><span class="p">())</span>
+</span><span data-line="220">            <span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">limit</span><span class="p">)</span>
+</span><span data-line="221">            <span class="o">.</span><span class="n">offset</span><span class="p">(</span><span class="n">offset</span><span class="p">)</span>
+</span><span data-line="222">        <span class="p">)</span>
+</span><span data-line="223">        <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">statement</span><span class="p">)</span>
+</span><span data-line="224">        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">scalars</span><span class="p">()</span><span class="o">.</span><span class="n">all</span><span class="p">())</span></div>
+
+</span><span data-line="225">
+<div class="viewcode-block" id="NominationRepository.get_by_nominator">
+<a class="viewcode-back" href="../../../../api/domains/nominations.html#pydotorg.domains.nominations.NominationRepository.get_by_nominator">[docs]</a>
+</span><span data-line="226">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_by_nominator</span><span class="p">(</span>
+</span><span data-line="227">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="228">        <span class="n">nominator_id</span><span class="p">:</span> <span class="n">UUID</span><span class="p">,</span>
+</span><span data-line="229">        <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+</span><span data-line="230">        <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span><span data-line="231">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Nomination</span><span class="p">]:</span>
+</span><span data-line="232"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get nominations by nominator.</span>
+</span><span data-line="233">
+</span><span data-line="234"><span class="sd">        Args:</span>
+</span><span data-line="235"><span class="sd">            nominator_id: The nominator user ID.</span>
+</span><span data-line="236"><span class="sd">            limit: Maximum number of nominations to return.</span>
+</span><span data-line="237"><span class="sd">            offset: Number of nominations to skip.</span>
+</span><span data-line="238">
+</span><span data-line="239"><span class="sd">        Returns:</span>
+</span><span data-line="240"><span class="sd">            List of nominations by the nominator.</span>
+</span><span data-line="241"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="242">        <span class="n">statement</span> <span class="o">=</span> <span class="p">(</span>
+</span><span data-line="243">            <span class="n">select</span><span class="p">(</span><span class="n">Nomination</span><span class="p">)</span>
+</span><span data-line="244">            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Nomination</span><span class="o">.</span><span class="n">nominator_id</span> <span class="o">==</span> <span class="n">nominator_id</span><span class="p">)</span>
+</span><span data-line="245">            <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">Nomination</span><span class="o">.</span><span class="n">created_at</span><span class="o">.</span><span class="n">desc</span><span class="p">())</span>
+</span><span data-line="246">            <span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">limit</span><span class="p">)</span>
+</span><span data-line="247">            <span class="o">.</span><span class="n">offset</span><span class="p">(</span><span class="n">offset</span><span class="p">)</span>
+</span><span data-line="248">        <span class="p">)</span>
+</span><span data-line="249">        <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">statement</span><span class="p">)</span>
+</span><span data-line="250">        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">scalars</span><span class="p">()</span><span class="o">.</span><span class="n">all</span><span class="p">())</span></div>
+
+</span><span data-line="251">
+<div class="viewcode-block" id="NominationRepository.count_by_nominee">
+<a class="viewcode-back" href="../../../../api/domains/nominations.html#pydotorg.domains.nominations.NominationRepository.count_by_nominee">[docs]</a>
+</span><span data-line="252">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">count_by_nominee</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nominee_id</span><span class="p">:</span> <span class="n">UUID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span><span data-line="253"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Count nominations for a nominee.</span>
+</span><span data-line="254">
+</span><span data-line="255"><span class="sd">        Args:</span>
+</span><span data-line="256"><span class="sd">            nominee_id: The nominee ID.</span>
+</span><span data-line="257">
+</span><span data-line="258"><span class="sd">        Returns:</span>
+</span><span data-line="259"><span class="sd">            Number of nominations for the nominee.</span>
+</span><span data-line="260"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="261">        <span class="n">statement</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">Nomination</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Nomination</span><span class="o">.</span><span class="n">nominee_id</span> <span class="o">==</span> <span class="n">nominee_id</span><span class="p">)</span>
+</span><span data-line="262">        <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">statement</span><span class="p">)</span>
+</span><span data-line="263">        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">scalars</span><span class="p">()</span><span class="o">.</span><span class="n">all</span><span class="p">()))</span></div>
+</div>
+
+</span></pre></div>
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Jacob Coffee</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+<a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+  <iconify-icon icon="simple-icons:github"></iconify-icon>
+</a></div>
+    </div>
+  </div>
+</footer>
+      <script src="../../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../../_static/copybutton.js?v=30646c52"></script>
+      <script src="../../../../_static/design-tabs.js?v=f930bc37"></script>
+      <script src="../../../../_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

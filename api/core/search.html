@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="blue" data-content_root="../../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Search - litestar-pydotorg</title><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Security" href="security.html" /><link rel="prev" title="Rate Limiting" href="ratelimit.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="../../_static/shibuya.css?v=14737038" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link media="print" rel="stylesheet" type="text/css" href="../../_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=513f0650" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="Search"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../../index.html">
+      
+      
+      <strong>litestar-pydotorg</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"><ul><li class="link">
+          <a href="https://litestar.dev/">
+            <span>Litestar</span></a>
+        </li><li class="link">
+          <a href="https://python.org/">
+            <span>Python.org</span></a>
+        </li></ul></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials">
+  <a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started/index.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../getting-started/installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting-started/quickstart.html">Quickstart</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/index.html">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/development.html">Development Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/contributing.html">Contribution Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/testing.html">Testing Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/debugging.html">Debugging Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/api-usage.html">API Usage Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/authentication.html">Authentication Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/feature-flags.html">Feature Flags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/configuration.html">Configuration Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/deployment.html">Deployment Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/docker.html">Docker Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/troubleshooting.html">Troubleshooting Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../cookbook/index.html">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../cookbook/domain-patterns.html">Domain Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cookbook/authentication-recipes.html">Authentication Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cookbook/database-recipes.html">Database Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cookbook/testing-recipes.html">Testing Recipes</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Core Infrastructure</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="auth.html">Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cache.html">Caching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="database.html">Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="email.html">Email</a></li>
+<li class="toctree-l3"><a class="reference internal" href="exceptions.html">Exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="features.html">Feature Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="feeds.html">RSS/Atom Feeds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ical.html">iCalendar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="middleware.html">Middleware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="openapi.html">OpenAPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ratelimit.html">Rate Limiting</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="security.html">Security</a></li>
+<li class="toctree-l3"><a class="reference internal" href="worker.html">Background Worker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../domains/index.html">Domain Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../domains/about.html">About</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../domains/admin.html">Admin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../domains/banners.html">banners</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../domains/blogs.html">blogs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../domains/codesamples.html">Code Samples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../domains/community.html">community</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../domains/docs.html">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../domains/downloads.html">downloads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../domains/events.html">events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../domains/jobs.html">jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../domains/mailing.html">Mailing Lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../domains/minutes.html">Minutes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../domains/nominations.html">Nominations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../domains/pages.html">pages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../domains/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../domains/sponsors.html">sponsors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../domains/sqladmin.html">SQLAdmin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../domains/successstories.html">Success Stories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../domains/users.html">users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../domains/work_groups.html">Work Groups</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../lib.html">Library Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tasks.html">Background Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../config.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../main.html">Application Entry Point</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../architecture/index.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../architecture/ARCHITECTURE.html">Litestar Python.org Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../architecture/DATABASE_SCHEMA.html">Database Schema Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../architecture/DOMAIN_MODELS.html">Domain Models Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../architecture/QUICK_START.html">Litestar Python.org Quick Start Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../architecture/API_TAGS_INDEX.html">API Tags Documentation Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../architecture/RATE_LIMITING_ARCHITECTURE.html">Rate Limiting Architecture Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../architecture/adr/001-litestar-framework.html">ADR-001: Use Litestar as Web Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../architecture/adr/002-saq-background-tasks.html">ADR-002: Use SAQ for Background Task Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#module-pydotorg.core.search">Module Contents</a><ul>
+<li><a class="reference internal" href="#pydotorg.core.search.IndexedDocument"><code class="docutils literal notranslate"><span class="pre">IndexedDocument</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.core.search.IndexedDocument.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.IndexedDocument.id"><code class="docutils literal notranslate">id</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.IndexedDocument.title"><code class="docutils literal notranslate">title</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.IndexedDocument.description"><code class="docutils literal notranslate">description</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.IndexedDocument.content"><code class="docutils literal notranslate">content</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.IndexedDocument.url"><code class="docutils literal notranslate">url</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.IndexedDocument.content_type"><code class="docutils literal notranslate">content_type</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.IndexedDocument.created"><code class="docutils literal notranslate">created</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.IndexedDocument.modified"><code class="docutils literal notranslate">modified</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.IndexedDocument.status"><code class="docutils literal notranslate">status</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.IndexedDocument.tags"><code class="docutils literal notranslate">tags</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.IndexedDocument.searchable_text"><code class="docutils literal notranslate">searchable_text</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.core.search.SearchQuery"><code class="docutils literal notranslate"><span class="pre">SearchQuery</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.core.search.SearchQuery.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.SearchQuery.query"><code class="docutils literal notranslate">query</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.SearchQuery.indexes"><code class="docutils literal notranslate">indexes</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.SearchQuery.filters"><code class="docutils literal notranslate">filters</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.SearchQuery.limit"><code class="docutils literal notranslate">limit</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.SearchQuery.offset"><code class="docutils literal notranslate">offset</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.SearchQuery.attributes_to_retrieve"><code class="docutils literal notranslate">attributes_to_retrieve</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.SearchQuery.attributes_to_highlight"><code class="docutils literal notranslate">attributes_to_highlight</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.core.search.SearchResult"><code class="docutils literal notranslate"><span class="pre">SearchResult</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.core.search.SearchResult.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.SearchResult.hits"><code class="docutils literal notranslate">hits</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.SearchResult.total"><code class="docutils literal notranslate">total</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.SearchResult.offset"><code class="docutils literal notranslate">offset</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.SearchResult.limit"><code class="docutils literal notranslate">limit</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.SearchResult.processing_time_ms"><code class="docutils literal notranslate">processing_time_ms</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.SearchResult.query"><code class="docutils literal notranslate">query</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.core.search.SearchService"><code class="docutils literal notranslate"><span class="pre">SearchService</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.core.search.SearchService.__init__"><code class="docutils literal notranslate">__init__()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.SearchService.clear_index"><code class="docutils literal notranslate">clear_index()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.SearchService.client"><code class="docutils literal notranslate">client</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.SearchService.close"><code class="docutils literal notranslate">close()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.SearchService.configure_index"><code class="docutils literal notranslate">configure_index()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.SearchService.create_index"><code class="docutils literal notranslate">create_index()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.SearchService.delete_documents"><code class="docutils literal notranslate">delete_documents()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.SearchService.delete_index"><code class="docutils literal notranslate">delete_index()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.SearchService.get_index_stats"><code class="docutils literal notranslate">get_index_stats()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.SearchService.index_documents"><code class="docutils literal notranslate">index_documents()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.SearchService.is_available"><code class="docutils literal notranslate">is_available()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.SearchService.search"><code class="docutils literal notranslate">search()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.SearchService.update_documents"><code class="docutils literal notranslate">update_documents()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#schemas">Schemas</a><ul>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.SearchQuery"><code class="docutils literal notranslate"><span class="pre">SearchQuery</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.SearchQuery.query"><code class="docutils literal notranslate">query</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.SearchQuery.indexes"><code class="docutils literal notranslate">indexes</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.SearchQuery.filters"><code class="docutils literal notranslate">filters</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.SearchQuery.limit"><code class="docutils literal notranslate">limit</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.SearchQuery.offset"><code class="docutils literal notranslate">offset</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.SearchQuery.attributes_to_retrieve"><code class="docutils literal notranslate">attributes_to_retrieve</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.SearchQuery.attributes_to_highlight"><code class="docutils literal notranslate">attributes_to_highlight</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.SearchQuery.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.SearchHit"><code class="docutils literal notranslate"><span class="pre">SearchHit</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.SearchHit.id"><code class="docutils literal notranslate">id</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.SearchHit.index"><code class="docutils literal notranslate">index</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.SearchHit.title"><code class="docutils literal notranslate">title</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.SearchHit.description"><code class="docutils literal notranslate">description</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.SearchHit.url"><code class="docutils literal notranslate">url</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.SearchHit.content_type"><code class="docutils literal notranslate">content_type</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.SearchHit.created"><code class="docutils literal notranslate">created</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.SearchHit.modified"><code class="docutils literal notranslate">modified</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.SearchHit.highlight"><code class="docutils literal notranslate">highlight</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.SearchHit.extra"><code class="docutils literal notranslate">extra</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.SearchHit.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.SearchResult"><code class="docutils literal notranslate"><span class="pre">SearchResult</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.SearchResult.hits"><code class="docutils literal notranslate">hits</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.SearchResult.total"><code class="docutils literal notranslate">total</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.SearchResult.offset"><code class="docutils literal notranslate">offset</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.SearchResult.limit"><code class="docutils literal notranslate">limit</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.SearchResult.processing_time_ms"><code class="docutils literal notranslate">processing_time_ms</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.SearchResult.query"><code class="docutils literal notranslate">query</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.SearchResult.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.IndexedDocument"><code class="docutils literal notranslate"><span class="pre">IndexedDocument</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.IndexedDocument.id"><code class="docutils literal notranslate">id</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.IndexedDocument.title"><code class="docutils literal notranslate">title</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.IndexedDocument.description"><code class="docutils literal notranslate">description</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.IndexedDocument.content"><code class="docutils literal notranslate">content</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.IndexedDocument.url"><code class="docutils literal notranslate">url</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.IndexedDocument.content_type"><code class="docutils literal notranslate">content_type</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.IndexedDocument.created"><code class="docutils literal notranslate">created</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.IndexedDocument.modified"><code class="docutils literal notranslate">modified</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.IndexedDocument.status"><code class="docutils literal notranslate">status</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.IndexedDocument.tags"><code class="docutils literal notranslate">tags</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.IndexedDocument.searchable_text"><code class="docutils literal notranslate">searchable_text</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.IndexedDocument.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.JobDocument"><code class="docutils literal notranslate"><span class="pre">JobDocument</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.JobDocument.content_type"><code class="docutils literal notranslate">content_type</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.JobDocument.company_name"><code class="docutils literal notranslate">company_name</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.JobDocument.location"><code class="docutils literal notranslate">location</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.JobDocument.remote"><code class="docutils literal notranslate">remote</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.JobDocument.job_types"><code class="docutils literal notranslate">job_types</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.JobDocument.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.EventDocument"><code class="docutils literal notranslate"><span class="pre">EventDocument</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.EventDocument.content_type"><code class="docutils literal notranslate">content_type</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.EventDocument.venue"><code class="docutils literal notranslate">venue</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.EventDocument.location"><code class="docutils literal notranslate">location</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.EventDocument.start_date"><code class="docutils literal notranslate">start_date</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.EventDocument.end_date"><code class="docutils literal notranslate">end_date</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.EventDocument.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.BlogDocument"><code class="docutils literal notranslate"><span class="pre">BlogDocument</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.BlogDocument.content_type"><code class="docutils literal notranslate">content_type</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.BlogDocument.author"><code class="docutils literal notranslate">author</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.BlogDocument.published"><code class="docutils literal notranslate">published</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.BlogDocument.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.PageDocument"><code class="docutils literal notranslate"><span class="pre">PageDocument</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.PageDocument.content_type"><code class="docutils literal notranslate">content_type</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.PageDocument.path"><code class="docutils literal notranslate">path</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.schemas.PageDocument.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#service">Service</a><ul>
+<li><a class="reference internal" href="#pydotorg.core.search.service.SearchService"><code class="docutils literal notranslate"><span class="pre">SearchService</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.core.search.service.SearchService.__init__"><code class="docutils literal notranslate">__init__()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.service.SearchService.client"><code class="docutils literal notranslate">client</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.service.SearchService.close"><code class="docutils literal notranslate">close()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.service.SearchService.create_index"><code class="docutils literal notranslate">create_index()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.service.SearchService.delete_index"><code class="docutils literal notranslate">delete_index()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.service.SearchService.configure_index"><code class="docutils literal notranslate">configure_index()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.service.SearchService.index_documents"><code class="docutils literal notranslate">index_documents()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.service.SearchService.update_documents"><code class="docutils literal notranslate">update_documents()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.service.SearchService.delete_documents"><code class="docutils literal notranslate">delete_documents()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.service.SearchService.clear_index"><code class="docutils literal notranslate">clear_index()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.service.SearchService.is_available"><code class="docutils literal notranslate">is_available()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.service.SearchService.search"><code class="docutils literal notranslate">search()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.core.search.service.SearchService.get_index_stats"><code class="docutils literal notranslate">get_index_stats()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../../index.html"><span itemprop="name">litestar-pydotorg</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../index.html"><span itemprop="name">API Reference</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="2" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="index.html"><span itemprop="name">Core Infrastructure</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="3" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">Search</strong>
+        <meta itemprop="position" content="4" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue dark-code" role="main">
+          <section id="search">
+<h1>Search<a class="headerlink" href="#search" title="Link to this heading">¶</a></h1>
+<p>Full-text search infrastructure.</p>
+<section id="module-pydotorg.core.search">
+<span id="module-contents"></span><h2>Module Contents<a class="headerlink" href="#module-pydotorg.core.search" title="Link to this heading">¶</a></h2>
+<p>Search functionality using Meilisearch.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.core.search.IndexedDocument">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">IndexedDocument</span></span><a class="reference internal" href="../../_modules/pydotorg/core/search/schemas.html#IndexedDocument"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.core.search.IndexedDocument" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Base schema for indexed documents in Meilisearch.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.IndexedDocument.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pydotorg.core.search.IndexedDocument.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.IndexedDocument.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pydotorg.core.search.IndexedDocument.id" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.IndexedDocument.title">
+<span class="sig-name descname"><span class="pre">title</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pydotorg.core.search.IndexedDocument.title" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.IndexedDocument.description">
+<span class="sig-name descname"><span class="pre">description</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.core.search.IndexedDocument.description" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.IndexedDocument.content">
+<span class="sig-name descname"><span class="pre">content</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.core.search.IndexedDocument.content" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.IndexedDocument.url">
+<span class="sig-name descname"><span class="pre">url</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pydotorg.core.search.IndexedDocument.url" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.IndexedDocument.content_type">
+<span class="sig-name descname"><span class="pre">content_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pydotorg.core.search.IndexedDocument.content_type" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.IndexedDocument.created">
+<span class="sig-name descname"><span class="pre">created</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.core.search.IndexedDocument.created" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.IndexedDocument.modified">
+<span class="sig-name descname"><span class="pre">modified</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.core.search.IndexedDocument.modified" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.IndexedDocument.status">
+<span class="sig-name descname"><span class="pre">status</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.core.search.IndexedDocument.status" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.IndexedDocument.tags">
+<span class="sig-name descname"><span class="pre">tags</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list[str]</span></em><a class="headerlink" href="#pydotorg.core.search.IndexedDocument.tags" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.IndexedDocument.searchable_text">
+<span class="sig-name descname"><span class="pre">searchable_text</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.core.search.IndexedDocument.searchable_text" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.core.search.SearchQuery">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SearchQuery</span></span><a class="reference internal" href="../../_modules/pydotorg/core/search/schemas.html#SearchQuery"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.core.search.SearchQuery" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Search query parameters.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.SearchQuery.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pydotorg.core.search.SearchQuery.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.SearchQuery.query">
+<span class="sig-name descname"><span class="pre">query</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pydotorg.core.search.SearchQuery.query" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.SearchQuery.indexes">
+<span class="sig-name descname"><span class="pre">indexes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list[str]</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.core.search.SearchQuery.indexes" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.SearchQuery.filters">
+<span class="sig-name descname"><span class="pre">filters</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict[str,</span> <span class="pre">Any]</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.core.search.SearchQuery.filters" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.SearchQuery.limit">
+<span class="sig-name descname"><span class="pre">limit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pydotorg.core.search.SearchQuery.limit" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.SearchQuery.offset">
+<span class="sig-name descname"><span class="pre">offset</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pydotorg.core.search.SearchQuery.offset" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.SearchQuery.attributes_to_retrieve">
+<span class="sig-name descname"><span class="pre">attributes_to_retrieve</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list[str]</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.core.search.SearchQuery.attributes_to_retrieve" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.SearchQuery.attributes_to_highlight">
+<span class="sig-name descname"><span class="pre">attributes_to_highlight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list[str]</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.core.search.SearchQuery.attributes_to_highlight" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.core.search.SearchResult">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SearchResult</span></span><a class="reference internal" href="../../_modules/pydotorg/core/search/schemas.html#SearchResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.core.search.SearchResult" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Search results response.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.SearchResult.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pydotorg.core.search.SearchResult.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.SearchResult.hits">
+<span class="sig-name descname"><span class="pre">hits</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list[SearchHit]</span></em><a class="headerlink" href="#pydotorg.core.search.SearchResult.hits" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.SearchResult.total">
+<span class="sig-name descname"><span class="pre">total</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pydotorg.core.search.SearchResult.total" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.SearchResult.offset">
+<span class="sig-name descname"><span class="pre">offset</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pydotorg.core.search.SearchResult.offset" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.SearchResult.limit">
+<span class="sig-name descname"><span class="pre">limit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pydotorg.core.search.SearchResult.limit" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.SearchResult.processing_time_ms">
+<span class="sig-name descname"><span class="pre">processing_time_ms</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pydotorg.core.search.SearchResult.processing_time_ms" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.SearchResult.query">
+<span class="sig-name descname"><span class="pre">query</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pydotorg.core.search.SearchResult.query" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.core.search.SearchService">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SearchService</span></span><a class="reference internal" href="../../_modules/pydotorg/core/search/service.html#SearchService"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.core.search.SearchService" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Service for interacting with Meilisearch.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.core.search.SearchService.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pydotorg_'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydotorg/core/search/service.html#SearchService.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.core.search.SearchService.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize the Meilisearch service.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>url</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Meilisearch server URL.</p></li>
+<li><p><strong>api_key</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Optional API key for authentication.</p></li>
+<li><p><strong>index_prefix</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Prefix for all index names.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.core.search.SearchService.clear_index">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">clear_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydotorg/core/search/service.html#SearchService.clear_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.core.search.SearchService.clear_index" title="Link to this definition">¶</a></dt>
+<dd><p>Clear all documents from an index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>index</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Base index name.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">TaskInfo</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Task information for the clear operation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pydotorg.core.search.SearchService.client">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">client</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">meilisearch_python_sdk.AsyncClient</span></em><a class="headerlink" href="#pydotorg.core.search.SearchService.client" title="Link to this definition">¶</a></dt>
+<dd><p>Get or create the Meilisearch async client.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.core.search.SearchService.close">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydotorg/core/search/service.html#SearchService.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.core.search.SearchService.close" title="Link to this definition">¶</a></dt>
+<dd><p>Close the Meilisearch client connection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.core.search.SearchService.configure_index">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">configure_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">searchable_attributes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filterable_attributes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sortable_attributes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ranking_rules</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydotorg/core/search/service.html#SearchService.configure_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.core.search.SearchService.configure_index" title="Link to this definition">¶</a></dt>
+<dd><p>Configure index settings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Base index name.</p></li>
+<li><p><strong>searchable_attributes</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>] | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Fields to search in (order matters for ranking).</p></li>
+<li><p><strong>filterable_attributes</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>] | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Fields that can be used in filters.</p></li>
+<li><p><strong>sortable_attributes</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>] | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Fields that can be used for sorting.</p></li>
+<li><p><strong>ranking_rules</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>] | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Custom ranking rules.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.core.search.SearchService.create_index">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">primary_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'id'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydotorg/core/search/service.html#SearchService.create_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.core.search.SearchService.create_index" title="Link to this definition">¶</a></dt>
+<dd><p>Create a new search index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Base index name.</p></li>
+<li><p><strong>primary_key</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Primary key field name.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">TaskInfo</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Task information for the index creation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.core.search.SearchService.delete_documents">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">delete_documents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">document_ids</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydotorg/core/search/service.html#SearchService.delete_documents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.core.search.SearchService.delete_documents" title="Link to this definition">¶</a></dt>
+<dd><p>Delete documents from an index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Base index name.</p></li>
+<li><p><strong>document_ids</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – List of document IDs to delete.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">TaskInfo</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Task information for the deletion operation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.core.search.SearchService.delete_index">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">delete_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydotorg/core/search/service.html#SearchService.delete_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.core.search.SearchService.delete_index" title="Link to this definition">¶</a></dt>
+<dd><p>Delete a search index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>index</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Base index name.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">TaskInfo</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Task information for the index deletion.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.core.search.SearchService.get_index_stats">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_index_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydotorg/core/search/service.html#SearchService.get_index_stats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.core.search.SearchService.get_index_stats" title="Link to this definition">¶</a></dt>
+<dd><p>Get statistics for an index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>index</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Base index name.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Index statistics.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.core.search.SearchService.index_documents">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">index_documents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">documents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">primary_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'id'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydotorg/core/search/service.html#SearchService.index_documents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.core.search.SearchService.index_documents" title="Link to this definition">¶</a></dt>
+<dd><p>Index documents into Meilisearch.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Base index name.</p></li>
+<li><p><strong>documents</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="#pydotorg.core.search.schemas.IndexedDocument" title="pydotorg.core.search.schemas.IndexedDocument"><code class="xref py py-class docutils literal notranslate"><span class="pre">IndexedDocument</span></code></a>] | <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]]</span>) – List of documents to index.</p></li>
+<li><p><strong>primary_key</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Primary key field name.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">TaskInfo</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Task information for the indexing operation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.core.search.SearchService.is_available">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_available</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydotorg/core/search/service.html#SearchService.is_available"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.core.search.SearchService.is_available" title="Link to this definition">¶</a></dt>
+<dd><p>Check if Meilisearch service is available.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if Meilisearch is reachable, False otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.core.search.SearchService.search">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydotorg/core/search/service.html#SearchService.search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.core.search.SearchService.search" title="Link to this definition">¶</a></dt>
+<dd><p>Search across specified indexes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>query</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#pydotorg.core.search.schemas.SearchQuery" title="pydotorg.core.search.schemas.SearchQuery"><code class="xref py py-class docutils literal notranslate"><span class="pre">SearchQuery</span></code></a></span>) – Search query parameters.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#pydotorg.core.search.schemas.SearchResult" title="pydotorg.core.search.schemas.SearchResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">SearchResult</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Aggregated search results.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.core.search.SearchService.update_documents">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">update_documents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">documents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">primary_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'id'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydotorg/core/search/service.html#SearchService.update_documents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.core.search.SearchService.update_documents" title="Link to this definition">¶</a></dt>
+<dd><p>Update existing documents in Meilisearch.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Base index name.</p></li>
+<li><p><strong>documents</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="#pydotorg.core.search.schemas.IndexedDocument" title="pydotorg.core.search.schemas.IndexedDocument"><code class="xref py py-class docutils literal notranslate"><span class="pre">IndexedDocument</span></code></a>] | <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]]</span>) – List of documents to update.</p></li>
+<li><p><strong>primary_key</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Primary key field name.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">TaskInfo</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Task information for the update operation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="schemas">
+<h2>Schemas<a class="headerlink" href="#schemas" title="Link to this heading">¶</a></h2>
+<p>Search request and response schemas.</p>
+<p id="module-pydotorg.core.search.schemas">Search schemas for Meilisearch integration.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.SearchQuery">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SearchQuery</span></span><a class="reference internal" href="../../_modules/pydotorg/core/search/schemas.html#SearchQuery"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.core.search.schemas.SearchQuery" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Search query parameters.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.SearchQuery.query">
+<span class="sig-name descname"><span class="pre">query</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.SearchQuery.query" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.SearchQuery.indexes">
+<span class="sig-name descname"><span class="pre">indexes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list[str]</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.SearchQuery.indexes" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.SearchQuery.filters">
+<span class="sig-name descname"><span class="pre">filters</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict[str,</span> <span class="pre">Any]</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.SearchQuery.filters" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.SearchQuery.limit">
+<span class="sig-name descname"><span class="pre">limit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.SearchQuery.limit" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.SearchQuery.offset">
+<span class="sig-name descname"><span class="pre">offset</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.SearchQuery.offset" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.SearchQuery.attributes_to_retrieve">
+<span class="sig-name descname"><span class="pre">attributes_to_retrieve</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list[str]</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.SearchQuery.attributes_to_retrieve" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.SearchQuery.attributes_to_highlight">
+<span class="sig-name descname"><span class="pre">attributes_to_highlight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list[str]</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.SearchQuery.attributes_to_highlight" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.SearchQuery.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.SearchQuery.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.SearchHit">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SearchHit</span></span><a class="reference internal" href="../../_modules/pydotorg/core/search/schemas.html#SearchHit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.core.search.schemas.SearchHit" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>A single search result hit.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.SearchHit.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.SearchHit.id" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.SearchHit.index">
+<span class="sig-name descname"><span class="pre">index</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.SearchHit.index" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.SearchHit.title">
+<span class="sig-name descname"><span class="pre">title</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.SearchHit.title" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.SearchHit.description">
+<span class="sig-name descname"><span class="pre">description</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.SearchHit.description" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.SearchHit.url">
+<span class="sig-name descname"><span class="pre">url</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.SearchHit.url" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.SearchHit.content_type">
+<span class="sig-name descname"><span class="pre">content_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.SearchHit.content_type" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.SearchHit.created">
+<span class="sig-name descname"><span class="pre">created</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.SearchHit.created" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.SearchHit.modified">
+<span class="sig-name descname"><span class="pre">modified</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.SearchHit.modified" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.SearchHit.highlight">
+<span class="sig-name descname"><span class="pre">highlight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict[str,</span> <span class="pre">list[str]]</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.SearchHit.highlight" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.SearchHit.extra">
+<span class="sig-name descname"><span class="pre">extra</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict[str,</span> <span class="pre">Any]</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.SearchHit.extra" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.SearchHit.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.SearchHit.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.SearchResult">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SearchResult</span></span><a class="reference internal" href="../../_modules/pydotorg/core/search/schemas.html#SearchResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.core.search.schemas.SearchResult" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Search results response.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.SearchResult.hits">
+<span class="sig-name descname"><span class="pre">hits</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list[SearchHit]</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.SearchResult.hits" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.SearchResult.total">
+<span class="sig-name descname"><span class="pre">total</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.SearchResult.total" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.SearchResult.offset">
+<span class="sig-name descname"><span class="pre">offset</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.SearchResult.offset" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.SearchResult.limit">
+<span class="sig-name descname"><span class="pre">limit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.SearchResult.limit" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.SearchResult.processing_time_ms">
+<span class="sig-name descname"><span class="pre">processing_time_ms</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.SearchResult.processing_time_ms" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.SearchResult.query">
+<span class="sig-name descname"><span class="pre">query</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.SearchResult.query" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.SearchResult.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.SearchResult.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.IndexedDocument">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">IndexedDocument</span></span><a class="reference internal" href="../../_modules/pydotorg/core/search/schemas.html#IndexedDocument"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.core.search.schemas.IndexedDocument" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Base schema for indexed documents in Meilisearch.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.IndexedDocument.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.IndexedDocument.id" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.IndexedDocument.title">
+<span class="sig-name descname"><span class="pre">title</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.IndexedDocument.title" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.IndexedDocument.description">
+<span class="sig-name descname"><span class="pre">description</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.IndexedDocument.description" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.IndexedDocument.content">
+<span class="sig-name descname"><span class="pre">content</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.IndexedDocument.content" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.IndexedDocument.url">
+<span class="sig-name descname"><span class="pre">url</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.IndexedDocument.url" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.IndexedDocument.content_type">
+<span class="sig-name descname"><span class="pre">content_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.IndexedDocument.content_type" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.IndexedDocument.created">
+<span class="sig-name descname"><span class="pre">created</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.IndexedDocument.created" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.IndexedDocument.modified">
+<span class="sig-name descname"><span class="pre">modified</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.IndexedDocument.modified" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.IndexedDocument.status">
+<span class="sig-name descname"><span class="pre">status</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.IndexedDocument.status" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.IndexedDocument.tags">
+<span class="sig-name descname"><span class="pre">tags</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list[str]</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.IndexedDocument.tags" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.IndexedDocument.searchable_text">
+<span class="sig-name descname"><span class="pre">searchable_text</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.IndexedDocument.searchable_text" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.IndexedDocument.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.IndexedDocument.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.JobDocument">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">JobDocument</span></span><a class="reference internal" href="../../_modules/pydotorg/core/search/schemas.html#JobDocument"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.core.search.schemas.JobDocument" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pydotorg.core.search.schemas.IndexedDocument" title="pydotorg.core.search.schemas.IndexedDocument"><code class="xref py py-class docutils literal notranslate"><span class="pre">IndexedDocument</span></code></a></p>
+<p>Job posting document for search indexing.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.JobDocument.content_type">
+<span class="sig-name descname"><span class="pre">content_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.JobDocument.content_type" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.JobDocument.company_name">
+<span class="sig-name descname"><span class="pre">company_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.JobDocument.company_name" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.JobDocument.location">
+<span class="sig-name descname"><span class="pre">location</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.JobDocument.location" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.JobDocument.remote">
+<span class="sig-name descname"><span class="pre">remote</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.JobDocument.remote" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.JobDocument.job_types">
+<span class="sig-name descname"><span class="pre">job_types</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list[str]</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.JobDocument.job_types" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.JobDocument.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.JobDocument.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.EventDocument">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EventDocument</span></span><a class="reference internal" href="../../_modules/pydotorg/core/search/schemas.html#EventDocument"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.core.search.schemas.EventDocument" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pydotorg.core.search.schemas.IndexedDocument" title="pydotorg.core.search.schemas.IndexedDocument"><code class="xref py py-class docutils literal notranslate"><span class="pre">IndexedDocument</span></code></a></p>
+<p>Event document for search indexing.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.EventDocument.content_type">
+<span class="sig-name descname"><span class="pre">content_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.EventDocument.content_type" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.EventDocument.venue">
+<span class="sig-name descname"><span class="pre">venue</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.EventDocument.venue" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.EventDocument.location">
+<span class="sig-name descname"><span class="pre">location</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.EventDocument.location" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.EventDocument.start_date">
+<span class="sig-name descname"><span class="pre">start_date</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.EventDocument.start_date" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.EventDocument.end_date">
+<span class="sig-name descname"><span class="pre">end_date</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.EventDocument.end_date" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.EventDocument.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.EventDocument.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.BlogDocument">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BlogDocument</span></span><a class="reference internal" href="../../_modules/pydotorg/core/search/schemas.html#BlogDocument"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.core.search.schemas.BlogDocument" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pydotorg.core.search.schemas.IndexedDocument" title="pydotorg.core.search.schemas.IndexedDocument"><code class="xref py py-class docutils literal notranslate"><span class="pre">IndexedDocument</span></code></a></p>
+<p>Blog entry document for search indexing.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.BlogDocument.content_type">
+<span class="sig-name descname"><span class="pre">content_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.BlogDocument.content_type" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.BlogDocument.author">
+<span class="sig-name descname"><span class="pre">author</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.BlogDocument.author" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.BlogDocument.published">
+<span class="sig-name descname"><span class="pre">published</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.BlogDocument.published" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.BlogDocument.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.BlogDocument.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.PageDocument">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PageDocument</span></span><a class="reference internal" href="../../_modules/pydotorg/core/search/schemas.html#PageDocument"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.core.search.schemas.PageDocument" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pydotorg.core.search.schemas.IndexedDocument" title="pydotorg.core.search.schemas.IndexedDocument"><code class="xref py py-class docutils literal notranslate"><span class="pre">IndexedDocument</span></code></a></p>
+<p>CMS page document for search indexing.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.PageDocument.content_type">
+<span class="sig-name descname"><span class="pre">content_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.PageDocument.content_type" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.PageDocument.path">
+<span class="sig-name descname"><span class="pre">path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.PageDocument.path" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.core.search.schemas.PageDocument.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pydotorg.core.search.schemas.PageDocument.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="service">
+<h2>Service<a class="headerlink" href="#service" title="Link to this heading">¶</a></h2>
+<p>Search service implementation.</p>
+<p id="module-pydotorg.core.search.service">Meilisearch service for search functionality.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.core.search.service.SearchService">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SearchService</span></span><a class="reference internal" href="../../_modules/pydotorg/core/search/service.html#SearchService"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.core.search.service.SearchService" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Service for interacting with Meilisearch.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.core.search.service.SearchService.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pydotorg_'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydotorg/core/search/service.html#SearchService.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.core.search.service.SearchService.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize the Meilisearch service.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>url</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Meilisearch server URL.</p></li>
+<li><p><strong>api_key</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Optional API key for authentication.</p></li>
+<li><p><strong>index_prefix</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Prefix for all index names.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pydotorg.core.search.service.SearchService.client">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">client</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">meilisearch_python_sdk.AsyncClient</span></em><a class="headerlink" href="#pydotorg.core.search.service.SearchService.client" title="Link to this definition">¶</a></dt>
+<dd><p>Get or create the Meilisearch async client.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.core.search.service.SearchService.close">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydotorg/core/search/service.html#SearchService.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.core.search.service.SearchService.close" title="Link to this definition">¶</a></dt>
+<dd><p>Close the Meilisearch client connection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.core.search.service.SearchService.create_index">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">primary_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'id'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydotorg/core/search/service.html#SearchService.create_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.core.search.service.SearchService.create_index" title="Link to this definition">¶</a></dt>
+<dd><p>Create a new search index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Base index name.</p></li>
+<li><p><strong>primary_key</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Primary key field name.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">TaskInfo</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Task information for the index creation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.core.search.service.SearchService.delete_index">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">delete_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydotorg/core/search/service.html#SearchService.delete_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.core.search.service.SearchService.delete_index" title="Link to this definition">¶</a></dt>
+<dd><p>Delete a search index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>index</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Base index name.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">TaskInfo</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Task information for the index deletion.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.core.search.service.SearchService.configure_index">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">configure_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">searchable_attributes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filterable_attributes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sortable_attributes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ranking_rules</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydotorg/core/search/service.html#SearchService.configure_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.core.search.service.SearchService.configure_index" title="Link to this definition">¶</a></dt>
+<dd><p>Configure index settings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Base index name.</p></li>
+<li><p><strong>searchable_attributes</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>] | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Fields to search in (order matters for ranking).</p></li>
+<li><p><strong>filterable_attributes</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>] | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Fields that can be used in filters.</p></li>
+<li><p><strong>sortable_attributes</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>] | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Fields that can be used for sorting.</p></li>
+<li><p><strong>ranking_rules</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>] | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Custom ranking rules.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.core.search.service.SearchService.index_documents">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">index_documents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">documents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">primary_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'id'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydotorg/core/search/service.html#SearchService.index_documents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.core.search.service.SearchService.index_documents" title="Link to this definition">¶</a></dt>
+<dd><p>Index documents into Meilisearch.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Base index name.</p></li>
+<li><p><strong>documents</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="#pydotorg.core.search.schemas.IndexedDocument" title="pydotorg.core.search.schemas.IndexedDocument"><code class="xref py py-class docutils literal notranslate"><span class="pre">IndexedDocument</span></code></a>] | <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]]</span>) – List of documents to index.</p></li>
+<li><p><strong>primary_key</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Primary key field name.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">TaskInfo</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Task information for the indexing operation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.core.search.service.SearchService.update_documents">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">update_documents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">documents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">primary_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'id'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydotorg/core/search/service.html#SearchService.update_documents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.core.search.service.SearchService.update_documents" title="Link to this definition">¶</a></dt>
+<dd><p>Update existing documents in Meilisearch.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Base index name.</p></li>
+<li><p><strong>documents</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="#pydotorg.core.search.schemas.IndexedDocument" title="pydotorg.core.search.schemas.IndexedDocument"><code class="xref py py-class docutils literal notranslate"><span class="pre">IndexedDocument</span></code></a>] | <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]]</span>) – List of documents to update.</p></li>
+<li><p><strong>primary_key</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Primary key field name.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">TaskInfo</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Task information for the update operation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.core.search.service.SearchService.delete_documents">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">delete_documents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">document_ids</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydotorg/core/search/service.html#SearchService.delete_documents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.core.search.service.SearchService.delete_documents" title="Link to this definition">¶</a></dt>
+<dd><p>Delete documents from an index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Base index name.</p></li>
+<li><p><strong>document_ids</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – List of document IDs to delete.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">TaskInfo</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Task information for the deletion operation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.core.search.service.SearchService.clear_index">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">clear_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydotorg/core/search/service.html#SearchService.clear_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.core.search.service.SearchService.clear_index" title="Link to this definition">¶</a></dt>
+<dd><p>Clear all documents from an index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>index</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Base index name.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">TaskInfo</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Task information for the clear operation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.core.search.service.SearchService.is_available">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_available</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydotorg/core/search/service.html#SearchService.is_available"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.core.search.service.SearchService.is_available" title="Link to this definition">¶</a></dt>
+<dd><p>Check if Meilisearch service is available.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if Meilisearch is reachable, False otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.core.search.service.SearchService.search">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydotorg/core/search/service.html#SearchService.search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.core.search.service.SearchService.search" title="Link to this definition">¶</a></dt>
+<dd><p>Search across specified indexes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>query</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#pydotorg.core.search.schemas.SearchQuery" title="pydotorg.core.search.schemas.SearchQuery"><code class="xref py py-class docutils literal notranslate"><span class="pre">SearchQuery</span></code></a></span>) – Search query parameters.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#pydotorg.core.search.schemas.SearchResult" title="pydotorg.core.search.schemas.SearchResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">SearchResult</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Aggregated search results.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.core.search.service.SearchService.get_index_stats">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_index_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydotorg/core/search/service.html#SearchService.get_index_stats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.core.search.service.SearchService.get_index_stats" title="Link to this definition">¶</a></dt>
+<dd><p>Get statistics for an index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>index</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Base index name.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Index statistics.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="ratelimit.html">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title">Rate Limiting</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="security.html">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title">Security</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Jacob Coffee</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+<a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+  <iconify-icon icon="simple-icons:github"></iconify-icon>
+</a></div>
+    </div>
+  </div>
+</footer>
+      <script src="../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=30646c52"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+      <script src="../../_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

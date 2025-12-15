@@ -1,0 +1,2339 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="blue" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Domain Models Reference - litestar-pydotorg</title><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Litestar Python.org Quick Start Guide" href="QUICK_START.html" /><link rel="prev" title="Database Schema Design" href="DATABASE_SCHEMA.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=14737038" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=513f0650" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="Domain Models Reference"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../index.html">
+      
+      
+      <strong>litestar-pydotorg</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"><ul><li class="link">
+          <a href="https://litestar.dev/">
+            <span>Litestar</span></a>
+        </li><li class="link">
+          <a href="https://python.org/">
+            <span>Python.org</span></a>
+        </li></ul></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials">
+  <a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started/index.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/quickstart.html">Quickstart</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/index.html">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/development.html">Development Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/contributing.html">Contribution Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/testing.html">Testing Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/debugging.html">Debugging Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/api-usage.html">API Usage Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/authentication.html">Authentication Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/feature-flags.html">Feature Flags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/configuration.html">Configuration Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/deployment.html">Deployment Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/docker.html">Docker Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/troubleshooting.html">Troubleshooting Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/index.html">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/domain-patterns.html">Domain Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/authentication-recipes.html">Authentication Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/database-recipes.html">Database Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/testing-recipes.html">Testing Recipes</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/core/index.html">Core Infrastructure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/auth.html">Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/cache.html">Caching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/database.html">Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/email.html">Email</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/exceptions.html">Exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/features.html">Feature Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/feeds.html">RSS/Atom Feeds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/ical.html">iCalendar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/middleware.html">Middleware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/openapi.html">OpenAPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/ratelimit.html">Rate Limiting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/security.html">Security</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/worker.html">Background Worker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/domains/index.html">Domain Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/about.html">About</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/admin.html">Admin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/banners.html">banners</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/blogs.html">blogs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/codesamples.html">Code Samples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/community.html">community</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/docs.html">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/downloads.html">downloads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/events.html">events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/jobs.html">jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/mailing.html">Mailing Lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/minutes.html">Minutes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/nominations.html">Nominations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/pages.html">pages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/sponsors.html">sponsors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/sqladmin.html">SQLAdmin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/successstories.html">Success Stories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/users.html">users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/work_groups.html">Work Groups</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/lib.html">Library Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/tasks.html">Background Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/config.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/main.html">Application Entry Point</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Architecture</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ARCHITECTURE.html">Litestar Python.org Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DATABASE_SCHEMA.html">Database Schema Design</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Domain Models Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="QUICK_START.html">Litestar Python.org Quick Start Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="API_TAGS_INDEX.html">API Tags Documentation Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RATE_LIMITING_ARCHITECTURE.html">Rate Limiting Architecture Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adr/001-litestar-framework.html">ADR-001: Use Litestar as Web Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adr/002-saq-background-tasks.html">ADR-002: Use SAQ for Background Task Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#domain-driven-design-approach">Domain-Driven Design Approach</a><ul>
+<li><a class="reference internal" href="#architecture-philosophy">Architecture Philosophy</a></li>
+<li><a class="reference internal" href="#domain-module-structure">Domain Module Structure</a></li>
+<li><a class="reference internal" href="#base-classes-and-mixins">Base Classes and Mixins</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#core-infrastructure">Core Infrastructure</a><ul>
+<li><a class="reference internal" href="#base-model-definitions">Base Model Definitions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#domain-catalog">Domain Catalog</a><ul>
+<li><a class="reference internal" href="#users-domain">Users Domain</a><ul>
+<li><a class="reference internal" href="#models">Models</a></li>
+<li><a class="reference internal" href="#user-model">User Model</a></li>
+<li><a class="reference internal" href="#membership-model">Membership Model</a></li>
+<li><a class="reference internal" href="#enums">Enums</a></li>
+<li><a class="reference internal" href="#services">Services</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pages-domain">Pages Domain</a><ul>
+<li><a class="reference internal" href="#id1">Models</a></li>
+<li><a class="reference internal" href="#page-model">Page Model</a></li>
+<li><a class="reference internal" href="#id2">Enums</a></li>
+<li><a class="reference internal" href="#id3">Services</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#downloads-domain">Downloads Domain</a><ul>
+<li><a class="reference internal" href="#id4">Models</a></li>
+<li><a class="reference internal" href="#release-model">Release Model</a></li>
+<li><a class="reference internal" href="#releasefile-model">ReleaseFile Model</a></li>
+<li><a class="reference internal" href="#id5">Enums</a></li>
+<li><a class="reference internal" href="#id6">Services</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#blogs-domain">Blogs Domain</a><ul>
+<li><a class="reference internal" href="#id7">Models</a></li>
+<li><a class="reference internal" href="#feed-model">Feed Model</a></li>
+<li><a class="reference internal" href="#blogentry-model">BlogEntry Model</a></li>
+<li><a class="reference internal" href="#association-table">Association Table</a></li>
+<li><a class="reference internal" href="#id8">Services</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#jobs-domain">Jobs Domain</a><ul>
+<li><a class="reference internal" href="#id9">Models</a></li>
+<li><a class="reference internal" href="#job-model">Job Model</a></li>
+<li><a class="reference internal" href="#id10">Enums</a></li>
+<li><a class="reference internal" href="#id11">Association Table</a></li>
+<li><a class="reference internal" href="#id12">Services</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#events-domain">Events Domain</a><ul>
+<li><a class="reference internal" href="#id13">Models</a></li>
+<li><a class="reference internal" href="#event-model">Event Model</a></li>
+<li><a class="reference internal" href="#recurringrule-model">RecurringRule Model</a></li>
+<li><a class="reference internal" href="#id14">Enums</a></li>
+<li><a class="reference internal" href="#id15">Association Table</a></li>
+<li><a class="reference internal" href="#id16">Services</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sponsors-domain">Sponsors Domain</a><ul>
+<li><a class="reference internal" href="#id17">Models</a></li>
+<li><a class="reference internal" href="#sponsor-model">Sponsor Model</a></li>
+<li><a class="reference internal" href="#sponsorship-model">Sponsorship Model</a></li>
+<li><a class="reference internal" href="#id18">Enums</a></li>
+<li><a class="reference internal" href="#id19">Services</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#community-domain">Community Domain</a><ul>
+<li><a class="reference internal" href="#id20">Models</a></li>
+<li><a class="reference internal" href="#post-model">Post Model</a></li>
+<li><a class="reference internal" href="#id21">Services</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#success-stories-domain">Success Stories Domain</a><ul>
+<li><a class="reference internal" href="#id22">Models</a></li>
+<li><a class="reference internal" href="#story-model">Story Model</a></li>
+<li><a class="reference internal" href="#id23">Services</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#nominations-domain">Nominations Domain</a><ul>
+<li><a class="reference internal" href="#id24">Models</a></li>
+<li><a class="reference internal" href="#election-model">Election Model</a></li>
+<li><a class="reference internal" href="#nominee-model">Nominee Model</a></li>
+<li><a class="reference internal" href="#id25">Enums</a></li>
+<li><a class="reference internal" href="#id26">Services</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#code-samples-domain">Code Samples Domain</a><ul>
+<li><a class="reference internal" href="#id27">Models</a></li>
+<li><a class="reference internal" href="#codesample-model">CodeSample Model</a></li>
+<li><a class="reference internal" href="#id28">Services</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#minutes-domain">Minutes Domain</a><ul>
+<li><a class="reference internal" href="#id29">Models</a></li>
+<li><a class="reference internal" href="#minutes-model">Minutes Model</a></li>
+<li><a class="reference internal" href="#id30">Services</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#banners-domain">Banners Domain</a><ul>
+<li><a class="reference internal" href="#id31">Models</a></li>
+<li><a class="reference internal" href="#banner-model">Banner Model</a></li>
+<li><a class="reference internal" href="#id32">Enums</a></li>
+<li><a class="reference internal" href="#id33">Services</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#mailing-domain">Mailing Domain</a><ul>
+<li><a class="reference internal" href="#id34">Models</a></li>
+<li><a class="reference internal" href="#emailtemplate-model">EmailTemplate Model</a></li>
+<li><a class="reference internal" href="#id35">Enums</a></li>
+<li><a class="reference internal" href="#id36">Services</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#work-groups-domain">Work Groups Domain</a><ul>
+<li><a class="reference internal" href="#id37">Models</a></li>
+<li><a class="reference internal" href="#workgroup-model">WorkGroup Model</a></li>
+<li><a class="reference internal" href="#id38">Services</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#entity-relationships">Entity Relationships</a><ul>
+<li><a class="reference internal" href="#complete-entity-relationship-diagram">Complete Entity Relationship Diagram</a></li>
+<li><a class="reference internal" href="#users-domain-relationships">Users Domain Relationships</a></li>
+<li><a class="reference internal" href="#downloads-domain-relationships">Downloads Domain Relationships</a></li>
+<li><a class="reference internal" href="#jobs-domain-relationships">Jobs Domain Relationships</a></li>
+<li><a class="reference internal" href="#events-domain-relationships">Events Domain Relationships</a></li>
+<li><a class="reference internal" href="#sponsors-domain-relationships">Sponsors Domain Relationships</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cross-domain-dependencies">Cross-Domain Dependencies</a><ul>
+<li><a class="reference internal" href="#dependency-graph">Dependency Graph</a></li>
+<li><a class="reference internal" href="#dependency-matrix">Dependency Matrix</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#database-tables-summary">Database Tables Summary</a><ul>
+<li><a class="reference internal" href="#all-tables-by-domain">All Tables by Domain</a></li>
+<li><a class="reference internal" href="#index-summary">Index Summary</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#revision-history">Revision History</a></li>
+<li><a class="reference internal" href="#references">References</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../index.html"><span itemprop="name">litestar-pydotorg</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="index.html"><span itemprop="name">Architecture</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="2" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">Domain Models Reference</strong>
+        <meta itemprop="position" content="3" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue dark-code" role="main">
+          <section id="domain-models-reference">
+<h1>Domain Models Reference<a class="headerlink" href="#domain-models-reference" title="Link to this heading">¶</a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>This document provides comprehensive documentation for all domain models in the Litestar <a class="reference external" href="http://Python.org">Python.org</a> project. The application follows a Domain-Driven Design (DDD) approach, organizing code into cohesive domain modules that encapsulate related business logic.</p>
+<p><strong>Document Status</strong>: Active
+<strong>Version</strong>: 1.0
+<strong>Last Updated</strong>: 2025-12-14</p>
+</section>
+<hr class="docutils" />
+<section id="domain-driven-design-approach">
+<h2>Domain-Driven Design Approach<a class="headerlink" href="#domain-driven-design-approach" title="Link to this heading">¶</a></h2>
+<section id="architecture-philosophy">
+<h3>Architecture Philosophy<a class="headerlink" href="#architecture-philosophy" title="Link to this heading">¶</a></h3>
+<p>The project implements a modular domain-driven architecture where each domain:</p>
+<ol class="arabic simple">
+<li><p><strong>Encapsulates Business Logic</strong>: Each domain contains its own models, services, controllers, and schemas</p></li>
+<li><p><strong>Maintains Clear Boundaries</strong>: Domains communicate through well-defined interfaces</p></li>
+<li><p><strong>Follows Single Responsibility</strong>: Each domain handles one cohesive area of functionality</p></li>
+<li><p><strong>Enables Independent Development</strong>: Domains can evolve independently with minimal coupling</p></li>
+</ol>
+</section>
+<section id="domain-module-structure">
+<h3>Domain Module Structure<a class="headerlink" href="#domain-module-structure" title="Link to this heading">¶</a></h3>
+<p>Each domain follows a consistent internal structure:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">domains</span><span class="o">/</span><span class="p">{</span><span class="n">domain_name</span><span class="p">}</span><span class="o">/</span>
+</span><span data-line="2">    <span class="fm">__init__</span><span class="o">.</span><span class="n">py</span>          <span class="c1"># Domain exports</span>
+</span><span data-line="3">    <span class="n">models</span><span class="o">.</span><span class="n">py</span>            <span class="c1"># SQLAlchemy ORM models</span>
+</span><span data-line="4">    <span class="n">schemas</span><span class="o">.</span><span class="n">py</span>           <span class="c1"># Pydantic validation schemas</span>
+</span><span data-line="5">    <span class="n">services</span><span class="o">.</span><span class="n">py</span>          <span class="c1"># Business logic layer</span>
+</span><span data-line="6">    <span class="n">controllers</span><span class="o">.</span><span class="n">py</span>       <span class="c1"># HTTP route handlers</span>
+</span><span data-line="7">    <span class="n">repositories</span><span class="o">.</span><span class="n">py</span>      <span class="c1"># Data access layer (when needed)</span>
+</span><span data-line="8">    <span class="n">dependencies</span><span class="o">.</span><span class="n">py</span>      <span class="c1"># Domain-specific DI providers</span>
+</span></pre></div>
+</div>
+</section>
+<section id="base-classes-and-mixins">
+<h3>Base Classes and Mixins<a class="headerlink" href="#base-classes-and-mixins" title="Link to this heading">¶</a></h3>
+<p>All models inherit from shared base classes defined in <code class="docutils literal notranslate"><span class="pre">pydotorg.core.database.base</span></code>:</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Base Class</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Base</span></code></p></td>
+<td><p>Basic model with UUID primary key (from <code class="docutils literal notranslate"><span class="pre">UUIDBase</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">AuditBase</span></code></p></td>
+<td><p>Adds <code class="docutils literal notranslate"><span class="pre">created_at</span></code> and <code class="docutils literal notranslate"><span class="pre">updated_at</span></code> timestamps (from <code class="docutils literal notranslate"><span class="pre">UUIDAuditBase</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SlugMixin</span></code></p></td>
+<td><p>Adds <code class="docutils literal notranslate"><span class="pre">slug</span></code> field with URL-friendly identifier</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">NameSlugMixin</span></code></p></td>
+<td><p>Extends <code class="docutils literal notranslate"><span class="pre">SlugMixin</span></code> with <code class="docutils literal notranslate"><span class="pre">name</span></code> field and auto-slug generation</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ContentManageableMixin</span></code></p></td>
+<td><p>Adds content management fields: <code class="docutils literal notranslate"><span class="pre">creator_id</span></code>, <code class="docutils literal notranslate"><span class="pre">last_modified_by_id</span></code>, <code class="docutils literal notranslate"><span class="pre">created</span></code>, <code class="docutils literal notranslate"><span class="pre">updated</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="core-infrastructure">
+<h2>Core Infrastructure<a class="headerlink" href="#core-infrastructure" title="Link to this heading">¶</a></h2>
+<section id="base-model-definitions">
+<h3>Base Model Definitions<a class="headerlink" href="#base-model-definitions" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">class</span><span class="w"> </span><span class="nc">Base</span><span class="p">(</span><span class="n">UUIDBase</span><span class="p">):</span>
+</span><span data-line="2"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Base for all models with UUID primary key.&quot;&quot;&quot;</span>
+</span><span data-line="3">    <span class="n">__abstract__</span> <span class="o">=</span> <span class="kc">True</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="k">class</span><span class="w"> </span><span class="nc">AuditBase</span><span class="p">(</span><span class="n">UUIDAuditBase</span><span class="p">):</span>
+</span><span data-line="6"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Base with automatic created/updated timestamps.&quot;&quot;&quot;</span>
+</span><span data-line="7">    <span class="n">__abstract__</span> <span class="o">=</span> <span class="kc">True</span>
+</span><span data-line="8">
+</span><span data-line="9"><span class="k">class</span><span class="w"> </span><span class="nc">SlugMixin</span><span class="p">:</span>
+</span><span data-line="10"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Adds URL-friendly slug field.&quot;&quot;&quot;</span>
+</span><span data-line="11">    <span class="n">slug</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">200</span><span class="p">),</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span data-line="12">
+</span><span data-line="13"><span class="k">class</span><span class="w"> </span><span class="nc">NameSlugMixin</span><span class="p">(</span><span class="n">SlugMixin</span><span class="p">):</span>
+</span><span data-line="14"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Adds name field with auto-generated slug.&quot;&quot;&quot;</span>
+</span><span data-line="15">    <span class="n">name</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">200</span><span class="p">))</span>
+</span><span data-line="16">
+</span><span data-line="17"><span class="k">class</span><span class="w"> </span><span class="nc">ContentManageableMixin</span><span class="p">:</span>
+</span><span data-line="18"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Adds content management tracking.&quot;&quot;&quot;</span>
+</span><span data-line="19">    <span class="n">created</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span>
+</span><span data-line="20">    <span class="n">updated</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span>
+</span><span data-line="21">    <span class="n">creator_id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">UUID</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+</span><span data-line="22">    <span class="n">last_modified_by_id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">UUID</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="domain-catalog">
+<h2>Domain Catalog<a class="headerlink" href="#domain-catalog" title="Link to this heading">¶</a></h2>
+<section id="users-domain">
+<h3>Users Domain<a class="headerlink" href="#users-domain" title="Link to this heading">¶</a></h3>
+<p><strong>Purpose</strong>: User authentication, profile management, and PSF membership</p>
+<p><strong>Location</strong>: <code class="docutils literal notranslate"><span class="pre">src/pydotorg/domains/users/</span></code></p>
+<section id="models">
+<h4>Models<a class="headerlink" href="#models" title="Link to this heading">¶</a></h4>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Model</p></th>
+<th class="head"><p>Table</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">User</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">users</span></code></p></td>
+<td><p>Core user account with authentication and profile</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Membership</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">memberships</span></code></p></td>
+<td><p>PSF membership information linked to user</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">UserGroup</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">user_groups</span></code></p></td>
+<td><p>Python user groups and meetups</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="user-model">
+<h4>User Model<a class="headerlink" href="#user-model" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">class</span><span class="w"> </span><span class="nc">User</span><span class="p">(</span><span class="n">UUIDAuditBase</span><span class="p">):</span>
+</span><span data-line="2">    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;users&quot;</span>
+</span><span data-line="3">
+</span><span data-line="4">    <span class="c1"># Authentication</span>
+</span><span data-line="5">    <span class="n">username</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>           <span class="c1"># Unique, indexed</span>
+</span><span data-line="6">    <span class="n">email</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>              <span class="c1"># Unique, indexed</span>
+</span><span data-line="7">    <span class="n">password_hash</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+</span><span data-line="8">    <span class="n">email_verified</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+</span><span data-line="9">
+</span><span data-line="10">    <span class="c1"># Profile</span>
+</span><span data-line="11">    <span class="n">first_name</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="12">    <span class="n">last_name</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="13">    <span class="n">bio</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="14">    <span class="n">public_profile</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+</span><span data-line="15">
+</span><span data-line="16">    <span class="c1"># Status</span>
+</span><span data-line="17">    <span class="n">is_active</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+</span><span data-line="18">    <span class="n">is_staff</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+</span><span data-line="19">    <span class="n">is_superuser</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+</span><span data-line="20">
+</span><span data-line="21">    <span class="c1"># OAuth</span>
+</span><span data-line="22">    <span class="n">oauth_provider</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+</span><span data-line="23">    <span class="n">oauth_id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+</span><span data-line="24">
+</span><span data-line="25">    <span class="c1"># Privacy</span>
+</span><span data-line="26">    <span class="n">search_visibility</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">SearchVisibility</span><span class="p">]</span>
+</span><span data-line="27">    <span class="n">email_privacy</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">EmailPrivacy</span><span class="p">]</span>
+</span><span data-line="28">
+</span><span data-line="29">    <span class="c1"># Relationships</span>
+</span><span data-line="30">    <span class="n">membership</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">Membership</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+</span><span data-line="31">    <span class="n">sponsorships</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Sponsorship</span><span class="p">]]</span>
+</span></pre></div>
+</div>
+</section>
+<section id="membership-model">
+<h4>Membership Model<a class="headerlink" href="#membership-model" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">class</span><span class="w"> </span><span class="nc">Membership</span><span class="p">(</span><span class="n">UUIDAuditBase</span><span class="p">):</span>
+</span><span data-line="2">    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;memberships&quot;</span>
+</span><span data-line="3">
+</span><span data-line="4">    <span class="n">user_id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">UUID</span><span class="p">]</span>               <span class="c1"># FK to users, unique</span>
+</span><span data-line="5">    <span class="n">membership_type</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">MembershipType</span><span class="p">]</span>
+</span><span data-line="6">    <span class="n">legal_name</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="7">    <span class="n">preferred_name</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="8">    <span class="n">email_address</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="9">
+</span><span data-line="10">    <span class="c1"># Location</span>
+</span><span data-line="11">    <span class="n">city</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="12">    <span class="n">region</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="13">    <span class="n">country</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="14">    <span class="n">postal_code</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="15">
+</span><span data-line="16">    <span class="c1"># PSF-specific</span>
+</span><span data-line="17">    <span class="n">psf_code_of_conduct</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+</span><span data-line="18">    <span class="n">psf_announcements</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+</span><span data-line="19">    <span class="n">votes</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+</span><span data-line="20">    <span class="n">last_vote_affirmation</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">date</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+</span></pre></div>
+</div>
+</section>
+<section id="enums">
+<h4>Enums<a class="headerlink" href="#enums" title="Link to this heading">¶</a></h4>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Enum</p></th>
+<th class="head"><p>Values</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SearchVisibility</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">PUBLIC</span></code>, <code class="docutils literal notranslate"><span class="pre">PRIVATE</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">EmailPrivacy</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">PUBLIC</span></code>, <code class="docutils literal notranslate"><span class="pre">PRIVATE</span></code>, <code class="docutils literal notranslate"><span class="pre">NEVER</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MembershipType</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">BASIC</span></code>, <code class="docutils literal notranslate"><span class="pre">SUPPORTING</span></code>, <code class="docutils literal notranslate"><span class="pre">SPONSOR</span></code>, <code class="docutils literal notranslate"><span class="pre">MANAGING</span></code>, <code class="docutils literal notranslate"><span class="pre">CONTRIBUTING</span></code>, <code class="docutils literal notranslate"><span class="pre">FELLOW</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">UserGroupType</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">MEETUP</span></code>, <code class="docutils literal notranslate"><span class="pre">DISTRIBUTION_LIST</span></code>, <code class="docutils literal notranslate"><span class="pre">OTHER</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="services">
+<h4>Services<a class="headerlink" href="#services" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">UserService</span></code>: User CRUD, authentication, deactivation</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MembershipService</span></code>: Membership management</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">UserGroupService</span></code>: User group approval and trust management</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">APIKeyService</span></code>: API key generation and revocation</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="pages-domain">
+<h3>Pages Domain<a class="headerlink" href="#pages-domain" title="Link to this heading">¶</a></h3>
+<p><strong>Purpose</strong>: CMS flat pages and content management</p>
+<p><strong>Location</strong>: <code class="docutils literal notranslate"><span class="pre">src/pydotorg/domains/pages/</span></code></p>
+<section id="id1">
+<h4>Models<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h4>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Model</p></th>
+<th class="head"><p>Table</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Page</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">pages</span></code></p></td>
+<td><p>CMS pages with markup content</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Image</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">page_images</span></code></p></td>
+<td><p>Images attached to pages</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DocumentFile</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">page_documents</span></code></p></td>
+<td><p>Documents attached to pages</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="page-model">
+<h4>Page Model<a class="headerlink" href="#page-model" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">class</span><span class="w"> </span><span class="nc">Page</span><span class="p">(</span><span class="n">AuditBase</span><span class="p">,</span> <span class="n">ContentManageableMixin</span><span class="p">):</span>
+</span><span data-line="2">    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;pages&quot;</span>
+</span><span data-line="3">
+</span><span data-line="4">    <span class="n">title</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="5">    <span class="n">keywords</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>           <span class="c1"># SEO meta keywords</span>
+</span><span data-line="6">    <span class="n">description</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>        <span class="c1"># SEO meta description</span>
+</span><span data-line="7">    <span class="n">path</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>               <span class="c1"># Unique URL path, indexed</span>
+</span><span data-line="8">    <span class="n">content</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>            <span class="c1"># Page content</span>
+</span><span data-line="9">    <span class="n">content_type</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">ContentType</span><span class="p">]</span>
+</span><span data-line="10">    <span class="n">is_published</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+</span><span data-line="11">    <span class="n">template_name</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>      <span class="c1"># Custom template override</span>
+</span><span data-line="12">
+</span><span data-line="13">    <span class="c1"># Relationships</span>
+</span><span data-line="14">    <span class="n">images</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Image</span><span class="p">]]</span>
+</span><span data-line="15">    <span class="n">documents</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">DocumentFile</span><span class="p">]]</span>
+</span></pre></div>
+</div>
+</section>
+<section id="id2">
+<h4>Enums<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h4>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Enum</p></th>
+<th class="head"><p>Values</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ContentType</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">MARKDOWN</span></code>, <code class="docutils literal notranslate"><span class="pre">RESTRUCTUREDTEXT</span></code>, <code class="docutils literal notranslate"><span class="pre">HTML</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id3">
+<h4>Services<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">PageService</span></code>: Page CRUD and publishing workflow</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="downloads-domain">
+<h3>Downloads Domain<a class="headerlink" href="#downloads-domain" title="Link to this heading">¶</a></h3>
+<p><strong>Purpose</strong>: Python release management and download file distribution</p>
+<p><strong>Location</strong>: <code class="docutils literal notranslate"><span class="pre">src/pydotorg/domains/downloads/</span></code></p>
+<section id="id4">
+<h4>Models<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h4>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Model</p></th>
+<th class="head"><p>Table</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">OS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">download_os</span></code></p></td>
+<td><p>Supported operating systems</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Release</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">releases</span></code></p></td>
+<td><p>Python version releases</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ReleaseFile</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">release_files</span></code></p></td>
+<td><p>Downloadable files for each release</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DownloadStatistic</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">download_statistics</span></code></p></td>
+<td><p>Daily download counts</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="release-model">
+<h4>Release Model<a class="headerlink" href="#release-model" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">class</span><span class="w"> </span><span class="nc">Release</span><span class="p">(</span><span class="n">AuditBase</span><span class="p">,</span> <span class="n">ContentManageableMixin</span><span class="p">,</span> <span class="n">NameSlugMixin</span><span class="p">):</span>
+</span><span data-line="2">    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;releases&quot;</span>
+</span><span data-line="3">
+</span><span data-line="4">    <span class="n">version</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">PythonVersion</span><span class="p">]</span>      <span class="c1"># Python 1/2/3/manager</span>
+</span><span data-line="5">    <span class="n">status</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">ReleaseStatus</span><span class="p">]</span>       <span class="c1"># prerelease/bugfix/security/eol</span>
+</span><span data-line="6">    <span class="n">is_latest</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>             <span class="c1"># Latest in version series</span>
+</span><span data-line="7">    <span class="n">is_published</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+</span><span data-line="8">    <span class="n">pre_release</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>           <span class="c1"># Alpha/beta/RC flag</span>
+</span><span data-line="9">    <span class="n">show_on_download_page</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+</span><span data-line="10">    <span class="n">release_date</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">date</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+</span><span data-line="11">    <span class="n">eol_date</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">date</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+</span><span data-line="12">    <span class="n">release_page_id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">UUID</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>  <span class="c1"># FK to pages</span>
+</span><span data-line="13">    <span class="n">release_notes_url</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="14">    <span class="n">content</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="15">
+</span><span data-line="16">    <span class="c1"># Relationships</span>
+</span><span data-line="17">    <span class="n">release_page</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">Page</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+</span><span data-line="18">    <span class="n">files</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">ReleaseFile</span><span class="p">]]</span>
+</span></pre></div>
+</div>
+</section>
+<section id="releasefile-model">
+<h4>ReleaseFile Model<a class="headerlink" href="#releasefile-model" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">class</span><span class="w"> </span><span class="nc">ReleaseFile</span><span class="p">(</span><span class="n">AuditBase</span><span class="p">,</span> <span class="n">ContentManageableMixin</span><span class="p">,</span> <span class="n">NameSlugMixin</span><span class="p">):</span>
+</span><span data-line="2">    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;release_files&quot;</span>
+</span><span data-line="3">
+</span><span data-line="4">    <span class="n">release_id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">UUID</span><span class="p">]</span>        <span class="c1"># FK to releases</span>
+</span><span data-line="5">    <span class="n">os_id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">UUID</span><span class="p">]</span>             <span class="c1"># FK to download_os</span>
+</span><span data-line="6">    <span class="n">description</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="7">    <span class="n">is_source</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>         <span class="c1"># Source distribution</span>
+</span><span data-line="8">    <span class="n">url</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>                <span class="c1"># Download URL</span>
+</span><span data-line="9">
+</span><span data-line="10">    <span class="c1"># Signatures and checksums</span>
+</span><span data-line="11">    <span class="n">gpg_signature_file</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="12">    <span class="n">sigstore_signature_file</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="13">    <span class="n">sigstore_cert_file</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="14">    <span class="n">sigstore_bundle_file</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="15">    <span class="n">sbom_spdx2_file</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="16">    <span class="n">md5_sum</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="17">    <span class="n">sha256_sum</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="18">
+</span><span data-line="19">    <span class="n">filesize</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+</span><span data-line="20">    <span class="n">download_button</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>   <span class="c1"># Featured download button</span>
+</span><span data-line="21">
+</span><span data-line="22">    <span class="c1"># Relationships</span>
+</span><span data-line="23">    <span class="n">release</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">Release</span><span class="p">]</span>
+</span><span data-line="24">    <span class="n">os</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">OS</span><span class="p">]</span>
+</span><span data-line="25">    <span class="n">statistics</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">DownloadStatistic</span><span class="p">]]</span>
+</span></pre></div>
+</div>
+</section>
+<section id="id5">
+<h4>Enums<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h4>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Enum</p></th>
+<th class="head"><p>Values</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PythonVersion</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">PYTHON1</span></code>, <code class="docutils literal notranslate"><span class="pre">PYTHON2</span></code>, <code class="docutils literal notranslate"><span class="pre">PYTHON3</span></code>, <code class="docutils literal notranslate"><span class="pre">PYMANAGER</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ReleaseStatus</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">PRERELEASE</span></code>, <code class="docutils literal notranslate"><span class="pre">BUGFIX</span></code>, <code class="docutils literal notranslate"><span class="pre">SECURITY</span></code>, <code class="docutils literal notranslate"><span class="pre">EOL</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id6">
+<h4>Services<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">OSService</span></code>: Operating system management</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ReleaseService</span></code>: Release management, version grouping, latest release tracking</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ReleaseFileService</span></code>: File management and download tracking</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="blogs-domain">
+<h3>Blogs Domain<a class="headerlink" href="#blogs-domain" title="Link to this heading">¶</a></h3>
+<p><strong>Purpose</strong>: Blog feed aggregation from external sources</p>
+<p><strong>Location</strong>: <code class="docutils literal notranslate"><span class="pre">src/pydotorg/domains/blogs/</span></code></p>
+<section id="id7">
+<h4>Models<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h4>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Model</p></th>
+<th class="head"><p>Table</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Feed</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">feeds</span></code></p></td>
+<td><p>RSS/Atom feed sources</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">BlogEntry</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">blog_entries</span></code></p></td>
+<td><p>Individual blog posts from feeds</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FeedAggregate</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">feed_aggregates</span></code></p></td>
+<td><p>Named groups of feeds</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RelatedBlog</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">related_blogs</span></code></p></td>
+<td><p>Related blog references</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="feed-model">
+<h4>Feed Model<a class="headerlink" href="#feed-model" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">class</span><span class="w"> </span><span class="nc">Feed</span><span class="p">(</span><span class="n">AuditBase</span><span class="p">):</span>
+</span><span data-line="2">    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;feeds&quot;</span>
+</span><span data-line="3">
+</span><span data-line="4">    <span class="n">name</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="5">    <span class="n">website_url</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="6">    <span class="n">feed_url</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>           <span class="c1"># Unique</span>
+</span><span data-line="7">    <span class="n">last_fetched</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">datetime</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+</span><span data-line="8">    <span class="n">is_active</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+</span><span data-line="9">    <span class="n">priority</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+</span><span data-line="10">
+</span><span data-line="11">    <span class="n">entries</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">BlogEntry</span><span class="p">]]</span>
+</span></pre></div>
+</div>
+</section>
+<section id="blogentry-model">
+<h4>BlogEntry Model<a class="headerlink" href="#blogentry-model" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">class</span><span class="w"> </span><span class="nc">BlogEntry</span><span class="p">(</span><span class="n">AuditBase</span><span class="p">):</span>
+</span><span data-line="2">    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;blog_entries&quot;</span>
+</span><span data-line="3">
+</span><span data-line="4">    <span class="n">feed_id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">UUID</span><span class="p">]</span>           <span class="c1"># FK to feeds</span>
+</span><span data-line="5">    <span class="n">title</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="6">    <span class="n">summary</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+</span><span data-line="7">    <span class="n">content</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+</span><span data-line="8">    <span class="n">url</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="9">    <span class="n">pub_date</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span>
+</span><span data-line="10">    <span class="n">guid</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>               <span class="c1"># Unique identifier</span>
+</span><span data-line="11">    <span class="n">is_featured</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+</span><span data-line="12">
+</span><span data-line="13">    <span class="n">feed</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">Feed</span><span class="p">]</span>
+</span></pre></div>
+</div>
+</section>
+<section id="association-table">
+<h4>Association Table<a class="headerlink" href="#association-table" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">feed_aggregate_feeds</span></code>: Many-to-many linking <code class="docutils literal notranslate"><span class="pre">feed_aggregates</span></code> to <code class="docutils literal notranslate"><span class="pre">feeds</span></code></p></li>
+</ul>
+</section>
+<section id="id8">
+<h4>Services<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">FeedService</span></code>: Feed CRUD and fetching</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">BlogEntryService</span></code>: Entry management</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="jobs-domain">
+<h3>Jobs Domain<a class="headerlink" href="#jobs-domain" title="Link to this heading">¶</a></h3>
+<p><strong>Purpose</strong>: Job board with submission, moderation, and publishing workflow</p>
+<p><strong>Location</strong>: <code class="docutils literal notranslate"><span class="pre">src/pydotorg/domains/jobs/</span></code></p>
+<section id="id9">
+<h4>Models<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h4>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Model</p></th>
+<th class="head"><p>Table</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Job</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">jobs</span></code></p></td>
+<td><p>Job listings</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">JobType</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">job_types</span></code></p></td>
+<td><p>Job type categories (full-time, contract, etc.)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">JobCategory</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">job_categories</span></code></p></td>
+<td><p>Industry categories</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">JobReviewComment</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">job_review_comments</span></code></p></td>
+<td><p>Moderation comments</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="job-model">
+<h4>Job Model<a class="headerlink" href="#job-model" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">class</span><span class="w"> </span><span class="nc">Job</span><span class="p">(</span><span class="n">AuditBase</span><span class="p">):</span>
+</span><span data-line="2">    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;jobs&quot;</span>
+</span><span data-line="3">
+</span><span data-line="4">    <span class="n">slug</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>               <span class="c1"># Unique, indexed</span>
+</span><span data-line="5">    <span class="n">creator_id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">UUID</span><span class="p">]</span>        <span class="c1"># FK to users</span>
+</span><span data-line="6">    <span class="n">company_name</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="7">    <span class="n">job_title</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="8">
+</span><span data-line="9">    <span class="c1"># Location</span>
+</span><span data-line="10">    <span class="n">city</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+</span><span data-line="11">    <span class="n">region</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+</span><span data-line="12">    <span class="n">country</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="13">
+</span><span data-line="14">    <span class="c1"># Content</span>
+</span><span data-line="15">    <span class="n">description</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="16">    <span class="n">requirements</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+</span><span data-line="17">
+</span><span data-line="18">    <span class="c1"># Contact</span>
+</span><span data-line="19">    <span class="n">contact</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+</span><span data-line="20">    <span class="n">url</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+</span><span data-line="21">    <span class="n">email</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="22">
+</span><span data-line="23">    <span class="c1"># Status</span>
+</span><span data-line="24">    <span class="n">status</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">JobStatus</span><span class="p">]</span>
+</span><span data-line="25">    <span class="n">telecommuting</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+</span><span data-line="26">    <span class="n">agencies</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+</span><span data-line="27">    <span class="n">is_featured</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+</span><span data-line="28">    <span class="n">expires</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">date</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+</span><span data-line="29">
+</span><span data-line="30">    <span class="n">category_id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">UUID</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+</span><span data-line="31">
+</span><span data-line="32">    <span class="c1"># Relationships</span>
+</span><span data-line="33">    <span class="n">creator</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">User</span><span class="p">]</span>
+</span><span data-line="34">    <span class="n">job_types</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">JobType</span><span class="p">]]</span>
+</span><span data-line="35">    <span class="n">category</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">JobCategory</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+</span><span data-line="36">    <span class="n">review_comments</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">JobReviewComment</span><span class="p">]]</span>
+</span></pre></div>
+</div>
+</section>
+<section id="id10">
+<h4>Enums<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h4>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Enum</p></th>
+<th class="head"><p>Values</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">JobStatus</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DRAFT</span></code>, <code class="docutils literal notranslate"><span class="pre">REVIEW</span></code>, <code class="docutils literal notranslate"><span class="pre">APPROVED</span></code>, <code class="docutils literal notranslate"><span class="pre">REJECTED</span></code>, <code class="docutils literal notranslate"><span class="pre">ARCHIVED</span></code>, <code class="docutils literal notranslate"><span class="pre">EXPIRED</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id11">
+<h4>Association Table<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">job_job_types</span></code>: Many-to-many linking <code class="docutils literal notranslate"><span class="pre">jobs</span></code> to <code class="docutils literal notranslate"><span class="pre">job_types</span></code></p></li>
+</ul>
+</section>
+<section id="id12">
+<h4>Services<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">JobService</span></code>: Job CRUD, submission workflow, approval/rejection</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">JobTypeService</span></code>: Job type management</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">JobCategoryService</span></code>: Category management</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">JobReviewCommentService</span></code>: Moderation comments</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="events-domain">
+<h3>Events Domain<a class="headerlink" href="#events-domain" title="Link to this heading">¶</a></h3>
+<p><strong>Purpose</strong>: Community event calendar with recurring event support</p>
+<p><strong>Location</strong>: <code class="docutils literal notranslate"><span class="pre">src/pydotorg/domains/events/</span></code></p>
+<section id="id13">
+<h4>Models<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h4>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Model</p></th>
+<th class="head"><p>Table</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Calendar</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">calendars</span></code></p></td>
+<td><p>Event calendars/categories</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Event</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">events</span></code></p></td>
+<td><p>Individual events</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">EventCategory</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">event_categories</span></code></p></td>
+<td><p>Event categories</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">EventLocation</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">event_locations</span></code></p></td>
+<td><p>Venues/locations</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">EventOccurrence</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">event_occurrences</span></code></p></td>
+<td><p>Single event occurrences</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RecurringRule</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">event_recurring_rules</span></code></p></td>
+<td><p>Recurrence patterns</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="event-model">
+<h4>Event Model<a class="headerlink" href="#event-model" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">class</span><span class="w"> </span><span class="nc">Event</span><span class="p">(</span><span class="n">AuditBase</span><span class="p">,</span> <span class="n">ContentManageableMixin</span><span class="p">,</span> <span class="n">NameSlugMixin</span><span class="p">):</span>
+</span><span data-line="2">    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;events&quot;</span>
+</span><span data-line="3">
+</span><span data-line="4">    <span class="n">title</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="5">    <span class="n">description</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+</span><span data-line="6">    <span class="n">calendar_id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">UUID</span><span class="p">]</span>       <span class="c1"># FK to calendars</span>
+</span><span data-line="7">    <span class="n">venue_id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">UUID</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>   <span class="c1"># FK to event_locations</span>
+</span><span data-line="8">    <span class="n">featured</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+</span><span data-line="9">
+</span><span data-line="10">    <span class="c1"># Relationships</span>
+</span><span data-line="11">    <span class="n">calendar</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">Calendar</span><span class="p">]</span>
+</span><span data-line="12">    <span class="n">venue</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">EventLocation</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+</span><span data-line="13">    <span class="n">categories</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">EventCategory</span><span class="p">]]</span>
+</span><span data-line="14">    <span class="n">occurrences</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">EventOccurrence</span><span class="p">]]</span>
+</span><span data-line="15">    <span class="n">recurring_rules</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">RecurringRule</span><span class="p">]]</span>
+</span></pre></div>
+</div>
+</section>
+<section id="recurringrule-model">
+<h4>RecurringRule Model<a class="headerlink" href="#recurringrule-model" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">class</span><span class="w"> </span><span class="nc">RecurringRule</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+</span><span data-line="2">    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;event_recurring_rules&quot;</span>
+</span><span data-line="3">
+</span><span data-line="4">    <span class="n">event_id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">UUID</span><span class="p">]</span>          <span class="c1"># FK to events</span>
+</span><span data-line="5">    <span class="n">begin</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span>
+</span><span data-line="6">    <span class="n">finish</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span>
+</span><span data-line="7">    <span class="n">duration</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">timedelta</span><span class="p">]</span>
+</span><span data-line="8">    <span class="n">interval</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>           <span class="c1"># e.g., every 2 weeks</span>
+</span><span data-line="9">    <span class="n">frequency</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>          <span class="c1"># YEARLY/MONTHLY/WEEKLY/DAILY</span>
+</span><span data-line="10">    <span class="n">all_day</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+</span><span data-line="11">
+</span><span data-line="12">    <span class="n">event</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">Event</span><span class="p">]</span>
+</span></pre></div>
+</div>
+</section>
+<section id="id14">
+<h4>Enums<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h4>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Enum</p></th>
+<th class="head"><p>Values (from dateutil.rrule)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RecurrenceFrequency</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">YEARLY</span></code>, <code class="docutils literal notranslate"><span class="pre">MONTHLY</span></code>, <code class="docutils literal notranslate"><span class="pre">WEEKLY</span></code>, <code class="docutils literal notranslate"><span class="pre">DAILY</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id15">
+<h4>Association Table<a class="headerlink" href="#id15" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">event_event_categories</span></code>: Many-to-many linking <code class="docutils literal notranslate"><span class="pre">events</span></code> to <code class="docutils literal notranslate"><span class="pre">event_categories</span></code></p></li>
+</ul>
+</section>
+<section id="id16">
+<h4>Services<a class="headerlink" href="#id16" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">EventService</span></code>: Event management</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CalendarService</span></code>: Calendar management</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="sponsors-domain">
+<h3>Sponsors Domain<a class="headerlink" href="#sponsors-domain" title="Link to this heading">¶</a></h3>
+<p><strong>Purpose</strong>: PSF sponsorship management with contract workflow</p>
+<p><strong>Location</strong>: <code class="docutils literal notranslate"><span class="pre">src/pydotorg/domains/sponsors/</span></code></p>
+<section id="id17">
+<h4>Models<a class="headerlink" href="#id17" title="Link to this heading">¶</a></h4>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Model</p></th>
+<th class="head"><p>Table</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Sponsor</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sponsors</span></code></p></td>
+<td><p>Sponsor organizations</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Sponsorship</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sponsorships</span></code></p></td>
+<td><p>Individual sponsorship agreements</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SponsorshipLevel</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sponsorship_levels</span></code></p></td>
+<td><p>Sponsorship tiers</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Contract</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sponsor_contracts</span></code></p></td>
+<td><p>Contract documents</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">LegalClause</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sponsor_legal_clauses</span></code></p></td>
+<td><p>Contract legal clauses</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="sponsor-model">
+<h4>Sponsor Model<a class="headerlink" href="#sponsor-model" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">class</span><span class="w"> </span><span class="nc">Sponsor</span><span class="p">(</span><span class="n">AuditBase</span><span class="p">,</span> <span class="n">ContentManageableMixin</span><span class="p">,</span> <span class="n">NameSlugMixin</span><span class="p">):</span>
+</span><span data-line="2">    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;sponsors&quot;</span>
+</span><span data-line="3">
+</span><span data-line="4">    <span class="n">description</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="5">    <span class="n">landing_page_url</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="6">    <span class="n">twitter_handle</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="7">    <span class="n">linked_in_page_url</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="8">
+</span><span data-line="9">    <span class="c1"># Logos</span>
+</span><span data-line="10">    <span class="n">web_logo</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="11">    <span class="n">print_logo</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="12">
+</span><span data-line="13">    <span class="c1"># Contact</span>
+</span><span data-line="14">    <span class="n">primary_phone</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="15">
+</span><span data-line="16">    <span class="c1"># Address</span>
+</span><span data-line="17">    <span class="n">mailing_address_line_1</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="18">    <span class="n">mailing_address_line_2</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="19">    <span class="n">city</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="20">    <span class="n">state</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="21">    <span class="n">postal_code</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="22">    <span class="n">country</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="23">    <span class="n">country_of_incorporation</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="24">    <span class="n">state_of_incorporation</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="25">
+</span><span data-line="26">    <span class="n">sponsorships</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Sponsorship</span><span class="p">]]</span>
+</span></pre></div>
+</div>
+</section>
+<section id="sponsorship-model">
+<h4>Sponsorship Model<a class="headerlink" href="#sponsorship-model" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">class</span><span class="w"> </span><span class="nc">Sponsorship</span><span class="p">(</span><span class="n">AuditBase</span><span class="p">,</span> <span class="n">ContentManageableMixin</span><span class="p">):</span>
+</span><span data-line="2">    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;sponsorships&quot;</span>
+</span><span data-line="3">
+</span><span data-line="4">    <span class="n">sponsor_id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">UUID</span><span class="p">]</span>        <span class="c1"># FK to sponsors</span>
+</span><span data-line="5">    <span class="n">level_id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">UUID</span><span class="p">]</span>          <span class="c1"># FK to sponsorship_levels</span>
+</span><span data-line="6">    <span class="n">submitted_by_id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">UUID</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>  <span class="c1"># FK to users</span>
+</span><span data-line="7">    <span class="n">status</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">SponsorshipStatus</span><span class="p">]</span>
+</span><span data-line="8">    <span class="n">locked</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+</span><span data-line="9">
+</span><span data-line="10">    <span class="c1"># Dates</span>
+</span><span data-line="11">    <span class="n">start_date</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">date</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+</span><span data-line="12">    <span class="n">end_date</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">date</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+</span><span data-line="13">    <span class="n">applied_on</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">date</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+</span><span data-line="14">    <span class="n">approved_on</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">date</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+</span><span data-line="15">    <span class="n">rejected_on</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">date</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+</span><span data-line="16">    <span class="n">finalized_on</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">date</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+</span><span data-line="17">
+</span><span data-line="18">    <span class="n">year</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+</span><span data-line="19">    <span class="n">sponsorship_fee</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">Decimal</span><span class="p">]</span>
+</span><span data-line="20">    <span class="n">for_modified_package</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+</span><span data-line="21">    <span class="n">renewal</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+</span><span data-line="22">
+</span><span data-line="23">    <span class="c1"># Relationships</span>
+</span><span data-line="24">    <span class="n">sponsor</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">Sponsor</span><span class="p">]</span>
+</span><span data-line="25">    <span class="n">level</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">SponsorshipLevel</span><span class="p">]</span>
+</span><span data-line="26">    <span class="n">submitted_by</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">User</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+</span><span data-line="27">    <span class="n">contract</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">Contract</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+</span></pre></div>
+</div>
+</section>
+<section id="id18">
+<h4>Enums<a class="headerlink" href="#id18" title="Link to this heading">¶</a></h4>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Enum</p></th>
+<th class="head"><p>Values</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SponsorshipStatus</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">APPLIED</span></code>, <code class="docutils literal notranslate"><span class="pre">REJECTED</span></code>, <code class="docutils literal notranslate"><span class="pre">APPROVED</span></code>, <code class="docutils literal notranslate"><span class="pre">FINALIZED</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ContractStatus</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DRAFT</span></code>, <code class="docutils literal notranslate"><span class="pre">OUTDATED</span></code>, <code class="docutils literal notranslate"><span class="pre">AWAITING_SIGNATURE</span></code>, <code class="docutils literal notranslate"><span class="pre">EXECUTED</span></code>, <code class="docutils literal notranslate"><span class="pre">NULLIFIED</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id19">
+<h4>Services<a class="headerlink" href="#id19" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">SponsorService</span></code>: Sponsor organization management</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SponsorshipService</span></code>: Sponsorship lifecycle management</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ContractService</span></code>: Contract workflow</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="community-domain">
+<h3>Community Domain<a class="headerlink" href="#community-domain" title="Link to this heading">¶</a></h3>
+<p><strong>Purpose</strong>: Community-contributed content including posts, photos, videos, and links</p>
+<p><strong>Location</strong>: <code class="docutils literal notranslate"><span class="pre">src/pydotorg/domains/community/</span></code></p>
+<section id="id20">
+<h4>Models<a class="headerlink" href="#id20" title="Link to this heading">¶</a></h4>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Model</p></th>
+<th class="head"><p>Table</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Post</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">community_posts</span></code></p></td>
+<td><p>Community blog posts</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Photo</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">community_photos</span></code></p></td>
+<td><p>Photo attachments</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Video</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">community_videos</span></code></p></td>
+<td><p>Video links</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Link</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">community_links</span></code></p></td>
+<td><p>External links</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="post-model">
+<h4>Post Model<a class="headerlink" href="#post-model" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">class</span><span class="w"> </span><span class="nc">Post</span><span class="p">(</span><span class="n">AuditBase</span><span class="p">,</span> <span class="n">SlugMixin</span><span class="p">):</span>
+</span><span data-line="2">    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;community_posts&quot;</span>
+</span><span data-line="3">
+</span><span data-line="4">    <span class="n">title</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="5">    <span class="n">content</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="6">    <span class="n">content_type</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">ContentType</span><span class="p">]</span>
+</span><span data-line="7">    <span class="n">creator_id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">UUID</span><span class="p">]</span>        <span class="c1"># FK to users</span>
+</span><span data-line="8">    <span class="n">is_published</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+</span><span data-line="9">
+</span><span data-line="10">    <span class="c1"># Relationships</span>
+</span><span data-line="11">    <span class="n">photos</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Photo</span><span class="p">]]</span>
+</span><span data-line="12">    <span class="n">videos</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Video</span><span class="p">]]</span>
+</span><span data-line="13">    <span class="n">links</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Link</span><span class="p">]]</span>
+</span></pre></div>
+</div>
+</section>
+<section id="id21">
+<h4>Services<a class="headerlink" href="#id21" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">PostService</span></code>: Post management</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PhotoService</span></code>: Photo management</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">VideoService</span></code>: Video management</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LinkService</span></code>: Link management</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="success-stories-domain">
+<h3>Success Stories Domain<a class="headerlink" href="#success-stories-domain" title="Link to this heading">¶</a></h3>
+<p><strong>Purpose</strong>: Python success stories and case studies</p>
+<p><strong>Location</strong>: <code class="docutils literal notranslate"><span class="pre">src/pydotorg/domains/successstories/</span></code></p>
+<section id="id22">
+<h4>Models<a class="headerlink" href="#id22" title="Link to this heading">¶</a></h4>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Model</p></th>
+<th class="head"><p>Table</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Story</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">success_stories</span></code></p></td>
+<td><p>Success story content</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">StoryCategory</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">story_categories</span></code></p></td>
+<td><p>Story categories</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="story-model">
+<h4>Story Model<a class="headerlink" href="#story-model" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">class</span><span class="w"> </span><span class="nc">Story</span><span class="p">(</span><span class="n">AuditBase</span><span class="p">,</span> <span class="n">SlugMixin</span><span class="p">):</span>
+</span><span data-line="2">    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;success_stories&quot;</span>
+</span><span data-line="3">
+</span><span data-line="4">    <span class="n">name</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="5">    <span class="n">company_name</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="6">    <span class="n">company_url</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+</span><span data-line="7">    <span class="n">category_id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">UUID</span><span class="p">]</span>       <span class="c1"># FK to story_categories</span>
+</span><span data-line="8">    <span class="n">content</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="9">    <span class="n">content_type</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">ContentType</span><span class="p">]</span>
+</span><span data-line="10">    <span class="n">is_published</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+</span><span data-line="11">    <span class="n">featured</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+</span><span data-line="12">    <span class="n">image</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+</span><span data-line="13">    <span class="n">creator_id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">UUID</span><span class="p">]</span>        <span class="c1"># FK to users</span>
+</span><span data-line="14">
+</span><span data-line="15">    <span class="n">category</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">StoryCategory</span><span class="p">]</span>
+</span></pre></div>
+</div>
+</section>
+<section id="id23">
+<h4>Services<a class="headerlink" href="#id23" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">StoryService</span></code>: Story CRUD and publishing</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="nominations-domain">
+<h3>Nominations Domain<a class="headerlink" href="#nominations-domain" title="Link to this heading">¶</a></h3>
+<p><strong>Purpose</strong>: PSF election nominations and voting</p>
+<p><strong>Location</strong>: <code class="docutils literal notranslate"><span class="pre">src/pydotorg/domains/nominations/</span></code></p>
+<section id="id24">
+<h4>Models<a class="headerlink" href="#id24" title="Link to this heading">¶</a></h4>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Model</p></th>
+<th class="head"><p>Table</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Election</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">elections</span></code></p></td>
+<td><p>PSF elections</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Nominee</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">nominees</span></code></p></td>
+<td><p>Election candidates</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Nomination</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">nominations</span></code></p></td>
+<td><p>Nominations with endorsements</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="election-model">
+<h4>Election Model<a class="headerlink" href="#election-model" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">class</span><span class="w"> </span><span class="nc">Election</span><span class="p">(</span><span class="n">AuditBase</span><span class="p">,</span> <span class="n">SlugMixin</span><span class="p">):</span>
+</span><span data-line="2">    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;elections&quot;</span>
+</span><span data-line="3">
+</span><span data-line="4">    <span class="n">name</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="5">    <span class="n">description</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+</span><span data-line="6">    <span class="n">nominations_open</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">date</span><span class="p">]</span>
+</span><span data-line="7">    <span class="n">nominations_close</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">date</span><span class="p">]</span>
+</span><span data-line="8">    <span class="n">voting_open</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">date</span><span class="p">]</span>
+</span><span data-line="9">    <span class="n">voting_close</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">date</span><span class="p">]</span>
+</span><span data-line="10">
+</span><span data-line="11">    <span class="n">nominees</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Nominee</span><span class="p">]]</span>
+</span><span data-line="12">
+</span><span data-line="13">    <span class="nd">@property</span>
+</span><span data-line="14">    <span class="k">def</span><span class="w"> </span><span class="nf">status</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ElectionStatus</span><span class="p">:</span>
+</span><span data-line="15">        <span class="c1"># Returns UPCOMING/NOMINATIONS_OPEN/VOTING_OPEN/CLOSED</span>
+</span></pre></div>
+</div>
+</section>
+<section id="nominee-model">
+<h4>Nominee Model<a class="headerlink" href="#nominee-model" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">class</span><span class="w"> </span><span class="nc">Nominee</span><span class="p">(</span><span class="n">AuditBase</span><span class="p">):</span>
+</span><span data-line="2">    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;nominees&quot;</span>
+</span><span data-line="3">
+</span><span data-line="4">    <span class="n">election_id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">UUID</span><span class="p">]</span>       <span class="c1"># FK to elections</span>
+</span><span data-line="5">    <span class="n">user_id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">UUID</span><span class="p">]</span>           <span class="c1"># FK to users</span>
+</span><span data-line="6">    <span class="n">accepted</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+</span><span data-line="7">
+</span><span data-line="8">    <span class="n">election</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">Election</span><span class="p">]</span>
+</span><span data-line="9">    <span class="n">user</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">User</span><span class="p">]</span>
+</span><span data-line="10">    <span class="n">nominations</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Nomination</span><span class="p">]]</span>
+</span></pre></div>
+</div>
+</section>
+<section id="id25">
+<h4>Enums<a class="headerlink" href="#id25" title="Link to this heading">¶</a></h4>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Enum</p></th>
+<th class="head"><p>Values</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ElectionStatus</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UPCOMING</span></code>, <code class="docutils literal notranslate"><span class="pre">NOMINATIONS_OPEN</span></code>, <code class="docutils literal notranslate"><span class="pre">VOTING_OPEN</span></code>, <code class="docutils literal notranslate"><span class="pre">CLOSED</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id26">
+<h4>Services<a class="headerlink" href="#id26" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ElectionService</span></code>: Election lifecycle management</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NomineeService</span></code>: Nominee management</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NominationService</span></code>: Nomination submissions</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="code-samples-domain">
+<h3>Code Samples Domain<a class="headerlink" href="#code-samples-domain" title="Link to this heading">¶</a></h3>
+<p><strong>Purpose</strong>: Python code sample repository for education</p>
+<p><strong>Location</strong>: <code class="docutils literal notranslate"><span class="pre">src/pydotorg/domains/codesamples/</span></code></p>
+<section id="id27">
+<h4>Models<a class="headerlink" href="#id27" title="Link to this heading">¶</a></h4>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Model</p></th>
+<th class="head"><p>Table</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CodeSample</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">code_samples</span></code></p></td>
+<td><p>Code snippets with descriptions</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="codesample-model">
+<h4>CodeSample Model<a class="headerlink" href="#codesample-model" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">class</span><span class="w"> </span><span class="nc">CodeSample</span><span class="p">(</span><span class="n">AuditBase</span><span class="p">,</span> <span class="n">SlugMixin</span><span class="p">):</span>
+</span><span data-line="2">    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;code_samples&quot;</span>
+</span><span data-line="3">
+</span><span data-line="4">    <span class="n">code</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>               <span class="c1"># The code content</span>
+</span><span data-line="5">    <span class="n">description</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="6">    <span class="n">is_published</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+</span><span data-line="7">    <span class="n">creator_id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">UUID</span><span class="p">]</span>        <span class="c1"># FK to users</span>
+</span></pre></div>
+</div>
+</section>
+<section id="id28">
+<h4>Services<a class="headerlink" href="#id28" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">CodeSampleService</span></code>: Code sample management</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="minutes-domain">
+<h3>Minutes Domain<a class="headerlink" href="#minutes-domain" title="Link to this heading">¶</a></h3>
+<p><strong>Purpose</strong>: PSF board meeting minutes</p>
+<p><strong>Location</strong>: <code class="docutils literal notranslate"><span class="pre">src/pydotorg/domains/minutes/</span></code></p>
+<section id="id29">
+<h4>Models<a class="headerlink" href="#id29" title="Link to this heading">¶</a></h4>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Model</p></th>
+<th class="head"><p>Table</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Minutes</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">minutes</span></code></p></td>
+<td><p>Meeting minutes documents</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="minutes-model">
+<h4>Minutes Model<a class="headerlink" href="#minutes-model" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">class</span><span class="w"> </span><span class="nc">Minutes</span><span class="p">(</span><span class="n">AuditBase</span><span class="p">,</span> <span class="n">SlugMixin</span><span class="p">):</span>
+</span><span data-line="2">    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;minutes&quot;</span>
+</span><span data-line="3">
+</span><span data-line="4">    <span class="n">date</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">date</span><span class="p">]</span>              <span class="c1"># Meeting date, indexed</span>
+</span><span data-line="5">    <span class="n">content</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="6">    <span class="n">content_type</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">ContentType</span><span class="p">]</span>
+</span><span data-line="7">    <span class="n">is_published</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+</span><span data-line="8">    <span class="n">creator_id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">UUID</span><span class="p">]</span>        <span class="c1"># FK to users</span>
+</span></pre></div>
+</div>
+</section>
+<section id="id30">
+<h4>Services<a class="headerlink" href="#id30" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">MinutesService</span></code>: Minutes CRUD and publishing</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="banners-domain">
+<h3>Banners Domain<a class="headerlink" href="#banners-domain" title="Link to this heading">¶</a></h3>
+<p><strong>Purpose</strong>: Site-wide and targeted banners for announcements</p>
+<p><strong>Location</strong>: <code class="docutils literal notranslate"><span class="pre">src/pydotorg/domains/banners/</span></code></p>
+<section id="id31">
+<h4>Models<a class="headerlink" href="#id31" title="Link to this heading">¶</a></h4>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Model</p></th>
+<th class="head"><p>Table</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Banner</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">banners</span></code></p></td>
+<td><p>Announcement banners</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="banner-model">
+<h4>Banner Model<a class="headerlink" href="#banner-model" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">class</span><span class="w"> </span><span class="nc">Banner</span><span class="p">(</span><span class="n">AuditBase</span><span class="p">):</span>
+</span><span data-line="2">    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;banners&quot;</span>
+</span><span data-line="3">
+</span><span data-line="4">    <span class="n">name</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>               <span class="c1"># Internal identifier</span>
+</span><span data-line="5">    <span class="n">title</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="6">    <span class="n">message</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="7">    <span class="n">link</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+</span><span data-line="8">    <span class="n">link_text</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+</span><span data-line="9">    <span class="n">banner_type</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>        <span class="c1"># info/success/warning/error</span>
+</span><span data-line="10">    <span class="n">target</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>             <span class="c1"># frontend/api</span>
+</span><span data-line="11">    <span class="n">paths</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>       <span class="c1"># Path patterns for targeting</span>
+</span><span data-line="12">    <span class="n">is_active</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+</span><span data-line="13">    <span class="n">is_dismissible</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+</span><span data-line="14">    <span class="n">is_sitewide</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+</span><span data-line="15">    <span class="n">start_date</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">date</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+</span><span data-line="16">    <span class="n">end_date</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">date</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+</span></pre></div>
+</div>
+</section>
+<section id="id32">
+<h4>Enums<a class="headerlink" href="#id32" title="Link to this heading">¶</a></h4>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Enum</p></th>
+<th class="head"><p>Values</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BannerType</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">INFO</span></code>, <code class="docutils literal notranslate"><span class="pre">SUCCESS</span></code>, <code class="docutils literal notranslate"><span class="pre">WARNING</span></code>, <code class="docutils literal notranslate"><span class="pre">ERROR</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">BannerTarget</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">FRONTEND</span></code>, <code class="docutils literal notranslate"><span class="pre">API</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id33">
+<h4>Services<a class="headerlink" href="#id33" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">BannerService</span></code>: Banner management and targeting</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="mailing-domain">
+<h3>Mailing Domain<a class="headerlink" href="#mailing-domain" title="Link to this heading">¶</a></h3>
+<p><strong>Purpose</strong>: Email templates and sending logs</p>
+<p><strong>Location</strong>: <code class="docutils literal notranslate"><span class="pre">src/pydotorg/domains/mailing/</span></code></p>
+<section id="id34">
+<h4>Models<a class="headerlink" href="#id34" title="Link to this heading">¶</a></h4>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Model</p></th>
+<th class="head"><p>Table</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">EmailTemplate</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">email_templates</span></code></p></td>
+<td><p>Jinja2 email templates</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">EmailLog</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">email_logs</span></code></p></td>
+<td><p>Email sending audit log</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="emailtemplate-model">
+<h4>EmailTemplate Model<a class="headerlink" href="#emailtemplate-model" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">class</span><span class="w"> </span><span class="nc">EmailTemplate</span><span class="p">(</span><span class="n">AuditBase</span><span class="p">):</span>
+</span><span data-line="2">    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;email_templates&quot;</span>
+</span><span data-line="3">
+</span><span data-line="4">    <span class="n">internal_name</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>      <span class="c1"># Unique code identifier</span>
+</span><span data-line="5">    <span class="n">display_name</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="6">    <span class="n">description</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+</span><span data-line="7">    <span class="n">template_type</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">EmailTemplateType</span><span class="p">]</span>
+</span><span data-line="8">    <span class="n">subject</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>            <span class="c1"># Jinja2 template</span>
+</span><span data-line="9">    <span class="n">content_text</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>       <span class="c1"># Plain text Jinja2 template</span>
+</span><span data-line="10">    <span class="n">content_html</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>  <span class="c1"># HTML Jinja2 template</span>
+</span><span data-line="11">    <span class="n">is_active</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+</span><span data-line="12">
+</span><span data-line="13">    <span class="c1"># Methods</span>
+</span><span data-line="14">    <span class="k">def</span><span class="w"> </span><span class="nf">render_subject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</span><span data-line="15">    <span class="k">def</span><span class="w"> </span><span class="nf">render_content_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</span><span data-line="16">    <span class="k">def</span><span class="w"> </span><span class="nf">render_content_html</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+</span><span data-line="17">    <span class="k">def</span><span class="w"> </span><span class="nf">validate_templates</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span></pre></div>
+</div>
+</section>
+<section id="id35">
+<h4>Enums<a class="headerlink" href="#id35" title="Link to this heading">¶</a></h4>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Enum</p></th>
+<th class="head"><p>Values</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">EmailTemplateType</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TRANSACTIONAL</span></code>, <code class="docutils literal notranslate"><span class="pre">NOTIFICATION</span></code>, <code class="docutils literal notranslate"><span class="pre">NEWSLETTER</span></code>, <code class="docutils literal notranslate"><span class="pre">MARKETING</span></code>, <code class="docutils literal notranslate"><span class="pre">SYSTEM</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id36">
+<h4>Services<a class="headerlink" href="#id36" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">EmailTemplateService</span></code>: Template management</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EmailService</span></code>: Email sending with logging</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="work-groups-domain">
+<h3>Work Groups Domain<a class="headerlink" href="#work-groups-domain" title="Link to this heading">¶</a></h3>
+<p><strong>Purpose</strong>: PSF working groups management</p>
+<p><strong>Location</strong>: <code class="docutils literal notranslate"><span class="pre">src/pydotorg/domains/work_groups/</span></code></p>
+<section id="id37">
+<h4>Models<a class="headerlink" href="#id37" title="Link to this heading">¶</a></h4>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Model</p></th>
+<th class="head"><p>Table</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">WorkGroup</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">work_groups</span></code></p></td>
+<td><p>PSF working groups</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="workgroup-model">
+<h4>WorkGroup Model<a class="headerlink" href="#workgroup-model" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">class</span><span class="w"> </span><span class="nc">WorkGroup</span><span class="p">(</span><span class="n">AuditBase</span><span class="p">,</span> <span class="n">SlugMixin</span><span class="p">):</span>
+</span><span data-line="2">    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;work_groups&quot;</span>
+</span><span data-line="3">
+</span><span data-line="4">    <span class="n">name</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="5">    <span class="n">purpose</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span data-line="6">    <span class="n">active</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+</span><span data-line="7">    <span class="n">url</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+</span><span data-line="8">    <span class="n">creator_id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">UUID</span><span class="p">]</span>        <span class="c1"># FK to users</span>
+</span></pre></div>
+</div>
+</section>
+<section id="id38">
+<h4>Services<a class="headerlink" href="#id38" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">WorkGroupService</span></code>: Work group management</p></li>
+</ul>
+</section>
+</section>
+</section>
+<hr class="docutils" />
+<section id="entity-relationships">
+<h2>Entity Relationships<a class="headerlink" href="#entity-relationships" title="Link to this heading">¶</a></h2>
+<section id="complete-entity-relationship-diagram">
+<h3>Complete Entity Relationship Diagram<a class="headerlink" href="#complete-entity-relationship-diagram" title="Link to this heading">¶</a></h3>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span data-line="1">erDiagram
+</span><span data-line="2">    %% Users Domain
+</span><span data-line="3">    users ||--o| memberships : &quot;has one&quot;
+</span><span data-line="4">    users ||--o{ sponsorships : &quot;submits&quot;
+</span><span data-line="5">    users ||--o{ jobs : &quot;creates&quot;
+</span><span data-line="6">    users ||--o{ community_posts : &quot;creates&quot;
+</span><span data-line="7">    users ||--o{ success_stories : &quot;creates&quot;
+</span><span data-line="8">    users ||--o{ nominations : &quot;nominates&quot;
+</span><span data-line="9">    users ||--o{ nominees : &quot;is nominated&quot;
+</span><span data-line="10">    users ||--o{ code_samples : &quot;creates&quot;
+</span><span data-line="11">    users ||--o{ minutes : &quot;creates&quot;
+</span><span data-line="12">    users ||--o{ work_groups : &quot;creates&quot;
+</span><span data-line="13">
+</span><span data-line="14">    %% Downloads Domain
+</span><span data-line="15">    releases ||--o{ release_files : &quot;contains&quot;
+</span><span data-line="16">    releases ||--o| pages : &quot;has release page&quot;
+</span><span data-line="17">    download_os ||--o{ release_files : &quot;supports&quot;
+</span><span data-line="18">    release_files ||--o{ download_statistics : &quot;tracks&quot;
+</span><span data-line="19">
+</span><span data-line="20">    %% Blogs Domain
+</span><span data-line="21">    feeds ||--o{ blog_entries : &quot;contains&quot;
+</span><span data-line="22">    feed_aggregates }o--o{ feeds : &quot;groups&quot;
+</span><span data-line="23">
+</span><span data-line="24">    %% Jobs Domain
+</span><span data-line="25">    jobs ||--o{ job_review_comments : &quot;has&quot;
+</span><span data-line="26">    jobs }o--o{ job_types : &quot;has&quot;
+</span><span data-line="27">    jobs }o--o| job_categories : &quot;belongs to&quot;
+</span><span data-line="28">
+</span><span data-line="29">    %% Events Domain
+</span><span data-line="30">    calendars ||--o{ events : &quot;contains&quot;
+</span><span data-line="31">    events }o--o{ event_categories : &quot;has&quot;
+</span><span data-line="32">    events }o--o| event_locations : &quot;at&quot;
+</span><span data-line="33">    events ||--o{ event_occurrences : &quot;occurs&quot;
+</span><span data-line="34">    events ||--o{ event_recurring_rules : &quot;repeats&quot;
+</span><span data-line="35">    event_categories }o--|| calendars : &quot;belongs to&quot;
+</span><span data-line="36">
+</span><span data-line="37">    %% Sponsors Domain
+</span><span data-line="38">    sponsors ||--o{ sponsorships : &quot;has&quot;
+</span><span data-line="39">    sponsorship_levels ||--o{ sponsorships : &quot;defines&quot;
+</span><span data-line="40">    sponsorships ||--o| sponsor_contracts : &quot;has&quot;
+</span><span data-line="41">
+</span><span data-line="42">    %% Community Domain
+</span><span data-line="43">    community_posts ||--o{ community_photos : &quot;has&quot;
+</span><span data-line="44">    community_posts ||--o{ community_videos : &quot;has&quot;
+</span><span data-line="45">    community_posts ||--o{ community_links : &quot;has&quot;
+</span><span data-line="46">
+</span><span data-line="47">    %% Success Stories Domain
+</span><span data-line="48">    story_categories ||--o{ success_stories : &quot;contains&quot;
+</span><span data-line="49">
+</span><span data-line="50">    %% Nominations Domain
+</span><span data-line="51">    elections ||--o{ nominees : &quot;has&quot;
+</span><span data-line="52">    nominees ||--o{ nominations : &quot;receives&quot;
+</span><span data-line="53">
+</span><span data-line="54">    %% Pages Domain
+</span><span data-line="55">    pages ||--o{ page_images : &quot;has&quot;
+</span><span data-line="56">    pages ||--o{ page_documents : &quot;has&quot;
+</span></pre></div>
+</div>
+</section>
+<section id="users-domain-relationships">
+<h3>Users Domain Relationships<a class="headerlink" href="#users-domain-relationships" title="Link to this heading">¶</a></h3>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span data-line="1">erDiagram
+</span><span data-line="2">    users {
+</span><span data-line="3">        uuid id PK
+</span><span data-line="4">        string username UK
+</span><span data-line="5">        string email UK
+</span><span data-line="6">        string password_hash
+</span><span data-line="7">        boolean is_active
+</span><span data-line="8">        boolean is_staff
+</span><span data-line="9">        boolean is_superuser
+</span><span data-line="10">    }
+</span><span data-line="11">
+</span><span data-line="12">    memberships {
+</span><span data-line="13">        uuid id PK
+</span><span data-line="14">        uuid user_id FK,UK
+</span><span data-line="15">        enum membership_type
+</span><span data-line="16">        string legal_name
+</span><span data-line="17">        boolean votes
+</span><span data-line="18">    }
+</span><span data-line="19">
+</span><span data-line="20">    user_groups {
+</span><span data-line="21">        uuid id PK
+</span><span data-line="22">        string name
+</span><span data-line="23">        string location
+</span><span data-line="24">        boolean approved
+</span><span data-line="25">        boolean trusted
+</span><span data-line="26">    }
+</span><span data-line="27">
+</span><span data-line="28">    users ||--o| memberships : &quot;has&quot;
+</span></pre></div>
+</div>
+</section>
+<section id="downloads-domain-relationships">
+<h3>Downloads Domain Relationships<a class="headerlink" href="#downloads-domain-relationships" title="Link to this heading">¶</a></h3>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span data-line="1">erDiagram
+</span><span data-line="2">    download_os {
+</span><span data-line="3">        uuid id PK
+</span><span data-line="4">        string name
+</span><span data-line="5">        string slug UK
+</span><span data-line="6">    }
+</span><span data-line="7">
+</span><span data-line="8">    releases {
+</span><span data-line="9">        uuid id PK
+</span><span data-line="10">        string name
+</span><span data-line="11">        string slug UK
+</span><span data-line="12">        enum version
+</span><span data-line="13">        enum status
+</span><span data-line="14">        boolean is_latest
+</span><span data-line="15">        boolean is_published
+</span><span data-line="16">        date release_date
+</span><span data-line="17">        uuid release_page_id FK
+</span><span data-line="18">    }
+</span><span data-line="19">
+</span><span data-line="20">    release_files {
+</span><span data-line="21">        uuid id PK
+</span><span data-line="22">        uuid release_id FK
+</span><span data-line="23">        uuid os_id FK
+</span><span data-line="24">        string url
+</span><span data-line="25">        string md5_sum
+</span><span data-line="26">        string sha256_sum
+</span><span data-line="27">        bigint filesize
+</span><span data-line="28">        boolean download_button
+</span><span data-line="29">    }
+</span><span data-line="30">
+</span><span data-line="31">    download_statistics {
+</span><span data-line="32">        uuid id PK
+</span><span data-line="33">        uuid release_file_id FK
+</span><span data-line="34">        date date
+</span><span data-line="35">        integer download_count
+</span><span data-line="36">    }
+</span><span data-line="37">
+</span><span data-line="38">    pages {
+</span><span data-line="39">        uuid id PK
+</span><span data-line="40">        string path UK
+</span><span data-line="41">    }
+</span><span data-line="42">
+</span><span data-line="43">    download_os ||--o{ release_files : &quot;supports&quot;
+</span><span data-line="44">    releases ||--o{ release_files : &quot;contains&quot;
+</span><span data-line="45">    releases ||--o| pages : &quot;links to&quot;
+</span><span data-line="46">    release_files ||--o{ download_statistics : &quot;tracks&quot;
+</span></pre></div>
+</div>
+</section>
+<section id="jobs-domain-relationships">
+<h3>Jobs Domain Relationships<a class="headerlink" href="#jobs-domain-relationships" title="Link to this heading">¶</a></h3>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span data-line="1">erDiagram
+</span><span data-line="2">    jobs {
+</span><span data-line="3">        uuid id PK
+</span><span data-line="4">        string slug UK
+</span><span data-line="5">        uuid creator_id FK
+</span><span data-line="6">        uuid category_id FK
+</span><span data-line="7">        string company_name
+</span><span data-line="8">        string job_title
+</span><span data-line="9">        enum status
+</span><span data-line="10">    }
+</span><span data-line="11">
+</span><span data-line="12">    job_types {
+</span><span data-line="13">        uuid id PK
+</span><span data-line="14">        string name
+</span><span data-line="15">        string slug UK
+</span><span data-line="16">    }
+</span><span data-line="17">
+</span><span data-line="18">    job_categories {
+</span><span data-line="19">        uuid id PK
+</span><span data-line="20">        string name
+</span><span data-line="21">        string slug UK
+</span><span data-line="22">    }
+</span><span data-line="23">
+</span><span data-line="24">    job_review_comments {
+</span><span data-line="25">        uuid id PK
+</span><span data-line="26">        uuid job_id FK
+</span><span data-line="27">        uuid creator_id FK
+</span><span data-line="28">        text comment
+</span><span data-line="29">    }
+</span><span data-line="30">
+</span><span data-line="31">    job_job_types {
+</span><span data-line="32">        uuid job_id PK,FK
+</span><span data-line="33">        uuid job_type_id PK,FK
+</span><span data-line="34">    }
+</span><span data-line="35">
+</span><span data-line="36">    jobs }o--o{ job_types : &quot;has&quot;
+</span><span data-line="37">    jobs }o--|| job_categories : &quot;in&quot;
+</span><span data-line="38">    jobs ||--o{ job_review_comments : &quot;has&quot;
+</span></pre></div>
+</div>
+</section>
+<section id="events-domain-relationships">
+<h3>Events Domain Relationships<a class="headerlink" href="#events-domain-relationships" title="Link to this heading">¶</a></h3>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span data-line="1">erDiagram
+</span><span data-line="2">    calendars {
+</span><span data-line="3">        uuid id PK
+</span><span data-line="4">        string name
+</span><span data-line="5">        string slug UK
+</span><span data-line="6">    }
+</span><span data-line="7">
+</span><span data-line="8">    events {
+</span><span data-line="9">        uuid id PK
+</span><span data-line="10">        string title
+</span><span data-line="11">        uuid calendar_id FK
+</span><span data-line="12">        uuid venue_id FK
+</span><span data-line="13">        boolean featured
+</span><span data-line="14">    }
+</span><span data-line="15">
+</span><span data-line="16">    event_categories {
+</span><span data-line="17">        uuid id PK
+</span><span data-line="18">        string name
+</span><span data-line="19">        string slug UK
+</span><span data-line="20">        uuid calendar_id FK
+</span><span data-line="21">    }
+</span><span data-line="22">
+</span><span data-line="23">    event_locations {
+</span><span data-line="24">        uuid id PK
+</span><span data-line="25">        string name
+</span><span data-line="26">        string address
+</span><span data-line="27">    }
+</span><span data-line="28">
+</span><span data-line="29">    event_occurrences {
+</span><span data-line="30">        uuid id PK
+</span><span data-line="31">        uuid event_id FK
+</span><span data-line="32">        datetime dt_start
+</span><span data-line="33">        datetime dt_end
+</span><span data-line="34">        boolean all_day
+</span><span data-line="35">    }
+</span><span data-line="36">
+</span><span data-line="37">    event_recurring_rules {
+</span><span data-line="38">        uuid id PK
+</span><span data-line="39">        uuid event_id FK
+</span><span data-line="40">        datetime begin
+</span><span data-line="41">        datetime finish
+</span><span data-line="42">        interval duration
+</span><span data-line="43">        integer frequency
+</span><span data-line="44">    }
+</span><span data-line="45">
+</span><span data-line="46">    calendars ||--o{ events : &quot;contains&quot;
+</span><span data-line="47">    calendars ||--o{ event_categories : &quot;has&quot;
+</span><span data-line="48">    events }o--o{ event_categories : &quot;tagged&quot;
+</span><span data-line="49">    events }o--o| event_locations : &quot;at&quot;
+</span><span data-line="50">    events ||--o{ event_occurrences : &quot;occurs&quot;
+</span><span data-line="51">    events ||--o{ event_recurring_rules : &quot;repeats&quot;
+</span></pre></div>
+</div>
+</section>
+<section id="sponsors-domain-relationships">
+<h3>Sponsors Domain Relationships<a class="headerlink" href="#sponsors-domain-relationships" title="Link to this heading">¶</a></h3>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span data-line="1">erDiagram
+</span><span data-line="2">    sponsors {
+</span><span data-line="3">        uuid id PK
+</span><span data-line="4">        string name
+</span><span data-line="5">        string slug UK
+</span><span data-line="6">        string web_logo
+</span><span data-line="7">    }
+</span><span data-line="8">
+</span><span data-line="9">    sponsorship_levels {
+</span><span data-line="10">        uuid id PK
+</span><span data-line="11">        string name
+</span><span data-line="12">        integer order
+</span><span data-line="13">        integer sponsorship_amount
+</span><span data-line="14">    }
+</span><span data-line="15">
+</span><span data-line="16">    sponsorships {
+</span><span data-line="17">        uuid id PK
+</span><span data-line="18">        uuid sponsor_id FK
+</span><span data-line="19">        uuid level_id FK
+</span><span data-line="20">        uuid submitted_by_id FK
+</span><span data-line="21">        enum status
+</span><span data-line="22">        date start_date
+</span><span data-line="23">        date end_date
+</span><span data-line="24">    }
+</span><span data-line="25">
+</span><span data-line="26">    sponsor_contracts {
+</span><span data-line="27">        uuid id PK
+</span><span data-line="28">        uuid sponsorship_id FK,UK
+</span><span data-line="29">        enum status
+</span><span data-line="30">        integer revision
+</span><span data-line="31">    }
+</span><span data-line="32">
+</span><span data-line="33">    sponsors ||--o{ sponsorships : &quot;has&quot;
+</span><span data-line="34">    sponsorship_levels ||--o{ sponsorships : &quot;defines&quot;
+</span><span data-line="35">    sponsorships ||--o| sponsor_contracts : &quot;has&quot;
+</span></pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="cross-domain-dependencies">
+<h2>Cross-Domain Dependencies<a class="headerlink" href="#cross-domain-dependencies" title="Link to this heading">¶</a></h2>
+<section id="dependency-graph">
+<h3>Dependency Graph<a class="headerlink" href="#dependency-graph" title="Link to this heading">¶</a></h3>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span data-line="1">graph TB
+</span><span data-line="2">    subgraph Core[&quot;Core Domains (No Dependencies)&quot;]
+</span><span data-line="3">        USERS[users]
+</span><span data-line="4">        PAGES[pages]
+</span><span data-line="5">        BANNERS[banners]
+</span><span data-line="6">        MAILING[mailing]
+</span><span data-line="7">    end
+</span><span data-line="8">
+</span><span data-line="9">    subgraph Content[&quot;Content Domains&quot;]
+</span><span data-line="10">        BLOGS[blogs]
+</span><span data-line="11">        CODESAMPLES[codesamples]
+</span><span data-line="12">        COMMUNITY[community]
+</span><span data-line="13">        SUCCESSSTORIES[successstories]
+</span><span data-line="14">        MINUTES[minutes]
+</span><span data-line="15">        WORKGROUPS[work_groups]
+</span><span data-line="16">    end
+</span><span data-line="17">
+</span><span data-line="18">    subgraph Business[&quot;Business Domains&quot;]
+</span><span data-line="19">        DOWNLOADS[downloads]
+</span><span data-line="20">        JOBS[jobs]
+</span><span data-line="21">        EVENTS[events]
+</span><span data-line="22">        SPONSORS[sponsors]
+</span><span data-line="23">        NOMINATIONS[nominations]
+</span><span data-line="24">    end
+</span><span data-line="25">
+</span><span data-line="26">    %% User dependencies
+</span><span data-line="27">    COMMUNITY --&gt; USERS
+</span><span data-line="28">    SUCCESSSTORIES --&gt; USERS
+</span><span data-line="29">    JOBS --&gt; USERS
+</span><span data-line="30">    SPONSORS --&gt; USERS
+</span><span data-line="31">    NOMINATIONS --&gt; USERS
+</span><span data-line="32">    CODESAMPLES --&gt; USERS
+</span><span data-line="33">    MINUTES --&gt; USERS
+</span><span data-line="34">    WORKGROUPS --&gt; USERS
+</span><span data-line="35">
+</span><span data-line="36">    %% Pages dependencies
+</span><span data-line="37">    DOWNLOADS --&gt; PAGES
+</span><span data-line="38">
+</span><span data-line="39">    %% ContentType sharing
+</span><span data-line="40">    COMMUNITY -.-&gt; PAGES
+</span><span data-line="41">    SUCCESSSTORIES -.-&gt; PAGES
+</span><span data-line="42">    MINUTES -.-&gt; PAGES
+</span></pre></div>
+</div>
+</section>
+<section id="dependency-matrix">
+<h3>Dependency Matrix<a class="headerlink" href="#dependency-matrix" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Domain</p></th>
+<th class="head"><p>Depends On</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">users</span></code></p></td>
+<td><p>(none)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pages</span></code></p></td>
+<td><p>(none)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">banners</span></code></p></td>
+<td><p>(none)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">mailing</span></code></p></td>
+<td><p>(none)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">downloads</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">pages</span></code> (release_page_id)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">blogs</span></code></p></td>
+<td><p>(none)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">jobs</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">users</span></code> (creator_id)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">events</span></code></p></td>
+<td><p>(none)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sponsors</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">users</span></code> (submitted_by_id)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">community</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">users</span></code> (creator_id), <code class="docutils literal notranslate"><span class="pre">pages.ContentType</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">successstories</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">users</span></code> (creator_id), <code class="docutils literal notranslate"><span class="pre">pages.ContentType</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">nominations</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">users</span></code> (user_id, nominator_id)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">codesamples</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">users</span></code> (creator_id)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">minutes</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">users</span></code> (creator_id), <code class="docutils literal notranslate"><span class="pre">pages.ContentType</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">work_groups</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">users</span></code> (creator_id)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="database-tables-summary">
+<h2>Database Tables Summary<a class="headerlink" href="#database-tables-summary" title="Link to this heading">¶</a></h2>
+<section id="all-tables-by-domain">
+<h3>All Tables by Domain<a class="headerlink" href="#all-tables-by-domain" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Domain</p></th>
+<th class="head"><p>Tables</p></th>
+<th class="head"><p>Count</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>users</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">users</span></code>, <code class="docutils literal notranslate"><span class="pre">memberships</span></code>, <code class="docutils literal notranslate"><span class="pre">user_groups</span></code></p></td>
+<td><p>3</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>pages</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">pages</span></code>, <code class="docutils literal notranslate"><span class="pre">page_images</span></code>, <code class="docutils literal notranslate"><span class="pre">page_documents</span></code></p></td>
+<td><p>3</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>downloads</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">download_os</span></code>, <code class="docutils literal notranslate"><span class="pre">releases</span></code>, <code class="docutils literal notranslate"><span class="pre">release_files</span></code>, <code class="docutils literal notranslate"><span class="pre">download_statistics</span></code></p></td>
+<td><p>4</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>blogs</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">feeds</span></code>, <code class="docutils literal notranslate"><span class="pre">blog_entries</span></code>, <code class="docutils literal notranslate"><span class="pre">feed_aggregates</span></code>, <code class="docutils literal notranslate"><span class="pre">feed_aggregate_feeds</span></code>, <code class="docutils literal notranslate"><span class="pre">related_blogs</span></code></p></td>
+<td><p>5</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>jobs</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">jobs</span></code>, <code class="docutils literal notranslate"><span class="pre">job_types</span></code>, <code class="docutils literal notranslate"><span class="pre">job_categories</span></code>, <code class="docutils literal notranslate"><span class="pre">job_job_types</span></code>, <code class="docutils literal notranslate"><span class="pre">job_review_comments</span></code></p></td>
+<td><p>5</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>events</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">calendars</span></code>, <code class="docutils literal notranslate"><span class="pre">events</span></code>, <code class="docutils literal notranslate"><span class="pre">event_categories</span></code>, <code class="docutils literal notranslate"><span class="pre">event_locations</span></code>, <code class="docutils literal notranslate"><span class="pre">event_occurrences</span></code>, <code class="docutils literal notranslate"><span class="pre">event_recurring_rules</span></code>, <code class="docutils literal notranslate"><span class="pre">event_event_categories</span></code></p></td>
+<td><p>7</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>sponsors</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sponsors</span></code>, <code class="docutils literal notranslate"><span class="pre">sponsorships</span></code>, <code class="docutils literal notranslate"><span class="pre">sponsorship_levels</span></code>, <code class="docutils literal notranslate"><span class="pre">sponsor_contracts</span></code>, <code class="docutils literal notranslate"><span class="pre">sponsor_legal_clauses</span></code></p></td>
+<td><p>5</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>community</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">community_posts</span></code>, <code class="docutils literal notranslate"><span class="pre">community_photos</span></code>, <code class="docutils literal notranslate"><span class="pre">community_videos</span></code>, <code class="docutils literal notranslate"><span class="pre">community_links</span></code></p></td>
+<td><p>4</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>successstories</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">success_stories</span></code>, <code class="docutils literal notranslate"><span class="pre">story_categories</span></code></p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>nominations</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">elections</span></code>, <code class="docutils literal notranslate"><span class="pre">nominees</span></code>, <code class="docutils literal notranslate"><span class="pre">nominations</span></code></p></td>
+<td><p>3</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>codesamples</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">code_samples</span></code></p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>minutes</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">minutes</span></code></p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>banners</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">banners</span></code></p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>mailing</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">email_templates</span></code>, <code class="docutils literal notranslate"><span class="pre">email_logs</span></code></p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>work_groups</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">work_groups</span></code></p></td>
+<td><p>1</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Total Tables</strong>: 47</p>
+</section>
+<section id="index-summary">
+<h3>Index Summary<a class="headerlink" href="#index-summary" title="Link to this heading">¶</a></h3>
+<p>Key indexed columns across all domains:</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Table</p></th>
+<th class="head"><p>Indexed Columns</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">users</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">username</span></code>, <code class="docutils literal notranslate"><span class="pre">email</span></code>, <code class="docutils literal notranslate"><span class="pre">oauth_provider</span></code>, <code class="docutils literal notranslate"><span class="pre">oauth_id</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pages</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">path</span></code>, <code class="docutils literal notranslate"><span class="pre">is_published</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">releases</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">slug</span></code>, <code class="docutils literal notranslate"><span class="pre">is_latest</span></code>, <code class="docutils literal notranslate"><span class="pre">is_published</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">release_files</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">slug</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">download_statistics</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">release_file_id</span></code>, <code class="docutils literal notranslate"><span class="pre">date</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">feeds</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">is_active</span></code>, <code class="docutils literal notranslate"><span class="pre">priority</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">blog_entries</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">pub_date</span></code>, <code class="docutils literal notranslate"><span class="pre">is_featured</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">jobs</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">slug</span></code>, <code class="docutils literal notranslate"><span class="pre">status</span></code>, <code class="docutils literal notranslate"><span class="pre">is_featured</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">events</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">featured</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">event_occurrences</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">dt_start</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">event_recurring_rules</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">begin</span></code>, <code class="docutils literal notranslate"><span class="pre">finish</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">sponsorships</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">status</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sponsor_contracts</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">status</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">elections</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">nominations_open</span></code>, <code class="docutils literal notranslate"><span class="pre">nominations_close</span></code>, <code class="docutils literal notranslate"><span class="pre">voting_open</span></code>, <code class="docutils literal notranslate"><span class="pre">voting_close</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">nominees</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">accepted</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">banners</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">banner_type</span></code>, <code class="docutils literal notranslate"><span class="pre">target</span></code>, <code class="docutils literal notranslate"><span class="pre">is_active</span></code>, <code class="docutils literal notranslate"><span class="pre">is_sitewide</span></code>, <code class="docutils literal notranslate"><span class="pre">start_date</span></code>, <code class="docutils literal notranslate"><span class="pre">end_date</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">email_templates</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">internal_name</span></code>, <code class="docutils literal notranslate"><span class="pre">template_type</span></code>, <code class="docutils literal notranslate"><span class="pre">is_active</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">email_logs</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">template_name</span></code>, <code class="docutils literal notranslate"><span class="pre">recipient_email</span></code>, <code class="docutils literal notranslate"><span class="pre">status</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="revision-history">
+<h2>Revision History<a class="headerlink" href="#revision-history" title="Link to this heading">¶</a></h2>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Version</p></th>
+<th class="head"><p>Date</p></th>
+<th class="head"><p>Author</p></th>
+<th class="head"><p>Changes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1.0</p></td>
+<td><p>2025-12-14</p></td>
+<td><p>Documentation Agent</p></td>
+<td><p>Initial domain models documentation</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="ARCHITECTURE.html"><span class="std std-doc">Architecture Overview</span></a></p></li>
+<li><p><a class="reference internal" href="DATABASE_SCHEMA.html"><span class="std std-doc">Database Schema</span></a></p></li>
+<li><p><a class="reference external" href="https://docs.litestar.dev/">Litestar Documentation</a></p></li>
+<li><p><a class="reference external" href="https://docs.sqlalchemy.org/">SQLAlchemy 2.0 Documentation</a></p></li>
+<li><p><a class="reference external" href="https://docs.advanced-alchemy.litestar.dev/">Advanced Alchemy</a></p></li>
+</ul>
+<hr class="docutils" />
+<p><strong>Document Path</strong>: <code class="docutils literal notranslate"><span class="pre">/docs/architecture/DOMAIN_MODELS.md</span></code></p>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="DATABASE_SCHEMA.html">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title">Database Schema Design</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="QUICK_START.html">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title">Litestar Python.org Quick Start Guide</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Jacob Coffee</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+<a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+  <iconify-icon icon="simple-icons:github"></iconify-icon>
+</a></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=30646c52"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script src="../_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

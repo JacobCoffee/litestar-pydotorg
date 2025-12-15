@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="blue" data-content_root="../../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>events - litestar-pydotorg</title><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="jobs" href="jobs.html" /><link rel="prev" title="downloads" href="downloads.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="../../_static/shibuya.css?v=14737038" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link media="print" rel="stylesheet" type="text/css" href="../../_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=513f0650" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="events"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../../index.html">
+      
+      
+      <strong>litestar-pydotorg</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"><ul><li class="link">
+          <a href="https://litestar.dev/">
+            <span>Litestar</span></a>
+        </li><li class="link">
+          <a href="https://python.org/">
+            <span>Python.org</span></a>
+        </li></ul></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials">
+  <a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started/index.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../getting-started/installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting-started/quickstart.html">Quickstart</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/index.html">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/development.html">Development Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/contributing.html">Contribution Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/testing.html">Testing Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/debugging.html">Debugging Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/api-usage.html">API Usage Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/authentication.html">Authentication Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/feature-flags.html">Feature Flags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/configuration.html">Configuration Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/deployment.html">Deployment Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/docker.html">Docker Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/troubleshooting.html">Troubleshooting Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../cookbook/index.html">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../cookbook/domain-patterns.html">Domain Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cookbook/authentication-recipes.html">Authentication Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cookbook/database-recipes.html">Database Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cookbook/testing-recipes.html">Testing Recipes</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../core/index.html">Core Infrastructure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../core/auth.html">Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/cache.html">Caching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/database.html">Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/email.html">Email</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/exceptions.html">Exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/features.html">Feature Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/feeds.html">RSS/Atom Feeds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/ical.html">iCalendar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/middleware.html">Middleware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/openapi.html">OpenAPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/ratelimit.html">Rate Limiting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/security.html">Security</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/worker.html">Background Worker</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Domain Modules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="about.html">About</a></li>
+<li class="toctree-l3"><a class="reference internal" href="admin.html">Admin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="banners.html">banners</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blogs.html">blogs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="codesamples.html">Code Samples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="community.html">community</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs.html">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="downloads.html">downloads</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jobs.html">jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mailing.html">Mailing Lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="minutes.html">Minutes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nominations.html">Nominations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pages.html">pages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sponsors.html">sponsors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqladmin.html">SQLAdmin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="successstories.html">Success Stories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="users.html">users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="work_groups.html">Work Groups</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../lib.html">Library Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tasks.html">Background Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../config.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../main.html">Application Entry Point</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../architecture/index.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../architecture/ARCHITECTURE.html">Litestar Python.org Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../architecture/DATABASE_SCHEMA.html">Database Schema Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../architecture/DOMAIN_MODELS.html">Domain Models Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../architecture/QUICK_START.html">Litestar Python.org Quick Start Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../architecture/API_TAGS_INDEX.html">API Tags Documentation Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../architecture/RATE_LIMITING_ARCHITECTURE.html">Rate Limiting Architecture Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../architecture/adr/001-litestar-framework.html">ADR-001: Use Litestar as Web Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../architecture/adr/002-saq-background-tasks.html">ADR-002: Use SAQ for Background Task Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#models">models</a></li>
+<li><a class="reference internal" href="#module-pydotorg.domains.events.schemas">schemas</a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.CalendarBase"><code class="docutils literal notranslate"><span class="pre">CalendarBase</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.CalendarBase.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.CalendarCreate"><code class="docutils literal notranslate"><span class="pre">CalendarCreate</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.CalendarCreate.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.CalendarUpdate"><code class="docutils literal notranslate"><span class="pre">CalendarUpdate</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.CalendarUpdate.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.CalendarRead"><code class="docutils literal notranslate"><span class="pre">CalendarRead</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.CalendarRead.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.EventCategoryBase"><code class="docutils literal notranslate"><span class="pre">EventCategoryBase</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.EventCategoryBase.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.EventCategoryCreate"><code class="docutils literal notranslate"><span class="pre">EventCategoryCreate</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.EventCategoryCreate.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.EventCategoryRead"><code class="docutils literal notranslate"><span class="pre">EventCategoryRead</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.EventCategoryRead.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.EventLocationBase"><code class="docutils literal notranslate"><span class="pre">EventLocationBase</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.EventLocationBase.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.EventLocationCreate"><code class="docutils literal notranslate"><span class="pre">EventLocationCreate</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.EventLocationCreate.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.EventLocationUpdate"><code class="docutils literal notranslate"><span class="pre">EventLocationUpdate</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.EventLocationUpdate.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.EventLocationRead"><code class="docutils literal notranslate"><span class="pre">EventLocationRead</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.EventLocationRead.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.EventOccurrenceBase"><code class="docutils literal notranslate"><span class="pre">EventOccurrenceBase</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.EventOccurrenceBase.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.EventOccurrenceCreate"><code class="docutils literal notranslate"><span class="pre">EventOccurrenceCreate</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.EventOccurrenceCreate.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.EventOccurrenceUpdate"><code class="docutils literal notranslate"><span class="pre">EventOccurrenceUpdate</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.EventOccurrenceUpdate.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.EventOccurrenceRead"><code class="docutils literal notranslate"><span class="pre">EventOccurrenceRead</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.EventOccurrenceRead.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.EventBase"><code class="docutils literal notranslate"><span class="pre">EventBase</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.EventBase.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.EventCreate"><code class="docutils literal notranslate"><span class="pre">EventCreate</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.EventCreate.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.EventUpdate"><code class="docutils literal notranslate"><span class="pre">EventUpdate</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.EventUpdate.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.EventRead"><code class="docutils literal notranslate"><span class="pre">EventRead</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.EventRead.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.EventWithRelations"><code class="docutils literal notranslate"><span class="pre">EventWithRelations</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.EventWithRelations.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.EventList"><code class="docutils literal notranslate"><span class="pre">EventList</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.EventList.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.EventCalendarPageData"><code class="docutils literal notranslate"><span class="pre">EventCalendarPageData</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.EventCalendarPageData.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.EventDetailPageData"><code class="docutils literal notranslate"><span class="pre">EventDetailPageData</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.events.schemas.EventDetailPageData.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#services">services</a></li>
+<li><a class="reference internal" href="#controllers">controllers</a></li>
+<li><a class="reference internal" href="#repositories">repositories</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../../index.html"><span itemprop="name">litestar-pydotorg</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../index.html"><span itemprop="name">API Reference</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="2" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="index.html"><span itemprop="name">Domain Modules</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="3" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">events</strong>
+        <meta itemprop="position" content="4" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue dark-code" role="main">
+          <section id="events">
+<h1>events<a class="headerlink" href="#events" title="Link to this heading">¶</a></h1>
+<section id="models">
+<h2>models<a class="headerlink" href="#models" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-pydotorg.domains.events.schemas">
+<span id="schemas"></span><h2>schemas<a class="headerlink" href="#module-pydotorg.domains.events.schemas" title="Link to this heading">¶</a></h2>
+<p>Events domain Pydantic schemas.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.CalendarBase">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CalendarBase</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/events/schemas.html#CalendarBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.events.schemas.CalendarBase" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Base calendar schema with common fields.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.CalendarBase.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pydotorg.domains.events.schemas.CalendarBase.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.CalendarCreate">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CalendarCreate</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/events/schemas.html#CalendarCreate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.events.schemas.CalendarCreate" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pydotorg.domains.events.schemas.CalendarBase" title="pydotorg.domains.events.schemas.CalendarBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">CalendarBase</span></code></a></p>
+<p>Schema for creating a new calendar.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.CalendarCreate.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'json_schema_extra':</span> <span class="pre">{'example':</span> <span class="pre">{'creator_id':</span> <span class="pre">None,</span> <span class="pre">'name':</span> <span class="pre">'Python</span> <span class="pre">Events',</span> <span class="pre">'slug':</span> <span class="pre">'python-events'}}}</span></em><a class="headerlink" href="#pydotorg.domains.events.schemas.CalendarCreate.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.CalendarUpdate">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CalendarUpdate</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/events/schemas.html#CalendarUpdate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.events.schemas.CalendarUpdate" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Schema for updating a calendar.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.CalendarUpdate.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'json_schema_extra':</span> <span class="pre">{'example':</span> <span class="pre">{'name':</span> <span class="pre">'Python</span> <span class="pre">Community</span> <span class="pre">Events'}}}</span></em><a class="headerlink" href="#pydotorg.domains.events.schemas.CalendarUpdate.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.CalendarRead">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CalendarRead</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/events/schemas.html#CalendarRead"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.events.schemas.CalendarRead" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pydotorg.domains.events.schemas.CalendarBase" title="pydotorg.domains.events.schemas.CalendarBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">CalendarBase</span></code></a></p>
+<p>Schema for reading calendar data.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.CalendarRead.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'from_attributes':</span> <span class="pre">True,</span> <span class="pre">'json_schema_extra':</span> <span class="pre">{'example':</span> <span class="pre">{'created':</span> <span class="pre">'2025-01-01T00:00:00Z',</span> <span class="pre">'created_at':</span> <span class="pre">'2025-01-01T00:00:00Z',</span> <span class="pre">'creator_id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440000',</span> <span class="pre">'id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440100',</span> <span class="pre">'name':</span> <span class="pre">'Python</span> <span class="pre">Events',</span> <span class="pre">'slug':</span> <span class="pre">'python-events',</span> <span class="pre">'updated':</span> <span class="pre">'2025-11-30T12:00:00Z',</span> <span class="pre">'updated_at':</span> <span class="pre">'2025-11-30T12:00:00Z'}}}</span></em><a class="headerlink" href="#pydotorg.domains.events.schemas.CalendarRead.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.EventCategoryBase">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EventCategoryBase</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/events/schemas.html#EventCategoryBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.events.schemas.EventCategoryBase" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Base event category schema with common fields.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.EventCategoryBase.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pydotorg.domains.events.schemas.EventCategoryBase.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.EventCategoryCreate">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EventCategoryCreate</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/events/schemas.html#EventCategoryCreate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.events.schemas.EventCategoryCreate" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pydotorg.domains.events.schemas.EventCategoryBase" title="pydotorg.domains.events.schemas.EventCategoryBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">EventCategoryBase</span></code></a></p>
+<p>Schema for creating a new event category.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.EventCategoryCreate.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'json_schema_extra':</span> <span class="pre">{'example':</span> <span class="pre">{'calendar_id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440100',</span> <span class="pre">'name':</span> <span class="pre">'Conferences',</span> <span class="pre">'slug':</span> <span class="pre">'conferences'}}}</span></em><a class="headerlink" href="#pydotorg.domains.events.schemas.EventCategoryCreate.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.EventCategoryRead">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EventCategoryRead</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/events/schemas.html#EventCategoryRead"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.events.schemas.EventCategoryRead" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pydotorg.domains.events.schemas.EventCategoryBase" title="pydotorg.domains.events.schemas.EventCategoryBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">EventCategoryBase</span></code></a></p>
+<p>Schema for reading event category data.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.EventCategoryRead.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'from_attributes':</span> <span class="pre">True,</span> <span class="pre">'json_schema_extra':</span> <span class="pre">{'example':</span> <span class="pre">{'calendar_id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440100',</span> <span class="pre">'id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440300',</span> <span class="pre">'name':</span> <span class="pre">'Conferences',</span> <span class="pre">'slug':</span> <span class="pre">'conferences'}}}</span></em><a class="headerlink" href="#pydotorg.domains.events.schemas.EventCategoryRead.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.EventLocationBase">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EventLocationBase</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/events/schemas.html#EventLocationBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.events.schemas.EventLocationBase" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Base event location schema with common fields.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.EventLocationBase.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pydotorg.domains.events.schemas.EventLocationBase.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.EventLocationCreate">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EventLocationCreate</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/events/schemas.html#EventLocationCreate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.events.schemas.EventLocationCreate" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pydotorg.domains.events.schemas.EventLocationBase" title="pydotorg.domains.events.schemas.EventLocationBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">EventLocationBase</span></code></a></p>
+<p>Schema for creating a new event location.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.EventLocationCreate.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'json_schema_extra':</span> <span class="pre">{'example':</span> <span class="pre">{'address':</span> <span class="pre">'1000</span> <span class="pre">Fort</span> <span class="pre">Duquesne</span> <span class="pre">Blvd,</span> <span class="pre">Pittsburgh,</span> <span class="pre">PA</span> <span class="pre">15222',</span> <span class="pre">'name':</span> <span class="pre">'Pittsburgh</span> <span class="pre">Convention</span> <span class="pre">Center',</span> <span class="pre">'slug':</span> <span class="pre">'pittsburgh-convention-center',</span> <span class="pre">'url':</span> <span class="pre">'https://pittsburghcc.com'}}}</span></em><a class="headerlink" href="#pydotorg.domains.events.schemas.EventLocationCreate.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.EventLocationUpdate">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EventLocationUpdate</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/events/schemas.html#EventLocationUpdate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.events.schemas.EventLocationUpdate" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Schema for updating an event location.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.EventLocationUpdate.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'json_schema_extra':</span> <span class="pre">{'example':</span> <span class="pre">{'address':</span> <span class="pre">'1000</span> <span class="pre">Fort</span> <span class="pre">Duquesne</span> <span class="pre">Blvd,</span> <span class="pre">Pittsburgh,</span> <span class="pre">PA</span> <span class="pre">15222',</span> <span class="pre">'name':</span> <span class="pre">'David</span> <span class="pre">L.</span> <span class="pre">Lawrence</span> <span class="pre">Convention</span> <span class="pre">Center'}}}</span></em><a class="headerlink" href="#pydotorg.domains.events.schemas.EventLocationUpdate.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.EventLocationRead">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EventLocationRead</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/events/schemas.html#EventLocationRead"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.events.schemas.EventLocationRead" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pydotorg.domains.events.schemas.EventLocationBase" title="pydotorg.domains.events.schemas.EventLocationBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">EventLocationBase</span></code></a></p>
+<p>Schema for reading event location data.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.EventLocationRead.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'from_attributes':</span> <span class="pre">True,</span> <span class="pre">'json_schema_extra':</span> <span class="pre">{'example':</span> <span class="pre">{'address':</span> <span class="pre">'1000</span> <span class="pre">Fort</span> <span class="pre">Duquesne</span> <span class="pre">Blvd,</span> <span class="pre">Pittsburgh,</span> <span class="pre">PA</span> <span class="pre">15222',</span> <span class="pre">'id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440200',</span> <span class="pre">'name':</span> <span class="pre">'David</span> <span class="pre">L.</span> <span class="pre">Lawrence</span> <span class="pre">Convention</span> <span class="pre">Center',</span> <span class="pre">'slug':</span> <span class="pre">'david-l-lawrence-convention-center',</span> <span class="pre">'url':</span> <span class="pre">'https://pittsburghcc.com'}}}</span></em><a class="headerlink" href="#pydotorg.domains.events.schemas.EventLocationRead.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.EventOccurrenceBase">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EventOccurrenceBase</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/events/schemas.html#EventOccurrenceBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.events.schemas.EventOccurrenceBase" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Base event occurrence schema with common fields.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.EventOccurrenceBase.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pydotorg.domains.events.schemas.EventOccurrenceBase.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.EventOccurrenceCreate">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EventOccurrenceCreate</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/events/schemas.html#EventOccurrenceCreate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.events.schemas.EventOccurrenceCreate" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pydotorg.domains.events.schemas.EventOccurrenceBase" title="pydotorg.domains.events.schemas.EventOccurrenceBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">EventOccurrenceBase</span></code></a></p>
+<p>Schema for creating a new event occurrence.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.EventOccurrenceCreate.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'json_schema_extra':</span> <span class="pre">{'example':</span> <span class="pre">{'all_day':</span> <span class="pre">False,</span> <span class="pre">'dt_end':</span> <span class="pre">'2025-05-18T17:00:00Z',</span> <span class="pre">'dt_start':</span> <span class="pre">'2025-05-15T09:00:00Z',</span> <span class="pre">'event_id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440500'}}}</span></em><a class="headerlink" href="#pydotorg.domains.events.schemas.EventOccurrenceCreate.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.EventOccurrenceUpdate">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EventOccurrenceUpdate</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/events/schemas.html#EventOccurrenceUpdate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.events.schemas.EventOccurrenceUpdate" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Schema for updating an event occurrence.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.EventOccurrenceUpdate.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'json_schema_extra':</span> <span class="pre">{'example':</span> <span class="pre">{'dt_end':</span> <span class="pre">'2025-05-19T17:00:00Z',</span> <span class="pre">'dt_start':</span> <span class="pre">'2025-05-16T09:00:00Z'}}}</span></em><a class="headerlink" href="#pydotorg.domains.events.schemas.EventOccurrenceUpdate.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.EventOccurrenceRead">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EventOccurrenceRead</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/events/schemas.html#EventOccurrenceRead"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.events.schemas.EventOccurrenceRead" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pydotorg.domains.events.schemas.EventOccurrenceBase" title="pydotorg.domains.events.schemas.EventOccurrenceBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">EventOccurrenceBase</span></code></a></p>
+<p>Schema for reading event occurrence data.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.EventOccurrenceRead.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'from_attributes':</span> <span class="pre">True,</span> <span class="pre">'json_schema_extra':</span> <span class="pre">{'example':</span> <span class="pre">{'all_day':</span> <span class="pre">False,</span> <span class="pre">'created_at':</span> <span class="pre">'2025-01-15T10:00:00Z',</span> <span class="pre">'dt_end':</span> <span class="pre">'2025-05-18T17:00:00Z',</span> <span class="pre">'dt_start':</span> <span class="pre">'2025-05-15T09:00:00Z',</span> <span class="pre">'event_id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440500',</span> <span class="pre">'id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440600',</span> <span class="pre">'updated_at':</span> <span class="pre">'2025-01-15T10:00:00Z'}}}</span></em><a class="headerlink" href="#pydotorg.domains.events.schemas.EventOccurrenceRead.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.EventBase">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EventBase</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/events/schemas.html#EventBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.events.schemas.EventBase" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Base event schema with common fields.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.EventBase.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pydotorg.domains.events.schemas.EventBase.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.EventCreate">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EventCreate</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/events/schemas.html#EventCreate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.events.schemas.EventCreate" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pydotorg.domains.events.schemas.EventBase" title="pydotorg.domains.events.schemas.EventBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">EventBase</span></code></a></p>
+<p>Schema for creating a new event.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.EventCreate.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'json_schema_extra':</span> <span class="pre">{'example':</span> <span class="pre">{'calendar_id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440100',</span> <span class="pre">'category_ids':</span> <span class="pre">['550e8400-e29b-41d4-a716-446655440300',</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440301'],</span> <span class="pre">'creator_id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440000',</span> <span class="pre">'description':</span> <span class="pre">'Join</span> <span class="pre">the</span> <span class="pre">largest</span> <span class="pre">annual</span> <span class="pre">gathering</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">Python</span> <span class="pre">community!</span> <span class="pre">PyCon</span> <span class="pre">US</span> <span class="pre">2025</span> <span class="pre">features</span> <span class="pre">talks,</span> <span class="pre">tutorials,</span> <span class="pre">sprints,</span> <span class="pre">and</span> <span class="pre">networking</span> <span class="pre">opportunities</span> <span class="pre">for</span> <span class="pre">Python</span> <span class="pre">developers</span> <span class="pre">of</span> <span class="pre">all</span> <span class="pre">skill</span> <span class="pre">levels.',</span> <span class="pre">'featured':</span> <span class="pre">True,</span> <span class="pre">'name':</span> <span class="pre">'PyCon</span> <span class="pre">US</span> <span class="pre">2025',</span> <span class="pre">'occurrences':</span> <span class="pre">[{'all_day':</span> <span class="pre">False,</span> <span class="pre">'dt_end':</span> <span class="pre">'2025-05-18T17:00:00Z',</span> <span class="pre">'dt_start':</span> <span class="pre">'2025-05-15T09:00:00Z'}],</span> <span class="pre">'slug':</span> <span class="pre">'pycon-us-2025',</span> <span class="pre">'title':</span> <span class="pre">'PyCon</span> <span class="pre">US</span> <span class="pre">2025</span> <span class="pre">-</span> <span class="pre">The</span> <span class="pre">Premier</span> <span class="pre">Python</span> <span class="pre">Conference',</span> <span class="pre">'venue_id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440200'}}}</span></em><a class="headerlink" href="#pydotorg.domains.events.schemas.EventCreate.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.EventUpdate">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EventUpdate</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/events/schemas.html#EventUpdate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.events.schemas.EventUpdate" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Schema for updating an event.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.EventUpdate.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'json_schema_extra':</span> <span class="pre">{'example':</span> <span class="pre">{'description':</span> <span class="pre">'Updated</span> <span class="pre">description</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">largest</span> <span class="pre">annual</span> <span class="pre">gathering</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">Python</span> <span class="pre">community!',</span> <span class="pre">'featured':</span> <span class="pre">True,</span> <span class="pre">'title':</span> <span class="pre">'PyCon</span> <span class="pre">US</span> <span class="pre">2025</span> <span class="pre">-</span> <span class="pre">The</span> <span class="pre">Premier</span> <span class="pre">Python</span> <span class="pre">Conference</span> <span class="pre">(Updated)'}}}</span></em><a class="headerlink" href="#pydotorg.domains.events.schemas.EventUpdate.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.EventRead">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EventRead</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/events/schemas.html#EventRead"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.events.schemas.EventRead" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pydotorg.domains.events.schemas.EventBase" title="pydotorg.domains.events.schemas.EventBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">EventBase</span></code></a></p>
+<p>Schema for reading event data.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.EventRead.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'from_attributes':</span> <span class="pre">True,</span> <span class="pre">'json_schema_extra':</span> <span class="pre">{'example':</span> <span class="pre">{'calendar_id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440100',</span> <span class="pre">'created':</span> <span class="pre">'2025-01-15T10:00:00Z',</span> <span class="pre">'created_at':</span> <span class="pre">'2025-01-15T10:00:00Z',</span> <span class="pre">'creator_id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440000',</span> <span class="pre">'description':</span> <span class="pre">'Join</span> <span class="pre">the</span> <span class="pre">largest</span> <span class="pre">annual</span> <span class="pre">gathering</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">Python</span> <span class="pre">community!</span> <span class="pre">PyCon</span> <span class="pre">US</span> <span class="pre">2025</span> <span class="pre">features</span> <span class="pre">talks,</span> <span class="pre">tutorials,</span> <span class="pre">sprints,</span> <span class="pre">and</span> <span class="pre">networking</span> <span class="pre">opportunities</span> <span class="pre">for</span> <span class="pre">Python</span> <span class="pre">developers</span> <span class="pre">of</span> <span class="pre">all</span> <span class="pre">skill</span> <span class="pre">levels.',</span> <span class="pre">'featured':</span> <span class="pre">True,</span> <span class="pre">'id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440500',</span> <span class="pre">'name':</span> <span class="pre">'PyCon</span> <span class="pre">US</span> <span class="pre">2025',</span> <span class="pre">'slug':</span> <span class="pre">'pycon-us-2025',</span> <span class="pre">'title':</span> <span class="pre">'PyCon</span> <span class="pre">US</span> <span class="pre">2025</span> <span class="pre">-</span> <span class="pre">The</span> <span class="pre">Premier</span> <span class="pre">Python</span> <span class="pre">Conference',</span> <span class="pre">'updated':</span> <span class="pre">'2025-11-20T14:30:00Z',</span> <span class="pre">'updated_at':</span> <span class="pre">'2025-11-20T14:30:00Z',</span> <span class="pre">'venue_id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440200'}}}</span></em><a class="headerlink" href="#pydotorg.domains.events.schemas.EventRead.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.EventWithRelations">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EventWithRelations</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/events/schemas.html#EventWithRelations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.events.schemas.EventWithRelations" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pydotorg.domains.events.schemas.EventRead" title="pydotorg.domains.events.schemas.EventRead"><code class="xref py py-class docutils literal notranslate"><span class="pre">EventRead</span></code></a></p>
+<p>Schema for event with all relations loaded.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.EventWithRelations.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'from_attributes':</span> <span class="pre">True,</span> <span class="pre">'json_schema_extra':</span> <span class="pre">{'example':</span> <span class="pre">{'calendar_id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440100',</span> <span class="pre">'categories':</span> <span class="pre">[{'calendar_id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440100',</span> <span class="pre">'id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440300',</span> <span class="pre">'name':</span> <span class="pre">'Conferences',</span> <span class="pre">'slug':</span> <span class="pre">'conferences'}],</span> <span class="pre">'created':</span> <span class="pre">'2025-01-15T10:00:00Z',</span> <span class="pre">'created_at':</span> <span class="pre">'2025-01-15T10:00:00Z',</span> <span class="pre">'creator_id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440000',</span> <span class="pre">'description':</span> <span class="pre">'Join</span> <span class="pre">the</span> <span class="pre">largest</span> <span class="pre">annual</span> <span class="pre">gathering</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">Python</span> <span class="pre">community!',</span> <span class="pre">'featured':</span> <span class="pre">True,</span> <span class="pre">'id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440500',</span> <span class="pre">'name':</span> <span class="pre">'PyCon</span> <span class="pre">US</span> <span class="pre">2025',</span> <span class="pre">'occurrences':</span> <span class="pre">[{'all_day':</span> <span class="pre">False,</span> <span class="pre">'created_at':</span> <span class="pre">'2025-01-15T10:00:00Z',</span> <span class="pre">'dt_end':</span> <span class="pre">'2025-05-18T17:00:00Z',</span> <span class="pre">'dt_start':</span> <span class="pre">'2025-05-15T09:00:00Z',</span> <span class="pre">'event_id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440500',</span> <span class="pre">'id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440600',</span> <span class="pre">'updated_at':</span> <span class="pre">'2025-01-15T10:00:00Z'}],</span> <span class="pre">'slug':</span> <span class="pre">'pycon-us-2025',</span> <span class="pre">'title':</span> <span class="pre">'PyCon</span> <span class="pre">US</span> <span class="pre">2025</span> <span class="pre">-</span> <span class="pre">The</span> <span class="pre">Premier</span> <span class="pre">Python</span> <span class="pre">Conference',</span> <span class="pre">'updated':</span> <span class="pre">'2025-11-20T14:30:00Z',</span> <span class="pre">'updated_at':</span> <span class="pre">'2025-11-20T14:30:00Z',</span> <span class="pre">'venue':</span> <span class="pre">{'address':</span> <span class="pre">'1000</span> <span class="pre">Fort</span> <span class="pre">Duquesne</span> <span class="pre">Blvd,</span> <span class="pre">Pittsburgh,</span> <span class="pre">PA</span> <span class="pre">15222',</span> <span class="pre">'id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440200',</span> <span class="pre">'name':</span> <span class="pre">'David</span> <span class="pre">L.</span> <span class="pre">Lawrence</span> <span class="pre">Convention</span> <span class="pre">Center',</span> <span class="pre">'slug':</span> <span class="pre">'david-l-lawrence-convention-center',</span> <span class="pre">'url':</span> <span class="pre">'https://pittsburghcc.com'},</span> <span class="pre">'venue_id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440200'}}}</span></em><a class="headerlink" href="#pydotorg.domains.events.schemas.EventWithRelations.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.EventList">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EventList</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/events/schemas.html#EventList"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.events.schemas.EventList" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Schema for event list items.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.EventList.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'from_attributes':</span> <span class="pre">True,</span> <span class="pre">'json_schema_extra':</span> <span class="pre">{'example':</span> <span class="pre">{'calendar_id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440100',</span> <span class="pre">'featured':</span> <span class="pre">True,</span> <span class="pre">'id':</span> <span class="pre">'550e8400-e29b-41d4-a716-446655440500',</span> <span class="pre">'name':</span> <span class="pre">'PyCon</span> <span class="pre">US</span> <span class="pre">2025',</span> <span class="pre">'next_occurrence':</span> <span class="pre">'2025-05-15T09:00:00Z',</span> <span class="pre">'slug':</span> <span class="pre">'pycon-us-2025',</span> <span class="pre">'title':</span> <span class="pre">'PyCon</span> <span class="pre">US</span> <span class="pre">2025</span> <span class="pre">-</span> <span class="pre">The</span> <span class="pre">Premier</span> <span class="pre">Python</span> <span class="pre">Conference'}}}</span></em><a class="headerlink" href="#pydotorg.domains.events.schemas.EventList.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.EventCalendarPageData">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EventCalendarPageData</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/events/schemas.html#EventCalendarPageData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.events.schemas.EventCalendarPageData" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Schema for events calendar page template data.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.EventCalendarPageData.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pydotorg.domains.events.schemas.EventCalendarPageData.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.EventDetailPageData">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EventDetailPageData</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/events/schemas.html#EventDetailPageData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.events.schemas.EventDetailPageData" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Schema for event detail page template data.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.events.schemas.EventDetailPageData.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pydotorg.domains.events.schemas.EventDetailPageData.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="services">
+<h2>services<a class="headerlink" href="#services" title="Link to this heading">¶</a></h2>
+</section>
+<section id="controllers">
+<h2>controllers<a class="headerlink" href="#controllers" title="Link to this heading">¶</a></h2>
+</section>
+<section id="repositories">
+<h2>repositories<a class="headerlink" href="#repositories" title="Link to this heading">¶</a></h2>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="downloads.html">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title">downloads</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="jobs.html">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title">jobs</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Jacob Coffee</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+<a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+  <iconify-icon icon="simple-icons:github"></iconify-icon>
+</a></div>
+    </div>
+  </div>
+</footer>
+      <script src="../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=30646c52"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+      <script src="../../_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

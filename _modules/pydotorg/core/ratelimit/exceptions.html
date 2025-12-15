@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="blue" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>pydotorg.core.ratelimit.exceptions - litestar-pydotorg</title><link rel="index" title="Index" href="../../../../genindex.html" /><link rel="search" title="Search" href="../../../../search.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/shibuya.css?v=14737038" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link media="print" rel="stylesheet" type="text/css" href="../../../../_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css?v=513f0650" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="pydotorg.core.ratelimit.exceptions"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../../../../index.html">
+      
+      
+      <strong>litestar-pydotorg</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"><ul><li class="link">
+          <a href="https://litestar.dev/">
+            <span>Litestar</span></a>
+        </li><li class="link">
+          <a href="https://python.org/">
+            <span>Python.org</span></a>
+        </li></ul></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../../../../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials">
+  <a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../getting-started/index.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../getting-started/installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../getting-started/quickstart.html">Quickstart</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../guides/index.html">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/development.html">Development Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/contributing.html">Contribution Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/testing.html">Testing Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/debugging.html">Debugging Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/api-usage.html">API Usage Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/authentication.html">Authentication Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/feature-flags.html">Feature Flags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/configuration.html">Configuration Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/deployment.html">Deployment Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/docker.html">Docker Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/troubleshooting.html">Troubleshooting Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cookbook/index.html">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../cookbook/domain-patterns.html">Domain Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../cookbook/authentication-recipes.html">Authentication Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../cookbook/database-recipes.html">Database Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../cookbook/testing-recipes.html">Testing Recipes</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/index.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/core/index.html">Core Infrastructure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/auth.html">Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/cache.html">Caching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/database.html">Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/email.html">Email</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/exceptions.html">Exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/features.html">Feature Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/feeds.html">RSS/Atom Feeds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/ical.html">iCalendar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/middleware.html">Middleware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/openapi.html">OpenAPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/ratelimit.html">Rate Limiting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/security.html">Security</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/worker.html">Background Worker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/domains/index.html">Domain Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/about.html">About</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/admin.html">Admin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/banners.html">banners</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/blogs.html">blogs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/codesamples.html">Code Samples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/community.html">community</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/docs.html">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/downloads.html">downloads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/events.html">events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/jobs.html">jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/mailing.html">Mailing Lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/minutes.html">Minutes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/nominations.html">Nominations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/pages.html">pages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/sponsors.html">sponsors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/sqladmin.html">SQLAdmin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/successstories.html">Success Stories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/users.html">users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/work_groups.html">Work Groups</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/lib.html">Library Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/tasks.html">Background Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/config.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/main.html">Application Entry Point</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../architecture/index.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/ARCHITECTURE.html">Litestar Python.org Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/DATABASE_SCHEMA.html">Database Schema Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/DOMAIN_MODELS.html">Domain Models Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/QUICK_START.html">Litestar Python.org Quick Start Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/API_TAGS_INDEX.html">API Tags Documentation Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/RATE_LIMITING_ARCHITECTURE.html">Rate Limiting Architecture Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/adr/001-litestar-framework.html">ADR-001: Use Litestar as Web Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/adr/002-saq-background-tasks.html">ADR-002: Use SAQ for Background Task Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../../../../index.html"><span itemprop="name">litestar-pydotorg</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../../../index.html"><span itemprop="name">Module code</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="2" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">pydotorg.core.ratelimit.exceptions</strong>
+        <meta itemprop="position" content="3" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue dark-code" role="main">
+          <h1>Source code for pydotorg.core.ratelimit.exceptions</h1><div class="highlight"><pre>
+<span></span><span data-line="1"><span class="sd">&quot;&quot;&quot;Rate limit exception handler with HTMX-aware responses.</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="sd">This module provides a custom exception handler for 429 Too Many Requests errors</span>
+</span><span data-line="4"><span class="sd">that adapts responses based on the request type (HTMX, API, or browser). It</span>
+</span><span data-line="5"><span class="sd">automatically includes Retry-After headers to inform clients when they can retry.</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="sd">Features:</span>
+</span><span data-line="8"><span class="sd">    - HTMX requests: Returns toast notification with rate limit message</span>
+</span><span data-line="9"><span class="sd">    - API requests: Returns JSON with Retry-After header</span>
+</span><span data-line="10"><span class="sd">    - Browser requests: Renders full 429 error template</span>
+</span><span data-line="11"><span class="sd">    - Automatic Retry-After header extraction from exception</span>
+</span><span data-line="12">
+</span><span data-line="13"><span class="sd">Usage::</span>
+</span><span data-line="14">
+</span><span data-line="15"><span class="sd">    from pydotorg.core.ratelimit.exceptions import rate_limit_exception_handler</span>
+</span><span data-line="16"><span class="sd">    from litestar.exceptions import TooManyRequestsException</span>
+</span><span data-line="17">
+</span><span data-line="18"><span class="sd">    app = Litestar(</span>
+</span><span data-line="19"><span class="sd">        exception_handlers={</span>
+</span><span data-line="20"><span class="sd">            TooManyRequestsException: rate_limit_exception_handler,</span>
+</span><span data-line="21"><span class="sd">        }</span>
+</span><span data-line="22"><span class="sd">    )</span>
+</span><span data-line="23"><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="24">
+</span><span data-line="25"><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+</span><span data-line="26">
+</span><span data-line="27"><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+</span><span data-line="28"><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+</span><span data-line="29"><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
+</span><span data-line="30">
+</span><span data-line="31"><span class="kn">from</span><span class="w"> </span><span class="nn">litestar.response</span><span class="w"> </span><span class="kn">import</span> <span class="n">Response</span><span class="p">,</span> <span class="n">Template</span>
+</span><span data-line="32"><span class="kn">from</span><span class="w"> </span><span class="nn">litestar.status_codes</span><span class="w"> </span><span class="kn">import</span> <span class="n">HTTP_429_TOO_MANY_REQUESTS</span>
+</span><span data-line="33">
+</span><span data-line="34"><span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+</span><span data-line="35">    <span class="kn">from</span><span class="w"> </span><span class="nn">litestar</span><span class="w"> </span><span class="kn">import</span> <span class="n">Request</span>
+</span><span data-line="36">    <span class="kn">from</span><span class="w"> </span><span class="nn">litestar.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">TooManyRequestsException</span>
+</span><span data-line="37">
+</span><span data-line="38"><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+</span><span data-line="39">
+</span><span data-line="40">
+</span><span data-line="41"><span class="k">def</span><span class="w"> </span><span class="nf">_is_htmx_request</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span data-line="42"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if the request is an HTMX request.</span>
+</span><span data-line="43">
+</span><span data-line="44"><span class="sd">    Args:</span>
+</span><span data-line="45"><span class="sd">        request: The incoming request</span>
+</span><span data-line="46">
+</span><span data-line="47"><span class="sd">    Returns:</span>
+</span><span data-line="48"><span class="sd">        bool: True if HX-Request header is present and set to &quot;true&quot;</span>
+</span><span data-line="49"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="50">    <span class="k">return</span> <span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;HX-Request&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span>
+</span><span data-line="51">
+</span><span data-line="52">
+</span><span data-line="53"><span class="k">def</span><span class="w"> </span><span class="nf">_is_api_request</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span data-line="54"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if the request is an API request.</span>
+</span><span data-line="55">
+</span><span data-line="56"><span class="sd">    Args:</span>
+</span><span data-line="57"><span class="sd">        request: The incoming request</span>
+</span><span data-line="58">
+</span><span data-line="59"><span class="sd">    Returns:</span>
+</span><span data-line="60"><span class="sd">        bool: True if path starts with /api/ or Accept header is application/json</span>
+</span><span data-line="61"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="62">    <span class="k">return</span> <span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;/api/&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;application/json&quot;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Accept&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+</span><span data-line="63">
+</span><span data-line="64">
+</span><span data-line="65"><span class="k">def</span><span class="w"> </span><span class="nf">_extract_retry_after</span><span class="p">(</span><span class="n">exc</span><span class="p">:</span> <span class="n">TooManyRequestsException</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span data-line="66"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract Retry-After value from exception headers or detail.</span>
+</span><span data-line="67">
+</span><span data-line="68"><span class="sd">    The exception may contain retry information in its headers dict or</span>
+</span><span data-line="69"><span class="sd">    as part of the detail message. Default to &quot;60&quot; (60 seconds) if not found.</span>
+</span><span data-line="70">
+</span><span data-line="71"><span class="sd">    Args:</span>
+</span><span data-line="72"><span class="sd">        exc: The TooManyRequestsException that was raised</span>
+</span><span data-line="73">
+</span><span data-line="74"><span class="sd">    Returns:</span>
+</span><span data-line="75"><span class="sd">        str: Retry-After value in seconds (e.g., &quot;60&quot;)</span>
+</span><span data-line="76"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="77">    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">exc</span><span class="p">,</span> <span class="s2">&quot;headers&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">exc</span><span class="o">.</span><span class="n">headers</span> <span class="ow">and</span> <span class="s2">&quot;retry-after&quot;</span> <span class="ow">in</span> <span class="n">exc</span><span class="o">.</span><span class="n">headers</span><span class="p">:</span>
+</span><span data-line="78">        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">exc</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s2">&quot;retry-after&quot;</span><span class="p">])</span>
+</span><span data-line="79">
+</span><span data-line="80">    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">exc</span><span class="p">,</span> <span class="s2">&quot;extra&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">exc</span><span class="o">.</span><span class="n">extra</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+</span><span data-line="81">        <span class="n">retry_after</span> <span class="o">=</span> <span class="n">exc</span><span class="o">.</span><span class="n">extra</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;retry_after&quot;</span><span class="p">)</span>
+</span><span data-line="82">        <span class="k">if</span> <span class="n">retry_after</span><span class="p">:</span>
+</span><span data-line="83">            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">retry_after</span><span class="p">)</span>
+</span><span data-line="84">
+</span><span data-line="85">    <span class="k">return</span> <span class="s2">&quot;60&quot;</span>
+</span><span data-line="86">
+</span><span data-line="87">
+</span><span data-line="88"><span class="k">def</span><span class="w"> </span><span class="nf">_create_toast_response</span><span class="p">(</span>
+</span><span data-line="89">    <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span data-line="90">    <span class="n">retry_after</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span data-line="91"><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
+</span><span data-line="92"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Create an HTMX-compatible response that triggers a toast notification.</span>
+</span><span data-line="93">
+</span><span data-line="94"><span class="sd">    Args:</span>
+</span><span data-line="95"><span class="sd">        message: The message to display in the toast</span>
+</span><span data-line="96"><span class="sd">        retry_after: Retry-After value in seconds</span>
+</span><span data-line="97">
+</span><span data-line="98"><span class="sd">    Returns:</span>
+</span><span data-line="99"><span class="sd">        Response with HX-Trigger header for toast display and Retry-After header</span>
+</span><span data-line="100"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="101">    <span class="n">toast_event</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
+</span><span data-line="102">        <span class="p">{</span>
+</span><span data-line="103">            <span class="s2">&quot;showToast&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span data-line="104">                <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="n">message</span><span class="p">,</span>
+</span><span data-line="105">                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;warning&quot;</span><span class="p">,</span>
+</span><span data-line="106">            <span class="p">}</span>
+</span><span data-line="107">        <span class="p">}</span>
+</span><span data-line="108">    <span class="p">)</span>
+</span><span data-line="109">    <span class="k">return</span> <span class="n">Response</span><span class="p">(</span>
+</span><span data-line="110">        <span class="n">content</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+</span><span data-line="111">        <span class="n">status_code</span><span class="o">=</span><span class="n">HTTP_429_TOO_MANY_REQUESTS</span><span class="p">,</span>
+</span><span data-line="112">        <span class="n">headers</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="113">            <span class="s2">&quot;HX-Trigger&quot;</span><span class="p">:</span> <span class="n">toast_event</span><span class="p">,</span>
+</span><span data-line="114">            <span class="s2">&quot;HX-Reswap&quot;</span><span class="p">:</span> <span class="s2">&quot;none&quot;</span><span class="p">,</span>
+</span><span data-line="115">            <span class="s2">&quot;Retry-After&quot;</span><span class="p">:</span> <span class="n">retry_after</span><span class="p">,</span>
+</span><span data-line="116">        <span class="p">},</span>
+</span><span data-line="117">    <span class="p">)</span>
+</span><span data-line="118">
+</span><span data-line="119">
+<div class="viewcode-block" id="rate_limit_exception_handler">
+<a class="viewcode-back" href="../../../../api/core/ratelimit.html#pydotorg.core.ratelimit.exceptions.rate_limit_exception_handler">[docs]</a>
+</span><span data-line="120"><span class="k">def</span><span class="w"> </span><span class="nf">rate_limit_exception_handler</span><span class="p">(</span>
+</span><span data-line="121">    <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span>
+</span><span data-line="122">    <span class="n">exc</span><span class="p">:</span> <span class="n">TooManyRequestsException</span><span class="p">,</span>
+</span><span data-line="123"><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span> <span class="o">|</span> <span class="n">Template</span><span class="p">:</span>
+</span><span data-line="124"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Handle 429 Too Many Requests exceptions with adaptive responses.</span>
+</span><span data-line="125">
+</span><span data-line="126"><span class="sd">    Provides different response formats based on the request type:</span>
+</span><span data-line="127"><span class="sd">    - HTMX requests: Empty response with toast notification trigger</span>
+</span><span data-line="128"><span class="sd">    - API requests: JSON response with error details</span>
+</span><span data-line="129"><span class="sd">    - Browser requests: Full HTML error page with friendly message</span>
+</span><span data-line="130">
+</span><span data-line="131"><span class="sd">    All responses include the Retry-After header to inform clients when</span>
+</span><span data-line="132"><span class="sd">    they can retry their request.</span>
+</span><span data-line="133">
+</span><span data-line="134"><span class="sd">    Args:</span>
+</span><span data-line="135"><span class="sd">        request: The incoming request</span>
+</span><span data-line="136"><span class="sd">        exc: The TooManyRequestsException that was raised</span>
+</span><span data-line="137">
+</span><span data-line="138"><span class="sd">    Returns:</span>
+</span><span data-line="139"><span class="sd">        Response | Template: Appropriate response based on request type</span>
+</span><span data-line="140">
+</span><span data-line="141"><span class="sd">    Example:</span>
+</span><span data-line="142"><span class="sd">        &gt;&gt;&gt; @get(&quot;/resource&quot;)</span>
+</span><span data-line="143"><span class="sd">        &gt;&gt;&gt; async def resource():</span>
+</span><span data-line="144"><span class="sd">        &gt;&gt;&gt; # This will trigger rate limit exception if limit exceeded</span>
+</span><span data-line="145"><span class="sd">        &gt;&gt;&gt;     return {&quot;data&quot;: &quot;resource&quot;}</span>
+</span><span data-line="146"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="147">    <span class="n">retry_after</span> <span class="o">=</span> <span class="n">_extract_retry_after</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span>
+</span><span data-line="148">    <span class="n">detail</span> <span class="o">=</span> <span class="n">exc</span><span class="o">.</span><span class="n">detail</span> <span class="k">if</span> <span class="n">exc</span><span class="o">.</span><span class="n">detail</span> <span class="k">else</span> <span class="s2">&quot;Too many requests. Please try again later.&quot;</span>
+</span><span data-line="149">
+</span><span data-line="150">    <span class="n">retry_minutes</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">retry_after</span><span class="p">)</span> <span class="o">//</span> <span class="mi">60</span> <span class="k">if</span> <span class="n">retry_after</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()</span> <span class="k">else</span> <span class="mi">1</span>
+</span><span data-line="151">    <span class="n">retry_seconds</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">retry_after</span><span class="p">)</span> <span class="k">if</span> <span class="n">retry_after</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()</span> <span class="k">else</span> <span class="mi">60</span>
+</span><span data-line="152">
+</span><span data-line="153">    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+</span><span data-line="154">        <span class="s2">&quot;Rate limit exceeded on </span><span class="si">%s</span><span class="s2"> from IP </span><span class="si">%s</span><span class="s2"> - retry in </span><span class="si">%s</span><span class="s2"> seconds&quot;</span><span class="p">,</span>
+</span><span data-line="155">        <span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="o">.</span><span class="n">path</span><span class="p">,</span>
+</span><span data-line="156">        <span class="n">request</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">host</span> <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">client</span> <span class="k">else</span> <span class="s2">&quot;unknown&quot;</span><span class="p">,</span>
+</span><span data-line="157">        <span class="n">retry_after</span><span class="p">,</span>
+</span><span data-line="158">    <span class="p">)</span>
+</span><span data-line="159">
+</span><span data-line="160">    <span class="k">if</span> <span class="n">_is_htmx_request</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+</span><span data-line="161">        <span class="n">friendly_message</span> <span class="o">=</span> <span class="p">(</span>
+</span><span data-line="162">            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">detail</span><span class="si">}</span><span class="s2"> You can try again in </span><span class="si">{</span><span class="n">retry_minutes</span><span class="si">}</span><span class="s2"> minute</span><span class="si">{</span><span class="s1">&#39;s&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">retry_minutes</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="si">}</span><span class="s2">.&quot;</span>
+</span><span data-line="163">            <span class="k">if</span> <span class="n">retry_minutes</span> <span class="o">&gt;</span> <span class="mi">0</span>
+</span><span data-line="164">            <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">detail</span><span class="si">}</span><span class="s2"> Please wait </span><span class="si">{</span><span class="n">retry_seconds</span><span class="si">}</span><span class="s2"> seconds before trying again.&quot;</span>
+</span><span data-line="165">        <span class="p">)</span>
+</span><span data-line="166">        <span class="k">return</span> <span class="n">_create_toast_response</span><span class="p">(</span>
+</span><span data-line="167">            <span class="n">message</span><span class="o">=</span><span class="n">friendly_message</span><span class="p">,</span>
+</span><span data-line="168">            <span class="n">retry_after</span><span class="o">=</span><span class="n">retry_after</span><span class="p">,</span>
+</span><span data-line="169">        <span class="p">)</span>
+</span><span data-line="170">
+</span><span data-line="171">    <span class="k">if</span> <span class="n">_is_api_request</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+</span><span data-line="172">        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span>
+</span><span data-line="173">            <span class="n">content</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="174">                <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="s2">&quot;Too Many Requests&quot;</span><span class="p">,</span>
+</span><span data-line="175">                <span class="s2">&quot;detail&quot;</span><span class="p">:</span> <span class="n">detail</span><span class="p">,</span>
+</span><span data-line="176">                <span class="s2">&quot;retry_after&quot;</span><span class="p">:</span> <span class="n">retry_after</span><span class="p">,</span>
+</span><span data-line="177">                <span class="s2">&quot;status_code&quot;</span><span class="p">:</span> <span class="n">HTTP_429_TOO_MANY_REQUESTS</span><span class="p">,</span>
+</span><span data-line="178">            <span class="p">},</span>
+</span><span data-line="179">            <span class="n">status_code</span><span class="o">=</span><span class="n">HTTP_429_TOO_MANY_REQUESTS</span><span class="p">,</span>
+</span><span data-line="180">            <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Retry-After&quot;</span><span class="p">:</span> <span class="n">retry_after</span><span class="p">},</span>
+</span><span data-line="181">        <span class="p">)</span>
+</span><span data-line="182">
+</span><span data-line="183">    <span class="n">friendly_message</span> <span class="o">=</span> <span class="p">(</span>
+</span><span data-line="184">        <span class="sa">f</span><span class="s2">&quot;You&#39;ve made too many requests. Please wait </span><span class="si">{</span><span class="n">retry_minutes</span><span class="si">}</span><span class="s2"> minute</span><span class="si">{</span><span class="s1">&#39;s&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">retry_minutes</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="si">}</span><span class="s2"> before trying again.&quot;</span>
+</span><span data-line="185">        <span class="k">if</span> <span class="n">retry_minutes</span> <span class="o">&gt;</span> <span class="mi">0</span>
+</span><span data-line="186">        <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;You&#39;ve made too many requests. Please wait </span><span class="si">{</span><span class="n">retry_seconds</span><span class="si">}</span><span class="s2"> seconds before trying again.&quot;</span>
+</span><span data-line="187">    <span class="p">)</span>
+</span><span data-line="188">
+</span><span data-line="189">    <span class="k">return</span> <span class="n">Template</span><span class="p">(</span>
+</span><span data-line="190">        <span class="n">template_name</span><span class="o">=</span><span class="s2">&quot;errors/429.html.jinja2&quot;</span><span class="p">,</span>
+</span><span data-line="191">        <span class="n">context</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="192">            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Too Many Requests&quot;</span><span class="p">,</span>
+</span><span data-line="193">            <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="n">friendly_message</span><span class="p">,</span>
+</span><span data-line="194">            <span class="s2">&quot;retry_after&quot;</span><span class="p">:</span> <span class="n">retry_after</span><span class="p">,</span>
+</span><span data-line="195">            <span class="s2">&quot;retry_minutes&quot;</span><span class="p">:</span> <span class="n">retry_minutes</span><span class="p">,</span>
+</span><span data-line="196">        <span class="p">},</span>
+</span><span data-line="197">        <span class="n">status_code</span><span class="o">=</span><span class="n">HTTP_429_TOO_MANY_REQUESTS</span><span class="p">,</span>
+</span><span data-line="198">        <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Retry-After&quot;</span><span class="p">:</span> <span class="n">retry_after</span><span class="p">},</span>
+</span><span data-line="199">    <span class="p">)</span></div>
+
+</span></pre></div>
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Jacob Coffee</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+<a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+  <iconify-icon icon="simple-icons:github"></iconify-icon>
+</a></div>
+    </div>
+  </div>
+</footer>
+      <script src="../../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../../_static/copybutton.js?v=30646c52"></script>
+      <script src="../../../../_static/design-tabs.js?v=f930bc37"></script>
+      <script src="../../../../_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

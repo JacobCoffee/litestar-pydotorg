@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="blue" data-content_root="../../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Mailing Lists - litestar-pydotorg</title><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Minutes" href="minutes.html" /><link rel="prev" title="jobs" href="jobs.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="../../_static/shibuya.css?v=14737038" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link media="print" rel="stylesheet" type="text/css" href="../../_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=513f0650" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="Mailing Lists"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../../index.html">
+      
+      
+      <strong>litestar-pydotorg</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"><ul><li class="link">
+          <a href="https://litestar.dev/">
+            <span>Litestar</span></a>
+        </li><li class="link">
+          <a href="https://python.org/">
+            <span>Python.org</span></a>
+        </li></ul></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials">
+  <a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started/index.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../getting-started/installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting-started/quickstart.html">Quickstart</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/index.html">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/development.html">Development Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/contributing.html">Contribution Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/testing.html">Testing Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/debugging.html">Debugging Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/api-usage.html">API Usage Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/authentication.html">Authentication Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/feature-flags.html">Feature Flags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/configuration.html">Configuration Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/deployment.html">Deployment Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/docker.html">Docker Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/troubleshooting.html">Troubleshooting Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../cookbook/index.html">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../cookbook/domain-patterns.html">Domain Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cookbook/authentication-recipes.html">Authentication Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cookbook/database-recipes.html">Database Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cookbook/testing-recipes.html">Testing Recipes</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../core/index.html">Core Infrastructure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../core/auth.html">Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/cache.html">Caching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/database.html">Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/email.html">Email</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/exceptions.html">Exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/features.html">Feature Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/feeds.html">RSS/Atom Feeds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/ical.html">iCalendar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/middleware.html">Middleware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/openapi.html">OpenAPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/ratelimit.html">Rate Limiting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/security.html">Security</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/worker.html">Background Worker</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Domain Modules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="about.html">About</a></li>
+<li class="toctree-l3"><a class="reference internal" href="admin.html">Admin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="banners.html">banners</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blogs.html">blogs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="codesamples.html">Code Samples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="community.html">community</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs.html">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="downloads.html">downloads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="events.html">events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jobs.html">jobs</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Mailing Lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="minutes.html">Minutes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nominations.html">Nominations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pages.html">pages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sponsors.html">sponsors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqladmin.html">SQLAdmin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="successstories.html">Success Stories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="users.html">users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="work_groups.html">Work Groups</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../lib.html">Library Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tasks.html">Background Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../config.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../main.html">Application Entry Point</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../architecture/index.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../architecture/ARCHITECTURE.html">Litestar Python.org Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../architecture/DATABASE_SCHEMA.html">Database Schema Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../architecture/DOMAIN_MODELS.html">Domain Models Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../architecture/QUICK_START.html">Litestar Python.org Quick Start Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../architecture/API_TAGS_INDEX.html">API Tags Documentation Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../architecture/RATE_LIMITING_ARCHITECTURE.html">Rate Limiting Architecture Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../architecture/adr/001-litestar-framework.html">ADR-001: Use Litestar as Web Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../architecture/adr/002-saq-background-tasks.html">ADR-002: Use SAQ for Background Task Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#module-contents">Module Contents</a></li>
+<li><a class="reference internal" href="#models">Models</a></li>
+<li><a class="reference internal" href="#module-pydotorg.domains.mailing.schemas">Schemas</a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailTemplateBase"><code class="docutils literal notranslate"><span class="pre">EmailTemplateBase</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailTemplateBase.internal_name"><code class="docutils literal notranslate">internal_name</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailTemplateBase.display_name"><code class="docutils literal notranslate">display_name</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailTemplateBase.description"><code class="docutils literal notranslate">description</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailTemplateBase.template_type"><code class="docutils literal notranslate">template_type</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailTemplateBase.subject"><code class="docutils literal notranslate">subject</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailTemplateBase.content_text"><code class="docutils literal notranslate">content_text</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailTemplateBase.content_html"><code class="docutils literal notranslate">content_html</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailTemplateBase.is_active"><code class="docutils literal notranslate">is_active</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailTemplateBase.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailTemplateCreate"><code class="docutils literal notranslate"><span class="pre">EmailTemplateCreate</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailTemplateCreate.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailTemplateUpdate"><code class="docutils literal notranslate"><span class="pre">EmailTemplateUpdate</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailTemplateUpdate.display_name"><code class="docutils literal notranslate">display_name</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailTemplateUpdate.description"><code class="docutils literal notranslate">description</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailTemplateUpdate.template_type"><code class="docutils literal notranslate">template_type</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailTemplateUpdate.subject"><code class="docutils literal notranslate">subject</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailTemplateUpdate.content_text"><code class="docutils literal notranslate">content_text</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailTemplateUpdate.content_html"><code class="docutils literal notranslate">content_html</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailTemplateUpdate.is_active"><code class="docutils literal notranslate">is_active</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailTemplateUpdate.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailTemplateRead"><code class="docutils literal notranslate"><span class="pre">EmailTemplateRead</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailTemplateRead.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailTemplateRead.id"><code class="docutils literal notranslate">id</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailTemplateRead.created_at"><code class="docutils literal notranslate">created_at</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailTemplateRead.updated_at"><code class="docutils literal notranslate">updated_at</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailTemplatePreview"><code class="docutils literal notranslate"><span class="pre">EmailTemplatePreview</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailTemplatePreview.subject"><code class="docutils literal notranslate">subject</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailTemplatePreview.content_text"><code class="docutils literal notranslate">content_text</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailTemplatePreview.content_html"><code class="docutils literal notranslate">content_html</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailTemplatePreview.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailTemplateValidation"><code class="docutils literal notranslate"><span class="pre">EmailTemplateValidation</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailTemplateValidation.is_valid"><code class="docutils literal notranslate">is_valid</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailTemplateValidation.errors"><code class="docutils literal notranslate">errors</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailTemplateValidation.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailLogBase"><code class="docutils literal notranslate"><span class="pre">EmailLogBase</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailLogBase.template_name"><code class="docutils literal notranslate">template_name</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailLogBase.recipient_email"><code class="docutils literal notranslate">recipient_email</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailLogBase.subject"><code class="docutils literal notranslate">subject</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailLogBase.status"><code class="docutils literal notranslate">status</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailLogBase.error_message"><code class="docutils literal notranslate">error_message</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailLogBase.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailLogCreate"><code class="docutils literal notranslate"><span class="pre">EmailLogCreate</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailLogCreate.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailLogRead"><code class="docutils literal notranslate"><span class="pre">EmailLogRead</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailLogRead.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailLogRead.id"><code class="docutils literal notranslate">id</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailLogRead.created_at"><code class="docutils literal notranslate">created_at</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailLogRead.updated_at"><code class="docutils literal notranslate">updated_at</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.SendEmailRequest"><code class="docutils literal notranslate"><span class="pre">SendEmailRequest</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.SendEmailRequest.template_name"><code class="docutils literal notranslate">template_name</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.SendEmailRequest.to_email"><code class="docutils literal notranslate">to_email</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.SendEmailRequest.context"><code class="docutils literal notranslate">context</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.SendEmailRequest.cc"><code class="docutils literal notranslate">cc</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.SendEmailRequest.bcc"><code class="docutils literal notranslate">bcc</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.SendEmailRequest.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.SendEmailResponse"><code class="docutils literal notranslate"><span class="pre">SendEmailResponse</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.SendEmailResponse.success"><code class="docutils literal notranslate">success</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.SendEmailResponse.message"><code class="docutils literal notranslate">message</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.SendEmailResponse.log_id"><code class="docutils literal notranslate">log_id</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.SendEmailResponse.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.BulkSendEmailRequest"><code class="docutils literal notranslate"><span class="pre">BulkSendEmailRequest</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.BulkSendEmailRequest.template_name"><code class="docutils literal notranslate">template_name</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.BulkSendEmailRequest.recipients"><code class="docutils literal notranslate">recipients</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.BulkSendEmailRequest.context"><code class="docutils literal notranslate">context</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.BulkSendEmailRequest.per_recipient_context"><code class="docutils literal notranslate">per_recipient_context</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.BulkSendEmailRequest.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.BulkSendEmailResponse"><code class="docutils literal notranslate"><span class="pre">BulkSendEmailResponse</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.BulkSendEmailResponse.total"><code class="docutils literal notranslate">total</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.BulkSendEmailResponse.sent"><code class="docutils literal notranslate">sent</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.BulkSendEmailResponse.failed"><code class="docutils literal notranslate">failed</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.BulkSendEmailResponse.log_ids"><code class="docutils literal notranslate">log_ids</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.domains.mailing.schemas.BulkSendEmailResponse.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#repositories">Repositories</a></li>
+<li><a class="reference internal" href="#services">Services</a></li>
+<li><a class="reference internal" href="#controllers">Controllers</a></li>
+<li><a class="reference internal" href="#dependencies">Dependencies</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../../index.html"><span itemprop="name">litestar-pydotorg</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../index.html"><span itemprop="name">API Reference</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="2" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="index.html"><span itemprop="name">Domain Modules</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="3" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">Mailing Lists</strong>
+        <meta itemprop="position" content="4" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue dark-code" role="main">
+          <section id="mailing-lists">
+<h1>Mailing Lists<a class="headerlink" href="#mailing-lists" title="Link to this heading">¶</a></h1>
+<p>Mailing list management and subscriptions.</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+</section>
+<section id="models">
+<h2>Models<a class="headerlink" href="#models" title="Link to this heading">¶</a></h2>
+<p>Mailing domain models.</p>
+<p>This module provides database-driven email templates that can be rendered
+with context variables using Jinja2. Templates can be managed via the admin
+interface and used for newsletters, notifications, and transactional emails.</p>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EmailTemplateType</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/mailing/models.html#EmailTemplateType"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.StrEnum" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">StrEnum</span></code></a></p>
+<p>Types of email templates.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">TRANSACTIONAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'transactional'</span></em></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">NOTIFICATION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'notification'</span></em></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">NEWSLETTER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'newsletter'</span></em></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">MARKETING</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'marketing'</span></em></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">SYSTEM</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'system'</span></em></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__new__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EmailTemplate</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/mailing/models.html#EmailTemplate"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Bases: <a class="reference internal" href="../core/database.html#pydotorg.core.database.base.AuditBase" title="pydotorg.core.database.base.AuditBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">AuditBase</span></code></a></p>
+<p>Database-driven email template.</p>
+<p>Stores email templates with Jinja2 content that can be rendered
+with context variables. Supports both plain text and HTML content.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">internal_name</span></span></dt>
+<dd><p>Unique identifier used in code (e.g., “job_approved”)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">display_name</span></span></dt>
+<dd><p>Human-readable name for admin UI</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">description</span></span></dt>
+<dd><p>Description of when/how this template is used</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">template_type</span></span></dt>
+<dd><p>Category of email (transactional, newsletter, etc.)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">subject</span></span></dt>
+<dd><p>Email subject (supports Jinja2 templating)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">content_text</span></span></dt>
+<dd><p>Plain text email body (supports Jinja2 templating)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">content_html</span></span></dt>
+<dd><p>HTML email body (supports Jinja2 templating, optional)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">is_active</span></span></dt>
+<dd><p>Whether this template can be used</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">default_context</span></span></dt>
+<dd><p>Default context variables as JSON</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">internal_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped[str]</span></em></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">display_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped[str]</span></em></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">description</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped[str</span> <span class="pre">|</span> <span class="pre">None]</span></em></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">template_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped[EmailTemplateType]</span></em></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">subject</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped[str]</span></em></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">content_text</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped[str]</span></em></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">content_html</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped[str</span> <span class="pre">|</span> <span class="pre">None]</span></em></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">is_active</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped[bool]</span></em></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">render_subject</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydotorg/domains/mailing/models.html#EmailTemplate.render_subject"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Render the email subject with context variables.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>context</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapping</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>] | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Dictionary of variables to use in template</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Rendered subject string</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TemplateSyntaxError</strong> – If template syntax is invalid</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">render_content_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydotorg/domains/mailing/models.html#EmailTemplate.render_content_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Render plain text email content with context variables.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>context</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapping</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>] | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Dictionary of variables to use in template</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Rendered plain text content</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TemplateSyntaxError</strong> – If template syntax is invalid</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">render_content_html</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydotorg/domains/mailing/models.html#EmailTemplate.render_content_html"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Render HTML email content with context variables.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>context</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapping</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>] | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Dictionary of variables to use in template</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Rendered HTML content, or None if no HTML template</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TemplateSyntaxError</strong> – If template syntax is invalid</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">validate_templates</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydotorg/domains/mailing/models.html#EmailTemplate.validate_templates"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Validate all template strings for syntax errors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of error messages (empty if valid)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>A simple constructor that allows initialization from kwargs.</p>
+<p>Sets attributes on the constructed instance using the names and
+values in <code class="docutils literal notranslate"><span class="pre">kwargs</span></code>.</p>
+<p>Only keys that are present as
+attributes of the instance’s class are allowed. These could be,
+for example, any mapped columns or relationships.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">created_at</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped[datetime.datetime]</span></em></dt>
+<dd><p>Date/time of instance creation.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped[UUID]</span></em></dt>
+<dd><p>UUID Primary key column.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">updated_at</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped[datetime.datetime]</span></em></dt>
+<dd><p>Date/time of instance last update.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EmailLog</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/mailing/models.html#EmailLog"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Bases: <a class="reference internal" href="../core/database.html#pydotorg.core.database.base.AuditBase" title="pydotorg.core.database.base.AuditBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">AuditBase</span></code></a></p>
+<p>Log of sent emails for audit and debugging.</p>
+<p>Tracks all emails sent through the system with their status,
+recipient, and template information.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">template_name</span></span></dt>
+<dd><p>Internal name of template used (or “custom”)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">recipient_email</span></span></dt>
+<dd><p>Email address of recipient</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">subject</span></span></dt>
+<dd><p>Actual rendered subject sent</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">status</span></span></dt>
+<dd><p>Delivery status (pending, sent, failed, bounced)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">error_message</span></span></dt>
+<dd><p>Error details if failed</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">sent_at</span></span></dt>
+<dd><p>Timestamp when email was sent</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">metadata</span></span></dt>
+<dd><p>Additional metadata as JSON (e.g., user_id, context)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">template_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped[str]</span></em></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">recipient_email</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped[str]</span></em></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">subject</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped[str]</span></em></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">status</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped[str]</span></em></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">error_message</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped[str</span> <span class="pre">|</span> <span class="pre">None]</span></em></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>A simple constructor that allows initialization from kwargs.</p>
+<p>Sets attributes on the constructed instance using the names and
+values in <code class="docutils literal notranslate"><span class="pre">kwargs</span></code>.</p>
+<p>Only keys that are present as
+attributes of the instance’s class are allowed. These could be,
+for example, any mapped columns or relationships.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">created_at</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped[datetime.datetime]</span></em></dt>
+<dd><p>Date/time of instance creation.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped[UUID]</span></em></dt>
+<dd><p>UUID Primary key column.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">updated_at</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped[datetime.datetime]</span></em></dt>
+<dd><p>Date/time of instance last update.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pydotorg.domains.mailing.schemas">
+<span id="schemas"></span><h2>Schemas<a class="headerlink" href="#module-pydotorg.domains.mailing.schemas" title="Link to this heading">¶</a></h2>
+<p>Mailing domain Pydantic schemas.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailTemplateBase">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EmailTemplateBase</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/mailing/schemas.html#EmailTemplateBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailTemplateBase" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Base schema for email templates.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailTemplateBase.internal_name">
+<span class="sig-name descname"><span class="pre">internal_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailTemplateBase.internal_name" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailTemplateBase.display_name">
+<span class="sig-name descname"><span class="pre">display_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailTemplateBase.display_name" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailTemplateBase.description">
+<span class="sig-name descname"><span class="pre">description</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailTemplateBase.description" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailTemplateBase.template_type">
+<span class="sig-name descname"><span class="pre">template_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">EmailTemplateType</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailTemplateBase.template_type" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailTemplateBase.subject">
+<span class="sig-name descname"><span class="pre">subject</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailTemplateBase.subject" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailTemplateBase.content_text">
+<span class="sig-name descname"><span class="pre">content_text</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailTemplateBase.content_text" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailTemplateBase.content_html">
+<span class="sig-name descname"><span class="pre">content_html</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailTemplateBase.content_html" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailTemplateBase.is_active">
+<span class="sig-name descname"><span class="pre">is_active</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailTemplateBase.is_active" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailTemplateBase.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailTemplateBase.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailTemplateCreate">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EmailTemplateCreate</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/mailing/schemas.html#EmailTemplateCreate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailTemplateCreate" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailTemplateBase" title="pydotorg.domains.mailing.schemas.EmailTemplateBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">EmailTemplateBase</span></code></a></p>
+<p>Schema for creating an email template.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailTemplateCreate.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailTemplateCreate.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailTemplateUpdate">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EmailTemplateUpdate</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/mailing/schemas.html#EmailTemplateUpdate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailTemplateUpdate" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Schema for updating an email template.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailTemplateUpdate.display_name">
+<span class="sig-name descname"><span class="pre">display_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailTemplateUpdate.display_name" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailTemplateUpdate.description">
+<span class="sig-name descname"><span class="pre">description</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailTemplateUpdate.description" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailTemplateUpdate.template_type">
+<span class="sig-name descname"><span class="pre">template_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">EmailTemplateType</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailTemplateUpdate.template_type" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailTemplateUpdate.subject">
+<span class="sig-name descname"><span class="pre">subject</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailTemplateUpdate.subject" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailTemplateUpdate.content_text">
+<span class="sig-name descname"><span class="pre">content_text</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailTemplateUpdate.content_text" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailTemplateUpdate.content_html">
+<span class="sig-name descname"><span class="pre">content_html</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailTemplateUpdate.content_html" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailTemplateUpdate.is_active">
+<span class="sig-name descname"><span class="pre">is_active</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailTemplateUpdate.is_active" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailTemplateUpdate.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailTemplateUpdate.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailTemplateRead">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EmailTemplateRead</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/mailing/schemas.html#EmailTemplateRead"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailTemplateRead" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailTemplateBase" title="pydotorg.domains.mailing.schemas.EmailTemplateBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">EmailTemplateBase</span></code></a></p>
+<p>Schema for reading an email template.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailTemplateRead.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'from_attributes':</span> <span class="pre">True}</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailTemplateRead.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailTemplateRead.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">UUID</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailTemplateRead.id" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailTemplateRead.created_at">
+<span class="sig-name descname"><span class="pre">created_at</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailTemplateRead.created_at" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailTemplateRead.updated_at">
+<span class="sig-name descname"><span class="pre">updated_at</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailTemplateRead.updated_at" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailTemplatePreview">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EmailTemplatePreview</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/mailing/schemas.html#EmailTemplatePreview"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailTemplatePreview" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Schema for previewing rendered email template.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailTemplatePreview.subject">
+<span class="sig-name descname"><span class="pre">subject</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailTemplatePreview.subject" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailTemplatePreview.content_text">
+<span class="sig-name descname"><span class="pre">content_text</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailTemplatePreview.content_text" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailTemplatePreview.content_html">
+<span class="sig-name descname"><span class="pre">content_html</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailTemplatePreview.content_html" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailTemplatePreview.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailTemplatePreview.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailTemplateValidation">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EmailTemplateValidation</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/mailing/schemas.html#EmailTemplateValidation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailTemplateValidation" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Schema for template validation results.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailTemplateValidation.is_valid">
+<span class="sig-name descname"><span class="pre">is_valid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailTemplateValidation.is_valid" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailTemplateValidation.errors">
+<span class="sig-name descname"><span class="pre">errors</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list[str]</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailTemplateValidation.errors" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailTemplateValidation.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailTemplateValidation.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailLogBase">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EmailLogBase</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/mailing/schemas.html#EmailLogBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailLogBase" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Base schema for email logs.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailLogBase.template_name">
+<span class="sig-name descname"><span class="pre">template_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailLogBase.template_name" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailLogBase.recipient_email">
+<span class="sig-name descname"><span class="pre">recipient_email</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">EmailStr</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailLogBase.recipient_email" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailLogBase.subject">
+<span class="sig-name descname"><span class="pre">subject</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailLogBase.subject" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailLogBase.status">
+<span class="sig-name descname"><span class="pre">status</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailLogBase.status" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailLogBase.error_message">
+<span class="sig-name descname"><span class="pre">error_message</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailLogBase.error_message" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailLogBase.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailLogBase.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailLogCreate">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EmailLogCreate</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/mailing/schemas.html#EmailLogCreate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailLogCreate" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailLogBase" title="pydotorg.domains.mailing.schemas.EmailLogBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">EmailLogBase</span></code></a></p>
+<p>Schema for creating an email log entry.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailLogCreate.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailLogCreate.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailLogRead">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EmailLogRead</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/mailing/schemas.html#EmailLogRead"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailLogRead" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pydotorg.domains.mailing.schemas.EmailLogBase" title="pydotorg.domains.mailing.schemas.EmailLogBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">EmailLogBase</span></code></a></p>
+<p>Schema for reading an email log entry.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailLogRead.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'from_attributes':</span> <span class="pre">True}</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailLogRead.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailLogRead.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">UUID</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailLogRead.id" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailLogRead.created_at">
+<span class="sig-name descname"><span class="pre">created_at</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailLogRead.created_at" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.EmailLogRead.updated_at">
+<span class="sig-name descname"><span class="pre">updated_at</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.EmailLogRead.updated_at" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.SendEmailRequest">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SendEmailRequest</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/mailing/schemas.html#SendEmailRequest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.mailing.schemas.SendEmailRequest" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Schema for sending an email via template.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.SendEmailRequest.template_name">
+<span class="sig-name descname"><span class="pre">template_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.SendEmailRequest.template_name" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.SendEmailRequest.to_email">
+<span class="sig-name descname"><span class="pre">to_email</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">EmailStr</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.SendEmailRequest.to_email" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.SendEmailRequest.context">
+<span class="sig-name descname"><span class="pre">context</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict[str,</span> <span class="pre">Any]</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.SendEmailRequest.context" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.SendEmailRequest.cc">
+<span class="sig-name descname"><span class="pre">cc</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list[EmailStr]</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.SendEmailRequest.cc" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.SendEmailRequest.bcc">
+<span class="sig-name descname"><span class="pre">bcc</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list[EmailStr]</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.SendEmailRequest.bcc" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.SendEmailRequest.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.SendEmailRequest.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.SendEmailResponse">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SendEmailResponse</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/mailing/schemas.html#SendEmailResponse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.mailing.schemas.SendEmailResponse" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Schema for send email response.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.SendEmailResponse.success">
+<span class="sig-name descname"><span class="pre">success</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.SendEmailResponse.success" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.SendEmailResponse.message">
+<span class="sig-name descname"><span class="pre">message</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.SendEmailResponse.message" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.SendEmailResponse.log_id">
+<span class="sig-name descname"><span class="pre">log_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">UUID</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.SendEmailResponse.log_id" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.SendEmailResponse.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.SendEmailResponse.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.BulkSendEmailRequest">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BulkSendEmailRequest</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/mailing/schemas.html#BulkSendEmailRequest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.mailing.schemas.BulkSendEmailRequest" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Schema for sending bulk emails.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.BulkSendEmailRequest.template_name">
+<span class="sig-name descname"><span class="pre">template_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.BulkSendEmailRequest.template_name" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.BulkSendEmailRequest.recipients">
+<span class="sig-name descname"><span class="pre">recipients</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list[EmailStr]</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.BulkSendEmailRequest.recipients" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.BulkSendEmailRequest.context">
+<span class="sig-name descname"><span class="pre">context</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict[str,</span> <span class="pre">Any]</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.BulkSendEmailRequest.context" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.BulkSendEmailRequest.per_recipient_context">
+<span class="sig-name descname"><span class="pre">per_recipient_context</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict[str,</span> <span class="pre">dict[str,</span> <span class="pre">Any]]</span> <span class="pre">|</span> <span class="pre">None</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.BulkSendEmailRequest.per_recipient_context" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.BulkSendEmailRequest.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.BulkSendEmailRequest.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.BulkSendEmailResponse">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BulkSendEmailResponse</span></span><a class="reference internal" href="../../_modules/pydotorg/domains/mailing/schemas.html#BulkSendEmailResponse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.domains.mailing.schemas.BulkSendEmailResponse" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Schema for bulk send email response.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.BulkSendEmailResponse.total">
+<span class="sig-name descname"><span class="pre">total</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.BulkSendEmailResponse.total" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.BulkSendEmailResponse.sent">
+<span class="sig-name descname"><span class="pre">sent</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.BulkSendEmailResponse.sent" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.BulkSendEmailResponse.failed">
+<span class="sig-name descname"><span class="pre">failed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.BulkSendEmailResponse.failed" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.BulkSendEmailResponse.log_ids">
+<span class="sig-name descname"><span class="pre">log_ids</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list[UUID]</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.BulkSendEmailResponse.log_ids" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.domains.mailing.schemas.BulkSendEmailResponse.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pydotorg.domains.mailing.schemas.BulkSendEmailResponse.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="repositories">
+<h2>Repositories<a class="headerlink" href="#repositories" title="Link to this heading">¶</a></h2>
+</section>
+<section id="services">
+<h2>Services<a class="headerlink" href="#services" title="Link to this heading">¶</a></h2>
+</section>
+<section id="controllers">
+<h2>Controllers<a class="headerlink" href="#controllers" title="Link to this heading">¶</a></h2>
+</section>
+<section id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Link to this heading">¶</a></h2>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="jobs.html">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title">jobs</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="minutes.html">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title">Minutes</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Jacob Coffee</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+<a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+  <iconify-icon icon="simple-icons:github"></iconify-icon>
+</a></div>
+    </div>
+  </div>
+</footer>
+      <script src="../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=30646c52"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+      <script src="../../_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

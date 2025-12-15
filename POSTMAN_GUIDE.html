@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="blue" data-content_root="./">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Postman Collection Guide - litestar-pydotorg</title><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="_static/shibuya.css?v=14737038" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link media="print" rel="stylesheet" type="text/css" href="_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=513f0650" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="Postman Collection Guide"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="index.html">
+      
+      
+      <strong>litestar-pydotorg</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"><ul><li class="link">
+          <a href="https://litestar.dev/">
+            <span>Litestar</span></a>
+        </li><li class="link">
+          <a href="https://python.org/">
+            <span>Python.org</span></a>
+        </li></ul></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials">
+  <a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting-started/index.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting-started/installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting-started/quickstart.html">Quickstart</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="guides/index.html">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="guides/development.html">Development Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/contributing.html">Contribution Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/testing.html">Testing Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/debugging.html">Debugging Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/api-usage.html">API Usage Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/authentication.html">Authentication Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/feature-flags.html">Feature Flags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/configuration.html">Configuration Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/deployment.html">Deployment Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/docker.html">Docker Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/troubleshooting.html">Troubleshooting Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cookbook/index.html">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cookbook/domain-patterns.html">Domain Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook/authentication-recipes.html">Authentication Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook/database-recipes.html">Database Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook/testing-recipes.html">Testing Recipes</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/core/index.html">Core Infrastructure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/core/auth.html">Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/cache.html">Caching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/database.html">Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/email.html">Email</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/exceptions.html">Exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/features.html">Feature Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/feeds.html">RSS/Atom Feeds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/ical.html">iCalendar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/middleware.html">Middleware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/openapi.html">OpenAPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/ratelimit.html">Rate Limiting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/security.html">Security</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/worker.html">Background Worker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/domains/index.html">Domain Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/about.html">About</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/admin.html">Admin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/banners.html">banners</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/blogs.html">blogs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/codesamples.html">Code Samples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/community.html">community</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/docs.html">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/downloads.html">downloads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/events.html">events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/jobs.html">jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/mailing.html">Mailing Lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/minutes.html">Minutes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/nominations.html">Nominations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/pages.html">pages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/sponsors.html">sponsors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/sqladmin.html">SQLAdmin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/successstories.html">Success Stories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/users.html">users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/work_groups.html">Work Groups</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/lib.html">Library Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/tasks.html">Background Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/config.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/main.html">Application Entry Point</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="architecture/index.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="architecture/ARCHITECTURE.html">Litestar Python.org Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/DATABASE_SCHEMA.html">Database Schema Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/DOMAIN_MODELS.html">Domain Models Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/QUICK_START.html">Litestar Python.org Quick Start Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/API_TAGS_INDEX.html">API Tags Documentation Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/RATE_LIMITING_ARCHITECTURE.html">Rate Limiting Architecture Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/adr/001-litestar-framework.html">ADR-001: Use Litestar as Web Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/adr/002-saq-background-tasks.html">ADR-002: Use SAQ for Background Task Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#quick-start">Quick Start</a><ul>
+<li><a class="reference internal" href="#import-the-collection">1. Import the Collection</a></li>
+<li><a class="reference internal" href="#configure-environment-variables">2. Configure Environment Variables</a></li>
+<li><a class="reference internal" href="#authentication-workflow">3. Authentication Workflow</a><ul>
+<li><a class="reference internal" href="#step-1-register-a-user">Step 1: Register a User</a></li>
+<li><a class="reference internal" href="#step-2-login">Step 2: Login</a></li>
+<li><a class="reference internal" href="#step-3-use-protected-endpoints">Step 3: Use Protected Endpoints</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#testing-the-collection">4. Testing the Collection</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#collection-structure">Collection Structure</a><ul>
+<li><a class="reference internal" href="#authentication-folder">Authentication Folder</a></li>
+<li><a class="reference internal" href="#users-folder">Users Folder</a></li>
+<li><a class="reference internal" href="#jobs-folder">Jobs Folder</a></li>
+<li><a class="reference internal" href="#events-folder">Events Folder</a></li>
+<li><a class="reference internal" href="#search-folder">Search Folder</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#features">Features</a><ul>
+<li><a class="reference internal" href="#automatic-token-management">Automatic Token Management</a></li>
+<li><a class="reference internal" href="#request-validation">Request Validation</a></li>
+<li><a class="reference internal" href="#example-request-bodies">Example Request Bodies</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#common-workflows">Common Workflows</a><ul>
+<li><a class="reference internal" href="#workflow-1-create-and-submit-a-job">Workflow 1: Create and Submit a Job</a></li>
+<li><a class="reference internal" href="#workflow-2-user-management">Workflow 2: User Management</a></li>
+<li><a class="reference internal" href="#workflow-3-event-discovery">Workflow 3: Event Discovery</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tips">Tips</a></li>
+<li><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul>
+<li><a class="reference internal" href="#unauthorized">401 Unauthorized</a></li>
+<li><a class="reference internal" href="#not-found">404 Not Found</a></li>
+<li><a class="reference internal" href="#validation-error">422 Validation Error</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#additional-resources">Additional Resources</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="index.html"><span itemprop="name">litestar-pydotorg</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">Postman Collection Guide</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue dark-code" role="main">
+          <section id="postman-collection-guide">
+<h1>Postman Collection Guide<a class="headerlink" href="#postman-collection-guide" title="Link to this heading">¶</a></h1>
+<p>This guide explains how to use the Postman collection for the Litestar-pydotorg API.</p>
+<section id="quick-start">
+<h2>Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading">¶</a></h2>
+<section id="import-the-collection">
+<h3>1. Import the Collection<a class="headerlink" href="#import-the-collection" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Open Postman</p></li>
+<li><p>Click <strong>Import</strong> in the top left</p></li>
+<li><p>Select <strong>File</strong> and choose <code class="docutils literal notranslate"><span class="pre">/Users/coffee/git/public/JacobCoffee/litestar-pydotorg/docs/postman-collection.json</span></code></p></li>
+<li><p>Click <strong>Import</strong></p></li>
+</ol>
+</section>
+<section id="configure-environment-variables">
+<h3>2. Configure Environment Variables<a class="headerlink" href="#configure-environment-variables" title="Link to this heading">¶</a></h3>
+<p>The collection uses the following variables:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">base_url</span></code>: Default is <code class="docutils literal notranslate"><span class="pre">http://localhost:8000</span></code> (modify if needed)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">access_token</span></code>: Automatically populated after login</p></li>
+</ul>
+<p>To view/edit variables:</p>
+<ol class="arabic simple">
+<li><p>Click on the collection name “Litestar-pydotorg API”</p></li>
+<li><p>Go to the <strong>Variables</strong> tab</p></li>
+<li><p>Update <code class="docutils literal notranslate"><span class="pre">base_url</span></code> if your API runs on a different host/port</p></li>
+</ol>
+</section>
+<section id="authentication-workflow">
+<h3>3. Authentication Workflow<a class="headerlink" href="#authentication-workflow" title="Link to this heading">¶</a></h3>
+<section id="step-1-register-a-user">
+<h4>Step 1: Register a User<a class="headerlink" href="#step-1-register-a-user" title="Link to this heading">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">POST</span> <span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">auth</span><span class="o">/</span><span class="n">register</span>
+</span></pre></div>
+</div>
+<p>Creates a new user account. Use the example request body and modify as needed.</p>
+</section>
+<section id="step-2-login">
+<h4>Step 2: Login<a class="headerlink" href="#step-2-login" title="Link to this heading">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">POST</span> <span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">auth</span><span class="o">/</span><span class="n">login</span>
+</span></pre></div>
+</div>
+<p>Authenticates and receives an access token. The token is <strong>automatically saved</strong> to the <code class="docutils literal notranslate"><span class="pre">access_token</span></code> variable via a post-request script.</p>
+</section>
+<section id="step-3-use-protected-endpoints">
+<h4>Step 3: Use Protected Endpoints<a class="headerlink" href="#step-3-use-protected-endpoints" title="Link to this heading">¶</a></h4>
+<p>All subsequent requests will automatically include the Bearer token in the Authorization header.</p>
+</section>
+</section>
+<section id="testing-the-collection">
+<h3>4. Testing the Collection<a class="headerlink" href="#testing-the-collection" title="Link to this heading">¶</a></h3>
+<p>Each request includes automated tests that:</p>
+<ul class="simple">
+<li><p>Verify response status codes</p></li>
+<li><p>Check response structure</p></li>
+<li><p>Validate data types</p></li>
+<li><p>Perform domain-specific checks</p></li>
+</ul>
+<p>View test results in the <strong>Test Results</strong> tab after each request.</p>
+</section>
+</section>
+<section id="collection-structure">
+<h2>Collection Structure<a class="headerlink" href="#collection-structure" title="Link to this heading">¶</a></h2>
+<section id="authentication-folder">
+<h3>Authentication Folder<a class="headerlink" href="#authentication-folder" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>Register</strong>: Create new user account</p></li>
+<li><p><strong>Login</strong>: Authenticate and get access token (auto-saves token)</p></li>
+<li><p><strong>Get Current User</strong>: Retrieve authenticated user info</p></li>
+<li><p><strong>Refresh Token</strong>: Refresh the access token</p></li>
+<li><p><strong>Logout</strong>: End session and invalidate token</p></li>
+</ul>
+</section>
+<section id="users-folder">
+<h3>Users Folder<a class="headerlink" href="#users-folder" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>List Users</strong>: Paginated user list (with limit/offset)</p></li>
+<li><p><strong>Get User by ID</strong>: Single user details</p></li>
+<li><p><strong>Create User</strong>: Create new user (admin)</p></li>
+<li><p><strong>Update User</strong>: Modify user information</p></li>
+<li><p><strong>Delete User</strong>: Remove user account</p></li>
+<li><p><strong>Deactivate User</strong>: Disable user account</p></li>
+<li><p><strong>Reactivate User</strong>: Re-enable user account</p></li>
+</ul>
+</section>
+<section id="jobs-folder">
+<h3>Jobs Folder<a class="headerlink" href="#jobs-folder" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>List Jobs</strong>: Paginated job listings</p></li>
+<li><p><strong>Get Job by ID</strong>: Single job details</p></li>
+<li><p><strong>Create Job</strong>: Post new job listing</p></li>
+<li><p><strong>Submit Job for Review</strong>: Submit draft for approval</p></li>
+<li><p><strong>Approve Job</strong>: Approve pending job (admin)</p></li>
+<li><p><strong>Reject Job</strong>: Reject pending job (admin)</p></li>
+<li><p><strong>Archive Job</strong>: Archive expired job</p></li>
+<li><p><strong>My Jobs</strong>: Get current user’s job postings</p></li>
+</ul>
+</section>
+<section id="events-folder">
+<h3>Events Folder<a class="headerlink" href="#events-folder" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>List Events</strong>: Paginated event list</p></li>
+<li><p><strong>Get Featured Events</strong>: Featured events only</p></li>
+<li><p><strong>Get Upcoming Events</strong>: Future events with date validation</p></li>
+<li><p><strong>Get Event by ID</strong>: Single event details</p></li>
+<li><p><strong>Create Event</strong>: Create new event</p></li>
+</ul>
+</section>
+<section id="search-folder">
+<h3>Search Folder<a class="headerlink" href="#search-folder" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>Search Jobs</strong>: Full-text search with filters</p></li>
+</ul>
+</section>
+</section>
+<section id="features">
+<h2>Features<a class="headerlink" href="#features" title="Link to this heading">¶</a></h2>
+<section id="automatic-token-management">
+<h3>Automatic Token Management<a class="headerlink" href="#automatic-token-management" title="Link to this heading">¶</a></h3>
+<p>The collection includes pre-request and post-request scripts that:</p>
+<ul class="simple">
+<li><p>Automatically inject Bearer tokens for authenticated requests</p></li>
+<li><p>Save access tokens from login responses</p></li>
+<li><p>Clear tokens on logout</p></li>
+</ul>
+</section>
+<section id="request-validation">
+<h3>Request Validation<a class="headerlink" href="#request-validation" title="Link to this heading">¶</a></h3>
+<p>All requests include tests for:</p>
+<ul class="simple">
+<li><p>HTTP status codes</p></li>
+<li><p>Response structure</p></li>
+<li><p>Required fields</p></li>
+<li><p>Data type validation</p></li>
+</ul>
+</section>
+<section id="example-request-bodies">
+<h3>Example Request Bodies<a class="headerlink" href="#example-request-bodies" title="Link to this heading">¶</a></h3>
+<p>Every POST/PUT/PATCH request includes a realistic example body with proper JSON structure.</p>
+</section>
+</section>
+<section id="common-workflows">
+<h2>Common Workflows<a class="headerlink" href="#common-workflows" title="Link to this heading">¶</a></h2>
+<section id="workflow-1-create-and-submit-a-job">
+<h3>Workflow 1: Create and Submit a Job<a class="headerlink" href="#workflow-1-create-and-submit-a-job" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Login → Save token</p></li>
+<li><p>Create Job → Get job_id from response</p></li>
+<li><p>Submit Job for Review → Use job_id</p></li>
+<li><p>(Admin) Approve Job</p></li>
+</ol>
+</section>
+<section id="workflow-2-user-management">
+<h3>Workflow 2: User Management<a class="headerlink" href="#workflow-2-user-management" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Login as admin → Save token</p></li>
+<li><p>List Users → See all users</p></li>
+<li><p>Get User by ID → View details</p></li>
+<li><p>Deactivate User → Disable account</p></li>
+<li><p>Reactivate User → Re-enable account</p></li>
+</ol>
+</section>
+<section id="workflow-3-event-discovery">
+<h3>Workflow 3: Event Discovery<a class="headerlink" href="#workflow-3-event-discovery" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Get Featured Events → See promoted events</p></li>
+<li><p>Get Upcoming Events → Find future events</p></li>
+<li><p>Get Event by ID → View full details</p></li>
+</ol>
+</section>
+</section>
+<section id="tips">
+<h2>Tips<a class="headerlink" href="#tips" title="Link to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li><p><strong>Variable Reuse</strong>: Save frequently used IDs as collection variables for quick access</p></li>
+<li><p><strong>Test Environment</strong>: Use different environments for local/staging/production</p></li>
+<li><p><strong>Run Collection</strong>: Use Collection Runner to execute all requests sequentially</p></li>
+<li><p><strong>Monitor</strong>: Set up Postman Monitors for API health checks</p></li>
+</ol>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">¶</a></h2>
+<section id="unauthorized">
+<h3>401 Unauthorized<a class="headerlink" href="#unauthorized" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Check that you’ve logged in and the <code class="docutils literal notranslate"><span class="pre">access_token</span></code> variable is set</p></li>
+<li><p>Token may have expired - try logging in again</p></li>
+</ul>
+</section>
+<section id="not-found">
+<h3>404 Not Found<a class="headerlink" href="#not-found" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Verify the API server is running on <code class="docutils literal notranslate"><span class="pre">http://localhost:8000</span></code></p></li>
+<li><p>Check that resource IDs (UUIDs) are valid</p></li>
+</ul>
+</section>
+<section id="validation-error">
+<h3>422 Validation Error<a class="headerlink" href="#validation-error" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Review request body for required fields</p></li>
+<li><p>Check data types match the schema</p></li>
+</ul>
+</section>
+</section>
+<section id="additional-resources">
+<h2>Additional Resources<a class="headerlink" href="#additional-resources" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>API Documentation: Check <code class="docutils literal notranslate"><span class="pre">/docs</span></code> endpoint (Swagger UI)</p></li>
+<li><p>OpenAPI Schema: Available at <code class="docutils literal notranslate"><span class="pre">/schema/openapi.json</span></code></p></li>
+<li><p>Redoc: Alternative docs at <code class="docutils literal notranslate"><span class="pre">/redoc</span></code></p></li>
+</ul>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Jacob Coffee</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+<a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+  <iconify-icon icon="simple-icons:github"></iconify-icon>
+</a></div>
+    </div>
+  </div>
+</footer>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=30646c52"></script>
+      <script src="_static/design-tabs.js?v=f930bc37"></script>
+      <script src="_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

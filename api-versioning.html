@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="blue" data-content_root="./">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>API Versioning - litestar-pydotorg</title><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="_static/shibuya.css?v=14737038" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link media="print" rel="stylesheet" type="text/css" href="_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=513f0650" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="API Versioning"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="index.html">
+      
+      
+      <strong>litestar-pydotorg</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"><ul><li class="link">
+          <a href="https://litestar.dev/">
+            <span>Litestar</span></a>
+        </li><li class="link">
+          <a href="https://python.org/">
+            <span>Python.org</span></a>
+        </li></ul></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials">
+  <a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting-started/index.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting-started/installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting-started/quickstart.html">Quickstart</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="guides/index.html">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="guides/development.html">Development Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/contributing.html">Contribution Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/testing.html">Testing Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/debugging.html">Debugging Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/api-usage.html">API Usage Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/authentication.html">Authentication Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/feature-flags.html">Feature Flags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/configuration.html">Configuration Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/deployment.html">Deployment Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/docker.html">Docker Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/troubleshooting.html">Troubleshooting Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cookbook/index.html">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cookbook/domain-patterns.html">Domain Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook/authentication-recipes.html">Authentication Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook/database-recipes.html">Database Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook/testing-recipes.html">Testing Recipes</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/core/index.html">Core Infrastructure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/core/auth.html">Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/cache.html">Caching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/database.html">Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/email.html">Email</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/exceptions.html">Exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/features.html">Feature Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/feeds.html">RSS/Atom Feeds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/ical.html">iCalendar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/middleware.html">Middleware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/openapi.html">OpenAPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/ratelimit.html">Rate Limiting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/security.html">Security</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/worker.html">Background Worker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/domains/index.html">Domain Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/about.html">About</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/admin.html">Admin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/banners.html">banners</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/blogs.html">blogs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/codesamples.html">Code Samples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/community.html">community</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/docs.html">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/downloads.html">downloads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/events.html">events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/jobs.html">jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/mailing.html">Mailing Lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/minutes.html">Minutes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/nominations.html">Nominations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/pages.html">pages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/sponsors.html">sponsors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/sqladmin.html">SQLAdmin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/successstories.html">Success Stories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/users.html">users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/work_groups.html">Work Groups</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/lib.html">Library Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/tasks.html">Background Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/config.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/main.html">Application Entry Point</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="architecture/index.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="architecture/ARCHITECTURE.html">Litestar Python.org Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/DATABASE_SCHEMA.html">Database Schema Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/DOMAIN_MODELS.html">Domain Models Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/QUICK_START.html">Litestar Python.org Quick Start Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/API_TAGS_INDEX.html">API Tags Documentation Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/RATE_LIMITING_ARCHITECTURE.html">Rate Limiting Architecture Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/adr/001-litestar-framework.html">ADR-001: Use Litestar as Web Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/adr/002-saq-background-tasks.html">ADR-002: Use SAQ for Background Task Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#features">Features</a></li>
+<li><a class="reference internal" href="#architecture">Architecture</a><ul>
+<li><a class="reference internal" href="#components">Components</a></li>
+<li><a class="reference internal" href="#version-negotiation-order">Version Negotiation Order</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#usage">Usage</a><ul>
+<li><a class="reference internal" href="#client-requests">Client Requests</a><ul>
+<li><a class="reference internal" href="#using-accept-header-recommended-for-api-clients">Using Accept Header (Recommended for API clients)</a></li>
+<li><a class="reference internal" href="#using-url-path-current-pattern">Using URL Path (Current pattern)</a></li>
+<li><a class="reference internal" href="#using-query-parameter-fallback">Using Query Parameter (Fallback)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#server-configuration">Server Configuration</a><ul>
+<li><a class="reference internal" href="#adding-a-new-version">Adding a New Version</a></li>
+<li><a class="reference internal" href="#deprecating-a-version">Deprecating a Version</a></li>
+<li><a class="reference internal" href="#accessing-version-in-route-handlers">Accessing Version in Route Handlers</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#response-examples">Response Examples</a><ul>
+<li><a class="reference internal" href="#non-deprecated-version">Non-Deprecated Version</a></li>
+<li><a class="reference internal" href="#deprecated-version">Deprecated Version</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#implementation-details">Implementation Details</a><ul>
+<li><a class="reference internal" href="#middleware-stack-order">Middleware Stack Order</a></li>
+<li><a class="reference internal" href="#version-format">Version Format</a></li>
+<li><a class="reference internal" href="#immutability">Immutability</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#best-practices">Best Practices</a></li>
+<li><a class="reference internal" href="#migration-example">Migration Example</a><ul>
+<li><a class="reference internal" href="#phase-1-announce-new-version">Phase 1: Announce New Version</a></li>
+<li><a class="reference internal" href="#phase-2-promote-new-version-3-months-later">Phase 2: Promote New Version (3 months later)</a></li>
+<li><a class="reference internal" href="#phase-3-remove-old-version-6-months-after-deprecation">Phase 3: Remove Old Version (6 months after deprecation)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#testing">Testing</a></li>
+<li><a class="reference internal" href="#future-enhancements">Future Enhancements</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="index.html"><span itemprop="name">litestar-pydotorg</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">API Versioning</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue dark-code" role="main">
+          <section id="api-versioning">
+<h1>API Versioning<a class="headerlink" href="#api-versioning" title="Link to this heading">¶</a></h1>
+<p>The Litestar pydotorg rewrite includes a comprehensive API versioning system that supports multiple version negotiation strategies and provides deprecation warnings.</p>
+<section id="features">
+<h2>Features<a class="headerlink" href="#features" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Multiple Version Negotiation Methods</strong></p>
+<ul>
+<li><p>Accept header (<code class="docutils literal notranslate"><span class="pre">application/vnd.pydotorg.v1+json</span></code>)</p></li>
+<li><p>URL path prefix (<code class="docutils literal notranslate"><span class="pre">/api/v1/...</span></code>)</p></li>
+<li><p>Query parameter (<code class="docutils literal notranslate"><span class="pre">?api_version=1</span></code>)</p></li>
+<li><p>Default version fallback</p></li>
+</ul>
+</li>
+<li><p><strong>Deprecation Support</strong></p>
+<ul>
+<li><p>Mark versions as deprecated</p></li>
+<li><p>Set sunset dates for version removal</p></li>
+<li><p>Automatic response headers with deprecation info</p></li>
+</ul>
+</li>
+<li><p><strong>Response Headers</strong></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">X-API-Version</span></code>: Current API version used</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">X-API-Deprecated</span></code>: true/false</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">X-API-Sunset-Date</span></code>: ISO date when deprecated version will be removed</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">X-API-Deprecation-Info</span></code>: JSON with detailed deprecation information</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="architecture">
+<h2>Architecture<a class="headerlink" href="#architecture" title="Link to this heading">¶</a></h2>
+<section id="components">
+<h3>Components<a class="headerlink" href="#components" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong>APIVersion</strong>: Immutable dataclass representing a semantic version with deprecation metadata</p></li>
+<li><p><strong>APIVersionRegistry</strong>: Singleton registry of supported versions</p></li>
+<li><p><strong>APIVersionMiddleware</strong>: Litestar middleware that negotiates versions and adds headers</p></li>
+</ol>
+</section>
+<section id="version-negotiation-order">
+<h3>Version Negotiation Order<a class="headerlink" href="#version-negotiation-order" title="Link to this heading">¶</a></h3>
+<p>The middleware checks for version information in this order:</p>
+<ol class="arabic">
+<li><p><strong>Accept Header</strong> (highest priority)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">Accept</span><span class="p">:</span> <span class="n">application</span><span class="o">/</span><span class="n">vnd</span><span class="o">.</span><span class="n">pydotorg</span><span class="o">.</span><span class="n">v1</span><span class="o">+</span><span class="n">json</span>
+</span></pre></div>
+</div>
+</li>
+<li><p><strong>URL Path</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">users</span>
+</span></pre></div>
+</div>
+</li>
+<li><p><strong>Query Parameter</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">/api/users?api_version=1
+</span></pre></div>
+</div>
+</li>
+<li><p><strong>Default Version</strong> (fallback)</p>
+<ul class="simple">
+<li><p>Currently: v1.0.0</p></li>
+</ul>
+</li>
+</ol>
+</section>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
+<section id="client-requests">
+<h3>Client Requests<a class="headerlink" href="#client-requests" title="Link to this heading">¶</a></h3>
+<section id="using-accept-header-recommended-for-api-clients">
+<h4>Using Accept Header (Recommended for API clients)<a class="headerlink" href="#using-accept-header-recommended-for-api-clients" title="Link to this heading">¶</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">curl<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Accept: application/vnd.pydotorg.v1+json&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span data-line="2"><span class="w">     </span>https://api.python.org/api/v1/users
+</span></pre></div>
+</div>
+</section>
+<section id="using-url-path-current-pattern">
+<h4>Using URL Path (Current pattern)<a class="headerlink" href="#using-url-path-current-pattern" title="Link to this heading">¶</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">curl<span class="w"> </span>https://api.python.org/api/v1/users
+</span></pre></div>
+</div>
+</section>
+<section id="using-query-parameter-fallback">
+<h4>Using Query Parameter (Fallback)<a class="headerlink" href="#using-query-parameter-fallback" title="Link to this heading">¶</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">curl<span class="w"> </span>https://api.python.org/api/users?api_version<span class="o">=</span><span class="m">1</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="server-configuration">
+<h3>Server Configuration<a class="headerlink" href="#server-configuration" title="Link to this heading">¶</a></h3>
+<section id="adding-a-new-version">
+<h4>Adding a New Version<a class="headerlink" href="#adding-a-new-version" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.lib.api_versioning</span><span class="w"> </span><span class="kn">import</span> <span class="n">add_version</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="c1"># Add v2 as a new version</span>
+</span><span data-line="4"><span class="n">add_version</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">is_default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="c1"># Or make it the default</span>
+</span><span data-line="7"><span class="n">add_version</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">is_default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="deprecating-a-version">
+<h4>Deprecating a Version<a class="headerlink" href="#deprecating-a-version" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">date</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.lib.api_versioning</span><span class="w"> </span><span class="kn">import</span> <span class="n">deprecate_version</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Deprecate v1 with a sunset date</span>
+</span><span data-line="5"><span class="n">deprecate_version</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">sunset_date</span><span class="o">=</span><span class="n">date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">31</span><span class="p">))</span>
+</span></pre></div>
+</div>
+</section>
+<section id="accessing-version-in-route-handlers">
+<h4>Accessing Version in Route Handlers<a class="headerlink" href="#accessing-version-in-route-handlers" title="Link to this heading">¶</a></h4>
+<p>The negotiated version is available in the request scope:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span><span class="w"> </span><span class="nn">litestar</span><span class="w"> </span><span class="kn">import</span> <span class="n">Request</span><span class="p">,</span> <span class="n">get</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.lib.api_versioning</span><span class="w"> </span><span class="kn">import</span> <span class="n">APIVersion</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/api/v1/example&quot;</span><span class="p">)</span>
+</span><span data-line="5"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">example_handler</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+</span><span data-line="6">    <span class="n">version</span><span class="p">:</span> <span class="n">APIVersion</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">scope</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;api_version&quot;</span><span class="p">)</span>
+</span><span data-line="7">    <span class="k">return</span> <span class="p">{</span>
+</span><span data-line="8">        <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">version</span><span class="p">),</span>
+</span><span data-line="9">        <span class="s2">&quot;deprecated&quot;</span><span class="p">:</span> <span class="n">version</span><span class="o">.</span><span class="n">deprecated</span><span class="p">,</span>
+</span><span data-line="10">    <span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="response-examples">
+<h2>Response Examples<a class="headerlink" href="#response-examples" title="Link to this heading">¶</a></h2>
+<section id="non-deprecated-version">
+<h3>Non-Deprecated Version<a class="headerlink" href="#non-deprecated-version" title="Link to this heading">¶</a></h3>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+</span><span data-line="2"><span class="na">X-API-Version</span><span class="o">:</span> <span class="l">v2.0.0</span>
+</span><span data-line="3"><span class="na">X-API-Deprecated</span><span class="o">:</span> <span class="l">false</span>
+</span><span data-line="4"><span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="p">{</span><span class="nt">&quot;data&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;...&quot;</span><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+<section id="deprecated-version">
+<h3>Deprecated Version<a class="headerlink" href="#deprecated-version" title="Link to this heading">¶</a></h3>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+</span><span data-line="2"><span class="na">X-API-Version</span><span class="o">:</span> <span class="l">v1.0.0</span>
+</span><span data-line="3"><span class="na">X-API-Deprecated</span><span class="o">:</span> <span class="l">true</span>
+</span><span data-line="4"><span class="na">X-API-Sunset-Date</span><span class="o">:</span> <span class="l">2026-12-31</span>
+</span><span data-line="5"><span class="na">X-API-Deprecation-Info</span><span class="o">:</span> <span class="l">{&quot;deprecated&quot;:true,&quot;sunset_date&quot;:&quot;2026-12-31&quot;,&quot;message&quot;:&quot;API version v1.0.0 is deprecated and will be removed on 2026-12-31&quot;,&quot;current_version&quot;:&quot;v2.0.0&quot;}</span>
+</span><span data-line="6"><span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+</span><span data-line="7">
+</span><span data-line="8"><span class="p">{</span><span class="nt">&quot;data&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;...&quot;</span><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="implementation-details">
+<h2>Implementation Details<a class="headerlink" href="#implementation-details" title="Link to this heading">¶</a></h2>
+<section id="middleware-stack-order">
+<h3>Middleware Stack Order<a class="headerlink" href="#middleware-stack-order" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">APIVersionMiddleware</span></code> is positioned early in the middleware stack to ensure version information is available for all subsequent middleware and handlers:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">middleware</span><span class="o">=</span><span class="p">[</span>
+</span><span data-line="2">    <span class="n">session_config</span><span class="o">.</span><span class="n">middleware</span><span class="p">,</span>
+</span><span data-line="3">    <span class="n">APIVersionMiddleware</span><span class="p">,</span>  <span class="c1"># &lt;- Early in the stack</span>
+</span><span data-line="4">    <span class="n">SitewideBannerMiddleware</span><span class="p">,</span>
+</span><span data-line="5">    <span class="n">APIBannerMiddleware</span><span class="p">,</span>
+</span><span data-line="6">    <span class="c1"># ... other middleware</span>
+</span><span data-line="7"><span class="p">]</span>
+</span></pre></div>
+</div>
+</section>
+<section id="version-format">
+<h3>Version Format<a class="headerlink" href="#version-format" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>Storage</strong>: Semantic versioning (major.minor.patch)</p></li>
+<li><p><strong>Display</strong>: Full format <code class="docutils literal notranslate"><span class="pre">v1.0.0</span></code> or short format <code class="docutils literal notranslate"><span class="pre">v1</span></code></p></li>
+<li><p><strong>Parsing</strong>: Supports <code class="docutils literal notranslate"><span class="pre">v1</span></code>, <code class="docutils literal notranslate"><span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">1.2</span></code>, <code class="docutils literal notranslate"><span class="pre">1.2.3</span></code></p></li>
+</ul>
+</section>
+<section id="immutability">
+<h3>Immutability<a class="headerlink" href="#immutability" title="Link to this heading">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">APIVersion</span></code> objects are frozen dataclasses to ensure thread safety and prevent accidental mutations. To update a version (e.g., deprecate it), a new version object is created and registered.</p>
+</section>
+</section>
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li><p><strong>Always use Accept header for programmatic clients</strong></p>
+<ul class="simple">
+<li><p>Most explicit and follows REST conventions</p></li>
+<li><p>Doesn’t pollute URLs</p></li>
+<li><p>Easy to version content types</p></li>
+</ul>
+</li>
+<li><p><strong>Use URL path for browser/documentation access</strong></p>
+<ul class="simple">
+<li><p>Currently implemented: <code class="docutils literal notranslate"><span class="pre">/api/v1/...</span></code></p></li>
+<li><p>Human-readable and bookmarkable</p></li>
+<li><p>Good for API documentation</p></li>
+</ul>
+</li>
+<li><p><strong>Reserve query parameters for exceptional cases</strong></p>
+<ul class="simple">
+<li><p>Useful when Accept header and URL aren’t available</p></li>
+<li><p>Good for testing and debugging</p></li>
+</ul>
+</li>
+<li><p><strong>Set sunset dates when deprecating</strong></p>
+<ul class="simple">
+<li><p>Gives clients time to migrate</p></li>
+<li><p>Include deprecation info in API documentation</p></li>
+<li><p>Communicate changes via release notes</p></li>
+</ul>
+</li>
+<li><p><strong>Maintain at least 2 versions</strong></p>
+<ul class="simple">
+<li><p>Current stable version</p></li>
+<li><p>Previous version (deprecated with sunset date)</p></li>
+<li><p>Gives clients 6-12 months to migrate</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="migration-example">
+<h2>Migration Example<a class="headerlink" href="#migration-example" title="Link to this heading">¶</a></h2>
+<section id="phase-1-announce-new-version">
+<h3>Phase 1: Announce New Version<a class="headerlink" href="#phase-1-announce-new-version" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Add v2 but keep v1 as default</span>
+</span><span data-line="2"><span class="n">add_version</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">is_default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="phase-2-promote-new-version-3-months-later">
+<h3>Phase 2: Promote New Version (3 months later)<a class="headerlink" href="#phase-2-promote-new-version-3-months-later" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Make v2 default, deprecate v1</span>
+</span><span data-line="2"><span class="n">add_version</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">is_default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span data-line="3"><span class="n">deprecate_version</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">sunset_date</span><span class="o">=</span><span class="n">date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">30</span><span class="p">))</span>
+</span></pre></div>
+</div>
+</section>
+<section id="phase-3-remove-old-version-6-months-after-deprecation">
+<h3>Phase 3: Remove Old Version (6 months after deprecation)<a class="headerlink" href="#phase-3-remove-old-version-6-months-after-deprecation" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Remove v1 from registry</span>
+</span><span data-line="2"><span class="c1"># Update documentation</span>
+</span><span data-line="3"><span class="c1"># Return 410 Gone for v1 requests</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="Link to this heading">¶</a></h2>
+<p>Tests are handled by the Tester agent. The test suite covers:</p>
+<ul class="simple">
+<li><p>Version parsing from all sources (Accept, path, query)</p></li>
+<li><p>Version negotiation priority order</p></li>
+<li><p>Response header injection</p></li>
+<li><p>Deprecation warning headers</p></li>
+<li><p>Registry operations (add, deprecate, get)</p></li>
+<li><p>Edge cases (invalid versions, missing versions, etc.)</p></li>
+</ul>
+</section>
+<section id="future-enhancements">
+<h2>Future Enhancements<a class="headerlink" href="#future-enhancements" title="Link to this heading">¶</a></h2>
+<ul class="contains-task-list simple">
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Version-specific route handlers</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Automatic OpenAPI spec per version</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Version negotiation analytics</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Breaking change detection</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Version migration helpers</p></li>
+</ul>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Jacob Coffee</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+<a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+  <iconify-icon icon="simple-icons:github"></iconify-icon>
+</a></div>
+    </div>
+  </div>
+</footer>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=30646c52"></script>
+      <script src="_static/design-tabs.js?v=f930bc37"></script>
+      <script src="_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="blue" data-content_root="./">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Feature Flags System - litestar-pydotorg</title><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="_static/shibuya.css?v=14737038" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link media="print" rel="stylesheet" type="text/css" href="_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=513f0650" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="Feature Flags System"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="index.html">
+      
+      
+      <strong>litestar-pydotorg</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"><ul><li class="link">
+          <a href="https://litestar.dev/">
+            <span>Litestar</span></a>
+        </li><li class="link">
+          <a href="https://python.org/">
+            <span>Python.org</span></a>
+        </li></ul></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials">
+  <a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting-started/index.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting-started/installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting-started/quickstart.html">Quickstart</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="guides/index.html">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="guides/development.html">Development Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/contributing.html">Contribution Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/testing.html">Testing Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/debugging.html">Debugging Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/api-usage.html">API Usage Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/authentication.html">Authentication Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/feature-flags.html">Feature Flags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/configuration.html">Configuration Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/deployment.html">Deployment Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/docker.html">Docker Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/troubleshooting.html">Troubleshooting Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cookbook/index.html">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cookbook/domain-patterns.html">Domain Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook/authentication-recipes.html">Authentication Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook/database-recipes.html">Database Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook/testing-recipes.html">Testing Recipes</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/core/index.html">Core Infrastructure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/core/auth.html">Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/cache.html">Caching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/database.html">Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/email.html">Email</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/exceptions.html">Exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/features.html">Feature Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/feeds.html">RSS/Atom Feeds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/ical.html">iCalendar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/middleware.html">Middleware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/openapi.html">OpenAPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/ratelimit.html">Rate Limiting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/security.html">Security</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/worker.html">Background Worker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/domains/index.html">Domain Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/about.html">About</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/admin.html">Admin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/banners.html">banners</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/blogs.html">blogs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/codesamples.html">Code Samples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/community.html">community</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/docs.html">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/downloads.html">downloads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/events.html">events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/jobs.html">jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/mailing.html">Mailing Lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/minutes.html">Minutes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/nominations.html">Nominations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/pages.html">pages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/sponsors.html">sponsors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/sqladmin.html">SQLAdmin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/successstories.html">Success Stories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/users.html">users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/work_groups.html">Work Groups</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/lib.html">Library Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/tasks.html">Background Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/config.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/main.html">Application Entry Point</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="architecture/index.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="architecture/ARCHITECTURE.html">Litestar Python.org Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/DATABASE_SCHEMA.html">Database Schema Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/DOMAIN_MODELS.html">Domain Models Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/QUICK_START.html">Litestar Python.org Quick Start Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/API_TAGS_INDEX.html">API Tags Documentation Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/RATE_LIMITING_ARCHITECTURE.html">Rate Limiting Architecture Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/adr/001-litestar-framework.html">ADR-001: Use Litestar as Web Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/adr/002-saq-background-tasks.html">ADR-002: Use SAQ for Background Task Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#configuration">Configuration</a><ul>
+<li><a class="reference internal" href="#environment-variables">Environment Variables</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#usage">Usage</a><ul>
+<li><a class="reference internal" href="#route-guards">1. Route Guards</a></li>
+<li><a class="reference internal" href="#dependency-injection">2. Dependency Injection</a></li>
+<li><a class="reference internal" href="#template-usage">3. Template Usage</a></li>
+<li><a class="reference internal" href="#application-state">4. Application State</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#available-feature-flags">Available Feature Flags</a></li>
+<li><a class="reference internal" href="#maintenance-mode">Maintenance Mode</a></li>
+<li><a class="reference internal" href="#architecture">Architecture</a><ul>
+<li><a class="reference internal" href="#core-components">Core Components</a></li>
+<li><a class="reference internal" href="#data-flow">Data Flow</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#testing">Testing</a></li>
+<li><a class="reference internal" href="#adding-new-feature-flags">Adding New Feature Flags</a></li>
+<li><a class="reference internal" href="#best-practices">Best Practices</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+<li><a class="reference internal" href="#migration-guide">Migration Guide</a><ul>
+<li><a class="reference internal" href="#before">Before</a></li>
+<li><a class="reference internal" href="#after">After</a></li>
+</ul>
+</li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="index.html"><span itemprop="name">litestar-pydotorg</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">Feature Flags System</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue dark-code" role="main">
+          <section id="feature-flags-system">
+<h1>Feature Flags System<a class="headerlink" href="#feature-flags-system" title="Link to this heading">¶</a></h1>
+<p>A simple, configuration-based feature flags system for conditionally enabling/disabling functionality in the application.</p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>The feature flags system allows you to:</p>
+<ul class="simple">
+<li><p>Enable/disable features via environment variables or configuration</p></li>
+<li><p>Protect routes with feature flag guards</p></li>
+<li><p>Access feature flags in templates for conditional rendering</p></li>
+<li><p>Programmatically check feature status in your code</p></li>
+<li><p>Enable maintenance mode across the entire application</p></li>
+</ul>
+</section>
+<section id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">¶</a></h2>
+<p>Feature flags are configured in <code class="docutils literal notranslate"><span class="pre">src/pydotorg/config.py</span></code> using a nested Pydantic model:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">class</span><span class="w"> </span><span class="nc">FeatureFlagsConfig</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span data-line="2"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Feature flags configuration for conditional functionality.&quot;&quot;&quot;</span>
+</span><span data-line="3">
+</span><span data-line="4">    <span class="n">enable_oauth</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+</span><span data-line="5">    <span class="n">enable_jobs</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+</span><span data-line="6">    <span class="n">enable_sponsors</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+</span><span data-line="7">    <span class="n">enable_search</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+</span><span data-line="8">    <span class="n">maintenance_mode</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+</span></pre></div>
+</div>
+<section id="environment-variables">
+<h3>Environment Variables<a class="headerlink" href="#environment-variables" title="Link to this heading">¶</a></h3>
+<p>Override feature flags using environment variables with the <code class="docutils literal notranslate"><span class="pre">FEATURES__</span></code> prefix:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Disable OAuth</span>
+</span><span data-line="2"><span class="nb">export</span><span class="w"> </span><span class="nv">FEATURES__ENABLE_OAUTH</span><span class="o">=</span><span class="nb">false</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Enable maintenance mode</span>
+</span><span data-line="5"><span class="nb">export</span><span class="w"> </span><span class="nv">FEATURES__MAINTENANCE_MODE</span><span class="o">=</span><span class="nb">true</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Disable jobs</span>
+</span><span data-line="8"><span class="nb">export</span><span class="w"> </span><span class="nv">FEATURES__ENABLE_JOBS</span><span class="o">=</span><span class="nb">false</span>
+</span></pre></div>
+</div>
+<p>Or in your <code class="docutils literal notranslate"><span class="pre">.env</span></code> file:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="nv">FEATURES__ENABLE_OAUTH</span><span class="o">=</span><span class="nb">false</span>
+</span><span data-line="2"><span class="nv">FEATURES__MAINTENANCE_MODE</span><span class="o">=</span><span class="nb">true</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
+<section id="route-guards">
+<h3>1. Route Guards<a class="headerlink" href="#route-guards" title="Link to this heading">¶</a></h3>
+<p>Protect routes so they’re only accessible when a feature is enabled:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span><span class="w"> </span><span class="nn">litestar</span><span class="w"> </span><span class="kn">import</span> <span class="n">Controller</span><span class="p">,</span> <span class="n">get</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.core.features</span><span class="w"> </span><span class="kn">import</span> <span class="n">require_feature</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="k">class</span><span class="w"> </span><span class="nc">OAuthController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="5">    <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;/oauth&quot;</span>
+</span><span data-line="6">
+</span><span data-line="7">    <span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/login&quot;</span><span class="p">,</span> <span class="n">guards</span><span class="o">=</span><span class="p">[</span><span class="n">require_feature</span><span class="p">(</span><span class="s2">&quot;enable_oauth&quot;</span><span class="p">)])</span>
+</span><span data-line="8">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">login</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+</span><span data-line="9"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Only accessible when OAuth is enabled.&quot;&quot;&quot;</span>
+</span><span data-line="10">        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;OAuth login&quot;</span><span class="p">}</span>
+</span></pre></div>
+</div>
+<p>When a feature is disabled or maintenance mode is active, the guard will return a <code class="docutils literal notranslate"><span class="pre">503</span> <span class="pre">Service</span> <span class="pre">Unavailable</span></code> response.</p>
+</section>
+<section id="dependency-injection">
+<h3>2. Dependency Injection<a class="headerlink" href="#dependency-injection" title="Link to this heading">¶</a></h3>
+<p>Inject feature flags into your handlers for programmatic checks:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span><span class="w"> </span><span class="nn">litestar</span><span class="w"> </span><span class="kn">import</span> <span class="n">get</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.core.features</span><span class="w"> </span><span class="kn">import</span> <span class="n">FeatureFlags</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/status&quot;</span><span class="p">)</span>
+</span><span data-line="5"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">status</span><span class="p">(</span><span class="n">feature_flags</span><span class="p">:</span> <span class="n">FeatureFlags</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+</span><span data-line="6"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Check feature availability programmatically.&quot;&quot;&quot;</span>
+</span><span data-line="7">    <span class="n">response</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;available_features&quot;</span><span class="p">:</span> <span class="p">[]}</span>
+</span><span data-line="8">
+</span><span data-line="9">    <span class="k">if</span> <span class="n">feature_flags</span><span class="o">.</span><span class="n">is_enabled</span><span class="p">(</span><span class="s2">&quot;enable_jobs&quot;</span><span class="p">):</span>
+</span><span data-line="10">        <span class="n">response</span><span class="p">[</span><span class="s2">&quot;available_features&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;jobs&quot;</span><span class="p">)</span>
+</span><span data-line="11">
+</span><span data-line="12">    <span class="k">if</span> <span class="n">feature_flags</span><span class="o">.</span><span class="n">is_enabled</span><span class="p">(</span><span class="s2">&quot;enable_sponsors&quot;</span><span class="p">):</span>
+</span><span data-line="13">        <span class="n">response</span><span class="p">[</span><span class="s2">&quot;available_features&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;sponsors&quot;</span><span class="p">)</span>
+</span><span data-line="14">
+</span><span data-line="15">    <span class="k">return</span> <span class="n">response</span>
+</span></pre></div>
+</div>
+</section>
+<section id="template-usage">
+<h3>3. Template Usage<a class="headerlink" href="#template-usage" title="Link to this heading">¶</a></h3>
+<p>Feature flags are automatically available in all Jinja templates via the global context:</p>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c">{# Show OAuth login only when enabled #}</span>
+</span><span data-line="2"><span class="cp">{%</span> <span class="k">if</span> <span class="nv">feature_flags.enable_oauth</span> <span class="cp">%}</span>
+</span><span data-line="3"><span class="x">&lt;div class=&quot;oauth-section&quot;&gt;</span>
+</span><span data-line="4"><span class="x">    &lt;a href=&quot;/oauth/github&quot;&gt;Login with GitHub&lt;/a&gt;</span>
+</span><span data-line="5"><span class="x">    &lt;a href=&quot;/oauth/google&quot;&gt;Login with Google&lt;/a&gt;</span>
+</span><span data-line="6"><span class="x">&lt;/div&gt;</span>
+</span><span data-line="7"><span class="cp">{%</span> <span class="k">endif</span> <span class="cp">%}</span>
+</span><span data-line="8">
+</span><span data-line="9"><span class="c">{# Show maintenance banner #}</span>
+</span><span data-line="10"><span class="cp">{%</span> <span class="k">if</span> <span class="nv">feature_flags.maintenance_mode</span> <span class="cp">%}</span>
+</span><span data-line="11"><span class="x">&lt;div class=&quot;alert alert-warning&quot;&gt;</span>
+</span><span data-line="12"><span class="x">    &lt;strong&gt;Maintenance Mode:&lt;/strong&gt; Some features are temporarily unavailable.</span>
+</span><span data-line="13"><span class="x">&lt;/div&gt;</span>
+</span><span data-line="14"><span class="cp">{%</span> <span class="k">endif</span> <span class="cp">%}</span>
+</span><span data-line="15">
+</span><span data-line="16"><span class="c">{# Conditionally show jobs section #}</span>
+</span><span data-line="17"><span class="cp">{%</span> <span class="k">if</span> <span class="nv">feature_flags.enable_jobs</span> <span class="cp">%}</span>
+</span><span data-line="18"><span class="x">&lt;div class=&quot;jobs-section&quot;&gt;</span>
+</span><span data-line="19"><span class="x">    &lt;a href=&quot;/jobs&quot;&gt;Browse Job Listings&lt;/a&gt;</span>
+</span><span data-line="20"><span class="x">&lt;/div&gt;</span>
+</span><span data-line="21"><span class="cp">{%</span> <span class="k">endif</span> <span class="cp">%}</span>
+</span></pre></div>
+</div>
+</section>
+<section id="application-state">
+<h3>4. Application State<a class="headerlink" href="#application-state" title="Link to this heading">¶</a></h3>
+<p>Feature flags are also available on the application state:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span><span class="w"> </span><span class="nn">litestar</span><span class="w"> </span><span class="kn">import</span> <span class="n">Request</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/check&quot;</span><span class="p">)</span>
+</span><span data-line="4"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">check</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+</span><span data-line="5"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Access feature flags from app state.&quot;&quot;&quot;</span>
+</span><span data-line="6">    <span class="n">flags</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">feature_flags</span>
+</span><span data-line="7">    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;maintenance_mode&quot;</span><span class="p">:</span> <span class="n">flags</span><span class="o">.</span><span class="n">maintenance_mode</span><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="available-feature-flags">
+<h2>Available Feature Flags<a class="headerlink" href="#available-feature-flags" title="Link to this heading">¶</a></h2>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Flag</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Default</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">enable_oauth</span></code></p></td>
+<td><p>OAuth authentication (GitHub, Google)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">enable_jobs</span></code></p></td>
+<td><p>Job listings functionality</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">enable_sponsors</span></code></p></td>
+<td><p>Sponsorship management and display</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">enable_search</span></code></p></td>
+<td><p>Site-wide search functionality</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">maintenance_mode</span></code></p></td>
+<td><p>Application-wide maintenance mode</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="maintenance-mode">
+<h2>Maintenance Mode<a class="headerlink" href="#maintenance-mode" title="Link to this heading">¶</a></h2>
+<p>When <code class="docutils literal notranslate"><span class="pre">maintenance_mode</span></code> is enabled:</p>
+<ul class="simple">
+<li><p>All feature flag guards will block access with 503 responses</p></li>
+<li><p>Templates can display maintenance banners</p></li>
+<li><p>Critical endpoints (health checks, admin) remain accessible</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Enable maintenance mode</span>
+</span><span data-line="2"><span class="nb">export</span><span class="w"> </span><span class="nv">FEATURES__MAINTENANCE_MODE</span><span class="o">=</span><span class="nb">true</span>
+</span></pre></div>
+</div>
+</section>
+<section id="architecture">
+<h2>Architecture<a class="headerlink" href="#architecture" title="Link to this heading">¶</a></h2>
+<section id="core-components">
+<h3>Core Components<a class="headerlink" href="#core-components" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">src/pydotorg/core/features.py</span></code></strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">FeatureFlags</span></code> class: Manages feature flag state</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">require_feature()</span></code> guard factory: Creates route guards</p></li>
+</ul>
+</li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">src/pydotorg/core/dependencies.py</span></code></strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">provide_feature_flags()</span></code>: Dependency provider</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_core_dependencies()</span></code>: Aggregates core dependencies</p></li>
+</ul>
+</li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">src/pydotorg/config.py</span></code></strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">FeatureFlagsConfig</span></code>: Pydantic model for configuration</p></li>
+<li><p>Integrated into main <code class="docutils literal notranslate"><span class="pre">Settings</span></code> class</p></li>
+</ul>
+</li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">src/pydotorg/main.py</span></code></strong></p>
+<ul class="simple">
+<li><p>Template context processor: Adds flags to templates</p></li>
+<li><p>App initialization: Adds flags to app state</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="data-flow">
+<h3>Data Flow<a class="headerlink" href="#data-flow" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">Environment Variables / .env
+</span><span data-line="2">    ↓
+</span><span data-line="3">Settings (Pydantic validation)
+</span><span data-line="4">    ↓
+</span><span data-line="5">FeatureFlags instance
+</span><span data-line="6">    ↓
+</span><span data-line="7">    ├─→ Route Guards (require_feature)
+</span><span data-line="8">    ├─→ Dependency Injection (handlers)
+</span><span data-line="9">    ├─→ Template Context (Jinja)
+</span><span data-line="10">    └─→ App State (request.app.state)
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="Link to this heading">¶</a></h2>
+<p>Feature flags can be easily mocked in tests:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span><span class="w"> </span><span class="nn">litestar</span><span class="w"> </span><span class="kn">import</span> <span class="n">Litestar</span><span class="p">,</span> <span class="n">get</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">litestar.testing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TestClient</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.core.features</span><span class="w"> </span><span class="kn">import</span> <span class="n">FeatureFlags</span><span class="p">,</span> <span class="n">require_feature</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="k">def</span><span class="w"> </span><span class="nf">test_disabled_feature</span><span class="p">():</span>
+</span><span data-line="6">    <span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/test&quot;</span><span class="p">,</span> <span class="n">guards</span><span class="o">=</span><span class="p">[</span><span class="n">require_feature</span><span class="p">(</span><span class="s2">&quot;enable_oauth&quot;</span><span class="p">)])</span>
+</span><span data-line="7">    <span class="k">def</span><span class="w"> </span><span class="nf">handler</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+</span><span data-line="8">        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;ok&quot;</span><span class="p">}</span>
+</span><span data-line="9">
+</span><span data-line="10">    <span class="k">def</span><span class="w"> </span><span class="nf">init_app</span><span class="p">(</span><span class="n">app</span><span class="p">:</span> <span class="n">Litestar</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="11">        <span class="n">app</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">feature_flags</span> <span class="o">=</span> <span class="n">FeatureFlags</span><span class="p">(</span><span class="n">enable_oauth</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span><span data-line="12">
+</span><span data-line="13">    <span class="n">app</span> <span class="o">=</span> <span class="n">Litestar</span><span class="p">(</span>
+</span><span data-line="14">        <span class="n">route_handlers</span><span class="o">=</span><span class="p">[</span><span class="n">handler</span><span class="p">],</span>
+</span><span data-line="15">        <span class="n">on_app_init</span><span class="o">=</span><span class="p">[</span><span class="n">init_app</span><span class="p">],</span>
+</span><span data-line="16">    <span class="p">)</span>
+</span><span data-line="17">
+</span><span data-line="18">    <span class="n">client</span> <span class="o">=</span> <span class="n">TestClient</span><span class="p">(</span><span class="n">app</span><span class="o">=</span><span class="n">app</span><span class="p">)</span>
+</span><span data-line="19">    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/test&quot;</span><span class="p">)</span>
+</span><span data-line="20">    <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">503</span>
+</span></pre></div>
+</div>
+</section>
+<section id="adding-new-feature-flags">
+<h2>Adding New Feature Flags<a class="headerlink" href="#adding-new-feature-flags" title="Link to this heading">¶</a></h2>
+<p>To add a new feature flag:</p>
+<ol class="arabic">
+<li><p>Add the field to <code class="docutils literal notranslate"><span class="pre">FeatureFlagsConfig</span></code> in <code class="docutils literal notranslate"><span class="pre">config.py</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">class</span><span class="w"> </span><span class="nc">FeatureFlagsConfig</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span data-line="2">    <span class="n">enable_oauth</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+</span><span data-line="3">    <span class="n">enable_new_feature</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># Add this</span>
+</span></pre></div>
+</div>
+</li>
+<li><p>Update <code class="docutils literal notranslate"><span class="pre">FeatureFlags.__init__()</span></code> in <code class="docutils literal notranslate"><span class="pre">features.py</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+</span><span data-line="2">    <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="3">    <span class="o">*</span><span class="p">,</span>
+</span><span data-line="4">    <span class="n">enable_oauth</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+</span><span data-line="5">    <span class="n">enable_new_feature</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>  <span class="c1"># Add this</span>
+</span><span data-line="6"><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="7">    <span class="bp">self</span><span class="o">.</span><span class="n">enable_oauth</span> <span class="o">=</span> <span class="n">enable_oauth</span>
+</span><span data-line="8">    <span class="bp">self</span><span class="o">.</span><span class="n">enable_new_feature</span> <span class="o">=</span> <span class="n">enable_new_feature</span>  <span class="c1"># Add this</span>
+</span></pre></div>
+</div>
+</li>
+<li><p>Update <code class="docutils literal notranslate"><span class="pre">FeatureFlags.to_dict()</span></code> in <code class="docutils literal notranslate"><span class="pre">features.py</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">def</span><span class="w"> </span><span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]:</span>
+</span><span data-line="2">    <span class="k">return</span> <span class="p">{</span>
+</span><span data-line="3">        <span class="s2">&quot;enable_oauth&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">enable_oauth</span><span class="p">,</span>
+</span><span data-line="4">        <span class="s2">&quot;enable_new_feature&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">enable_new_feature</span><span class="p">,</span>  <span class="c1"># Add this</span>
+</span><span data-line="5">    <span class="p">}</span>
+</span></pre></div>
+</div>
+</li>
+<li><p>Update the providers in <code class="docutils literal notranslate"><span class="pre">dependencies.py</span></code> and <code class="docutils literal notranslate"><span class="pre">main.py</span></code> to pass the new flag.</p></li>
+<li><p>Use the feature flag in your code:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/new-feature&quot;</span><span class="p">,</span> <span class="n">guards</span><span class="o">=</span><span class="p">[</span><span class="n">require_feature</span><span class="p">(</span><span class="s2">&quot;enable_new_feature&quot;</span><span class="p">)])</span>
+</span><span data-line="2"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">new_feature_endpoint</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+</span><span data-line="3">    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;New feature&quot;</span><span class="p">}</span>
+</span></pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li><p><strong>Use guards for route protection</strong>: Always use <code class="docutils literal notranslate"><span class="pre">require_feature()</span></code> guards rather than manual checks in handlers</p></li>
+<li><p><strong>Keep flags boolean</strong>: Feature flags should be simple on/off switches</p></li>
+<li><p><strong>Document flag purpose</strong>: Add clear docstrings explaining what each flag controls</p></li>
+<li><p><strong>Default to enabled</strong>: New features should default to <code class="docutils literal notranslate"><span class="pre">True</span></code> unless explicitly risky</p></li>
+<li><p><strong>Clean up old flags</strong>: Remove feature flags once features are stable and permanently enabled</p></li>
+<li><p><strong>Test both states</strong>: Always test your code with flags both enabled and disabled</p></li>
+</ol>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<p>See the following files for complete examples:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">docs/feature_flags_example.py</span></code> - Controller examples</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">docs/feature_flags_template_example.html</span></code> - Template examples</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tests/core/test_features.py</span></code> - Test examples</p></li>
+</ul>
+</section>
+<section id="migration-guide">
+<h2>Migration Guide<a class="headerlink" href="#migration-guide" title="Link to this heading">¶</a></h2>
+<p>If you’re migrating existing code to use feature flags:</p>
+<section id="before">
+<h3>Before<a class="headerlink" href="#before" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/oauth/login&quot;</span><span class="p">)</span>
+</span><span data-line="2"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">oauth_login</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+</span><span data-line="3">    <span class="k">if</span> <span class="ow">not</span> <span class="n">settings</span><span class="o">.</span><span class="n">oauth_enabled</span><span class="p">:</span>
+</span><span data-line="4">        <span class="k">raise</span> <span class="n">ServiceUnavailableException</span><span class="p">(</span><span class="s2">&quot;OAuth disabled&quot;</span><span class="p">)</span>
+</span><span data-line="5">    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;OAuth login&quot;</span><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+<section id="after">
+<h3>After<a class="headerlink" href="#after" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/oauth/login&quot;</span><span class="p">,</span> <span class="n">guards</span><span class="o">=</span><span class="p">[</span><span class="n">require_feature</span><span class="p">(</span><span class="s2">&quot;enable_oauth&quot;</span><span class="p">)])</span>
+</span><span data-line="2"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">oauth_login</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+</span><span data-line="3">    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;OAuth login&quot;</span><span class="p">}</span>
+</span></pre></div>
+</div>
+<p>The guard handles the feature check automatically and provides consistent error responses.</p>
+</section>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Jacob Coffee</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+<a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+  <iconify-icon icon="simple-icons:github"></iconify-icon>
+</a></div>
+    </div>
+  </div>
+</footer>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=30646c52"></script>
+      <script src="_static/design-tabs.js?v=f930bc37"></script>
+      <script src="_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

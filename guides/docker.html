@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="blue" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Docker Guide - litestar-pydotorg</title><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Troubleshooting Guide" href="troubleshooting.html" /><link rel="prev" title="Deployment Guide" href="deployment.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=14737038" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=513f0650" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="Docker Guide"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../index.html">
+      
+      
+      <strong>litestar-pydotorg</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"><ul><li class="link">
+          <a href="https://litestar.dev/">
+            <span>Litestar</span></a>
+        </li><li class="link">
+          <a href="https://python.org/">
+            <span>Python.org</span></a>
+        </li></ul></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials">
+  <a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting-started/index.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/quickstart.html">Quickstart</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="development.html">Development Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html">Contribution Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html">Testing Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="debugging.html">Debugging Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api-usage.html">API Usage Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="authentication.html">Authentication Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="feature-flags.html">Feature Flags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html">Configuration Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deployment.html">Deployment Guide</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Docker Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="troubleshooting.html">Troubleshooting Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/index.html">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/domain-patterns.html">Domain Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/authentication-recipes.html">Authentication Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/database-recipes.html">Database Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/testing-recipes.html">Testing Recipes</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/core/index.html">Core Infrastructure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/auth.html">Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/cache.html">Caching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/database.html">Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/email.html">Email</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/exceptions.html">Exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/features.html">Feature Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/feeds.html">RSS/Atom Feeds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/ical.html">iCalendar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/middleware.html">Middleware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/openapi.html">OpenAPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/ratelimit.html">Rate Limiting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/security.html">Security</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/worker.html">Background Worker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/domains/index.html">Domain Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/about.html">About</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/admin.html">Admin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/banners.html">banners</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/blogs.html">blogs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/codesamples.html">Code Samples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/community.html">community</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/docs.html">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/downloads.html">downloads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/events.html">events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/jobs.html">jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/mailing.html">Mailing Lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/minutes.html">Minutes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/nominations.html">Nominations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/pages.html">pages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/sponsors.html">sponsors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/sqladmin.html">SQLAdmin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/successstories.html">Success Stories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/users.html">users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/work_groups.html">Work Groups</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/lib.html">Library Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/tasks.html">Background Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/config.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/main.html">Application Entry Point</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/ARCHITECTURE.html">Litestar Python.org Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/DATABASE_SCHEMA.html">Database Schema Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/DOMAIN_MODELS.html">Domain Models Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/QUICK_START.html">Litestar Python.org Quick Start Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/API_TAGS_INDEX.html">API Tags Documentation Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/RATE_LIMITING_ARCHITECTURE.html">Rate Limiting Architecture Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/adr/001-litestar-framework.html">ADR-001: Use Litestar as Web Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/adr/002-saq-background-tasks.html">ADR-002: Use SAQ for Background Task Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#development-setup">Development Setup</a><ul>
+<li><a class="reference internal" href="#quick-start-with-docker-compose">Quick Start with Docker Compose</a></li>
+<li><a class="reference internal" href="#docker-compose-configuration">Docker Compose Configuration</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#managing-containers">Managing Containers</a><ul>
+<li><a class="reference internal" href="#basic-commands">Basic Commands</a></li>
+<li><a class="reference internal" href="#database-operations">Database Operations</a></li>
+<li><a class="reference internal" href="#redis-operations">Redis Operations</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#building-the-application-image">Building the Application Image</a><ul>
+<li><a class="reference internal" href="#development-dockerfile">Development Dockerfile</a></li>
+<li><a class="reference internal" href="#production-dockerfile">Production Dockerfile</a></li>
+<li><a class="reference internal" href="#building-images">Building Images</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#full-docker-development">Full Docker Development</a><ul>
+<li><a class="reference internal" href="#complete-docker-compose-stack">Complete Docker Compose Stack</a></li>
+<li><a class="reference internal" href="#running-full-stack">Running Full Stack</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul>
+<li><a class="reference internal" href="#container-wont-start">Container Won&#8217;t Start</a></li>
+<li><a class="reference internal" href="#database-connection-issues">Database Connection Issues</a></li>
+<li><a class="reference internal" href="#port-already-in-use">Port Already in Use</a></li>
+<li><a class="reference internal" href="#clean-up">Clean Up</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#best-practices">Best Practices</a></li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../index.html"><span itemprop="name">litestar-pydotorg</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="index.html"><span itemprop="name">Guides</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="2" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">Docker Guide</strong>
+        <meta itemprop="position" content="3" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue dark-code" role="main">
+          <section id="docker-guide">
+<h1>Docker Guide<a class="headerlink" href="#docker-guide" title="Link to this heading">¶</a></h1>
+<p>This guide covers using Docker for development and deployment of litestar-pydotorg.</p>
+<section id="development-setup">
+<h2>Development Setup<a class="headerlink" href="#development-setup" title="Link to this heading">¶</a></h2>
+<section id="quick-start-with-docker-compose">
+<h3>Quick Start with Docker Compose<a class="headerlink" href="#quick-start-with-docker-compose" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Start all services (PostgreSQL, Redis)</span>
+</span><span data-line="2">make<span class="w"> </span>infra-up
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Check services are running</span>
+</span><span data-line="5">docker-compose<span class="w"> </span>ps
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># View logs</span>
+</span><span data-line="8">docker-compose<span class="w"> </span>logs<span class="w"> </span>-f
+</span><span data-line="9">
+</span><span data-line="10"><span class="c1"># Stop services</span>
+</span><span data-line="11">make<span class="w"> </span>infra-down
+</span></pre></div>
+</div>
+</section>
+<section id="docker-compose-configuration">
+<h3>Docker Compose Configuration<a class="headerlink" href="#docker-compose-configuration" title="Link to this heading">¶</a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># docker-compose.yml</span>
+</span><span data-line="2"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;3.8&#39;</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="nt">services</span><span class="p">:</span>
+</span><span data-line="5"><span class="w">  </span><span class="nt">postgres</span><span class="p">:</span>
+</span><span data-line="6"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres:15</span>
+</span><span data-line="7"><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pydotorg-postgres</span>
+</span><span data-line="8"><span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+</span><span data-line="9"><span class="w">      </span><span class="nt">POSTGRES_USER</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres</span>
+</span><span data-line="10"><span class="w">      </span><span class="nt">POSTGRES_PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres</span>
+</span><span data-line="11"><span class="w">      </span><span class="nt">POSTGRES_DB</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pydotorg</span>
+</span><span data-line="12"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+</span><span data-line="13"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;5432:5432&quot;</span>
+</span><span data-line="14"><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+</span><span data-line="15"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres_data:/var/lib/postgresql/data</span>
+</span><span data-line="16"><span class="w">    </span><span class="nt">healthcheck</span><span class="p">:</span>
+</span><span data-line="17"><span class="w">      </span><span class="nt">test</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;CMD-SHELL&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;pg_isready</span><span class="nv"> </span><span class="s">-U</span><span class="nv"> </span><span class="s">postgres&quot;</span><span class="p p-Indicator">]</span>
+</span><span data-line="18"><span class="w">      </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5s</span>
+</span><span data-line="19"><span class="w">      </span><span class="nt">timeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5s</span>
+</span><span data-line="20"><span class="w">      </span><span class="nt">retries</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+</span><span data-line="21">
+</span><span data-line="22"><span class="w">  </span><span class="nt">redis</span><span class="p">:</span>
+</span><span data-line="23"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">redis:7-alpine</span>
+</span><span data-line="24"><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pydotorg-redis</span>
+</span><span data-line="25"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+</span><span data-line="26"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;6379:6379&quot;</span>
+</span><span data-line="27"><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+</span><span data-line="28"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">redis_data:/data</span>
+</span><span data-line="29"><span class="w">    </span><span class="nt">healthcheck</span><span class="p">:</span>
+</span><span data-line="30"><span class="w">      </span><span class="nt">test</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;CMD&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;redis-cli&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;ping&quot;</span><span class="p p-Indicator">]</span>
+</span><span data-line="31"><span class="w">      </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5s</span>
+</span><span data-line="32"><span class="w">      </span><span class="nt">timeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5s</span>
+</span><span data-line="33"><span class="w">      </span><span class="nt">retries</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+</span><span data-line="34">
+</span><span data-line="35"><span class="w">  </span><span class="nt">meilisearch</span><span class="p">:</span>
+</span><span data-line="36"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">getmeili/meilisearch:v1.5</span>
+</span><span data-line="37"><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pydotorg-meilisearch</span>
+</span><span data-line="38"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+</span><span data-line="39"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;7700:7700&quot;</span>
+</span><span data-line="40"><span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+</span><span data-line="41"><span class="w">      </span><span class="nt">MEILI_MASTER_KEY</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">your-master-key</span>
+</span><span data-line="42"><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+</span><span data-line="43"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">meilisearch_data:/meili_data</span>
+</span><span data-line="44">
+</span><span data-line="45"><span class="nt">volumes</span><span class="p">:</span>
+</span><span data-line="46"><span class="w">  </span><span class="nt">postgres_data</span><span class="p">:</span>
+</span><span data-line="47"><span class="w">  </span><span class="nt">redis_data</span><span class="p">:</span>
+</span><span data-line="48"><span class="w">  </span><span class="nt">meilisearch_data</span><span class="p">:</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="managing-containers">
+<h2>Managing Containers<a class="headerlink" href="#managing-containers" title="Link to this heading">¶</a></h2>
+<section id="basic-commands">
+<h3>Basic Commands<a class="headerlink" href="#basic-commands" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Start services in background</span>
+</span><span data-line="2">docker-compose<span class="w"> </span>up<span class="w"> </span>-d
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Start specific service</span>
+</span><span data-line="5">docker-compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>postgres
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Stop all services</span>
+</span><span data-line="8">docker-compose<span class="w"> </span>down
+</span><span data-line="9">
+</span><span data-line="10"><span class="c1"># Stop and remove volumes (data loss!)</span>
+</span><span data-line="11">docker-compose<span class="w"> </span>down<span class="w"> </span>-v
+</span><span data-line="12">
+</span><span data-line="13"><span class="c1"># Restart a service</span>
+</span><span data-line="14">docker-compose<span class="w"> </span>restart<span class="w"> </span>postgres
+</span><span data-line="15">
+</span><span data-line="16"><span class="c1"># View logs</span>
+</span><span data-line="17">docker-compose<span class="w"> </span>logs<span class="w"> </span>postgres
+</span><span data-line="18">docker-compose<span class="w"> </span>logs<span class="w"> </span>-f<span class="w">  </span><span class="c1"># Follow logs</span>
+</span></pre></div>
+</div>
+</section>
+<section id="database-operations">
+<h3>Database Operations<a class="headerlink" href="#database-operations" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Connect to PostgreSQL</span>
+</span><span data-line="2">docker-compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-U<span class="w"> </span>postgres<span class="w"> </span>-d<span class="w"> </span>pydotorg
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Create a database backup</span>
+</span><span data-line="5">docker-compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>postgres<span class="w"> </span>pg_dump<span class="w"> </span>-U<span class="w"> </span>postgres<span class="w"> </span>pydotorg<span class="w"> </span>&gt;<span class="w"> </span>backup.sql
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Restore from backup</span>
+</span><span data-line="8">docker-compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-T<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-U<span class="w"> </span>postgres<span class="w"> </span>pydotorg<span class="w"> </span>&lt;<span class="w"> </span>backup.sql
+</span></pre></div>
+</div>
+</section>
+<section id="redis-operations">
+<h3>Redis Operations<a class="headerlink" href="#redis-operations" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Connect to Redis CLI</span>
+</span><span data-line="2">docker-compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>redis<span class="w"> </span>redis-cli
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Flush all data (development only!)</span>
+</span><span data-line="5">docker-compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>redis<span class="w"> </span>redis-cli<span class="w"> </span>FLUSHALL
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="building-the-application-image">
+<h2>Building the Application Image<a class="headerlink" href="#building-the-application-image" title="Link to this heading">¶</a></h2>
+<section id="development-dockerfile">
+<h3>Development Dockerfile<a class="headerlink" href="#development-dockerfile" title="Link to this heading">¶</a></h3>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c"># Dockerfile.dev</span>
+</span><span data-line="2"><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.12-slim</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="k">WORKDIR</span><span class="w"> </span><span class="s">/app</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="c"># Install system dependencies</span>
+</span><span data-line="7"><span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>--no-install-recommends<span class="w"> </span><span class="se">\</span>
+</span><span data-line="8"><span class="w">    </span>curl<span class="w"> </span><span class="se">\</span>
+</span><span data-line="9"><span class="w">    </span><span class="o">&amp;&amp;</span><span class="w"> </span>rm<span class="w"> </span>-rf<span class="w"> </span>/var/lib/apt/lists/*
+</span><span data-line="10">
+</span><span data-line="11"><span class="c"># Install uv</span>
+</span><span data-line="12"><span class="k">RUN</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>uv
+</span><span data-line="13">
+</span><span data-line="14"><span class="c"># Copy dependency files</span>
+</span><span data-line="15"><span class="k">COPY</span><span class="w"> </span>pyproject.toml<span class="w"> </span>uv.lock<span class="w"> </span>./
+</span><span data-line="16">
+</span><span data-line="17"><span class="c"># Install dependencies</span>
+</span><span data-line="18"><span class="k">RUN</span><span class="w"> </span>uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--system<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[dev]&quot;</span>
+</span><span data-line="19">
+</span><span data-line="20"><span class="c"># Copy application code</span>
+</span><span data-line="21"><span class="k">COPY</span><span class="w"> </span>.<span class="w"> </span>.
+</span><span data-line="22">
+</span><span data-line="23"><span class="c"># Run development server</span>
+</span><span data-line="24"><span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;litestar&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;run&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;--reload&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;--host&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;0.0.0.0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;--port&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;8000&quot;</span><span class="p">]</span>
+</span></pre></div>
+</div>
+</section>
+<section id="production-dockerfile">
+<h3>Production Dockerfile<a class="headerlink" href="#production-dockerfile" title="Link to this heading">¶</a></h3>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c"># Dockerfile</span>
+</span><span data-line="2"><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.12-slim</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="s">builder</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="k">WORKDIR</span><span class="w"> </span><span class="s">/app</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>--no-install-recommends<span class="w"> </span><span class="se">\</span>
+</span><span data-line="7"><span class="w">    </span>build-essential<span class="w"> </span><span class="se">\</span>
+</span><span data-line="8"><span class="w">    </span><span class="o">&amp;&amp;</span><span class="w"> </span>rm<span class="w"> </span>-rf<span class="w"> </span>/var/lib/apt/lists/*
+</span><span data-line="9">
+</span><span data-line="10"><span class="k">RUN</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>uv
+</span><span data-line="11">
+</span><span data-line="12"><span class="k">COPY</span><span class="w"> </span>pyproject.toml<span class="w"> </span>uv.lock<span class="w"> </span>./
+</span><span data-line="13"><span class="k">RUN</span><span class="w"> </span>uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--system<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.&quot;</span>
+</span><span data-line="14">
+</span><span data-line="15"><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.12-slim</span>
+</span><span data-line="16">
+</span><span data-line="17"><span class="k">WORKDIR</span><span class="w"> </span><span class="s">/app</span>
+</span><span data-line="18">
+</span><span data-line="19"><span class="k">RUN</span><span class="w"> </span>useradd<span class="w"> </span>--create-home<span class="w"> </span>--shell<span class="w"> </span>/bin/bash<span class="w"> </span>app
+</span><span data-line="20">
+</span><span data-line="21"><span class="k">COPY</span><span class="w"> </span>--from<span class="o">=</span>builder<span class="w"> </span>/usr/local/lib/python3.12/site-packages<span class="w"> </span>/usr/local/lib/python3.12/site-packages
+</span><span data-line="22"><span class="k">COPY</span><span class="w"> </span>--from<span class="o">=</span>builder<span class="w"> </span>/usr/local/bin<span class="w"> </span>/usr/local/bin
+</span><span data-line="23">
+</span><span data-line="24"><span class="k">COPY</span><span class="w"> </span>--chown<span class="o">=</span>app:app<span class="w"> </span>.<span class="w"> </span>.
+</span><span data-line="25">
+</span><span data-line="26"><span class="k">USER</span><span class="w"> </span><span class="s">app</span>
+</span><span data-line="27">
+</span><span data-line="28"><span class="k">EXPOSE</span><span class="w"> </span><span class="s">8000</span>
+</span><span data-line="29">
+</span><span data-line="30"><span class="k">HEALTHCHECK</span><span class="w"> </span>--interval<span class="o">=</span>30s<span class="w"> </span>--timeout<span class="o">=</span>10s<span class="w"> </span>--start-period<span class="o">=</span>5s<span class="w"> </span>--retries<span class="o">=</span><span class="m">3</span><span class="w"> </span><span class="se">\</span>
+</span><span data-line="31"><span class="w">    </span>CMD<span class="w"> </span>curl<span class="w"> </span>-f<span class="w"> </span>http://localhost:8000/health<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
+</span><span data-line="32">
+</span><span data-line="33"><span class="k">ENV</span><span class="w"> </span><span class="nv">LITESTAR_APP</span><span class="o">=</span>pydotorg.main:app
+</span><span data-line="34">
+</span><span data-line="35"><span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;litestar&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;run&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;--host&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;0.0.0.0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;--port&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;8000&quot;</span><span class="p">]</span>
+</span></pre></div>
+</div>
+</section>
+<section id="building-images">
+<h3>Building Images<a class="headerlink" href="#building-images" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Build development image</span>
+</span><span data-line="2">docker<span class="w"> </span>build<span class="w"> </span>-f<span class="w"> </span>Dockerfile.dev<span class="w"> </span>-t<span class="w"> </span>pydotorg:dev<span class="w"> </span>.
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Build production image</span>
+</span><span data-line="5">docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>pydotorg:latest<span class="w"> </span>.
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Build with specific tag</span>
+</span><span data-line="8">docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>pydotorg:v1.0.0<span class="w"> </span>.
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="full-docker-development">
+<h2>Full Docker Development<a class="headerlink" href="#full-docker-development" title="Link to this heading">¶</a></h2>
+<section id="complete-docker-compose-stack">
+<h3>Complete Docker Compose Stack<a class="headerlink" href="#complete-docker-compose-stack" title="Link to this heading">¶</a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># docker-compose.full.yml</span>
+</span><span data-line="2"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;3.8&#39;</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="nt">services</span><span class="p">:</span>
+</span><span data-line="5"><span class="w">  </span><span class="nt">web</span><span class="p">:</span>
+</span><span data-line="6"><span class="w">    </span><span class="nt">build</span><span class="p">:</span>
+</span><span data-line="7"><span class="w">      </span><span class="nt">context</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.</span>
+</span><span data-line="8"><span class="w">      </span><span class="nt">dockerfile</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Dockerfile.dev</span>
+</span><span data-line="9"><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pydotorg-web</span>
+</span><span data-line="10"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+</span><span data-line="11"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;8000:8000&quot;</span>
+</span><span data-line="12"><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+</span><span data-line="13"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.:/app</span>
+</span><span data-line="14"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/app/.venv</span><span class="w">  </span><span class="c1"># Exclude venv from mount</span>
+</span><span data-line="15"><span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+</span><span data-line="16"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DEBUG=true</span>
+</span><span data-line="17"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DATABASE_URL=postgresql+asyncpg://postgres:postgres@postgres:5432/pydotorg</span>
+</span><span data-line="18"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">REDIS_URL=redis://redis:6379/0</span>
+</span><span data-line="19"><span class="w">    </span><span class="nt">depends_on</span><span class="p">:</span>
+</span><span data-line="20"><span class="w">      </span><span class="nt">postgres</span><span class="p">:</span>
+</span><span data-line="21"><span class="w">        </span><span class="nt">condition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">service_healthy</span>
+</span><span data-line="22"><span class="w">      </span><span class="nt">redis</span><span class="p">:</span>
+</span><span data-line="23"><span class="w">        </span><span class="nt">condition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">service_healthy</span>
+</span><span data-line="24"><span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">litestar run --reload --host 0.0.0.0 --port 8000</span>
+</span><span data-line="25">
+</span><span data-line="26"><span class="w">  </span><span class="nt">worker</span><span class="p">:</span>
+</span><span data-line="27"><span class="w">    </span><span class="nt">build</span><span class="p">:</span>
+</span><span data-line="28"><span class="w">      </span><span class="nt">context</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.</span>
+</span><span data-line="29"><span class="w">      </span><span class="nt">dockerfile</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Dockerfile.dev</span>
+</span><span data-line="30"><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pydotorg-worker</span>
+</span><span data-line="31"><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+</span><span data-line="32"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.:/app</span>
+</span><span data-line="33"><span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+</span><span data-line="34"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DATABASE_URL=postgresql+asyncpg://postgres:postgres@postgres:5432/pydotorg</span>
+</span><span data-line="35"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">REDIS_URL=redis://redis:6379/0</span>
+</span><span data-line="36"><span class="w">    </span><span class="nt">depends_on</span><span class="p">:</span>
+</span><span data-line="37"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres</span>
+</span><span data-line="38"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">redis</span>
+</span><span data-line="39"><span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">python -m saq worker pydotorg.tasks.base.worker</span>
+</span><span data-line="40">
+</span><span data-line="41"><span class="w">  </span><span class="nt">postgres</span><span class="p">:</span>
+</span><span data-line="42"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres:15</span>
+</span><span data-line="43"><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pydotorg-postgres</span>
+</span><span data-line="44"><span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+</span><span data-line="45"><span class="w">      </span><span class="nt">POSTGRES_USER</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres</span>
+</span><span data-line="46"><span class="w">      </span><span class="nt">POSTGRES_PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres</span>
+</span><span data-line="47"><span class="w">      </span><span class="nt">POSTGRES_DB</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pydotorg</span>
+</span><span data-line="48"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+</span><span data-line="49"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;5432:5432&quot;</span>
+</span><span data-line="50"><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+</span><span data-line="51"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres_data:/var/lib/postgresql/data</span>
+</span><span data-line="52"><span class="w">    </span><span class="nt">healthcheck</span><span class="p">:</span>
+</span><span data-line="53"><span class="w">      </span><span class="nt">test</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;CMD-SHELL&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;pg_isready</span><span class="nv"> </span><span class="s">-U</span><span class="nv"> </span><span class="s">postgres&quot;</span><span class="p p-Indicator">]</span>
+</span><span data-line="54"><span class="w">      </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5s</span>
+</span><span data-line="55"><span class="w">      </span><span class="nt">timeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5s</span>
+</span><span data-line="56"><span class="w">      </span><span class="nt">retries</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+</span><span data-line="57">
+</span><span data-line="58"><span class="w">  </span><span class="nt">redis</span><span class="p">:</span>
+</span><span data-line="59"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">redis:7-alpine</span>
+</span><span data-line="60"><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pydotorg-redis</span>
+</span><span data-line="61"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+</span><span data-line="62"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;6379:6379&quot;</span>
+</span><span data-line="63"><span class="w">    </span><span class="nt">healthcheck</span><span class="p">:</span>
+</span><span data-line="64"><span class="w">      </span><span class="nt">test</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;CMD&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;redis-cli&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;ping&quot;</span><span class="p p-Indicator">]</span>
+</span><span data-line="65"><span class="w">      </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5s</span>
+</span><span data-line="66"><span class="w">      </span><span class="nt">timeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5s</span>
+</span><span data-line="67"><span class="w">      </span><span class="nt">retries</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+</span><span data-line="68">
+</span><span data-line="69"><span class="nt">volumes</span><span class="p">:</span>
+</span><span data-line="70"><span class="w">  </span><span class="nt">postgres_data</span><span class="p">:</span>
+</span></pre></div>
+</div>
+</section>
+<section id="running-full-stack">
+<h3>Running Full Stack<a class="headerlink" href="#running-full-stack" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Start full stack</span>
+</span><span data-line="2">docker-compose<span class="w"> </span>-f<span class="w"> </span>docker-compose.full.yml<span class="w"> </span>up
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Start in background</span>
+</span><span data-line="5">docker-compose<span class="w"> </span>-f<span class="w"> </span>docker-compose.full.yml<span class="w"> </span>up<span class="w"> </span>-d
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># View logs</span>
+</span><span data-line="8">docker-compose<span class="w"> </span>-f<span class="w"> </span>docker-compose.full.yml<span class="w"> </span>logs<span class="w"> </span>-f<span class="w"> </span>web
+</span><span data-line="9">
+</span><span data-line="10"><span class="c1"># Run migrations</span>
+</span><span data-line="11">docker-compose<span class="w"> </span>-f<span class="w"> </span>docker-compose.full.yml<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>web<span class="w"> </span>litestar<span class="w"> </span>database<span class="w"> </span>upgrade
+</span><span data-line="12">
+</span><span data-line="13"><span class="c1"># Run tests inside container</span>
+</span><span data-line="14">docker-compose<span class="w"> </span>-f<span class="w"> </span>docker-compose.full.yml<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>web<span class="w"> </span>pytest
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">¶</a></h2>
+<section id="container-wont-start">
+<h3>Container Won’t Start<a class="headerlink" href="#container-wont-start" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Check logs</span>
+</span><span data-line="2">docker-compose<span class="w"> </span>logs<span class="w"> </span>web
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Check container status</span>
+</span><span data-line="5">docker-compose<span class="w"> </span>ps
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Inspect container</span>
+</span><span data-line="8">docker<span class="w"> </span>inspect<span class="w"> </span>pydotorg-web
+</span></pre></div>
+</div>
+</section>
+<section id="database-connection-issues">
+<h3>Database Connection Issues<a class="headerlink" href="#database-connection-issues" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Verify postgres is running</span>
+</span><span data-line="2">docker-compose<span class="w"> </span>ps<span class="w"> </span>postgres
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Test connection from host</span>
+</span><span data-line="5">psql<span class="w"> </span>postgresql://postgres:postgres@localhost:5432/pydotorg<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;SELECT 1&quot;</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Test connection from web container</span>
+</span><span data-line="8">docker-compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>web<span class="w"> </span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;</span>
+</span><span data-line="9"><span class="s2">from sqlalchemy import create_engine</span>
+</span><span data-line="10"><span class="s2">engine = create_engine(&#39;postgresql://postgres:postgres@postgres:5432/pydotorg&#39;)</span>
+</span><span data-line="11"><span class="s2">print(&#39;Connected!&#39; if engine.connect() else &#39;Failed&#39;)</span>
+</span><span data-line="12"><span class="s2">&quot;</span>
+</span></pre></div>
+</div>
+</section>
+<section id="port-already-in-use">
+<h3>Port Already in Use<a class="headerlink" href="#port-already-in-use" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Find process using port</span>
+</span><span data-line="2">lsof<span class="w"> </span>-i<span class="w"> </span>:8000
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Use different port</span>
+</span><span data-line="5">docker-compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;PORT=8001&quot;</span>
+</span></pre></div>
+</div>
+</section>
+<section id="clean-up">
+<h3>Clean Up<a class="headerlink" href="#clean-up" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Remove stopped containers</span>
+</span><span data-line="2">docker-compose<span class="w"> </span>rm
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Remove unused images</span>
+</span><span data-line="5">docker<span class="w"> </span>image<span class="w"> </span>prune
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Remove unused volumes (data loss!)</span>
+</span><span data-line="8">docker<span class="w"> </span>volume<span class="w"> </span>prune
+</span><span data-line="9">
+</span><span data-line="10"><span class="c1"># Full cleanup</span>
+</span><span data-line="11">docker<span class="w"> </span>system<span class="w"> </span>prune<span class="w"> </span>-a
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li><p><strong>Use health checks</strong> - Always define health checks for production</p></li>
+<li><p><strong>Non-root user</strong> - Run containers as non-root user</p></li>
+<li><p><strong>Multi-stage builds</strong> - Keep production images small</p></li>
+<li><p><strong>Pin versions</strong> - Use specific image tags, not <code class="docutils literal notranslate"><span class="pre">latest</span></code></p></li>
+<li><p><strong>Volume data</strong> - Use volumes for persistent data</p></li>
+<li><p><strong>Environment variables</strong> - Never hardcode secrets</p></li>
+<li><p><strong>Resource limits</strong> - Set memory and CPU limits</p></li>
+</ol>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="deployment.html"><span class="std std-doc">Deployment Guide</span></a> - Production deployment</p></li>
+<li><p><a class="reference internal" href="configuration.html"><span class="std std-doc">Configuration Guide</span></a> - Environment configuration</p></li>
+</ul>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="deployment.html">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title">Deployment Guide</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="troubleshooting.html">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title">Troubleshooting Guide</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Jacob Coffee</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+<a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+  <iconify-icon icon="simple-icons:github"></iconify-icon>
+</a></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=30646c52"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script src="../_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

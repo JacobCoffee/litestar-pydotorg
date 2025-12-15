@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="blue" data-content_root="./">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>API Getting Started Guide - litestar-pydotorg</title><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="_static/shibuya.css?v=14737038" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link media="print" rel="stylesheet" type="text/css" href="_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=513f0650" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="API Getting Started Guide"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="index.html">
+      
+      
+      <strong>litestar-pydotorg</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"><ul><li class="link">
+          <a href="https://litestar.dev/">
+            <span>Litestar</span></a>
+        </li><li class="link">
+          <a href="https://python.org/">
+            <span>Python.org</span></a>
+        </li></ul></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials">
+  <a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting-started/index.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting-started/installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting-started/quickstart.html">Quickstart</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="guides/index.html">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="guides/development.html">Development Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/contributing.html">Contribution Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/testing.html">Testing Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/debugging.html">Debugging Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/api-usage.html">API Usage Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/authentication.html">Authentication Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/feature-flags.html">Feature Flags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/configuration.html">Configuration Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/deployment.html">Deployment Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/docker.html">Docker Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/troubleshooting.html">Troubleshooting Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cookbook/index.html">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cookbook/domain-patterns.html">Domain Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook/authentication-recipes.html">Authentication Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook/database-recipes.html">Database Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook/testing-recipes.html">Testing Recipes</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/core/index.html">Core Infrastructure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/core/auth.html">Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/cache.html">Caching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/database.html">Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/email.html">Email</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/exceptions.html">Exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/features.html">Feature Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/feeds.html">RSS/Atom Feeds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/ical.html">iCalendar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/middleware.html">Middleware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/openapi.html">OpenAPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/ratelimit.html">Rate Limiting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/security.html">Security</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/worker.html">Background Worker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/domains/index.html">Domain Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/about.html">About</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/admin.html">Admin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/banners.html">banners</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/blogs.html">blogs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/codesamples.html">Code Samples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/community.html">community</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/docs.html">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/downloads.html">downloads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/events.html">events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/jobs.html">jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/mailing.html">Mailing Lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/minutes.html">Minutes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/nominations.html">Nominations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/pages.html">pages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/sponsors.html">sponsors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/sqladmin.html">SQLAdmin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/successstories.html">Success Stories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/users.html">users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/work_groups.html">Work Groups</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/lib.html">Library Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/tasks.html">Background Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/config.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/main.html">Application Entry Point</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="architecture/index.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="architecture/ARCHITECTURE.html">Litestar Python.org Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/DATABASE_SCHEMA.html">Database Schema Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/DOMAIN_MODELS.html">Domain Models Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/QUICK_START.html">Litestar Python.org Quick Start Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/API_TAGS_INDEX.html">API Tags Documentation Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/RATE_LIMITING_ARCHITECTURE.html">Rate Limiting Architecture Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/adr/001-litestar-framework.html">ADR-001: Use Litestar as Web Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/adr/002-saq-background-tasks.html">ADR-002: Use SAQ for Background Task Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a><ul>
+<li><a class="reference internal" href="#what-the-api-provides">What the API Provides</a></li>
+<li><a class="reference internal" href="#base-url-and-versioning">Base URL and Versioning</a></li>
+<li><a class="reference internal" href="#api-documentation-uis">API Documentation UIs</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#authentication">Authentication</a><ul>
+<li><a class="reference internal" href="#quick-start-with-jwt-tokens">Quick Start with JWT Tokens</a></li>
+<li><a class="reference internal" href="#token-lifetimes">Token Lifetimes</a></li>
+<li><a class="reference internal" href="#refreshing-tokens">Refreshing Tokens</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#making-your-first-request">Making Your First Request</a><ul>
+<li><a class="reference internal" href="#example-get-list-of-jobs">Example: Get List of Jobs</a><ul>
+<li><a class="reference internal" href="#curl">cURL</a></li>
+<li><a class="reference internal" href="#python-requests">Python (requests)</a></li>
+<li><a class="reference internal" href="#python-httpx-async">Python (httpx - async)</a></li>
+<li><a class="reference internal" href="#javascript-fetch">JavaScript (fetch)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#example-get-a-specific-release">Example: Get a Specific Release</a><ul>
+<li><a class="reference internal" href="#id1">cURL</a></li>
+<li><a class="reference internal" href="#python">Python</a></li>
+<li><a class="reference internal" href="#javascript">JavaScript</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#example-search-jobs-with-filters">Example: Search Jobs with Filters</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#common-patterns">Common Patterns</a><ul>
+<li><a class="reference internal" href="#pagination">Pagination</a><ul>
+<li><a class="reference internal" href="#pattern-1-limit-offset-most-endpoints">Pattern 1: Limit/Offset (Most Endpoints)</a></li>
+<li><a class="reference internal" href="#pattern-2-page-based-some-list-endpoints">Pattern 2: Page-Based (Some List Endpoints)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#filtering-and-searching">Filtering and Searching</a></li>
+<li><a class="reference internal" href="#error-handling">Error Handling</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#rate-limiting">Rate Limiting</a><ul>
+<li><a class="reference internal" href="#rate-limit-tiers">Rate Limit Tiers</a></li>
+<li><a class="reference internal" href="#checking-your-quota">Checking Your Quota</a></li>
+<li><a class="reference internal" href="#handling-429-responses">Handling 429 Responses</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#api-endpoints-overview">API Endpoints Overview</a><ul>
+<li><a class="reference internal" href="#quick-reference-by-domain">Quick Reference by Domain</a></li>
+<li><a class="reference internal" href="#downloads-domain">Downloads Domain</a></li>
+<li><a class="reference internal" href="#jobs-domain">Jobs Domain</a></li>
+<li><a class="reference internal" href="#events-domain">Events Domain</a></li>
+<li><a class="reference internal" href="#search-endpoints">Search Endpoints</a></li>
+<li><a class="reference internal" href="#full-openapi-specification">Full OpenAPI Specification</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sdks-and-tools">SDKs and Tools</a><ul>
+<li><a class="reference internal" href="#openapi-specification">OpenAPI Specification</a></li>
+<li><a class="reference internal" href="#generating-client-sdks">Generating Client SDKs</a><ul>
+<li><a class="reference internal" href="#python-client-using-openapi-python-client">Python Client (using openapi-python-client)</a></li>
+<li><a class="reference internal" href="#typescript-client-using-openapi-typescript">TypeScript Client (using openapi-typescript)</a></li>
+<li><a class="reference internal" href="#go-client-using-oapi-codegen">Go Client (using oapi-codegen)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#postman-collection">Postman Collection</a></li>
+<li><a class="reference internal" href="#testing-with-httpie">Testing with HTTPie</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#best-practices">Best Practices</a><ul>
+<li><a class="reference internal" href="#caching">Caching</a></li>
+<li><a class="reference internal" href="#request-batching">Request Batching</a></li>
+<li><a class="reference internal" href="#error-retry-strategy">Error Retry Strategy</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#next-steps">Next Steps</a></li>
+<li><a class="reference internal" href="#support">Support</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="index.html"><span itemprop="name">litestar-pydotorg</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">API Getting Started Guide</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue dark-code" role="main">
+          <section id="api-getting-started-guide">
+<h1>API Getting Started Guide<a class="headerlink" href="#api-getting-started-guide" title="Link to this heading">¶</a></h1>
+<p>Welcome to the <a class="reference external" href="http://Python.org">Python.org</a> API. This guide covers everything you need to start building applications that integrate with <a class="reference external" href="http://Python.org">Python.org</a>.</p>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h2>
+<section id="what-the-api-provides">
+<h3>What the API Provides<a class="headerlink" href="#what-the-api-provides" title="Link to this heading">¶</a></h3>
+<p>The <a class="reference external" href="http://Python.org">Python.org</a> API gives you programmatic access to:</p>
+<ul class="simple">
+<li><p><strong>Python Releases</strong>: Download information, version history, and release files</p></li>
+<li><p><strong>Job Board</strong>: Python job postings with search and filtering</p></li>
+<li><p><strong>Events</strong>: Community events, calendars, and locations</p></li>
+<li><p><strong>Content</strong>: Blog posts, success stories, and community content</p></li>
+<li><p><strong>Sponsors</strong>: PSF sponsors and sponsorship information</p></li>
+<li><p><strong>Users</strong>: User management and authentication</p></li>
+</ul>
+</section>
+<section id="base-url-and-versioning">
+<h3>Base URL and Versioning<a class="headerlink" href="#base-url-and-versioning" title="Link to this heading">¶</a></h3>
+<p>All API endpoints are available at:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">python</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span>
+</span></pre></div>
+</div>
+<p>The API is versioned using URL path prefixes. Currently, <code class="docutils literal notranslate"><span class="pre">v1</span></code> is the active version.</p>
+</section>
+<section id="api-documentation-uis">
+<h3>API Documentation UIs<a class="headerlink" href="#api-documentation-uis" title="Link to this heading">¶</a></h3>
+<p>Interactive API documentation is available at:</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>UI</p></th>
+<th class="head"><p>URL</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Scalar</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/api/</span></code></p></td>
+<td><p>Modern, feature-rich API explorer (recommended)</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Swagger</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/api/swagger</span></code></p></td>
+<td><p>Classic OpenAPI UI</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>ReDoc</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/api/redoc</span></code></p></td>
+<td><p>Clean, responsive documentation</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Visit these endpoints in your browser to explore the full API schema and try requests interactively.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="authentication">
+<h2>Authentication<a class="headerlink" href="#authentication" title="Link to this heading">¶</a></h2>
+<p>Most read endpoints are public, but write operations require authentication. The API supports JWT (JSON Web Tokens) for stateless authentication.</p>
+<section id="quick-start-with-jwt-tokens">
+<h3>Quick Start with JWT Tokens<a class="headerlink" href="#quick-start-with-jwt-tokens" title="Link to this heading">¶</a></h3>
+<p><strong>Step 1: Get a Token</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>https://python.org/api/auth/login<span class="w"> </span><span class="se">\</span>
+</span><span data-line="2"><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span data-line="3"><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;username&quot;: &quot;your_username&quot;, &quot;password&quot;: &quot;your_password&quot;}&#39;</span>
+</span></pre></div>
+</div>
+<p><strong>Response:</strong></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;access_token&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...&quot;</span><span class="p">,</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;refresh_token&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...&quot;</span><span class="p">,</span>
+</span><span data-line="4"><span class="w">  </span><span class="nt">&quot;token_type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bearer&quot;</span><span class="p">,</span>
+</span><span data-line="5"><span class="w">  </span><span class="nt">&quot;expires_in&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">604800</span>
+</span><span data-line="6"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>Step 2: Use the Token</strong></p>
+<p>Include the access token in the <code class="docutils literal notranslate"><span class="pre">Authorization</span></code> header for authenticated requests:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">curl<span class="w"> </span>https://python.org/api/auth/me<span class="w"> </span><span class="se">\</span>
+</span><span data-line="2"><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...&quot;</span>
+</span></pre></div>
+</div>
+</section>
+<section id="token-lifetimes">
+<h3>Token Lifetimes<a class="headerlink" href="#token-lifetimes" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Token Type</p></th>
+<th class="head"><p>Lifetime</p></th>
+<th class="head"><p>Purpose</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Access Token</p></td>
+<td><p>7 days</p></td>
+<td><p>API access</p></td>
+</tr>
+<tr class="row-odd"><td><p>Refresh Token</p></td>
+<td><p>30 days</p></td>
+<td><p>Renew access tokens</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="refreshing-tokens">
+<h3>Refreshing Tokens<a class="headerlink" href="#refreshing-tokens" title="Link to this heading">¶</a></h3>
+<p>When your access token expires, use the refresh token to get new tokens:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>https://python.org/api/auth/refresh<span class="w"> </span><span class="se">\</span>
+</span><span data-line="2"><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span data-line="3"><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;refresh_token&quot;: &quot;your_refresh_token&quot;}&#39;</span>
+</span></pre></div>
+</div>
+<p>For comprehensive authentication documentation, see <a class="reference internal" href="api-authentication.html"><span class="std std-doc">API Authentication Guide</span></a>.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="making-your-first-request">
+<h2>Making Your First Request<a class="headerlink" href="#making-your-first-request" title="Link to this heading">¶</a></h2>
+<section id="example-get-list-of-jobs">
+<h3>Example: Get List of Jobs<a class="headerlink" href="#example-get-list-of-jobs" title="Link to this heading">¶</a></h3>
+<p>Fetch approved Python job postings:</p>
+<section id="curl">
+<h4>cURL<a class="headerlink" href="#curl" title="Link to this heading">¶</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">curl<span class="w"> </span><span class="s2">&quot;https://python.org/api/v1/jobs?status=approved&amp;limit=10&quot;</span>
+</span></pre></div>
+</div>
+</section>
+<section id="python-requests">
+<h4>Python (requests)<a class="headerlink" href="#python-requests" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+</span><span data-line="4">    <span class="s2">&quot;https://python.org/api/v1/jobs&quot;</span><span class="p">,</span>
+</span><span data-line="5">    <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;approved&quot;</span><span class="p">,</span> <span class="s2">&quot;limit&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">}</span>
+</span><span data-line="6"><span class="p">)</span>
+</span><span data-line="7">
+</span><span data-line="8"><span class="n">jobs</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+</span><span data-line="9"><span class="k">for</span> <span class="n">job</span> <span class="ow">in</span> <span class="n">jobs</span><span class="p">:</span>
+</span><span data-line="10">    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">job</span><span class="p">[</span><span class="s1">&#39;job_title&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> at </span><span class="si">{</span><span class="n">job</span><span class="p">[</span><span class="s1">&#39;company_name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="python-httpx-async">
+<h4>Python (httpx - async)<a class="headerlink" href="#python-httpx-async" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">import</span><span class="w"> </span><span class="nn">httpx</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_jobs</span><span class="p">():</span>
+</span><span data-line="4">    <span class="k">async</span> <span class="k">with</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+</span><span data-line="5">        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+</span><span data-line="6">            <span class="s2">&quot;https://python.org/api/v1/jobs&quot;</span><span class="p">,</span>
+</span><span data-line="7">            <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;approved&quot;</span><span class="p">,</span> <span class="s2">&quot;limit&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">}</span>
+</span><span data-line="8">        <span class="p">)</span>
+</span><span data-line="9">        <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+</span><span data-line="10">
+</span><span data-line="11"><span class="c1"># Run with: asyncio.run(get_jobs())</span>
+</span></pre></div>
+</div>
+</section>
+<section id="javascript-fetch">
+<h4>JavaScript (fetch)<a class="headerlink" href="#javascript-fetch" title="Link to this heading">¶</a></h4>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kd">const</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">fetch</span><span class="p">(</span>
+</span><span data-line="2"><span class="w">  </span><span class="s2">&quot;https://python.org/api/v1/jobs?status=approved&amp;limit=10&quot;</span>
+</span><span data-line="3"><span class="p">);</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="kd">const</span><span class="w"> </span><span class="nx">jobs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">();</span>
+</span><span data-line="6"><span class="nx">jobs</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">job</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="7"><span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`</span><span class="si">${</span><span class="nx">job</span><span class="p">.</span><span class="nx">job_title</span><span class="si">}</span><span class="sb"> at </span><span class="si">${</span><span class="nx">job</span><span class="p">.</span><span class="nx">company_name</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+</span><span data-line="8"><span class="p">});</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="example-get-a-specific-release">
+<h3>Example: Get a Specific Release<a class="headerlink" href="#example-get-a-specific-release" title="Link to this heading">¶</a></h3>
+<p>Fetch details about the latest Python release:</p>
+<section id="id1">
+<h4>cURL<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">curl<span class="w"> </span><span class="s2">&quot;https://python.org/api/v1/releases/latest&quot;</span>
+</span></pre></div>
+</div>
+</section>
+<section id="python">
+<h4>Python<a class="headerlink" href="#python" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;https://python.org/api/v1/releases/latest&quot;</span><span class="p">)</span>
+</span><span data-line="4"><span class="n">release</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Latest Python: </span><span class="si">{</span><span class="n">release</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span data-line="7"><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Released: </span><span class="si">{</span><span class="n">release</span><span class="p">[</span><span class="s1">&#39;release_date&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span data-line="8"><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Download: </span><span class="si">{</span><span class="n">release</span><span class="p">[</span><span class="s1">&#39;resource_uri&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="javascript">
+<h4>JavaScript<a class="headerlink" href="#javascript" title="Link to this heading">¶</a></h4>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kd">const</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">fetch</span><span class="p">(</span><span class="s2">&quot;https://python.org/api/v1/releases/latest&quot;</span><span class="p">);</span>
+</span><span data-line="2"><span class="kd">const</span><span class="w"> </span><span class="nx">release</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">();</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`Latest Python: </span><span class="si">${</span><span class="nx">release</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+</span><span data-line="5"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`Released: </span><span class="si">${</span><span class="nx">release</span><span class="p">.</span><span class="nx">release_date</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="example-search-jobs-with-filters">
+<h3>Example: Search Jobs with Filters<a class="headerlink" href="#example-search-jobs-with-filters" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+</span><span data-line="4">    <span class="s2">&quot;https://python.org/api/v1/jobs/search&quot;</span><span class="p">,</span>
+</span><span data-line="5">    <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="6">        <span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="s2">&quot;django&quot;</span><span class="p">,</span>
+</span><span data-line="7">        <span class="s2">&quot;location&quot;</span><span class="p">:</span> <span class="s2">&quot;remote&quot;</span><span class="p">,</span>
+</span><span data-line="8">        <span class="s2">&quot;job_type_ids&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;uuid-for-full-time&quot;</span><span class="p">]</span>
+</span><span data-line="9">    <span class="p">}</span>
+</span><span data-line="10"><span class="p">)</span>
+</span><span data-line="11">
+</span><span data-line="12"><span class="n">matching_jobs</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="common-patterns">
+<h2>Common Patterns<a class="headerlink" href="#common-patterns" title="Link to this heading">¶</a></h2>
+<section id="pagination">
+<h3>Pagination<a class="headerlink" href="#pagination" title="Link to this heading">¶</a></h3>
+<p>The API supports two pagination patterns depending on the endpoint:</p>
+<section id="pattern-1-limit-offset-most-endpoints">
+<h4>Pattern 1: Limit/Offset (Most Endpoints)<a class="headerlink" href="#pattern-1-limit-offset-most-endpoints" title="Link to this heading">¶</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Get results 21-40</span>
+</span><span data-line="2">curl<span class="w"> </span><span class="s2">&quot;https://python.org/api/v1/jobs?limit=20&amp;offset=20&quot;</span>
+</span></pre></div>
+</div>
+<p><strong>Parameters:</strong></p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">limit</span></code></p></td>
+<td><p>integer</p></td>
+<td><p>100</p></td>
+<td><p>Maximum items to return (1-1000)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">offset</span></code></p></td>
+<td><p>integer</p></td>
+<td><p>0</p></td>
+<td><p>Number of items to skip</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Example (Python):</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="k">def</span><span class="w"> </span><span class="nf">get_all_jobs</span><span class="p">():</span>
+</span><span data-line="4"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Fetch all jobs using pagination.&quot;&quot;&quot;</span>
+</span><span data-line="5">    <span class="n">all_jobs</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span data-line="6">    <span class="n">offset</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span data-line="7">    <span class="n">limit</span> <span class="o">=</span> <span class="mi">100</span>
+</span><span data-line="8">
+</span><span data-line="9">    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+</span><span data-line="10">        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+</span><span data-line="11">            <span class="s2">&quot;https://python.org/api/v1/jobs&quot;</span><span class="p">,</span>
+</span><span data-line="12">            <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;limit&quot;</span><span class="p">:</span> <span class="n">limit</span><span class="p">,</span> <span class="s2">&quot;offset&quot;</span><span class="p">:</span> <span class="n">offset</span><span class="p">,</span> <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;approved&quot;</span><span class="p">}</span>
+</span><span data-line="13">        <span class="p">)</span>
+</span><span data-line="14">        <span class="n">jobs</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+</span><span data-line="15">
+</span><span data-line="16">        <span class="k">if</span> <span class="ow">not</span> <span class="n">jobs</span><span class="p">:</span>
+</span><span data-line="17">            <span class="k">break</span>
+</span><span data-line="18">
+</span><span data-line="19">        <span class="n">all_jobs</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">jobs</span><span class="p">)</span>
+</span><span data-line="20">        <span class="n">offset</span> <span class="o">+=</span> <span class="n">limit</span>
+</span><span data-line="21">
+</span><span data-line="22">        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">jobs</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">limit</span><span class="p">:</span>
+</span><span data-line="23">            <span class="k">break</span>
+</span><span data-line="24">
+</span><span data-line="25">    <span class="k">return</span> <span class="n">all_jobs</span>
+</span></pre></div>
+</div>
+</section>
+<section id="pattern-2-page-based-some-list-endpoints">
+<h4>Pattern 2: Page-Based (Some List Endpoints)<a class="headerlink" href="#pattern-2-page-based-some-list-endpoints" title="Link to this heading">¶</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Get page 2 with 20 items per page</span>
+</span><span data-line="2">curl<span class="w"> </span><span class="s2">&quot;https://python.org/api/v1/releases?currentPage=2&amp;pageSize=20&quot;</span>
+</span></pre></div>
+</div>
+<p><strong>Parameters:</strong></p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">currentPage</span></code></p></td>
+<td><p>integer</p></td>
+<td><p>1</p></td>
+<td><p>Page number (1-indexed)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pageSize</span></code></p></td>
+<td><p>integer</p></td>
+<td><p>20</p></td>
+<td><p>Items per page</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="filtering-and-searching">
+<h3>Filtering and Searching<a class="headerlink" href="#filtering-and-searching" title="Link to this heading">¶</a></h3>
+<p>Most list endpoints support filtering via query parameters:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Filter jobs by status</span>
+</span><span data-line="2">curl<span class="w"> </span><span class="s2">&quot;https://python.org/api/v1/jobs?status=approved&quot;</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Filter releases by Python version</span>
+</span><span data-line="5">curl<span class="w"> </span><span class="s2">&quot;https://python.org/api/v1/releases/latest/3&quot;</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Filter events by upcoming</span>
+</span><span data-line="8">curl<span class="w"> </span><span class="s2">&quot;https://python.org/api/v1/events?upcoming=true&quot;</span>
+</span></pre></div>
+</div>
+<p>For complex searches, use the search endpoints:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Full-text search across content</span>
+</span><span data-line="2"><span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+</span><span data-line="3">    <span class="s2">&quot;https://python.org/api/v1/search&quot;</span><span class="p">,</span>
+</span><span data-line="4">    <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="5">        <span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="s2">&quot;asyncio tutorial&quot;</span><span class="p">,</span>
+</span><span data-line="6">        <span class="s2">&quot;indexes&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;pages&quot;</span><span class="p">,</span> <span class="s2">&quot;blogs&quot;</span><span class="p">],</span>
+</span><span data-line="7">        <span class="s2">&quot;limit&quot;</span><span class="p">:</span> <span class="mi">20</span>
+</span><span data-line="8">    <span class="p">}</span>
+</span><span data-line="9"><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="error-handling">
+<h3>Error Handling<a class="headerlink" href="#error-handling" title="Link to this heading">¶</a></h3>
+<p>The API uses standard HTTP status codes:</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Code</p></th>
+<th class="head"><p>Meaning</p></th>
+<th class="head"><p>Example Scenario</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>200</p></td>
+<td><p>Success</p></td>
+<td><p>Request completed successfully</p></td>
+</tr>
+<tr class="row-odd"><td><p>201</p></td>
+<td><p>Created</p></td>
+<td><p>Resource created successfully</p></td>
+</tr>
+<tr class="row-even"><td><p>400</p></td>
+<td><p>Bad Request</p></td>
+<td><p>Invalid request body or parameters</p></td>
+</tr>
+<tr class="row-odd"><td><p>401</p></td>
+<td><p>Unauthorized</p></td>
+<td><p>Missing or invalid authentication</p></td>
+</tr>
+<tr class="row-even"><td><p>403</p></td>
+<td><p>Forbidden</p></td>
+<td><p>Authenticated but lacking permissions</p></td>
+</tr>
+<tr class="row-odd"><td><p>404</p></td>
+<td><p>Not Found</p></td>
+<td><p>Resource does not exist</p></td>
+</tr>
+<tr class="row-even"><td><p>422</p></td>
+<td><p>Unprocessable Entity</p></td>
+<td><p>Validation error in request data</p></td>
+</tr>
+<tr class="row-odd"><td><p>429</p></td>
+<td><p>Too Many Requests</p></td>
+<td><p>Rate limit exceeded</p></td>
+</tr>
+<tr class="row-even"><td><p>500</p></td>
+<td><p>Internal Server Error</p></td>
+<td><p>Server-side error</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Error Response Format:</strong></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Human-readable error message&quot;</span><span class="p">,</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;status_code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">404</span><span class="p">,</span>
+</span><span data-line="4"><span class="w">  </span><span class="nt">&quot;extra&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span>
+</span><span data-line="5"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>Handling Errors (Python):</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;https://python.org/api/v1/jobs/nonexistent-id&quot;</span><span class="p">)</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+</span><span data-line="6">    <span class="n">job</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+</span><span data-line="7"><span class="k">elif</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">404</span><span class="p">:</span>
+</span><span data-line="8">    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Job not found&quot;</span><span class="p">)</span>
+</span><span data-line="9"><span class="k">elif</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">401</span><span class="p">:</span>
+</span><span data-line="10">    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Authentication required&quot;</span><span class="p">)</span>
+</span><span data-line="11"><span class="k">elif</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">429</span><span class="p">:</span>
+</span><span data-line="12">    <span class="n">retry_after</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Retry-After&quot;</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
+</span><span data-line="13">    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Rate limited. Retry after </span><span class="si">{</span><span class="n">retry_after</span><span class="si">}</span><span class="s2"> seconds&quot;</span><span class="p">)</span>
+</span><span data-line="14"><span class="k">else</span><span class="p">:</span>
+</span><span data-line="15">    <span class="n">error</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+</span><span data-line="16">    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">error</span><span class="p">[</span><span class="s1">&#39;detail&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span></pre></div>
+</div>
+<p><strong>Handling Errors (JavaScript):</strong></p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">fetch</span><span class="p">(</span><span class="s2">&quot;https://python.org/api/v1/jobs/nonexistent-id&quot;</span><span class="p">);</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nx">response</span><span class="p">.</span><span class="nx">ok</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="5"><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="mf">404</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="6"><span class="w">      </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Job not found&quot;</span><span class="p">);</span>
+</span><span data-line="7"><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="mf">429</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="8"><span class="w">      </span><span class="kd">const</span><span class="w"> </span><span class="nx">retryAfter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">response</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;Retry-After&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="mf">60</span><span class="p">;</span>
+</span><span data-line="9"><span class="w">      </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`Rate limited. Retry after </span><span class="si">${</span><span class="nx">retryAfter</span><span class="si">}</span><span class="sb"> seconds`</span><span class="p">);</span>
+</span><span data-line="10"><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="11"><span class="w">      </span><span class="kd">const</span><span class="w"> </span><span class="nx">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">();</span>
+</span><span data-line="12"><span class="w">      </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`Error: </span><span class="si">${</span><span class="nx">error</span><span class="p">.</span><span class="nx">detail</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+</span><span data-line="13"><span class="w">    </span><span class="p">}</span>
+</span><span data-line="14"><span class="w">    </span><span class="k">return</span><span class="p">;</span>
+</span><span data-line="15"><span class="w">  </span><span class="p">}</span>
+</span><span data-line="16">
+</span><span data-line="17"><span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">job</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">();</span>
+</span><span data-line="18"><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="19"><span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s2">&quot;Network error:&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">);</span>
+</span><span data-line="20"><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="rate-limiting">
+<h2>Rate Limiting<a class="headerlink" href="#rate-limiting" title="Link to this heading">¶</a></h2>
+<p>The API implements rate limiting to ensure fair usage and protect against abuse.</p>
+<section id="rate-limit-tiers">
+<h3>Rate Limit Tiers<a class="headerlink" href="#rate-limit-tiers" title="Link to this heading">¶</a></h3>
+<p>The API uses a 4-tier rate limiting system based on endpoint sensitivity:</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Tier</p></th>
+<th class="head"><p>Anonymous</p></th>
+<th class="head"><p>Authenticated</p></th>
+<th class="head"><p>Staff</p></th>
+<th class="head"><p>Use Cases</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>CRITICAL</strong></p></td>
+<td><p>5/min</p></td>
+<td><p>20/min</p></td>
+<td><p>100/min</p></td>
+<td><p>Auth, search, submissions</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>HIGH</strong></p></td>
+<td><p>20/min</p></td>
+<td><p>60/min</p></td>
+<td><p>300/min</p></td>
+<td><p>Forms, job/event posts</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>MEDIUM</strong></p></td>
+<td><p>60/min</p></td>
+<td><p>180/min</p></td>
+<td><p>900/min</p></td>
+<td><p>Community content</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>LOW</strong></p></td>
+<td><p>120/min</p></td>
+<td><p>300/min</p></td>
+<td><p>1500/min</p></td>
+<td><p>Read-only operations</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Authenticated users receive 4x the anonymous limit. Staff users receive 5x the authenticated limit.</p>
+</section>
+<section id="checking-your-quota">
+<h3>Checking Your Quota<a class="headerlink" href="#checking-your-quota" title="Link to this heading">¶</a></h3>
+<p>Rate limit information is included in response headers:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">RateLimit</span><span class="o">-</span><span class="n">Policy</span><span class="p">:</span> <span class="mi">120</span><span class="p">;</span><span class="n">w</span><span class="o">=</span><span class="mi">60</span>      <span class="c1"># 120 requests per 60 seconds</span>
+</span><span data-line="2"><span class="n">RateLimit</span><span class="o">-</span><span class="n">Remaining</span><span class="p">:</span> <span class="mi">118</span>        <span class="c1"># 118 requests remaining</span>
+</span><span data-line="3"><span class="n">RateLimit</span><span class="o">-</span><span class="n">Reset</span><span class="p">:</span> <span class="mi">1735689600</span>     <span class="c1"># Unix timestamp for reset</span>
+</span><span data-line="4"><span class="n">RateLimit</span><span class="o">-</span><span class="n">Limit</span><span class="p">:</span> <span class="mi">120</span>            <span class="c1"># Total requests allowed</span>
+</span></pre></div>
+</div>
+</section>
+<section id="handling-429-responses">
+<h3>Handling 429 Responses<a class="headerlink" href="#handling-429-responses" title="Link to this heading">¶</a></h3>
+<p>When rate limited, you receive a <code class="docutils literal notranslate"><span class="pre">429</span> <span class="pre">Too</span> <span class="pre">Many</span> <span class="pre">Requests</span></code> response:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Rate limit exceeded. Try again in 45 seconds.&quot;</span><span class="p">,</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;status_code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">429</span>
+</span><span data-line="4"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>Response Headers:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">Retry</span><span class="o">-</span><span class="n">After</span><span class="p">:</span> <span class="mi">45</span>                 <span class="c1"># Seconds until reset</span>
+</span></pre></div>
+</div>
+<p><strong>Best Practice: Implement Exponential Backoff</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+</span><span data-line="2"><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="k">def</span><span class="w"> </span><span class="nf">request_with_retry</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">max_retries</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+</span><span data-line="5"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Make request with exponential backoff for rate limits.&quot;&quot;&quot;</span>
+</span><span data-line="6">    <span class="k">for</span> <span class="n">attempt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_retries</span><span class="p">):</span>
+</span><span data-line="7">        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+</span><span data-line="8">
+</span><span data-line="9">        <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">429</span><span class="p">:</span>
+</span><span data-line="10">            <span class="n">retry_after</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Retry-After&quot;</span><span class="p">,</span> <span class="mi">60</span><span class="p">))</span>
+</span><span data-line="11">            <span class="n">wait_time</span> <span class="o">=</span> <span class="n">retry_after</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">attempt</span><span class="p">)</span>  <span class="c1"># Exponential backoff</span>
+</span><span data-line="12">            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Rate limited. Waiting </span><span class="si">{</span><span class="n">wait_time</span><span class="si">}</span><span class="s2"> seconds...&quot;</span><span class="p">)</span>
+</span><span data-line="13">            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">wait_time</span><span class="p">)</span>
+</span><span data-line="14">            <span class="k">continue</span>
+</span><span data-line="15">
+</span><span data-line="16">        <span class="k">return</span> <span class="n">response</span>
+</span><span data-line="17">
+</span><span data-line="18">    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Max retries exceeded&quot;</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="api-endpoints-overview">
+<h2>API Endpoints Overview<a class="headerlink" href="#api-endpoints-overview" title="Link to this heading">¶</a></h2>
+<section id="quick-reference-by-domain">
+<h3>Quick Reference by Domain<a class="headerlink" href="#quick-reference-by-domain" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Domain</p></th>
+<th class="head"><p>Base Path</p></th>
+<th class="head"><p>Key Endpoints</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Authentication</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/api/auth/</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">login</span></code>, <code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">register</span></code>, <code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">refresh</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Users</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/api/v1/users/</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/</span></code>, <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/{id}</span></code>, <code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Releases</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/api/v1/releases/</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/</span></code>, <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/latest</span></code>, <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/{id}</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Jobs</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/api/v1/jobs/</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/</span></code>, <code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/search</span></code>, <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/{id}</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Events</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/api/v1/events/</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/</span></code>, <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/upcoming</span></code>, <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/{id}</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Blogs</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/api/blogs/</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/</span></code>, <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/entries/{id}</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Sponsors</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/api/v1/sponsors/</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/</span></code>, <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/{id}</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Search</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/api/v1/search/</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/</span></code>, <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/autocomplete</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Pages</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/api/pages/</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/</span></code>, <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/{id}</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="downloads-domain">
+<h3>Downloads Domain<a class="headerlink" href="#downloads-domain" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">GET</span>  <span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">os</span><span class="o">/</span>                    <span class="c1"># List operating systems</span>
+</span><span data-line="2"><span class="n">GET</span>  <span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">os</span><span class="o">/</span><span class="p">{</span><span class="nb">id</span><span class="p">}</span>                <span class="c1"># Get OS by ID</span>
+</span><span data-line="3"><span class="n">GET</span>  <span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">os</span><span class="o">/</span><span class="n">slug</span><span class="o">/</span><span class="p">{</span><span class="n">slug</span><span class="p">}</span>         <span class="c1"># Get OS by slug</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="n">GET</span>  <span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span>              <span class="c1"># List all releases</span>
+</span><span data-line="6"><span class="n">GET</span>  <span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="p">{</span><span class="nb">id</span><span class="p">}</span>          <span class="c1"># Get release by ID</span>
+</span><span data-line="7"><span class="n">GET</span>  <span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">slug</span><span class="o">/</span><span class="p">{</span><span class="n">slug</span><span class="p">}</span>   <span class="c1"># Get release by slug</span>
+</span><span data-line="8"><span class="n">GET</span>  <span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">latest</span>        <span class="c1"># Get latest Python 3 release</span>
+</span><span data-line="9"><span class="n">GET</span>  <span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">latest</span><span class="o">/</span><span class="p">{</span><span class="n">ver</span><span class="p">}</span>  <span class="c1"># Get latest for version (2, 3)</span>
+</span><span data-line="10"><span class="n">GET</span>  <span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">published</span>     <span class="c1"># List published releases</span>
+</span><span data-line="11"><span class="n">GET</span>  <span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">download</span><span class="o">-</span><span class="n">page</span> <span class="c1"># Releases for download page</span>
+</span><span data-line="12">
+</span><span data-line="13"><span class="n">GET</span>  <span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">files</span><span class="o">/</span><span class="p">{</span><span class="nb">id</span><span class="p">}</span>             <span class="c1"># Get release file by ID</span>
+</span><span data-line="14"><span class="n">GET</span>  <span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">files</span><span class="o">/</span><span class="n">release</span><span class="o">/</span><span class="p">{</span><span class="nb">id</span><span class="p">}</span>     <span class="c1"># List files for a release</span>
+</span><span data-line="15"><span class="n">GET</span>  <span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">files</span><span class="o">/</span><span class="n">os</span><span class="o">/</span><span class="p">{</span><span class="nb">id</span><span class="p">}</span>          <span class="c1"># List files for an OS</span>
+</span></pre></div>
+</div>
+</section>
+<section id="jobs-domain">
+<h3>Jobs Domain<a class="headerlink" href="#jobs-domain" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">GET</span>   <span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">jobs</span><span class="o">/</span>                 <span class="c1"># List all jobs</span>
+</span><span data-line="2"><span class="n">GET</span>   <span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">jobs</span><span class="o">/</span><span class="p">{</span><span class="nb">id</span><span class="p">}</span>             <span class="c1"># Get job by ID</span>
+</span><span data-line="3"><span class="n">POST</span>  <span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">jobs</span><span class="o">/</span><span class="n">search</span>           <span class="c1"># Search jobs with filters</span>
+</span><span data-line="4"><span class="n">GET</span>   <span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">jobs</span><span class="o">/</span><span class="n">mine</span>             <span class="c1"># List user&#39;s jobs (auth required)</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="n">GET</span>   <span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">job</span><span class="o">-</span><span class="n">types</span><span class="o">/</span>            <span class="c1"># List job types</span>
+</span><span data-line="7"><span class="n">GET</span>   <span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">job</span><span class="o">-</span><span class="n">types</span><span class="o">/</span><span class="p">{</span><span class="nb">id</span><span class="p">}</span>        <span class="c1"># Get job type by ID</span>
+</span><span data-line="8">
+</span><span data-line="9"><span class="n">GET</span>   <span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">job</span><span class="o">-</span><span class="n">categories</span><span class="o">/</span>       <span class="c1"># List job categories</span>
+</span><span data-line="10"><span class="n">GET</span>   <span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">job</span><span class="o">-</span><span class="n">categories</span><span class="o">/</span><span class="p">{</span><span class="nb">id</span><span class="p">}</span>   <span class="c1"># Get job category by ID</span>
+</span></pre></div>
+</div>
+</section>
+<section id="events-domain">
+<h3>Events Domain<a class="headerlink" href="#events-domain" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">GET</span>  <span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">events</span><span class="o">/</span>                <span class="c1"># List events</span>
+</span><span data-line="2"><span class="n">GET</span>  <span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">events</span><span class="o">/</span><span class="p">{</span><span class="nb">id</span><span class="p">}</span>            <span class="c1"># Get event by ID</span>
+</span><span data-line="3"><span class="n">GET</span>  <span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">events</span><span class="o">/</span><span class="n">upcoming</span>        <span class="c1"># Get upcoming events</span>
+</span><span data-line="4"><span class="n">GET</span>  <span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">events</span><span class="o">/</span><span class="n">featured</span>        <span class="c1"># Get featured events</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="n">GET</span>  <span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">calendars</span><span class="o">/</span>             <span class="c1"># List calendars</span>
+</span><span data-line="7"><span class="n">GET</span>  <span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">event</span><span class="o">-</span><span class="n">categories</span><span class="o">/</span>      <span class="c1"># List event categories</span>
+</span><span data-line="8"><span class="n">GET</span>  <span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">event</span><span class="o">-</span><span class="n">locations</span><span class="o">/</span>       <span class="c1"># List event locations</span>
+</span><span data-line="9"><span class="n">GET</span>  <span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">event</span><span class="o">-</span><span class="n">occurrences</span><span class="o">/</span>     <span class="c1"># List event occurrences</span>
+</span></pre></div>
+</div>
+</section>
+<section id="search-endpoints">
+<h3>Search Endpoints<a class="headerlink" href="#search-endpoints" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">POST</span> <span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">search</span><span class="o">/</span>                <span class="c1"># Full-text search</span>
+</span><span data-line="2"><span class="n">GET</span>  <span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">search</span><span class="o">/</span><span class="n">autocomplete</span>    <span class="c1"># Autocomplete suggestions</span>
+</span></pre></div>
+</div>
+</section>
+<section id="full-openapi-specification">
+<h3>Full OpenAPI Specification<a class="headerlink" href="#full-openapi-specification" title="Link to this heading">¶</a></h3>
+<p>The complete API specification is available at:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">GET</span> <span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">openapi</span><span class="o">.</span><span class="n">json</span>
+</span></pre></div>
+</div>
+<p>This JSON schema can be used with OpenAPI tools for client generation, testing, and documentation.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="sdks-and-tools">
+<h2>SDKs and Tools<a class="headerlink" href="#sdks-and-tools" title="Link to this heading">¶</a></h2>
+<section id="openapi-specification">
+<h3>OpenAPI Specification<a class="headerlink" href="#openapi-specification" title="Link to this heading">¶</a></h3>
+<p>The OpenAPI 3.0 specification is available at:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">python</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">openapi</span><span class="o">.</span><span class="n">json</span>
+</span></pre></div>
+</div>
+<p>You can use this specification with various tools:</p>
+<ul class="simple">
+<li><p><strong>Postman</strong>: Import the spec for API testing</p></li>
+<li><p><strong>Swagger Codegen</strong>: Generate client SDKs</p></li>
+<li><p><strong>OpenAPI Generator</strong>: Generate clients in 50+ languages</p></li>
+</ul>
+</section>
+<section id="generating-client-sdks">
+<h3>Generating Client SDKs<a class="headerlink" href="#generating-client-sdks" title="Link to this heading">¶</a></h3>
+<section id="python-client-using-openapi-python-client">
+<h4>Python Client (using openapi-python-client)<a class="headerlink" href="#python-client-using-openapi-python-client" title="Link to this heading">¶</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">pip<span class="w"> </span>install<span class="w"> </span>openapi-python-client
+</span><span data-line="2">
+</span><span data-line="3">openapi-python-client<span class="w"> </span>generate<span class="w"> </span><span class="se">\</span>
+</span><span data-line="4"><span class="w">  </span>--url<span class="w"> </span>https://python.org/api/openapi.json<span class="w"> </span><span class="se">\</span>
+</span><span data-line="5"><span class="w">  </span>--output-path<span class="w"> </span>./python-org-client
+</span></pre></div>
+</div>
+</section>
+<section id="typescript-client-using-openapi-typescript">
+<h4>TypeScript Client (using openapi-typescript)<a class="headerlink" href="#typescript-client-using-openapi-typescript" title="Link to this heading">¶</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">npx<span class="w"> </span>openapi-typescript<span class="w"> </span>https://python.org/api/openapi.json<span class="w"> </span><span class="se">\</span>
+</span><span data-line="2"><span class="w">  </span>--output<span class="w"> </span>./types/python-org-api.ts
+</span></pre></div>
+</div>
+</section>
+<section id="go-client-using-oapi-codegen">
+<h4>Go Client (using oapi-codegen)<a class="headerlink" href="#go-client-using-oapi-codegen" title="Link to this heading">¶</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">go<span class="w"> </span>install<span class="w"> </span>github.com/deepmap/oapi-codegen/cmd/oapi-codegen@latest
+</span><span data-line="2">
+</span><span data-line="3">oapi-codegen<span class="w"> </span>-package<span class="w"> </span>pythonorg<span class="w"> </span><span class="se">\</span>
+</span><span data-line="4"><span class="w">  </span>https://python.org/api/openapi.json<span class="w"> </span>&gt;<span class="w"> </span>pythonorg/client.go
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="postman-collection">
+<h3>Postman Collection<a class="headerlink" href="#postman-collection" title="Link to this heading">¶</a></h3>
+<p>A Postman collection is available for quick API exploration:</p>
+<ol class="arabic simple">
+<li><p>Open Postman</p></li>
+<li><p>Click <strong>Import</strong></p></li>
+<li><p>Select <strong>Link</strong> tab</p></li>
+<li><p>Enter: <code class="docutils literal notranslate"><span class="pre">https://python.org/api/openapi.json</span></code></p></li>
+<li><p>Click <strong>Continue</strong> and then <strong>Import</strong></p></li>
+</ol>
+<p>The collection includes all endpoints with example requests.</p>
+</section>
+<section id="testing-with-httpie">
+<h3>Testing with HTTPie<a class="headerlink" href="#testing-with-httpie" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://httpie.io/">HTTPie</a> is a user-friendly command-line HTTP client:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Install</span>
+</span><span data-line="2">pip<span class="w"> </span>install<span class="w"> </span>httpie
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Get latest release</span>
+</span><span data-line="5">http<span class="w"> </span>https://python.org/api/v1/releases/latest
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Search jobs</span>
+</span><span data-line="8">http<span class="w"> </span>POST<span class="w"> </span>https://python.org/api/v1/jobs/search<span class="w"> </span><span class="nv">query</span><span class="o">=</span><span class="s2">&quot;django&quot;</span><span class="w"> </span>limit:<span class="o">=</span><span class="m">10</span>
+</span><span data-line="9">
+</span><span data-line="10"><span class="c1"># Authenticated request</span>
+</span><span data-line="11">http<span class="w"> </span>https://python.org/api/auth/me<span class="w"> </span><span class="s2">&quot;Authorization:Bearer </span><span class="nv">$TOKEN</span><span class="s2">&quot;</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading">¶</a></h2>
+<section id="caching">
+<h3>Caching<a class="headerlink" href="#caching" title="Link to this heading">¶</a></h3>
+<p>The API returns caching headers. Respect <code class="docutils literal notranslate"><span class="pre">Cache-Control</span></code> and <code class="docutils literal notranslate"><span class="pre">ETag</span></code> headers to reduce unnecessary requests:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="c1"># Store ETag from previous request</span>
+</span><span data-line="4"><span class="n">etag</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="5"><span class="n">cached_data</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="k">def</span><span class="w"> </span><span class="nf">get_releases</span><span class="p">():</span>
+</span><span data-line="8">    <span class="k">global</span> <span class="n">etag</span><span class="p">,</span> <span class="n">cached_data</span>
+</span><span data-line="9">
+</span><span data-line="10">    <span class="n">headers</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span data-line="11">    <span class="k">if</span> <span class="n">etag</span><span class="p">:</span>
+</span><span data-line="12">        <span class="n">headers</span><span class="p">[</span><span class="s2">&quot;If-None-Match&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">etag</span>
+</span><span data-line="13">
+</span><span data-line="14">    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+</span><span data-line="15">        <span class="s2">&quot;https://python.org/api/v1/releases&quot;</span><span class="p">,</span>
+</span><span data-line="16">        <span class="n">headers</span><span class="o">=</span><span class="n">headers</span>
+</span><span data-line="17">    <span class="p">)</span>
+</span><span data-line="18">
+</span><span data-line="19">    <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">304</span><span class="p">:</span>
+</span><span data-line="20">        <span class="k">return</span> <span class="n">cached_data</span>  <span class="c1"># Use cached version</span>
+</span><span data-line="21">
+</span><span data-line="22">    <span class="n">etag</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ETag&quot;</span><span class="p">)</span>
+</span><span data-line="23">    <span class="n">cached_data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+</span><span data-line="24">    <span class="k">return</span> <span class="n">cached_data</span>
+</span></pre></div>
+</div>
+</section>
+<section id="request-batching">
+<h3>Request Batching<a class="headerlink" href="#request-batching" title="Link to this heading">¶</a></h3>
+<p>When fetching multiple resources, batch your requests where possible:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Instead of multiple single requests:</span>
+</span><span data-line="2"><span class="c1"># requests.get(&quot;/api/v1/jobs/1&quot;)</span>
+</span><span data-line="3"><span class="c1"># requests.get(&quot;/api/v1/jobs/2&quot;)</span>
+</span><span data-line="4"><span class="c1"># requests.get(&quot;/api/v1/jobs/3&quot;)</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="c1"># Use list endpoint with filtering:</span>
+</span><span data-line="7"><span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+</span><span data-line="8">    <span class="s2">&quot;https://python.org/api/v1/jobs&quot;</span><span class="p">,</span>
+</span><span data-line="9">    <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;limit&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">}</span>
+</span><span data-line="10"><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="error-retry-strategy">
+<h3>Error Retry Strategy<a class="headerlink" href="#error-retry-strategy" title="Link to this heading">¶</a></h3>
+<p>Implement proper retry logic for transient errors:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+</span><span data-line="2"><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">requests.adapters</span><span class="w"> </span><span class="kn">import</span> <span class="n">HTTPAdapter</span>
+</span><span data-line="4"><span class="kn">from</span><span class="w"> </span><span class="nn">urllib3.util.retry</span><span class="w"> </span><span class="kn">import</span> <span class="n">Retry</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="k">def</span><span class="w"> </span><span class="nf">create_session</span><span class="p">():</span>
+</span><span data-line="7"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a requests session with retry logic.&quot;&quot;&quot;</span>
+</span><span data-line="8">    <span class="n">session</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
+</span><span data-line="9">
+</span><span data-line="10">    <span class="n">retry_strategy</span> <span class="o">=</span> <span class="n">Retry</span><span class="p">(</span>
+</span><span data-line="11">        <span class="n">total</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+</span><span data-line="12">        <span class="n">status_forcelist</span><span class="o">=</span><span class="p">[</span><span class="mi">429</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">502</span><span class="p">,</span> <span class="mi">503</span><span class="p">,</span> <span class="mi">504</span><span class="p">],</span>
+</span><span data-line="13">        <span class="n">allowed_methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;HEAD&quot;</span><span class="p">,</span> <span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;OPTIONS&quot;</span><span class="p">],</span>
+</span><span data-line="14">        <span class="n">backoff_factor</span><span class="o">=</span><span class="mi">1</span>
+</span><span data-line="15">    <span class="p">)</span>
+</span><span data-line="16">
+</span><span data-line="17">    <span class="n">adapter</span> <span class="o">=</span> <span class="n">HTTPAdapter</span><span class="p">(</span><span class="n">max_retries</span><span class="o">=</span><span class="n">retry_strategy</span><span class="p">)</span>
+</span><span data-line="18">    <span class="n">session</span><span class="o">.</span><span class="n">mount</span><span class="p">(</span><span class="s2">&quot;https://&quot;</span><span class="p">,</span> <span class="n">adapter</span><span class="p">)</span>
+</span><span data-line="19">    <span class="n">session</span><span class="o">.</span><span class="n">mount</span><span class="p">(</span><span class="s2">&quot;http://&quot;</span><span class="p">,</span> <span class="n">adapter</span><span class="p">)</span>
+</span><span data-line="20">
+</span><span data-line="21">    <span class="k">return</span> <span class="n">session</span>
+</span><span data-line="22">
+</span><span data-line="23"><span class="c1"># Usage</span>
+</span><span data-line="24"><span class="n">session</span> <span class="o">=</span> <span class="n">create_session</span><span class="p">()</span>
+</span><span data-line="25"><span class="n">response</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;https://python.org/api/v1/releases&quot;</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Explore the API</strong>: Visit <code class="docutils literal notranslate"><span class="pre">/api/</span></code> to use the interactive Scalar documentation</p></li>
+<li><p><strong>Read Authentication Guide</strong>: See <a class="reference internal" href="api-authentication.html"><span class="std std-doc">API Authentication</span></a> for detailed auth flows</p></li>
+<li><p><strong>Check Rate Limits</strong>: Review the <a class="reference internal" href="architecture/RATE_LIMITING_QUICK_REF.html"><span class="std std-doc">Rate Limiting Quick Reference</span></a></p></li>
+<li><p><strong>Generate a Client</strong>: Use the OpenAPI spec to generate a client SDK for your language</p></li>
+<li><p><strong>Report Issues</strong>: Found a bug? Report it at <a class="reference external" href="https://github.com/python/pythondotorg/issues">GitHub Issues</a></p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="support">
+<h2>Support<a class="headerlink" href="#support" title="Link to this heading">¶</a></h2>
+<p>For API-related questions and issues:</p>
+<ul class="simple">
+<li><p><strong>GitHub Issues</strong>: <a class="reference external" href="https://github.com/python/pythondotorg/issues">https://github.com/python/pythondotorg/issues</a></p></li>
+<li><p><strong>Security Issues</strong>: <a class="reference external" href="mailto:security&#37;&#52;&#48;python&#46;org">security<span>&#64;</span>python<span>&#46;</span>org</a></p></li>
+<li><p><strong>General Questions</strong>: <a class="reference external" href="https://discuss.python.org/">https://discuss.python.org/</a></p></li>
+</ul>
+<hr class="docutils" />
+<p><em>Last updated: 2025-11-29</em></p>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Jacob Coffee</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+<a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+  <iconify-icon icon="simple-icons:github"></iconify-icon>
+</a></div>
+    </div>
+  </div>
+</footer>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=30646c52"></script>
+      <script src="_static/design-tabs.js?v=f930bc37"></script>
+      <script src="_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="blue" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>pydotorg.domains.sponsors.services - litestar-pydotorg</title><link rel="index" title="Index" href="../../../../genindex.html" /><link rel="search" title="Search" href="../../../../search.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/shibuya.css?v=14737038" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link media="print" rel="stylesheet" type="text/css" href="../../../../_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css?v=513f0650" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="pydotorg.domains.sponsors.services"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../../../../index.html">
+      
+      
+      <strong>litestar-pydotorg</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"><ul><li class="link">
+          <a href="https://litestar.dev/">
+            <span>Litestar</span></a>
+        </li><li class="link">
+          <a href="https://python.org/">
+            <span>Python.org</span></a>
+        </li></ul></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../../../../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials">
+  <a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../getting-started/index.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../getting-started/installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../getting-started/quickstart.html">Quickstart</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../guides/index.html">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/development.html">Development Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/contributing.html">Contribution Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/testing.html">Testing Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/debugging.html">Debugging Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/api-usage.html">API Usage Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/authentication.html">Authentication Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/feature-flags.html">Feature Flags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/configuration.html">Configuration Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/deployment.html">Deployment Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/docker.html">Docker Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/troubleshooting.html">Troubleshooting Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cookbook/index.html">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../cookbook/domain-patterns.html">Domain Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../cookbook/authentication-recipes.html">Authentication Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../cookbook/database-recipes.html">Database Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../cookbook/testing-recipes.html">Testing Recipes</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/index.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/core/index.html">Core Infrastructure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/auth.html">Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/cache.html">Caching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/database.html">Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/email.html">Email</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/exceptions.html">Exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/features.html">Feature Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/feeds.html">RSS/Atom Feeds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/ical.html">iCalendar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/middleware.html">Middleware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/openapi.html">OpenAPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/ratelimit.html">Rate Limiting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/security.html">Security</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/core/worker.html">Background Worker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/domains/index.html">Domain Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/about.html">About</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/admin.html">Admin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/banners.html">banners</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/blogs.html">blogs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/codesamples.html">Code Samples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/community.html">community</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/docs.html">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/downloads.html">downloads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/events.html">events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/jobs.html">jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/mailing.html">Mailing Lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/minutes.html">Minutes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/nominations.html">Nominations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/pages.html">pages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/sponsors.html">sponsors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/sqladmin.html">SQLAdmin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/successstories.html">Success Stories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/users.html">users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/domains/work_groups.html">Work Groups</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/lib.html">Library Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/tasks.html">Background Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/config.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/main.html">Application Entry Point</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../architecture/index.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/ARCHITECTURE.html">Litestar Python.org Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/DATABASE_SCHEMA.html">Database Schema Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/DOMAIN_MODELS.html">Domain Models Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/QUICK_START.html">Litestar Python.org Quick Start Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/API_TAGS_INDEX.html">API Tags Documentation Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/RATE_LIMITING_ARCHITECTURE.html">Rate Limiting Architecture Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/adr/001-litestar-framework.html">ADR-001: Use Litestar as Web Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../architecture/adr/002-saq-background-tasks.html">ADR-002: Use SAQ for Background Task Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../../../../index.html"><span itemprop="name">litestar-pydotorg</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../../../index.html"><span itemprop="name">Module code</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="2" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">pydotorg.domains.sponsors.services</strong>
+        <meta itemprop="position" content="3" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue dark-code" role="main">
+          <h1>Source code for pydotorg.domains.sponsors.services</h1><div class="highlight"><pre>
+<span></span><span data-line="1"><span class="sd">&quot;&quot;&quot;Sponsors domain services for business logic.&quot;&quot;&quot;</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
+</span><span data-line="6"><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">UTC</span>
+</span><span data-line="7"><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
+</span><span data-line="8">
+</span><span data-line="9"><span class="kn">from</span><span class="w"> </span><span class="nn">advanced_alchemy.service</span><span class="w"> </span><span class="kn">import</span> <span class="n">SQLAlchemyAsyncRepositoryService</span>
+</span><span data-line="10">
+</span><span data-line="11"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.domains.sponsors.models</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+</span><span data-line="12">    <span class="n">Contract</span><span class="p">,</span>
+</span><span data-line="13">    <span class="n">ContractStatus</span><span class="p">,</span>
+</span><span data-line="14">    <span class="n">LegalClause</span><span class="p">,</span>
+</span><span data-line="15">    <span class="n">Sponsor</span><span class="p">,</span>
+</span><span data-line="16">    <span class="n">Sponsorship</span><span class="p">,</span>
+</span><span data-line="17">    <span class="n">SponsorshipLevel</span><span class="p">,</span>
+</span><span data-line="18">    <span class="n">SponsorshipStatus</span><span class="p">,</span>
+</span><span data-line="19"><span class="p">)</span>
+</span><span data-line="20"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.domains.sponsors.repositories</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+</span><span data-line="21">    <span class="n">ContractRepository</span><span class="p">,</span>
+</span><span data-line="22">    <span class="n">LegalClauseRepository</span><span class="p">,</span>
+</span><span data-line="23">    <span class="n">SponsorRepository</span><span class="p">,</span>
+</span><span data-line="24">    <span class="n">SponsorshipLevelRepository</span><span class="p">,</span>
+</span><span data-line="25">    <span class="n">SponsorshipRepository</span><span class="p">,</span>
+</span><span data-line="26"><span class="p">)</span>
+</span><span data-line="27">
+</span><span data-line="28"><span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+</span><span data-line="29">    <span class="kn">from</span><span class="w"> </span><span class="nn">uuid</span><span class="w"> </span><span class="kn">import</span> <span class="n">UUID</span>
+</span><span data-line="30">
+</span><span data-line="31">    <span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.domains.sponsors.schemas</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+</span><span data-line="32">        <span class="n">SponsorCreate</span><span class="p">,</span>
+</span><span data-line="33">        <span class="n">SponsorshipCreate</span><span class="p">,</span>
+</span><span data-line="34">        <span class="n">SponsorshipLevelCreate</span><span class="p">,</span>
+</span><span data-line="35">    <span class="p">)</span>
+</span><span data-line="36">
+</span><span data-line="37">
+<div class="viewcode-block" id="InvalidContractStatusError">
+<a class="viewcode-back" href="../../../../api/domains/sponsors.html#pydotorg.domains.sponsors.InvalidContractStatusError">[docs]</a>
+</span><span data-line="38"><span class="k">class</span><span class="w"> </span><span class="nc">InvalidContractStatusError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+</span><span data-line="39"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Raised when a contract status transition is not valid.&quot;&quot;&quot;</span></div>
+
+</span><span data-line="40">
+</span><span data-line="41">
+<div class="viewcode-block" id="SponsorshipLevelService">
+<a class="viewcode-back" href="../../../../api/domains/sponsors.html#pydotorg.domains.sponsors.SponsorshipLevelService">[docs]</a>
+</span><span data-line="42"><span class="k">class</span><span class="w"> </span><span class="nc">SponsorshipLevelService</span><span class="p">(</span><span class="n">SQLAlchemyAsyncRepositoryService</span><span class="p">[</span><span class="n">SponsorshipLevel</span><span class="p">]):</span>
+</span><span data-line="43"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Service for SponsorshipLevel business logic.&quot;&quot;&quot;</span>
+</span><span data-line="44">
+</span><span data-line="45">    <span class="n">repository_type</span> <span class="o">=</span> <span class="n">SponsorshipLevelRepository</span>
+</span><span data-line="46">    <span class="n">match_fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;slug&quot;</span><span class="p">]</span>
+</span><span data-line="47">
+<div class="viewcode-block" id="SponsorshipLevelService.create_level">
+<a class="viewcode-back" href="../../../../api/domains/sponsors.html#pydotorg.domains.sponsors.SponsorshipLevelService.create_level">[docs]</a>
+</span><span data-line="48">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_level</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">SponsorshipLevelCreate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SponsorshipLevel</span><span class="p">:</span>
+</span><span data-line="49"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new sponsorship level.</span>
+</span><span data-line="50">
+</span><span data-line="51"><span class="sd">        Args:</span>
+</span><span data-line="52"><span class="sd">            data: Sponsorship level creation data.</span>
+</span><span data-line="53">
+</span><span data-line="54"><span class="sd">        Returns:</span>
+</span><span data-line="55"><span class="sd">            The created sponsorship level instance.</span>
+</span><span data-line="56">
+</span><span data-line="57"><span class="sd">        Raises:</span>
+</span><span data-line="58"><span class="sd">            ValueError: If slug already exists.</span>
+</span><span data-line="59"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="60">        <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">slug</span> <span class="ow">and</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">repository</span><span class="o">.</span><span class="n">exists_by_slug</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">slug</span><span class="p">):</span>
+</span><span data-line="61">            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Sponsorship level with slug </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">slug</span><span class="si">}</span><span class="s2"> already exists&quot;</span>
+</span><span data-line="62">            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</span><span data-line="63">
+</span><span data-line="64">        <span class="n">level_data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">model_dump</span><span class="p">()</span>
+</span><span data-line="65">        <span class="k">if</span> <span class="ow">not</span> <span class="n">level_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;slug&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">level_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">):</span>
+</span><span data-line="66">            <span class="n">level_data</span><span class="p">[</span><span class="s2">&quot;slug&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">SponsorshipLevel</span><span class="o">.</span><span class="n">generate_slug</span><span class="p">(</span><span class="n">level_data</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">])</span>
+</span><span data-line="67">
+</span><span data-line="68">        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">level_data</span><span class="p">)</span></div>
+
+</span><span data-line="69">
+<div class="viewcode-block" id="SponsorshipLevelService.get_by_slug">
+<a class="viewcode-back" href="../../../../api/domains/sponsors.html#pydotorg.domains.sponsors.SponsorshipLevelService.get_by_slug">[docs]</a>
+</span><span data-line="70">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_by_slug</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slug</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SponsorshipLevel</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="71"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a sponsorship level by its slug.</span>
+</span><span data-line="72">
+</span><span data-line="73"><span class="sd">        Args:</span>
+</span><span data-line="74"><span class="sd">            slug: The slug to search for.</span>
+</span><span data-line="75">
+</span><span data-line="76"><span class="sd">        Returns:</span>
+</span><span data-line="77"><span class="sd">            The sponsorship level if found, None otherwise.</span>
+</span><span data-line="78"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="79">        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">repository</span><span class="o">.</span><span class="n">get_by_slug</span><span class="p">(</span><span class="n">slug</span><span class="p">)</span></div>
+
+</span><span data-line="80">
+<div class="viewcode-block" id="SponsorshipLevelService.list_ordered">
+<a class="viewcode-back" href="../../../../api/domains/sponsors.html#pydotorg.domains.sponsors.SponsorshipLevelService.list_ordered">[docs]</a>
+</span><span data-line="81">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_ordered</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">SponsorshipLevel</span><span class="p">]:</span>
+</span><span data-line="82"><span class="w">        </span><span class="sd">&quot;&quot;&quot;List sponsorship levels ordered by order field.</span>
+</span><span data-line="83">
+</span><span data-line="84"><span class="sd">        Args:</span>
+</span><span data-line="85"><span class="sd">            limit: Maximum number of levels to return.</span>
+</span><span data-line="86"><span class="sd">            offset: Number of levels to skip.</span>
+</span><span data-line="87">
+</span><span data-line="88"><span class="sd">        Returns:</span>
+</span><span data-line="89"><span class="sd">            List of sponsorship levels ordered by order field.</span>
+</span><span data-line="90"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="91">        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">repository</span><span class="o">.</span><span class="n">list_ordered</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="n">limit</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">)</span></div>
+</div>
+
+</span><span data-line="92">
+</span><span data-line="93">
+<div class="viewcode-block" id="SponsorService">
+<a class="viewcode-back" href="../../../../api/domains/sponsors.html#pydotorg.domains.sponsors.SponsorService">[docs]</a>
+</span><span data-line="94"><span class="k">class</span><span class="w"> </span><span class="nc">SponsorService</span><span class="p">(</span><span class="n">SQLAlchemyAsyncRepositoryService</span><span class="p">[</span><span class="n">Sponsor</span><span class="p">]):</span>
+</span><span data-line="95"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Service for Sponsor business logic.&quot;&quot;&quot;</span>
+</span><span data-line="96">
+</span><span data-line="97">    <span class="n">repository_type</span> <span class="o">=</span> <span class="n">SponsorRepository</span>
+</span><span data-line="98">    <span class="n">match_fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;slug&quot;</span><span class="p">]</span>
+</span><span data-line="99">
+<div class="viewcode-block" id="SponsorService.create_sponsor">
+<a class="viewcode-back" href="../../../../api/domains/sponsors.html#pydotorg.domains.sponsors.SponsorService.create_sponsor">[docs]</a>
+</span><span data-line="100">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_sponsor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">SponsorCreate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sponsor</span><span class="p">:</span>
+</span><span data-line="101"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new sponsor.</span>
+</span><span data-line="102">
+</span><span data-line="103"><span class="sd">        Args:</span>
+</span><span data-line="104"><span class="sd">            data: Sponsor creation data.</span>
+</span><span data-line="105">
+</span><span data-line="106"><span class="sd">        Returns:</span>
+</span><span data-line="107"><span class="sd">            The created sponsor instance.</span>
+</span><span data-line="108">
+</span><span data-line="109"><span class="sd">        Raises:</span>
+</span><span data-line="110"><span class="sd">            ValueError: If slug already exists.</span>
+</span><span data-line="111"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="112">        <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">slug</span> <span class="ow">and</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">repository</span><span class="o">.</span><span class="n">exists_by_slug</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">slug</span><span class="p">):</span>
+</span><span data-line="113">            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Sponsor with slug </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">slug</span><span class="si">}</span><span class="s2"> already exists&quot;</span>
+</span><span data-line="114">            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</span><span data-line="115">
+</span><span data-line="116">        <span class="n">sponsor_data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">model_dump</span><span class="p">()</span>
+</span><span data-line="117">        <span class="k">if</span> <span class="ow">not</span> <span class="n">sponsor_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;slug&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">sponsor_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">):</span>
+</span><span data-line="118">            <span class="n">sponsor_data</span><span class="p">[</span><span class="s2">&quot;slug&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Sponsor</span><span class="o">.</span><span class="n">generate_slug</span><span class="p">(</span><span class="n">sponsor_data</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">])</span>
+</span><span data-line="119">
+</span><span data-line="120">        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">sponsor_data</span><span class="p">)</span></div>
+
+</span><span data-line="121">
+<div class="viewcode-block" id="SponsorService.get_by_slug">
+<a class="viewcode-back" href="../../../../api/domains/sponsors.html#pydotorg.domains.sponsors.SponsorService.get_by_slug">[docs]</a>
+</span><span data-line="122">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_by_slug</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slug</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sponsor</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="123"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a sponsor by its slug.</span>
+</span><span data-line="124">
+</span><span data-line="125"><span class="sd">        Args:</span>
+</span><span data-line="126"><span class="sd">            slug: The slug to search for.</span>
+</span><span data-line="127">
+</span><span data-line="128"><span class="sd">        Returns:</span>
+</span><span data-line="129"><span class="sd">            The sponsor if found, None otherwise.</span>
+</span><span data-line="130"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="131">        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">repository</span><span class="o">.</span><span class="n">get_by_slug</span><span class="p">(</span><span class="n">slug</span><span class="p">)</span></div>
+
+</span><span data-line="132">
+<div class="viewcode-block" id="SponsorService.list_with_active_sponsorships">
+<a class="viewcode-back" href="../../../../api/domains/sponsors.html#pydotorg.domains.sponsors.SponsorService.list_with_active_sponsorships">[docs]</a>
+</span><span data-line="133">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_with_active_sponsorships</span><span class="p">(</span>
+</span><span data-line="134">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="135">        <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+</span><span data-line="136">        <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span><span data-line="137">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Sponsor</span><span class="p">]:</span>
+</span><span data-line="138"><span class="w">        </span><span class="sd">&quot;&quot;&quot;List sponsors with active sponsorships.</span>
+</span><span data-line="139">
+</span><span data-line="140"><span class="sd">        Args:</span>
+</span><span data-line="141"><span class="sd">            limit: Maximum number of sponsors to return.</span>
+</span><span data-line="142"><span class="sd">            offset: Number of sponsors to skip.</span>
+</span><span data-line="143">
+</span><span data-line="144"><span class="sd">        Returns:</span>
+</span><span data-line="145"><span class="sd">            List of sponsors with active sponsorships.</span>
+</span><span data-line="146"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="147">        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">repository</span><span class="o">.</span><span class="n">list_with_active_sponsorships</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="n">limit</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">)</span></div>
+</div>
+
+</span><span data-line="148">
+</span><span data-line="149">
+<div class="viewcode-block" id="SponsorshipService">
+<a class="viewcode-back" href="../../../../api/domains/sponsors.html#pydotorg.domains.sponsors.SponsorshipService">[docs]</a>
+</span><span data-line="150"><span class="k">class</span><span class="w"> </span><span class="nc">SponsorshipService</span><span class="p">(</span><span class="n">SQLAlchemyAsyncRepositoryService</span><span class="p">[</span><span class="n">Sponsorship</span><span class="p">]):</span>
+</span><span data-line="151"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Service for Sponsorship business logic.&quot;&quot;&quot;</span>
+</span><span data-line="152">
+</span><span data-line="153">    <span class="n">repository_type</span> <span class="o">=</span> <span class="n">SponsorshipRepository</span>
+</span><span data-line="154">    <span class="n">match_fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;sponsor_id&quot;</span><span class="p">,</span> <span class="s2">&quot;level_id&quot;</span><span class="p">]</span>
+</span><span data-line="155">
+<div class="viewcode-block" id="SponsorshipService.create_sponsorship">
+<a class="viewcode-back" href="../../../../api/domains/sponsors.html#pydotorg.domains.sponsors.SponsorshipService.create_sponsorship">[docs]</a>
+</span><span data-line="156">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_sponsorship</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">SponsorshipCreate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sponsorship</span><span class="p">:</span>
+</span><span data-line="157"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new sponsorship.</span>
+</span><span data-line="158">
+</span><span data-line="159"><span class="sd">        Args:</span>
+</span><span data-line="160"><span class="sd">            data: Sponsorship creation data.</span>
+</span><span data-line="161">
+</span><span data-line="162"><span class="sd">        Returns:</span>
+</span><span data-line="163"><span class="sd">            The created sponsorship instance.</span>
+</span><span data-line="164"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="165">        <span class="n">sponsorship_data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">model_dump</span><span class="p">()</span>
+</span><span data-line="166">        <span class="k">if</span> <span class="ow">not</span> <span class="n">sponsorship_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;applied_on&quot;</span><span class="p">):</span>
+</span><span data-line="167">            <span class="n">sponsorship_data</span><span class="p">[</span><span class="s2">&quot;applied_on&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="n">UTC</span><span class="p">)</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
+</span><span data-line="168">
+</span><span data-line="169">        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">sponsorship_data</span><span class="p">)</span></div>
+
+</span><span data-line="170">
+<div class="viewcode-block" id="SponsorshipService.list_by_sponsor_id">
+<a class="viewcode-back" href="../../../../api/domains/sponsors.html#pydotorg.domains.sponsors.SponsorshipService.list_by_sponsor_id">[docs]</a>
+</span><span data-line="171">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_by_sponsor_id</span><span class="p">(</span>
+</span><span data-line="172">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="173">        <span class="n">sponsor_id</span><span class="p">:</span> <span class="n">UUID</span><span class="p">,</span>
+</span><span data-line="174">        <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+</span><span data-line="175">        <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span><span data-line="176">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Sponsorship</span><span class="p">]:</span>
+</span><span data-line="177"><span class="w">        </span><span class="sd">&quot;&quot;&quot;List sponsorships for a specific sponsor.</span>
+</span><span data-line="178">
+</span><span data-line="179"><span class="sd">        Args:</span>
+</span><span data-line="180"><span class="sd">            sponsor_id: The sponsor ID to filter by.</span>
+</span><span data-line="181"><span class="sd">            limit: Maximum number of sponsorships to return.</span>
+</span><span data-line="182"><span class="sd">            offset: Number of sponsorships to skip.</span>
+</span><span data-line="183">
+</span><span data-line="184"><span class="sd">        Returns:</span>
+</span><span data-line="185"><span class="sd">            List of sponsorships for the sponsor.</span>
+</span><span data-line="186"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="187">        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">repository</span><span class="o">.</span><span class="n">list_by_sponsor_id</span><span class="p">(</span><span class="n">sponsor_id</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="n">limit</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">)</span></div>
+
+</span><span data-line="188">
+<div class="viewcode-block" id="SponsorshipService.list_by_level_id">
+<a class="viewcode-back" href="../../../../api/domains/sponsors.html#pydotorg.domains.sponsors.SponsorshipService.list_by_level_id">[docs]</a>
+</span><span data-line="189">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_by_level_id</span><span class="p">(</span>
+</span><span data-line="190">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="191">        <span class="n">level_id</span><span class="p">:</span> <span class="n">UUID</span><span class="p">,</span>
+</span><span data-line="192">        <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+</span><span data-line="193">        <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span><span data-line="194">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Sponsorship</span><span class="p">]:</span>
+</span><span data-line="195"><span class="w">        </span><span class="sd">&quot;&quot;&quot;List sponsorships for a specific level.</span>
+</span><span data-line="196">
+</span><span data-line="197"><span class="sd">        Args:</span>
+</span><span data-line="198"><span class="sd">            level_id: The level ID to filter by.</span>
+</span><span data-line="199"><span class="sd">            limit: Maximum number of sponsorships to return.</span>
+</span><span data-line="200"><span class="sd">            offset: Number of sponsorships to skip.</span>
+</span><span data-line="201">
+</span><span data-line="202"><span class="sd">        Returns:</span>
+</span><span data-line="203"><span class="sd">            List of sponsorships for the level.</span>
+</span><span data-line="204"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="205">        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">repository</span><span class="o">.</span><span class="n">list_by_level_id</span><span class="p">(</span><span class="n">level_id</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="n">limit</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">)</span></div>
+
+</span><span data-line="206">
+<div class="viewcode-block" id="SponsorshipService.list_by_status">
+<a class="viewcode-back" href="../../../../api/domains/sponsors.html#pydotorg.domains.sponsors.SponsorshipService.list_by_status">[docs]</a>
+</span><span data-line="207">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_by_status</span><span class="p">(</span>
+</span><span data-line="208">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="209">        <span class="n">status</span><span class="p">:</span> <span class="n">SponsorshipStatus</span><span class="p">,</span>
+</span><span data-line="210">        <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+</span><span data-line="211">        <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span><span data-line="212">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Sponsorship</span><span class="p">]:</span>
+</span><span data-line="213"><span class="w">        </span><span class="sd">&quot;&quot;&quot;List sponsorships by status.</span>
+</span><span data-line="214">
+</span><span data-line="215"><span class="sd">        Args:</span>
+</span><span data-line="216"><span class="sd">            status: The status to filter by.</span>
+</span><span data-line="217"><span class="sd">            limit: Maximum number of sponsorships to return.</span>
+</span><span data-line="218"><span class="sd">            offset: Number of sponsorships to skip.</span>
+</span><span data-line="219">
+</span><span data-line="220"><span class="sd">        Returns:</span>
+</span><span data-line="221"><span class="sd">            List of sponsorships with the given status.</span>
+</span><span data-line="222"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="223">        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">repository</span><span class="o">.</span><span class="n">list_by_status</span><span class="p">(</span><span class="n">status</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="n">limit</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">)</span></div>
+
+</span><span data-line="224">
+<div class="viewcode-block" id="SponsorshipService.list_active">
+<a class="viewcode-back" href="../../../../api/domains/sponsors.html#pydotorg.domains.sponsors.SponsorshipService.list_active">[docs]</a>
+</span><span data-line="225">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_active</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Sponsorship</span><span class="p">]:</span>
+</span><span data-line="226"><span class="w">        </span><span class="sd">&quot;&quot;&quot;List active sponsorships.</span>
+</span><span data-line="227">
+</span><span data-line="228"><span class="sd">        Args:</span>
+</span><span data-line="229"><span class="sd">            limit: Maximum number of sponsorships to return.</span>
+</span><span data-line="230"><span class="sd">            offset: Number of sponsorships to skip.</span>
+</span><span data-line="231">
+</span><span data-line="232"><span class="sd">        Returns:</span>
+</span><span data-line="233"><span class="sd">            List of active sponsorships.</span>
+</span><span data-line="234"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="235">        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">repository</span><span class="o">.</span><span class="n">list_active</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="n">limit</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">)</span></div>
+
+</span><span data-line="236">
+<div class="viewcode-block" id="SponsorshipService.approve">
+<a class="viewcode-back" href="../../../../api/domains/sponsors.html#pydotorg.domains.sponsors.SponsorshipService.approve">[docs]</a>
+</span><span data-line="237">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">approve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sponsorship_id</span><span class="p">:</span> <span class="n">UUID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sponsorship</span><span class="p">:</span>
+</span><span data-line="238"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Approve a sponsorship.</span>
+</span><span data-line="239">
+</span><span data-line="240"><span class="sd">        Args:</span>
+</span><span data-line="241"><span class="sd">            sponsorship_id: The ID of the sponsorship to approve.</span>
+</span><span data-line="242">
+</span><span data-line="243"><span class="sd">        Returns:</span>
+</span><span data-line="244"><span class="sd">            The updated sponsorship instance.</span>
+</span><span data-line="245"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="246">        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+</span><span data-line="247">            <span class="n">sponsorship_id</span><span class="p">,</span>
+</span><span data-line="248">            <span class="p">{</span>
+</span><span data-line="249">                <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="n">SponsorshipStatus</span><span class="o">.</span><span class="n">APPROVED</span><span class="p">,</span>
+</span><span data-line="250">                <span class="s2">&quot;approved_on&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="n">UTC</span><span class="p">)</span><span class="o">.</span><span class="n">date</span><span class="p">(),</span>
+</span><span data-line="251">            <span class="p">},</span>
+</span><span data-line="252">        <span class="p">)</span></div>
+
+</span><span data-line="253">
+<div class="viewcode-block" id="SponsorshipService.reject">
+<a class="viewcode-back" href="../../../../api/domains/sponsors.html#pydotorg.domains.sponsors.SponsorshipService.reject">[docs]</a>
+</span><span data-line="254">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">reject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sponsorship_id</span><span class="p">:</span> <span class="n">UUID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sponsorship</span><span class="p">:</span>
+</span><span data-line="255"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Reject a sponsorship.</span>
+</span><span data-line="256">
+</span><span data-line="257"><span class="sd">        Args:</span>
+</span><span data-line="258"><span class="sd">            sponsorship_id: The ID of the sponsorship to reject.</span>
+</span><span data-line="259">
+</span><span data-line="260"><span class="sd">        Returns:</span>
+</span><span data-line="261"><span class="sd">            The updated sponsorship instance.</span>
+</span><span data-line="262"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="263">        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+</span><span data-line="264">            <span class="n">sponsorship_id</span><span class="p">,</span>
+</span><span data-line="265">            <span class="p">{</span>
+</span><span data-line="266">                <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="n">SponsorshipStatus</span><span class="o">.</span><span class="n">REJECTED</span><span class="p">,</span>
+</span><span data-line="267">                <span class="s2">&quot;rejected_on&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="n">UTC</span><span class="p">)</span><span class="o">.</span><span class="n">date</span><span class="p">(),</span>
+</span><span data-line="268">            <span class="p">},</span>
+</span><span data-line="269">        <span class="p">)</span></div>
+
+</span><span data-line="270">
+<div class="viewcode-block" id="SponsorshipService.finalize">
+<a class="viewcode-back" href="../../../../api/domains/sponsors.html#pydotorg.domains.sponsors.SponsorshipService.finalize">[docs]</a>
+</span><span data-line="271">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">finalize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sponsorship_id</span><span class="p">:</span> <span class="n">UUID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sponsorship</span><span class="p">:</span>
+</span><span data-line="272"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Finalize a sponsorship.</span>
+</span><span data-line="273">
+</span><span data-line="274"><span class="sd">        Args:</span>
+</span><span data-line="275"><span class="sd">            sponsorship_id: The ID of the sponsorship to finalize.</span>
+</span><span data-line="276">
+</span><span data-line="277"><span class="sd">        Returns:</span>
+</span><span data-line="278"><span class="sd">            The updated sponsorship instance.</span>
+</span><span data-line="279"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="280">        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+</span><span data-line="281">            <span class="n">sponsorship_id</span><span class="p">,</span>
+</span><span data-line="282">            <span class="p">{</span>
+</span><span data-line="283">                <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="n">SponsorshipStatus</span><span class="o">.</span><span class="n">FINALIZED</span><span class="p">,</span>
+</span><span data-line="284">                <span class="s2">&quot;finalized_on&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="n">UTC</span><span class="p">)</span><span class="o">.</span><span class="n">date</span><span class="p">(),</span>
+</span><span data-line="285">            <span class="p">},</span>
+</span><span data-line="286">        <span class="p">)</span></div>
+
+</span><span data-line="287">
+<div class="viewcode-block" id="SponsorshipService.approve_with_renewal">
+<a class="viewcode-back" href="../../../../api/domains/sponsors.html#pydotorg.domains.sponsors.SponsorshipService.approve_with_renewal">[docs]</a>
+</span><span data-line="288">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">approve_with_renewal</span><span class="p">(</span>
+</span><span data-line="289">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="290">        <span class="n">sponsorship_id</span><span class="p">:</span> <span class="n">UUID</span><span class="p">,</span>
+</span><span data-line="291">        <span class="n">start_date</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">,</span>
+</span><span data-line="292">        <span class="n">end_date</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">,</span>
+</span><span data-line="293">        <span class="n">sponsorship_fee</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span data-line="294">        <span class="o">*</span><span class="p">,</span>
+</span><span data-line="295">        <span class="n">is_renewal</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+</span><span data-line="296">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sponsorship</span><span class="p">:</span>
+</span><span data-line="297"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Approve a sponsorship with full approval data.</span>
+</span><span data-line="298">
+</span><span data-line="299"><span class="sd">        Args:</span>
+</span><span data-line="300"><span class="sd">            sponsorship_id: The ID of the sponsorship to approve.</span>
+</span><span data-line="301"><span class="sd">            start_date: The sponsorship start date.</span>
+</span><span data-line="302"><span class="sd">            end_date: The sponsorship end date.</span>
+</span><span data-line="303"><span class="sd">            sponsorship_fee: Optional sponsorship fee override.</span>
+</span><span data-line="304"><span class="sd">            is_renewal: Whether this is a renewal of a previous sponsorship.</span>
+</span><span data-line="305">
+</span><span data-line="306"><span class="sd">        Returns:</span>
+</span><span data-line="307"><span class="sd">            The updated sponsorship instance.</span>
+</span><span data-line="308"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="309">        <span class="n">update_data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">bool</span> <span class="o">|</span> <span class="n">SponsorshipStatus</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+</span><span data-line="310">            <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="n">SponsorshipStatus</span><span class="o">.</span><span class="n">APPROVED</span><span class="p">,</span>
+</span><span data-line="311">            <span class="s2">&quot;approved_on&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="n">UTC</span><span class="p">)</span><span class="o">.</span><span class="n">date</span><span class="p">(),</span>
+</span><span data-line="312">            <span class="s2">&quot;start_date&quot;</span><span class="p">:</span> <span class="n">start_date</span><span class="p">,</span>
+</span><span data-line="313">            <span class="s2">&quot;end_date&quot;</span><span class="p">:</span> <span class="n">end_date</span><span class="p">,</span>
+</span><span data-line="314">            <span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="n">start_date</span><span class="o">.</span><span class="n">year</span><span class="p">,</span>
+</span><span data-line="315">            <span class="s2">&quot;renewal&quot;</span><span class="p">:</span> <span class="n">is_renewal</span><span class="p">,</span>
+</span><span data-line="316">        <span class="p">}</span>
+</span><span data-line="317">        <span class="k">if</span> <span class="n">sponsorship_fee</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="318">            <span class="n">update_data</span><span class="p">[</span><span class="s2">&quot;sponsorship_fee&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sponsorship_fee</span>
+</span><span data-line="319">
+</span><span data-line="320">        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">update_data</span><span class="p">,</span> <span class="n">item_id</span><span class="o">=</span><span class="n">sponsorship_id</span><span class="p">)</span></div>
+
+</span><span data-line="321">
+<div class="viewcode-block" id="SponsorshipService.get_previous_sponsorship">
+<a class="viewcode-back" href="../../../../api/domains/sponsors.html#pydotorg.domains.sponsors.SponsorshipService.get_previous_sponsorship">[docs]</a>
+</span><span data-line="322">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_previous_sponsorship</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sponsorship</span><span class="p">:</span> <span class="n">Sponsorship</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sponsorship</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="323"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the previous sponsorship for the same sponsor.</span>
+</span><span data-line="324">
+</span><span data-line="325"><span class="sd">        Used to determine previous effective date for renewal contracts.</span>
+</span><span data-line="326">
+</span><span data-line="327"><span class="sd">        Args:</span>
+</span><span data-line="328"><span class="sd">            sponsorship: The current sponsorship.</span>
+</span><span data-line="329">
+</span><span data-line="330"><span class="sd">        Returns:</span>
+</span><span data-line="331"><span class="sd">            The previous sponsorship if found, None otherwise.</span>
+</span><span data-line="332"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="333">        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">repository</span><span class="o">.</span><span class="n">get_previous_for_sponsor</span><span class="p">(</span>
+</span><span data-line="334">            <span class="n">sponsor_id</span><span class="o">=</span><span class="n">sponsorship</span><span class="o">.</span><span class="n">sponsor_id</span><span class="p">,</span>
+</span><span data-line="335">            <span class="n">current_year</span><span class="o">=</span><span class="n">sponsorship</span><span class="o">.</span><span class="n">year</span><span class="p">,</span>
+</span><span data-line="336">        <span class="p">)</span></div>
+
+</span><span data-line="337">
+<div class="viewcode-block" id="SponsorshipService.list_expiring_soon">
+<a class="viewcode-back" href="../../../../api/domains/sponsors.html#pydotorg.domains.sponsors.SponsorshipService.list_expiring_soon">[docs]</a>
+</span><span data-line="338">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_expiring_soon</span><span class="p">(</span>
+</span><span data-line="339">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="340">        <span class="n">days</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">90</span><span class="p">,</span>
+</span><span data-line="341">        <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+</span><span data-line="342">        <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span><span data-line="343">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Sponsorship</span><span class="p">]:</span>
+</span><span data-line="344"><span class="w">        </span><span class="sd">&quot;&quot;&quot;List sponsorships expiring within the given number of days.</span>
+</span><span data-line="345">
+</span><span data-line="346"><span class="sd">        Useful for sending renewal reminders.</span>
+</span><span data-line="347">
+</span><span data-line="348"><span class="sd">        Args:</span>
+</span><span data-line="349"><span class="sd">            days: Number of days until expiration.</span>
+</span><span data-line="350"><span class="sd">            limit: Maximum number of sponsorships to return.</span>
+</span><span data-line="351"><span class="sd">            offset: Number of sponsorships to skip.</span>
+</span><span data-line="352">
+</span><span data-line="353"><span class="sd">        Returns:</span>
+</span><span data-line="354"><span class="sd">            List of sponsorships expiring within the given timeframe.</span>
+</span><span data-line="355"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="356">        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">repository</span><span class="o">.</span><span class="n">list_expiring_soon</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="n">days</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="n">limit</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">)</span></div>
+
+</span><span data-line="357">
+<div class="viewcode-block" id="SponsorshipService.create_renewal">
+<a class="viewcode-back" href="../../../../api/domains/sponsors.html#pydotorg.domains.sponsors.SponsorshipService.create_renewal">[docs]</a>
+</span><span data-line="358">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_renewal</span><span class="p">(</span>
+</span><span data-line="359">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="360">        <span class="n">previous_sponsorship</span><span class="p">:</span> <span class="n">Sponsorship</span><span class="p">,</span>
+</span><span data-line="361">        <span class="n">level_id</span><span class="p">:</span> <span class="n">UUID</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span data-line="362">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sponsorship</span><span class="p">:</span>
+</span><span data-line="363"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a renewal sponsorship based on a previous one.</span>
+</span><span data-line="364">
+</span><span data-line="365"><span class="sd">        Args:</span>
+</span><span data-line="366"><span class="sd">            previous_sponsorship: The sponsorship being renewed.</span>
+</span><span data-line="367"><span class="sd">            level_id: Optional new level ID (defaults to same level).</span>
+</span><span data-line="368">
+</span><span data-line="369"><span class="sd">        Returns:</span>
+</span><span data-line="370"><span class="sd">            The new renewal sponsorship instance.</span>
+</span><span data-line="371"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="372">        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+</span><span data-line="373">            <span class="p">{</span>
+</span><span data-line="374">                <span class="s2">&quot;sponsor_id&quot;</span><span class="p">:</span> <span class="n">previous_sponsorship</span><span class="o">.</span><span class="n">sponsor_id</span><span class="p">,</span>
+</span><span data-line="375">                <span class="s2">&quot;level_id&quot;</span><span class="p">:</span> <span class="n">level_id</span> <span class="ow">or</span> <span class="n">previous_sponsorship</span><span class="o">.</span><span class="n">level_id</span><span class="p">,</span>
+</span><span data-line="376">                <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="n">SponsorshipStatus</span><span class="o">.</span><span class="n">APPLIED</span><span class="p">,</span>
+</span><span data-line="377">                <span class="s2">&quot;applied_on&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="n">UTC</span><span class="p">)</span><span class="o">.</span><span class="n">date</span><span class="p">(),</span>
+</span><span data-line="378">                <span class="s2">&quot;renewal&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+</span><span data-line="379">            <span class="p">}</span>
+</span><span data-line="380">        <span class="p">)</span></div>
+</div>
+
+</span><span data-line="381">
+</span><span data-line="382">
+<div class="viewcode-block" id="LegalClauseService">
+<a class="viewcode-back" href="../../../../api/domains/sponsors.html#pydotorg.domains.sponsors.LegalClauseService">[docs]</a>
+</span><span data-line="383"><span class="k">class</span><span class="w"> </span><span class="nc">LegalClauseService</span><span class="p">(</span><span class="n">SQLAlchemyAsyncRepositoryService</span><span class="p">[</span><span class="n">LegalClause</span><span class="p">]):</span>
+</span><span data-line="384"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Service for LegalClause business logic.&quot;&quot;&quot;</span>
+</span><span data-line="385">
+</span><span data-line="386">    <span class="n">repository_type</span> <span class="o">=</span> <span class="n">LegalClauseRepository</span>
+</span><span data-line="387">    <span class="n">match_fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;slug&quot;</span><span class="p">]</span>
+</span><span data-line="388">
+<div class="viewcode-block" id="LegalClauseService.get_by_slug">
+<a class="viewcode-back" href="../../../../api/domains/sponsors.html#pydotorg.domains.sponsors.LegalClauseService.get_by_slug">[docs]</a>
+</span><span data-line="389">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_by_slug</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slug</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LegalClause</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="390"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a legal clause by its slug.</span>
+</span><span data-line="391">
+</span><span data-line="392"><span class="sd">        Args:</span>
+</span><span data-line="393"><span class="sd">            slug: The slug to search for.</span>
+</span><span data-line="394">
+</span><span data-line="395"><span class="sd">        Returns:</span>
+</span><span data-line="396"><span class="sd">            The legal clause if found, None otherwise.</span>
+</span><span data-line="397"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="398">        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">repository</span><span class="o">.</span><span class="n">get_by_slug</span><span class="p">(</span><span class="n">slug</span><span class="p">)</span></div>
+
+</span><span data-line="399">
+<div class="viewcode-block" id="LegalClauseService.list_active">
+<a class="viewcode-back" href="../../../../api/domains/sponsors.html#pydotorg.domains.sponsors.LegalClauseService.list_active">[docs]</a>
+</span><span data-line="400">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_active</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">LegalClause</span><span class="p">]:</span>
+</span><span data-line="401"><span class="w">        </span><span class="sd">&quot;&quot;&quot;List active legal clauses ordered by order field.</span>
+</span><span data-line="402">
+</span><span data-line="403"><span class="sd">        Args:</span>
+</span><span data-line="404"><span class="sd">            limit: Maximum number of clauses to return.</span>
+</span><span data-line="405"><span class="sd">            offset: Number of clauses to skip.</span>
+</span><span data-line="406">
+</span><span data-line="407"><span class="sd">        Returns:</span>
+</span><span data-line="408"><span class="sd">            List of active legal clauses.</span>
+</span><span data-line="409"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="410">        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">repository</span><span class="o">.</span><span class="n">list_active</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="n">limit</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">)</span></div>
+</div>
+
+</span><span data-line="411">
+</span><span data-line="412">
+<div class="viewcode-block" id="ContractService">
+<a class="viewcode-back" href="../../../../api/domains/sponsors.html#pydotorg.domains.sponsors.ContractService">[docs]</a>
+</span><span data-line="413"><span class="k">class</span><span class="w"> </span><span class="nc">ContractService</span><span class="p">(</span><span class="n">SQLAlchemyAsyncRepositoryService</span><span class="p">[</span><span class="n">Contract</span><span class="p">]):</span>
+</span><span data-line="414"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Service for Contract business logic and workflow management.&quot;&quot;&quot;</span>
+</span><span data-line="415">
+</span><span data-line="416">    <span class="n">repository_type</span> <span class="o">=</span> <span class="n">ContractRepository</span>
+</span><span data-line="417">
+<div class="viewcode-block" id="ContractService.create_contract">
+<a class="viewcode-back" href="../../../../api/domains/sponsors.html#pydotorg.domains.sponsors.ContractService.create_contract">[docs]</a>
+</span><span data-line="418">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_contract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sponsorship_id</span><span class="p">:</span> <span class="n">UUID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Contract</span><span class="p">:</span>
+</span><span data-line="419"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new contract for a sponsorship.</span>
+</span><span data-line="420">
+</span><span data-line="421"><span class="sd">        Initializes a draft contract with sponsor information from the sponsorship.</span>
+</span><span data-line="422">
+</span><span data-line="423"><span class="sd">        Args:</span>
+</span><span data-line="424"><span class="sd">            sponsorship_id: The sponsorship ID to create contract for.</span>
+</span><span data-line="425">
+</span><span data-line="426"><span class="sd">        Returns:</span>
+</span><span data-line="427"><span class="sd">            The created contract instance.</span>
+</span><span data-line="428"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="429">        <span class="n">sponsorship</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">repository</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Sponsorship</span><span class="p">,</span> <span class="n">sponsorship_id</span><span class="p">)</span>
+</span><span data-line="430">        <span class="k">if</span> <span class="ow">not</span> <span class="n">sponsorship</span><span class="p">:</span>
+</span><span data-line="431">            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Sponsorship </span><span class="si">{</span><span class="n">sponsorship_id</span><span class="si">}</span><span class="s2"> not found&quot;</span>
+</span><span data-line="432">            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</span><span data-line="433">
+</span><span data-line="434">        <span class="n">sponsor</span> <span class="o">=</span> <span class="n">sponsorship</span><span class="o">.</span><span class="n">sponsor</span>
+</span><span data-line="435">        <span class="n">sponsor_info</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sponsor</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span data-line="436">        <span class="k">if</span> <span class="n">sponsor</span><span class="o">.</span><span class="n">description</span><span class="p">:</span>
+</span><span data-line="437">            <span class="n">sponsor_info</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; - </span><span class="si">{</span><span class="n">sponsor</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span data-line="438">
+</span><span data-line="439">        <span class="n">sponsor_contact</span> <span class="o">=</span> <span class="n">sponsor</span><span class="o">.</span><span class="n">full_address</span>
+</span><span data-line="440">        <span class="k">if</span> <span class="n">sponsor</span><span class="o">.</span><span class="n">primary_phone</span><span class="p">:</span>
+</span><span data-line="441">            <span class="n">sponsor_contact</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; | Phone: </span><span class="si">{</span><span class="n">sponsor</span><span class="o">.</span><span class="n">primary_phone</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span data-line="442">
+</span><span data-line="443">        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+</span><span data-line="444">            <span class="p">{</span>
+</span><span data-line="445">                <span class="s2">&quot;sponsorship_id&quot;</span><span class="p">:</span> <span class="n">sponsorship_id</span><span class="p">,</span>
+</span><span data-line="446">                <span class="s2">&quot;sponsor_info&quot;</span><span class="p">:</span> <span class="n">sponsor_info</span><span class="p">,</span>
+</span><span data-line="447">                <span class="s2">&quot;sponsor_contact&quot;</span><span class="p">:</span> <span class="n">sponsor_contact</span><span class="p">,</span>
+</span><span data-line="448">                <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="n">ContractStatus</span><span class="o">.</span><span class="n">DRAFT</span><span class="p">,</span>
+</span><span data-line="449">            <span class="p">}</span>
+</span><span data-line="450">        <span class="p">)</span></div>
+
+</span><span data-line="451">
+<div class="viewcode-block" id="ContractService.get_by_sponsorship_id">
+<a class="viewcode-back" href="../../../../api/domains/sponsors.html#pydotorg.domains.sponsors.ContractService.get_by_sponsorship_id">[docs]</a>
+</span><span data-line="452">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_by_sponsorship_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sponsorship_id</span><span class="p">:</span> <span class="n">UUID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Contract</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="453"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a contract by sponsorship ID.</span>
+</span><span data-line="454">
+</span><span data-line="455"><span class="sd">        Args:</span>
+</span><span data-line="456"><span class="sd">            sponsorship_id: The sponsorship ID to search for.</span>
+</span><span data-line="457">
+</span><span data-line="458"><span class="sd">        Returns:</span>
+</span><span data-line="459"><span class="sd">            The contract if found, None otherwise.</span>
+</span><span data-line="460"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="461">        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">repository</span><span class="o">.</span><span class="n">get_by_sponsorship_id</span><span class="p">(</span><span class="n">sponsorship_id</span><span class="p">)</span></div>
+
+</span><span data-line="462">
+<div class="viewcode-block" id="ContractService.list_by_status">
+<a class="viewcode-back" href="../../../../api/domains/sponsors.html#pydotorg.domains.sponsors.ContractService.list_by_status">[docs]</a>
+</span><span data-line="463">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_by_status</span><span class="p">(</span>
+</span><span data-line="464">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="465">        <span class="n">status</span><span class="p">:</span> <span class="n">ContractStatus</span><span class="p">,</span>
+</span><span data-line="466">        <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+</span><span data-line="467">        <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span><span data-line="468">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Contract</span><span class="p">]:</span>
+</span><span data-line="469"><span class="w">        </span><span class="sd">&quot;&quot;&quot;List contracts by status.</span>
+</span><span data-line="470">
+</span><span data-line="471"><span class="sd">        Args:</span>
+</span><span data-line="472"><span class="sd">            status: The status to filter by.</span>
+</span><span data-line="473"><span class="sd">            limit: Maximum number of contracts to return.</span>
+</span><span data-line="474"><span class="sd">            offset: Number of contracts to skip.</span>
+</span><span data-line="475">
+</span><span data-line="476"><span class="sd">        Returns:</span>
+</span><span data-line="477"><span class="sd">            List of contracts with the given status.</span>
+</span><span data-line="478"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="479">        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">repository</span><span class="o">.</span><span class="n">list_by_status</span><span class="p">(</span><span class="n">status</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="n">limit</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">)</span></div>
+
+</span><span data-line="480">
+<div class="viewcode-block" id="ContractService.send_for_signature">
+<a class="viewcode-back" href="../../../../api/domains/sponsors.html#pydotorg.domains.sponsors.ContractService.send_for_signature">[docs]</a>
+</span><span data-line="481">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">send_for_signature</span><span class="p">(</span>
+</span><span data-line="482">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="483">        <span class="n">contract_id</span><span class="p">:</span> <span class="n">UUID</span><span class="p">,</span>
+</span><span data-line="484">        <span class="n">document_pdf</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+</span><span data-line="485">        <span class="n">document_docx</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+</span><span data-line="486">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Contract</span><span class="p">:</span>
+</span><span data-line="487"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Send contract for signature.</span>
+</span><span data-line="488">
+</span><span data-line="489"><span class="sd">        Transitions contract from DRAFT to AWAITING_SIGNATURE.</span>
+</span><span data-line="490">
+</span><span data-line="491"><span class="sd">        Args:</span>
+</span><span data-line="492"><span class="sd">            contract_id: The contract ID.</span>
+</span><span data-line="493"><span class="sd">            document_pdf: Path to the unsigned PDF document.</span>
+</span><span data-line="494"><span class="sd">            document_docx: Path to the unsigned DOCX document.</span>
+</span><span data-line="495">
+</span><span data-line="496"><span class="sd">        Returns:</span>
+</span><span data-line="497"><span class="sd">            The updated contract instance.</span>
+</span><span data-line="498">
+</span><span data-line="499"><span class="sd">        Raises:</span>
+</span><span data-line="500"><span class="sd">            InvalidContractStatusError: If transition is not valid.</span>
+</span><span data-line="501"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="502">        <span class="n">contract</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">contract_id</span><span class="p">)</span>
+</span><span data-line="503">        <span class="k">if</span> <span class="ow">not</span> <span class="n">contract</span><span class="o">.</span><span class="n">can_send</span><span class="p">:</span>
+</span><span data-line="504">            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Cannot send contract in </span><span class="si">{</span><span class="n">contract</span><span class="o">.</span><span class="n">status</span><span class="si">}</span><span class="s2"> status for signature&quot;</span>
+</span><span data-line="505">            <span class="k">raise</span> <span class="n">InvalidContractStatusError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</span><span data-line="506">
+</span><span data-line="507">        <span class="n">contract</span><span class="o">.</span><span class="n">revision</span> <span class="o">+=</span> <span class="mi">1</span>
+</span><span data-line="508">        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+</span><span data-line="509">            <span class="n">contract_id</span><span class="p">,</span>
+</span><span data-line="510">            <span class="p">{</span>
+</span><span data-line="511">                <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="n">ContractStatus</span><span class="o">.</span><span class="n">AWAITING_SIGNATURE</span><span class="p">,</span>
+</span><span data-line="512">                <span class="s2">&quot;document_pdf&quot;</span><span class="p">:</span> <span class="n">document_pdf</span><span class="p">,</span>
+</span><span data-line="513">                <span class="s2">&quot;document_docx&quot;</span><span class="p">:</span> <span class="n">document_docx</span><span class="p">,</span>
+</span><span data-line="514">                <span class="s2">&quot;sent_on&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="n">UTC</span><span class="p">)</span><span class="o">.</span><span class="n">date</span><span class="p">(),</span>
+</span><span data-line="515">                <span class="s2">&quot;revision&quot;</span><span class="p">:</span> <span class="n">contract</span><span class="o">.</span><span class="n">revision</span><span class="p">,</span>
+</span><span data-line="516">            <span class="p">},</span>
+</span><span data-line="517">        <span class="p">)</span></div>
+
+</span><span data-line="518">
+<div class="viewcode-block" id="ContractService.execute_contract">
+<a class="viewcode-back" href="../../../../api/domains/sponsors.html#pydotorg.domains.sponsors.ContractService.execute_contract">[docs]</a>
+</span><span data-line="519">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">execute_contract</span><span class="p">(</span>
+</span><span data-line="520">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="521">        <span class="n">contract_id</span><span class="p">:</span> <span class="n">UUID</span><span class="p">,</span>
+</span><span data-line="522">        <span class="n">signed_document</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+</span><span data-line="523">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Contract</span><span class="p">:</span>
+</span><span data-line="524"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute a contract.</span>
+</span><span data-line="525">
+</span><span data-line="526"><span class="sd">        Marks the contract as executed and finalizes the associated sponsorship.</span>
+</span><span data-line="527">
+</span><span data-line="528"><span class="sd">        Args:</span>
+</span><span data-line="529"><span class="sd">            contract_id: The contract ID.</span>
+</span><span data-line="530"><span class="sd">            signed_document: Path to the signed document.</span>
+</span><span data-line="531">
+</span><span data-line="532"><span class="sd">        Returns:</span>
+</span><span data-line="533"><span class="sd">            The updated contract instance.</span>
+</span><span data-line="534">
+</span><span data-line="535"><span class="sd">        Raises:</span>
+</span><span data-line="536"><span class="sd">            InvalidContractStatusError: If transition is not valid.</span>
+</span><span data-line="537"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="538">        <span class="n">contract</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">contract_id</span><span class="p">)</span>
+</span><span data-line="539">        <span class="k">if</span> <span class="ow">not</span> <span class="n">contract</span><span class="o">.</span><span class="n">can_execute</span><span class="p">:</span>
+</span><span data-line="540">            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Cannot execute contract in </span><span class="si">{</span><span class="n">contract</span><span class="o">.</span><span class="n">status</span><span class="si">}</span><span class="s2"> status&quot;</span>
+</span><span data-line="541">            <span class="k">raise</span> <span class="n">InvalidContractStatusError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</span><span data-line="542">
+</span><span data-line="543">        <span class="n">contract</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+</span><span data-line="544">            <span class="n">contract_id</span><span class="p">,</span>
+</span><span data-line="545">            <span class="p">{</span>
+</span><span data-line="546">                <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="n">ContractStatus</span><span class="o">.</span><span class="n">EXECUTED</span><span class="p">,</span>
+</span><span data-line="547">                <span class="s2">&quot;signed_document&quot;</span><span class="p">:</span> <span class="n">signed_document</span><span class="p">,</span>
+</span><span data-line="548">                <span class="s2">&quot;executed_on&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="n">UTC</span><span class="p">)</span><span class="o">.</span><span class="n">date</span><span class="p">(),</span>
+</span><span data-line="549">            <span class="p">},</span>
+</span><span data-line="550">        <span class="p">)</span>
+</span><span data-line="551">
+</span><span data-line="552">        <span class="n">sponsorship</span> <span class="o">=</span> <span class="n">contract</span><span class="o">.</span><span class="n">sponsorship</span>
+</span><span data-line="553">        <span class="n">sponsorship</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">SponsorshipStatus</span><span class="o">.</span><span class="n">FINALIZED</span>
+</span><span data-line="554">        <span class="n">sponsorship</span><span class="o">.</span><span class="n">finalized_on</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="n">UTC</span><span class="p">)</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
+</span><span data-line="555">        <span class="n">sponsorship</span><span class="o">.</span><span class="n">locked</span> <span class="o">=</span> <span class="kc">True</span>
+</span><span data-line="556">        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">repository</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+</span><span data-line="557">
+</span><span data-line="558">        <span class="k">return</span> <span class="n">contract</span></div>
+
+</span><span data-line="559">
+<div class="viewcode-block" id="ContractService.nullify_contract">
+<a class="viewcode-back" href="../../../../api/domains/sponsors.html#pydotorg.domains.sponsors.ContractService.nullify_contract">[docs]</a>
+</span><span data-line="560">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">nullify_contract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">contract_id</span><span class="p">:</span> <span class="n">UUID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Contract</span><span class="p">:</span>
+</span><span data-line="561"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Nullify a contract.</span>
+</span><span data-line="562">
+</span><span data-line="563"><span class="sd">        Args:</span>
+</span><span data-line="564"><span class="sd">            contract_id: The contract ID.</span>
+</span><span data-line="565">
+</span><span data-line="566"><span class="sd">        Returns:</span>
+</span><span data-line="567"><span class="sd">            The updated contract instance.</span>
+</span><span data-line="568">
+</span><span data-line="569"><span class="sd">        Raises:</span>
+</span><span data-line="570"><span class="sd">            InvalidContractStatusError: If transition is not valid.</span>
+</span><span data-line="571"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="572">        <span class="n">contract</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">contract_id</span><span class="p">)</span>
+</span><span data-line="573">        <span class="k">if</span> <span class="ow">not</span> <span class="n">contract</span><span class="o">.</span><span class="n">can_nullify</span><span class="p">:</span>
+</span><span data-line="574">            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Cannot nullify contract in </span><span class="si">{</span><span class="n">contract</span><span class="o">.</span><span class="n">status</span><span class="si">}</span><span class="s2"> status&quot;</span>
+</span><span data-line="575">            <span class="k">raise</span> <span class="n">InvalidContractStatusError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</span><span data-line="576">
+</span><span data-line="577">        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+</span><span data-line="578">            <span class="n">contract_id</span><span class="p">,</span>
+</span><span data-line="579">            <span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="n">ContractStatus</span><span class="o">.</span><span class="n">NULLIFIED</span><span class="p">},</span>
+</span><span data-line="580">        <span class="p">)</span></div>
+
+</span><span data-line="581">
+<div class="viewcode-block" id="ContractService.revert_to_draft">
+<a class="viewcode-back" href="../../../../api/domains/sponsors.html#pydotorg.domains.sponsors.ContractService.revert_to_draft">[docs]</a>
+</span><span data-line="582">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">revert_to_draft</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">contract_id</span><span class="p">:</span> <span class="n">UUID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Contract</span><span class="p">:</span>
+</span><span data-line="583"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Revert a nullified contract back to draft.</span>
+</span><span data-line="584">
+</span><span data-line="585"><span class="sd">        Args:</span>
+</span><span data-line="586"><span class="sd">            contract_id: The contract ID.</span>
+</span><span data-line="587">
+</span><span data-line="588"><span class="sd">        Returns:</span>
+</span><span data-line="589"><span class="sd">            The updated contract instance.</span>
+</span><span data-line="590">
+</span><span data-line="591"><span class="sd">        Raises:</span>
+</span><span data-line="592"><span class="sd">            InvalidContractStatusError: If transition is not valid.</span>
+</span><span data-line="593"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="594">        <span class="n">contract</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">contract_id</span><span class="p">)</span>
+</span><span data-line="595">        <span class="k">if</span> <span class="n">ContractStatus</span><span class="o">.</span><span class="n">DRAFT</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">contract</span><span class="o">.</span><span class="n">next_statuses</span><span class="p">:</span>
+</span><span data-line="596">            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Cannot revert contract in </span><span class="si">{</span><span class="n">contract</span><span class="o">.</span><span class="n">status</span><span class="si">}</span><span class="s2"> status to draft&quot;</span>
+</span><span data-line="597">            <span class="k">raise</span> <span class="n">InvalidContractStatusError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</span><span data-line="598">
+</span><span data-line="599">        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+</span><span data-line="600">            <span class="n">contract_id</span><span class="p">,</span>
+</span><span data-line="601">            <span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="n">ContractStatus</span><span class="o">.</span><span class="n">DRAFT</span><span class="p">},</span>
+</span><span data-line="602">        <span class="p">)</span></div>
+
+</span><span data-line="603">
+<div class="viewcode-block" id="ContractService.update_benefits_and_clauses">
+<a class="viewcode-back" href="../../../../api/domains/sponsors.html#pydotorg.domains.sponsors.ContractService.update_benefits_and_clauses">[docs]</a>
+</span><span data-line="604">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">update_benefits_and_clauses</span><span class="p">(</span>
+</span><span data-line="605">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="606">        <span class="n">contract_id</span><span class="p">:</span> <span class="n">UUID</span><span class="p">,</span>
+</span><span data-line="607">        <span class="n">benefits_list</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span data-line="608">        <span class="n">legal_clauses_text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span data-line="609">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Contract</span><span class="p">:</span>
+</span><span data-line="610"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Update contract benefits list and legal clauses.</span>
+</span><span data-line="611">
+</span><span data-line="612"><span class="sd">        Args:</span>
+</span><span data-line="613"><span class="sd">            contract_id: The contract ID.</span>
+</span><span data-line="614"><span class="sd">            benefits_list: Markdown formatted list of benefits.</span>
+</span><span data-line="615"><span class="sd">            legal_clauses_text: Markdown formatted legal clauses.</span>
+</span><span data-line="616">
+</span><span data-line="617"><span class="sd">        Returns:</span>
+</span><span data-line="618"><span class="sd">            The updated contract instance.</span>
+</span><span data-line="619"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="620">        <span class="n">contract</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">contract_id</span><span class="p">)</span>
+</span><span data-line="621">        <span class="k">if</span> <span class="ow">not</span> <span class="n">contract</span><span class="o">.</span><span class="n">is_draft</span><span class="p">:</span>
+</span><span data-line="622">            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Can only update benefits and clauses on draft contracts&quot;</span>
+</span><span data-line="623">            <span class="k">raise</span> <span class="n">InvalidContractStatusError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</span><span data-line="624">
+</span><span data-line="625">        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+</span><span data-line="626">            <span class="n">contract_id</span><span class="p">,</span>
+</span><span data-line="627">            <span class="p">{</span>
+</span><span data-line="628">                <span class="s2">&quot;benefits_list&quot;</span><span class="p">:</span> <span class="n">benefits_list</span><span class="p">,</span>
+</span><span data-line="629">                <span class="s2">&quot;legal_clauses_text&quot;</span><span class="p">:</span> <span class="n">legal_clauses_text</span><span class="p">,</span>
+</span><span data-line="630">            <span class="p">},</span>
+</span><span data-line="631">        <span class="p">)</span></div>
+</div>
+
+</span></pre></div>
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Jacob Coffee</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+<a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+  <iconify-icon icon="simple-icons:github"></iconify-icon>
+</a></div>
+    </div>
+  </div>
+</footer>
+      <script src="../../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../../_static/copybutton.js?v=30646c52"></script>
+      <script src="../../../../_static/design-tabs.js?v=f930bc37"></script>
+      <script src="../../../../_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

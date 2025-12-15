@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="blue" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Debugging Guide - litestar-pydotorg</title><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="API Usage Guide" href="api-usage.html" /><link rel="prev" title="Testing Guide" href="testing.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=14737038" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=513f0650" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="Debugging Guide"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../index.html">
+      
+      
+      <strong>litestar-pydotorg</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"><ul><li class="link">
+          <a href="https://litestar.dev/">
+            <span>Litestar</span></a>
+        </li><li class="link">
+          <a href="https://python.org/">
+            <span>Python.org</span></a>
+        </li></ul></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials">
+  <a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting-started/index.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/quickstart.html">Quickstart</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="development.html">Development Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html">Contribution Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html">Testing Guide</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Debugging Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api-usage.html">API Usage Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="authentication.html">Authentication Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="feature-flags.html">Feature Flags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html">Configuration Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deployment.html">Deployment Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docker.html">Docker Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="troubleshooting.html">Troubleshooting Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/index.html">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/domain-patterns.html">Domain Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/authentication-recipes.html">Authentication Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/database-recipes.html">Database Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/testing-recipes.html">Testing Recipes</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/core/index.html">Core Infrastructure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/auth.html">Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/cache.html">Caching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/database.html">Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/email.html">Email</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/exceptions.html">Exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/features.html">Feature Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/feeds.html">RSS/Atom Feeds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/ical.html">iCalendar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/middleware.html">Middleware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/openapi.html">OpenAPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/ratelimit.html">Rate Limiting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/security.html">Security</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/worker.html">Background Worker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/domains/index.html">Domain Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/about.html">About</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/admin.html">Admin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/banners.html">banners</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/blogs.html">blogs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/codesamples.html">Code Samples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/community.html">community</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/docs.html">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/downloads.html">downloads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/events.html">events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/jobs.html">jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/mailing.html">Mailing Lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/minutes.html">Minutes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/nominations.html">Nominations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/pages.html">pages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/sponsors.html">sponsors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/sqladmin.html">SQLAdmin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/successstories.html">Success Stories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/users.html">users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/work_groups.html">Work Groups</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/lib.html">Library Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/tasks.html">Background Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/config.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/main.html">Application Entry Point</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/ARCHITECTURE.html">Litestar Python.org Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/DATABASE_SCHEMA.html">Database Schema Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/DOMAIN_MODELS.html">Domain Models Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/QUICK_START.html">Litestar Python.org Quick Start Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/API_TAGS_INDEX.html">API Tags Documentation Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/RATE_LIMITING_ARCHITECTURE.html">Rate Limiting Architecture Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/adr/001-litestar-framework.html">ADR-001: Use Litestar as Web Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/adr/002-saq-background-tasks.html">ADR-002: Use SAQ for Background Task Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#debug-mode">Debug Mode</a><ul>
+<li><a class="reference internal" href="#enable-debug-mode">Enable Debug Mode</a></li>
+<li><a class="reference internal" href="#database-query-logging">Database Query Logging</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#using-breakpoints">Using Breakpoints</a><ul>
+<li><a class="reference internal" href="#python-built-in-debugger">Python Built-in Debugger</a></li>
+<li><a class="reference internal" href="#ipython-debugger">IPython Debugger</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#logging">Logging</a><ul>
+<li><a class="reference internal" href="#basic-logging">Basic Logging</a></li>
+<li><a class="reference internal" href="#structured-logging">Structured Logging</a></li>
+<li><a class="reference internal" href="#configure-log-level">Configure Log Level</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#debugging-http-requests">Debugging HTTP Requests</a><ul>
+<li><a class="reference internal" href="#request-inspection">Request Inspection</a></li>
+<li><a class="reference internal" href="#response-debugging">Response Debugging</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#database-debugging">Database Debugging</a><ul>
+<li><a class="reference internal" href="#query-inspection">Query Inspection</a></li>
+<li><a class="reference internal" href="#connection-pool-status">Connection Pool Status</a></li>
+<li><a class="reference internal" href="#interactive-database-shell">Interactive Database Shell</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#debugging-background-tasks">Debugging Background Tasks</a><ul>
+<li><a class="reference internal" href="#saq-worker-logging">SAQ Worker Logging</a></li>
+<li><a class="reference internal" href="#task-inspection">Task Inspection</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#memory-debugging">Memory Debugging</a><ul>
+<li><a class="reference internal" href="#memory-profiling">Memory Profiling</a></li>
+<li><a class="reference internal" href="#object-reference-tracking">Object Reference Tracking</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#performance-debugging">Performance Debugging</a><ul>
+<li><a class="reference internal" href="#request-timing-middleware">Request Timing Middleware</a></li>
+<li><a class="reference internal" href="#profile-specific-code">Profile Specific Code</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#debugging-tests">Debugging Tests</a><ul>
+<li><a class="reference internal" href="#run-single-test-with-output">Run Single Test with Output</a></li>
+<li><a class="reference internal" href="#debug-failing-tests">Debug Failing Tests</a></li>
+<li><a class="reference internal" href="#show-local-variables">Show Local Variables</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ide-debugging">IDE Debugging</a><ul>
+<li><a class="reference internal" href="#vs-code">VS Code</a></li>
+<li><a class="reference internal" href="#pycharm">PyCharm</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#common-issues">Common Issues</a><ul>
+<li><a class="reference internal" href="#import-errors">Import Errors</a></li>
+<li><a class="reference internal" href="#connection-issues">Connection Issues</a></li>
+<li><a class="reference internal" href="#environment-issues">Environment Issues</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#troubleshooting-checklist">Troubleshooting Checklist</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../index.html"><span itemprop="name">litestar-pydotorg</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="index.html"><span itemprop="name">Guides</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="2" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">Debugging Guide</strong>
+        <meta itemprop="position" content="3" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue dark-code" role="main">
+          <section id="debugging-guide">
+<h1>Debugging Guide<a class="headerlink" href="#debugging-guide" title="Link to this heading">¶</a></h1>
+<p>This guide covers debugging techniques and tools for litestar-pydotorg.</p>
+<section id="debug-mode">
+<h2>Debug Mode<a class="headerlink" href="#debug-mode" title="Link to this heading">¶</a></h2>
+<section id="enable-debug-mode">
+<h3>Enable Debug Mode<a class="headerlink" href="#enable-debug-mode" title="Link to this heading">¶</a></h3>
+<p>Set in your <code class="docutils literal notranslate"><span class="pre">.env</span></code> file:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="nv">DEBUG</span><span class="o">=</span><span class="nb">true</span>
+</span></pre></div>
+</div>
+<p>This enables:</p>
+<ul class="simple">
+<li><p>Detailed error pages with stack traces</p></li>
+<li><p>SQL query logging</p></li>
+<li><p>Debug toolbar (if installed)</p></li>
+<li><p>More verbose logging</p></li>
+</ul>
+</section>
+<section id="database-query-logging">
+<h3>Database Query Logging<a class="headerlink" href="#database-query-logging" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># In .env</span>
+</span><span data-line="2"><span class="nv">DATABASE_ECHO</span><span class="o">=</span><span class="nb">true</span>
+</span></pre></div>
+</div>
+<p>All SQL queries will be logged to console.</p>
+</section>
+</section>
+<section id="using-breakpoints">
+<h2>Using Breakpoints<a class="headerlink" href="#using-breakpoints" title="Link to this heading">¶</a></h2>
+<section id="python-built-in-debugger">
+<h3>Python Built-in Debugger<a class="headerlink" href="#python-built-in-debugger" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Add breakpoint in code</span>
+</span><span data-line="2"><span class="nb">breakpoint</span><span class="p">()</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># When execution reaches this line, you&#39;ll enter pdb</span>
+</span></pre></div>
+</div>
+<p>Common pdb commands:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">n</span></code> - Next line</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">s</span></code> - Step into function</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">c</span></code> - Continue execution</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">l</span></code> - List source code</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">p</span> <span class="pre">variable</span></code> - Print variable</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">q</span></code> - Quit debugger</p></li>
+</ul>
+</section>
+<section id="ipython-debugger">
+<h3>IPython Debugger<a class="headerlink" href="#ipython-debugger" title="Link to this heading">¶</a></h3>
+<p>For a better debugging experience, use ipdb:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">import</span><span class="w"> </span><span class="nn">ipdb</span><span class="p">;</span> <span class="n">ipdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
+</span></pre></div>
+</div>
+<p>Install with:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>ipdb
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="logging">
+<h2>Logging<a class="headerlink" href="#logging" title="Link to this heading">¶</a></h2>
+<section id="basic-logging">
+<h3>Basic Logging<a class="headerlink" href="#basic-logging" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="c1"># Different log levels</span>
+</span><span data-line="6"><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Detailed debug info&quot;</span><span class="p">)</span>
+</span><span data-line="7"><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;General information&quot;</span><span class="p">)</span>
+</span><span data-line="8"><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Warning message&quot;</span><span class="p">)</span>
+</span><span data-line="9"><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Error occurred&quot;</span><span class="p">)</span>
+</span><span data-line="10"><span class="n">logger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s2">&quot;Critical error&quot;</span><span class="p">)</span>
+</span><span data-line="11">
+</span><span data-line="12"><span class="c1"># Log with exception info</span>
+</span><span data-line="13"><span class="k">try</span><span class="p">:</span>
+</span><span data-line="14">    <span class="n">risky_operation</span><span class="p">()</span>
+</span><span data-line="15"><span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+</span><span data-line="16">    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Operation failed&quot;</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="structured-logging">
+<h3>Structured Logging<a class="headerlink" href="#structured-logging" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">import</span><span class="w"> </span><span class="nn">structlog</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="n">logger</span> <span class="o">=</span> <span class="n">structlog</span><span class="o">.</span><span class="n">get_logger</span><span class="p">()</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;user_created&quot;</span><span class="p">,</span> <span class="n">user_id</span><span class="o">=</span><span class="s2">&quot;123&quot;</span><span class="p">,</span> <span class="n">email</span><span class="o">=</span><span class="s2">&quot;test@example.com&quot;</span><span class="p">)</span>
+</span><span data-line="6"><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;operation_failed&quot;</span><span class="p">,</span> <span class="n">error_code</span><span class="o">=</span><span class="s2">&quot;E001&quot;</span><span class="p">,</span> <span class="n">details</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;reason&quot;</span><span class="p">:</span> <span class="s2">&quot;timeout&quot;</span><span class="p">})</span>
+</span></pre></div>
+</div>
+</section>
+<section id="configure-log-level">
+<h3>Configure Log Level<a class="headerlink" href="#configure-log-level" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># In .env</span>
+</span><span data-line="2"><span class="nv">LOG_LEVEL</span><span class="o">=</span>DEBUG
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="debugging-http-requests">
+<h2>Debugging HTTP Requests<a class="headerlink" href="#debugging-http-requests" title="Link to this heading">¶</a></h2>
+<section id="request-inspection">
+<h3>Request Inspection<a class="headerlink" href="#request-inspection" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span><span class="w"> </span><span class="nn">litestar</span><span class="w"> </span><span class="kn">import</span> <span class="n">Request</span><span class="p">,</span> <span class="n">get</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/debug&quot;</span><span class="p">)</span>
+</span><span data-line="4"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">debug_endpoint</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+</span><span data-line="5">    <span class="k">return</span> <span class="p">{</span>
+</span><span data-line="6">        <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span><span class="p">,</span>
+</span><span data-line="7">        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">),</span>
+</span><span data-line="8">        <span class="s2">&quot;headers&quot;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="p">),</span>
+</span><span data-line="9">        <span class="s2">&quot;query_params&quot;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">query_params</span><span class="p">),</span>
+</span><span data-line="10">        <span class="s2">&quot;path_params&quot;</span><span class="p">:</span> <span class="n">request</span><span class="o">.</span><span class="n">path_params</span><span class="p">,</span>
+</span><span data-line="11">    <span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+<section id="response-debugging">
+<h3>Response Debugging<a class="headerlink" href="#response-debugging" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span><span class="w"> </span><span class="nn">litestar</span><span class="w"> </span><span class="kn">import</span> <span class="n">Response</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/debug-response&quot;</span><span class="p">)</span>
+</span><span data-line="4"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">debug_response</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
+</span><span data-line="5">    <span class="n">response</span> <span class="o">=</span> <span class="n">Response</span><span class="p">(</span>
+</span><span data-line="6">        <span class="n">content</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;debug&quot;</span><span class="p">},</span>
+</span><span data-line="7">        <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;X-Debug&quot;</span><span class="p">:</span> <span class="s2">&quot;true&quot;</span><span class="p">}</span>
+</span><span data-line="8">    <span class="p">)</span>
+</span><span data-line="9">    <span class="c1"># Log response before sending</span>
+</span><span data-line="10">    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Response: </span><span class="si">{</span><span class="n">response</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span data-line="11">    <span class="k">return</span> <span class="n">response</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="database-debugging">
+<h2>Database Debugging<a class="headerlink" href="#database-debugging" title="Link to this heading">¶</a></h2>
+<section id="query-inspection">
+<h3>Query Inspection<a class="headerlink" href="#query-inspection" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">event</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.engine</span><span class="w"> </span><span class="kn">import</span> <span class="n">Engine</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="nd">@event</span><span class="o">.</span><span class="n">listens_for</span><span class="p">(</span><span class="n">Engine</span><span class="p">,</span> <span class="s2">&quot;before_cursor_execute&quot;</span><span class="p">)</span>
+</span><span data-line="5"><span class="k">def</span><span class="w"> </span><span class="nf">receive_before_cursor_execute</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">cursor</span><span class="p">,</span> <span class="n">statement</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">executemany</span><span class="p">):</span>
+</span><span data-line="6">    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SQL: </span><span class="si">{</span><span class="n">statement</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span data-line="7">    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Params: </span><span class="si">{</span><span class="n">parameters</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="connection-pool-status">
+<h3>Connection Pool Status<a class="headerlink" href="#connection-pool-status" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.core.database</span><span class="w"> </span><span class="kn">import</span> <span class="n">engine</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="c1"># Check pool status</span>
+</span><span data-line="4"><span class="n">pool</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">pool</span>
+</span><span data-line="5"><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pool size: </span><span class="si">{</span><span class="n">pool</span><span class="o">.</span><span class="n">size</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span data-line="6"><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Checked out: </span><span class="si">{</span><span class="n">pool</span><span class="o">.</span><span class="n">checkedout</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span data-line="7"><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Overflow: </span><span class="si">{</span><span class="n">pool</span><span class="o">.</span><span class="n">overflow</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="interactive-database-shell">
+<h3>Interactive Database Shell<a class="headerlink" href="#interactive-database-shell" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># PostgreSQL shell</span>
+</span><span data-line="2">psql<span class="w"> </span><span class="nv">$DATABASE_URL</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Python shell with app context</span>
+</span><span data-line="5">uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/shell.py
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="debugging-background-tasks">
+<h2>Debugging Background Tasks<a class="headerlink" href="#debugging-background-tasks" title="Link to this heading">¶</a></h2>
+<section id="saq-worker-logging">
+<h3>SAQ Worker Logging<a class="headerlink" href="#saq-worker-logging" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Start worker with verbose logging</span>
+</span><span data-line="2"><span class="nv">LOG_LEVEL</span><span class="o">=</span>DEBUG<span class="w"> </span>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>saq<span class="w"> </span>worker<span class="w"> </span>pydotorg.tasks.base.worker
+</span></pre></div>
+</div>
+</section>
+<section id="task-inspection">
+<h3>Task Inspection<a class="headerlink" href="#task-inspection" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.tasks.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">queue</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="c1"># Get queue status</span>
+</span><span data-line="4"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">check_queue</span><span class="p">():</span>
+</span><span data-line="5">    <span class="n">stats</span> <span class="o">=</span> <span class="k">await</span> <span class="n">queue</span><span class="o">.</span><span class="n">stats</span><span class="p">()</span>
+</span><span data-line="6">    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Queue stats: </span><span class="si">{</span><span class="n">stats</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span data-line="7">
+</span><span data-line="8">    <span class="c1"># List pending jobs</span>
+</span><span data-line="9">    <span class="n">jobs</span> <span class="o">=</span> <span class="k">await</span> <span class="n">queue</span><span class="o">.</span><span class="n">jobs</span><span class="p">()</span>
+</span><span data-line="10">    <span class="k">for</span> <span class="n">job</span> <span class="ow">in</span> <span class="n">jobs</span><span class="p">:</span>
+</span><span data-line="11">        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Job: </span><span class="si">{</span><span class="n">job</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">, Status: </span><span class="si">{</span><span class="n">job</span><span class="o">.</span><span class="n">status</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="memory-debugging">
+<h2>Memory Debugging<a class="headerlink" href="#memory-debugging" title="Link to this heading">¶</a></h2>
+<section id="memory-profiling">
+<h3>Memory Profiling<a class="headerlink" href="#memory-profiling" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">import</span><span class="w"> </span><span class="nn">tracemalloc</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="n">tracemalloc</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="c1"># ... your code ...</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="n">current</span><span class="p">,</span> <span class="n">peak</span> <span class="o">=</span> <span class="n">tracemalloc</span><span class="o">.</span><span class="n">get_traced_memory</span><span class="p">()</span>
+</span><span data-line="8"><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Current memory: </span><span class="si">{</span><span class="n">current</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">10</span><span class="o">**</span><span class="mi">6</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> MB&quot;</span><span class="p">)</span>
+</span><span data-line="9"><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Peak memory: </span><span class="si">{</span><span class="n">peak</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">10</span><span class="o">**</span><span class="mi">6</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> MB&quot;</span><span class="p">)</span>
+</span><span data-line="10"><span class="n">tracemalloc</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+</span></pre></div>
+</div>
+</section>
+<section id="object-reference-tracking">
+<h3>Object Reference Tracking<a class="headerlink" href="#object-reference-tracking" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">import</span><span class="w"> </span><span class="nn">gc</span>
+</span><span data-line="2"><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Force garbage collection</span>
+</span><span data-line="5"><span class="n">gc</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Count objects of a type</span>
+</span><span data-line="8"><span class="n">user_count</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">gc</span><span class="o">.</span><span class="n">get_objects</span><span class="p">()</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">User</span><span class="p">))</span>
+</span><span data-line="9"><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;User objects in memory: </span><span class="si">{</span><span class="n">user_count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="performance-debugging">
+<h2>Performance Debugging<a class="headerlink" href="#performance-debugging" title="Link to this heading">¶</a></h2>
+<section id="request-timing-middleware">
+<h3>Request Timing Middleware<a class="headerlink" href="#request-timing-middleware" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">litestar</span><span class="w"> </span><span class="kn">import</span> <span class="n">Litestar</span><span class="p">,</span> <span class="n">Request</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">litestar.middleware</span><span class="w"> </span><span class="kn">import</span> <span class="n">MiddlewareProtocol</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="k">class</span><span class="w"> </span><span class="nc">TimingMiddleware</span><span class="p">(</span><span class="n">MiddlewareProtocol</span><span class="p">):</span>
+</span><span data-line="6">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scope</span><span class="p">,</span> <span class="n">receive</span><span class="p">,</span> <span class="n">send</span><span class="p">):</span>
+</span><span data-line="7">        <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+</span><span data-line="8">        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="p">(</span><span class="n">scope</span><span class="p">,</span> <span class="n">receive</span><span class="p">,</span> <span class="n">send</span><span class="p">)</span>
+</span><span data-line="9">        <span class="n">elapsed</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span>
+</span><span data-line="10">        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Request took </span><span class="si">{</span><span class="n">elapsed</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">s&quot;</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="profile-specific-code">
+<h3>Profile Specific Code<a class="headerlink" href="#profile-specific-code" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">import</span><span class="w"> </span><span class="nn">cProfile</span>
+</span><span data-line="2"><span class="kn">import</span><span class="w"> </span><span class="nn">pstats</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="k">def</span><span class="w"> </span><span class="nf">profile_function</span><span class="p">():</span>
+</span><span data-line="5">    <span class="n">profiler</span> <span class="o">=</span> <span class="n">cProfile</span><span class="o">.</span><span class="n">Profile</span><span class="p">()</span>
+</span><span data-line="6">    <span class="n">profiler</span><span class="o">.</span><span class="n">enable</span><span class="p">()</span>
+</span><span data-line="7">
+</span><span data-line="8">    <span class="c1"># Code to profile</span>
+</span><span data-line="9">    <span class="n">result</span> <span class="o">=</span> <span class="n">expensive_operation</span><span class="p">()</span>
+</span><span data-line="10">
+</span><span data-line="11">    <span class="n">profiler</span><span class="o">.</span><span class="n">disable</span><span class="p">()</span>
+</span><span data-line="12">    <span class="n">stats</span> <span class="o">=</span> <span class="n">pstats</span><span class="o">.</span><span class="n">Stats</span><span class="p">(</span><span class="n">profiler</span><span class="p">)</span><span class="o">.</span><span class="n">sort_stats</span><span class="p">(</span><span class="s2">&quot;cumulative&quot;</span><span class="p">)</span>
+</span><span data-line="13">    <span class="n">stats</span><span class="o">.</span><span class="n">print_stats</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>  <span class="c1"># Top 10 functions</span>
+</span><span data-line="14">
+</span><span data-line="15">    <span class="k">return</span> <span class="n">result</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="debugging-tests">
+<h2>Debugging Tests<a class="headerlink" href="#debugging-tests" title="Link to this heading">¶</a></h2>
+<section id="run-single-test-with-output">
+<h3>Run Single Test with Output<a class="headerlink" href="#run-single-test-with-output" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">uv<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/unit/test_file.py::test_name<span class="w"> </span>-v<span class="w"> </span>-s
+</span></pre></div>
+</div>
+</section>
+<section id="debug-failing-tests">
+<h3>Debug Failing Tests<a class="headerlink" href="#debug-failing-tests" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Enter debugger on failure</span>
+</span><span data-line="2">uv<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>--pdb
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Enter debugger on first failure and stop</span>
+</span><span data-line="5">uv<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>-x<span class="w"> </span>--pdb
+</span></pre></div>
+</div>
+</section>
+<section id="show-local-variables">
+<h3>Show Local Variables<a class="headerlink" href="#show-local-variables" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">uv<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>-l<span class="w">  </span><span class="c1"># Show locals in tracebacks</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="ide-debugging">
+<h2>IDE Debugging<a class="headerlink" href="#ide-debugging" title="Link to this heading">¶</a></h2>
+<section id="vs-code">
+<h3>VS Code<a class="headerlink" href="#vs-code" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Create <code class="docutils literal notranslate"><span class="pre">.vscode/launch.json</span></code>:</p></li>
+</ol>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;0.2.0&quot;</span><span class="p">,</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;configurations&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span data-line="4"><span class="w">    </span><span class="p">{</span>
+</span><span data-line="5"><span class="w">      </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Python: Litestar&quot;</span><span class="p">,</span>
+</span><span data-line="6"><span class="w">      </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;python&quot;</span><span class="p">,</span>
+</span><span data-line="7"><span class="w">      </span><span class="nt">&quot;request&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;launch&quot;</span><span class="p">,</span>
+</span><span data-line="8"><span class="w">      </span><span class="nt">&quot;module&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;litestar&quot;</span><span class="p">,</span>
+</span><span data-line="9"><span class="w">      </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;run&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;--reload&quot;</span><span class="p">],</span>
+</span><span data-line="10"><span class="w">      </span><span class="nt">&quot;env&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="11"><span class="w">        </span><span class="nt">&quot;LITESTAR_APP&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;pydotorg.main:app&quot;</span>
+</span><span data-line="12"><span class="w">      </span><span class="p">},</span>
+</span><span data-line="13"><span class="w">      </span><span class="nt">&quot;console&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;integratedTerminal&quot;</span>
+</span><span data-line="14"><span class="w">    </span><span class="p">},</span>
+</span><span data-line="15"><span class="w">    </span><span class="p">{</span>
+</span><span data-line="16"><span class="w">      </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Python: Current File&quot;</span><span class="p">,</span>
+</span><span data-line="17"><span class="w">      </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;python&quot;</span><span class="p">,</span>
+</span><span data-line="18"><span class="w">      </span><span class="nt">&quot;request&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;launch&quot;</span><span class="p">,</span>
+</span><span data-line="19"><span class="w">      </span><span class="nt">&quot;program&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;${file}&quot;</span><span class="p">,</span>
+</span><span data-line="20"><span class="w">      </span><span class="nt">&quot;console&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;integratedTerminal&quot;</span>
+</span><span data-line="21"><span class="w">    </span><span class="p">}</span>
+</span><span data-line="22"><span class="w">  </span><span class="p">]</span>
+</span><span data-line="23"><span class="p">}</span>
+</span></pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Set breakpoints by clicking in the gutter</p></li>
+<li><p>Press F5 to start debugging</p></li>
+</ol>
+</section>
+<section id="pycharm">
+<h3>PyCharm<a class="headerlink" href="#pycharm" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Right-click on file and select “Debug”</p></li>
+<li><p>Set breakpoints by clicking in the gutter</p></li>
+<li><p>Use debug panel to inspect variables</p></li>
+</ol>
+</section>
+</section>
+<section id="common-issues">
+<h2>Common Issues<a class="headerlink" href="#common-issues" title="Link to this heading">¶</a></h2>
+<section id="import-errors">
+<h3>Import Errors<a class="headerlink" href="#import-errors" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Check Python path</span>
+</span><span data-line="2">uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import sys; print(sys.path)&quot;</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Verify package installation</span>
+</span><span data-line="5">uv<span class="w"> </span>pip<span class="w"> </span>show<span class="w"> </span>pydotorg
+</span></pre></div>
+</div>
+</section>
+<section id="connection-issues">
+<h3>Connection Issues<a class="headerlink" href="#connection-issues" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Test database connection</span>
+</span><span data-line="2">uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;</span>
+</span><span data-line="3"><span class="s2">from pydotorg.core.database import engine</span>
+</span><span data-line="4"><span class="s2">import asyncio</span>
+</span><span data-line="5"><span class="s2">async def test():</span>
+</span><span data-line="6"><span class="s2">    async with engine.begin() as conn:</span>
+</span><span data-line="7"><span class="s2">        await conn.execute(&#39;SELECT 1&#39;)</span>
+</span><span data-line="8"><span class="s2">        print(&#39;Database OK&#39;)</span>
+</span><span data-line="9"><span class="s2">asyncio.run(test())</span>
+</span><span data-line="10"><span class="s2">&quot;</span>
+</span><span data-line="11">
+</span><span data-line="12"><span class="c1"># Test Redis connection</span>
+</span><span data-line="13">uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;</span>
+</span><span data-line="14"><span class="s2">import redis</span>
+</span><span data-line="15"><span class="s2">r = redis.from_url(&#39;redis://localhost:6379&#39;)</span>
+</span><span data-line="16"><span class="s2">print(&#39;Redis:&#39;, r.ping())</span>
+</span><span data-line="17"><span class="s2">&quot;</span>
+</span></pre></div>
+</div>
+</section>
+<section id="environment-issues">
+<h3>Environment Issues<a class="headerlink" href="#environment-issues" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Print all environment variables</span>
+</span><span data-line="2">uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;</span>
+</span><span data-line="3"><span class="s2">import os</span>
+</span><span data-line="4"><span class="s2">for key, value in sorted(os.environ.items()):</span>
+</span><span data-line="5"><span class="s2">    if &#39;PYDOTORG&#39; in key or &#39;DATABASE&#39; in key:</span>
+</span><span data-line="6"><span class="s2">        print(f&#39;{key}={value}&#39;)</span>
+</span><span data-line="7"><span class="s2">&quot;</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="troubleshooting-checklist">
+<h2>Troubleshooting Checklist<a class="headerlink" href="#troubleshooting-checklist" title="Link to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Check if services are running: <code class="docutils literal notranslate"><span class="pre">docker-compose</span> <span class="pre">ps</span></code></p></li>
+<li><p>Verify environment variables: <code class="docutils literal notranslate"><span class="pre">cat</span> <span class="pre">.env</span></code></p></li>
+<li><p>Check database connection: <code class="docutils literal notranslate"><span class="pre">psql</span> <span class="pre">$DATABASE_URL</span> <span class="pre">-c</span> <span class="pre">&quot;SELECT</span> <span class="pre">1&quot;</span></code></p></li>
+<li><p>Check Redis connection: <code class="docutils literal notranslate"><span class="pre">redis-cli</span> <span class="pre">ping</span></code></p></li>
+<li><p>Review logs: <code class="docutils literal notranslate"><span class="pre">docker-compose</span> <span class="pre">logs</span> <span class="pre">-f</span></code></p></li>
+<li><p>Clear cache: <code class="docutils literal notranslate"><span class="pre">redis-cli</span> <span class="pre">FLUSHALL</span></code></p></li>
+<li><p>Restart services: <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">infra-down</span> <span class="pre">&amp;&amp;</span> <span class="pre">make</span> <span class="pre">infra-up</span></code></p></li>
+<li><p>Reinstall dependencies: <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">install</span></code></p></li>
+</ol>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="testing.html">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title">Testing Guide</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="api-usage.html">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title">API Usage Guide</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Jacob Coffee</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+<a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+  <iconify-icon icon="simple-icons:github"></iconify-icon>
+</a></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=30646c52"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script src="../_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

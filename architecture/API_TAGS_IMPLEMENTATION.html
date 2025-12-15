@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="blue" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>API Tags Implementation Guide - litestar-pydotorg</title><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=14737038" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=513f0650" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="API Tags Implementation Guide"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../index.html">
+      
+      
+      <strong>litestar-pydotorg</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"><ul><li class="link">
+          <a href="https://litestar.dev/">
+            <span>Litestar</span></a>
+        </li><li class="link">
+          <a href="https://python.org/">
+            <span>Python.org</span></a>
+        </li></ul></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials">
+  <a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started/index.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/quickstart.html">Quickstart</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/index.html">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/development.html">Development Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/contributing.html">Contribution Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/testing.html">Testing Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/debugging.html">Debugging Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/api-usage.html">API Usage Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/authentication.html">Authentication Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/feature-flags.html">Feature Flags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/configuration.html">Configuration Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/deployment.html">Deployment Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/docker.html">Docker Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/troubleshooting.html">Troubleshooting Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/index.html">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/domain-patterns.html">Domain Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/authentication-recipes.html">Authentication Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/database-recipes.html">Database Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/testing-recipes.html">Testing Recipes</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/core/index.html">Core Infrastructure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/auth.html">Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/cache.html">Caching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/database.html">Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/email.html">Email</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/exceptions.html">Exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/features.html">Feature Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/feeds.html">RSS/Atom Feeds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/ical.html">iCalendar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/middleware.html">Middleware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/openapi.html">OpenAPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/ratelimit.html">Rate Limiting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/security.html">Security</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/worker.html">Background Worker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/domains/index.html">Domain Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/about.html">About</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/admin.html">Admin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/banners.html">banners</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/blogs.html">blogs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/codesamples.html">Code Samples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/community.html">community</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/docs.html">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/downloads.html">downloads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/events.html">events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/jobs.html">jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/mailing.html">Mailing Lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/minutes.html">Minutes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/nominations.html">Nominations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/pages.html">pages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/sponsors.html">sponsors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/sqladmin.html">SQLAdmin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/successstories.html">Success Stories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/users.html">users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/work_groups.html">Work Groups</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/lib.html">Library Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/tasks.html">Background Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/config.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/main.html">Application Entry Point</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ARCHITECTURE.html">Litestar Python.org Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DATABASE_SCHEMA.html">Database Schema Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DOMAIN_MODELS.html">Domain Models Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="QUICK_START.html">Litestar Python.org Quick Start Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="API_TAGS_INDEX.html">API Tags Documentation Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RATE_LIMITING_ARCHITECTURE.html">Rate Limiting Architecture Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adr/001-litestar-framework.html">ADR-001: Use Litestar as Web Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adr/002-saq-background-tasks.html">ADR-002: Use SAQ for Background Task Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#phase-1-audit-current-implementation">Phase 1: Audit Current Implementation</a><ul>
+<li><a class="reference internal" href="#identify-all-current-tags">1.1 Identify All Current Tags</a></li>
+<li><a class="reference internal" href="#verify-render-controllers">1.2 Verify Render Controllers</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#phase-2-update-controller-tags">Phase 2: Update Controller Tags</a><ul>
+<li><a class="reference internal" href="#tag-migration-map">2.1 Tag Migration Map</a></li>
+<li><a class="reference internal" href="#downloads-domain">2.2 Downloads Domain</a></li>
+<li><a class="reference internal" href="#events-domain">2.3 Events Domain</a></li>
+<li><a class="reference internal" href="#jobs-domain">2.4 Jobs Domain</a></li>
+<li><a class="reference internal" href="#sponsors-domain">2.5 Sponsors Domain</a></li>
+<li><a class="reference internal" href="#blogs-domain">2.6 Blogs Domain</a></li>
+<li><a class="reference internal" href="#community-domain">2.7 Community Domain</a></li>
+<li><a class="reference internal" href="#success-stories-domain">2.8 Success Stories Domain</a></li>
+<li><a class="reference internal" href="#other-domains">2.9 Other Domains</a></li>
+<li><a class="reference internal" href="#admin-domain">2.10 Admin Domain</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#phase-3-configure-openapi-tags">Phase 3: Configure OpenAPI Tags</a><ul>
+<li><a class="reference internal" href="#create-tag-configuration">3.1 Create Tag Configuration</a></li>
+<li><a class="reference internal" href="#update-application-configuration">3.2 Update Application Configuration</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#phase-4-exclude-render-controllers">Phase 4: Exclude Render Controllers</a><ul>
+<li><a class="reference internal" href="#option-a-mark-as-internal">4.1 Option A: Mark as Internal</a></li>
+<li><a class="reference internal" href="#option-b-filter-in-openapi-config">4.2 Option B: Filter in OpenAPI Config</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#phase-5-testing-validation">Phase 5: Testing &amp; Validation</a><ul>
+<li><a class="reference internal" href="#test-tag-organization">5.1 Test Tag Organization</a></li>
+<li><a class="reference internal" href="#validate-in-scalar-ui">5.2 Validate in Scalar UI</a></li>
+<li><a class="reference internal" href="#manual-verification">5.3 Manual Verification</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#phase-6-documentation">Phase 6: Documentation</a><ul>
+<li><a class="reference internal" href="#update-api-documentation">6.1 Update API Documentation</a></li>
+<li><a class="reference internal" href="#update-developer-guides">6.2 Update Developer Guides</a></li>
+<li><a class="reference internal" href="#communicate-changes">6.3 Communicate Changes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#checklist">Checklist</a></li>
+<li><a class="reference internal" href="#rollback-plan">Rollback Plan</a></li>
+<li><a class="reference internal" href="#references">References</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../index.html"><span itemprop="name">litestar-pydotorg</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">API Tags Implementation Guide</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue dark-code" role="main">
+          <section id="api-tags-implementation-guide">
+<h1>API Tags Implementation Guide<a class="headerlink" href="#api-tags-implementation-guide" title="Link to this heading">¶</a></h1>
+<p>Step-by-step guide to implement the optimized tag structure in the <a class="reference external" href="http://Python.org">Python.org</a> Litestar API.</p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>This guide walks through migrating from the current fragmented tag structure to the optimized 50-tag hierarchy defined in <code class="docutils literal notranslate"><span class="pre">API_TAGS_STRUCTURE.md</span></code>.</p>
+</section>
+<section id="phase-1-audit-current-implementation">
+<h2>Phase 1: Audit Current Implementation<a class="headerlink" href="#phase-1-audit-current-implementation" title="Link to this heading">¶</a></h2>
+<section id="identify-all-current-tags">
+<h3>1.1 Identify All Current Tags<a class="headerlink" href="#identify-all-current-tags" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">grep<span class="w"> </span>-rn<span class="w"> </span><span class="s2">&quot;tags = &quot;</span><span class="w"> </span>src/pydotorg/domains/*/controllers*.py<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-o<span class="w"> </span><span class="s1">&#39;tags = \[.*\]&#39;</span>
+</span></pre></div>
+</div>
+<p>Output should match <code class="docutils literal notranslate"><span class="pre">API_TAGS_QUICK_REF.md</span></code> table.</p>
+</section>
+<section id="verify-render-controllers">
+<h3>1.2 Verify Render Controllers<a class="headerlink" href="#verify-render-controllers" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">grep<span class="w"> </span>-rn<span class="w"> </span><span class="s2">&quot;render&quot;</span><span class="w"> </span>src/pydotorg/domains/*/controllers.py<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;class\|tags = &quot;</span>
+</span></pre></div>
+</div>
+<p>Should find:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">JobRenderController</span></code> → <code class="docutils literal notranslate"><span class="pre">jobs/controllers.py:291</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NominationRenderController</span></code> → <code class="docutils literal notranslate"><span class="pre">nominations/controllers.py:248</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PageRenderController</span></code> → <code class="docutils literal notranslate"><span class="pre">pages/controllers.py:212</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SearchRenderController</span></code> → <code class="docutils literal notranslate"><span class="pre">search/controllers.py:77</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SponsorRenderController</span></code> → <code class="docutils literal notranslate"><span class="pre">sponsors/controllers.py:374</span></code></p></li>
+</ul>
+</section>
+</section>
+<section id="phase-2-update-controller-tags">
+<h2>Phase 2: Update Controller Tags<a class="headerlink" href="#phase-2-update-controller-tags" title="Link to this heading">¶</a></h2>
+<section id="tag-migration-map">
+<h3>2.1 Tag Migration Map<a class="headerlink" href="#tag-migration-map" title="Link to this heading">¶</a></h3>
+<p>Update all controller files with consistent Title Case tag names:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># src/pydotorg/domains/users/controllers.py</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="k">class</span><span class="w"> </span><span class="nc">UserController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="4">    <span class="c1"># Before:</span>
+</span><span data-line="5">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;users&quot;</span><span class="p">]</span>
+</span><span data-line="6">    <span class="c1"># After:</span>
+</span><span data-line="7">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Users&quot;</span><span class="p">]</span>
+</span><span data-line="8">
+</span><span data-line="9"><span class="k">class</span><span class="w"> </span><span class="nc">MembershipController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="10">    <span class="c1"># Before:</span>
+</span><span data-line="11">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;memberships&quot;</span><span class="p">]</span>
+</span><span data-line="12">    <span class="c1"># After:</span>
+</span><span data-line="13">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;User Memberships&quot;</span><span class="p">]</span>
+</span><span data-line="14">
+</span><span data-line="15"><span class="k">class</span><span class="w"> </span><span class="nc">UserGroupController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="16">    <span class="c1"># Before:</span>
+</span><span data-line="17">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;user-groups&quot;</span><span class="p">]</span>
+</span><span data-line="18">    <span class="c1"># After:</span>
+</span><span data-line="19">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;User Groups&quot;</span><span class="p">]</span>
+</span></pre></div>
+</div>
+</section>
+<section id="downloads-domain">
+<h3>2.2 Downloads Domain<a class="headerlink" href="#downloads-domain" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># src/pydotorg/domains/downloads/controllers.py</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="k">class</span><span class="w"> </span><span class="nc">OSController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="4">    <span class="c1"># Before:</span>
+</span><span data-line="5">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;os&quot;</span><span class="p">]</span>
+</span><span data-line="6">    <span class="c1"># After:</span>
+</span><span data-line="7">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Operating Systems&quot;</span><span class="p">]</span>
+</span><span data-line="8">
+</span><span data-line="9"><span class="k">class</span><span class="w"> </span><span class="nc">ReleaseController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="10">    <span class="c1"># Before:</span>
+</span><span data-line="11">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;releases&quot;</span><span class="p">]</span>
+</span><span data-line="12">    <span class="c1"># After:</span>
+</span><span data-line="13">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Python Releases&quot;</span><span class="p">]</span>
+</span><span data-line="14">
+</span><span data-line="15"><span class="k">class</span><span class="w"> </span><span class="nc">ReleaseFileController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="16">    <span class="c1"># Before:</span>
+</span><span data-line="17">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;release-files&quot;</span><span class="p">]</span>
+</span><span data-line="18">    <span class="c1"># After:</span>
+</span><span data-line="19">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Release Files&quot;</span><span class="p">]</span>
+</span></pre></div>
+</div>
+</section>
+<section id="events-domain">
+<h3>2.3 Events Domain<a class="headerlink" href="#events-domain" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># src/pydotorg/domains/events/controllers.py</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="k">class</span><span class="w"> </span><span class="nc">CalendarController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="4">    <span class="c1"># Before:</span>
+</span><span data-line="5">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;calendars&quot;</span><span class="p">]</span>
+</span><span data-line="6">    <span class="c1"># After:</span>
+</span><span data-line="7">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Event Calendars&quot;</span><span class="p">]</span>
+</span><span data-line="8">
+</span><span data-line="9"><span class="k">class</span><span class="w"> </span><span class="nc">EventCategoryController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="10">    <span class="c1"># Before:</span>
+</span><span data-line="11">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;event-categories&quot;</span><span class="p">]</span>
+</span><span data-line="12">    <span class="c1"># After:</span>
+</span><span data-line="13">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Event Categories&quot;</span><span class="p">]</span>
+</span><span data-line="14">
+</span><span data-line="15"><span class="k">class</span><span class="w"> </span><span class="nc">EventLocationController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="16">    <span class="c1"># Before:</span>
+</span><span data-line="17">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;event-locations&quot;</span><span class="p">]</span>
+</span><span data-line="18">    <span class="c1"># After:</span>
+</span><span data-line="19">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Event Locations&quot;</span><span class="p">]</span>
+</span><span data-line="20">
+</span><span data-line="21"><span class="k">class</span><span class="w"> </span><span class="nc">EventOccurrenceController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="22">    <span class="c1"># Before:</span>
+</span><span data-line="23">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;event-occurrences&quot;</span><span class="p">]</span>
+</span><span data-line="24">    <span class="c1"># After:</span>
+</span><span data-line="25">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Event Occurrences&quot;</span><span class="p">]</span>
+</span><span data-line="26">
+</span><span data-line="27"><span class="k">class</span><span class="w"> </span><span class="nc">EventController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="28">    <span class="c1"># Before:</span>
+</span><span data-line="29">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;events&quot;</span><span class="p">]</span>
+</span><span data-line="30">    <span class="c1"># After:</span>
+</span><span data-line="31">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Events&quot;</span><span class="p">]</span>
+</span></pre></div>
+</div>
+</section>
+<section id="jobs-domain">
+<h3>2.4 Jobs Domain<a class="headerlink" href="#jobs-domain" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># src/pydotorg/domains/jobs/controllers.py</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="k">class</span><span class="w"> </span><span class="nc">JobController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="4">    <span class="c1"># Before:</span>
+</span><span data-line="5">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;jobs&quot;</span><span class="p">]</span>
+</span><span data-line="6">    <span class="c1"># After:</span>
+</span><span data-line="7">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Jobs&quot;</span><span class="p">]</span>
+</span><span data-line="8">
+</span><span data-line="9"><span class="k">class</span><span class="w"> </span><span class="nc">JobTypeController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="10">    <span class="c1"># Before:</span>
+</span><span data-line="11">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;job-types&quot;</span><span class="p">]</span>
+</span><span data-line="12">    <span class="c1"># After:</span>
+</span><span data-line="13">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Job Types&quot;</span><span class="p">]</span>
+</span><span data-line="14">
+</span><span data-line="15"><span class="k">class</span><span class="w"> </span><span class="nc">JobCategoryController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="16">    <span class="c1"># Before:</span>
+</span><span data-line="17">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;job-categories&quot;</span><span class="p">]</span>
+</span><span data-line="18">    <span class="c1"># After:</span>
+</span><span data-line="19">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Job Categories&quot;</span><span class="p">]</span>
+</span><span data-line="20">
+</span><span data-line="21"><span class="k">class</span><span class="w"> </span><span class="nc">JobReviewCommentController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="22">    <span class="c1"># Before:</span>
+</span><span data-line="23">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;job-review-comments&quot;</span><span class="p">]</span>
+</span><span data-line="24">    <span class="c1"># After:</span>
+</span><span data-line="25">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Job Review Comments&quot;</span><span class="p">]</span>
+</span><span data-line="26">
+</span><span data-line="27"><span class="k">class</span><span class="w"> </span><span class="nc">JobRenderController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="28">    <span class="c1"># Before:</span>
+</span><span data-line="29">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;jobs-render&quot;</span><span class="p">]</span>
+</span><span data-line="30">    <span class="c1"># After (EXCLUDE):</span>
+</span><span data-line="31">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;internal&quot;</span><span class="p">]</span>  <span class="c1"># or include_in_schema=False</span>
+</span></pre></div>
+</div>
+</section>
+<section id="sponsors-domain">
+<h3>2.5 Sponsors Domain<a class="headerlink" href="#sponsors-domain" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># src/pydotorg/domains/sponsors/controllers.py</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="k">class</span><span class="w"> </span><span class="nc">SponsorController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="4">    <span class="c1"># Before:</span>
+</span><span data-line="5">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;sponsors&quot;</span><span class="p">]</span>
+</span><span data-line="6">    <span class="c1"># After:</span>
+</span><span data-line="7">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Sponsors&quot;</span><span class="p">]</span>
+</span><span data-line="8">
+</span><span data-line="9"><span class="k">class</span><span class="w"> </span><span class="nc">SponsorshipLevelController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="10">    <span class="c1"># Before:</span>
+</span><span data-line="11">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;sponsorship-levels&quot;</span><span class="p">]</span>
+</span><span data-line="12">    <span class="c1"># After:</span>
+</span><span data-line="13">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Sponsorship Levels&quot;</span><span class="p">]</span>
+</span><span data-line="14">
+</span><span data-line="15"><span class="k">class</span><span class="w"> </span><span class="nc">SponsorshipController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="16">    <span class="c1"># Before:</span>
+</span><span data-line="17">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;sponsorships&quot;</span><span class="p">]</span>
+</span><span data-line="18">    <span class="c1"># After:</span>
+</span><span data-line="19">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Sponsorships&quot;</span><span class="p">]</span>
+</span><span data-line="20">
+</span><span data-line="21"><span class="k">class</span><span class="w"> </span><span class="nc">SponsorRenderController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="22">    <span class="c1"># Before:</span>
+</span><span data-line="23">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;sponsors-render&quot;</span><span class="p">]</span>
+</span><span data-line="24">    <span class="c1"># After (EXCLUDE):</span>
+</span><span data-line="25">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;internal&quot;</span><span class="p">]</span>
+</span></pre></div>
+</div>
+</section>
+<section id="blogs-domain">
+<h3>2.6 Blogs Domain<a class="headerlink" href="#blogs-domain" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># src/pydotorg/domains/blogs/controllers.py</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="k">class</span><span class="w"> </span><span class="nc">BlogEntryController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="4">    <span class="c1"># Before:</span>
+</span><span data-line="5">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;blog-entries&quot;</span><span class="p">]</span>
+</span><span data-line="6">    <span class="c1"># After:</span>
+</span><span data-line="7">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Blogs&quot;</span><span class="p">]</span>
+</span><span data-line="8">
+</span><span data-line="9"><span class="k">class</span><span class="w"> </span><span class="nc">FeedController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="10">    <span class="c1"># Before:</span>
+</span><span data-line="11">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;feeds&quot;</span><span class="p">]</span>
+</span><span data-line="12">    <span class="c1"># After:</span>
+</span><span data-line="13">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Blog Feeds&quot;</span><span class="p">]</span>
+</span><span data-line="14">
+</span><span data-line="15"><span class="k">class</span><span class="w"> </span><span class="nc">FeedAggregateController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="16">    <span class="c1"># Before:</span>
+</span><span data-line="17">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;feed-aggregates&quot;</span><span class="p">]</span>
+</span><span data-line="18">    <span class="c1"># After:</span>
+</span><span data-line="19">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Blog Feeds&quot;</span><span class="p">]</span>  <span class="c1"># Merge with feeds</span>
+</span><span data-line="20">
+</span><span data-line="21"><span class="k">class</span><span class="w"> </span><span class="nc">RelatedBlogController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="22">    <span class="c1"># Before:</span>
+</span><span data-line="23">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;related-blogs&quot;</span><span class="p">]</span>
+</span><span data-line="24">    <span class="c1"># After:</span>
+</span><span data-line="25">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Blogs&quot;</span><span class="p">]</span>  <span class="c1"># Merge with main blogs</span>
+</span></pre></div>
+</div>
+</section>
+<section id="community-domain">
+<h3>2.7 Community Domain<a class="headerlink" href="#community-domain" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># src/pydotorg/domains/community/controllers.py</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="k">class</span><span class="w"> </span><span class="nc">CommunityGroupController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="4">    <span class="c1"># Rename from &quot;user-groups&quot; endpoint specific</span>
+</span><span data-line="5">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;User Groups &amp; Communities&quot;</span><span class="p">]</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="k">class</span><span class="w"> </span><span class="nc">CommunityPostController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="8">    <span class="c1"># Before:</span>
+</span><span data-line="9">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;community-posts&quot;</span><span class="p">]</span>
+</span><span data-line="10">    <span class="c1"># After:</span>
+</span><span data-line="11">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Community Content&quot;</span><span class="p">]</span>
+</span><span data-line="12">
+</span><span data-line="13"><span class="k">class</span><span class="w"> </span><span class="nc">CommunityPhotoController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="14">    <span class="c1"># Before:</span>
+</span><span data-line="15">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;community-photos&quot;</span><span class="p">]</span>
+</span><span data-line="16">    <span class="c1"># After:</span>
+</span><span data-line="17">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Community Content&quot;</span><span class="p">]</span>
+</span><span data-line="18">
+</span><span data-line="19"><span class="k">class</span><span class="w"> </span><span class="nc">CommunityVideoController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="20">    <span class="c1"># Before:</span>
+</span><span data-line="21">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;community-videos&quot;</span><span class="p">]</span>
+</span><span data-line="22">    <span class="c1"># After:</span>
+</span><span data-line="23">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Community Content&quot;</span><span class="p">]</span>
+</span><span data-line="24">
+</span><span data-line="25"><span class="k">class</span><span class="w"> </span><span class="nc">CommunityLinkController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="26">    <span class="c1"># Before:</span>
+</span><span data-line="27">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;community-links&quot;</span><span class="p">]</span>
+</span><span data-line="28">    <span class="c1"># After:</span>
+</span><span data-line="29">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Community Content&quot;</span><span class="p">]</span>
+</span></pre></div>
+</div>
+</section>
+<section id="success-stories-domain">
+<h3>2.8 Success Stories Domain<a class="headerlink" href="#success-stories-domain" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># src/pydotorg/domains/successstories/controllers.py</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="k">class</span><span class="w"> </span><span class="nc">SuccessStoryController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="4">    <span class="c1"># Before:</span>
+</span><span data-line="5">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;success-stories&quot;</span><span class="p">]</span>
+</span><span data-line="6">    <span class="c1"># After:</span>
+</span><span data-line="7">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Success Stories&quot;</span><span class="p">]</span>
+</span><span data-line="8">
+</span><span data-line="9"><span class="k">class</span><span class="w"> </span><span class="nc">SuccessStoryCategoryController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="10">    <span class="c1"># Before:</span>
+</span><span data-line="11">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;success-stories-categories&quot;</span><span class="p">]</span>
+</span><span data-line="12">    <span class="c1"># After:</span>
+</span><span data-line="13">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Success Story Categories&quot;</span><span class="p">]</span>
+</span></pre></div>
+</div>
+</section>
+<section id="other-domains">
+<h3>2.9 Other Domains<a class="headerlink" href="#other-domains" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># src/pydotorg/domains/pages/controllers.py</span>
+</span><span data-line="2"><span class="k">class</span><span class="w"> </span><span class="nc">PageController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="3">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Pages&quot;</span><span class="p">]</span>  <span class="c1"># Before: &quot;pages&quot;</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="k">class</span><span class="w"> </span><span class="nc">PageRenderController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="6">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;internal&quot;</span><span class="p">]</span>  <span class="c1"># Before: &quot;page-render&quot; (EXCLUDE)</span>
+</span><span data-line="7">
+</span><span data-line="8"><span class="c1"># src/pydotorg/domains/banners/controllers.py</span>
+</span><span data-line="9"><span class="k">class</span><span class="w"> </span><span class="nc">BannerController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="10">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Banners&quot;</span><span class="p">]</span>  <span class="c1"># Before: &quot;banners&quot;</span>
+</span><span data-line="11">
+</span><span data-line="12"><span class="c1"># src/pydotorg/domains/codesamples/controllers.py</span>
+</span><span data-line="13"><span class="k">class</span><span class="w"> </span><span class="nc">CodeSampleController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="14">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Code Samples&quot;</span><span class="p">]</span>  <span class="c1"># Before: &quot;code-samples&quot;</span>
+</span><span data-line="15">
+</span><span data-line="16"><span class="c1"># src/pydotorg/domains/search/controllers.py</span>
+</span><span data-line="17"><span class="k">class</span><span class="w"> </span><span class="nc">SearchController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="18">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Search&quot;</span><span class="p">]</span>  <span class="c1"># Before: &quot;search&quot;</span>
+</span><span data-line="19">
+</span><span data-line="20"><span class="k">class</span><span class="w"> </span><span class="nc">SearchRenderController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="21">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;internal&quot;</span><span class="p">]</span>  <span class="c1"># Before: &quot;search-render&quot; (EXCLUDE)</span>
+</span><span data-line="22">
+</span><span data-line="23"><span class="c1"># src/pydotorg/domains/nominations/controllers.py</span>
+</span><span data-line="24"><span class="k">class</span><span class="w"> </span><span class="nc">NominationController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="25">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Nominations&quot;</span><span class="p">]</span>  <span class="c1"># Before: &quot;nominations&quot;</span>
+</span><span data-line="26">
+</span><span data-line="27"><span class="k">class</span><span class="w"> </span><span class="nc">NomineeController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="28">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Nominees&quot;</span><span class="p">]</span>  <span class="c1"># Before: &quot;nominees&quot;</span>
+</span><span data-line="29">
+</span><span data-line="30"><span class="k">class</span><span class="w"> </span><span class="nc">NominationRenderController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="31">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;internal&quot;</span><span class="p">]</span>  <span class="c1"># Before: &quot;nominations-render&quot; (EXCLUDE)</span>
+</span><span data-line="32">
+</span><span data-line="33"><span class="c1"># src/pydotorg/domains/minutes/controllers.py</span>
+</span><span data-line="34"><span class="k">class</span><span class="w"> </span><span class="nc">MinutesController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="35">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Meeting Minutes&quot;</span><span class="p">]</span>  <span class="c1"># Before: &quot;minutes&quot;</span>
+</span><span data-line="36">
+</span><span data-line="37"><span class="c1"># src/pydotorg/domains/work_groups/controllers.py</span>
+</span><span data-line="38"><span class="k">class</span><span class="w"> </span><span class="nc">WorkGroupController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="39">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Work Groups&quot;</span><span class="p">]</span>  <span class="c1"># Before: &quot;work-groups&quot;</span>
+</span><span data-line="40">
+</span><span data-line="41"><span class="c1"># src/pydotorg/domains/mailing/controllers.py</span>
+</span><span data-line="42"><span class="k">class</span><span class="w"> </span><span class="nc">MailingController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="43">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Mailing Lists&quot;</span><span class="p">]</span>  <span class="c1"># Before: check current</span>
+</span></pre></div>
+</div>
+</section>
+<section id="admin-domain">
+<h3>2.10 Admin Domain<a class="headerlink" href="#admin-domain" title="Link to this heading">¶</a></h3>
+<p>All admin controllers should follow the pattern <code class="docutils literal notranslate"><span class="pre">&quot;Admin</span> <span class="pre">*&quot;</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># src/pydotorg/domains/admin/controllers/dashboard.py</span>
+</span><span data-line="2"><span class="k">class</span><span class="w"> </span><span class="nc">AdminDashboardController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="3">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Admin Dashboard&quot;</span><span class="p">]</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="c1"># src/pydotorg/domains/admin/controllers/users.py</span>
+</span><span data-line="6"><span class="k">class</span><span class="w"> </span><span class="nc">AdminUserController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="7">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Admin Users&quot;</span><span class="p">]</span>
+</span><span data-line="8">
+</span><span data-line="9"><span class="c1"># src/pydotorg/domains/admin/controllers/pages.py</span>
+</span><span data-line="10"><span class="k">class</span><span class="w"> </span><span class="nc">AdminPageController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="11">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Admin Pages&quot;</span><span class="p">]</span>
+</span><span data-line="12">
+</span><span data-line="13"><span class="c1"># src/pydotorg/domains/admin/controllers/events.py</span>
+</span><span data-line="14"><span class="k">class</span><span class="w"> </span><span class="nc">AdminEventController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="15">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Admin Events&quot;</span><span class="p">]</span>
+</span><span data-line="16">
+</span><span data-line="17"><span class="c1"># src/pydotorg/domains/admin/controllers/jobs.py</span>
+</span><span data-line="18"><span class="k">class</span><span class="w"> </span><span class="nc">AdminJobController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="19">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Admin Jobs&quot;</span><span class="p">]</span>
+</span><span data-line="20">
+</span><span data-line="21"><span class="c1"># src/pydotorg/domains/admin/controllers/sponsors.py</span>
+</span><span data-line="22"><span class="k">class</span><span class="w"> </span><span class="nc">AdminSponsorController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="23">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Admin Sponsors&quot;</span><span class="p">]</span>
+</span><span data-line="24">
+</span><span data-line="25"><span class="c1"># src/pydotorg/domains/admin/controllers/blogs.py</span>
+</span><span data-line="26"><span class="k">class</span><span class="w"> </span><span class="nc">AdminBlogController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="27">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Admin Blogs&quot;</span><span class="p">]</span>
+</span><span data-line="28">
+</span><span data-line="29"><span class="c1"># src/pydotorg/domains/admin/controllers/logs.py</span>
+</span><span data-line="30"><span class="k">class</span><span class="w"> </span><span class="nc">AdminLogController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="31">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Admin Logs&quot;</span><span class="p">]</span>
+</span><span data-line="32">
+</span><span data-line="33"><span class="k">class</span><span class="w"> </span><span class="nc">AdminEmailTemplateController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="34">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Admin Email Templates&quot;</span><span class="p">]</span>
+</span><span data-line="35">
+</span><span data-line="36"><span class="k">class</span><span class="w"> </span><span class="nc">AdminEmailLogController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="37">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Admin Email Logs&quot;</span><span class="p">]</span>
+</span><span data-line="38">
+</span><span data-line="39"><span class="c1"># src/pydotorg/domains/admin/controllers/tasks.py</span>
+</span><span data-line="40"><span class="k">class</span><span class="w"> </span><span class="nc">AdminTaskController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="41">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Admin Tasks&quot;</span><span class="p">]</span>
+</span><span data-line="42">
+</span><span data-line="43"><span class="c1"># src/pydotorg/domains/admin/controllers/settings.py</span>
+</span><span data-line="44"><span class="k">class</span><span class="w"> </span><span class="nc">AdminSettingController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="45">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Admin Settings&quot;</span><span class="p">]</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="phase-3-configure-openapi-tags">
+<h2>Phase 3: Configure OpenAPI Tags<a class="headerlink" href="#phase-3-configure-openapi-tags" title="Link to this heading">¶</a></h2>
+<section id="create-tag-configuration">
+<h3>3.1 Create Tag Configuration<a class="headerlink" href="#create-tag-configuration" title="Link to this heading">¶</a></h3>
+<p>Create a new file to define all OpenAPI tags:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># src/pydotorg/config/openapi_tags.py</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">litestar.openapi.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAPIConfig</span>
+</span><span data-line="4"><span class="kn">from</span><span class="w"> </span><span class="nn">litestar.openapi.spec</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tag</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="n">OPENAPI_TAGS</span> <span class="o">=</span> <span class="p">[</span>
+</span><span data-line="7">    <span class="c1"># Core API</span>
+</span><span data-line="8">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="9">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Authentication&quot;</span><span class="p">,</span>
+</span><span data-line="10">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;User authentication, login, registration, and token management&quot;</span><span class="p">,</span>
+</span><span data-line="11">    <span class="p">),</span>
+</span><span data-line="12">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="13">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Users&quot;</span><span class="p">,</span>
+</span><span data-line="14">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;User account management, profiles, and account operations&quot;</span><span class="p">,</span>
+</span><span data-line="15">    <span class="p">),</span>
+</span><span data-line="16">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="17">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;User Memberships&quot;</span><span class="p">,</span>
+</span><span data-line="18">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;User membership types and membership status management&quot;</span><span class="p">,</span>
+</span><span data-line="19">    <span class="p">),</span>
+</span><span data-line="20">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="21">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;User Groups&quot;</span><span class="p">,</span>
+</span><span data-line="22">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;User group management, approval, and trust status&quot;</span><span class="p">,</span>
+</span><span data-line="23">    <span class="p">),</span>
+</span><span data-line="24">
+</span><span data-line="25">    <span class="c1"># Content Management</span>
+</span><span data-line="26">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="27">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Pages&quot;</span><span class="p">,</span>
+</span><span data-line="28">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Static pages and page management&quot;</span><span class="p">,</span>
+</span><span data-line="29">    <span class="p">),</span>
+</span><span data-line="30">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="31">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Documents&quot;</span><span class="p">,</span>
+</span><span data-line="32">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Documentation files and document management&quot;</span><span class="p">,</span>
+</span><span data-line="33">    <span class="p">),</span>
+</span><span data-line="34">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="35">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Images&quot;</span><span class="p">,</span>
+</span><span data-line="36">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Image assets and image management&quot;</span><span class="p">,</span>
+</span><span data-line="37">    <span class="p">),</span>
+</span><span data-line="38">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="39">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Banners&quot;</span><span class="p">,</span>
+</span><span data-line="40">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Website banners and promotional content&quot;</span><span class="p">,</span>
+</span><span data-line="41">    <span class="p">),</span>
+</span><span data-line="42">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="43">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Code Samples&quot;</span><span class="p">,</span>
+</span><span data-line="44">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Code examples and sample snippets&quot;</span><span class="p">,</span>
+</span><span data-line="45">    <span class="p">),</span>
+</span><span data-line="46">
+</span><span data-line="47">    <span class="c1"># Downloads &amp; Releases</span>
+</span><span data-line="48">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="49">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Operating Systems&quot;</span><span class="p">,</span>
+</span><span data-line="50">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Supported operating systems for Python downloads&quot;</span><span class="p">,</span>
+</span><span data-line="51">    <span class="p">),</span>
+</span><span data-line="52">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="53">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Python Releases&quot;</span><span class="p">,</span>
+</span><span data-line="54">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Python version releases and release information&quot;</span><span class="p">,</span>
+</span><span data-line="55">    <span class="p">),</span>
+</span><span data-line="56">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="57">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Release Files&quot;</span><span class="p">,</span>
+</span><span data-line="58">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Download files associated with Python releases&quot;</span><span class="p">,</span>
+</span><span data-line="59">    <span class="p">),</span>
+</span><span data-line="60">
+</span><span data-line="61">    <span class="c1"># Events &amp; Community</span>
+</span><span data-line="62">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="63">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Events&quot;</span><span class="p">,</span>
+</span><span data-line="64">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Python events and conference information&quot;</span><span class="p">,</span>
+</span><span data-line="65">    <span class="p">),</span>
+</span><span data-line="66">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="67">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Event Calendars&quot;</span><span class="p">,</span>
+</span><span data-line="68">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Event calendars and calendar management&quot;</span><span class="p">,</span>
+</span><span data-line="69">    <span class="p">),</span>
+</span><span data-line="70">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="71">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Event Categories&quot;</span><span class="p">,</span>
+</span><span data-line="72">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Event type categories and classifications&quot;</span><span class="p">,</span>
+</span><span data-line="73">    <span class="p">),</span>
+</span><span data-line="74">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="75">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Event Locations&quot;</span><span class="p">,</span>
+</span><span data-line="76">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Physical venues and event locations&quot;</span><span class="p">,</span>
+</span><span data-line="77">    <span class="p">),</span>
+</span><span data-line="78">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="79">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Event Occurrences&quot;</span><span class="p">,</span>
+</span><span data-line="80">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Specific event instances and scheduling&quot;</span><span class="p">,</span>
+</span><span data-line="81">    <span class="p">),</span>
+</span><span data-line="82">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="83">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;User Groups &amp; Communities&quot;</span><span class="p">,</span>
+</span><span data-line="84">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Community groups and member organizations&quot;</span><span class="p">,</span>
+</span><span data-line="85">    <span class="p">),</span>
+</span><span data-line="86">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="87">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Community Content&quot;</span><span class="p">,</span>
+</span><span data-line="88">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Community-contributed content (posts, photos, videos, links)&quot;</span><span class="p">,</span>
+</span><span data-line="89">    <span class="p">),</span>
+</span><span data-line="90">
+</span><span data-line="91">    <span class="c1"># Content Discovery</span>
+</span><span data-line="92">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="93">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Blogs&quot;</span><span class="p">,</span>
+</span><span data-line="94">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Blog posts and blog entries&quot;</span><span class="p">,</span>
+</span><span data-line="95">    <span class="p">),</span>
+</span><span data-line="96">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="97">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Blog Feeds&quot;</span><span class="p">,</span>
+</span><span data-line="98">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;RSS feeds and feed aggregation&quot;</span><span class="p">,</span>
+</span><span data-line="99">    <span class="p">),</span>
+</span><span data-line="100">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="101">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Success Stories&quot;</span><span class="p">,</span>
+</span><span data-line="102">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;User success stories and testimonials&quot;</span><span class="p">,</span>
+</span><span data-line="103">    <span class="p">),</span>
+</span><span data-line="104">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="105">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Success Story Categories&quot;</span><span class="p">,</span>
+</span><span data-line="106">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Success story categories and classifications&quot;</span><span class="p">,</span>
+</span><span data-line="107">    <span class="p">),</span>
+</span><span data-line="108">
+</span><span data-line="109">    <span class="c1"># Jobs &amp; Opportunities</span>
+</span><span data-line="110">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="111">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Jobs&quot;</span><span class="p">,</span>
+</span><span data-line="112">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Python job listings and employment opportunities&quot;</span><span class="p">,</span>
+</span><span data-line="113">    <span class="p">),</span>
+</span><span data-line="114">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="115">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Job Types&quot;</span><span class="p">,</span>
+</span><span data-line="116">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Job type categories (contract, full-time, part-time, etc.)&quot;</span><span class="p">,</span>
+</span><span data-line="117">    <span class="p">),</span>
+</span><span data-line="118">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="119">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Job Categories&quot;</span><span class="p">,</span>
+</span><span data-line="120">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Job industry and role categories&quot;</span><span class="p">,</span>
+</span><span data-line="121">    <span class="p">),</span>
+</span><span data-line="122">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="123">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Job Review Comments&quot;</span><span class="p">,</span>
+</span><span data-line="124">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Job listing review comments and moderation&quot;</span><span class="p">,</span>
+</span><span data-line="125">    <span class="p">),</span>
+</span><span data-line="126">
+</span><span data-line="127">    <span class="c1"># Business &amp; Sponsorship</span>
+</span><span data-line="128">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="129">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Sponsors&quot;</span><span class="p">,</span>
+</span><span data-line="130">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Python organizations and sponsor information&quot;</span><span class="p">,</span>
+</span><span data-line="131">    <span class="p">),</span>
+</span><span data-line="132">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="133">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Sponsorship Levels&quot;</span><span class="p">,</span>
+</span><span data-line="134">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Sponsorship tier definitions and benefits&quot;</span><span class="p">,</span>
+</span><span data-line="135">    <span class="p">),</span>
+</span><span data-line="136">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="137">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Sponsorships&quot;</span><span class="p">,</span>
+</span><span data-line="138">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Active sponsorship relationships and agreements&quot;</span><span class="p">,</span>
+</span><span data-line="139">    <span class="p">),</span>
+</span><span data-line="140">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="141">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Companies&quot;</span><span class="p">,</span>
+</span><span data-line="142">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Company profiles and organization data&quot;</span><span class="p">,</span>
+</span><span data-line="143">    <span class="p">),</span>
+</span><span data-line="144">
+</span><span data-line="145">    <span class="c1"># Governance &amp; Meetings</span>
+</span><span data-line="146">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="147">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Work Groups&quot;</span><span class="p">,</span>
+</span><span data-line="148">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Python Enhancement Proposal (PEP) work groups&quot;</span><span class="p">,</span>
+</span><span data-line="149">    <span class="p">),</span>
+</span><span data-line="150">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="151">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Meeting Minutes&quot;</span><span class="p">,</span>
+</span><span data-line="152">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Meeting notes and minutes archives&quot;</span><span class="p">,</span>
+</span><span data-line="153">    <span class="p">),</span>
+</span><span data-line="154">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="155">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Nominations&quot;</span><span class="p">,</span>
+</span><span data-line="156">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Award nominations and election cycles&quot;</span><span class="p">,</span>
+</span><span data-line="157">    <span class="p">),</span>
+</span><span data-line="158">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="159">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Nominees&quot;</span><span class="p">,</span>
+</span><span data-line="160">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Nominated individuals and candidates&quot;</span><span class="p">,</span>
+</span><span data-line="161">    <span class="p">),</span>
+</span><span data-line="162">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="163">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Elections&quot;</span><span class="p">,</span>
+</span><span data-line="164">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Election information and voting&quot;</span><span class="p">,</span>
+</span><span data-line="165">    <span class="p">),</span>
+</span><span data-line="166">
+</span><span data-line="167">    <span class="c1"># Discovery &amp; Utilities</span>
+</span><span data-line="168">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="169">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Search&quot;</span><span class="p">,</span>
+</span><span data-line="170">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Full-text and faceted search across platform&quot;</span><span class="p">,</span>
+</span><span data-line="171">    <span class="p">),</span>
+</span><span data-line="172">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="173">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Mailing Lists&quot;</span><span class="p">,</span>
+</span><span data-line="174">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Email list subscriptions and management&quot;</span><span class="p">,</span>
+</span><span data-line="175">    <span class="p">),</span>
+</span><span data-line="176">
+</span><span data-line="177">    <span class="c1"># Administration</span>
+</span><span data-line="178">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="179">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Admin Dashboard&quot;</span><span class="p">,</span>
+</span><span data-line="180">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Administrative dashboard and system overview&quot;</span><span class="p">,</span>
+</span><span data-line="181">    <span class="p">),</span>
+</span><span data-line="182">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="183">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Admin Users&quot;</span><span class="p">,</span>
+</span><span data-line="184">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Administrative user management&quot;</span><span class="p">,</span>
+</span><span data-line="185">    <span class="p">),</span>
+</span><span data-line="186">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="187">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Admin Pages&quot;</span><span class="p">,</span>
+</span><span data-line="188">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Administrative page management&quot;</span><span class="p">,</span>
+</span><span data-line="189">    <span class="p">),</span>
+</span><span data-line="190">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="191">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Admin Events&quot;</span><span class="p">,</span>
+</span><span data-line="192">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Administrative event management&quot;</span><span class="p">,</span>
+</span><span data-line="193">    <span class="p">),</span>
+</span><span data-line="194">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="195">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Admin Jobs&quot;</span><span class="p">,</span>
+</span><span data-line="196">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Administrative job listing management&quot;</span><span class="p">,</span>
+</span><span data-line="197">    <span class="p">),</span>
+</span><span data-line="198">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="199">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Admin Sponsors&quot;</span><span class="p">,</span>
+</span><span data-line="200">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Administrative sponsor management&quot;</span><span class="p">,</span>
+</span><span data-line="201">    <span class="p">),</span>
+</span><span data-line="202">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="203">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Admin Blogs&quot;</span><span class="p">,</span>
+</span><span data-line="204">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Administrative blog management&quot;</span><span class="p">,</span>
+</span><span data-line="205">    <span class="p">),</span>
+</span><span data-line="206">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="207">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Admin Logs&quot;</span><span class="p">,</span>
+</span><span data-line="208">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;System logging and audit trails&quot;</span><span class="p">,</span>
+</span><span data-line="209">    <span class="p">),</span>
+</span><span data-line="210">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="211">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Admin Email Templates&quot;</span><span class="p">,</span>
+</span><span data-line="212">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Email template management and customization&quot;</span><span class="p">,</span>
+</span><span data-line="213">    <span class="p">),</span>
+</span><span data-line="214">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="215">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Admin Email Logs&quot;</span><span class="p">,</span>
+</span><span data-line="216">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Email delivery logs and status tracking&quot;</span><span class="p">,</span>
+</span><span data-line="217">    <span class="p">),</span>
+</span><span data-line="218">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="219">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Admin Tasks&quot;</span><span class="p">,</span>
+</span><span data-line="220">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Background task management and scheduling&quot;</span><span class="p">,</span>
+</span><span data-line="221">    <span class="p">),</span>
+</span><span data-line="222">    <span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="223">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Admin Settings&quot;</span><span class="p">,</span>
+</span><span data-line="224">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;System configuration and application settings&quot;</span><span class="p">,</span>
+</span><span data-line="225">    <span class="p">),</span>
+</span><span data-line="226"><span class="p">]</span>
+</span></pre></div>
+</div>
+</section>
+<section id="update-application-configuration">
+<h3>3.2 Update Application Configuration<a class="headerlink" href="#update-application-configuration" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># src/pydotorg/config.py or src/pydotorg/main.py</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.config.openapi_tags</span><span class="w"> </span><span class="kn">import</span> <span class="n">OPENAPI_TAGS</span>
+</span><span data-line="4"><span class="kn">from</span><span class="w"> </span><span class="nn">litestar.openapi.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAPIConfig</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="n">app</span> <span class="o">=</span> <span class="n">Litestar</span><span class="p">(</span>
+</span><span data-line="7">    <span class="n">route_handlers</span><span class="o">=</span><span class="p">[</span><span class="o">...</span><span class="p">],</span>
+</span><span data-line="8">    <span class="n">openapi_config</span><span class="o">=</span><span class="n">OpenAPIConfig</span><span class="p">(</span>
+</span><span data-line="9">        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Python.org API&quot;</span><span class="p">,</span>
+</span><span data-line="10">        <span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.0.0&quot;</span><span class="p">,</span>
+</span><span data-line="11">        <span class="n">tags</span><span class="o">=</span><span class="n">OPENAPI_TAGS</span><span class="p">,</span>  <span class="c1"># Add this</span>
+</span><span data-line="12">    <span class="p">),</span>
+</span><span data-line="13">    <span class="c1"># ... rest of config</span>
+</span><span data-line="14"><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="phase-4-exclude-render-controllers">
+<h2>Phase 4: Exclude Render Controllers<a class="headerlink" href="#phase-4-exclude-render-controllers" title="Link to this heading">¶</a></h2>
+<section id="option-a-mark-as-internal">
+<h3>4.1 Option A: Mark as Internal<a class="headerlink" href="#option-a-mark-as-internal" title="Link to this heading">¶</a></h3>
+<p>For controllers that serve HTML rendering and shouldn’t appear in public API docs:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># src/pydotorg/domains/jobs/controllers.py</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="k">class</span><span class="w"> </span><span class="nc">JobRenderController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="4">    <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;/jobs&quot;</span>
+</span><span data-line="5">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;internal&quot;</span><span class="p">]</span>  <span class="c1"># Will be filtered out in OpenAPI</span>
+</span><span data-line="6">    <span class="n">include_in_schema</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># Explicitly exclude from OpenAPI schema</span>
+</span><span data-line="7">
+</span><span data-line="8">    <span class="c1"># ... routes</span>
+</span></pre></div>
+</div>
+</section>
+<section id="option-b-filter-in-openapi-config">
+<h3>4.2 Option B: Filter in OpenAPI Config<a class="headerlink" href="#option-b-filter-in-openapi-config" title="Link to this heading">¶</a></h3>
+<p>Alternatively, filter tags in the OpenAPI configuration:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># src/pydotorg/config.py</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">litestar.openapi.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAPIConfig</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="c1"># Filter out internal and render controllers</span>
+</span><span data-line="6"><span class="n">excluded_tags</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;internal&quot;</span><span class="p">,</span> <span class="s2">&quot;admin-internal&quot;</span><span class="p">}</span>
+</span><span data-line="7">
+</span><span data-line="8"><span class="n">openapi_config</span> <span class="o">=</span> <span class="n">OpenAPIConfig</span><span class="p">(</span>
+</span><span data-line="9">    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Python.org API&quot;</span><span class="p">,</span>
+</span><span data-line="10">    <span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.0.0&quot;</span><span class="p">,</span>
+</span><span data-line="11">    <span class="n">tags</span><span class="o">=</span><span class="n">OPENAPI_TAGS</span><span class="p">,</span>
+</span><span data-line="12">    <span class="c1"># Custom filter logic (may need to implement in Litestar)</span>
+</span><span data-line="13"><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="phase-5-testing-validation">
+<h2>Phase 5: Testing &amp; Validation<a class="headerlink" href="#phase-5-testing-validation" title="Link to this heading">¶</a></h2>
+<section id="test-tag-organization">
+<h3>5.1 Test Tag Organization<a class="headerlink" href="#test-tag-organization" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Run tests to verify tags are properly assigned</span>
+</span><span data-line="2">uv<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/<span class="w"> </span>-v<span class="w"> </span>-k<span class="w"> </span><span class="s2">&quot;tag&quot;</span><span class="w"> </span>--no-cov
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Check OpenAPI schema generation</span>
+</span><span data-line="5">uv<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/integration/test_openapi.py<span class="w"> </span>-v
+</span></pre></div>
+</div>
+</section>
+<section id="validate-in-scalar-ui">
+<h3>5.2 Validate in Scalar UI<a class="headerlink" href="#validate-in-scalar-ui" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Start the development server: <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">serve</span></code></p></li>
+<li><p>Visit the API documentation (typically <code class="docutils literal notranslate"><span class="pre">http://localhost:8000/docs</span></code>)</p></li>
+<li><p>Verify:</p>
+<ul class="simple">
+<li><p>Tags appear in the left sidebar</p></li>
+<li><p>Tags are in the correct order</p></li>
+<li><p>Render controllers are hidden</p></li>
+<li><p>Admin tags are grouped together</p></li>
+<li><p>Tag descriptions are clear and helpful</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="manual-verification">
+<h3>5.3 Manual Verification<a class="headerlink" href="#manual-verification" title="Link to this heading">¶</a></h3>
+<p>Confirm all tag updates:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Check all tags are updated</span>
+</span><span data-line="2">grep<span class="w"> </span>-rn<span class="w"> </span><span class="s2">&quot;tags = &quot;</span><span class="w"> </span>src/pydotorg/domains/*/controllers*.py<span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="se">\</span>
+</span><span data-line="3"><span class="w">  </span>grep<span class="w"> </span>-v<span class="w"> </span><span class="s2">&quot;tags = \[\&quot;[A-Z]&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="se">\</span>
+</span><span data-line="4"><span class="w">  </span>grep<span class="w"> </span>-v<span class="w"> </span><span class="s2">&quot;tags = \[\&quot;Admin&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="se">\</span>
+</span><span data-line="5"><span class="w">  </span>grep<span class="w"> </span>-v<span class="w"> </span><span class="s2">&quot;tags = \[\&quot;internal&quot;</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Should return no results (all tags properly cased)</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="phase-6-documentation">
+<h2>Phase 6: Documentation<a class="headerlink" href="#phase-6-documentation" title="Link to this heading">¶</a></h2>
+<section id="update-api-documentation">
+<h3>6.1 Update API Documentation<a class="headerlink" href="#update-api-documentation" title="Link to this heading">¶</a></h3>
+<p>Add to the main API documentation:</p>
+<ul class="simple">
+<li><p>Link to <code class="docutils literal notranslate"><span class="pre">API_TAGS_STRUCTURE.md</span></code> for detailed tag information</p></li>
+<li><p>Include quick reference table from <code class="docutils literal notranslate"><span class="pre">API_TAGS_QUICK_REF.md</span></code></p></li>
+<li><p>Show visual hierarchy from <code class="docutils literal notranslate"><span class="pre">API_TAGS_HIERARCHY.txt</span></code></p></li>
+</ul>
+</section>
+<section id="update-developer-guides">
+<h3>6.2 Update Developer Guides<a class="headerlink" href="#update-developer-guides" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Update any developer onboarding docs to reference new tag structure</p></li>
+<li><p>Add tag navigation tips to API documentation</p></li>
+<li><p>Document any tag-specific conventions</p></li>
+</ul>
+</section>
+<section id="communicate-changes">
+<h3>6.3 Communicate Changes<a class="headerlink" href="#communicate-changes" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Notify API users about the new tag structure</p></li>
+<li><p>Highlight improvements in API documentation UX</p></li>
+<li><p>Provide migration guide for any dependent systems</p></li>
+</ul>
+</section>
+</section>
+<section id="checklist">
+<h2>Checklist<a class="headerlink" href="#checklist" title="Link to this heading">¶</a></h2>
+<ul class="contains-task-list simple">
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Review and approve tag structure</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Update all controller <code class="docutils literal notranslate"><span class="pre">tags</span></code> assignments (Phase 2)</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Create OpenAPI tag configuration (Phase 3.1)</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Update application configuration (Phase 3.2)</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Mark/exclude render controllers (Phase 4)</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Run tag-related tests (Phase 5.1)</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Validate in Scalar UI (Phase 5.2)</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Verify all tags are properly formatted (Phase 5.3)</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Update API documentation (Phase 6.1)</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Update developer guides (Phase 6.2)</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Communicate changes to stakeholders (Phase 6.3)</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Monitor usage patterns post-launch</p></li>
+</ul>
+</section>
+<section id="rollback-plan">
+<h2>Rollback Plan<a class="headerlink" href="#rollback-plan" title="Link to this heading">¶</a></h2>
+<p>If issues arise after implementation:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Revert controller tag changes</span>
+</span><span data-line="2">git<span class="w"> </span>checkout<span class="w"> </span>--<span class="w"> </span>src/pydotorg/domains/*/controllers*.py
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Revert configuration changes</span>
+</span><span data-line="5">git<span class="w"> </span>checkout<span class="w"> </span>--<span class="w"> </span>src/pydotorg/config/openapi_tags.py
+</span><span data-line="6">git<span class="w"> </span>checkout<span class="w"> </span>--<span class="w"> </span>src/pydotorg/config.py
+</span></pre></div>
+</div>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">API_TAGS_STRUCTURE.md</span></code> - Detailed tag definitions and rationale</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">API_TAGS_QUICK_REF.md</span></code> - Quick reference table</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">API_TAGS_HIERARCHY.txt</span></code> - Visual tag hierarchy diagram</p></li>
+<li><p>Scalar Documentation: <a class="reference external" href="https://scalar.com/">https://scalar.com/</a></p></li>
+<li><p>Litestar OpenAPI: <a class="reference external" href="https://docs.litestar.dev/latest/features/openapi.html">https://docs.litestar.dev/latest/features/openapi.html</a></p></li>
+</ul>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Jacob Coffee</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+<a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+  <iconify-icon icon="simple-icons:github"></iconify-icon>
+</a></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=30646c52"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script src="../_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

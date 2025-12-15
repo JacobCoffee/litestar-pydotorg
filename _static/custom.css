@@ -1,0 +1,285 @@
+/* Python.org Custom Documentation Theme
+ * Colors match the Python.org website and API docs (Scalar theme)
+ * Primary: Python Blue (#3776AB)
+ * Secondary: Python Yellow (#FFD43B)
+ */
+
+/* Python Brand Colors - Override Shibuya accent */
+:root {
+  --python-blue: #3776AB;
+  --python-blue-light: #4B8BBE;
+  --python-blue-dark: #2B5B8A;
+  --python-yellow: #FFD43B;
+  --python-yellow-light: #FFE873;
+  --python-yellow-dark: #D4A600;
+  --python-gray: #646464;
+  --python-gray-light: #999999;
+  --python-gray-dark: #333333;
+}
+
+/* Override Shibuya blue accent with Python Blue */
+html[data-accent-color='blue'] {
+  --accent-1: #f8fbff;
+  --accent-2: #f0f7ff;
+  --accent-3: #e0efff;
+  --accent-4: #cce4ff;
+  --accent-5: #b8d8ff;
+  --accent-6: #9ec8f5;
+  --accent-7: #7db5eb;
+  --accent-8: #4B8BBE;
+  --accent-9: #3776AB;
+  --accent-10: #2B5B8A;
+  --accent-11: #1d4f7a;
+  --accent-12: #0f3654;
+
+  --accent-a1: rgba(55, 118, 171, 0.02);
+  --accent-a2: rgba(55, 118, 171, 0.06);
+  --accent-a3: rgba(55, 118, 171, 0.12);
+  --accent-a4: rgba(55, 118, 171, 0.18);
+  --accent-a5: rgba(55, 118, 171, 0.24);
+  --accent-a6: rgba(55, 118, 171, 0.32);
+  --accent-a7: rgba(55, 118, 171, 0.44);
+  --accent-a8: rgba(55, 118, 171, 0.60);
+  --accent-a9: rgba(55, 118, 171, 0.85);
+  --accent-a10: rgba(55, 118, 171, 0.90);
+  --accent-a11: rgba(43, 91, 138, 0.95);
+  --accent-a12: rgba(15, 54, 84, 0.98);
+}
+
+/* Dark mode Python colors */
+html.dark[data-accent-color='blue'],
+html[data-theme='dark'][data-accent-color='blue'] {
+  --accent-1: #0f1a24;
+  --accent-2: #142536;
+  --accent-3: #1a3048;
+  --accent-4: #1f3d5c;
+  --accent-5: #264a70;
+  --accent-6: #2f5985;
+  --accent-7: #3a6a9a;
+  --accent-8: #4B8BBE;
+  --accent-9: #4B8BBE;
+  --accent-10: #5a9acc;
+  --accent-11: #7eb3dc;
+  --accent-12: #c5dff5;
+
+  --accent-a1: rgba(75, 139, 190, 0.05);
+  --accent-a2: rgba(75, 139, 190, 0.10);
+  --accent-a3: rgba(75, 139, 190, 0.18);
+  --accent-a4: rgba(75, 139, 190, 0.26);
+  --accent-a5: rgba(75, 139, 190, 0.34);
+  --accent-a6: rgba(75, 139, 190, 0.44);
+  --accent-a7: rgba(75, 139, 190, 0.56);
+  --accent-a8: rgba(75, 139, 190, 0.70);
+  --accent-a9: rgba(75, 139, 190, 0.85);
+  --accent-a10: rgba(90, 154, 204, 0.90);
+  --accent-a11: rgba(126, 179, 220, 0.95);
+  --accent-a12: rgba(197, 223, 245, 0.98);
+}
+
+/* Header/navbar styling with Python gradient */
+.sy-head {
+  background: linear-gradient(135deg, var(--python-blue) 0%, var(--python-blue-dark) 100%) !important;
+}
+
+.sy-head a,
+.sy-head button,
+.sy-head .sy-head-title {
+  color: #ffffff !important;
+}
+
+.sy-head a:hover {
+  color: var(--python-yellow) !important;
+}
+
+/* Sidebar active item uses Python Blue */
+.sy-sidebar a.current,
+.sy-sidebar a:hover {
+  color: var(--python-blue);
+  border-left-color: var(--python-yellow);
+}
+
+/* Code block styling */
+.highlight pre {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border-left: 3px solid var(--python-yellow);
+}
+
+/* Inline code */
+code.literal {
+  padding: 0.2em 0.4em;
+  border-radius: 0.25rem;
+  background-color: var(--accent-a2);
+  color: var(--python-blue-dark);
+}
+
+html.dark code.literal,
+html[data-theme='dark'] code.literal {
+  color: var(--python-blue-light);
+}
+
+/* Table improvements */
+table.docutils {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table.docutils th {
+  background: var(--accent-a2);
+  color: var(--python-blue);
+  border-bottom: 2px solid var(--python-yellow);
+  font-weight: 600;
+  padding: 0.75rem;
+}
+
+table.docutils td {
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--accent-a3);
+}
+
+/* Admonition styling with Python colors */
+.admonition {
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin: 1rem 0;
+  border-left: 4px solid var(--python-blue);
+}
+
+.admonition.note {
+  border-left-color: var(--python-blue);
+  background: var(--accent-a2);
+}
+
+.admonition.warning {
+  border-left-color: var(--python-yellow);
+}
+
+.admonition.tip {
+  border-left-color: #36D399;
+}
+
+.admonition.danger,
+.admonition.error {
+  border-left-color: #F87272;
+}
+
+.admonition-title {
+  font-weight: 600;
+  color: var(--python-blue);
+}
+
+/* API reference styling */
+dl.py.class > dt,
+dl.py.function > dt,
+dl.py.method > dt {
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.25rem;
+  margin-bottom: 0.5rem;
+  background: var(--accent-a2);
+  border-left: 3px solid var(--python-yellow);
+}
+
+/* Better spacing for parameter lists */
+dl.field-list > dt {
+  font-weight: 600;
+  color: var(--python-blue);
+}
+
+dl.field-list > dd {
+  margin-left: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Links use Python Blue */
+a {
+  color: var(--python-blue);
+}
+
+a:hover {
+  color: var(--python-blue-dark);
+  text-decoration: underline;
+}
+
+html.dark a,
+html[data-theme='dark'] a {
+  color: var(--python-blue-light);
+}
+
+html.dark a:hover,
+html[data-theme='dark'] a:hover {
+  color: #7eb3dc;
+}
+
+/* Button styling */
+.sy-btn-primary,
+a.btn-primary {
+  background: linear-gradient(135deg, var(--python-blue) 0%, var(--python-blue-dark) 100%);
+  border: none;
+  color: white;
+}
+
+.sy-btn-primary:hover,
+a.btn-primary:hover {
+  background: linear-gradient(135deg, var(--python-blue-dark) 0%, var(--python-blue) 100%);
+}
+
+/* Version selector and badges */
+.badge,
+.version-badge {
+  background: var(--python-blue);
+  color: white;
+}
+
+/* Sphinx Design cards */
+.sd-card {
+  border-color: var(--accent-a4);
+}
+
+.sd-card:hover {
+  border-color: var(--python-blue);
+  box-shadow: 0 4px 12px var(--accent-a3);
+}
+
+.sd-card-title {
+  color: var(--python-blue);
+}
+
+/* TOC styling */
+.toc-tree a.current {
+  color: var(--python-blue);
+  font-weight: 600;
+  border-left: 2px solid var(--python-yellow);
+  padding-left: 0.5rem;
+}
+
+/* Search highlight */
+.highlighted {
+  background-color: var(--python-yellow-light);
+  color: var(--python-gray-dark);
+  padding: 0.1em 0.2em;
+  border-radius: 0.2em;
+}
+
+/* Scrollbar styling (webkit) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--accent-a2);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--python-blue-light);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--python-blue);
+}
+
+/* Footer branding */
+footer {
+  border-top: 2px solid var(--python-yellow);
+}

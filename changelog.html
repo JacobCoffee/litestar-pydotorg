@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="blue" data-content_root="./">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Changelog - litestar-pydotorg</title><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="prev" title="ADR-002: Use SAQ for Background Task Processing" href="architecture/adr/002-saq-background-tasks.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="_static/shibuya.css?v=14737038" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link media="print" rel="stylesheet" type="text/css" href="_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=513f0650" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="Changelog"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="index.html">
+      
+      
+      <strong>litestar-pydotorg</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"><ul><li class="link">
+          <a href="https://litestar.dev/">
+            <span>Litestar</span></a>
+        </li><li class="link">
+          <a href="https://python.org/">
+            <span>Python.org</span></a>
+        </li></ul></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials">
+  <a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting-started/index.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting-started/installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting-started/quickstart.html">Quickstart</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="guides/index.html">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="guides/development.html">Development Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/contributing.html">Contribution Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/testing.html">Testing Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/debugging.html">Debugging Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/api-usage.html">API Usage Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/authentication.html">Authentication Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/feature-flags.html">Feature Flags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/configuration.html">Configuration Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/deployment.html">Deployment Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/docker.html">Docker Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/troubleshooting.html">Troubleshooting Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cookbook/index.html">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cookbook/domain-patterns.html">Domain Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook/authentication-recipes.html">Authentication Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook/database-recipes.html">Database Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook/testing-recipes.html">Testing Recipes</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/core/index.html">Core Infrastructure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/core/auth.html">Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/cache.html">Caching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/database.html">Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/email.html">Email</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/exceptions.html">Exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/features.html">Feature Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/feeds.html">RSS/Atom Feeds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/ical.html">iCalendar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/middleware.html">Middleware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/openapi.html">OpenAPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/ratelimit.html">Rate Limiting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/security.html">Security</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/core/worker.html">Background Worker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/domains/index.html">Domain Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/about.html">About</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/admin.html">Admin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/banners.html">banners</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/blogs.html">blogs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/codesamples.html">Code Samples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/community.html">community</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/docs.html">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/downloads.html">downloads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/events.html">events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/jobs.html">jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/mailing.html">Mailing Lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/minutes.html">Minutes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/nominations.html">Nominations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/pages.html">pages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/sponsors.html">sponsors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/sqladmin.html">SQLAdmin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/successstories.html">Success Stories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/users.html">users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/domains/work_groups.html">Work Groups</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/lib.html">Library Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/tasks.html">Background Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/config.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/main.html">Application Entry Point</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="architecture/index.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="architecture/ARCHITECTURE.html">Litestar Python.org Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/DATABASE_SCHEMA.html">Database Schema Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/DOMAIN_MODELS.html">Domain Models Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/QUICK_START.html">Litestar Python.org Quick Start Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/API_TAGS_INDEX.html">API Tags Documentation Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/RATE_LIMITING_ARCHITECTURE.html">Rate Limiting Architecture Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/adr/001-litestar-framework.html">ADR-001: Use Litestar as Web Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture/adr/002-saq-background-tasks.html">ADR-002: Use SAQ for Background Task Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#unreleased">[unreleased]</a><ul>
+<li><a class="reference internal" href="#bug-fixes">Bug Fixes</a></li>
+<li><a class="reference internal" href="#documentation">Documentation</a></li>
+<li><a class="reference internal" href="#features">Features</a></li>
+<li><a class="reference internal" href="#miscellaneous-chores">Miscellaneous Chores</a></li>
+<li><a class="reference internal" href="#performance">Performance</a></li>
+<li><a class="reference internal" href="#refactoring">Refactoring</a></li>
+<li><a class="reference internal" href="#security">Security</a></li>
+<li><a class="reference internal" href="#style">Style</a></li>
+<li><a class="reference internal" href="#tests">Tests</a></li>
+<li><a class="reference internal" href="#build">Build</a></li>
+<li><a class="reference internal" href="#debug">Debug</a></li>
+</ul>
+</li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="index.html"><span itemprop="name">litestar-pydotorg</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">Changelog</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue dark-code" role="main">
+          <section id="changelog">
+<h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading">¶</a></h1>
+<p>All notable changes to this project will be documented in this file.</p>
+<hr class="docutils" />
+<section id="unreleased">
+<h2>[unreleased]<a class="headerlink" href="#unreleased" title="Link to this heading">¶</a></h2>
+<section id="bug-fixes">
+<h3>Bug Fixes<a class="headerlink" href="#bug-fixes" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>(admin)</strong> improve security and dashboard services - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/5304a587bef550a474d004b01e1d4bad87e6da08">5304a58</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> keep main navbar visible in admin area - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/eda3465eae33d2942743693b0c03435a925c21f4">eda3465</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> use safe user access and add Python logo to sidebar - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/ab48a0237c9f9f2611173403f8f66efd8f0fc317">ab48a02</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> use safe user access in dashboard template - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/dc785b891f72ab7dfa14372750e2a493449a39e2">dc785b8</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> reorder drawer elements for proper sidebar display - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/729857c0e406a5bbe2b778ac245691d1b40a5f0e">729857c</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> restore drawer sidebar with correct element order - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/1f3038a3ec00977f84185e994fd4d332c736a5b4">1f3038a</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> remove breadcrumbs block to prevent duplicate rendering - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/d8c138a04bdf20d5e2ba48da7a2a71c12dfd697f">d8c138a</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> use inline SVG for search icons - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/c1c8ac146020861c9b9ae02c0afb9bed217d57b2">c1c8ac1</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> resolve admin panel initialization issues - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/67e8d7a0eb87e211a43e0717057075e4e30bb9f5">67e8d7a</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> use DaisyUI input pattern for search field - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/5fe4a057c6098a70493fe4e66d7b5177a30c0cf9">5fe4a05</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> exclude admin page controllers from OpenAPI schema - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/dc895e781896b2ba17a9995cc238ef3efd9fd68f">dc895e7</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> always show HTML tabs in email preview with warning - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/1d14e98b8b3df8bd477dc238550fb01f74674cef">1d14e98</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> always show HTML tabs in template detail page - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/879710ba6bafa2bef3d740272b9d9ab8fb979309">879710b</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> fix modal layout collision and DIALOG method error - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/2a4dcb2efd3ac74b06cda2f6c0515c67f677f95f">2a4dcb2</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> improve cache management UI with toast notifications and fixes - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/a0213ad91323755108d300892b349d4ec5fac9bd">a0213ad</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> ensure toast appears immediately after redirect - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/6651c870de98c8f2b27bdaf84837423cb757b337">6651c87</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> fix modal close buttons causing HTTP 405 errors - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/fe5e4a222a3bf032ae34073f3120df9be17445b5">fe5e4a2</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> implement email logs filter functionality - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/13b6dcdc58bf103d08c75add206c3210b8265bef">13b6dcd</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> default email logs time_range to all - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/c26ac3230442ded1e8add2f1b9eae8385a70d1a4">c26ac32</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> implement email templates status and type filters - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/34c5eefc2b410becd030c7b70bdf15679f92cab1">34c5eef</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> fix pages list published filter parameter - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/abc9c64c2105851639ed1fe1d8e399874e9c211b">abc9c64</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> export DownloadAnalyticsService from services module - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/89d8670091ab5f1cf5148ccd0033d03f17e328a1">89d8670</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin/blogs)</strong> handle empty feed_id query param in entries list - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/ddc5b1b03fc3aa7916b07bed5539b456e94a5d7b">ddc5b1b</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin/blogs)</strong> render entry summary HTML with safe filter - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/1bf21cdb6d5b367966912c6f51dd2b959282f13f">1bf21cd</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin/blogs)</strong> use feed.entries instead of undefined entries variable - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/bb3051697e0533c006e3e3cce29e1fe92c61b752">bb30516</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin/blogs)</strong> pass entries to feed preview modal context - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/7205e4d467e6fa29e875e7011c07c3159ee90f14">7205e4d</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin/blogs)</strong> inline search button with join class - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/e4021179ea16af73ff5968f5ee9fec9dfe24da60">e402117</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin/email)</strong> use correct AuditBase field names in logs detail - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/6b143f6c80d44b61764bbd05d25f032b9bd2d369">6b143f6</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin/email)</strong> add duplicate template handler - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/dcd9ab2e5d0e03dd6b90d1a31b00431dbde4b33b">dcd9ab2</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin/events)</strong> fix validation errors and add HTMX partials - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/0b70608259c9d7992195f39d65b53dc93ae0f9d9">0b70608</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin/events)</strong> add |safe filter to render HTML in event titles - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/4d80afffea022e540b8d4a9c93c86e768175e741">4d80aff</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin/events)</strong> avoid empty query params in pagination URLs - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/c53818e69f696b7989bb1b2173614db8c1ae18cd">c53818e</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin/jobs)</strong> improve preview modal UX - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/349b3086e25c00bbd584508ffa0e00f9fbf0463b">349b308</a>) - Jacob Coffee</p></li>
+<li><p><strong>(api)</strong> consolidate OpenAPI tags for users and add Nominations tag - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/e859ee2af60fc2ff49917cf06adcb83bd80ba898">e859ee2</a>) - Jacob Coffee</p></li>
+<li><p><strong>(api)</strong> exclude page render controllers from OpenAPI schema - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/b67e0f03aa991a2a240dae2bf1870315206c9b8e">b67e0f0</a>) - Jacob Coffee</p></li>
+<li><p><strong>(api)</strong> add missing limit_offset pagination dependency - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/2273023c3a7eb49d0bddb64debef84f6a563d306">2273023</a>) - Jacob Coffee</p></li>
+<li><p><strong>(auth)</strong> handle plugin.config as list in middleware - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/2b5c5d36588c4955e1be3f375e22c1752bcbfe7c">2b5c5d3</a>) - Jacob Coffee</p></li>
+<li><p><strong>(auth)</strong> use Request type for route handler DI - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/b4259976c843f9bc320b9f4d7ff4ffa7d72b9792">b425997</a>) - Jacob Coffee</p></li>
+<li><p><strong>(auth)</strong> set proper HTTP status codes for auth endpoints - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/ddea628b59b303b244e9b86e6d5706fba39fd6c4">ddea628</a>) - Jacob Coffee</p></li>
+<li><p><strong>(auth)</strong> keep UUID/datetime as runtime imports for Pydantic - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/94195de69cbae05417b374831efeefc3b0aa24f0">94195de</a>) - Jacob Coffee</p></li>
+<li><p><strong>(auth)</strong> update auth controller routes for page rendering - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/9e347cbe835a3f1da9ecc5b4270032d3451461d3">9e347cb</a>) - Jacob Coffee</p></li>
+<li><p><strong>(auth)</strong> use native fetch for login form JSON submission - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/0cfbd0e297f18e74b3909b0a492f0b9534ab5587">0cfbd0e</a>) - Jacob Coffee</p></li>
+<li><p><strong>(auth)</strong> prevent form GET submission and SQLAlchemy greenlet error - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/cc76098d3554cb1167723e5a5c946ea2bae7d523">cc76098</a>) - Jacob Coffee</p></li>
+<li><p><strong>(auth)</strong> use native fetch for all auth forms JSON submission - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/6fece370ea63ebf78ea6c34d89be6abbc88c9510">6fece37</a>) - Jacob Coffee</p></li>
+<li><p><strong>(auth)</strong> add UserPopulationMiddleware to show admin button on all pages - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/ae01f3fa41db4eebb1fa612b88bff577eaf8a626">ae01f3f</a>) - Jacob Coffee</p></li>
+<li><p><strong>(auth)</strong> resolve circular import in guards module - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/b98ada17b4cb801d6c26ff8e427ca3c12ca3a4c1">b98ada1</a>) - Jacob Coffee</p></li>
+<li><p><strong>(banners)</strong> persist sitewide banners across HTMX navigation - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/eb6711ef4ddb08f3a31215f82125779d6df5a9a1">eb6711e</a>) - Jacob Coffee</p></li>
+<li><p><strong>(blogs)</strong> filter featured entries by is_featured flag - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/1aa9c7b921b101832551ad508a774643e1caa9e7">1aa9c7b</a>) - Jacob Coffee</p></li>
+<li><p><strong>(blogs)</strong> add HTMX OOB swap for sidebar feed filter active state - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/21bb063014c2ca09604b010689490f3e1df26dca">21bb063</a>) - Jacob Coffee</p></li>
+<li><p><strong>(blogs)</strong> resolve MissingGreenlet error in feed fetch - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/56459f50873e879541ae97d9ea20681b5a329b4a">56459f5</a>) - Jacob Coffee</p></li>
+<li><p><strong>(ci)</strong> resolve Docker test and Feed schema issues - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/539fa32275d05027792b0e62a93fb2edbde483a0">539fa32</a>) - Jacob Coffee</p></li>
+<li><p><strong>(ci)</strong> add CNAME to docs deployment for custom domain - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/dbebad616111c4ba2cdf92d006329ff514272e99">dbebad6</a>) - Jacob Coffee</p></li>
+<li><p><strong>(ci)</strong> exclude e2e tests from coverage job to prevent timeout - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/539a532f07a6df2f61f57b00a8e1557663b48a5c">539a532</a>) - Jacob Coffee</p></li>
+<li><p><strong>(ci)</strong> start server for E2E tests with frontend build - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/a8dcb7ade7420e904722871e1f8e07d1d2d3c758">a8dcb7a</a>) - Jacob Coffee</p></li>
+<li><p><strong>(ci)</strong> add database setup and improve server startup for E2E - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/050c6bedb61326aebcdf16f0541f87779f244255">050c6be</a>) - Jacob Coffee</p></li>
+<li><p><strong>(codespell)</strong> skip generated directories and add regex false positive - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/8e70658d95a7b576248f56bfcedf1260d64fea39">8e70658</a>) - Jacob Coffee</p></li>
+<li><p><strong>(config)</strong> use IPv4 address for Meilisearch default URL - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/6ac961fdfd77f779e86f8b029f7515f345feeb57">6ac961f</a>) - Jacob Coffee</p></li>
+<li><p><strong>(config)</strong> auto-convert postgresql:// to postgresql+asyncpg:// - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/00fa30255bdc6eed92709eea45337f008ce1c21b">00fa302</a>) - Jacob Coffee</p></li>
+<li><p><strong>(csrf)</strong> improve CSRF configuration and add tests - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/41cef7d9d981d55aaa9454a42982cfe134b2c7af">41cef7d</a>) - Jacob Coffee</p></li>
+<li><p><strong>(css)</strong> rename loading-spinner to avoid DaisyUI circular dependency - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/6988847fa7a1687c45cfc7e8a42924c38591e1a9">6988847</a>) - Jacob Coffee</p></li>
+<li><p><strong>(db)</strong> configure AlembicAsyncConfig for Litestar CLI database commands - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/61ce8a7a297e37ba02d092674af18d1366de53fc">61ce8a7</a>) - Jacob Coffee</p></li>
+<li><p><strong>(deploy)</strong> add Railway config and fix test connection pool - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/91cabed3a665212ffd3ebc2dc5134087590a9e0e">91cabed</a>) - Jacob Coffee</p></li>
+<li><p><strong>(deploy)</strong> wrap start command in shell for env var parsing - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/dc3096c477d3b8bc21610a8dddedc14254813cbc">dc3096c</a>) - Jacob Coffee</p></li>
+<li><p><strong>(deploy)</strong> increase healthcheck timeout to 120s - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/32dbef95f61418ded579d2b5184ccf84dce1f808">32dbef9</a>) - Jacob Coffee</p></li>
+<li><p><strong>(docker)</strong> add BuildKit syntax and cache mount ids for Railway - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/8fdcd61f0a72ef264469338a120e3d80137296cb">8fdcd61</a>) - Jacob Coffee</p></li>
+<li><p><strong>(docker)</strong> remove cache mounts for Railway compatibility - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/07ce5bbcda8c18b7c781537b34b7b6153e43aa95">07ce5bb</a>) - Jacob Coffee</p></li>
+<li><p><strong>(docker)</strong> ensure venv binaries have execute permissions - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/70634dab6f35384de08161b5eb23b2e0d493d88a">70634da</a>) - Jacob Coffee</p></li>
+<li><p><strong>(docker)</strong> use –chmod=755 on COPY for venv executables - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/124e63dccc34a75cd64b3b0efc6796a30f18da91">124e63d</a>) - Jacob Coffee</p></li>
+<li><p><strong>(docker)</strong> resolve Python version mismatch and venv symlink issues - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/69ca3f697480c97efff3783836119c0f40e8b1c9">69ca3f6</a>) - Jacob Coffee</p></li>
+<li><p><strong>(docs)</strong> fix Scalar plugin and change schema path to /api - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/c62d2133c443c10f39d952981d75da6ff753212c">c62d213</a>) - Jacob Coffee</p></li>
+<li><p><strong>(docs)</strong> simplify OpenAPI plugin configuration - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/4d39dc766625f19ad775e70c7d92f958bfc35167">4d39dc7</a>) - Jacob Coffee</p></li>
+<li><p><strong>(docs)</strong> simplify OpenAPI plugins to use built-in renders - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/d6ccb2825f8c8d591020986a3194a0de15838852">d6ccb28</a>) - Jacob Coffee</p></li>
+<li><p><strong>(docs)</strong> make header text white on blue background - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/0af03d29285541376b5230cca15bcbdc427f71b0">0af03d2</a>) - Jacob Coffee</p></li>
+<li><p><strong>(docs)</strong> add yellow hover state for header elements - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/5d15ee55814618ef1b5565fc9d33696831c0ae39">5d15ee5</a>) - Jacob Coffee</p></li>
+<li><p><strong>(docs)</strong> exclude internal directory from Sphinx builds - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/e7dd06f779519e8ea96fceb69ac2b7ef3e37739d">e7dd06f</a>) - Jacob Coffee</p></li>
+<li><p><strong>(docs)</strong> resolve Sphinx build warnings - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/95a0ec82dc6bc3f78f5bdd5cd469608b1cf2187d">95a0ec8</a>) - Jacob Coffee</p></li>
+<li><p><strong>(docs)</strong> resolve Sphinx warnings from SQLAdmin and docstrings - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/327b533b822c8e4053cb1168bbfef1bd5041c1e2">327b533</a>) - Jacob Coffee</p></li>
+<li><p><strong>(docs)</strong> suppress debug logging during sphinx build - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/09b2c45a5177cf599711c5f2b9258806f590d35a">09b2c45</a>) - Jacob Coffee</p></li>
+<li><p><strong>(events)</strong> render event description HTML with safe filter - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/04380cde287d662d8ac48ad4ec95de0960fc2f3f">04380cd</a>) - Jacob Coffee</p></li>
+<li><p><strong>(events)</strong> correct iCalendar feed URL in calendar template - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/8d2ced0e8c5fe83117fe3cfc35c3f362ecffa161">8d2ced0</a>) - Jacob Coffee</p></li>
+<li><p><strong>(events)</strong> add hx-boost=false to iCalendar download links - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/c0db8487a987c9212ce45a26847de744cfea229f">c0db848</a>) - Jacob Coffee</p></li>
+<li><p><strong>(events)</strong> rewire calendar view with proper data and HTMX support - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/4fbbd4b5e73212d71cc979c4c6e602f66e9d1e75">4fbbd4b</a>) - Jacob Coffee</p></li>
+<li><p><strong>(events)</strong> improve calendar view HTMX and add week view - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/c79929af2e2eb38a6881f4a431970ea94be76ced">c79929a</a>) - Jacob Coffee</p></li>
+<li><p><strong>(events)</strong> make calendar navigation work with HTMX - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/c2e377aad7221a9f0979a005fa9c7c304dd82ada">c2e377a</a>) - Jacob Coffee</p></li>
+<li><p><strong>(events)</strong> add eager loading to prevent MissingGreenlet errors - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/5eedfbbe9a11ded88d1af4f2a216e64ec6d6f6ab">5eedfbb</a>) - Jacob Coffee</p></li>
+<li><p><strong>(events)</strong> add eager loading to event queries - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/06075877a566e8fb20eaaac417f183fd28161c9d">0607587</a>) - Jacob Coffee</p></li>
+<li><p><strong>(events)</strong> add calendar, start_date, end_date filter params to controller - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/147282769ee192ef9e98b686f921c37830a17856">1472827</a>) - Jacob Coffee</p></li>
+<li><p><strong>(exceptions)</strong> improve toast messages and add deduplication - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/20733565c35d92fa0722b550ccd137d01162cf7a">2073356</a>) - Jacob Coffee</p></li>
+<li><p><strong>(homepage)</strong> display venue name instead of object repr - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/2563d69eabf4bf30c387784641fbaaee52fa576f">2563d69</a>) - Jacob Coffee</p></li>
+<li><p><strong>(jobs)</strong> resolve duplicate content in job filter sidebar - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/5720d754ac2445879fc0db8591c6a49f7d94d492">5720d75</a>) - Jacob Coffee</p></li>
+<li><p><strong>(jobs)</strong> convert Clear All to htmx button for proper partial swap - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/60791af045e7067c97481e7a4e8914dcbabbc91d">60791af</a>) - Jacob Coffee</p></li>
+<li><p><strong>(jobs)</strong> use standard ‘data’ param name for Body() in search endpoint - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/09b1de220f5e7f76f347124b7f8e763c054faa1c">09b1de2</a>) - Jacob Coffee</p></li>
+<li><p><strong>(jobs)</strong> return 200 OK for search endpoint instead of 201 Created - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/60c0775d8574b0c3974da41a4c92495b6034fbad">60c0775</a>) - Jacob Coffee</p></li>
+<li><p><strong>(jobs/submit)</strong> fix modal close button and checkbox array handling - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/6cfb5459fd5bfb04b40c4d34c46b084bf5a7b778">6cfb545</a>) - Jacob Coffee</p></li>
+<li><p><strong>(jobs/submit)</strong> fix form data mapping to match API schema - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/fb82b274acdb0f886be75bcf6d96fb3f88249727">fb82b27</a>) - Jacob Coffee</p></li>
+<li><p><strong>(jobs/submit)</strong> remove conflicting form action and method - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/e6324f07aeb8b3a4544ca54a22da67c827ab5b41">e6324f0</a>) - Jacob Coffee</p></li>
+<li><p><strong>(js)</strong> prevent script re-execution from hx-boost navigation - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/985fa5abe6d5f5e54ec14a5c89567705ab8c2ad5">985fa5a</a>) - Jacob Coffee</p></li>
+<li><p><strong>(lint)</strong> ignore PLC0415 in tasks for lazy imports - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/bd0f9b6f04ff42754b1890e270ea31f2c2166aa9">bd0f9b6</a>) - Jacob Coffee</p></li>
+<li><p><strong>(lint)</strong> disable PLC0415 globally and fix FURB162 - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/c221c28af1e4126ac1d549451825e7f6c0f84ec6">c221c28</a>) - Jacob Coffee</p></li>
+<li><p><strong>(logging)</strong> remove format_exc_info for dev mode to enable Rich tracebacks - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/e31639ac3d7567685633a6a4ce69d5d6e1e1238f">e31639a</a>) - Jacob Coffee</p></li>
+<li><p><strong>(logging)</strong> explicitly configure processors for Rich console output - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/68c8e6ea0f140f04e49a26b1dd0e124dafcd156c">68c8e6e</a>) - Jacob Coffee</p></li>
+<li><p><strong>(make)</strong> remove duplicate Docker targets - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/6d5daed84b71e62dd18e35aed651900a56535c55">6d5daed</a>) - Jacob Coffee</p></li>
+<li><p><strong>(navbar)</strong> safely access user from request scope - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/daa4ffd284025abe70e61e487e5a49e4ed135d8c">daa4ffd</a>) - Jacob Coffee</p></li>
+<li><p><strong>(navbar)</strong> improve admin dropdown and fix donate button alignment - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/e7f115972d1207894c652d8988e3605ec9da6a3e">e7f1159</a>) - Jacob Coffee</p></li>
+<li><p><strong>(navbar)</strong> improve dropdown hover behavior and update links - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/6eba545fad5d4a7183549af30ea37ac226430e55">6eba545</a>) - Jacob Coffee</p></li>
+<li><p><strong>(pages)</strong> prevent double slash in page paths - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/c03e66ae47cc4c1c3d549a0ba81711e1b5d9d3fd">c03e66a</a>) - Jacob Coffee</p></li>
+<li><p><strong>(railway)</strong> reduce workers to 1 for debugging - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/8cd444434bd25cc6c4bceb750c9eab041a211823">8cd4444</a>) - Jacob Coffee</p></li>
+<li><p><strong>(search)</strong> cleanup stale index entries and reduce log noise - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/f01b0a9f031a81204b380026ac99d45e9251e4b3">f01b0a9</a>) - Jacob Coffee</p></li>
+<li><p><strong>(search)</strong> graceful degradation when Meilisearch unavailable - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/2455853b43f0d604267e226e1eb97c86bed403eb">2455853</a>) - Jacob Coffee</p></li>
+<li><p><strong>(search)</strong> add eager loading to event indexing tasks - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/08c42bcac8a6dee5fc903cfa116acecafaec031d">08c42bc</a>) - Jacob Coffee</p></li>
+<li><p><strong>(seed)</strong> remove unnecessary noqa comments - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/aac019598eee6c767e116c917af518d065244df3">aac0195</a>) - Jacob Coffee</p></li>
+<li><p><strong>(seed)</strong> update blog feeds to use official Python sources - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/ef1687af1fc62cb172069042765efd267db6c814">ef1687a</a>) - Jacob Coffee</p></li>
+<li><p><strong>(sqladmin)</strong> add Tailwind CSS, Lucide icons, and Python logo - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/7aa54955dd3b9b63a8831e887bf4e0086408a643">7aa5495</a>) - Jacob Coffee</p></li>
+<li><p><strong>(sqladmin)</strong> fix sidebar header layout with Python logo - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/5e4ab190f39a1ad863406375a533df7efb3668f8">5e4ab19</a>) - Jacob Coffee</p></li>
+<li><p><strong>(sqladmin)</strong> use same sidebar as admin pages - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/d3c96f6c33dac5d581a00bcbaa6e939ab46f5e10">d3c96f6</a>) - Jacob Coffee</p></li>
+<li><p><strong>(sqladmin)</strong> handle category children in template menu iteration - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/151baf937d9fd04d87bda56a77bf4e83810c6568">151baf9</a>) - Jacob Coffee</p></li>
+<li><p><strong>(tasks)</strong> prevent MissingGreenlet error in feed refresh tasks - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/e61aea55bc97c1aca73fd4a142befa0df0c975fc">e61aea5</a>) - Jacob Coffee</p></li>
+<li><p><strong>(templates)</strong> update admin templates for new controllers - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/05ecdcaaa2c0c72a0b5d5df569d7050b850a0230">05ecdca</a>) - Jacob Coffee</p></li>
+<li><p><strong>(templates)</strong> use striptags filter to prevent raw HTML in summaries - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/99864f51b348ba5000ca92c1cac564540b21a3fb">99864f5</a>) - Jacob Coffee</p></li>
+<li><p><strong>(templates)</strong> minor template fixes across admin and auth - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/ae5abb71fd2b83dd74919e60f799b317aed8552f">ae5abb7</a>) - Jacob Coffee</p></li>
+<li><p><strong>(templates)</strong> update donate links to point to <a class="reference external" href="http://donate.python.org">donate.python.org</a> - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/ceda26433cf75330dbb8250dacd240eb64f61cde">ceda264</a>) - Jacob Coffee</p></li>
+<li><p><strong>(templates)</strong> strip HTML tags from blog summaries on home page - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/e69d3721b947ca4266525f933ae15e329b10e038">e69d372</a>) - Jacob Coffee</p></li>
+<li><p><strong>(templates)</strong> correct footer links - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/e376b43ae3e3dbc55c1ca6bfd3a7f97966e8b455">e376b43</a>) - Jacob Coffee</p></li>
+<li><p><strong>(tests)</strong> skip E2E tests when no server is available - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/d0a2e43ab9644ede02c781aadcbdbe1184ec10b9">d0a2e43</a>) - Jacob Coffee</p></li>
+<li><p><strong>(tests)</strong> add sync_to_thread=False to feature guard tests - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/1089e874159693b1ccdcdb95b5ed8c6ba511b086">1089e87</a>) - Jacob Coffee</p></li>
+<li><p><strong>(tests)</strong> prevent connection exhaustion in integration tests - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/4a1fb4a1bc3359b4413948baa7e62f56c654aa19">4a1fb4a</a>) - Jacob Coffee</p></li>
+<li><p><strong>(tests)</strong> use session-scoped engine to prevent connection exhaustion - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/5ea554d05d57c1f204988d1e458bfadeb88de22e">5ea554d</a>) - Jacob Coffee</p></li>
+<li><p><strong>(tests)</strong> check table existence before truncating - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/2d4043be9beab038a72b96a922a104835d283fdd">2d4043b</a>) - Jacob Coffee</p></li>
+<li><p><strong>(tests)</strong> prevent connection exhaustion with shared session factory - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/396d53ba549a1d936a1f739f690eb7f6e109fd5e">396d53b</a>) - Jacob Coffee</p></li>
+<li><p><strong>(tests)</strong> use module-scoped SQLAlchemy config to prevent connection exhaustion - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/e3228b2b68ea3ea1f9fc37b8f9bca9ecc18c8b4f">e3228b2</a>) - Jacob Coffee</p></li>
+<li><p><strong>(tests)</strong> use shared session factory to prevent connection exhaustion - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/09586502dba4bd904c53a354166c22a6eaac0eb1">0958650</a>) - Jacob Coffee</p></li>
+<li><p><strong>(tests)</strong> fix remaining postgres_uri references in blogs and jobs tests - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/35db9265bd67358180e038708e60930ed22778ba">35db926</a>) - Jacob Coffee</p></li>
+<li><p><strong>(tests)</strong> add autocommit handler to ensure transactions commit - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/efe95fd7b8af3d87439f116c5f6e26e04d8a7530">efe95fd</a>) - Jacob Coffee</p></li>
+<li><p><strong>(tests)</strong> use module-scoped fixture in api_validation_errors tests - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/0397163c5287efcb7c376e915a1716cc58b5aba7">0397163</a>) - Jacob Coffee</p></li>
+<li><p><strong>(tests)</strong> use session-scoped fixtures to prevent module transition timeouts - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/96dbf53adbcb5d6046c0aae8c95cfe7549c38ca0">96dbf53</a>) - Jacob Coffee</p></li>
+<li><p><strong>(tests)</strong> make truncate_tables autouse to ensure test isolation - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/071416b3eb1345d0b2b57a1da4a657431a572b35">071416b</a>) - Jacob Coffee</p></li>
+<li><p><strong>(tests)</strong> apply mock only after login in database error test - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/3223acef10145e5438e50911b3fca4dd88a5ae7e">3223ace</a>) - Jacob Coffee</p></li>
+<li><p><strong>(tests)</strong> resolve session conflicts and MissingGreenlet errors - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/a5a24525daadf12b611d168eab91de295d36fa5b">a5a2452</a>) - Jacob Coffee</p></li>
+<li><p><strong>(tests)</strong> correct fixture references and search payload in integration tests - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/bb2066d79f291642205886b6bc5635acd1e6a95e">bb2066d</a>) - Jacob Coffee</p></li>
+<li><p><strong>(tests)</strong> revert incorrect job search payload structure - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/5c9fca779cafa548415cc8323efcb90615110f8d">5c9fca7</a>) - Jacob Coffee</p></li>
+<li><p><strong>(tests)</strong> update job search tests to use correct body format - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/cebb49f820293325e3d1e588a0ff8c342a1fe69a">cebb49f</a>) - Jacob Coffee</p></li>
+<li><p><strong>(tests)</strong> restore sample_feed.is_active after mutation in test - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/c6cea3272d076fda0f4d6570537be0309db8fb56">c6cea32</a>) - Jacob Coffee</p></li>
+<li><p><strong>(timeline)</strong> reorder terminus layout and fix logo SVG - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/646772254991e80cec6b52046acc88ce186c7b9d">6467722</a>) - Jacob Coffee</p></li>
+<li><p><strong>(timeline)</strong> improve river rendering and add external links - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/b6ed3872093952e1b6a4051de2c598a70dd3f44e">b6ed387</a>) - Jacob Coffee</p></li>
+<li><p><strong>(ty)</strong> ignore invalid-key and possibly-missing-attribute rules - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/6c5afc9eb991d67dca310dfae325193bdaf8129b">6c5afc9</a>) - Jacob Coffee</p></li>
+<li><p><strong>(ty)</strong> ignore invalid-type-arguments for Litestar Request generics - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/8e409ebf5f8cf20ce4ef3b73575d6d5590e1d83e">8e409eb</a>) - Jacob Coffee</p></li>
+<li><p><strong>(ui)</strong> remove duplicate navbar in admin area and fix user access - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/4dda986630e2a06466c85449b2af8423cc203191">4dda986</a>) - Jacob Coffee</p></li>
+<li><p><strong>(ui)</strong> use Lucide icons consistently and improve admin layout - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/f09a2f6b0e1c7905524ed0fbb9e1972f102bb637">f09a2f6</a>) - Jacob Coffee</p></li>
+<li><p><strong>(ui)</strong> remove search button from navbar until sitewide search implemented - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/aae1b6aca496407a09574f66c8bd96521a1792b1">aae1b6a</a>) - Jacob Coffee</p></li>
+<li><p><strong>(worker)</strong> align startup banner box drawing - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/8d7b9531d6627e85f29e61680cc83982833b3c0e">8d7b953</a>) - Jacob Coffee</p></li>
+<li><p><strong>(worker)</strong> resolve MissingGreenlet in cache warming tasks - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/7dc9c71829f9a1d36ea12676a964f68e58c52b1a">7dc9c71</a>) - Jacob Coffee</p></li>
+<li><p><strong>(worker)</strong> correct EventLocation field references in search indexing - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/a0a0a3a1d4e3d1fbff10e64151afd2e947535c1c">a0a0a3a</a>) - Jacob Coffee</p></li>
+<li><p>move datetime/UUID imports outside TYPE_CHECKING for Pydantic - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/4195f9da85763145e64de5c855f2249334b623a0">4195f9d</a>) - Jacob Coffee</p></li>
+<li><p>use direct return pattern for dependency providers - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/890646081791b4317f1127442f5b994acf3a67c2">8906460</a>) - Jacob Coffee</p></li>
+<li><p>remove downloads from gitignore - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/7ae18bae94d6681d3a5cf6cdc767188070e7eea5">7ae18ba</a>) - Jacob Coffee</p></li>
+<li><p>resolve HTMX/Alpine errors and fix test infrastructure - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/a03e7742fd128e9e06f32b5f3331beb75d961d47">a03e774</a>) - Jacob Coffee</p></li>
+<li><p>resolve CI check failures across multiple workflows - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/6aca255a0e0b25dc1acc8305bb8f4364a4a833e6">6aca255</a>) - Jacob Coffee</p></li>
+<li><p>resolve additional CI failures - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/7fe7f1e9cdcb16b40edea5454ec55152ea6ee566">7fe7f1e</a>) - Jacob Coffee</p></li>
+<li><p>resolve type checker warnings - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/dea42e2a958222ac9d0cd55ab4267dd53c23c787">dea42e2</a>) - Jacob Coffee</p></li>
+<li><p>resolve remaining CI failures - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/93c1bbee327fbe668a3126ae1ca53a83c381fc69">93c1bbe</a>) - Jacob Coffee</p></li>
+<li><p>resolve ruff lint and intersphinx warnings - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/e0c12ab8d91939f8c108010261c375fadabd80fd">e0c12ab</a>) - Jacob Coffee</p></li>
+<li><p>add missing lib module and migration - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/9400374fd99a7041f04edbb85b98876003ee4e9b">9400374</a>) - Jacob Coffee</p></li>
+<li><p>update gitignore to not ignore src/**/lib - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/54e558e532438f2c28d9dccd335775f3637dad70">54e558e</a>) - Jacob Coffee</p></li>
+<li><p>resolve remaining ruff lint errors in lib/tasks.py and migration - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/7dd48c85f4ddb66f1f66f45914523505f8d97276">7dd48c8</a>) - Jacob Coffee</p></li>
+<li><p>address CodeQL review comments - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/2fb10a5387c76f1a1db1b63f4e624e7a5d57b2c4">2fb10a5</a>) - Jacob Coffee</p></li>
+<li><p>resolve lint errors and format code - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/90a847ce28d762575dd39914755d1aaee81b89cc">90a847c</a>) - Jacob Coffee</p></li>
+<li><p>resolve CI failures in docs and Trivy security scan - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/f6d2a084bedbc04eec1e1d395748a343048a7875">f6d2a08</a>) - Jacob Coffee</p></li>
+<li><p>Railway deployment issues - CSS, seeding, and template scanning - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/90da89a518f372959a83e9ede61295baf77febb8">90da89a</a>) - Jacob Coffee</p></li>
+<li><p>re-enable –force to reseed Railway database - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/b9e665f7e9ad99696b77c704708f60c8628f0450">b9e665f</a>) - Jacob Coffee</p></li>
+<li><p>increase healthcheck timeout to 5 minutes - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/ac70ca0d711f688af36dab2b7721a94f40560a73">ac70ca0</a>) - Jacob Coffee</p></li>
+<li><p>remove seeding from startup to debug healthcheck failure - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/185f226073c2927f959978960ed83f35cf1e3a34">185f226</a>) - Jacob Coffee</p></li>
+<li><p>run seeding in background after Granian starts - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/17fd8dbbe83f2d7917e62f3732498a0fa2b4ccae">17fd8db</a>) - Jacob Coffee</p></li>
+<li><p>remove –force from background seed, capture errors - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/f5967c1a4f50140c61ea9a431d2203ba9b9c78df">f5967c1</a>) - Jacob Coffee</p></li>
+<li><p>add sa_orm_sentinel column migration for download_statistics - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/b5e933eb292669974de1d9f4a3a2d8615564d39f">b5e933e</a>) - Jacob Coffee</p></li>
+<li><p>correct advanced-alchemy update method signature and add repository exception handler - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/a84004cb9f3b5af4c0f5fcb6f56ed508a85ae9d3">a84004c</a>) - Jacob Coffee</p></li>
+</ul>
+</section>
+<section id="documentation">
+<h3>Documentation<a class="headerlink" href="#documentation" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>(api)</strong> add request/response examples to auth schemas - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/606787779cdfce1963b86537eb80f9601f8ff732">6067877</a>) - Jacob Coffee</p></li>
+<li><p><strong>(api)</strong> add request/response examples to domain schemas - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/f438201e8591081011ed8654eedb6737aaa25b93">f438201</a>) - Jacob Coffee</p></li>
+<li><p><strong>(api)</strong> add comprehensive docstrings to controller endpoints - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/8a91cd9ac6b745175799ac1e2ac1fb513f5cb377">8a91cd9</a>) - Jacob Coffee</p></li>
+<li><p><strong>(api)</strong> add SDK autodoc structure with autosummary - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/afcc9a58212da6e91b6927a420b9fb49c52caa4f">afcc9a5</a>) - Jacob Coffee</p></li>
+<li><p><strong>(architecture)</strong> add API tags documentation - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/83573aa5ec65c76fca5be9ebc6981f3b56c0694d">83573aa</a>) - Jacob Coffee</p></li>
+<li><p><strong>(architecture)</strong> add rate limiting architecture documentation - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/52ac3648831bf3e6f54810f3d9ee60da77856ad4">52ac364</a>) - Jacob Coffee</p></li>
+<li><p><strong>(architecture)</strong> add comprehensive domain model reference - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/b6a1766dc171d2bf1d414388f1af785b67aab83b">b6a1766</a>) - Jacob Coffee</p></li>
+<li><p><strong>(architecture)</strong> remove manual table of contents sections - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/cb626893920c40dca77f11f36e3402f68eca0363">cb62689</a>) - Jacob Coffee</p></li>
+<li><p><strong>(cookbook)</strong> add practical recipes and patterns - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/130a630a2fabb5450698faac1df90d1861f775db">130a630</a>) - Jacob Coffee</p></li>
+<li><p><strong>(db)</strong> update README with Litestar CLI migration commands - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/574773258958a0270d991e87ad80f2b200bfd82d">5747732</a>) - Jacob Coffee</p></li>
+<li><p><strong>(getting-started)</strong> add installation and quickstart guides - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/8f751e9ede142bff3d564c36f0a7c752d63725a1">8f751e9</a>) - Jacob Coffee</p></li>
+<li><p><strong>(guides)</strong> add comprehensive development guides - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/63ca9445a1669021fcc650603936a830d8e85776">63ca944</a>) - Jacob Coffee</p></li>
+<li><p><strong>(guides)</strong> rename contributing page title to Contribution Guide - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/e653681ca1d15433617760add201bea9379a2447">e653681</a>) - Jacob Coffee</p></li>
+<li><p><strong>(index)</strong> update landing page with grid cards and navigation - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/8148f74428ef7843c950ef52e5e2cb8d0c44918f">8148f74</a>) - Jacob Coffee</p></li>
+<li><p><strong>(makefile)</strong> add litestar-vite CLI commands for frontend assets - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/f4698bf46be0e8f7df4c8094a9bb27cdb60ed89f">f4698bf</a>) - Jacob Coffee</p></li>
+<li><p><strong>(openapi)</strong> enhance API spec with metadata and improved tag descriptions - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/b7c29a46a85170e83519cef0c106e197c8e51662">b7c29a4</a>) - Jacob Coffee</p></li>
+<li><p><strong>(plan)</strong> update Phase 7 Admin status and add testing improvements - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/cb39cd97d7d8da8195549e8a26df18c2130b7d3a">cb39cd9</a>) - Jacob Coffee</p></li>
+<li><p><strong>(plan)</strong> mark Phase 8 Testing as complete - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/55ec6bf50a00b6835d04de0652f946beab55f284">55ec6bf</a>) - Jacob Coffee</p></li>
+<li><p><strong>(plan)</strong> update Phase 10 status with completed admin sub-pages - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/5e5727b3a808f97c5d13107c53ca8683e525730f">5e5727b</a>) - Jacob Coffee</p></li>
+<li><p><strong>(plan)</strong> update Phase 10 status and add tiered priority list - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/1bbda01085c8e84eb5af0f65e66cf84d5e37e46d">1bbda01</a>) - Jacob Coffee</p></li>
+<li><p><strong>(plan)</strong> mark Phase 10 Admin Panel complete - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/37c694d1cd8ba545fc4e1df51970737e47536aed">37c694d</a>) - Jacob Coffee</p></li>
+<li><p><strong>(plan)</strong> mark Docker and CI/CD tasks complete - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/a0f4aa7e3f74ff041a5511d3b7a711b28026372c">a0f4aa7</a>) - Jacob Coffee</p></li>
+<li><p><strong>(plan)</strong> update auth and testing sections - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/58ad8fce82f3951fd4ab87f1686c76f6929d8f92">58ad8fc</a>) - Jacob Coffee</p></li>
+<li><p><strong>(plan)</strong> update project plan with completed tasks - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/b3484efade4c19edd00aaf284f8ffa089c8ceddb">b3484ef</a>) - Jacob Coffee</p></li>
+<li><p><strong>(plan)</strong> document admin task UI enhancements - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/4d53620254301e26081c30279eec7e534fa35366">4d53620</a>) - Jacob Coffee</p></li>
+<li><p><strong>(plan)</strong> complete API route audit, add internal API research - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/2e8df2331b61aa8e46b6fbb240925ac53bf280b1">2e8df23</a>) - Jacob Coffee</p></li>
+<li><p><strong>(plan)</strong> update completion status and add known bugs - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/f874078a3532869e513dd1f1a17c587365328cbc">f874078</a>) - Jacob Coffee</p></li>
+<li><p><strong>(plan)</strong> add email UI improvements to completion list - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/7beddbef288700e28239449ef1cde327cdeff637">7beddbe</a>) - Jacob Coffee</p></li>
+<li><p><strong>(plan)</strong> mark jobs progress tracking as fixed, add cron dashboard plan - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/40ff15d53110ea2ef3d4fbd0c54fdd3bab816d9f">40ff15d</a>) - Jacob Coffee</p></li>
+<li><p><strong>(plan)</strong> mark API documentation as complete, add enhancement entries - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/399a7b2f6d0abb8c8f8a176a8f2a55d48b3ccd0f">399a7b2</a>) - Jacob Coffee</p></li>
+<li><p><strong>(plan)</strong> mark OAuth testing as complete - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/ee173d7b3d394b05343974971eaecd842ded6228">ee173d7</a>) - Jacob Coffee</p></li>
+<li><p><strong>(plan)</strong> mark page caching as complete - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/9d921d186ca013e76ebe872a140fc97d63b9fb07">9d921d1</a>) - Jacob Coffee</p></li>
+<li><p><strong>(plan)</strong> add cache management admin UI to completed enhancements - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/e2faa7409a018a92aae86b224eaded2921771923">e2faa74</a>) - Jacob Coffee</p></li>
+<li><p><strong>(plan)</strong> update cache management UI as complete with full features - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/e9cc85921cd16d14ce6c423ec50f89ee201151ab">e9cc859</a>) - Jacob Coffee</p></li>
+<li><p><strong>(plan)</strong> remove GraphQL API from roadmap - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/de7316fa8aa6f8befd2f6ab566a0642351b05a19">de7316f</a>) - Jacob Coffee</p></li>
+<li><p><strong>(plan)</strong> mark download statistics feature as complete - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/a55a98a36e4c08c07bea31bd34a8ceab6813c016">a55a98a</a>) - Jacob Coffee</p></li>
+<li><p><strong>(plan)</strong> add Litestar CLI commands and litestar-vite integration - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/35fc4973ad2c434e036e9cc3c815b59d33ca947c">35fc497</a>) - Jacob Coffee</p></li>
+<li><p><strong>(plan)</strong> move <a class="reference external" href="http://PLAN.md">PLAN.md</a> to root, mark HTMX audit complete - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/ac8446d7a7632477b5d13b1072e158cdafdfc17f">ac8446d</a>) - Jacob Coffee</p></li>
+<li><p><strong>(plan)</strong> mark SAQ worker MissingGreenlet issues as fixed - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/7ec7e786f0908e0da9185b7b77799d0c37c7e68a">7ec7e78</a>) - Jacob Coffee</p></li>
+<li><p><strong>(plan)</strong> update banner feature as complete with full details - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/9ff3e0c6bf374838bf26f53f52c67d4692def912">9ff3e0c</a>) - Jacob Coffee</p></li>
+<li><p><strong>(plan)</strong> mark all page implementations as complete - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/2171cfeb6c4dae2a7c1d6994b864450ee7650511">2171cfe</a>) - Jacob Coffee</p></li>
+<li><p><strong>(plan)</strong> mark pagination First/Last buttons complete - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/75337356575e891439662c6f89ec96d879bebceb">7533735</a>) - Jacob Coffee</p></li>
+<li><p><strong>(plan)</strong> mark 3 admin UX issues complete - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/1508b6367ba4e479d1155563a159561246532212">1508b63</a>) - Jacob Coffee</p></li>
+<li><p><strong>(plan)</strong> mark LOW priority issues complete - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/1dee3b6405a664d62f4352a52c582c9dc847e006">1dee3b6</a>) - Jacob Coffee</p></li>
+<li><p><strong>(plan)</strong> mark page caching and CDN integration complete - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/331d4e850647fa30fc7e4e139fee3b72f04013ec">331d4e8</a>) - Jacob Coffee</p></li>
+<li><p><strong>(plan)</strong> mark GPG signature verification complete - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/7180680a02f6b4663f9e76f829d031ee3c131091">7180680</a>) - Jacob Coffee</p></li>
+<li><p><strong>(plan)</strong> mark all domain feature gaps complete - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/50d777aa1afd175f73d189e213945c965c33aac6">50d777a</a>) - Jacob Coffee</p></li>
+<li><p><strong>(plan)</strong> mark template refactor as complete - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/cf96232b9960f46683d214874975729ecb3e00c0">cf96232</a>) - Jacob Coffee</p></li>
+<li><p><strong>(plan)</strong> mark OAuth2 providers testing complete - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/439671111d81afc4d2222a059f00a9d4c1c093d3">4396711</a>) - Jacob Coffee</p></li>
+<li><p><strong>(plan)</strong> mark Phase 9 documentation complete - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/a147f6ccb7f7ef3c7cbdf454c8543e57b5752121">a147f6c</a>) - Jacob Coffee</p></li>
+<li><p><strong>(plan)</strong> add sponsor admin UI gaps and litestar-workflows research - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/518abe7a2e711b1e353e6df12bc921323444cf60">518abe7</a>) - Jacob Coffee</p></li>
+<li><p><strong>(sidebar)</strong> reorganize docs navigation into Learn/Reference/Project sections - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/719d2c1a0fe2c76f730619048ebf956ab88d2972">719d2c1</a>) - Jacob Coffee</p></li>
+<li><p>update <a class="reference external" href="http://PLAN.md">PLAN.md</a> with progress and auth reference - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/7174bbd5bded2ac7987623988c608e98296b7ca6">7174bbd</a>) - Jacob Coffee</p></li>
+<li><p>add API usage guides and Postman collection - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/b857c0ce9ba17e171cb8b165e578f461a7388b24">b857c0c</a>) - Jacob Coffee</p></li>
+<li><p>update <a class="reference external" href="http://PLAN.md">PLAN.md</a> with latest changes and fixes - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/e9199cf24d74fdf94011b334c4429481958236f1">e9199cf</a>) - Jacob Coffee</p></li>
+<li><p>mark Batch 3 issues as fixed in <a class="reference external" href="http://PLAN.md">PLAN.md</a> - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/a72f7af96d1f98f73b8be3701e44b953bf9d1d37">a72f7af</a>) - Jacob Coffee</p></li>
+<li><p>add email logs filters issue to <a class="reference external" href="http://PLAN.md">PLAN.md</a> - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/681d28472b0c4c6221f3277caf2e00adc655611c">681d284</a>) - Jacob Coffee</p></li>
+<li><p>add planned enhancements for jobs workflow - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/0a6f662e56a952a0d0df8cde23ccd60b68bfc451">0a6f662</a>) - Jacob Coffee</p></li>
+<li><p>mark Batch 4 issues as fixed in <a class="reference external" href="http://PLAN.md">PLAN.md</a> - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/42553e65b170adbec51461bccf4351f9d73eaed4">42553e6</a>) - Jacob Coffee</p></li>
+<li><p>update events/submit entry to reference toast issue - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/b1a5a5138c423d0a53bb902442ef81b341202c51">b1a5a51</a>) - Jacob Coffee</p></li>
+<li><p>update <a class="reference external" href="http://PLAN.md">PLAN.md</a> with fixed issues - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/d3d40fba31f0122a609be8c4216aba6a32ebb123">d3d40fb</a>) - Jacob Coffee</p></li>
+<li><p>mark API versioning and notifications complete in <a class="reference external" href="http://PLAN.md">PLAN.md</a> - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/44fe50ce8b61769674da39b34c00e022017bb094">44fe50c</a>) - Jacob Coffee</p></li>
+<li><p>fix sphinx warnings for code blocks and cross-references - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/d8dca07ac47e281583391bb6b48221d31b31d75f">d8dca07</a>) - Jacob Coffee</p></li>
+<li><p>optimize build speed and clean up sidebar - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/38a6471b97d56cf3f16774794354894a5b714548">38a6471</a>) - Jacob Coffee</p></li>
+<li><p>restore orphaned pages to sidebar navigation - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/865dd8f232f080a36286465a2a5dc2d6a7c90dad">865dd8f</a>) - Jacob Coffee</p></li>
+<li><p>suppress all sphinx warnings for clean builds - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/3e2e456716aa6b3376c2181a2351fa00b6c383be">3e2e456</a>) - Jacob Coffee</p></li>
+<li><p>enhance API domain documentation - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/d0489c01a533543cf411699fc7d9e4a1a405d85e">d0489c0</a>) - Jacob Coffee</p></li>
+</ul>
+</section>
+<section id="features">
+<h3>Features<a class="headerlink" href="#features" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>(about)</strong> add About section domain and templates - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/c8a957538733608d09078de642600514e23b60d7">c8a9575</a>) - Jacob Coffee</p></li>
+<li><p><strong>(about)</strong> add interactive Python timeline with river-flow effect - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/f4ccb93abc370ed592df9e11997b3283e65ec015">f4ccb93</a>) - Jacob Coffee</p></li>
+<li><p><strong>(about)</strong> add static pages for help, apps, quotes, getting started, legal - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/60d4fe638b6b77a6bf4e78cd8eb98c5c3e902a13">60d4fe6</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> add admin domain scaffold with guards, schemas, and services - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/e3bd4080169806a0a019974ae70fc0b16546a29a">e3bd408</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> add admin dashboard controller with auth redirect - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/429bab804a5eba14691e7f3da54bb0fc7547f453">429bab8</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> add sqladmin-litestar-plugin for CRUD admin interface - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/38bd8883232d67c0bbf077c76a846476484ef365">38bd888</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> add admin templates with TailwindCSS/DaisyUI - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/8bf4fbc319f62dda9982a23699a68fe21a859a98">8bf4fbc</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> integrate admin controllers into main application - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/56cd357023290844dc3dc1e75554412d8ffdf4be">56cd357</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> add user admin service and controller - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/7707c5a7e39d2bb4d91bfbfd4d10cc4e29edb657">7707c5a</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> add job admin service and controller - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/73c27a7b0bcbeb16fd65ae2d681e8ee163ba939d">73c27a7</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> register job and user admin controllers - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/759ace8280f3b7059f718ce6d1a2e5d759927fab">759ace8</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> add sponsor admin service and controller - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/01f56d3975ec43d28a0b4a119665e1fc160fc5e0">01f56d3</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> add sponsor admin templates - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/7084fdb7e6881b5c24e6da8d55e6ecbc2097f35e">7084fdb</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> add events management page with calendar support - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/a6d83293fc9627629bf76739242dbebb262683f0">a6d8329</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> add pages CMS management with publish/unpublish - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/87a82aaae91f53906b1b86178afb5cd832ae01b5">87a82aa</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> add blogs/feeds management with activate/deactivate - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/a9483fe3c52f30f86f10b88c14dca21c4f71ea66">a9483fe</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> add settings and logs placeholder pages - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/6a1c860fe0c29cce74be52875b16b83dfcaa3874">6a1c860</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> simplify admin navbar button and add navbar to SQLAdmin - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/d36d0770cafd34305161c522462d8587c21605a1">d36d077</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> add Lucide icons to database admin tiles - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/a306a6c73ac7ec28b01e9e1ada0adacf42713709">a306a6c</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> organize database admin into sections with search - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/3203c5edf931fc2bb03076f16389a3c6fae77ef0">3203c5e</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> enhance admin services with search indexing triggers - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/4381e816490af9be863b8ce0ded304be78d3ed84">4381e81</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> add email template management UI with HTMX - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/5c5bcee91c746d9db12d2ece05148c9c655f6298">5c5bcee</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> add email content guidance and status alerts - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/9652591050a5375b55f8ef0bf02aff3cd255fc9c">9652591</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> add cron jobs dashboard for scheduled task monitoring - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/ddd3d5940c583ff34a3a80a300d742040b2adb57">ddd3d59</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> add cache management UI at /admin/settings/cache - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/4c7e54abcae20b4a88b4ab4734b057ff53f77282">4c7e54a</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> add interactive key inspection to cache management UI - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/4ed9d0cd0b8f6802a07350087718da6c6cc69408">4ed9d0c</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> add toast notifications and error handling to cache management - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/eb0a00d14586ad4b54ca673f775fcd3958e721b0">eb0a00d</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> add feed priority editing to admin blogs UI - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/b0a0e5a9aa4fb32f1f6d9833647c755d0d394f31">b0a0e5a</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> add banner management UI - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/8d7b3625c933b5b8dbb5de69b7215b45aff875b7">8d7b362</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> add manual trigger button for cron jobs - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/acdb882edd115e8533c290322e7a8e7293a335e0">acdb882</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin/blogs)</strong> add HTMX partial rendering and feature toggles - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/0e49cf93a3da88523abf848decddf8b6f55c010f">0e49cf9</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin/email)</strong> add HTMX partial rendering for email logs - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/25e9b04a011c4caf6f30dd3d6d70e4e5d6ba2364">25e9b04</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin/events)</strong> add calendar pagination and upcoming filter - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/239b040745c462fc61a786d0450841381cdc70e0">239b040</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin/events)</strong> add date metadata to event rows - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/2f59ec038354f62ed8fbfeacf799ca9a3045f1f0">2f59ec0</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin/jobs)</strong> add HTMX partial rendering for job list - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/b84038237d3f64e5d0d0d14d923b979a25aed742">b840382</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin/jobs)</strong> add DELETE handler for job deletion - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/ecab59b65191db389804412bad31a0cdeac4a073">ecab59b</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin/pages)</strong> add delete page functionality - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/c2eb8614383e6075fa3671de7a1d8418b6b5865a">c2eb861</a>) - Jacob Coffee</p></li>
+<li><p><strong>(api)</strong> add JSON error responses for API exception handlers - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/0a04fcf4db11b1c09026699399c20c985e197698">0a04fcf</a>) - Jacob Coffee</p></li>
+<li><p><strong>(api)</strong> add API key management endpoints - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/db203166c5156958e99347f80e1619533baf6845">db20316</a>) - Jacob Coffee</p></li>
+<li><p><strong>(api)</strong> add API version negotiation middleware - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/8f86b408c5f658cb5f775e18ec2b947697c00037">8f86b40</a>) - Jacob Coffee</p></li>
+<li><p><strong>(api)</strong> add admin-only API documentation at /api/admin/docs/ - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/2aa7a9679e82b78efb5a08f2805fcefbc7df8c3f">2aa7a96</a>) - Jacob Coffee</p></li>
+<li><p><strong>(app)</strong> add JWT middleware, nominations, and OpenAPI config - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/8a33a99752b15a30362ea34e2a572db417cd972e">8a33a99</a>) - Jacob Coffee</p></li>
+<li><p><strong>(auth)</strong> add login and registration templates with htmx - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/1eea194ff87cae55d0848af5211d82afc91ef815">1eea194</a>) - Jacob Coffee</p></li>
+<li><p><strong>(auth)</strong> add token refresh and password change endpoints - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/8f34b4fef73e2abb25fa5651fdfa9a2ff2d7f46b">8f34b4f</a>) - Jacob Coffee</p></li>
+<li><p><strong>(auth)</strong> add missing profile management endpoints - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/db3a97adc88091ba7876d6acf941ab458cdfb9f9">db3a97a</a>) - Jacob Coffee</p></li>
+<li><p><strong>(auth)</strong> add API key authentication to middleware - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/262857b40fe4527b23df289954ccc69756e28911">262857b</a>) - Jacob Coffee</p></li>
+<li><p><strong>(auth)</strong> add API key guards for route protection - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/cf7a72ac3b297e66a2b9744449ab76ee1493a61a">cf7a72a</a>) - Jacob Coffee</p></li>
+<li><p><strong>(banners)</strong> add targeting fields to banner model - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/4c5230c4ef0a91cb23bc4d506f90c687b29de722">4c5230c</a>) - Jacob Coffee</p></li>
+<li><p><strong>(banners)</strong> add repository methods for targeted banner queries - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/c25e329dc3884299c396e0aa962a4ec7dc906e1c">c25e329</a>) - Jacob Coffee</p></li>
+<li><p><strong>(banners)</strong> add middleware for frontend and API banners - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/02531f73db9ac2286a81a6e2c76caa43579d11f7">02531f7</a>) - Jacob Coffee</p></li>
+<li><p><strong>(banners)</strong> add API endpoint and integration tests - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/0757cec9ed61babefb18533fdc33c4ce34a8dfbe">0757cec</a>) - Jacob Coffee</p></li>
+<li><p><strong>(blogs)</strong> add is_featured field to blog entries - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/6e26fa50452faeffc76a7caeb015ce2ca282a8af">6e26fa5</a>) - Jacob Coffee</p></li>
+<li><p><strong>(blogs)</strong> add feed filtering and featured posts section - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/04a60118cd60aceaa6f2957341b150c476baa22e">04a6011</a>) - Jacob Coffee</p></li>
+<li><p><strong>(blogs)</strong> add feed priority for official Python blogs first - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/f295162daa15e083f38516045ed118730875bde7">f295162</a>) - Jacob Coffee</p></li>
+<li><p><strong>(cache)</strong> add core cache module for page caching - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/7ff610d70de48a2cc5cbe7835ab7ff5020df66a7">7ff610d</a>) - Jacob Coffee</p></li>
+<li><p><strong>(cache)</strong> integrate response caching into Litestar app - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/e72c7b1057e5d17824b179faf3b5703d36f3d3df">e72c7b1</a>) - Jacob Coffee</p></li>
+<li><p><strong>(cache)</strong> add automatic cache invalidation on page changes - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/f0a8197646e45c11dbe903570eb403b0f30440ea">f0a8197</a>) - Jacob Coffee</p></li>
+<li><p><strong>(cache)</strong> add HTTP cache-control middleware - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/eced8fb4e39d385af2473f68c3c6bfce2dad5933">eced8fb</a>) - Jacob Coffee</p></li>
+<li><p><strong>(cache)</strong> wire up cache middleware in application - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/4d6e00760ff09daa1b8c101a5d6cca5927d5a541">4d6e007</a>) - Jacob Coffee</p></li>
+<li><p><strong>(cache)</strong> add Cache-Control header for 404 responses - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/8c5ab428f91278ae9b14f5e375c5d1b55b130a29">8c5ab42</a>) - Jacob Coffee</p></li>
+<li><p><strong>(ci)</strong> add comprehensive CI workflow - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/486adb346edc50e38d24d41377f7a0f16216b5e8">486adb3</a>) - Jacob Coffee</p></li>
+<li><p><strong>(ci)</strong> add PR title validation workflow - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/f97826cf1a2363f5bd28bc22913b5db46bc6a885">f97826c</a>) - Jacob Coffee</p></li>
+<li><p><strong>(ci)</strong> add changelog generation workflow - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/01756a74504298d783b2ecdb67344adab9698e81">01756a7</a>) - Jacob Coffee</p></li>
+<li><p><strong>(ci)</strong> add release workflow with Docker publishing - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/8cb74e2359785f6dedefada7552e093bd9163e1f">8cb74e2</a>) - Jacob Coffee</p></li>
+<li><p><strong>(cli)</strong> add Litestar database CLI commands to Makefile - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/538e9d7a8f389c28e9502e94e5bf3cca94cbd43d">538e9d7</a>) - Jacob Coffee</p></li>
+<li><p><strong>(cli)</strong> add Litestar CLI integration with Makefile targets - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/0ac2cf668df72053bb0f1d473da521232bb94535">0ac2cf6</a>) - Jacob Coffee</p></li>
+<li><p><strong>(cli)</strong> enable advanced-alchemy CLI extra and convert seed to markdown - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/bb9e07e00965d97251675cc2c5ce8b853e337e7a">bb9e07e</a>) - Jacob Coffee</p></li>
+<li><p><strong>(community)</strong> redesign community page with comprehensive sections - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/26b34703c1ecd5481c9699e3e1e0e91204b601bd">26b3470</a>) - Jacob Coffee</p></li>
+<li><p><strong>(community)</strong> add workshops, IRC, forums, and mailing lists pages - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/719e285fc0ad747d9b437f668cbed1ac98708e70">719e285</a>) - Jacob Coffee</p></li>
+<li><p><strong>(community)</strong> overhaul posts page UX - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/b6c12e7f734683e9016b393e79f26517e117a1cf">b6c12e7</a>) - Jacob Coffee</p></li>
+<li><p><strong>(config)</strong> add Meilisearch configuration for search - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/4ff9e6e9f50508aad202eccb189b2e7dd8ce96c0">4ff9e6e</a>) - Jacob Coffee</p></li>
+<li><p><strong>(config)</strong> split env files for dev and prod environments - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/2cf8e59079d47cc7cd069a36c3d3633755c17b26">2cf8e59</a>) - Jacob Coffee</p></li>
+<li><p><strong>(core)</strong> add site-wide exception handlers with HTMX toast support - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/6aa94ed0822ba0bc16074690d8edca9dd8948717">6aa94ed</a>) - Jacob Coffee</p></li>
+<li><p><strong>(db)</strong> add migration for Feed.is_official column - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/30b839abf005ffeb239412c03e6c233346261e63">30b839a</a>) - Jacob Coffee</p></li>
+<li><p><strong>(deps)</strong> add admin UI dependencies - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/0d497a70a2309dd980613c3df9b0b07d70de4662">0d497a7</a>) - Jacob Coffee</p></li>
+<li><p><strong>(deps)</strong> add litestar-vite for frontend asset management - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/7f12b0957529a2b3e891107712981afb89608eb0">7f12b09</a>) - Jacob Coffee</p></li>
+<li><p><strong>(docker)</strong> add multi-stage Docker build configuration - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/ac3522b2462eee4dcca21a46f417f586b505a8fd">ac3522b</a>) - Jacob Coffee</p></li>
+<li><p><strong>(docker)</strong> add docker-compose for dev and production - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/128b12603efeef021b87b9f0b4ee6a3f2f88b47d">128b126</a>) - Jacob Coffee</p></li>
+<li><p><strong>(docs)</strong> add <a class="reference external" href="http://Python.org">Python.org</a> themed Scalar CSS - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/1b6d777bc767114ab28ccfba278ed00570dd4b22">1b6d777</a>) - Jacob Coffee</p></li>
+<li><p><strong>(docs)</strong> add custom OpenAPI UI plugins - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/48b322ba8825aeb9235990618941ff5cab3c81c3">48b322b</a>) - Jacob Coffee</p></li>
+<li><p><strong>(docs)</strong> integrate Scalar + Swagger OpenAPI plugins - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/38f61f0146ef97958d14d6c5526a0416f970dbd6">38f61f0</a>) - Jacob Coffee</p></li>
+<li><p><strong>(docs)</strong> add custom <a class="reference external" href="http://Python.org">Python.org</a> CSS theme to Scalar - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/388cd89235ed79b1c98f07d4564207050891c393">388cd89</a>) - Jacob Coffee</p></li>
+<li><p><strong>(docs)</strong> add Documentation section domain and templates - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/f0d5ddae7ffbb9ed917f471161e757d22cea4149">f0d5dda</a>) - Jacob Coffee</p></li>
+<li><p><strong>(downloads)</strong> add downloads domain module - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/0d36e49b1ebe9146bbd47bdcc7f8568f7fc126f0">0d36e49</a>) - Jacob Coffee</p></li>
+<li><p><strong>(downloads)</strong> add download statistics tracking and admin analytics (#4) - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/50668a6ccdeebbbe1d27bc883c3f93ba922a01a1">50668a6</a>) - Jacob Coffee</p></li>
+<li><p><strong>(downloads)</strong> add download statistics tracking and admin analytics - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/009f0f7c19ae939514088426dd0d44bee7508483">009f0f7</a>) - Jacob Coffee</p></li>
+<li><p><strong>(downloads)</strong> add import script and remove faulty constraint - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/8cef0aa3894a27fd1cb596ab88459d595293365a">8cef0aa</a>) - Jacob Coffee</p></li>
+<li><p><strong>(downloads)</strong> enhance release notes and fix UI issues - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/715e669ff6f3345b82861a9dcf9b5dd204c1f1b4">715e669</a>) - Jacob Coffee</p></li>
+<li><p><strong>(downloads)</strong> add markdown rendering for release notes - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/0e26174dbe71d3a3839fa58d446a1297ad2cfb94">0e26174</a>) - Jacob Coffee</p></li>
+<li><p><strong>(downloads)</strong> add alternative implementations and other resources pages - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/783f8a4fa45f6e30fee7c9190f7bd3219d7763b1">783f8a4</a>) - Jacob Coffee</p></li>
+<li><p><strong>(downloads)</strong> add SHA256 checksum field to ReleaseFile - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/b801721d2b847fb6ac7224a7929f0651cd8f12c3">b801721</a>) - Jacob Coffee</p></li>
+<li><p><strong>(downloads)</strong> add SHA256 checksum to API schemas - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/7db1997d9053c5e28e0390e787b709f8d48dfc82">7db1997</a>) - Jacob Coffee</p></li>
+<li><p><strong>(downloads)</strong> add Jinja2 macros for signature verification UI - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/a6fe8846f987d7a8b5336a0bbb641df9e43fb0b4">a6fe884</a>) - Jacob Coffee</p></li>
+<li><p><strong>(downloads)</strong> show signatures and checksums on release page - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/41cb33c9a2bb60c31bbc1da42f66093f2e5a3c7e">41cb33c</a>) - Jacob Coffee</p></li>
+<li><p><strong>(events)</strong> add RFC 5545 compliant iCalendar export - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/7c30dd310bb9ee0f836cc94c8ac03202f0a6e58e">7c30dd3</a>) - Jacob Coffee</p></li>
+<li><p><strong>(events)</strong> add HTMX partials and calendar list view - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/2a766e9d30c19f1fdaed016e79bd225c3c50a9f6">2a766e9</a>) - Jacob Coffee</p></li>
+<li><p><strong>(events)</strong> add toast notification on event submission - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/468810bef8e25993eed827690f345d99ecc5c26e">468810b</a>) - Jacob Coffee</p></li>
+<li><p><strong>(events)</strong> add recurrence rule engine - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/1da777a0049802d40fe755c6a34e073eb39439e8">1da777a</a>) - Jacob Coffee</p></li>
+<li><p><strong>(events)</strong> add RSS/Atom calendar feeds - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/7298c66c84f4dc6f933a2085bb9e299d777716fe">7298c66</a>) - Jacob Coffee</p></li>
+<li><p><strong>(jobs)</strong> add filtering, preview endpoint and HTMX partials - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/79a975a28aaa7d0c26a73ad8a98fdf8f996ffe96">79a975a</a>) - Jacob Coffee</p></li>
+<li><p><strong>(jobs)</strong> add draft→review workflow for job submissions - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/e8c630934cd682d45de88ee1ecacf4baa22b1813">e8c6309</a>) - Jacob Coffee</p></li>
+<li><p><strong>(jobs)</strong> add featured jobs functionality - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/a84ffb1ac7bea02d59fd67c8f9facc325f8f95ea">a84ffb1</a>) - Jacob Coffee</p></li>
+<li><p><strong>(jobs)</strong> add email notification tasks - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/3f29f497304be05d54da72ab5fad2b6f5a204acd">3f29f49</a>) - Jacob Coffee</p></li>
+<li><p><strong>(logging)</strong> use Rich console renderer for dev mode - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/dbbdf32d6530a214b02150ece053d10f0bb59138">dbbdf32</a>) - Jacob Coffee</p></li>
+<li><p><strong>(mailing)</strong> add domain init with exports - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/e163752753d5b93a40ce70c7b936302840dd82a3">e163752</a>) - Jacob Coffee</p></li>
+<li><p><strong>(mailing)</strong> add email template and log management domain - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/50e466754e7687402f8638a0decc346d9a6c58c9">50e4667</a>) - Jacob Coffee</p></li>
+<li><p><strong>(main)</strong> register site-wide exception handlers - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/95ffcead49158c8537896aa4646ee128232f6ab5">95ffcea</a>) - Jacob Coffee</p></li>
+<li><p><strong>(main)</strong> register sponsor admin controller - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/062793e85289c6f0fa52ac7d1c28b7dc95787e96">062793e</a>) - Jacob Coffee</p></li>
+<li><p><strong>(make)</strong> add Docker targets to Makefile - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/39845563e5ccd99608dc6fa6a4d602c6af0cedae">3984556</a>) - Jacob Coffee</p></li>
+<li><p><strong>(make)</strong> reorganize test targets for better DX - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/7aec5a61cb4fa8c0371fac16aa82285bc84adfa7">7aec5a6</a>) - Jacob Coffee</p></li>
+<li><p><strong>(make)</strong> add meilisearch to infra-up and dev target improvements - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/c5a29e004f175e264301045f33c16a72ea3e0153">c5a29e0</a>) - Jacob Coffee</p></li>
+<li><p><strong>(make)</strong> add worktree aliases and maildev to infra-up - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/ac1a1e9628a3dc7edefb900bd0a050b60a48a406">ac1a1e9</a>) - Jacob Coffee</p></li>
+<li><p><strong>(nav)</strong> update community links to internal routes - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/88b269439f978f545a29f977b80943c45f4ba012">88b2694</a>) - Jacob Coffee</p></li>
+<li><p><strong>(nominations)</strong> add HTMX nomination endpoint - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/8dcf277aa5c3fe859dc83d36d2177fb2fb077c1e">8dcf277</a>) - Jacob Coffee</p></li>
+<li><p><strong>(notifications)</strong> wire job and event email notifications - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/f2357c8c740cd74ca04271838b7d691aab801f84">f2357c8</a>) - Jacob Coffee</p></li>
+<li><p><strong>(oauth)</strong> add Discord as OAuth provider - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/e1634a9811c99dd46ae527cf4d7f17bf4b30e325">e1634a9</a>) - Jacob Coffee</p></li>
+<li><p><strong>(pagination)</strong> add First/Last buttons to data table macro - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/7b318fa3611dca8aadbbfb1336d42b08acfd54ce">7b318fa</a>) - Jacob Coffee</p></li>
+<li><p><strong>(pagination)</strong> add First/Last buttons to public templates - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/fc8db9917400b715f80d28c3a96cd8b4f5289be4">fc8db99</a>) - Jacob Coffee</p></li>
+<li><p><strong>(pagination)</strong> add First/Last buttons to admin templates - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/a9a32f148f8f943d3f80d96e663b9c59a977dbbe">a9a32f1</a>) - Jacob Coffee</p></li>
+<li><p><strong>(psf)</strong> implement /psf/diversity page (#7) - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/c69d8803aa5a2259414d406cb9207677ca622e39">c69d880</a>) - Jacob Coffee</p></li>
+<li><p><strong>(psf)</strong> add membership, about, conduct, and get-involved pages - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/8c7302f1046bab253904f700fa0d1e578022704d">8c7302f</a>) - Jacob Coffee</p></li>
+<li><p><strong>(ratelimit)</strong> add Redis-backed API rate limiting with tiered limits - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/ad03c391ba7cadd007918fcdd594db08023865c1">ad03c39</a>) - Jacob Coffee</p></li>
+<li><p><strong>(search)</strong> add site-wide search domain and templates - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/02683669689dc8d75482f7e8d9e5d1bc74f0e43a">0268366</a>) - Jacob Coffee</p></li>
+<li><p><strong>(security)</strong> enable CSRF protection in Litestar app - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/7329fac069871f51eb4b9eb9c96bcd851cb73d28">7329fac</a>) - Jacob Coffee</p></li>
+<li><p><strong>(services)</strong> add search index triggers to domain services - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/5be8a727a5494a698b227cde4d8a637ace1634bf">5be8a72</a>) - Jacob Coffee</p></li>
+<li><p><strong>(sponsors)</strong> add sponsorship application endpoint - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/b8944199d8aee44fb8c70f0d9177e0f10c081762">b894419</a>) - Jacob Coffee</p></li>
+<li><p><strong>(sponsors)</strong> add contract management and renewal workflow - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/c10a6a5c487508d785c05203807191569b85e320">c10a6a5</a>) - Jacob Coffee</p></li>
+<li><p><strong>(sqladmin)</strong> add SSO authentication with Litestar sessions - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/7a4296aed2998ca8be6ae279215c7d1e37f768fd">7a4296a</a>) - Jacob Coffee</p></li>
+<li><p><strong>(sqladmin)</strong> add DaisyUI custom templates - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/cb159f63bb518e1b1ef8e152653dc816bd16b8d8">cb159f6</a>) - Jacob Coffee</p></li>
+<li><p><strong>(sqladmin)</strong> configure custom templates directory - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/788b41f6bfef268aedde3cbaa64e5dd68cc2d787">788b41f</a>) - Jacob Coffee</p></li>
+<li><p><strong>(sqladmin)</strong> add 17 missing model admin views - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/05d36260242cc2b6e30c20fcf02c87c126e4ad3f">05d3626</a>) - Jacob Coffee</p></li>
+<li><p><strong>(sqladmin)</strong> add categories and sections for all model admin views - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/9dd2bfb8b19fb79c2074c2753af11bc9882829e3">9dd2bfb</a>) - Jacob Coffee</p></li>
+<li><p><strong>(static)</strong> add Python favicon and logo images - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/453608764fdf249507bd1baceab1dec4241d2a22">4536087</a>) - Jacob Coffee</p></li>
+<li><p><strong>(successstories)</strong> enhance detail page with related stories - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/5de5720cbb287e2f3b5110b332884048ac40c7b9">5de5720</a>) - Jacob Coffee</p></li>
+<li><p><strong>(sync)</strong> add background tasks and scripts for importing external content - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/80ed41f00c803f596702f30c529567fc1de93ba5">80ed41f</a>) - Jacob Coffee</p></li>
+<li><p><strong>(tailwind)</strong> safelist dynamic category colors for success stories - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/0bccbbf00fa544f6724c9c767e8820c9b2aea049">0bccbbf</a>) - Jacob Coffee</p></li>
+<li><p><strong>(tasks)</strong> implement SAQ background task queue with litestar-saq - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/a7273ce49dc909ff1d73c18bfc55677fb12665fb">a7273ce</a>) - Jacob Coffee</p></li>
+<li><p><strong>(tasks)</strong> add job sorting and scheduled status detection - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/9d705fadbe331cca0d6ea005d1855509172d365e">9d705fa</a>) - Jacob Coffee</p></li>
+<li><p><strong>(tasks)</strong> add sorting params and test failure endpoint - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/eba2b86652ba6b65540d3de50d53bc2a3d69457b">eba2b86</a>) - Jacob Coffee</p></li>
+<li><p><strong>(tasks)</strong> add test_failing_task for debugging tracebacks - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/d4c535af11a4f279323b3fb411b10afd8e3e6777">d4c535a</a>) - Jacob Coffee</p></li>
+<li><p><strong>(tasks)</strong> add event reminder and cleanup background tasks - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/7f7504cc6a1c955e460cbc7e9f9a4e438c8233a3">7f7504c</a>) - Jacob Coffee</p></li>
+<li><p><strong>(tasks)</strong> add persistent job statistics tracking - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/c07e5333cefc87ecd1f86c14f21587ef33a0f29c">c07e533</a>) - Jacob Coffee</p></li>
+<li><p><strong>(templates)</strong> add render templates for various sections - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/ee6e56b89653f7c0a883435ac08d749d8189a561">ee6e56b</a>) - Jacob Coffee</p></li>
+<li><p><strong>(templates)</strong> add toast notification JS for HTMX error handling - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/f32b9b95b598156f2fa60a9b378334f0d9482c13">f32b9b9</a>) - Jacob Coffee</p></li>
+<li><p><strong>(templates)</strong> add Jinja filters for time, JSON, and traceback formatting - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/f019c292b2b0d7c094cbb31a312d99f6f57d88e6">f019c29</a>) - Jacob Coffee</p></li>
+<li><p><strong>(templates)</strong> add multi-directory template support - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/b96a2b9e941d98fb2288b2fb8160023e43849d33">b96a2b9</a>) - Jacob Coffee</p></li>
+<li><p><strong>(tests)</strong> complete Task 8.2b route/controller integration tests - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/655c55353e46b4fc568879242f66067675a0c807">655c553</a>) - Jacob Coffee</p></li>
+<li><p><strong>(timeline)</strong> enhance interactivity and add community events - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/95802c6e3023e4a7d40e95a0941c3bb0b5298245">95802c6</a>) - Jacob Coffee</p></li>
+<li><p><strong>(timeline)</strong> add flowing curved SVG river with animations - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/2d7a954f05e4b488b2ce06c92eb8b73ba8b711cd">2d7a954</a>) - Jacob Coffee</p></li>
+<li><p><strong>(timeline)</strong> add 2026 Steering Council election - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/e66c44402032602baa118016ee61ea120150a1ef">e66c444</a>) - Jacob Coffee</p></li>
+<li><p><strong>(ui)</strong> add admin dropdown to navbar for staff users - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/6e38b2d7957ab4b30a5d0d9209d0e85d4eabb9b6">6e38b2d</a>) - Jacob Coffee</p></li>
+<li><p><strong>(ui)</strong> add Admin FAB for staff/superusers on non-admin pages - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/6f86cd3dbe9dd2f895e914327c8698fe9f180973">6f86cd3</a>) - Jacob Coffee</p></li>
+<li><p><strong>(ui)</strong> add sortable columns and scheduled tab to jobs table - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/fe514daf84684e8b25f92ed3ff61d92c2e0bfc8f">fe514da</a>) - Jacob Coffee</p></li>
+<li><p><strong>(ui)</strong> improve job detail page with scheduled status and traceback display - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/64c43670b3554499eaf72b6c7813b2592b4d6a3b">64c4367</a>) - Jacob Coffee</p></li>
+<li><p><strong>(ui)</strong> add Test Failure button to task dashboard - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/2bdd1e80b825cf8b3496f05c057b093995d13520">2bdd1e8</a>) - Jacob Coffee</p></li>
+<li><p><strong>(ui)</strong> add toast notification system to base template - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/14dc98e76158ecbd884b68e7e2e66de544784b23">14dc98e</a>) - Jacob Coffee</p></li>
+<li><p><strong>(ui)</strong> add developer links (Docs, API, GitHub) to navbar - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/cdd630415a1041b9f8a2f0741ebcc8c1174d1c25">cdd6304</a>) - Jacob Coffee</p></li>
+<li><p><strong>(users)</strong> add API key model and migration - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/d5ba4335071d84bf2e97c6244da881120b3b96d5">d5ba433</a>) - Jacob Coffee</p></li>
+<li><p><strong>(users)</strong> add API key service, repository, and schemas - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/ddfea0c20f21e0bccc4eefd9b73e37d8f1d4c145">ddfea0c</a>) - Jacob Coffee</p></li>
+<li><p><strong>(vite)</strong> add admin bundle entry points - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/8cdd7af12e5a7d9b01b54bd6d756ca30dfbd1b3b">8cdd7af</a>) - Jacob Coffee</p></li>
+<li><p><strong>(vite)</strong> integrate VitePlugin for frontend development - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/b2c6a3aa65019673dcae0f641b23c749477f7570">b2c6a3a</a>) - Jacob Coffee</p></li>
+<li><p><strong>(workflows)</strong> add workflow module with sponsor workflows - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/58fa26f26a0e8c4784dbaad317f841c410035490">58fa26f</a>) - Jacob Coffee</p></li>
+<li><p>add page controllers for all domains - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/5829c195ebc1510ad0c8ddf15200ec69364e85d7">5829c19</a>) - Jacob Coffee</p></li>
+<li><p>add dynamic home page with content services - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/1c7b8ceb9a31b327001ab1acd23989cd66e83c4c">1c7b8ce</a>) - Jacob Coffee</p></li>
+<li><p>complete database layer with migrations and seeding - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/3c601978a63b2a5244e003ccbeb3cbabbd07744f">3c60197</a>) - Jacob Coffee</p></li>
+<li><p>update domain models with OAuth and additional fields - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/aa7154442a895d58ae025d5dbf68b6d1b5063af7">aa71544</a>) - Jacob Coffee</p></li>
+<li><p>add auth system foundation with JWT middleware - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/f0b56540198239d1e5b14a993eff797231b9f2d5">f0b5654</a>) - Jacob Coffee</p></li>
+<li><p>add error page templates - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/c036aa8327f92abfc66a18335bae316b5f9f5570">c036aa8</a>) - Jacob Coffee</p></li>
+<li><p>add flash messages with session middleware - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/7fac14b6de9e95aedd51d6c69f8963bb0a497af4">7fac14b</a>) - Jacob Coffee</p></li>
+<li><p>add render controllers for jobs, nominations, sponsors - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/48456f931c4ccef9242643fdc9c35bbe85f20fd0">48456f9</a>) - Jacob Coffee</p></li>
+<li><p>register workflow plugin in application - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/4e3470a07ad6a088fdf0efae16eb5c4897c9ff95">4e3470a</a>) - Jacob Coffee</p></li>
+<li><p>add worker Dockerfile and Railway config - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/6e6c908fb071c9d530b0f19e01e6638b5d0c2bd1">6e6c908</a>) - Jacob Coffee</p></li>
+</ul>
+</section>
+<section id="miscellaneous-chores">
+<h3>Miscellaneous Chores<a class="headerlink" href="#miscellaneous-chores" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>(admin)</strong> register new controllers and services in exports - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/35b37173e6e8d181613d8c00f729bedc38aa2b20">35b3717</a>) - Jacob Coffee</p></li>
+<li><p><strong>(deps)</strong> configure dependabot with grouped updates - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/0603218903a14172a5bec09da0aa68abd6174c60">0603218</a>) - Jacob Coffee</p></li>
+<li><p><strong>(deps)</strong> Bump the actions group with 9 updates (#5) - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/26b1032b3e41ab02d2722c338e75ce89b3689af6">26b1032</a>) - dependabot[bot]</p></li>
+<li><p><strong>(deps)</strong> Bump python from 3.13-slim to 3.14-slim in the docker-images group across 1 directory (#6) - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/19403f839d6b6ab3c78f30d901bb8132a6745fac">19403f8</a>) - dependabot[bot]</p></li>
+<li><p><strong>(gitignore)</strong> ignore Vite build artifacts - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/e63249c59bfffaf6939d260eb15915713a73e2da">e63249c</a>) - Jacob Coffee</p></li>
+<li><p>update config and build dependencies - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/6ba9dc61e70529adbd2eff24e89e7557b454f3c8">6ba9dc6</a>) - Jacob Coffee</p></li>
+<li><p>cleanup import ordering per lint rules - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/1470884e166a59b1298d97e0871c1e760e42f697">1470884</a>) - Jacob Coffee</p></li>
+<li><p>fix TC002/TC003 import organization issues - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/8cc615e6f1bc887bdd670f61abf35f6c6da9cb0c">8cc615e</a>) - Jacob Coffee</p></li>
+<li><p>update .gitignore for Claude Flow files - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/e1a42da988bd1e7f90f28e0591ec951d5acca553">e1a42da</a>) - Jacob Coffee</p></li>
+<li><p>add dev tooling and test documentation - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/5279392f65777cea1feddcefb9cebeca9bce078d">5279392</a>) - Jacob Coffee</p></li>
+<li><p>fix trailing newline and update vite manifest - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/b68fe001e379edcc4b7d31fa9244d2fbdf31c1e7">b68fe00</a>) - Jacob Coffee</p></li>
+<li><p>consolidate <a class="reference external" href="http://PLAN.md">PLAN.md</a> to top level - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/07fb233e29afe62ddb091f89b4d954a19f965e79">07fb233</a>) - Jacob Coffee</p></li>
+<li><p>update uv.lock for advanced-alchemy[cli] extra - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/14e18936047f9ea00f3d5ab459b331b672bfb79d">14e1893</a>) - Jacob Coffee</p></li>
+<li><p>move internal docs to docs/internal - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/ad80d160126f5e33b0a4a112331a6ad8e27e3e70">ad80d16</a>) - Jacob Coffee</p></li>
+<li><p>register PSFPageController in app routes - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/c16df92b4ad22926eff989452ced853fd112beb8">c16df92</a>) - Jacob Coffee</p></li>
+<li><p>integrate prek pre-commit hooks and apply auto-formatting - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/852e4d0c4531e3d42539a8b59a164147e807fa06">852e4d0</a>) - Jacob Coffee</p></li>
+<li><p>remove –force from seed command - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/01b34cd06525262f82e130664764a920bb761604">01b34cd</a>) - Jacob Coffee</p></li>
+</ul>
+</section>
+<section id="performance">
+<h3>Performance<a class="headerlink" href="#performance" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>(ci)</strong> run integration/E2E tests on PRs only - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/eb6a746974e638156ac4bcfdf52319a440eca18d">eb6a746</a>) - Jacob Coffee</p></li>
+<li><p><strong>(ci)</strong> optimize Sphinx builds and fix test fixtures - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/2acfceb25472d0b3542e993d3082095769305066">2acfceb</a>) - Jacob Coffee</p></li>
+<li><p><strong>(ci)</strong> parallelize integration tests with pytest-split - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/20f68dff6eaaa118cd6646d4a9f69ea14ceadf20">20f68df</a>) - Jacob Coffee</p></li>
+<li><p><strong>(docs)</strong> skip linkcheck for auto-generated changelog commit URLs - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/b6394ff99d4ed65027799b5c756fc4a754c7eb50">b6394ff</a>) - Jacob Coffee</p></li>
+<li><p><strong>(tests)</strong> optimize pytest suite for faster development feedback - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/dad0a2d70e626f3ea7fe9cb46b89a63750ba1dd3">dad0a2d</a>) - Jacob Coffee</p></li>
+</ul>
+</section>
+<section id="refactoring">
+<h3>Refactoring<a class="headerlink" href="#refactoring" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>(banners)</strong> move templates to domain folder - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/7554e7fee3565659e925047566e59ea3add0c170">7554e7f</a>) - Jacob Coffee</p></li>
+<li><p><strong>(blogs)</strong> move templates to domain folder - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/56ec0d9040a89b75e8f8069910a41652123cad50">56ec0d9</a>) - Jacob Coffee</p></li>
+<li><p><strong>(codesamples)</strong> move templates to domain folder - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/e7ce920df8f492cc6c4490f947dea53420bf48ce">e7ce920</a>) - Jacob Coffee</p></li>
+<li><p><strong>(community)</strong> move templates to domain folder - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/6fc4fb67edd1a3839969d7112b443a3e82e271a0">6fc4fb6</a>) - Jacob Coffee</p></li>
+<li><p><strong>(config)</strong> improve startup banner and validation warnings - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/161698358ea64f5cb14efc0377f2e87623a82230">1616983</a>) - Jacob Coffee</p></li>
+<li><p><strong>(csrf)</strong> remove unused csrf_token_injector function - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/7389c7ef0571194516c529ba87a11ddbf1b4f525">7389c7e</a>) - Jacob Coffee</p></li>
+<li><p><strong>(db)</strong> add lazy initialization for database sessions - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/f24865d6153b3661998f8171aa7cb95f7c1d0a15">f24865d</a>) - Jacob Coffee</p></li>
+<li><p><strong>(downloads)</strong> move templates to domain folder - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/c9f526dec31c328202a76ca672883b97c991b993">c9f526d</a>) - Jacob Coffee</p></li>
+<li><p><strong>(events)</strong> move templates to domain folder - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/3f0665e013115db904b742808cc0d91dccdff84f">3f0665e</a>) - Jacob Coffee</p></li>
+<li><p><strong>(jobs)</strong> move templates to domain folder - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/a91e91b15edd7ce8b5950d8cbc67d201a2c50295">a91e91b</a>) - Jacob Coffee</p></li>
+<li><p><strong>(minutes)</strong> move templates to domain folder - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/d8c0b62570de412029618bdafae1c48455aa713d">d8c0b62</a>) - Jacob Coffee</p></li>
+<li><p><strong>(nominations)</strong> move templates to domain folder - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/c01e3025833ff3004d6e0679df5b67ff29a55662">c01e302</a>) - Jacob Coffee</p></li>
+<li><p><strong>(sponsors)</strong> move templates to domain folder - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/93f0e169720064594760cdc1044037b937232b91">93f0e16</a>) - Jacob Coffee</p></li>
+<li><p><strong>(successstories)</strong> move templates to domain folder - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/9420b6ed053ac73ece9ef6ceb3d663d0927687ca">9420b6e</a>) - Jacob Coffee</p></li>
+<li><p><strong>(tests)</strong> remove unused imports from OAuth tests - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/9ea531aa337dee5b6a18f6837387881fb9fd2db3">9ea531a</a>) - Jacob Coffee</p></li>
+<li><p><strong>(tests)</strong> cleanup conftest imports in cache tests - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/6a64b6c578b4d0dd5ef8570207f39eb25cc7fad7">6a64b6c</a>) - Jacob Coffee</p></li>
+<li><p><strong>(ui)</strong> update queue card and remove unused job_row partial - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/a5705d8a1106375aa8aaed6b1237f069453c78d4">a5705d8</a>) - Jacob Coffee</p></li>
+<li><p><strong>(work_groups)</strong> move templates to domain folder - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/f1a5488fb9ca92b6819e425f097f181a1d6946a7">f1a5488</a>) - Jacob Coffee</p></li>
+</ul>
+</section>
+<section id="security">
+<h3>Security<a class="headerlink" href="#security" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>(github)</strong> add GitHub Actions workflows and labeler config - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/54cbaf27d13182f56ae74deccf26abdb73eb12f9">54cbaf2</a>) - Jacob Coffee</p></li>
+</ul>
+</section>
+<section id="style">
+<h3>Style<a class="headerlink" href="#style" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>(admin)</strong> improve Jinja2 syntax reference with badges - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/695d7512f98231c9bb2292f4a5bdad582d38b10b">695d751</a>) - Jacob Coffee</p></li>
+<li><p><strong>(css)</strong> add htmx loading states and improve transitions - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/f5c15bf2d7982f0082cc86340728d90264788a79">f5c15bf</a>) - Jacob Coffee</p></li>
+<li><p><strong>(docs)</strong> update theme to Python brand colors - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/e9ecd6a05611d9b777512639109605388467afce">e9ecd6a</a>) - Jacob Coffee</p></li>
+<li><p><strong>(scripts)</strong> reorder imports in import_downloads.py - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/3d16c91841e0f432f3f103711bb6bfa24bc58350">3d16c91</a>) - Jacob Coffee</p></li>
+<li><p><strong>(tasks)</strong> minor formatting in <a class="reference external" href="http://sync.py">sync.py</a> - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/1232d9dad1e13dc285f04b575124d6f7a22e7ea0">1232d9d</a>) - Jacob Coffee</p></li>
+<li><p><strong>(templates)</strong> normalize page header sizes sitewide - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/cd04dbbbbb470b2277f73adf521457888d7b3c75">cd04dbb</a>) - Jacob Coffee</p></li>
+<li><p><strong>(timeline)</strong> match external link styling to PEP links - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/d879d0ccef38a53d20d75ce54bdc9c218b07bffe">d879d0c</a>) - Jacob Coffee</p></li>
+<li><p>apply ruff formatting and simplify test fixtures - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/87cd228ab5f11e829c11aa65df0dbaf191e4b467">87cd228</a>) - Jacob Coffee</p></li>
+<li><p>apply ruff formatting fixes - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/9b00795aab40e53b9a2b68bc0efd89efdc1e7c19">9b00795</a>) - Jacob Coffee</p></li>
+<li><p>format <a class="reference external" href="http://seed.py">seed.py</a> - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/9674ff8dd5a75bcd01aa6f821bb147112f9c2912">9674ff8</a>) - Jacob Coffee</p></li>
+<li><p>format ruff lint config in pyproject.toml - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/bd78be93bada3e5ec4c037e41e13f6fbf629102c">bd78be9</a>) - Jacob Coffee</p></li>
+<li><p>apply ruff formatting - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/15591d8c6689066f54caacdd2f9e523295fdb75c">15591d8</a>) - Jacob Coffee</p></li>
+<li><p>fix lint error in migration file - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/6ac4304cde5ea0986ba2ba6b28fb9ea7667b7082">6ac4304</a>) - Jacob Coffee</p></li>
+</ul>
+</section>
+<section id="tests">
+<h3>Tests<a class="headerlink" href="#tests" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>(admin)</strong> add unit tests for admin guards and config - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/2c213950dd6384dbbefe15ce7ecf1706426ef42c">2c21395</a>) - Jacob Coffee</p></li>
+<li><p><strong>(admin)</strong> add SponsorAdminService unit tests - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/ef2298807f06f0e11b417c1e24d575ee2805799d">ef22988</a>) - Jacob Coffee</p></li>
+<li><p><strong>(auth)</strong> add JWT and CSRF test coverage - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/f2311d9a6cad31646f1fd791e841f4970fc5f6b5">f2311d9</a>) - Jacob Coffee</p></li>
+<li><p><strong>(cache)</strong> add comprehensive tests for page caching - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/4d0f95272235879c57510f615e937d995f66f242">4d0f952</a>) - Jacob Coffee</p></li>
+<li><p><strong>(e2e)</strong> add Playwright E2E tests for auth forms - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/17670efef518de1633938368180f7134c9632018">17670ef</a>) - Jacob Coffee</p></li>
+<li><p><strong>(integration)</strong> add auth flow integration tests - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/dd175c00879a80dbabd31acb7d0ca83d5ef75f5f">dd175c0</a>) - Jacob Coffee</p></li>
+<li><p><strong>(logging)</strong> add comprehensive tests for structlog configuration - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/bbb15bae8724a1e3f1b4e2c51a03cb95ab3cee42">bbb15ba</a>) - Jacob Coffee</p></li>
+<li><p><strong>(oauth)</strong> add comprehensive OAuth2 unit and integration tests - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/58fdf7316e3afdf3b879bc78fef78366ac1c9df2">58fdf73</a>) - Jacob Coffee</p></li>
+<li><p><strong>(oauth)</strong> add tests for POST endpoint and account restrictions - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/5bf1fa7248cd1e10bfe07f814a4fe8eb68047f8c">5bf1fa7</a>) - Jacob Coffee</p></li>
+<li><p><strong>(tasks)</strong> add integration tests for task admin and update worker tests - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/567ad0a5b9391a3fbecf7c4906dbf6abda88a018">567ad0a</a>) - Jacob Coffee</p></li>
+<li><p><strong>(unit)</strong> add comprehensive domain unit tests - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/c09817507762dfdb315b5fec715cc8a1c0e93e05">c098175</a>) - Jacob Coffee</p></li>
+<li><p><strong>(users)</strong> add API key unit tests - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/42335db753212085e0599dca46d187e1cac472c3">42335db</a>) - Jacob Coffee</p></li>
+<li><p>update test suite for auth and model changes - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/c6281e0ac9bf1ab00a85667ff98b6d406b526d1f">c6281e0</a>) - Jacob Coffee</p></li>
+<li><p>add pytest-databases for PostgreSQL integration testing - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/9cc3d3c3e42d22928286b2bd8d598a5b027d61d8">9cc3d3c</a>) - Jacob Coffee</p></li>
+<li><p>refactor auth tests to use API-based fixtures - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/eb9bc0a4163b35856dc9708e98937f8525e4bfac">eb9bc0a</a>) - Jacob Coffee</p></li>
+<li><p>update integration tests for API improvements - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/ab460dc5abf535a6fe8f708125e3f68359419dad">ab460dc</a>) - Jacob Coffee</p></li>
+<li><p>skip CSRF tests requiring database lifecycle - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/87d286d356b0f170aef0c4a2f0dfe482736755c8">87d286d</a>) - Jacob Coffee</p></li>
+<li><p>properly implement CSRF tests with dedicated fixture - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/164d3b2b87245aa63637abe44203b97b1f2a3a36">164d3b2</a>) - Jacob Coffee</p></li>
+</ul>
+</section>
+<section id="build">
+<h3>Build<a class="headerlink" href="#build" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>(deps)</strong> bump the actions group across 1 directory with 6 updates (#13) - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/6704766c047458837578d9cb792caab5ad531db2">6704766</a>) - dependabot[bot]</p></li>
+<li><p><strong>(make)</strong> add test-unit, test-integration, test-e2e, test-full targets - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/fcf2cc096740a52b8b572d5e97469cc6c07bbe31">fcf2cc0</a>) - Jacob Coffee</p></li>
+<li><p>add litestar-workflows dependency - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/73b1c9b3e5a13972060d88ea4b4a7055101e0d97">73b1c9b</a>) - Jacob Coffee</p></li>
+</ul>
+</section>
+<section id="debug">
+<h3>Debug<a class="headerlink" href="#debug" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>(railway)</strong> single worker with debug logging - (<a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg/commit/5b290119f44fba23ac7497c085a3f3e921686e3c">5b29011</a>) - Jacob Coffee</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">litestar-pydotorg</span></code> Changelog</p>
+</section>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="architecture/adr/002-saq-background-tasks.html">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title">ADR-002: Use SAQ for Background Task Processing</div></div>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Jacob Coffee</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+<a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+  <iconify-icon icon="simple-icons:github"></iconify-icon>
+</a></div>
+    </div>
+  </div>
+</footer>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=30646c52"></script>
+      <script src="_static/design-tabs.js?v=f930bc37"></script>
+      <script src="_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

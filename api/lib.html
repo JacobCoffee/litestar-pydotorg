@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="blue" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Library Utilities - litestar-pydotorg</title><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Background Tasks" href="tasks.html" /><link rel="prev" title="Work Groups" href="domains/work_groups.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=14737038" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=513f0650" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="Library Utilities"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../index.html">
+      
+      
+      <strong>litestar-pydotorg</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"><ul><li class="link">
+          <a href="https://litestar.dev/">
+            <span>Litestar</span></a>
+        </li><li class="link">
+          <a href="https://python.org/">
+            <span>Python.org</span></a>
+        </li></ul></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials">
+  <a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started/index.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/quickstart.html">Quickstart</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/index.html">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/development.html">Development Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/contributing.html">Contribution Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/testing.html">Testing Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/debugging.html">Debugging Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/api-usage.html">API Usage Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/authentication.html">Authentication Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/feature-flags.html">Feature Flags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/configuration.html">Configuration Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/deployment.html">Deployment Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/docker.html">Docker Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/troubleshooting.html">Troubleshooting Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/index.html">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/domain-patterns.html">Domain Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/authentication-recipes.html">Authentication Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/database-recipes.html">Database Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/testing-recipes.html">Testing Recipes</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="core/index.html">Core Infrastructure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core/auth.html">Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core/cache.html">Caching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core/database.html">Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core/email.html">Email</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core/exceptions.html">Exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core/features.html">Feature Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core/feeds.html">RSS/Atom Feeds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core/ical.html">iCalendar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core/logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core/middleware.html">Middleware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core/openapi.html">OpenAPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core/ratelimit.html">Rate Limiting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core/security.html">Security</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core/worker.html">Background Worker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="domains/index.html">Domain Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="domains/about.html">About</a></li>
+<li class="toctree-l3"><a class="reference internal" href="domains/admin.html">Admin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="domains/banners.html">banners</a></li>
+<li class="toctree-l3"><a class="reference internal" href="domains/blogs.html">blogs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="domains/codesamples.html">Code Samples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="domains/community.html">community</a></li>
+<li class="toctree-l3"><a class="reference internal" href="domains/docs.html">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="domains/downloads.html">downloads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="domains/events.html">events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="domains/jobs.html">jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="domains/mailing.html">Mailing Lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="domains/minutes.html">Minutes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="domains/nominations.html">Nominations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="domains/pages.html">pages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="domains/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="domains/sponsors.html">sponsors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="domains/sqladmin.html">SQLAdmin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="domains/successstories.html">Success Stories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="domains/users.html">users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="domains/work_groups.html">Work Groups</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Library Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tasks.html">Background Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="main.html">Application Entry Point</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/ARCHITECTURE.html">Litestar Python.org Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/DATABASE_SCHEMA.html">Database Schema Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/DOMAIN_MODELS.html">Domain Models Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/QUICK_START.html">Litestar Python.org Quick Start Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/API_TAGS_INDEX.html">API Tags Documentation Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/RATE_LIMITING_ARCHITECTURE.html">Rate Limiting Architecture Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/adr/001-litestar-framework.html">ADR-001: Use Litestar as Web Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/adr/002-saq-background-tasks.html">ADR-002: Use SAQ for Background Task Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#module-pydotorg.lib">Module Contents</a><ul>
+<li><a class="reference internal" href="#pydotorg.lib.APIVersion"><code class="docutils literal notranslate"><span class="pre">APIVersion</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.lib.APIVersion.__eq__"><code class="docutils literal notranslate">__eq__()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.lib.APIVersion.__hash__"><code class="docutils literal notranslate">__hash__()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.lib.APIVersion.__init__"><code class="docutils literal notranslate">__init__()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.lib.APIVersion.__lt__"><code class="docutils literal notranslate">__lt__()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.lib.APIVersion.__str__"><code class="docutils literal notranslate">__str__()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.lib.APIVersion.deprecated"><code class="docutils literal notranslate">deprecated</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.lib.APIVersion.from_string"><code class="docutils literal notranslate">from_string()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.lib.APIVersion.patch"><code class="docutils literal notranslate">patch</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.lib.APIVersion.sunset_date"><code class="docutils literal notranslate">sunset_date</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.lib.APIVersion.to_short_string"><code class="docutils literal notranslate">to_short_string()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.lib.APIVersion.major"><code class="docutils literal notranslate">major</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.lib.APIVersion.minor"><code class="docutils literal notranslate">minor</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.lib.APIVersionMiddleware"><code class="docutils literal notranslate"><span class="pre">APIVersionMiddleware</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.lib.APIVersionMiddleware.app"><code class="docutils literal notranslate">app</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.lib.APIVersionMiddleware.ACCEPT_PATTERN"><code class="docutils literal notranslate">ACCEPT_PATTERN</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.lib.APIVersionMiddleware.PATH_PATTERN"><code class="docutils literal notranslate">PATH_PATTERN</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.lib.APIVersionMiddleware.__call__"><code class="docutils literal notranslate">__call__()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.lib.APIVersionMiddleware.__init__"><code class="docutils literal notranslate">__init__()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.lib.APIVersionRegistry"><code class="docutils literal notranslate"><span class="pre">APIVersionRegistry</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.lib.APIVersionRegistry.__init__"><code class="docutils literal notranslate">__init__()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.lib.APIVersionRegistry.get_default"><code class="docutils literal notranslate">get_default()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.lib.APIVersionRegistry.get_version"><code class="docutils literal notranslate">get_version()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.lib.APIVersionRegistry.is_supported"><code class="docutils literal notranslate">is_supported()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.lib.APIVersionRegistry.register"><code class="docutils literal notranslate">register()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.lib.add_version"><code class="docutils literal notranslate"><span class="pre">add_version()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.lib.deprecate_version"><code class="docutils literal notranslate"><span class="pre">deprecate_version()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#api-versioning">API Versioning</a><ul>
+<li><a class="reference internal" href="#pydotorg.lib.api_versioning.APIVersion"><code class="docutils literal notranslate"><span class="pre">APIVersion</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.lib.api_versioning.APIVersion.major"><code class="docutils literal notranslate">major</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.lib.api_versioning.APIVersion.minor"><code class="docutils literal notranslate">minor</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.lib.api_versioning.APIVersion.patch"><code class="docutils literal notranslate">patch</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.lib.api_versioning.APIVersion.deprecated"><code class="docutils literal notranslate">deprecated</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.lib.api_versioning.APIVersion.sunset_date"><code class="docutils literal notranslate">sunset_date</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.lib.api_versioning.APIVersion.from_string"><code class="docutils literal notranslate">from_string()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.lib.api_versioning.APIVersion.__str__"><code class="docutils literal notranslate">__str__()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.lib.api_versioning.APIVersion.to_short_string"><code class="docutils literal notranslate">to_short_string()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.lib.api_versioning.APIVersion.__lt__"><code class="docutils literal notranslate">__lt__()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.lib.api_versioning.APIVersion.__eq__"><code class="docutils literal notranslate">__eq__()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.lib.api_versioning.APIVersion.__hash__"><code class="docutils literal notranslate">__hash__()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.lib.api_versioning.APIVersion.__init__"><code class="docutils literal notranslate">__init__()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.lib.api_versioning.APIVersionRegistry"><code class="docutils literal notranslate"><span class="pre">APIVersionRegistry</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.lib.api_versioning.APIVersionRegistry.__init__"><code class="docutils literal notranslate">__init__()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.lib.api_versioning.APIVersionRegistry.register"><code class="docutils literal notranslate">register()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.lib.api_versioning.APIVersionRegistry.get_version"><code class="docutils literal notranslate">get_version()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.lib.api_versioning.APIVersionRegistry.get_default"><code class="docutils literal notranslate">get_default()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.lib.api_versioning.APIVersionRegistry.is_supported"><code class="docutils literal notranslate">is_supported()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.lib.api_versioning.APIVersionMiddleware"><code class="docutils literal notranslate"><span class="pre">APIVersionMiddleware</span></code></a><ul>
+<li><a class="reference internal" href="#pydotorg.lib.api_versioning.APIVersionMiddleware.ACCEPT_PATTERN"><code class="docutils literal notranslate">ACCEPT_PATTERN</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.lib.api_versioning.APIVersionMiddleware.PATH_PATTERN"><code class="docutils literal notranslate">PATH_PATTERN</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.lib.api_versioning.APIVersionMiddleware.__init__"><code class="docutils literal notranslate">__init__()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.lib.api_versioning.APIVersionMiddleware.app"><code class="docutils literal notranslate">app</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.lib.api_versioning.APIVersionMiddleware.__call__"><code class="docutils literal notranslate">__call__()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pydotorg.lib.api_versioning.deprecate_version"><code class="docutils literal notranslate"><span class="pre">deprecate_version()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.lib.api_versioning.add_version"><code class="docutils literal notranslate"><span class="pre">add_version()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tasks">Tasks</a><ul>
+<li><a class="reference internal" href="#pydotorg.lib.tasks.get_queue"><code class="docutils literal notranslate"><span class="pre">get_queue()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.lib.tasks.enqueue_task"><code class="docutils literal notranslate"><span class="pre">enqueue_task()</span></code></a></li>
+<li><a class="reference internal" href="#pydotorg.lib.tasks.enqueue_task_safe"><code class="docutils literal notranslate"><span class="pre">enqueue_task_safe()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../index.html"><span itemprop="name">litestar-pydotorg</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="index.html"><span itemprop="name">API Reference</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="2" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">Library Utilities</strong>
+        <meta itemprop="position" content="3" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue dark-code" role="main">
+          <section id="library-utilities">
+<h1>Library Utilities<a class="headerlink" href="#library-utilities" title="Link to this heading">¶</a></h1>
+<p>Shared library utilities and helpers.</p>
+<section id="module-pydotorg.lib">
+<span id="module-contents"></span><h2>Module Contents<a class="headerlink" href="#module-pydotorg.lib" title="Link to this heading">¶</a></h2>
+<p>Shared library utilities.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.lib.APIVersion">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">APIVersion</span></span><a class="reference internal" href="../_modules/pydotorg/lib/api_versioning.html#APIVersion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.lib.APIVersion" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Represents an API version with deprecation metadata.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.lib.APIVersion.__eq__">
+<span class="sig-name descname"><span class="pre">__eq__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pydotorg/lib/api_versioning.html#APIVersion.__eq__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.lib.APIVersion.__eq__" title="Link to this definition">¶</a></dt>
+<dd><p>Compare versions for equality.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.lib.APIVersion.__hash__">
+<span class="sig-name descname"><span class="pre">__hash__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pydotorg/lib/api_versioning.html#APIVersion.__hash__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.lib.APIVersion.__hash__" title="Link to this definition">¶</a></dt>
+<dd><p>Return hash for use in sets and dicts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.lib.APIVersion.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">major</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deprecated</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sunset_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydotorg.lib.APIVersion.__init__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.lib.APIVersion.__lt__">
+<span class="sig-name descname"><span class="pre">__lt__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pydotorg/lib/api_versioning.html#APIVersion.__lt__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.lib.APIVersion.__lt__" title="Link to this definition">¶</a></dt>
+<dd><p>Compare versions for sorting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.lib.APIVersion.__str__">
+<span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pydotorg/lib/api_versioning.html#APIVersion.__str__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.lib.APIVersion.__str__" title="Link to this definition">¶</a></dt>
+<dd><p>Return version as string (e.g., ‘v1.0.0’).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.lib.APIVersion.deprecated">
+<span class="sig-name descname"><span class="pre">deprecated</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#pydotorg.lib.APIVersion.deprecated" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.lib.APIVersion.from_string">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">version_str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pydotorg/lib/api_versioning.html#APIVersion.from_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.lib.APIVersion.from_string" title="Link to this definition">¶</a></dt>
+<dd><p>Parse version from string like ‘v1’ or ‘1.2.3’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>version_str</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Version string in format ‘v1’, ‘1’, ‘1.2’, or ‘1.2.3’</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#pydotorg.lib.api_versioning.APIVersion" title="pydotorg.lib.api_versioning.APIVersion"><code class="xref py py-class docutils literal notranslate"><span class="pre">APIVersion</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Parsed APIVersion instance</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If version string is invalid</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.lib.APIVersion.patch">
+<span class="sig-name descname"><span class="pre">patch</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#pydotorg.lib.APIVersion.patch" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.lib.APIVersion.sunset_date">
+<span class="sig-name descname"><span class="pre">sunset_date</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.date" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">date</span></code></a> <span class="pre">|</span> <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pydotorg.lib.APIVersion.sunset_date" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.lib.APIVersion.to_short_string">
+<span class="sig-name descname"><span class="pre">to_short_string</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pydotorg/lib/api_versioning.html#APIVersion.to_short_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.lib.APIVersion.to_short_string" title="Link to this definition">¶</a></dt>
+<dd><p>Return short version string (e.g., ‘v1’).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.lib.APIVersion.major">
+<span class="sig-name descname"><span class="pre">major</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></em><a class="headerlink" href="#pydotorg.lib.APIVersion.major" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.lib.APIVersion.minor">
+<span class="sig-name descname"><span class="pre">minor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></em><a class="headerlink" href="#pydotorg.lib.APIVersion.minor" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.lib.APIVersionMiddleware">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">APIVersionMiddleware</span></span><a class="reference internal" href="../_modules/pydotorg/lib/api_versioning.html#APIVersionMiddleware"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.lib.APIVersionMiddleware" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.litestar.dev/2/reference/middleware/index.html#litestar.middleware.MiddlewareProtocol" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MiddlewareProtocol</span></code></a></p>
+<p>Middleware that negotiates API version and adds version headers.</p>
+<p>Version negotiation order:
+1. Accept header (application/vnd.pydotorg.v1+json)
+2. URL path prefix (/api/v1/…)
+3. Query parameter (?api_version=1)
+4. Default version (v1)</p>
+<p>Adds response headers:
+- X-API-Version: Current version used
+- X-API-Deprecated: true/false
+- X-API-Sunset-Date: ISO date if deprecated</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.lib.APIVersionMiddleware.app">
+<span class="sig-name descname"><span class="pre">app</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ASGIApp</span></em><a class="headerlink" href="#pydotorg.lib.APIVersionMiddleware.app" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.lib.APIVersionMiddleware.ACCEPT_PATTERN">
+<span class="sig-name descname"><span class="pre">ACCEPT_PATTERN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">re.compile('application/vnd\\.pydotorg\\.v(\\d+)\\+json')</span></em><a class="headerlink" href="#pydotorg.lib.APIVersionMiddleware.ACCEPT_PATTERN" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.lib.APIVersionMiddleware.PATH_PATTERN">
+<span class="sig-name descname"><span class="pre">PATH_PATTERN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">re.compile('^/api/v(\\d+)/')</span></em><a class="headerlink" href="#pydotorg.lib.APIVersionMiddleware.PATH_PATTERN" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.lib.APIVersionMiddleware.__call__">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scope</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">receive</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">send</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pydotorg/lib/api_versioning.html#APIVersionMiddleware.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.lib.APIVersionMiddleware.__call__" title="Link to this definition">¶</a></dt>
+<dd><p>Process the request and add version headers to response.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>scope</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.HTTPScope" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPScope</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.WebSocketScope" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">WebSocketScope</span></code></a>]</span>) – The ASGI scope</p></li>
+<li><p><strong>receive</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/constants.html#Ellipsis" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Awaitable" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Awaitable</span></code></a>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.HTTPRequestEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPRequestEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.HTTPDisconnectEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPDisconnectEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.WebSocketConnectEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">WebSocketConnectEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.WebSocketReceiveEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">WebSocketReceiveEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.WebSocketDisconnectEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">WebSocketDisconnectEvent</span></code></a>]]]</span>) – The receive callable</p></li>
+<li><p><strong>send</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.HTTPResponseStartEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPResponseStartEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.HTTPResponseBodyEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPResponseBodyEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.HTTPServerPushEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPServerPushEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.HTTPDisconnectEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPDisconnectEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.WebSocketAcceptEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">WebSocketAcceptEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.WebSocketSendEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">WebSocketSendEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.WebSocketResponseStartEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">WebSocketResponseStartEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.WebSocketResponseBodyEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">WebSocketResponseBodyEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.WebSocketCloseEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">WebSocketCloseEvent</span></code></a>]], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Awaitable" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Awaitable</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>]]</span>) – The send callable</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.lib.APIVersionMiddleware.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pydotorg/lib/api_versioning.html#APIVersionMiddleware.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.lib.APIVersionMiddleware.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize the middleware.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>app</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.HTTPScope" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPScope</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.WebSocketScope" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">WebSocketScope</span></code></a>], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/constants.html#Ellipsis" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Awaitable" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Awaitable</span></code></a>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.HTTPRequestEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPRequestEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.HTTPDisconnectEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPDisconnectEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.WebSocketConnectEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">WebSocketConnectEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.WebSocketReceiveEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">WebSocketReceiveEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.WebSocketDisconnectEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">WebSocketDisconnectEvent</span></code></a>]]], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.HTTPResponseStartEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPResponseStartEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.HTTPResponseBodyEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPResponseBodyEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.HTTPServerPushEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPServerPushEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.HTTPDisconnectEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPDisconnectEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.WebSocketAcceptEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">WebSocketAcceptEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.WebSocketSendEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">WebSocketSendEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.WebSocketResponseStartEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">WebSocketResponseStartEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.WebSocketResponseBodyEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">WebSocketResponseBodyEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.WebSocketCloseEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">WebSocketCloseEvent</span></code></a>]], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Awaitable" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Awaitable</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>]]], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Awaitable" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Awaitable</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>]]</span>) – The ASGI application</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.lib.APIVersionRegistry">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">APIVersionRegistry</span></span><a class="reference internal" href="../_modules/pydotorg/lib/api_versioning.html#APIVersionRegistry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.lib.APIVersionRegistry" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Registry of supported API versions with deprecation metadata.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.lib.APIVersionRegistry.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pydotorg/lib/api_versioning.html#APIVersionRegistry.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.lib.APIVersionRegistry.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize the version registry with default versions.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.lib.APIVersionRegistry.get_default">
+<span class="sig-name descname"><span class="pre">get_default</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pydotorg/lib/api_versioning.html#APIVersionRegistry.get_default"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.lib.APIVersionRegistry.get_default" title="Link to this definition">¶</a></dt>
+<dd><p>Get the default API version.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#pydotorg.lib.api_versioning.APIVersion" title="pydotorg.lib.api_versioning.APIVersion"><code class="xref py py-class docutils literal notranslate"><span class="pre">APIVersion</span></code></a></span></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The default APIVersion</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.14)"><strong>RuntimeError</strong></a> – If no default version is set</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.lib.APIVersionRegistry.get_version">
+<span class="sig-name descname"><span class="pre">get_version</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">major</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pydotorg/lib/api_versioning.html#APIVersionRegistry.get_version"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.lib.APIVersionRegistry.get_version" title="Link to this definition">¶</a></dt>
+<dd><p>Get a version by major version number.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>major</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – The major version number</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#pydotorg.lib.api_versioning.APIVersion" title="pydotorg.lib.api_versioning.APIVersion"><code class="xref py py-class docutils literal notranslate"><span class="pre">APIVersion</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The APIVersion if found, None otherwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.lib.APIVersionRegistry.is_supported">
+<span class="sig-name descname"><span class="pre">is_supported</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">version</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pydotorg/lib/api_versioning.html#APIVersionRegistry.is_supported"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.lib.APIVersionRegistry.is_supported" title="Link to this definition">¶</a></dt>
+<dd><p>Check if a version is supported.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>version</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#pydotorg.lib.api_versioning.APIVersion" title="pydotorg.lib.api_versioning.APIVersion"><code class="xref py py-class docutils literal notranslate"><span class="pre">APIVersion</span></code></a></span>) – The version to check</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if the version is supported, False otherwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.lib.APIVersionRegistry.register">
+<span class="sig-name descname"><span class="pre">register</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">version</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pydotorg/lib/api_versioning.html#APIVersionRegistry.register"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.lib.APIVersionRegistry.register" title="Link to this definition">¶</a></dt>
+<dd><p>Register a new API version.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>version</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#pydotorg.lib.api_versioning.APIVersion" title="pydotorg.lib.api_versioning.APIVersion"><code class="xref py py-class docutils literal notranslate"><span class="pre">APIVersion</span></code></a></span>) – The version to register (with deprecation metadata already set)</p></li>
+<li><p><strong>is_default</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – Whether this should be the default version</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pydotorg.lib.add_version">
+<span class="sig-name descname"><span class="pre">add_version</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">major</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pydotorg/lib/api_versioning.html#add_version"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.lib.add_version" title="Link to this definition">¶</a></dt>
+<dd><p>Add a new API version to the registry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>major</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Major version number</p></li>
+<li><p><strong>minor</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Minor version number (default: 0)</p></li>
+<li><p><strong>patch</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Patch version number (default: 0)</p></li>
+<li><p><strong>is_default</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – Whether this should be the default version</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#pydotorg.lib.api_versioning.APIVersion" title="pydotorg.lib.api_versioning.APIVersion"><code class="xref py py-class docutils literal notranslate"><span class="pre">APIVersion</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The created APIVersion</p>
+</dd>
+</dl>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">add_version</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">is_default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span data-line="2"><span class="go">APIVersion(major=2, minor=0, patch=0)</span>
+</span></pre></div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pydotorg.lib.deprecate_version">
+<span class="sig-name descname"><span class="pre">deprecate_version</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">major</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sunset_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pydotorg/lib/api_versioning.html#deprecate_version"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.lib.deprecate_version" title="Link to this definition">¶</a></dt>
+<dd><p>Mark an API version as deprecated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>major</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – The major version number to deprecate</p></li>
+<li><p><strong>sunset_date</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.date" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">date</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Optional sunset date when version will be removed</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">date</span>
+</span><span data-line="2"><span class="gp">&gt;&gt;&gt; </span><span class="n">deprecate_version</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">sunset_date</span><span class="o">=</span><span class="n">date</span><span class="p">(</span><span class="mi">2025</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">31</span><span class="p">))</span>
+</span></pre></div>
+</div>
+</div>
+</dd></dl>
+
+</section>
+<section id="api-versioning">
+<h2>API Versioning<a class="headerlink" href="#api-versioning" title="Link to this heading">¶</a></h2>
+<p>API versioning utilities and decorators.</p>
+<p id="module-pydotorg.lib.api_versioning">API versioning middleware with version negotiation support.</p>
+<p>Provides version negotiation via Accept header, URL path, and query parameters.
+Includes deprecation warnings for old API versions.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.lib.api_versioning.APIVersion">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">APIVersion</span></span><a class="reference internal" href="../_modules/pydotorg/lib/api_versioning.html#APIVersion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.lib.api_versioning.APIVersion" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Represents an API version with deprecation metadata.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.lib.api_versioning.APIVersion.major">
+<span class="sig-name descname"><span class="pre">major</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></em><a class="headerlink" href="#pydotorg.lib.api_versioning.APIVersion.major" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.lib.api_versioning.APIVersion.minor">
+<span class="sig-name descname"><span class="pre">minor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></em><a class="headerlink" href="#pydotorg.lib.api_versioning.APIVersion.minor" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.lib.api_versioning.APIVersion.patch">
+<span class="sig-name descname"><span class="pre">patch</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#pydotorg.lib.api_versioning.APIVersion.patch" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.lib.api_versioning.APIVersion.deprecated">
+<span class="sig-name descname"><span class="pre">deprecated</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#pydotorg.lib.api_versioning.APIVersion.deprecated" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.lib.api_versioning.APIVersion.sunset_date">
+<span class="sig-name descname"><span class="pre">sunset_date</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.date" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">date</span></code></a> <span class="pre">|</span> <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pydotorg.lib.api_versioning.APIVersion.sunset_date" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.lib.api_versioning.APIVersion.from_string">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">version_str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pydotorg/lib/api_versioning.html#APIVersion.from_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.lib.api_versioning.APIVersion.from_string" title="Link to this definition">¶</a></dt>
+<dd><p>Parse version from string like ‘v1’ or ‘1.2.3’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>version_str</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Version string in format ‘v1’, ‘1’, ‘1.2’, or ‘1.2.3’</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#pydotorg.lib.api_versioning.APIVersion" title="pydotorg.lib.api_versioning.APIVersion"><code class="xref py py-class docutils literal notranslate"><span class="pre">APIVersion</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Parsed APIVersion instance</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If version string is invalid</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.lib.api_versioning.APIVersion.__str__">
+<span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pydotorg/lib/api_versioning.html#APIVersion.__str__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.lib.api_versioning.APIVersion.__str__" title="Link to this definition">¶</a></dt>
+<dd><p>Return version as string (e.g., ‘v1.0.0’).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.lib.api_versioning.APIVersion.to_short_string">
+<span class="sig-name descname"><span class="pre">to_short_string</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pydotorg/lib/api_versioning.html#APIVersion.to_short_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.lib.api_versioning.APIVersion.to_short_string" title="Link to this definition">¶</a></dt>
+<dd><p>Return short version string (e.g., ‘v1’).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.lib.api_versioning.APIVersion.__lt__">
+<span class="sig-name descname"><span class="pre">__lt__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pydotorg/lib/api_versioning.html#APIVersion.__lt__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.lib.api_versioning.APIVersion.__lt__" title="Link to this definition">¶</a></dt>
+<dd><p>Compare versions for sorting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.lib.api_versioning.APIVersion.__eq__">
+<span class="sig-name descname"><span class="pre">__eq__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pydotorg/lib/api_versioning.html#APIVersion.__eq__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.lib.api_versioning.APIVersion.__eq__" title="Link to this definition">¶</a></dt>
+<dd><p>Compare versions for equality.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.lib.api_versioning.APIVersion.__hash__">
+<span class="sig-name descname"><span class="pre">__hash__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pydotorg/lib/api_versioning.html#APIVersion.__hash__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.lib.api_versioning.APIVersion.__hash__" title="Link to this definition">¶</a></dt>
+<dd><p>Return hash for use in sets and dicts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.lib.api_versioning.APIVersion.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">major</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deprecated</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sunset_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydotorg.lib.api_versioning.APIVersion.__init__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.lib.api_versioning.APIVersionRegistry">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">APIVersionRegistry</span></span><a class="reference internal" href="../_modules/pydotorg/lib/api_versioning.html#APIVersionRegistry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.lib.api_versioning.APIVersionRegistry" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Registry of supported API versions with deprecation metadata.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.lib.api_versioning.APIVersionRegistry.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pydotorg/lib/api_versioning.html#APIVersionRegistry.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.lib.api_versioning.APIVersionRegistry.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize the version registry with default versions.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.lib.api_versioning.APIVersionRegistry.register">
+<span class="sig-name descname"><span class="pre">register</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">version</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pydotorg/lib/api_versioning.html#APIVersionRegistry.register"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.lib.api_versioning.APIVersionRegistry.register" title="Link to this definition">¶</a></dt>
+<dd><p>Register a new API version.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>version</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#pydotorg.lib.api_versioning.APIVersion" title="pydotorg.lib.api_versioning.APIVersion"><code class="xref py py-class docutils literal notranslate"><span class="pre">APIVersion</span></code></a></span>) – The version to register (with deprecation metadata already set)</p></li>
+<li><p><strong>is_default</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – Whether this should be the default version</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.lib.api_versioning.APIVersionRegistry.get_version">
+<span class="sig-name descname"><span class="pre">get_version</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">major</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pydotorg/lib/api_versioning.html#APIVersionRegistry.get_version"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.lib.api_versioning.APIVersionRegistry.get_version" title="Link to this definition">¶</a></dt>
+<dd><p>Get a version by major version number.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>major</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – The major version number</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#pydotorg.lib.api_versioning.APIVersion" title="pydotorg.lib.api_versioning.APIVersion"><code class="xref py py-class docutils literal notranslate"><span class="pre">APIVersion</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The APIVersion if found, None otherwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.lib.api_versioning.APIVersionRegistry.get_default">
+<span class="sig-name descname"><span class="pre">get_default</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pydotorg/lib/api_versioning.html#APIVersionRegistry.get_default"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.lib.api_versioning.APIVersionRegistry.get_default" title="Link to this definition">¶</a></dt>
+<dd><p>Get the default API version.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#pydotorg.lib.api_versioning.APIVersion" title="pydotorg.lib.api_versioning.APIVersion"><code class="xref py py-class docutils literal notranslate"><span class="pre">APIVersion</span></code></a></span></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The default APIVersion</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.14)"><strong>RuntimeError</strong></a> – If no default version is set</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.lib.api_versioning.APIVersionRegistry.is_supported">
+<span class="sig-name descname"><span class="pre">is_supported</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">version</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pydotorg/lib/api_versioning.html#APIVersionRegistry.is_supported"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.lib.api_versioning.APIVersionRegistry.is_supported" title="Link to this definition">¶</a></dt>
+<dd><p>Check if a version is supported.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>version</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#pydotorg.lib.api_versioning.APIVersion" title="pydotorg.lib.api_versioning.APIVersion"><code class="xref py py-class docutils literal notranslate"><span class="pre">APIVersion</span></code></a></span>) – The version to check</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if the version is supported, False otherwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydotorg.lib.api_versioning.APIVersionMiddleware">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">APIVersionMiddleware</span></span><a class="reference internal" href="../_modules/pydotorg/lib/api_versioning.html#APIVersionMiddleware"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.lib.api_versioning.APIVersionMiddleware" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.litestar.dev/2/reference/middleware/index.html#litestar.middleware.MiddlewareProtocol" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MiddlewareProtocol</span></code></a></p>
+<p>Middleware that negotiates API version and adds version headers.</p>
+<p>Version negotiation order:
+1. Accept header (application/vnd.pydotorg.v1+json)
+2. URL path prefix (/api/v1/…)
+3. Query parameter (?api_version=1)
+4. Default version (v1)</p>
+<p>Adds response headers:
+- X-API-Version: Current version used
+- X-API-Deprecated: true/false
+- X-API-Sunset-Date: ISO date if deprecated</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.lib.api_versioning.APIVersionMiddleware.ACCEPT_PATTERN">
+<span class="sig-name descname"><span class="pre">ACCEPT_PATTERN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">re.compile('application/vnd\\.pydotorg\\.v(\\d+)\\+json')</span></em><a class="headerlink" href="#pydotorg.lib.api_versioning.APIVersionMiddleware.ACCEPT_PATTERN" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.lib.api_versioning.APIVersionMiddleware.PATH_PATTERN">
+<span class="sig-name descname"><span class="pre">PATH_PATTERN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">re.compile('^/api/v(\\d+)/')</span></em><a class="headerlink" href="#pydotorg.lib.api_versioning.APIVersionMiddleware.PATH_PATTERN" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.lib.api_versioning.APIVersionMiddleware.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pydotorg/lib/api_versioning.html#APIVersionMiddleware.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.lib.api_versioning.APIVersionMiddleware.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize the middleware.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>app</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.HTTPScope" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPScope</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.WebSocketScope" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">WebSocketScope</span></code></a>], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/constants.html#Ellipsis" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Awaitable" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Awaitable</span></code></a>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.HTTPRequestEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPRequestEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.HTTPDisconnectEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPDisconnectEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.WebSocketConnectEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">WebSocketConnectEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.WebSocketReceiveEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">WebSocketReceiveEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.WebSocketDisconnectEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">WebSocketDisconnectEvent</span></code></a>]]], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.HTTPResponseStartEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPResponseStartEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.HTTPResponseBodyEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPResponseBodyEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.HTTPServerPushEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPServerPushEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.HTTPDisconnectEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPDisconnectEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.WebSocketAcceptEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">WebSocketAcceptEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.WebSocketSendEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">WebSocketSendEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.WebSocketResponseStartEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">WebSocketResponseStartEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.WebSocketResponseBodyEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">WebSocketResponseBodyEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.WebSocketCloseEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">WebSocketCloseEvent</span></code></a>]], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Awaitable" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Awaitable</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>]]], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Awaitable" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Awaitable</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>]]</span>) – The ASGI application</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydotorg.lib.api_versioning.APIVersionMiddleware.app">
+<span class="sig-name descname"><span class="pre">app</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ASGIApp</span></em><a class="headerlink" href="#pydotorg.lib.api_versioning.APIVersionMiddleware.app" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydotorg.lib.api_versioning.APIVersionMiddleware.__call__">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scope</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">receive</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">send</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pydotorg/lib/api_versioning.html#APIVersionMiddleware.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.lib.api_versioning.APIVersionMiddleware.__call__" title="Link to this definition">¶</a></dt>
+<dd><p>Process the request and add version headers to response.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>scope</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.HTTPScope" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPScope</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.WebSocketScope" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">WebSocketScope</span></code></a>]</span>) – The ASGI scope</p></li>
+<li><p><strong>receive</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/constants.html#Ellipsis" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Awaitable" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Awaitable</span></code></a>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.HTTPRequestEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPRequestEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.HTTPDisconnectEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPDisconnectEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.WebSocketConnectEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">WebSocketConnectEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.WebSocketReceiveEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">WebSocketReceiveEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.WebSocketDisconnectEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">WebSocketDisconnectEvent</span></code></a>]]]</span>) – The receive callable</p></li>
+<li><p><strong>send</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.HTTPResponseStartEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPResponseStartEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.HTTPResponseBodyEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPResponseBodyEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.HTTPServerPushEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPServerPushEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.HTTPDisconnectEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPDisconnectEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.WebSocketAcceptEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">WebSocketAcceptEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.WebSocketSendEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">WebSocketSendEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.WebSocketResponseStartEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">WebSocketResponseStartEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.WebSocketResponseBodyEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">WebSocketResponseBodyEvent</span></code></a>, <a class="reference external" href="https://docs.litestar.dev/2/reference/types.html#litestar.types.WebSocketCloseEvent" title="(in Litestar)"><code class="xref py py-class docutils literal notranslate"><span class="pre">WebSocketCloseEvent</span></code></a>]], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Awaitable" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Awaitable</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>]]</span>) – The send callable</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pydotorg.lib.api_versioning.deprecate_version">
+<span class="sig-name descname"><span class="pre">deprecate_version</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">major</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sunset_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pydotorg/lib/api_versioning.html#deprecate_version"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.lib.api_versioning.deprecate_version" title="Link to this definition">¶</a></dt>
+<dd><p>Mark an API version as deprecated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>major</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – The major version number to deprecate</p></li>
+<li><p><strong>sunset_date</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.date" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">date</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Optional sunset date when version will be removed</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">date</span>
+</span><span data-line="2"><span class="gp">&gt;&gt;&gt; </span><span class="n">deprecate_version</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">sunset_date</span><span class="o">=</span><span class="n">date</span><span class="p">(</span><span class="mi">2025</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">31</span><span class="p">))</span>
+</span></pre></div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pydotorg.lib.api_versioning.add_version">
+<span class="sig-name descname"><span class="pre">add_version</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">major</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pydotorg/lib/api_versioning.html#add_version"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.lib.api_versioning.add_version" title="Link to this definition">¶</a></dt>
+<dd><p>Add a new API version to the registry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>major</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Major version number</p></li>
+<li><p><strong>minor</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Minor version number (default: 0)</p></li>
+<li><p><strong>patch</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Patch version number (default: 0)</p></li>
+<li><p><strong>is_default</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – Whether this should be the default version</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#pydotorg.lib.api_versioning.APIVersion" title="pydotorg.lib.api_versioning.APIVersion"><code class="xref py py-class docutils literal notranslate"><span class="pre">APIVersion</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The created APIVersion</p>
+</dd>
+</dl>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">add_version</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">is_default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span data-line="2"><span class="go">APIVersion(major=2, minor=0, patch=0)</span>
+</span></pre></div>
+</div>
+</div>
+</dd></dl>
+
+</section>
+<section id="tasks">
+<h2>Tasks<a class="headerlink" href="#tasks" title="Link to this heading">¶</a></h2>
+<p>Shared task utilities.</p>
+<p id="module-pydotorg.lib.tasks">Task queue helpers for SAQ background tasks.</p>
+<p>This module provides utilities for enqueueing background tasks from
+service layers. It handles lazy imports to avoid circular dependencies
+and provides consistent error handling.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.lib.tasks</span><span class="w"> </span><span class="kn">import</span> <span class="n">enqueue_task</span>
+</span><span data-line="2">
+</span><span data-line="3">
+</span><span data-line="4"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">approve_job</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_id</span><span class="p">:</span> <span class="n">UUID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Job</span><span class="p">:</span>
+</span><span data-line="5">    <span class="n">job</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">repository</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">job_id</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="n">JobStatus</span><span class="o">.</span><span class="n">APPROVED</span><span class="p">)</span>
+</span><span data-line="6">
+</span><span data-line="7">    <span class="c1"># Enqueue background tasks - best effort</span>
+</span><span data-line="8">    <span class="k">await</span> <span class="n">enqueue_task</span><span class="p">(</span><span class="s2">&quot;index_job&quot;</span><span class="p">,</span> <span class="n">job_id</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">job</span><span class="o">.</span><span class="n">id</span><span class="p">))</span>
+</span><span data-line="9">    <span class="k">await</span> <span class="n">enqueue_task</span><span class="p">(</span>
+</span><span data-line="10">        <span class="s2">&quot;send_job_approved_email&quot;</span><span class="p">,</span>
+</span><span data-line="11">        <span class="n">to_email</span><span class="o">=</span><span class="n">job</span><span class="o">.</span><span class="n">creator</span><span class="o">.</span><span class="n">email</span><span class="p">,</span>
+</span><span data-line="12">        <span class="n">job_title</span><span class="o">=</span><span class="n">job</span><span class="o">.</span><span class="n">job_title</span><span class="p">,</span>
+</span><span data-line="13">        <span class="n">company_name</span><span class="o">=</span><span class="n">job</span><span class="o">.</span><span class="n">company_name</span><span class="p">,</span>
+</span><span data-line="14">        <span class="n">job_url</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;/jobs/</span><span class="si">{</span><span class="n">job</span><span class="o">.</span><span class="n">slug</span><span class="si">}</span><span class="s2">/&quot;</span><span class="p">,</span>
+</span><span data-line="15">    <span class="p">)</span>
+</span><span data-line="16">
+</span><span data-line="17">    <span class="k">return</span> <span class="n">job</span>
+</span></pre></div>
+</div>
+<dl class="py function">
+<dt class="sig sig-object py" id="pydotorg.lib.tasks.get_queue">
+<span class="sig-name descname"><span class="pre">get_queue</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pydotorg/lib/tasks.html#get_queue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.lib.tasks.get_queue" title="Link to this definition">¶</a></dt>
+<dd><p>Get the SAQ queue lazily to avoid circular imports.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Queue</span></code></span></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Configured SAQ Queue instance</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pydotorg.lib.tasks.enqueue_task">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">enqueue_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_name</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pydotorg/lib/tasks.html#enqueue_task"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.lib.tasks.enqueue_task" title="Link to this definition">¶</a></dt>
+<dd><p>Enqueue a background task by name.</p>
+<p>This is the primary helper for enqueueing tasks from service layers.
+Provides error handling and returns the job key for tracking.</p>
+<p>The task function must be registered in the worker’s get_task_functions().
+Task arguments should match the function signature (keyword-only args after ctx).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>task_name</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Name of the task function to enqueue (must be registered in worker).</p></li>
+<li><p><strong>timeout</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Optional task timeout in seconds.</p></li>
+<li><p><strong>retries</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Number of retry attempts (default: 3).</p></li>
+<li><p><strong>**kwargs</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></span>) – Task-specific arguments passed to the task function.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Job key (str) if successful, None if enqueue failed</p>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Enqueue email after user registration</span>
+</span><span data-line="2"><span class="n">job_key</span> <span class="o">=</span> <span class="k">await</span> <span class="n">enqueue_task</span><span class="p">(</span>
+</span><span data-line="3">    <span class="s2">&quot;send_verification_email&quot;</span><span class="p">,</span>
+</span><span data-line="4">    <span class="n">to_email</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="p">,</span>
+</span><span data-line="5">    <span class="n">username</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">username</span><span class="p">,</span>
+</span><span data-line="6">    <span class="n">verification_link</span><span class="o">=</span><span class="n">verification_link</span><span class="p">,</span>
+</span><span data-line="7"><span class="p">)</span>
+</span><span data-line="8"><span class="k">if</span> <span class="n">job_key</span><span class="p">:</span>
+</span><span data-line="9">    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Verification email queued: </span><span class="si">{</span><span class="n">job_key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span data-line="10">
+</span><span data-line="11"><span class="c1"># Enqueue search indexing after job approval</span>
+</span><span data-line="12"><span class="k">await</span> <span class="n">enqueue_task</span><span class="p">(</span><span class="s2">&quot;index_job&quot;</span><span class="p">,</span> <span class="n">job_id</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">job</span><span class="o">.</span><span class="n">id</span><span class="p">))</span>
+</span></pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pydotorg.lib.tasks.enqueue_task_safe">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">enqueue_task_safe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_name</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pydotorg/lib/tasks.html#enqueue_task_safe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydotorg.lib.tasks.enqueue_task_safe" title="Link to this definition">¶</a></dt>
+<dd><p>Enqueue a task and return success status with optional job key.</p>
+<p>Variant of enqueue_task that returns a tuple for easier error handling
+in conditional flows.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>task_name</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Name of the task function to enqueue</p></li>
+<li><p><strong>timeout</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Optional task timeout in seconds</p></li>
+<li><p><strong>retries</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Number of retry attempts</p></li>
+<li><p><strong>**kwargs</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></span>) – Task-specific arguments</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool, job_key: str | None)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tuple of (success</p>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">success</span><span class="p">,</span> <span class="n">job_key</span> <span class="o">=</span> <span class="k">await</span> <span class="n">enqueue_task_safe</span><span class="p">(</span><span class="s2">&quot;send_email&quot;</span><span class="p">,</span> <span class="n">to_email</span><span class="o">=</span><span class="s2">&quot;user@example.com&quot;</span><span class="p">)</span>
+</span><span data-line="2"><span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
+</span><span data-line="3">    <span class="c1"># Handle failure - maybe log or retry later</span>
+</span><span data-line="4">    <span class="k">pass</span>
+</span></pre></div>
+</div>
+</dd></dl>
+
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="domains/work_groups.html">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title">Work Groups</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="tasks.html">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title">Background Tasks</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Jacob Coffee</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+<a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+  <iconify-icon icon="simple-icons:github"></iconify-icon>
+</a></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=30646c52"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script src="../_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

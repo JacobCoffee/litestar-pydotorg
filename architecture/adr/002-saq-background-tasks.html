@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="blue" data-content_root="../../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>ADR-002: Use SAQ for Background Task Processing - litestar-pydotorg</title><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Changelog" href="../../changelog.html" /><link rel="prev" title="ADR-001: Use Litestar as Web Framework" href="001-litestar-framework.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="../../_static/shibuya.css?v=14737038" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link media="print" rel="stylesheet" type="text/css" href="../../_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=513f0650" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="ADR-002: Use SAQ for Background Task Processing"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../../index.html">
+      
+      
+      <strong>litestar-pydotorg</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"><ul><li class="link">
+          <a href="https://litestar.dev/">
+            <span>Litestar</span></a>
+        </li><li class="link">
+          <a href="https://python.org/">
+            <span>Python.org</span></a>
+        </li></ul></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials">
+  <a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started/index.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../getting-started/installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting-started/quickstart.html">Quickstart</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/index.html">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/development.html">Development Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/contributing.html">Contribution Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/testing.html">Testing Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/debugging.html">Debugging Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/api-usage.html">API Usage Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/authentication.html">Authentication Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/feature-flags.html">Feature Flags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/configuration.html">Configuration Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/deployment.html">Deployment Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/docker.html">Docker Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/troubleshooting.html">Troubleshooting Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../cookbook/index.html">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../cookbook/domain-patterns.html">Domain Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cookbook/authentication-recipes.html">Authentication Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cookbook/database-recipes.html">Database Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cookbook/testing-recipes.html">Testing Recipes</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api/core/index.html">Core Infrastructure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/core/auth.html">Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/core/cache.html">Caching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/core/database.html">Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/core/email.html">Email</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/core/exceptions.html">Exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/core/features.html">Feature Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/core/feeds.html">RSS/Atom Feeds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/core/ical.html">iCalendar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/core/logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/core/middleware.html">Middleware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/core/openapi.html">OpenAPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/core/ratelimit.html">Rate Limiting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/core/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/core/security.html">Security</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/core/worker.html">Background Worker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/domains/index.html">Domain Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/domains/about.html">About</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/domains/admin.html">Admin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/domains/banners.html">banners</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/domains/blogs.html">blogs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/domains/codesamples.html">Code Samples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/domains/community.html">community</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/domains/docs.html">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/domains/downloads.html">downloads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/domains/events.html">events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/domains/jobs.html">jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/domains/mailing.html">Mailing Lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/domains/minutes.html">Minutes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/domains/nominations.html">Nominations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/domains/pages.html">pages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/domains/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/domains/sponsors.html">sponsors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/domains/sqladmin.html">SQLAdmin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/domains/successstories.html">Success Stories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/domains/users.html">users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/domains/work_groups.html">Work Groups</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/lib.html">Library Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/tasks.html">Background Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/config.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/main.html">Application Entry Point</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Architecture</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../ARCHITECTURE.html">Litestar Python.org Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../DATABASE_SCHEMA.html">Database Schema Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../DOMAIN_MODELS.html">Domain Models Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../QUICK_START.html">Litestar Python.org Quick Start Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../API_TAGS_INDEX.html">API Tags Documentation Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../RATE_LIMITING_ARCHITECTURE.html">Rate Limiting Architecture Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="001-litestar-framework.html">ADR-001: Use Litestar as Web Framework</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">ADR-002: Use SAQ for Background Task Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#status">Status</a></li>
+<li><a class="reference internal" href="#context">Context</a><ul>
+<li><a class="reference internal" href="#problem-statement">Problem Statement</a></li>
+<li><a class="reference internal" href="#constraints">Constraints</a></li>
+<li><a class="reference internal" href="#requirements">Requirements</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#decision">Decision</a><ul>
+<li><a class="reference internal" href="#chosen-solution">Chosen Solution</a></li>
+<li><a class="reference internal" href="#rationale">Rationale</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#consequences">Consequences</a><ul>
+<li><a class="reference internal" href="#positive-consequences">Positive Consequences</a></li>
+<li><a class="reference internal" href="#negative-consequences">Negative Consequences</a></li>
+<li><a class="reference internal" href="#risks-mitigation">Risks &amp; Mitigation</a></li>
+<li><a class="reference internal" href="#migration-path">Migration Path</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#alternatives-considered">Alternatives Considered</a><ul>
+<li><a class="reference internal" href="#alternative-1-keep-celery">Alternative 1: Keep Celery</a></li>
+<li><a class="reference internal" href="#alternative-2-arq">Alternative 2: Arq</a></li>
+<li><a class="reference internal" href="#alternative-3-rq-redis-queue">Alternative 3: RQ (Redis Queue)</a></li>
+<li><a class="reference internal" href="#alternative-4-taskiq">Alternative 4: TaskIQ</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#implementation-notes">Implementation Notes</a><ul>
+<li><a class="reference internal" href="#timeline">Timeline</a></li>
+<li><a class="reference internal" href="#dependencies">Dependencies</a></li>
+<li><a class="reference internal" href="#success-criteria">Success Criteria</a></li>
+<li><a class="reference internal" href="#rollback-strategy">Rollback Strategy</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#task-migration-examples">Task Migration Examples</a><ul>
+<li><a class="reference internal" href="#simple-task-django-celery-saq">Simple Task (Django Celery &#8594; SAQ)</a></li>
+<li><a class="reference internal" href="#scheduled-task">Scheduled Task</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#monitoring-strategy">Monitoring Strategy</a><ul>
+<li><a class="reference internal" href="#metrics-to-track">Metrics to Track</a></li>
+<li><a class="reference internal" href="#implementation">Implementation</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#references">References</a></li>
+<li><a class="reference internal" href="#metadata">Metadata</a></li>
+<li><a class="reference internal" href="#revision-history">Revision History</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../../index.html"><span itemprop="name">litestar-pydotorg</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../index.html"><span itemprop="name">Architecture</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="2" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">ADR-002: Use SAQ for Background Task Processing</strong>
+        <meta itemprop="position" content="3" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue dark-code" role="main">
+          <section id="adr-002-use-saq-for-background-task-processing">
+<h1>ADR-002: Use SAQ for Background Task Processing<a class="headerlink" href="#adr-002-use-saq-for-background-task-processing" title="Link to this heading">¶</a></h1>
+<section id="status">
+<h2>Status<a class="headerlink" href="#status" title="Link to this heading">¶</a></h2>
+<p>Accepted</p>
+</section>
+<section id="context">
+<h2>Context<a class="headerlink" href="#context" title="Link to this heading">¶</a></h2>
+<p>The Django <a class="reference external" href="http://python.org">python.org</a> application currently uses Celery for background task processing. During the Litestar migration, we need to choose a task queue system that:</p>
+<section id="problem-statement">
+<h3>Problem Statement<a class="headerlink" href="#problem-statement" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Celery has significant complexity overhead for our use cases</p></li>
+<li><p>Celery’s async support is still maturing</p></li>
+<li><p>We want native async/await task processing</p></li>
+<li><p>Current tasks are relatively simple (cache updates, email sending, event imports)</p></li>
+<li><p>Need reliable task scheduling and retry logic</p></li>
+</ul>
+</section>
+<section id="constraints">
+<h3>Constraints<a class="headerlink" href="#constraints" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Must support async/await natively</p></li>
+<li><p>Must integrate well with our async stack (Litestar, SQLAlchemy 2.0)</p></li>
+<li><p>Must support Redis (already in our stack)</p></li>
+<li><p>Must handle scheduled/periodic tasks</p></li>
+<li><p>Must provide retry logic with backoff</p></li>
+<li><p>Should be simpler to operate than Celery</p></li>
+</ul>
+</section>
+<section id="requirements">
+<h3>Requirements<a class="headerlink" href="#requirements" title="Link to this heading">¶</a></h3>
+<p><strong>Functional Requirements</strong>:</p>
+<ul class="simple">
+<li><p>Enqueue async tasks</p></li>
+<li><p>Schedule periodic tasks (cron-like)</p></li>
+<li><p>Retry failed tasks with exponential backoff</p></li>
+<li><p>Task result tracking</p></li>
+<li><p>Dead letter queue for failed tasks</p></li>
+<li><p>Multiple workers for concurrency</p></li>
+</ul>
+<p><strong>Non-Functional Requirements</strong>:</p>
+<ul class="simple">
+<li><p>Low latency task processing (&lt; 1 second)</p></li>
+<li><p>Handle 1000+ tasks per hour</p></li>
+<li><p>Simple deployment and monitoring</p></li>
+<li><p>Minimal operational overhead</p></li>
+<li><p>Python 3.12+ compatibility</p></li>
+</ul>
+</section>
+</section>
+<section id="decision">
+<h2>Decision<a class="headerlink" href="#decision" title="Link to this heading">¶</a></h2>
+<p>We will use <strong>SAQ (Simple Async Queue)</strong> as the background task processing system.</p>
+<section id="chosen-solution">
+<h3>Chosen Solution<a class="headerlink" href="#chosen-solution" title="Link to this heading">¶</a></h3>
+<p>SAQ provides:</p>
+<ul class="simple">
+<li><p>Native async/await support</p></li>
+<li><p>Redis-based queue (simple, reliable)</p></li>
+<li><p>Built-in cron scheduling</p></li>
+<li><p>Exponential backoff retry logic</p></li>
+<li><p>Task timeouts and cancellation</p></li>
+<li><p>Dead letter queue</p></li>
+<li><p>Simple worker process</p></li>
+<li><p>Minimal configuration</p></li>
+</ul>
+</section>
+<section id="rationale">
+<h3>Rationale<a class="headerlink" href="#rationale" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Async Native</strong>: Written for async Python from the ground up</p></li>
+<li><p><strong>Simplicity</strong>: Much simpler than Celery, easier to understand and debug</p></li>
+<li><p><strong>Performance</strong>: Excellent performance for async tasks</p></li>
+<li><p><strong>Redis Integration</strong>: Works seamlessly with our existing Redis instance</p></li>
+<li><p><strong>Maintenance</strong>: Smaller codebase, easier to contribute fixes if needed</p></li>
+<li><p><strong>Modern</strong>: Actively maintained with Python 3.12+ support</p></li>
+</ol>
+</section>
+</section>
+<section id="consequences">
+<h2>Consequences<a class="headerlink" href="#consequences" title="Link to this heading">¶</a></h2>
+<section id="positive-consequences">
+<h3>Positive Consequences<a class="headerlink" href="#positive-consequences" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>Simplicity</strong>: Significantly less complexity than Celery</p></li>
+<li><p><strong>Performance</strong>: Native async processing, no thread/process overhead</p></li>
+<li><p><strong>Integration</strong>: Seamless integration with async SQLAlchemy and Litestar</p></li>
+<li><p><strong>Debugging</strong>: Easier to debug with simpler architecture</p></li>
+<li><p><strong>Resource Usage</strong>: Lower memory footprint than Celery</p></li>
+<li><p><strong>Development Velocity</strong>: Faster to implement and test tasks</p></li>
+</ul>
+</section>
+<section id="negative-consequences">
+<h3>Negative Consequences<a class="headerlink" href="#negative-consequences" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>Ecosystem</strong>: Smaller ecosystem compared to Celery</p></li>
+<li><p><strong>Features</strong>: Fewer advanced features (canvas, chord, etc.)</p></li>
+<li><p><strong>Community</strong>: Smaller community, less Stack Overflow content</p></li>
+<li><p><strong>Battle Testing</strong>: Less proven at massive scale</p></li>
+<li><p><strong>Monitoring</strong>: Fewer monitoring tool integrations</p></li>
+</ul>
+</section>
+<section id="risks-mitigation">
+<h3>Risks &amp; Mitigation<a class="headerlink" href="#risks-mitigation" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Risk</p></th>
+<th class="head"><p>Likelihood</p></th>
+<th class="head"><p>Impact</p></th>
+<th class="head"><p>Mitigation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>SAQ can’t handle load</p></td>
+<td><p>Low</p></td>
+<td><p>High</p></td>
+<td><p>Load test extensively, have Celery as fallback</p></td>
+</tr>
+<tr class="row-odd"><td><p>Missing critical feature</p></td>
+<td><p>Low</p></td>
+<td><p>Medium</p></td>
+<td><p>Contribute to SAQ or implement custom</p></td>
+</tr>
+<tr class="row-even"><td><p>Project abandonment</p></td>
+<td><p>Low</p></td>
+<td><p>High</p></td>
+<td><p>Fork if needed, evaluate alternatives annually</p></td>
+</tr>
+<tr class="row-odd"><td><p>Complex task requirements</p></td>
+<td><p>Medium</p></td>
+<td><p>Low</p></td>
+<td><p>Re-evaluate if needs exceed SAQ capabilities</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="migration-path">
+<h3>Migration Path<a class="headerlink" href="#migration-path" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Week 1</strong>: Install SAQ, configure workers</p></li>
+<li><p><strong>Week 2</strong>: Migrate simple tasks (cache updates, email)</p></li>
+<li><p><strong>Week 3</strong>: Migrate scheduled tasks (periodic updates)</p></li>
+<li><p><strong>Week 4</strong>: Migrate complex tasks (event imports, search indexing)</p></li>
+<li><p><strong>Week 5</strong>: Performance testing and optimization</p></li>
+<li><p><strong>Week 6</strong>: Production deployment with monitoring</p></li>
+</ol>
+</section>
+</section>
+<section id="alternatives-considered">
+<h2>Alternatives Considered<a class="headerlink" href="#alternatives-considered" title="Link to this heading">¶</a></h2>
+<section id="alternative-1-keep-celery">
+<h3>Alternative 1: Keep Celery<a class="headerlink" href="#alternative-1-keep-celery" title="Link to this heading">¶</a></h3>
+<p><strong>Description</strong>: Continue using Celery with async worker support</p>
+<p><strong>Pros</strong>:</p>
+<ul class="simple">
+<li><p>Already familiar to team</p></li>
+<li><p>Battle-tested at massive scale</p></li>
+<li><p>Rich ecosystem of plugins</p></li>
+<li><p>Excellent monitoring tools (Flower, Prometheus exporters)</p></li>
+<li><p>Comprehensive documentation</p></li>
+<li><p>Supports many backends (RabbitMQ, Redis, SQS)</p></li>
+</ul>
+<p><strong>Cons</strong>:</p>
+<ul class="simple">
+<li><p>Complex architecture with many moving parts</p></li>
+<li><p>Async support still maturing</p></li>
+<li><p>Heavy resource usage (processes/threads)</p></li>
+<li><p>Verbose configuration</p></li>
+<li><p>Difficult to debug</p></li>
+<li><p>Designed for sync tasks primarily</p></li>
+</ul>
+<p><strong>Why not chosen</strong>: Celery’s complexity outweighs benefits for our use case. Our task requirements are simple enough that SAQ’s feature set is sufficient, and SAQ’s native async support aligns better with our stack.</p>
+</section>
+<section id="alternative-2-arq">
+<h3>Alternative 2: Arq<a class="headerlink" href="#alternative-2-arq" title="Link to this heading">¶</a></h3>
+<p><strong>Description</strong>: Another async task queue for Python</p>
+<p><strong>Pros</strong>:</p>
+<ul class="simple">
+<li><p>Async native</p></li>
+<li><p>Redis-based</p></li>
+<li><p>Simple API</p></li>
+<li><p>Good documentation</p></li>
+<li><p>Designed by Samuel Colvin (Pydantic author)</p></li>
+</ul>
+<p><strong>Cons</strong>:</p>
+<ul class="simple">
+<li><p>Less active development than SAQ</p></li>
+<li><p>Fewer features than SAQ</p></li>
+<li><p>No built-in cron scheduling</p></li>
+<li><p>Smaller community</p></li>
+<li><p>Less flexible retry logic</p></li>
+</ul>
+<p><strong>Why not chosen</strong>: SAQ has more active development, better scheduling support, and more features while maintaining simplicity. SAQ’s retry logic and dead letter queue are more sophisticated.</p>
+</section>
+<section id="alternative-3-rq-redis-queue">
+<h3>Alternative 3: RQ (Redis Queue)<a class="headerlink" href="#alternative-3-rq-redis-queue" title="Link to this heading">¶</a></h3>
+<p><strong>Description</strong>: Simple Redis-based task queue</p>
+<p><strong>Pros</strong>:</p>
+<ul class="simple">
+<li><p>Very simple</p></li>
+<li><p>Well-documented</p></li>
+<li><p>Stable and mature</p></li>
+<li><p>Good monitoring tools</p></li>
+<li><p>Large community</p></li>
+</ul>
+<p><strong>Cons</strong>:</p>
+<ul class="simple">
+<li><p>No native async support</p></li>
+<li><p>Requires sync-to-async adapters</p></li>
+<li><p>Thread-based workers</p></li>
+<li><p>Less efficient for async tasks</p></li>
+<li><p>No built-in scheduling</p></li>
+</ul>
+<p><strong>Why not chosen</strong>: Lack of native async support is a dealbreaker. Using sync tasks with our async stack would create unnecessary complexity and performance overhead.</p>
+</section>
+<section id="alternative-4-taskiq">
+<h3>Alternative 4: TaskIQ<a class="headerlink" href="#alternative-4-taskiq" title="Link to this heading">¶</a></h3>
+<p><strong>Description</strong>: Modern async task queue with broker abstraction</p>
+<p><strong>Pros</strong>:</p>
+<ul class="simple">
+<li><p>Async native</p></li>
+<li><p>Multiple broker support (Redis, RabbitMQ, Kafka)</p></li>
+<li><p>Good scheduling support</p></li>
+<li><p>Modern design</p></li>
+<li><p>Type-safe</p></li>
+</ul>
+<p><strong>Cons</strong>:</p>
+<ul class="simple">
+<li><p>Newer project, less proven</p></li>
+<li><p>More complex than SAQ</p></li>
+<li><p>Heavier dependencies</p></li>
+<li><p>Smaller community</p></li>
+</ul>
+<p><strong>Why not chosen</strong>: While TaskIQ is promising, it’s more complex than we need, and SAQ’s focus on Redis simplicity better fits our requirements.</p>
+</section>
+</section>
+<section id="implementation-notes">
+<h2>Implementation Notes<a class="headerlink" href="#implementation-notes" title="Link to this heading">¶</a></h2>
+<section id="timeline">
+<h3>Timeline<a class="headerlink" href="#timeline" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>Setup</strong>: 1 week</p></li>
+<li><p><strong>Simple Task Migration</strong>: 1 week</p></li>
+<li><p><strong>Scheduled Task Migration</strong>: 1 week</p></li>
+<li><p><strong>Complex Task Migration</strong>: 1 week</p></li>
+<li><p><strong>Testing &amp; Optimization</strong>: 1 week</p></li>
+<li><p><strong>Production Deployment</strong>: 1 week</p></li>
+<li><p><strong>Total</strong>: ~6 weeks</p></li>
+</ul>
+</section>
+<section id="dependencies">
+<h3>Dependencies<a class="headerlink" href="#dependencies" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>SAQ</strong>: Latest stable version</p></li>
+<li><p><strong>Redis</strong>: 7.x (already in stack)</p></li>
+<li><p><strong>Croniter</strong>: For cron scheduling</p></li>
+<li><p><strong>Integration</strong>: Custom Litestar plugin for task management</p></li>
+</ul>
+</section>
+<section id="success-criteria">
+<h3>Success Criteria<a class="headerlink" href="#success-criteria" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>All Celery tasks migrated successfully</p></li>
+<li><p>Task processing latency &lt; 1 second (p95)</p></li>
+<li><p>Handle 1000+ tasks per hour</p></li>
+<li><p>Zero task loss during failures</p></li>
+<li><p>Successful retry of failed tasks</p></li>
+<li><p>Scheduled tasks run on time (within 1 minute)</p></li>
+</ul>
+</section>
+<section id="rollback-strategy">
+<h3>Rollback Strategy<a class="headerlink" href="#rollback-strategy" title="Link to this heading">¶</a></h3>
+<p>If SAQ proves insufficient:</p>
+<ol class="arabic simple">
+<li><p><strong>Immediate</strong>: Keep Celery workers running in parallel during transition</p></li>
+<li><p><strong>Short-term</strong>: Route tasks back to Celery</p></li>
+<li><p><strong>Long-term</strong>: Full migration back to Celery if needed</p></li>
+</ol>
+<p>Maintain Celery configuration for 60 days post-migration.</p>
+</section>
+</section>
+<section id="task-migration-examples">
+<h2>Task Migration Examples<a class="headerlink" href="#task-migration-examples" title="Link to this heading">¶</a></h2>
+<section id="simple-task-django-celery-saq">
+<h3>Simple Task (Django Celery → SAQ)<a class="headerlink" href="#simple-task-django-celery-saq" title="Link to this heading">¶</a></h3>
+<p><strong>Before (Celery)</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># tasks.py</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">celery</span><span class="w"> </span><span class="kn">import</span> <span class="n">shared_task</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="nd">@shared_task</span>
+</span><span data-line="5"><span class="k">def</span><span class="w"> </span><span class="nf">update_download_boxes</span><span class="p">():</span>
+</span><span data-line="6">    <span class="n">service</span> <span class="o">=</span> <span class="n">ReleaseService</span><span class="p">()</span>
+</span><span data-line="7">    <span class="n">service</span><span class="o">.</span><span class="n">update_boxes</span><span class="p">()</span>
+</span></pre></div>
+</div>
+<p><strong>After (SAQ)</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># tasks/downloads.py</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">saq</span><span class="w"> </span><span class="kn">import</span> <span class="n">Queue</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.domains.downloads.services</span><span class="w"> </span><span class="kn">import</span> <span class="n">ReleaseService</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">update_download_boxes</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="6">    <span class="k">async</span> <span class="k">with</span> <span class="n">get_db_session</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+</span><span data-line="7">        <span class="n">service</span> <span class="o">=</span> <span class="n">ReleaseService</span><span class="p">(</span><span class="n">session</span><span class="p">)</span>
+</span><span data-line="8">        <span class="k">await</span> <span class="n">service</span><span class="o">.</span><span class="n">update_boxes</span><span class="p">()</span>
+</span><span data-line="9">
+</span><span data-line="10"><span class="c1"># Enqueue</span>
+</span><span data-line="11"><span class="k">await</span> <span class="n">queue</span><span class="o">.</span><span class="n">enqueue</span><span class="p">(</span><span class="s2">&quot;update_download_boxes&quot;</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="scheduled-task">
+<h3>Scheduled Task<a class="headerlink" href="#scheduled-task" title="Link to this heading">¶</a></h3>
+<p><strong>Before (Celery Beat)</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span><span class="w"> </span><span class="nn">celery.schedules</span><span class="w"> </span><span class="kn">import</span> <span class="n">crontab</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="n">CELERY_BEAT_SCHEDULE</span> <span class="o">=</span> <span class="p">{</span>
+</span><span data-line="4">    <span class="s1">&#39;update-boxes&#39;</span><span class="p">:</span> <span class="p">{</span>
+</span><span data-line="5">        <span class="s1">&#39;task&#39;</span><span class="p">:</span> <span class="s1">&#39;tasks.update_download_boxes&#39;</span><span class="p">,</span>
+</span><span data-line="6">        <span class="s1">&#39;schedule&#39;</span><span class="p">:</span> <span class="n">crontab</span><span class="p">(</span><span class="n">hour</span><span class="o">=</span><span class="s1">&#39;*/6&#39;</span><span class="p">),</span>
+</span><span data-line="7">    <span class="p">},</span>
+</span><span data-line="8"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>After (SAQ Cron)</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># On app startup</span>
+</span><span data-line="2"><span class="k">await</span> <span class="n">queue</span><span class="o">.</span><span class="n">schedule</span><span class="p">(</span>
+</span><span data-line="3">    <span class="s2">&quot;update_download_boxes&quot;</span><span class="p">,</span>
+</span><span data-line="4">    <span class="n">cron</span><span class="o">=</span><span class="s2">&quot;0 */6 * * *&quot;</span><span class="p">,</span>  <span class="c1"># Every 6 hours</span>
+</span><span data-line="5"><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="monitoring-strategy">
+<h2>Monitoring Strategy<a class="headerlink" href="#monitoring-strategy" title="Link to this heading">¶</a></h2>
+<section id="metrics-to-track">
+<h3>Metrics to Track<a class="headerlink" href="#metrics-to-track" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Task queue length</p></li>
+<li><p>Task processing time (p50, p95, p99)</p></li>
+<li><p>Task failure rate</p></li>
+<li><p>Worker utilization</p></li>
+<li><p>Dead letter queue size</p></li>
+</ul>
+</section>
+<section id="implementation">
+<h3>Implementation<a class="headerlink" href="#implementation" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Prometheus metrics</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">prometheus_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span><span class="p">,</span> <span class="n">Histogram</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="n">task_counter</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="s1">&#39;saq_tasks_total&#39;</span><span class="p">,</span> <span class="s1">&#39;Total tasks&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;task_name&#39;</span><span class="p">,</span> <span class="s1">&#39;status&#39;</span><span class="p">])</span>
+</span><span data-line="5"><span class="n">task_duration</span> <span class="o">=</span> <span class="n">Histogram</span><span class="p">(</span><span class="s1">&#39;saq_task_duration_seconds&#39;</span><span class="p">,</span> <span class="s1">&#39;Task duration&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;task_name&#39;</span><span class="p">])</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># In task wrapper</span>
+</span><span data-line="8"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">tracked_task</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="9">    <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+</span><span data-line="10">    <span class="k">try</span><span class="p">:</span>
+</span><span data-line="11">        <span class="k">await</span> <span class="n">original_task</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
+</span><span data-line="12">        <span class="n">task_counter</span><span class="o">.</span><span class="n">labels</span><span class="p">(</span><span class="n">task_name</span><span class="o">=</span><span class="n">ctx</span><span class="p">[</span><span class="s1">&#39;task&#39;</span><span class="p">],</span> <span class="n">status</span><span class="o">=</span><span class="s1">&#39;success&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">inc</span><span class="p">()</span>
+</span><span data-line="13">    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+</span><span data-line="14">        <span class="n">task_counter</span><span class="o">.</span><span class="n">labels</span><span class="p">(</span><span class="n">task_name</span><span class="o">=</span><span class="n">ctx</span><span class="p">[</span><span class="s1">&#39;task&#39;</span><span class="p">],</span> <span class="n">status</span><span class="o">=</span><span class="s1">&#39;failure&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">inc</span><span class="p">()</span>
+</span><span data-line="15">        <span class="k">raise</span>
+</span><span data-line="16">    <span class="k">finally</span><span class="p">:</span>
+</span><span data-line="17">        <span class="n">duration</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span>
+</span><span data-line="18">        <span class="n">task_duration</span><span class="o">.</span><span class="n">labels</span><span class="p">(</span><span class="n">task_name</span><span class="o">=</span><span class="n">ctx</span><span class="p">[</span><span class="s1">&#39;task&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="n">duration</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://saq-py.readthedocs.io/">SAQ Documentation</a></p></li>
+<li><p><a class="reference external" href="https://github.com/tobymao/saq">SAQ GitHub Repository</a></p></li>
+<li><p><a class="reference external" href="https://docs.celeryproject.org/en/stable/userguide/workers.html#asynchronous-workers">Celery Async Workers</a></p></li>
+<li><p><a class="reference external" href="https://github.com/asyncio-docs/asyncio-task-queues">Async Task Queue Comparison</a></p></li>
+</ul>
+</section>
+<section id="metadata">
+<h2>Metadata<a class="headerlink" href="#metadata" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Author</strong>: ARCHITECT Agent</p></li>
+<li><p><strong>Date</strong>: 2025-11-25</p></li>
+<li><p><strong>Reviewers</strong>: TBD</p></li>
+<li><p><strong>Related ADRs</strong>: ADR-001 (Litestar Framework)</p></li>
+<li><p><strong>Tags</strong>: background-tasks, async, infrastructure, performance</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="revision-history">
+<h2>Revision History<a class="headerlink" href="#revision-history" title="Link to this heading">¶</a></h2>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Version</p></th>
+<th class="head"><p>Date</p></th>
+<th class="head"><p>Author</p></th>
+<th class="head"><p>Changes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1.0</p></td>
+<td><p>2025-11-25</p></td>
+<td><p>ARCHITECT</p></td>
+<td><p>Initial version</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="001-litestar-framework.html">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title">ADR-001: Use Litestar as Web Framework</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="../../changelog.html">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title">Changelog</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Jacob Coffee</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+<a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+  <iconify-icon icon="simple-icons:github"></iconify-icon>
+</a></div>
+    </div>
+  </div>
+</footer>
+      <script src="../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=30646c52"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+      <script src="../../_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

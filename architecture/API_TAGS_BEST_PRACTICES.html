@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="blue" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>API Tags - Best Practices &amp; Guidelines - litestar-pydotorg</title><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=14737038" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=513f0650" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="API Tags - Best Practices &amp; Guidelines"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../index.html">
+      
+      
+      <strong>litestar-pydotorg</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"><ul><li class="link">
+          <a href="https://litestar.dev/">
+            <span>Litestar</span></a>
+        </li><li class="link">
+          <a href="https://python.org/">
+            <span>Python.org</span></a>
+        </li></ul></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials">
+  <a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started/index.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/quickstart.html">Quickstart</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/index.html">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/development.html">Development Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/contributing.html">Contribution Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/testing.html">Testing Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/debugging.html">Debugging Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/api-usage.html">API Usage Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/authentication.html">Authentication Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/feature-flags.html">Feature Flags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/configuration.html">Configuration Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/deployment.html">Deployment Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/docker.html">Docker Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/troubleshooting.html">Troubleshooting Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook/index.html">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/domain-patterns.html">Domain Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/authentication-recipes.html">Authentication Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/database-recipes.html">Database Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cookbook/testing-recipes.html">Testing Recipes</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/core/index.html">Core Infrastructure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/auth.html">Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/cache.html">Caching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/database.html">Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/email.html">Email</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/exceptions.html">Exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/features.html">Feature Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/feeds.html">RSS/Atom Feeds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/ical.html">iCalendar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/middleware.html">Middleware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/openapi.html">OpenAPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/ratelimit.html">Rate Limiting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/security.html">Security</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/core/worker.html">Background Worker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/domains/index.html">Domain Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/about.html">About</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/admin.html">Admin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/banners.html">banners</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/blogs.html">blogs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/codesamples.html">Code Samples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/community.html">community</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/docs.html">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/downloads.html">downloads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/events.html">events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/jobs.html">jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/mailing.html">Mailing Lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/minutes.html">Minutes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/nominations.html">Nominations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/pages.html">pages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/search.html">Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/sponsors.html">sponsors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/sqladmin.html">SQLAdmin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/successstories.html">Success Stories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/users.html">users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/domains/work_groups.html">Work Groups</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/lib.html">Library Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/tasks.html">Background Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/config.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/main.html">Application Entry Point</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ARCHITECTURE.html">Litestar Python.org Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DATABASE_SCHEMA.html">Database Schema Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DOMAIN_MODELS.html">Domain Models Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="QUICK_START.html">Litestar Python.org Quick Start Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="API_TAGS_INDEX.html">API Tags Documentation Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RATE_LIMITING_ARCHITECTURE.html">Rate Limiting Architecture Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adr/001-litestar-framework.html">ADR-001: Use Litestar as Web Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adr/002-saq-background-tasks.html">ADR-002: Use SAQ for Background Task Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/JacobCoffee/litestar-pydotorg">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#naming-conventions">Naming Conventions</a><ul>
+<li><a class="reference internal" href="#use-title-case-with-spaces">1. Use Title Case with Spaces</a></li>
+<li><a class="reference internal" href="#keep-tag-names-concise">2. Keep Tag Names Concise</a></li>
+<li><a class="reference internal" href="#use-singular-or-plural-consistently">3. Use Singular or Plural Consistently</a></li>
+<li><a class="reference internal" href="#admin-tag-prefix">4. Admin Tag Prefix</a></li>
+<li><a class="reference internal" href="#group-related-concepts">5. Group Related Concepts</a></li>
+<li><a class="reference internal" href="#use-specific-resource-terms">6. Use Specific Resource Terms</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#controller-organization">Controller Organization</a><ul>
+<li><a class="reference internal" href="#one-tag-per-controller">1. One Tag Per Controller</a></li>
+<li><a class="reference internal" href="#tag-at-class-level-not-method-level">2. Tag at Class Level, Not Method Level</a></li>
+<li><a class="reference internal" href="#related-resources-should-be-nearby">3. Related Resources Should Be Nearby</a></li>
+<li><a class="reference internal" href="#render-controllers-use-internal-tag">4. Render Controllers Use &#8220;internal&#8221; Tag</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#maintaining-the-tag-structure">Maintaining the Tag Structure</a><ul>
+<li><a class="reference internal" href="#when-to-add-new-tags">1. When to Add New Tags</a></li>
+<li><a class="reference internal" href="#refactoring-tags">2. Refactoring Tags</a></li>
+<li><a class="reference internal" href="#tag-migration-checklist">3. Tag Migration Checklist</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#openapi-tag-configuration">OpenAPI Tag Configuration</a><ul>
+<li><a class="reference internal" href="#keep-descriptions-clear-and-concise">1. Keep Descriptions Clear and Concise</a></li>
+<li><a class="reference internal" href="#add-external-documentation-links-when-applicable">2. Add External Documentation Links When Applicable</a></li>
+<li><a class="reference internal" href="#keep-tag-descriptions-in-english">3. Keep Tag Descriptions in English</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#testing-tags">Testing Tags</a><ul>
+<li><a class="reference internal" href="#test-that-tags-are-present">1. Test That Tags Are Present</a></li>
+<li><a class="reference internal" href="#test-openapi-schema">2. Test OpenAPI Schema</a></li>
+<li><a class="reference internal" href="#test-tag-count-and-organization">3. Test Tag Count and Organization</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#documentation">Documentation</a><ul>
+<li><a class="reference internal" href="#update-quick-reference-when-adding-tags">1. Update Quick Reference When Adding Tags</a></li>
+<li><a class="reference internal" href="#keep-hierarchy-diagram-current">2. Keep Hierarchy Diagram Current</a></li>
+<li><a class="reference internal" href="#document-the-rationale">3. Document the Rationale</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#common-patterns">Common Patterns</a><ul>
+<li><a class="reference internal" href="#pattern-1-resource-with-sub-resources">Pattern 1: Resource with Sub-Resources</a></li>
+<li><a class="reference internal" href="#pattern-2-admin-versions-of-public-resources">Pattern 2: Admin Versions of Public Resources</a></li>
+<li><a class="reference internal" href="#pattern-3-unified-content-type">Pattern 3: Unified Content Type</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul>
+<li><a class="reference internal" href="#problem-tags-not-appearing-in-scalar-ui">Problem: Tags Not Appearing in Scalar UI</a></li>
+<li><a class="reference internal" href="#problem-duplicate-tags-in-scalar-ui">Problem: Duplicate Tags in Scalar UI</a></li>
+<li><a class="reference internal" href="#problem-tags-not-in-expected-order">Problem: Tags Not in Expected Order</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#future-improvements">Future Improvements</a><ul>
+<li><a class="reference internal" href="#potential-enhancements">Potential Enhancements</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#references">References</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../index.html"><span itemprop="name">litestar-pydotorg</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">API Tags - Best Practices &amp; Guidelines</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue dark-code" role="main">
+          <section id="api-tags-best-practices-guidelines">
+<h1>API Tags - Best Practices &amp; Guidelines<a class="headerlink" href="#api-tags-best-practices-guidelines" title="Link to this heading">¶</a></h1>
+<p>Guidelines for maintaining and extending the API tag structure in the <a class="reference external" href="http://Python.org">Python.org</a> API.</p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>This document provides best practices for working with API tags in the OpenAPI documentation to ensure consistency, maintainability, and optimal developer experience.</p>
+</section>
+<section id="naming-conventions">
+<h2>Naming Conventions<a class="headerlink" href="#naming-conventions" title="Link to this heading">¶</a></h2>
+<section id="use-title-case-with-spaces">
+<h3>1. Use Title Case with Spaces<a class="headerlink" href="#use-title-case-with-spaces" title="Link to this heading">¶</a></h3>
+<p>Tags should use Title Case with spaces, NOT kebab-case or camelCase.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Good</span>
+</span><span data-line="2"><span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;User Memberships&quot;</span><span class="p">]</span>
+</span><span data-line="3"><span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Event Locations&quot;</span><span class="p">]</span>
+</span><span data-line="4"><span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Admin Email Templates&quot;</span><span class="p">]</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="c1"># Bad</span>
+</span><span data-line="7"><span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;user-memberships&quot;</span><span class="p">]</span>
+</span><span data-line="8"><span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;userMemberships&quot;</span><span class="p">]</span>
+</span><span data-line="9"><span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;user_memberships&quot;</span><span class="p">]</span>
+</span></pre></div>
+</div>
+<p><strong>Rationale</strong>: Title Case with spaces is much more readable in Scalar UI navigation and creates a more professional appearance.</p>
+</section>
+<section id="keep-tag-names-concise">
+<h3>2. Keep Tag Names Concise<a class="headerlink" href="#keep-tag-names-concise" title="Link to this heading">¶</a></h3>
+<p>Tag names should be descriptive but brief (2-4 words maximum).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Good</span>
+</span><span data-line="2"><span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Job Review Comments&quot;</span><span class="p">]</span>   <span class="c1"># 3 words, clear</span>
+</span><span data-line="3"><span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Success Stories&quot;</span><span class="p">]</span>        <span class="c1"># 2 words, concise</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="c1"># Bad</span>
+</span><span data-line="6"><span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;User Job Review Comments&quot;</span><span class="p">]</span>  <span class="c1"># Too long, ambiguous</span>
+</span><span data-line="7"><span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Community Contributed Content Posts&quot;</span><span class="p">]</span>  <span class="c1"># Too long</span>
+</span></pre></div>
+</div>
+</section>
+<section id="use-singular-or-plural-consistently">
+<h3>3. Use Singular or Plural Consistently<a class="headerlink" href="#use-singular-or-plural-consistently" title="Link to this heading">¶</a></h3>
+<p>Use plural forms for collection resources, singular for singular resources.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Good</span>
+</span><span data-line="2"><span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Jobs&quot;</span><span class="p">]</span>                   <span class="c1"># Collection</span>
+</span><span data-line="3"><span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Sponsors&quot;</span><span class="p">]</span>               <span class="c1"># Collection</span>
+</span><span data-line="4"><span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Event Occurrences&quot;</span><span class="p">]</span>      <span class="c1"># Collection</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="c1"># Avoid mixing</span>
+</span><span data-line="7"><span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Job&quot;</span><span class="p">]</span>                    <span class="c1"># Too singular for collection endpoints</span>
+</span><span data-line="8"><span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Event Occurrence&quot;</span><span class="p">]</span>       <span class="c1"># Use plural for consistency</span>
+</span></pre></div>
+</div>
+</section>
+<section id="admin-tag-prefix">
+<h3>4. Admin Tag Prefix<a class="headerlink" href="#admin-tag-prefix" title="Link to this heading">¶</a></h3>
+<p>All administrative endpoints must use the “Admin “ prefix (note the space).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Good</span>
+</span><span data-line="2"><span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Admin Dashboard&quot;</span><span class="p">]</span>
+</span><span data-line="3"><span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Admin Email Templates&quot;</span><span class="p">]</span>
+</span><span data-line="4"><span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Admin Tasks&quot;</span><span class="p">]</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="c1"># Bad</span>
+</span><span data-line="7"><span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;AdminDashboard&quot;</span><span class="p">]</span>         <span class="c1"># No space</span>
+</span><span data-line="8"><span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Admin-Users&quot;</span><span class="p">]</span>            <span class="c1"># Hyphen, not space</span>
+</span><span data-line="9"><span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;administration-users&quot;</span><span class="p">]</span>   <span class="c1"># No prefix</span>
+</span></pre></div>
+</div>
+</section>
+<section id="group-related-concepts">
+<h3>5. Group Related Concepts<a class="headerlink" href="#group-related-concepts" title="Link to this heading">¶</a></h3>
+<p>Related tags should use consistent prefixes to show relationships.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Good - Clear relationships</span>
+</span><span data-line="2"><span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Event Categories&quot;</span><span class="p">]</span>       <span class="c1"># Grouped under &quot;Event&quot;</span>
+</span><span data-line="3"><span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Event Locations&quot;</span><span class="p">]</span>        <span class="c1"># Grouped under &quot;Event&quot;</span>
+</span><span data-line="4"><span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Event Occurrences&quot;</span><span class="p">]</span>      <span class="c1"># Grouped under &quot;Event&quot;</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="c1"># Less clear</span>
+</span><span data-line="7"><span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Categories&quot;</span><span class="p">]</span>             <span class="c1"># Ambiguous</span>
+</span><span data-line="8"><span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Locations&quot;</span><span class="p">]</span>              <span class="c1"># Ambiguous</span>
+</span><span data-line="9"><span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Occurrences&quot;</span><span class="p">]</span>            <span class="c1"># Ambiguous</span>
+</span></pre></div>
+</div>
+</section>
+<section id="use-specific-resource-terms">
+<h3>6. Use Specific Resource Terms<a class="headerlink" href="#use-specific-resource-terms" title="Link to this heading">¶</a></h3>
+<p>Be specific about what resource the tag represents.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Good</span>
+</span><span data-line="2"><span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;User Memberships&quot;</span><span class="p">]</span>       <span class="c1"># Specific: memberships belong to users</span>
+</span><span data-line="3"><span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Blog Feeds&quot;</span><span class="p">]</span>             <span class="c1"># Specific: feeds related to blogs</span>
+</span><span data-line="4"><span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Community Content&quot;</span><span class="p">]</span>      <span class="c1"># Specific: community-contributed content</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="c1"># Vague</span>
+</span><span data-line="7"><span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Memberships&quot;</span><span class="p">]</span>            <span class="c1"># What kind of memberships?</span>
+</span><span data-line="8"><span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Feeds&quot;</span><span class="p">]</span>                  <span class="c1"># Feeds of what?</span>
+</span><span data-line="9"><span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Content&quot;</span><span class="p">]</span>                <span class="c1"># What type of content?</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="controller-organization">
+<h2>Controller Organization<a class="headerlink" href="#controller-organization" title="Link to this heading">¶</a></h2>
+<section id="one-tag-per-controller">
+<h3>1. One Tag Per Controller<a class="headerlink" href="#one-tag-per-controller" title="Link to this heading">¶</a></h3>
+<p>Each controller class should have exactly one tag (rare exceptions may have two related tags).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Good</span>
+</span><span data-line="2"><span class="k">class</span><span class="w"> </span><span class="nc">UserController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="3">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Users&quot;</span><span class="p">]</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="k">class</span><span class="w"> </span><span class="nc">MembershipController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="6">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;User Memberships&quot;</span><span class="p">]</span>
+</span><span data-line="7">
+</span><span data-line="8"><span class="c1"># Bad - Multiple unrelated tags</span>
+</span><span data-line="9"><span class="k">class</span><span class="w"> </span><span class="nc">MixedController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="10">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Users&quot;</span><span class="p">,</span> <span class="s2">&quot;Jobs&quot;</span><span class="p">,</span> <span class="s2">&quot;Events&quot;</span><span class="p">]</span>  <span class="c1"># Don&#39;t do this</span>
+</span></pre></div>
+</div>
+</section>
+<section id="tag-at-class-level-not-method-level">
+<h3>2. Tag at Class Level, Not Method Level<a class="headerlink" href="#tag-at-class-level-not-method-level" title="Link to this heading">¶</a></h3>
+<p>Define tags at the controller class level, not on individual route methods.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Good - Tag defined at class level</span>
+</span><span data-line="2"><span class="k">class</span><span class="w"> </span><span class="nc">JobController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="3">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Jobs&quot;</span><span class="p">]</span>
+</span><span data-line="4">
+</span><span data-line="5">    <span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+</span><span data-line="6">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">JobRead</span><span class="p">]:</span>
+</span><span data-line="7"><span class="w">        </span><span class="sd">&quot;&quot;&quot;List all jobs.&quot;&quot;&quot;</span>
+</span><span data-line="8">        <span class="k">pass</span>
+</span><span data-line="9">
+</span><span data-line="10"><span class="c1"># Avoid - Tags on individual methods</span>
+</span><span data-line="11"><span class="k">class</span><span class="w"> </span><span class="nc">JobController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="12">    <span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Jobs&quot;</span><span class="p">])</span>  <span class="c1"># Don&#39;t do this</span>
+</span><span data-line="13">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">JobRead</span><span class="p">]:</span>
+</span><span data-line="14">        <span class="k">pass</span>
+</span></pre></div>
+</div>
+<p><strong>Rationale</strong>: Tags in OpenAPI are typically defined at operation (route) level, but Litestar controller tags apply to all routes in the controller. Keep it consistent at the class level for simplicity.</p>
+</section>
+<section id="related-resources-should-be-nearby">
+<h3>3. Related Resources Should Be Nearby<a class="headerlink" href="#related-resources-should-be-nearby" title="Link to this heading">¶</a></h3>
+<p>If Tag A is about a sub-resource of Tag B, they should be close in the OpenAPI tags list.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Good ordering - Resource hierarchy</span>
+</span><span data-line="2"><span class="mf">1.</span> <span class="n">Events</span>
+</span><span data-line="3"><span class="mf">2.</span> <span class="n">Event</span> <span class="n">Calendars</span>
+</span><span data-line="4"><span class="mf">3.</span> <span class="n">Event</span> <span class="n">Categories</span>
+</span><span data-line="5"><span class="mf">4.</span> <span class="n">Event</span> <span class="n">Locations</span>
+</span><span data-line="6"><span class="mf">5.</span> <span class="n">Event</span> <span class="n">Occurrences</span>
+</span><span data-line="7">
+</span><span data-line="8"><span class="c1"># Bad ordering - Scattered</span>
+</span><span data-line="9"><span class="mf">1.</span> <span class="n">Events</span>
+</span><span data-line="10"><span class="mf">2.</span> <span class="n">Admin</span> <span class="n">Dashboard</span>
+</span><span data-line="11"><span class="mf">3.</span> <span class="n">Event</span> <span class="n">Calendars</span>
+</span><span data-line="12"><span class="mf">4.</span> <span class="n">Jobs</span>
+</span><span data-line="13"><span class="mf">5.</span> <span class="n">Event</span> <span class="n">Occurrences</span>
+</span></pre></div>
+</div>
+</section>
+<section id="render-controllers-use-internal-tag">
+<h3>4. Render Controllers Use “internal” Tag<a class="headerlink" href="#render-controllers-use-internal-tag" title="Link to this heading">¶</a></h3>
+<p>Controllers that serve HTML should use the “internal” tag to exclude them from public API documentation.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Good - HTML render controllers excluded</span>
+</span><span data-line="2"><span class="k">class</span><span class="w"> </span><span class="nc">PageRenderController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="3">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;internal&quot;</span><span class="p">]</span>
+</span><span data-line="4">    <span class="n">include_in_schema</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># Explicitly exclude from OpenAPI</span>
+</span><span data-line="5">
+</span><span data-line="6">    <span class="nd">@get</span><span class="p">(</span><span class="s2">&quot;/{slug:str}&quot;</span><span class="p">)</span>
+</span><span data-line="7">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">render_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slug</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Template</span><span class="p">:</span>
+</span><span data-line="8"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Render a page as HTML (not in API docs).&quot;&quot;&quot;</span>
+</span><span data-line="9">        <span class="k">pass</span>
+</span><span data-line="10">
+</span><span data-line="11"><span class="c1"># Bad - Render controller in public API</span>
+</span><span data-line="12"><span class="k">class</span><span class="w"> </span><span class="nc">PageRenderController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="13">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Pages&quot;</span><span class="p">]</span>  <span class="c1"># Wrong! Pages tag is for API resources</span>
+</span></pre></div>
+</div>
+<p><strong>Important</strong>: Controllers that serve HTML templates (not JSON/structured data) should NEVER use public API tags. Always use “internal” or exclude from schema.</p>
+</section>
+</section>
+<section id="maintaining-the-tag-structure">
+<h2>Maintaining the Tag Structure<a class="headerlink" href="#maintaining-the-tag-structure" title="Link to this heading">¶</a></h2>
+<section id="when-to-add-new-tags">
+<h3>1. When to Add New Tags<a class="headerlink" href="#when-to-add-new-tags" title="Link to this heading">¶</a></h3>
+<p>Add a new tag when:</p>
+<ul class="simple">
+<li><p>You’re adding a major new feature/domain</p></li>
+<li><p>The new resource doesn’t fit logically into existing tags</p></li>
+<li><p>You need to create a new top-level category</p></li>
+</ul>
+<p><strong>Don’t</strong> add new tags for:</p>
+<ul class="simple">
+<li><p>Variations of existing resources (use existing tag)</p></li>
+<li><p>Helper controllers (mark as “internal”)</p></li>
+<li><p>Render controllers (mark as “internal”)</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Good - Reuse existing tag for variants</span>
+</span><span data-line="2"><span class="k">class</span><span class="w"> </span><span class="nc">BlogEntryController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="3">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Blogs&quot;</span><span class="p">]</span>  <span class="c1"># Both entries and feeds use blog-related tags</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="k">class</span><span class="w"> </span><span class="nc">BlogFeedController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="6">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Blog Feeds&quot;</span><span class="p">]</span>  <span class="c1"># Related to blogs</span>
+</span><span data-line="7">
+</span><span data-line="8"><span class="c1"># Bad - Creating unnecessary tags</span>
+</span><span data-line="9"><span class="k">class</span><span class="w"> </span><span class="nc">BlogEntryDetailController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="10">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Blog Entry Details&quot;</span><span class="p">]</span>  <span class="c1"># Too specific</span>
+</span><span data-line="11">
+</span><span data-line="12"><span class="k">class</span><span class="w"> </span><span class="nc">BlogEntryCommentController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="13">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Blog Entry Comments&quot;</span><span class="p">]</span>  <span class="c1"># Should group under &quot;Blogs&quot;</span>
+</span></pre></div>
+</div>
+</section>
+<section id="refactoring-tags">
+<h3>2. Refactoring Tags<a class="headerlink" href="#refactoring-tags" title="Link to this heading">¶</a></h3>
+<p>When refactoring tags:</p>
+<ol class="arabic simple">
+<li><p>Update all affected controllers at once</p></li>
+<li><p>Update OpenAPI tag configuration</p></li>
+<li><p>Update documentation (<code class="docutils literal notranslate"><span class="pre">API_TAGS_QUICK_REF.md</span></code>, <code class="docutils literal notranslate"><span class="pre">API_TAGS_STRUCTURE.md</span></code>)</p></li>
+<li><p>Update any integration tests</p></li>
+<li><p>Test in Scalar UI to verify grouping</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># When refactoring &quot;community-posts&quot; tag:</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="c1"># 1. Update controller</span>
+</span><span data-line="4"><span class="k">class</span><span class="w"> </span><span class="nc">CommunityPostController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="5">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Community Content&quot;</span><span class="p">]</span>  <span class="c1"># Was: &quot;community-posts&quot;</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># 2. Update OpenAPI config</span>
+</span><span data-line="8"><span class="n">OPENAPI_TAGS</span> <span class="o">=</span> <span class="p">[</span>
+</span><span data-line="9">    <span class="c1"># ... remove old tag ...</span>
+</span><span data-line="10">    <span class="n">Tag</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Community Content&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;...&quot;</span><span class="p">),</span>
+</span><span data-line="11"><span class="p">]</span>
+</span><span data-line="12">
+</span><span data-line="13"><span class="c1"># 3. Update tests</span>
+</span><span data-line="14"><span class="k">def</span><span class="w"> </span><span class="nf">test_community_content_tag</span><span class="p">():</span>
+</span><span data-line="15">    <span class="k">assert</span> <span class="n">community_post_controller</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;Community Content&quot;</span><span class="p">]</span>
+</span><span data-line="16">
+</span><span data-line="17"><span class="c1"># 4. Test in Scalar</span>
+</span><span data-line="18"><span class="c1"># Visit http://localhost:8000/docs and verify</span>
+</span></pre></div>
+</div>
+</section>
+<section id="tag-migration-checklist">
+<h3>3. Tag Migration Checklist<a class="headerlink" href="#tag-migration-checklist" title="Link to this heading">¶</a></h3>
+<p>When migrating or adding tags:</p>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">- [ ]</span> Identify all affected controllers
+</span><span data-line="2"><span class="k">- [ ]</span> Update controller tag assignments
+</span><span data-line="3"><span class="k">- [ ]</span> Update OpenAPI tag configuration
+</span><span data-line="4"><span class="k">- [ ]</span> Update API_TAGS_QUICK_REF.md
+</span><span data-line="5"><span class="k">- [ ]</span> Update API_TAGS_STRUCTURE.md (if needed)
+</span><span data-line="6"><span class="k">- [ ]</span> Update API_TAGS_HIERARCHY.txt (if adding new category)
+</span><span data-line="7"><span class="k">- [ ]</span> Run tests: <span class="sb">`make test`</span>
+</span><span data-line="8"><span class="k">- [ ]</span> Verify in Scalar UI: <span class="sb">`make serve`</span> then visit docs
+</span><span data-line="9"><span class="k">- [ ]</span> Update any external documentation
+</span><span data-line="10"><span class="k">- [ ]</span> Create atomic git commit with all changes
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="openapi-tag-configuration">
+<h2>OpenAPI Tag Configuration<a class="headerlink" href="#openapi-tag-configuration" title="Link to this heading">¶</a></h2>
+<section id="keep-descriptions-clear-and-concise">
+<h3>1. Keep Descriptions Clear and Concise<a class="headerlink" href="#keep-descriptions-clear-and-concise" title="Link to this heading">¶</a></h3>
+<p>Each tag needs a clear description that helps developers understand what endpoints are in this group.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Good - Clear and helpful</span>
+</span><span data-line="2"><span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="3">    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Event Locations&quot;</span><span class="p">,</span>
+</span><span data-line="4">    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Physical venues and event locations&quot;</span><span class="p">,</span>
+</span><span data-line="5"><span class="p">),</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Bad - Vague</span>
+</span><span data-line="8"><span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="9">    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Event Locations&quot;</span><span class="p">,</span>
+</span><span data-line="10">    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Location stuff&quot;</span><span class="p">,</span>  <span class="c1"># Too vague</span>
+</span><span data-line="11"><span class="p">),</span>
+</span><span data-line="12">
+</span><span data-line="13"><span class="c1"># Bad - Too long</span>
+</span><span data-line="14"><span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="15">    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Event Locations&quot;</span><span class="p">,</span>
+</span><span data-line="16">    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;This tag contains all endpoints related to managing the physical venues and locations where events can be held, including information about addresses, accessibility, parking, and other venue-related details that help organize Python events&quot;</span><span class="p">,</span>  <span class="c1"># Way too long</span>
+</span><span data-line="17"><span class="p">),</span>
+</span></pre></div>
+</div>
+</section>
+<section id="add-external-documentation-links-when-applicable">
+<h3>2. Add External Documentation Links When Applicable<a class="headerlink" href="#add-external-documentation-links-when-applicable" title="Link to this heading">¶</a></h3>
+<p>If there’s external documentation for a resource category, include a link:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span><span class="w"> </span><span class="nn">litestar.openapi.spec</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tag</span><span class="p">,</span> <span class="n">ExternalDocumentation</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="n">Tag</span><span class="p">(</span>
+</span><span data-line="4">    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Python Releases&quot;</span><span class="p">,</span>
+</span><span data-line="5">    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Python version releases and release information&quot;</span><span class="p">,</span>
+</span><span data-line="6">    <span class="n">external_docs</span><span class="o">=</span><span class="n">ExternalDocumentation</span><span class="p">(</span>
+</span><span data-line="7">        <span class="n">url</span><span class="o">=</span><span class="s2">&quot;https://www.python.org/downloads/release/&quot;</span><span class="p">,</span>
+</span><span data-line="8">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;View all Python releases&quot;</span><span class="p">,</span>
+</span><span data-line="9">    <span class="p">),</span>
+</span><span data-line="10"><span class="p">),</span>
+</span></pre></div>
+</div>
+</section>
+<section id="keep-tag-descriptions-in-english">
+<h3>3. Keep Tag Descriptions in English<a class="headerlink" href="#keep-tag-descriptions-in-english" title="Link to this heading">¶</a></h3>
+<p>All tag descriptions should be in clear, professional English suitable for an international developer audience.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Good</span>
+</span><span data-line="2"><span class="n">description</span><span class="o">=</span><span class="s2">&quot;User account management, profiles, and account operations&quot;</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Avoid</span>
+</span><span data-line="5"><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Administrer les comptes utilisateurs et les profils&quot;</span>  <span class="c1"># French</span>
+</span><span data-line="6"><span class="n">description</span><span class="o">=</span><span class="s2">&quot;ユーザーアカウント管理&quot;</span>  <span class="c1"># Japanese</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="testing-tags">
+<h2>Testing Tags<a class="headerlink" href="#testing-tags" title="Link to this heading">¶</a></h2>
+<section id="test-that-tags-are-present">
+<h3>1. Test That Tags Are Present<a class="headerlink" href="#test-that-tags-are-present" title="Link to this heading">¶</a></h3>
+<p>Ensure your controllers have the correct tags:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># tests/integration/test_openapi_tags.py</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+</span><span data-line="4"><span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.domains.users.controllers</span><span class="w"> </span><span class="kn">import</span> <span class="n">UserController</span><span class="p">,</span> <span class="n">MembershipController</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="k">class</span><span class="w"> </span><span class="nc">TestOpenAPITags</span><span class="p">:</span>
+</span><span data-line="7">    <span class="k">def</span><span class="w"> </span><span class="nf">test_user_controller_has_users_tag</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span data-line="8">        <span class="k">assert</span> <span class="n">UserController</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;Users&quot;</span><span class="p">]</span>
+</span><span data-line="9">
+</span><span data-line="10">    <span class="k">def</span><span class="w"> </span><span class="nf">test_membership_controller_has_user_memberships_tag</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span data-line="11">        <span class="k">assert</span> <span class="n">MembershipController</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;User Memberships&quot;</span><span class="p">]</span>
+</span><span data-line="12">
+</span><span data-line="13">    <span class="k">def</span><span class="w"> </span><span class="nf">test_admin_tags_have_prefix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span data-line="14">        <span class="kn">from</span><span class="w"> </span><span class="nn">pydotorg.domains.admin.controllers.users</span><span class="w"> </span><span class="kn">import</span> <span class="n">AdminUserController</span>
+</span><span data-line="15">        <span class="k">assert</span> <span class="n">AdminUserController</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;Admin &quot;</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="test-openapi-schema">
+<h3>2. Test OpenAPI Schema<a class="headerlink" href="#test-openapi-schema" title="Link to this heading">¶</a></h3>
+<p>Verify tags appear correctly in the generated OpenAPI schema:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">def</span><span class="w"> </span><span class="nf">test_openapi_schema_includes_tags</span><span class="p">(</span><span class="n">client</span><span class="p">):</span>
+</span><span data-line="2">    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/api/v1/openapi.json&quot;</span><span class="p">)</span>
+</span><span data-line="3">    <span class="n">schema</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+</span><span data-line="4">
+</span><span data-line="5">    <span class="c1"># Check tags are defined</span>
+</span><span data-line="6">    <span class="n">tag_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">tag</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">schema</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tags&quot;</span><span class="p">,</span> <span class="p">[])]</span>
+</span><span data-line="7">    <span class="k">assert</span> <span class="s2">&quot;Users&quot;</span> <span class="ow">in</span> <span class="n">tag_names</span>
+</span><span data-line="8">    <span class="k">assert</span> <span class="s2">&quot;Jobs&quot;</span> <span class="ow">in</span> <span class="n">tag_names</span>
+</span><span data-line="9">    <span class="k">assert</span> <span class="s2">&quot;Admin Dashboard&quot;</span> <span class="ow">in</span> <span class="n">tag_names</span>
+</span><span data-line="10">
+</span><span data-line="11">    <span class="c1"># Check no render tags in public schema</span>
+</span><span data-line="12">    <span class="k">assert</span> <span class="s2">&quot;internal&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tag_names</span>
+</span><span data-line="13">    <span class="k">assert</span> <span class="s2">&quot;jobs-render&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tag_names</span>
+</span></pre></div>
+</div>
+</section>
+<section id="test-tag-count-and-organization">
+<h3>3. Test Tag Count and Organization<a class="headerlink" href="#test-tag-count-and-organization" title="Link to this heading">¶</a></h3>
+<p>Validate that tags match the documented structure:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">def</span><span class="w"> </span><span class="nf">test_openapi_tags_match_documentation</span><span class="p">(</span><span class="n">client</span><span class="p">):</span>
+</span><span data-line="2">    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/api/v1/openapi.json&quot;</span><span class="p">)</span>
+</span><span data-line="3">    <span class="n">schema</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+</span><span data-line="4">
+</span><span data-line="5">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="n">tag</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">schema</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tags&quot;</span><span class="p">,</span> <span class="p">[])]</span>
+</span><span data-line="6">
+</span><span data-line="7">    <span class="c1"># Should have approximately 50 public tags</span>
+</span><span data-line="8">    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">tags</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">45</span>  <span class="c1"># Allow some flexibility</span>
+</span><span data-line="9">    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">tags</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">55</span>
+</span><span data-line="10">
+</span><span data-line="11">    <span class="c1"># Admin tags should be grouped</span>
+</span><span data-line="12">    <span class="n">admin_tags</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tags</span> <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;Admin &quot;</span><span class="p">)]</span>
+</span><span data-line="13">    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">admin_tags</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">10</span>  <span class="c1"># At least 10 admin categories</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="documentation">
+<h2>Documentation<a class="headerlink" href="#documentation" title="Link to this heading">¶</a></h2>
+<section id="update-quick-reference-when-adding-tags">
+<h3>1. Update Quick Reference When Adding Tags<a class="headerlink" href="#update-quick-reference-when-adding-tags" title="Link to this heading">¶</a></h3>
+<p>Whenever you add a new tag, update <code class="docutils literal notranslate"><span class="pre">API_TAGS_QUICK_REF.md</span></code>:</p>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span data-line="1">| 51 | New Feature | <span class="sb">`new/controllers.py`</span> | Description |
+</span></pre></div>
+</div>
+</section>
+<section id="keep-hierarchy-diagram-current">
+<h3>2. Keep Hierarchy Diagram Current<a class="headerlink" href="#keep-hierarchy-diagram-current" title="Link to this heading">¶</a></h3>
+<p>If adding a major new category, update <code class="docutils literal notranslate"><span class="pre">API_TAGS_HIERARCHY.txt</span></code> to reflect the new grouping.</p>
+</section>
+<section id="document-the-rationale">
+<h3>3. Document the Rationale<a class="headerlink" href="#document-the-rationale" title="Link to this heading">¶</a></h3>
+<p>In <code class="docutils literal notranslate"><span class="pre">API_TAGS_STRUCTURE.md</span></code>, explain why the tag structure is organized the way it is and how it benefits developers.</p>
+</section>
+</section>
+<section id="common-patterns">
+<h2>Common Patterns<a class="headerlink" href="#common-patterns" title="Link to this heading">¶</a></h2>
+<section id="pattern-1-resource-with-sub-resources">
+<h3>Pattern 1: Resource with Sub-Resources<a class="headerlink" href="#pattern-1-resource-with-sub-resources" title="Link to this heading">¶</a></h3>
+<p>When a resource has sub-resources (e.g., Events → Calendars → Categories):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Main resource</span>
+</span><span data-line="2"><span class="k">class</span><span class="w"> </span><span class="nc">EventController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="3">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Events&quot;</span><span class="p">]</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="c1"># Sub-resources</span>
+</span><span data-line="6"><span class="k">class</span><span class="w"> </span><span class="nc">CalendarController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="7">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Event Calendars&quot;</span><span class="p">]</span>  <span class="c1"># Prefix with parent resource</span>
+</span><span data-line="8">
+</span><span data-line="9"><span class="k">class</span><span class="w"> </span><span class="nc">EventCategoryController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="10">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Event Categories&quot;</span><span class="p">]</span>  <span class="c1"># Consistent prefix</span>
+</span></pre></div>
+</div>
+<p><strong>In OpenAPI tags list</strong>: Keep these adjacent for logical discovery.</p>
+</section>
+<section id="pattern-2-admin-versions-of-public-resources">
+<h3>Pattern 2: Admin Versions of Public Resources<a class="headerlink" href="#pattern-2-admin-versions-of-public-resources" title="Link to this heading">¶</a></h3>
+<p>When you have both public and admin versions of a resource:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Public API</span>
+</span><span data-line="2"><span class="k">class</span><span class="w"> </span><span class="nc">UserController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="3">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Users&quot;</span><span class="p">]</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="c1"># Admin API</span>
+</span><span data-line="6"><span class="k">class</span><span class="w"> </span><span class="nc">AdminUserController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="7">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Admin Users&quot;</span><span class="p">]</span>  <span class="c1"># Admin prefix, same concept</span>
+</span></pre></div>
+</div>
+</section>
+<section id="pattern-3-unified-content-type">
+<h3>Pattern 3: Unified Content Type<a class="headerlink" href="#pattern-3-unified-content-type" title="Link to this heading">¶</a></h3>
+<p>When multiple content types share a category (e.g., community posts, photos, videos):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">class</span><span class="w"> </span><span class="nc">CommunityPostController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="2">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Community Content&quot;</span><span class="p">]</span>  <span class="c1"># All use same tag</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="k">class</span><span class="w"> </span><span class="nc">CommunityPhotoController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="5">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Community Content&quot;</span><span class="p">]</span>  <span class="c1"># Grouped together</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="k">class</span><span class="w"> </span><span class="nc">CommunityVideoController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="8">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Community Content&quot;</span><span class="p">]</span>  <span class="c1"># Grouped together</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">¶</a></h2>
+<section id="problem-tags-not-appearing-in-scalar-ui">
+<h3>Problem: Tags Not Appearing in Scalar UI<a class="headerlink" href="#problem-tags-not-appearing-in-scalar-ui" title="Link to this heading">¶</a></h3>
+<p><strong>Causes</strong>:</p>
+<ol class="arabic simple">
+<li><p>Controller tags not updated</p></li>
+<li><p>OpenAPI config not deployed</p></li>
+<li><p>Browser cache issue</p></li>
+</ol>
+<p><strong>Solutions</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># 1. Verify controller tags</span>
+</span><span data-line="2">grep<span class="w"> </span><span class="s2">&quot;tags = &quot;</span><span class="w"> </span>src/pydotorg/domains/*/controllers*.py
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># 2. Restart development server</span>
+</span><span data-line="5">make<span class="w"> </span>serve
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># 3. Hard refresh browser</span>
+</span><span data-line="8"><span class="c1"># On Chrome: Cmd+Shift+R (Mac) or Ctrl+Shift+R (Windows/Linux)</span>
+</span><span data-line="9">
+</span><span data-line="10"><span class="c1"># 4. Check OpenAPI schema</span>
+</span><span data-line="11">curl<span class="w"> </span>http://localhost:8000/api/v1/openapi.json<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">&#39;.tags&#39;</span>
+</span></pre></div>
+</div>
+</section>
+<section id="problem-duplicate-tags-in-scalar-ui">
+<h3>Problem: Duplicate Tags in Scalar UI<a class="headerlink" href="#problem-duplicate-tags-in-scalar-ui" title="Link to this heading">¶</a></h3>
+<p><strong>Causes</strong>:</p>
+<ol class="arabic simple">
+<li><p>Controller has multiple tags</p></li>
+<li><p>Sub-controllers with overlapping tag assignments</p></li>
+</ol>
+<p><strong>Solution</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Each controller should have exactly one tag</span>
+</span><span data-line="2"><span class="k">class</span><span class="w"> </span><span class="nc">MyController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="3">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Single Tag Only&quot;</span><span class="p">]</span>  <span class="c1"># Not multiple</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="c1"># If you need multiple concepts, create related tags</span>
+</span><span data-line="6"><span class="k">class</span><span class="w"> </span><span class="nc">UserController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="7">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Users&quot;</span><span class="p">]</span>
+</span><span data-line="8">
+</span><span data-line="9"><span class="k">class</span><span class="w"> </span><span class="nc">UserMembershipController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+</span><span data-line="10">    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;User Memberships&quot;</span><span class="p">]</span>  <span class="c1"># Related but distinct</span>
+</span></pre></div>
+</div>
+</section>
+<section id="problem-tags-not-in-expected-order">
+<h3>Problem: Tags Not in Expected Order<a class="headerlink" href="#problem-tags-not-in-expected-order" title="Link to this heading">¶</a></h3>
+<p><strong>Causes</strong>:</p>
+<ol class="arabic simple">
+<li><p>Tag order in OpenAPI config doesn’t match desired order</p></li>
+<li><p>Scalar UI is using alphabetical ordering</p></li>
+</ol>
+<p><strong>Solution</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># In openapi_tags.py, ensure tags are defined in desired order</span>
+</span><span data-line="2"><span class="n">OPENAPI_TAGS</span> <span class="o">=</span> <span class="p">[</span>
+</span><span data-line="3">    <span class="n">Tag</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Authentication&quot;</span><span class="p">,</span> <span class="o">...</span><span class="p">),</span>      <span class="c1"># 1st</span>
+</span><span data-line="4">    <span class="n">Tag</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Users&quot;</span><span class="p">,</span> <span class="o">...</span><span class="p">),</span>               <span class="c1"># 2nd</span>
+</span><span data-line="5">    <span class="n">Tag</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;User Memberships&quot;</span><span class="p">,</span> <span class="o">...</span><span class="p">),</span>    <span class="c1"># 3rd</span>
+</span><span data-line="6">    <span class="c1"># ... in the correct order</span>
+</span><span data-line="7"><span class="p">]</span>
+</span></pre></div>
+</div>
+<p>Scalar respects the tag order defined in the OpenAPI spec.</p>
+</section>
+</section>
+<section id="future-improvements">
+<h2>Future Improvements<a class="headerlink" href="#future-improvements" title="Link to this heading">¶</a></h2>
+<section id="potential-enhancements">
+<h3>Potential Enhancements<a class="headerlink" href="#potential-enhancements" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Tag Categories</strong>: If the API grows significantly, consider grouping tags into categories (e.g., “Core”, “Content”, “Administration”)</p></li>
+<li><p><strong>Search-Friendly Tags</strong>: Add searchable keywords to help developers find tags (may require custom Scalar configuration)</p></li>
+<li><p><strong>Tag Aliases</strong>: For tags with multiple names (e.g., “Python Releases” vs “Downloads”), consider supporting aliases</p></li>
+<li><p><strong>Analytics Integration</strong>: Track which tags developers use most to optimize tag organization</p></li>
+<li><p><strong>Deprecation Warnings</strong>: For tags/endpoints being deprecated, add deprecation markers in Scalar UI</p></li>
+</ol>
+</section>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Litestar OpenAPI Documentation: <a class="reference external" href="https://docs.litestar.dev/latest/features/openapi.html">https://docs.litestar.dev/latest/features/openapi.html</a></p></li>
+<li><p>OpenAPI 3.1.0 Specification: <a class="reference external" href="https://spec.openapis.org/oas/v3.1.0">https://spec.openapis.org/oas/v3.1.0</a></p></li>
+<li><p>Scalar API Documentation: <a class="reference external" href="https://scalar.com/">https://scalar.com/</a></p></li>
+<li><p>This project’s tag documentation:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">API_TAGS_STRUCTURE.md</span></code> - Detailed structure and rationale</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">API_TAGS_QUICK_REF.md</span></code> - Quick reference table</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">API_TAGS_HIERARCHY.txt</span></code> - Visual hierarchy</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">API_TAGS_IMPLEMENTATION.md</span></code> - Implementation guide</p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Jacob Coffee</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+<a href="https://github.com/JacobCoffee/litestar-pydotorg" aria-label="GitHub">
+  <iconify-icon icon="simple-icons:github"></iconify-icon>
+</a></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=30646c52"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script src="../_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>
