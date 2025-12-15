@@ -16,10 +16,8 @@ from advanced_alchemy.extensions.litestar import SQLAlchemyPlugin
 from advanced_alchemy.extensions.litestar.plugins.init.config.asyncio import SQLAlchemyAsyncConfig
 from litestar import Litestar
 from playwright.async_api import Browser, BrowserContext, Page, async_playwright
-from sqlalchemy.ext.asyncio import create_async_engine
 
 from pydotorg.core.auth.middleware import JWTAuthMiddleware
-from pydotorg.core.database.base import AuditBase
 from pydotorg.domains.users.auth_controller import AuthController, AuthPageController
 from pydotorg.main import health_check
 
@@ -89,23 +87,10 @@ async def page(context: BrowserContext) -> AsyncIterator[Page]:
     await page.close()
 
 
-@pytest.fixture
-async def test_app(postgres_uri: str) -> AsyncIterator[Litestar]:
-    """Create test application with database for E2E tests."""
-    engine = create_async_engine(postgres_uri, echo=False)
-
-    async with engine.begin() as conn:
-        await conn.run_sync(AuditBase.metadata.drop_all)
-        await conn.run_sync(AuditBase.metadata.create_all)
-
-    await engine.dispose()
-
-    sqlalchemy_config = SQLAlchemyAsyncConfig(
-        connection_string=postgres_uri,
-        metadata=AuditBase.metadata,
-        create_all=False,
-    )
-    sqlalchemy_plugin = SQLAlchemyPlugin(config=sqlalchemy_config)
+@pytest.fixture(scope="session")
+async def test_app(_module_sqlalchemy_config: SQLAlchemyAsyncConfig) -> AsyncIterator[Litestar]:
+    """Create test application for E2E tests, reusing session-scoped config."""
+    sqlalchemy_plugin = SQLAlchemyPlugin(config=_module_sqlalchemy_config)
 
     app = Litestar(
         route_handlers=[health_check, AuthController, AuthPageController],

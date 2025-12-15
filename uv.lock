@@ -902,6 +902,7 @@ dev = [
     { name = "pytest-cov" },
     { name = "pytest-databases", extra = ["postgres"] },
     { name = "pytest-playwright" },
+    { name = "pytest-skip-slow" },
     { name = "pytest-split" },
     { name = "pytest-sugar" },
     { name = "pytest-timeout" },
@@ -945,6 +946,7 @@ test = [
     { name = "pytest-cov" },
     { name = "pytest-databases", extra = ["postgres"] },
     { name = "pytest-playwright" },
+    { name = "pytest-skip-slow" },
     { name = "pytest-split" },
     { name = "pytest-sugar" },
     { name = "pytest-timeout" },
@@ -1004,6 +1006,7 @@ dev = [
     { name = "pytest-cov", specifier = ">=6.0.0" },
     { name = "pytest-databases", extras = ["postgres"], specifier = ">=0.10.0" },
     { name = "pytest-playwright", specifier = ">=0.6.0" },
+    { name = "pytest-skip-slow", specifier = ">=0.0.5" },
     { name = "pytest-split", specifier = ">=0.9.0" },
     { name = "pytest-sugar", specifier = ">=1.1.1" },
     { name = "pytest-timeout", specifier = ">=2.3.0" },
@@ -1047,6 +1050,7 @@ test = [
     { name = "pytest-cov", specifier = ">=6.0.0" },
     { name = "pytest-databases", extras = ["postgres"], specifier = ">=0.10.0" },
     { name = "pytest-playwright", specifier = ">=0.6.0" },
+    { name = "pytest-skip-slow", specifier = ">=0.0.5" },
     { name = "pytest-split", specifier = ">=0.9.0" },
     { name = "pytest-sugar", specifier = ">=1.1.1" },
     { name = "pytest-timeout", specifier = ">=2.3.0" },
@@ -1639,6 +1643,18 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/e8/6b/913e36aa421b35689ec95ed953ff7e8df3f2ee1c7b8ab2a3f1fd39d95faf/pytest_playwright-0.7.2.tar.gz", hash = "sha256:247b61123b28c7e8febb993a187a07e54f14a9aa04edc166f7a976d88f04c770", size = 16928, upload-time = "2025-11-24T03:43:22.53Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/76/61/4d333d8354ea2bea2c2f01bad0a4aa3c1262de20e1241f78e73360e9b620/pytest_playwright-0.7.2-py3-none-any.whl", hash = "sha256:8084e015b2b3ecff483c2160f1c8219b38b66c0d4578b23c0f700d1b0240ea38", size = 16881, upload-time = "2025-11-24T03:43:24.423Z" },
+]
+
+[[package]]
+name = "pytest-skip-slow"
+version = "0.0.5"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pytest" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/7e/cf/507ddfc0f43492bf1cd3fd192fab672de62a381d85a7c8fcd55e5364dd7d/pytest-skip-slow-0.0.5.tar.gz", hash = "sha256:655ea5c748c72947e0d302334e7fa8ef99929257a2a2bc928f630ddb5a161d88", size = 1473, upload-time = "2023-02-09T19:58:41.955Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/1d/43/76edc0738298170fef6e2a9315ef96ed0d5c77de381b2ec1b54d43838a91/pytest_skip_slow-0.0.5-py3-none-any.whl", hash = "sha256:e2f6401d6ed0db3be1402622a7b24f7df14f61ebd26feda808a0d45433d4d474", size = 2959, upload-time = "2023-02-09T19:58:40.575Z" },
 ]
 
 [[package]]

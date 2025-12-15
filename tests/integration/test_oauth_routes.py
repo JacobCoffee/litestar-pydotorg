@@ -11,6 +11,7 @@ import pytest
 if TYPE_CHECKING:
     from litestar.testing import AsyncTestClient
 
+pytestmark = [pytest.mark.integration, pytest.mark.slow]
 
 GITHUB_USER_DATA = {
     "id": 12345,

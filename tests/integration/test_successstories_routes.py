@@ -15,10 +15,8 @@ from advanced_alchemy.filters import LimitOffset
 from litestar import Litestar
 from litestar.params import Parameter
 from litestar.testing import AsyncTestClient
-from sqlalchemy import text
-from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
-from pydotorg.core.database.base import AuditBase
 from pydotorg.domains.pages.models import ContentType
 from pydotorg.domains.successstories.controllers import (
     StoryCategoryController,
@@ -30,6 +28,8 @@ from pydotorg.domains.users.models import User
 
 if TYPE_CHECKING:
     from collections.abc import AsyncIterator
+
+pytestmark = [pytest.mark.integration, pytest.mark.slow]
 
 
 class SuccessStoriesTestFixtures:
@@ -123,7 +123,6 @@ async def provide_story_service(db_session: AsyncSession) -> StoryService:
 
 @pytest.fixture
 async def successstories_fixtures(
-    async_engine: AsyncEngine,
     async_session_factory: async_sessionmaker,
     _module_sqlalchemy_config: SQLAlchemyAsyncConfig,
 ) -> AsyncIterator[SuccessStoriesTestFixtures]:
@@ -132,13 +131,6 @@ async def successstories_fixtures(
     Uses the shared _module_sqlalchemy_config from conftest.py instead of creating
     a new SQLAlchemyAsyncConfig per test, which was causing TooManyConnectionsError.
     """
-    async with async_engine.begin() as conn:
-        result = await conn.execute(text("SELECT tablename FROM pg_tables WHERE schemaname = 'public'"))
-        existing_tables = {row[0] for row in result.fetchall()}
-
-        for table in reversed(AuditBase.metadata.sorted_tables):
-            if table.name in existing_tables:
-                await conn.execute(text(f"TRUNCATE TABLE {table.name} CASCADE"))
 
     async def provide_limit_offset(
         current_page: int = Parameter(ge=1, default=1, query="currentPage"),

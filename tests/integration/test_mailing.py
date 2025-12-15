@@ -24,6 +24,8 @@ from pydotorg.domains.users.models import User
 if TYPE_CHECKING:
     from collections.abc import AsyncIterator
 
+pytestmark = [pytest.mark.integration, pytest.mark.slow]
+
 
 def _is_maildev_available() -> bool:
     """Check if MailDev is running on localhost:1025."""

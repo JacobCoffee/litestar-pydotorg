@@ -9,6 +9,8 @@ import pytest
 if TYPE_CHECKING:
     from litestar.testing import AsyncTestClient
 
+pytestmark = [pytest.mark.integration, pytest.mark.slow]
+
 
 @pytest.mark.asyncio
 async def test_health_check(client: AsyncTestClient) -> None:

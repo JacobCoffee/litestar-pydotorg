@@ -13,6 +13,8 @@ from pydotorg.core.auth.guards import require_admin, require_staff
 if TYPE_CHECKING:
     from litestar.testing import AsyncTestClient
 
+pytestmark = [pytest.mark.integration, pytest.mark.slow]
+
 
 @pytest.fixture
 async def middleware_test_user(client: AsyncTestClient) -> dict:

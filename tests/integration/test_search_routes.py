@@ -16,6 +16,8 @@ from pydotorg.domains.search.controllers import SearchAPIController
 if TYPE_CHECKING:
     from collections.abc import AsyncGenerator
 
+pytestmark = [pytest.mark.integration, pytest.mark.slow]
+
 
 class MockSearchService:
     """Mock search service for testing without Meilisearch."""

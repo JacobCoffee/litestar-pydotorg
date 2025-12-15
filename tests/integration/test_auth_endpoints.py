@@ -9,6 +9,8 @@ import pytest
 if TYPE_CHECKING:
     from litestar.testing import AsyncTestClient
 
+pytestmark = [pytest.mark.integration, pytest.mark.slow]
+
 
 @pytest.fixture
 async def registered_user(client: AsyncTestClient) -> dict:

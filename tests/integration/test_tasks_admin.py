@@ -17,6 +17,8 @@ from pydotorg.domains.users.models import User
 if TYPE_CHECKING:
     from sqlalchemy.ext.asyncio import async_sessionmaker
 
+pytestmark = [pytest.mark.integration, pytest.mark.slow]
+
 
 @pytest.mark.integration
 class TestTaskAdminServiceIntegration:

@@ -116,6 +116,34 @@ test-e2e: ## Run E2E Playwright tests (requires: make serve + playwright)
 test-full: ## Run all tests including E2E (requires server running)
 	$(UV) run pytest $(TESTS_DIR) -v
 
+.PHONY: test-quick
+test-quick: ## Run only fast tests (skips slow/integration/e2e)
+	$(UV) run pytest $(TESTS_DIR)/unit $(TESTS_DIR)/core -v -m "not slow"
+
+.PHONY: test-changed
+test-changed: ## Run only tests affected by code changes (requires pytest-testmon)
+	$(UV) run pytest --testmon -v
+
+.PHONY: test-failed
+test-failed: ## Rerun only previously failed tests
+	$(UV) run pytest --lf -v
+
+.PHONY: test-failed-first
+test-failed-first: ## Run failed tests first, then all others
+	$(UV) run pytest --ff -v
+
+.PHONY: test-slow
+test-slow: ## Run only slow tests (integration + e2e)
+	$(UV) run pytest $(TESTS_DIR)/integration $(TESTS_DIR)/e2e -v --slow
+
+.PHONY: test-parallel
+test-parallel: ## Run all tests in parallel (uses all cores)
+	$(UV) run pytest $(TESTS_DIR) -v -n auto
+
+.PHONY: test-durations
+test-durations: ## Show 20 slowest tests
+	$(UV) run pytest $(TESTS_DIR)/unit $(TESTS_DIR)/core --durations=20 -q
+
 .PHONY: playwright-install
 playwright-install: ## Install Playwright browsers for E2E testing
 	$(UV) run playwright install chromium

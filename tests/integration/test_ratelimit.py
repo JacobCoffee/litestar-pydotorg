@@ -31,6 +31,8 @@ from pydotorg.core.ratelimit.identifier import get_rate_limit_identifier
 if TYPE_CHECKING:
     from collections.abc import AsyncIterator
 
+pytestmark = [pytest.mark.integration, pytest.mark.slow]
+
 
 @get("/test-endpoint", exclude_from_auth=True, sync_to_thread=False)
 def _rate_test_endpoint() -> dict:

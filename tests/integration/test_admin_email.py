@@ -14,11 +14,9 @@ from litestar.contrib.jinja import JinjaTemplateEngine
 from litestar.di import Provide
 from litestar.template.config import TemplateConfig
 from litestar.testing import AsyncTestClient
-from sqlalchemy import text
-from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from pydotorg.core.auth.middleware import JWTAuthMiddleware
-from pydotorg.core.database.base import AuditBase
 from pydotorg.domains.admin.controllers.email import AdminEmailController
 from pydotorg.domains.admin.dependencies import (
     provide_email_admin_service,
@@ -35,7 +33,7 @@ from pydotorg.domains.users.models import User
 if TYPE_CHECKING:
     from collections.abc import AsyncIterator
 
-    from sqlalchemy.ext.asyncio import AsyncEngine
+pytestmark = [pytest.mark.integration, pytest.mark.slow]
 
 
 async def _create_sample_template(session_factory: async_sessionmaker, session: AsyncSession) -> EmailTemplate:
@@ -84,7 +82,6 @@ class AdminEmailTestFixtures:
 
 @pytest.fixture
 async def admin_email_fixtures(
-    async_engine: AsyncEngine,
     async_session_factory: async_sessionmaker,
     _module_sqlalchemy_config: SQLAlchemyAsyncConfig,
 ) -> AsyncIterator[AdminEmailTestFixtures]:
@@ -93,15 +90,6 @@ async def admin_email_fixtures(
     Uses session-scoped async_engine to prevent connection exhaustion.
     Creates test users and client for admin email tests.
     """
-
-    async with async_engine.begin() as conn:
-        # Only truncate tables that exist - some plugin tables may not be created
-        result = await conn.execute(text("SELECT tablename FROM pg_tables WHERE schemaname = 'public'"))
-        existing_tables = {row[0] for row in result.fetchall()}
-
-        for table in reversed(AuditBase.metadata.sorted_tables):
-            if table.name in existing_tables:
-                await conn.execute(text(f"TRUNCATE TABLE {table.name} CASCADE"))
 
     async with async_session_factory() as session:
         staff = User(
@@ -883,7 +871,6 @@ class TestAppStartup:
 
 @pytest.fixture
 async def csrf_test_fixtures(
-    async_engine: AsyncEngine,
     async_session_factory: async_sessionmaker,
     _module_sqlalchemy_config: SQLAlchemyAsyncConfig,
 ) -> AsyncIterator[AdminEmailTestFixtures]:
@@ -897,15 +884,6 @@ async def csrf_test_fixtures(
     from litestar.config.csrf import CSRFConfig
 
     from pydotorg.config import settings
-
-    async with async_engine.begin() as conn:
-        # Only truncate tables that exist - some plugin tables may not be created
-        result = await conn.execute(text("SELECT tablename FROM pg_tables WHERE schemaname = 'public'"))
-        existing_tables = {row[0] for row in result.fetchall()}
-
-        for table in reversed(AuditBase.metadata.sorted_tables):
-            if table.name in existing_tables:
-                await conn.execute(text(f"TRUNCATE TABLE {table.name} CASCADE"))
 
     async with async_session_factory() as session:
         staff = User(

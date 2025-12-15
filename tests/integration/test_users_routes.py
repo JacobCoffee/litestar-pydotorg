@@ -10,10 +10,8 @@ from advanced_alchemy.extensions.litestar import SQLAlchemyPlugin
 from advanced_alchemy.extensions.litestar.plugins.init.config.asyncio import SQLAlchemyAsyncConfig
 from litestar import Litestar
 from litestar.testing import AsyncTestClient
-from sqlalchemy import text
-from sqlalchemy.ext.asyncio import AsyncEngine, async_sessionmaker
+from sqlalchemy.ext.asyncio import async_sessionmaker
 
-from pydotorg.core.database.base import AuditBase
 from pydotorg.core.exceptions import get_exception_handlers
 from pydotorg.domains.users.controllers import MembershipController, UserController, UserGroupController
 from pydotorg.domains.users.dependencies import get_user_dependencies
@@ -21,6 +19,8 @@ from pydotorg.domains.users.models import EmailPrivacy, Membership, MembershipTy
 
 if TYPE_CHECKING:
     from collections.abc import AsyncIterator
+
+pytestmark = [pytest.mark.integration, pytest.mark.slow]
 
 
 class UsersTestFixtures:
@@ -36,7 +36,6 @@ class UsersTestFixtures:
 
 @pytest.fixture
 async def users_fixtures(
-    async_engine: AsyncEngine,
     async_session_factory: async_sessionmaker,
     _module_sqlalchemy_config: SQLAlchemyAsyncConfig,
 ) -> AsyncIterator[UsersTestFixtures]:
@@ -47,14 +46,6 @@ async def users_fixtures(
     Creates the database schema, test users, memberships, and groups in the correct order
     to ensure all tests have access to the same database state.
     """
-    async with async_engine.begin() as conn:
-        result = await conn.execute(text("SELECT tablename FROM pg_tables WHERE schemaname = 'public'"))
-        existing_tables = {row[0] for row in result.fetchall()}
-
-        for table in reversed(AuditBase.metadata.sorted_tables):
-            if table.name in existing_tables:
-                await conn.execute(text(f"TRUNCATE TABLE {table.name} CASCADE"))
-
     async with async_session_factory() as session:
         user1 = User(
             username=f"testuser_{uuid4().hex[:8]}",

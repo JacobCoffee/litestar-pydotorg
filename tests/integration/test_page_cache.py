@@ -10,6 +10,8 @@ import pytest
 if TYPE_CHECKING:
     pass
 
+pytestmark = [pytest.mark.integration, pytest.mark.slow]
+
 
 class TestPageRenderControllerCaching:
     """Integration tests for page render controller caching."""

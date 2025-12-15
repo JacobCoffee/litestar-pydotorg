@@ -87,6 +87,7 @@ test = [
     "pytest-cov>=6.0.0",
     "pytest-databases[postgres]>=0.10.0",
     "pytest-playwright>=0.6.0",
+    "pytest-skip-slow>=0.0.5",
     "pytest-sugar>=1.1.1",
     "pytest-timeout>=2.3.0",
     "pytest-xdist>=3.5.0",
@@ -225,12 +226,10 @@ addopts = [
     "--strict-markers",
     "--strict-config",
     "--tb=short",
-    "-p",
-    "no:pastebin",
-    "-p",
-    "no:nose",
-    "-p",
-    "no:doctest",
+    "-p", "no:pastebin",
+    "-p", "no:nose",
+    "-p", "no:doctest",
+    "-p", "no:legacypath",
     "-ra",
 ]
 asyncio_mode = "auto"
@@ -256,6 +255,8 @@ markers = [
     "integration: Integration tests (may use mocked external services)",
     "e2e: End-to-end tests (full application workflow)",
     "slow: Tests that take more than 1 second",
+    "db_heavy: Tests with extensive database operations",
+    "requires_truncate: Tests requiring TRUNCATE isolation (vs transaction rollback)",
 ]
 minversion = "8.0"
 python_classes = ["Test*"]

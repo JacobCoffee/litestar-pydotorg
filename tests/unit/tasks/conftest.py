@@ -91,9 +91,12 @@ def mock_search_service() -> AsyncMock:
     return service
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def sample_feed() -> Feed:
-    """Create a sample Feed instance."""
+    """Immutable sample Feed instance shared across all tests.
+
+    Session-scoped because this test data is read-only and never mutated.
+    """
     from pydotorg.domains.blogs.models import Feed
 
     return Feed(
@@ -106,9 +109,12 @@ def sample_feed() -> Feed:
     )
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def sample_feeds() -> list[Feed]:
-    """Create multiple sample Feed instances."""
+    """Immutable sample Feed list shared across all tests.
+
+    Session-scoped because this test data is read-only.
+    """
     from pydotorg.domains.blogs.models import Feed
 
     return [
@@ -139,9 +145,12 @@ def sample_feeds() -> list[Feed]:
     ]
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def sample_blog_entries() -> list[BlogEntry]:
-    """Create sample BlogEntry instances."""
+    """Immutable sample BlogEntry list shared across all tests.
+
+    Session-scoped because this test data is read-only.
+    """
     from pydotorg.domains.blogs.models import BlogEntry
 
     feed_id = uuid4()
@@ -165,9 +174,12 @@ def sample_blog_entries() -> list[BlogEntry]:
     ]
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def sample_job() -> Job:
-    """Create a sample Job instance."""
+    """Immutable sample Job instance shared across all tests.
+
+    Session-scoped because this test data is read-only.
+    """
     from pydotorg.domains.jobs.models import Job, JobStatus
 
     return Job(
@@ -184,9 +196,12 @@ def sample_job() -> Job:
     )
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def sample_jobs() -> list[Job]:
-    """Create multiple sample Job instances."""
+    """Immutable sample Job list shared across all tests.
+
+    Session-scoped because this test data is read-only.
+    """
     from pydotorg.domains.jobs.models import Job, JobStatus
 
     now = datetime.now(UTC)
