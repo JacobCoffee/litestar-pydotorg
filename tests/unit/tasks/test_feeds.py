@@ -197,19 +197,23 @@ class TestRefreshSingleFeed:
         self, mock_feeds_ctx: dict, mock_session_maker: AsyncMock, sample_feed: Feed
     ) -> None:
         """Test handling when feed is inactive."""
+        original_active = sample_feed.is_active
         sample_feed.is_active = False
 
-        with patch("pydotorg.domains.blogs.services.FeedService") as mock_service_class:
-            mock_service = mock_service_class.return_value
-            mock_service.get = AsyncMock(return_value=sample_feed)
+        try:
+            with patch("pydotorg.domains.blogs.services.FeedService") as mock_service_class:
+                mock_service = mock_service_class.return_value
+                mock_service.get = AsyncMock(return_value=sample_feed)
 
-            from pydotorg.tasks.feeds import refresh_single_feed
+                from pydotorg.tasks.feeds import refresh_single_feed
 
-            result = await refresh_single_feed(mock_feeds_ctx, feed_id=str(sample_feed.id))
+                result = await refresh_single_feed(mock_feeds_ctx, feed_id=str(sample_feed.id))
 
-            assert result["success"] is False
-            assert "not active" in result["error"].lower()
-            assert result["feed_name"] == sample_feed.name
+                assert result["success"] is False
+                assert "not active" in result["error"].lower()
+                assert result["feed_name"] == sample_feed.name
+        finally:
+            sample_feed.is_active = original_active
 
     async def test_handles_invalid_uuid(self, mock_feeds_ctx: dict, mock_session_maker: AsyncMock) -> None:
         """Test handling invalid feed_id format."""
