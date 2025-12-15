@@ -11,6 +11,7 @@ from litestar.exceptions import NotFoundException
 from litestar.openapi import ResponseSpec
 from litestar.params import Body, Parameter
 from litestar.response import Template
+from litestar.status_codes import HTTP_200_OK
 
 from pydotorg.core.auth.guards import require_authenticated, require_staff
 from pydotorg.domains.jobs.models import JobStatus
@@ -299,7 +300,7 @@ class JobController(Controller):
     path = "/api/v1/jobs"
     tags = ["Jobs"]
 
-    @post("/search")
+    @post("/search", status_code=HTTP_200_OK)
     async def search_jobs(
         self,
         job_service: JobService,
