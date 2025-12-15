@@ -166,9 +166,13 @@ def async_session_factory(async_engine: AsyncEngine):
     return async_sessionmaker(async_engine, expire_on_commit=False)
 
 
-@pytest.fixture
+@pytest.fixture(autouse=True)
 async def truncate_tables(async_engine: AsyncEngine) -> None:
-    """Truncate all tables before each test for isolation."""
+    """Truncate all tables before each test for isolation.
+
+    This is an autouse fixture that runs before every test to ensure
+    clean database state, since the client fixture is session-scoped.
+    """
     from sqlalchemy import text
 
     async with async_engine.begin() as conn:

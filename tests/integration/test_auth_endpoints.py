@@ -10,11 +10,6 @@ if TYPE_CHECKING:
     from litestar.testing import AsyncTestClient
 
 
-@pytest.fixture(autouse=True)
-async def _clean_db(truncate_tables: None) -> None:
-    """Auto-truncate tables before each test for isolation."""
-
-
 @pytest.fixture
 async def registered_user(client: AsyncTestClient) -> dict:
     """Create a test user via the registration API."""
