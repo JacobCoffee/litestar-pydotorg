@@ -229,7 +229,7 @@ class TestFeedControllerRoutes:
     async def test_get_feed_by_id(self, blogs_fixtures: BlogsTestFixtures) -> None:
         """Test getting a feed by ID."""
         feed = await _create_feed_via_db(
-            blogs_fixtures.postgres_uri,
+            blogs_fixtures.session_factory,
             name="Get Feed Test",
         )
         response = await blogs_fixtures.client.get(f"/api/v1/feeds/{feed['id']}")
@@ -247,7 +247,7 @@ class TestFeedControllerRoutes:
     async def test_update_feed(self, blogs_fixtures: BlogsTestFixtures) -> None:
         """Test updating a feed."""
         feed = await _create_feed_via_db(
-            blogs_fixtures.postgres_uri,
+            blogs_fixtures.session_factory,
             name="Original Name",
         )
         update_data = {"name": "Updated Name", "is_active": False}
@@ -260,7 +260,7 @@ class TestFeedControllerRoutes:
     async def test_delete_feed(self, blogs_fixtures: BlogsTestFixtures) -> None:
         """Test deleting a feed."""
         feed = await _create_feed_via_db(
-            blogs_fixtures.postgres_uri,
+            blogs_fixtures.session_factory,
             name="Delete Me",
         )
         response = await blogs_fixtures.client.delete(f"/api/v1/feeds/{feed['id']}")
@@ -296,7 +296,7 @@ class TestBlogEntryControllerRoutes:
         """Test listing recent entries."""
         feed = await _create_feed_via_db(blogs_fixtures.session_factory, name="Recent Feed")
         await _create_entry_via_db(
-            blogs_fixtures.postgres_uri,
+            blogs_fixtures.session_factory,
             feed_id=feed["id"],
             title="Recent Entry",
         )
@@ -307,7 +307,7 @@ class TestBlogEntryControllerRoutes:
         """Test listing entries for a specific feed."""
         feed = await _create_feed_via_db(blogs_fixtures.session_factory, name="Feed For Entries")
         await _create_entry_via_db(
-            blogs_fixtures.postgres_uri,
+            blogs_fixtures.session_factory,
             feed_id=feed["id"],
             title="Entry For Feed",
         )

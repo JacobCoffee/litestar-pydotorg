@@ -474,7 +474,7 @@ class TestJobControllerRoutes:
     async def test_archive_job(self, jobs_fixtures: JobsTestFixtures) -> None:
         """Test archiving a job."""
         job = await _create_job_via_db(
-            jobs_fixtures.postgres_uri, jobs_fixtures.staff_user.id, status=JobStatus.APPROVED
+            jobs_fixtures.session_factory, jobs_fixtures.staff_user.id, status=JobStatus.APPROVED
         )
 
         response = await jobs_fixtures.client.patch(f"/api/v1/jobs/{job['id']}/archive")
@@ -493,13 +493,13 @@ class TestJobControllerRoutes:
     async def test_search_jobs_basic(self, jobs_fixtures: JobsTestFixtures) -> None:
         """Test basic job search."""
         await _create_job_via_db(
-            jobs_fixtures.postgres_uri,
+            jobs_fixtures.session_factory,
             jobs_fixtures.staff_user.id,
             job_title="Senior Python Developer",
             status=JobStatus.APPROVED,
         )
         await _create_job_via_db(
-            jobs_fixtures.postgres_uri,
+            jobs_fixtures.session_factory,
             jobs_fixtures.staff_user.id,
             job_title="Junior JavaScript Developer",
             status=JobStatus.APPROVED,
@@ -518,14 +518,14 @@ class TestJobControllerRoutes:
     async def test_search_jobs_by_location(self, jobs_fixtures: JobsTestFixtures) -> None:
         """Test searching jobs by location."""
         await _create_job_via_db(
-            jobs_fixtures.postgres_uri,
+            jobs_fixtures.session_factory,
             jobs_fixtures.staff_user.id,
             city="San Francisco",
             country="United States",
             status=JobStatus.APPROVED,
         )
         await _create_job_via_db(
-            jobs_fixtures.postgres_uri,
+            jobs_fixtures.session_factory,
             jobs_fixtures.staff_user.id,
             city="London",
             country="United Kingdom",
@@ -545,13 +545,13 @@ class TestJobControllerRoutes:
     async def test_search_jobs_telecommuting(self, jobs_fixtures: JobsTestFixtures) -> None:
         """Test searching jobs by telecommuting filter."""
         await _create_job_via_db(
-            jobs_fixtures.postgres_uri,
+            jobs_fixtures.session_factory,
             jobs_fixtures.staff_user.id,
             telecommuting=True,
             status=JobStatus.APPROVED,
         )
         await _create_job_via_db(
-            jobs_fixtures.postgres_uri,
+            jobs_fixtures.session_factory,
             jobs_fixtures.staff_user.id,
             telecommuting=False,
             status=JobStatus.APPROVED,
@@ -571,7 +571,7 @@ class TestJobControllerRoutes:
         """Test job search with pagination."""
         for i in range(5):
             await _create_job_via_db(
-                jobs_fixtures.postgres_uri,
+                jobs_fixtures.session_factory,
                 jobs_fixtures.staff_user.id,
                 job_title=f"Developer {i}",
                 status=JobStatus.APPROVED,
@@ -680,7 +680,7 @@ class TestJobWorkflow:
         category_id = category_response.json()["id"]
 
         job = await _create_job_via_db(
-            jobs_fixtures.postgres_uri,
+            jobs_fixtures.session_factory,
             jobs_fixtures.staff_user.id,
             company_name="Lifecycle Test Corp",
             job_title="Senior Python Engineer",
@@ -725,7 +725,7 @@ class TestJobWorkflow:
     async def test_job_rejection_workflow(self, jobs_fixtures: JobsTestFixtures) -> None:
         """Test job rejection workflow with review comments."""
         job = await _create_job_via_db(
-            jobs_fixtures.postgres_uri,
+            jobs_fixtures.session_factory,
             jobs_fixtures.staff_user.id,
             company_name="Reject Test Corp",
             description="Job to be rejected",
