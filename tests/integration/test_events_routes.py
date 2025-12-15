@@ -12,9 +12,8 @@ from advanced_alchemy.extensions.litestar.plugins.init.config.asyncio import SQL
 from advanced_alchemy.filters import LimitOffset
 from litestar import Litestar
 from litestar.testing import AsyncTestClient
-from sqlalchemy import NullPool
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import text
+from sqlalchemy.ext.asyncio import AsyncEngine, async_sessionmaker
 
 from pydotorg.core.database.base import AuditBase
 from pydotorg.domains.events.controllers import (
@@ -39,11 +38,9 @@ if TYPE_CHECKING:
     from collections.abc import AsyncIterator
 
 
-async def _create_calendar_via_db(postgres_uri: str, **calendar_data) -> dict:
+async def _create_calendar_via_db(session_factory: async_sessionmaker, **calendar_data) -> dict:
     """Create a calendar directly via database."""
-    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
-    async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-    async with async_session_factory() as session:
+    async with session_factory() as session:
         calendar = Calendar(
             name=calendar_data.get("name", "Test Calendar"),
             slug=calendar_data.get("slug", f"test-calendar-{uuid4().hex[:8]}"),
@@ -51,16 +48,12 @@ async def _create_calendar_via_db(postgres_uri: str, **calendar_data) -> dict:
         session.add(calendar)
         await session.commit()
         await session.refresh(calendar)
-        result = {"id": str(calendar.id), "name": calendar.name, "slug": calendar.slug}
-    await engine.dispose()
-    return result
+        return {"id": str(calendar.id), "name": calendar.name, "slug": calendar.slug}
 
 
-async def _create_category_via_db(postgres_uri: str, calendar_id: str, **category_data) -> dict:
+async def _create_category_via_db(session_factory: async_sessionmaker, calendar_id: str, **category_data) -> dict:
     """Create a category directly via database."""
-    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
-    async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-    async with async_session_factory() as session:
+    async with session_factory() as session:
         category = EventCategory(
             name=category_data.get("name", "Test Category"),
             slug=category_data.get("slug", f"test-category-{uuid4().hex[:8]}"),
@@ -69,16 +62,12 @@ async def _create_category_via_db(postgres_uri: str, calendar_id: str, **categor
         session.add(category)
         await session.commit()
         await session.refresh(category)
-        result = {"id": str(category.id), "name": category.name, "slug": category.slug}
-    await engine.dispose()
-    return result
+        return {"id": str(category.id), "name": category.name, "slug": category.slug}
 
 
-async def _create_location_via_db(postgres_uri: str, **location_data) -> dict:
+async def _create_location_via_db(session_factory: async_sessionmaker, **location_data) -> dict:
     """Create a location directly via database."""
-    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
-    async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-    async with async_session_factory() as session:
+    async with session_factory() as session:
         location = EventLocation(
             name=location_data.get("name", "Test Location"),
             slug=location_data.get("slug", f"test-location-{uuid4().hex[:8]}"),
@@ -88,16 +77,12 @@ async def _create_location_via_db(postgres_uri: str, **location_data) -> dict:
         session.add(location)
         await session.commit()
         await session.refresh(location)
-        result = {"id": str(location.id), "name": location.name, "slug": location.slug, "address": location.address}
-    await engine.dispose()
-    return result
+        return {"id": str(location.id), "name": location.name, "slug": location.slug, "address": location.address}
 
 
-async def _create_event_via_db(postgres_uri: str, calendar_id: str, **event_data) -> dict:
+async def _create_event_via_db(session_factory: async_sessionmaker, calendar_id: str, **event_data) -> dict:
     """Create an event directly via database."""
-    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
-    async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-    async with async_session_factory() as session:
+    async with session_factory() as session:
         event = Event(
             title=event_data.get("title", "Test Event"),
             slug=event_data.get("slug", f"test-event-{uuid4().hex[:8]}"),
@@ -110,31 +95,34 @@ async def _create_event_via_db(postgres_uri: str, calendar_id: str, **event_data
         session.add(event)
         await session.commit()
         await session.refresh(event)
-        result = {"id": str(event.id), "title": event.title, "slug": event.slug}
-    await engine.dispose()
-    return result
+        return {"id": str(event.id), "title": event.title, "slug": event.slug}
 
 
 class EventsTestFixtures:
     """Container for events test fixtures."""
 
     client: AsyncTestClient
-    postgres_uri: str
+    session_factory: async_sessionmaker
 
 
 @pytest.fixture
-async def events_fixtures(postgres_uri: str) -> AsyncIterator[EventsTestFixtures]:
-    """Async test client with events controllers."""
-    from sqlalchemy import text
+async def events_fixtures(
+    async_engine: AsyncEngine,
+    async_session_factory: async_sessionmaker,
+    _module_sqlalchemy_config: SQLAlchemyAsyncConfig,
+) -> AsyncIterator[EventsTestFixtures]:
+    """Create test fixtures using module-scoped config to prevent connection exhaustion.
 
-    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
+    Uses the shared _module_sqlalchemy_config from conftest.py instead of creating
+    a new SQLAlchemyAsyncConfig per test, which was causing TooManyConnectionsError.
+    """
+    async with async_engine.begin() as conn:
+        result = await conn.execute(text("SELECT tablename FROM pg_tables WHERE schemaname = 'public'"))
+        existing_tables = {row[0] for row in result.fetchall()}
 
-    async with engine.begin() as conn:
-        await conn.execute(text("DROP SCHEMA public CASCADE"))
-        await conn.execute(text("CREATE SCHEMA public"))
-        await conn.run_sync(AuditBase.metadata.create_all)
-
-    await engine.dispose()
+        for table in reversed(AuditBase.metadata.sorted_tables):
+            if table.name in existing_tables:
+                await conn.execute(text(f"TRUNCATE TABLE {table.name} CASCADE"))
 
     import datetime
 
@@ -149,13 +137,7 @@ async def events_fixtures(postgres_uri: str) -> AsyncIterator[EventsTestFixtures
         """Provide limit offset pagination."""
         return LimitOffset(limit, offset)
 
-    sqlalchemy_config = SQLAlchemyAsyncConfig(
-        connection_string=postgres_uri,
-        metadata=AuditBase.metadata,
-        create_all=False,
-        before_send_handler="autocommit",
-    )
-    sqlalchemy_plugin = SQLAlchemyPlugin(config=sqlalchemy_config)
+    sqlalchemy_plugin = SQLAlchemyPlugin(config=_module_sqlalchemy_config)
 
     events_dependencies = get_events_dependencies()
     events_dependencies["limit_offset"] = provide_limit_offset
@@ -179,7 +161,7 @@ async def events_fixtures(postgres_uri: str) -> AsyncIterator[EventsTestFixtures
     ) as test_client:
         fixtures = EventsTestFixtures()
         fixtures.client = test_client
-        fixtures.postgres_uri = postgres_uri
+        fixtures.session_factory = async_session_factory
         yield fixtures
 
 
@@ -189,7 +171,7 @@ class TestCalendarController:
 
     async def test_list_calendars(self, events_fixtures: EventsTestFixtures) -> None:
         """Test listing all calendars."""
-        calendar = await _create_calendar_via_db(events_fixtures.postgres_uri)
+        await _create_calendar_via_db(events_fixtures.session_factory)
         response = await events_fixtures.client.get("/api/v1/calendars/?limit=100&offset=0")
         assert response.status_code == 200
         calendars = response.json()
@@ -199,7 +181,7 @@ class TestCalendarController:
     async def test_get_calendar_by_id(self, events_fixtures: EventsTestFixtures) -> None:
         """Test getting a calendar by ID."""
         calendar = await _create_calendar_via_db(
-            events_fixtures.postgres_uri, name="Test Calendar", slug="test-calendar"
+            events_fixtures.session_factory, name="Test Calendar", slug="test-calendar"
         )
         response = await events_fixtures.client.get(f"/api/v1/calendars/{calendar['id']}")
         assert response.status_code == 200
@@ -216,7 +198,7 @@ class TestCalendarController:
 
     async def test_get_calendar_by_slug(self, events_fixtures: EventsTestFixtures) -> None:
         """Test getting a calendar by slug."""
-        calendar = await _create_calendar_via_db(events_fixtures.postgres_uri, slug="test-calendar-slug")
+        calendar = await _create_calendar_via_db(events_fixtures.session_factory, slug="test-calendar-slug")
         response = await events_fixtures.client.get(f"/api/v1/calendars/slug/{calendar['slug']}")
         assert response.status_code == 200
         data = response.json()
@@ -287,8 +269,8 @@ class TestEventCategoryController:
 
     async def test_list_categories(self, events_fixtures: EventsTestFixtures) -> None:
         """Test listing all event categories."""
-        calendar = await _create_calendar_via_db(events_fixtures.postgres_uri)
-        await _create_category_via_db(events_fixtures.postgres_uri, calendar["id"])
+        calendar = await _create_calendar_via_db(events_fixtures.session_factory)
+        await _create_category_via_db(events_fixtures.session_factory, calendar["id"])
         response = await events_fixtures.client.get("/api/v1/event-categories/?limit=100&offset=0")
         assert response.status_code == 200
         categories = response.json()
@@ -297,8 +279,8 @@ class TestEventCategoryController:
 
     async def test_get_category_by_id(self, events_fixtures: EventsTestFixtures) -> None:
         """Test getting a category by ID."""
-        calendar = await _create_calendar_via_db(events_fixtures.postgres_uri)
-        category = await _create_category_via_db(events_fixtures.postgres_uri, calendar["id"], name="Test Category")
+        calendar = await _create_calendar_via_db(events_fixtures.session_factory)
+        category = await _create_category_via_db(events_fixtures.session_factory, calendar["id"], name="Test Category")
         response = await events_fixtures.client.get(f"/api/v1/event-categories/{category['id']}")
         assert response.status_code == 200
         data = response.json()
@@ -313,8 +295,8 @@ class TestEventCategoryController:
 
     async def test_get_category_by_slug(self, events_fixtures: EventsTestFixtures) -> None:
         """Test getting a category by slug."""
-        calendar = await _create_calendar_via_db(events_fixtures.postgres_uri)
-        category = await _create_category_via_db(events_fixtures.postgres_uri, calendar["id"], slug="test-category")
+        calendar = await _create_calendar_via_db(events_fixtures.session_factory)
+        category = await _create_category_via_db(events_fixtures.session_factory, calendar["id"], slug="test-category")
         response = await events_fixtures.client.get(f"/api/v1/event-categories/slug/{category['slug']}")
         assert response.status_code == 200
         data = response.json()
@@ -327,8 +309,8 @@ class TestEventCategoryController:
 
     async def test_list_categories_by_calendar(self, events_fixtures: EventsTestFixtures) -> None:
         """Test listing categories for a calendar."""
-        calendar = await _create_calendar_via_db(events_fixtures.postgres_uri)
-        await _create_category_via_db(events_fixtures.postgres_uri, calendar["id"])
+        calendar = await _create_calendar_via_db(events_fixtures.session_factory)
+        await _create_category_via_db(events_fixtures.session_factory, calendar["id"])
         response = await events_fixtures.client.get(f"/api/v1/event-categories/calendar/{calendar['id']}")
         assert response.status_code == 200
         categories = response.json()
@@ -338,7 +320,7 @@ class TestEventCategoryController:
 
     async def test_create_category(self, events_fixtures: EventsTestFixtures) -> None:
         """Test creating a new category."""
-        calendar = await _create_calendar_via_db(events_fixtures.postgres_uri)
+        calendar = await _create_calendar_via_db(events_fixtures.session_factory)
         category_data = {
             "name": "New Category",
             "slug": f"new-category-{uuid4().hex[:8]}",
@@ -353,7 +335,7 @@ class TestEventCategoryController:
 
     async def test_delete_category(self, events_fixtures: EventsTestFixtures) -> None:
         """Test deleting a category."""
-        calendar = await _create_calendar_via_db(events_fixtures.postgres_uri)
+        calendar = await _create_calendar_via_db(events_fixtures.session_factory)
         create_data = {
             "name": "To Delete",
             "slug": f"to-delete-{uuid4().hex[:8]}",
@@ -378,7 +360,7 @@ class TestEventLocationController:
 
     async def test_list_locations(self, events_fixtures: EventsTestFixtures) -> None:
         """Test listing all event locations."""
-        await _create_location_via_db(events_fixtures.postgres_uri)
+        await _create_location_via_db(events_fixtures.session_factory)
         response = await events_fixtures.client.get("/api/v1/event-locations/?limit=100&offset=0")
         assert response.status_code == 200
         locations = response.json()
@@ -388,7 +370,7 @@ class TestEventLocationController:
     async def test_get_location_by_id(self, events_fixtures: EventsTestFixtures) -> None:
         """Test getting a location by ID."""
         location = await _create_location_via_db(
-            events_fixtures.postgres_uri, name="Test Location", address="123 Main St"
+            events_fixtures.session_factory, name="Test Location", address="123 Main St"
         )
         response = await events_fixtures.client.get(f"/api/v1/event-locations/{location['id']}")
         assert response.status_code == 200
@@ -405,7 +387,7 @@ class TestEventLocationController:
 
     async def test_get_location_by_slug(self, events_fixtures: EventsTestFixtures) -> None:
         """Test getting a location by slug."""
-        location = await _create_location_via_db(events_fixtures.postgres_uri, slug="test-location")
+        location = await _create_location_via_db(events_fixtures.session_factory, slug="test-location")
         response = await events_fixtures.client.get(f"/api/v1/event-locations/slug/{location['slug']}")
         assert response.status_code == 200
         data = response.json()
@@ -486,7 +468,7 @@ class TestEventController:
 
     async def test_create_event_minimal(self, events_fixtures: EventsTestFixtures) -> None:
         """Test creating an event with minimal data."""
-        calendar = await _create_calendar_via_db(events_fixtures.postgres_uri)
+        calendar = await _create_calendar_via_db(events_fixtures.session_factory)
         event_data = {
             "title": "Test Event",
             "slug": f"test-event-{uuid4().hex[:8]}",
@@ -504,9 +486,9 @@ class TestEventController:
 
     async def test_create_event_with_all_fields(self, events_fixtures: EventsTestFixtures) -> None:
         """Test creating an event with all fields."""
-        calendar = await _create_calendar_via_db(events_fixtures.postgres_uri)
-        location = await _create_location_via_db(events_fixtures.postgres_uri)
-        category = await _create_category_via_db(events_fixtures.postgres_uri, calendar["id"])
+        calendar = await _create_calendar_via_db(events_fixtures.session_factory)
+        location = await _create_location_via_db(events_fixtures.session_factory)
+        category = await _create_category_via_db(events_fixtures.session_factory, calendar["id"])
         event_data = {
             "title": "Complete Event",
             "slug": f"complete-event-{uuid4().hex[:8]}",
@@ -535,7 +517,7 @@ class TestEventController:
 
     async def test_get_event_by_id(self, events_fixtures: EventsTestFixtures) -> None:
         """Test getting an event by ID."""
-        calendar = await _create_calendar_via_db(events_fixtures.postgres_uri)
+        calendar = await _create_calendar_via_db(events_fixtures.session_factory)
         create_data = {
             "title": "Get Test Event",
             "slug": f"get-test-{uuid4().hex[:8]}",
@@ -563,7 +545,7 @@ class TestEventController:
 
     async def test_get_event_by_slug(self, events_fixtures: EventsTestFixtures) -> None:
         """Test getting an event by slug."""
-        calendar = await _create_calendar_via_db(events_fixtures.postgres_uri)
+        calendar = await _create_calendar_via_db(events_fixtures.session_factory)
         slug = f"slug-test-{uuid4().hex[:8]}"
         create_data = {
             "title": "Slug Test Event",
@@ -589,7 +571,7 @@ class TestEventController:
 
     async def test_list_events_by_calendar(self, events_fixtures: EventsTestFixtures) -> None:
         """Test listing events for a calendar."""
-        calendar = await _create_calendar_via_db(events_fixtures.postgres_uri)
+        calendar = await _create_calendar_via_db(events_fixtures.session_factory)
         event_data = {
             "title": "Calendar Event",
             "slug": f"calendar-event-{uuid4().hex[:8]}",
@@ -610,8 +592,8 @@ class TestEventController:
 
     async def test_list_events_by_category(self, events_fixtures: EventsTestFixtures) -> None:
         """Test listing events for a category."""
-        calendar = await _create_calendar_via_db(events_fixtures.postgres_uri)
-        category = await _create_category_via_db(events_fixtures.postgres_uri, calendar["id"])
+        calendar = await _create_calendar_via_db(events_fixtures.session_factory)
+        category = await _create_category_via_db(events_fixtures.session_factory, calendar["id"])
         event_data = {
             "title": "Category Event",
             "slug": f"category-event-{uuid4().hex[:8]}",
@@ -632,7 +614,7 @@ class TestEventController:
 
     async def test_list_featured_events(self, events_fixtures: EventsTestFixtures) -> None:
         """Test listing featured events."""
-        calendar = await _create_calendar_via_db(events_fixtures.postgres_uri)
+        calendar = await _create_calendar_via_db(events_fixtures.session_factory)
         event_data = {
             "title": "Featured Event",
             "slug": f"featured-{uuid4().hex[:8]}",
@@ -653,7 +635,7 @@ class TestEventController:
 
     async def test_list_featured_events_by_calendar(self, events_fixtures: EventsTestFixtures) -> None:
         """Test listing featured events filtered by calendar."""
-        calendar = await _create_calendar_via_db(events_fixtures.postgres_uri)
+        calendar = await _create_calendar_via_db(events_fixtures.session_factory)
         response = await events_fixtures.client.get(f"/api/v1/events/featured?calendar_id={calendar['id']}")
         assert response.status_code in (200, 500)
         if response.status_code == 200:
@@ -662,7 +644,7 @@ class TestEventController:
 
     async def test_list_upcoming_events(self, events_fixtures: EventsTestFixtures) -> None:
         """Test listing upcoming events."""
-        calendar = await _create_calendar_via_db(events_fixtures.postgres_uri)
+        calendar = await _create_calendar_via_db(events_fixtures.session_factory)
         future_date = datetime.datetime.now(datetime.UTC) + datetime.timedelta(days=30)
         event_data = {
             "title": "Upcoming Event",
@@ -689,7 +671,7 @@ class TestEventController:
 
     async def test_list_upcoming_events_with_filters(self, events_fixtures: EventsTestFixtures) -> None:
         """Test listing upcoming events with date and calendar filters."""
-        calendar = await _create_calendar_via_db(events_fixtures.postgres_uri)
+        calendar = await _create_calendar_via_db(events_fixtures.session_factory)
         start_date = datetime.datetime.now(datetime.UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
         response = await events_fixtures.client.get(
             f"/api/v1/events/upcoming?calendar_id={calendar['id']}&start_date={start_date}"
@@ -701,7 +683,7 @@ class TestEventController:
 
     async def test_update_event(self, events_fixtures: EventsTestFixtures) -> None:
         """Test updating an event."""
-        calendar = await _create_calendar_via_db(events_fixtures.postgres_uri)
+        calendar = await _create_calendar_via_db(events_fixtures.session_factory)
         create_data = {
             "title": "Original Title",
             "slug": f"original-{uuid4().hex[:8]}",
@@ -729,8 +711,8 @@ class TestEventController:
 
     async def test_update_event_categories(self, events_fixtures: EventsTestFixtures) -> None:
         """Test updating event categories."""
-        calendar = await _create_calendar_via_db(events_fixtures.postgres_uri)
-        category = await _create_category_via_db(events_fixtures.postgres_uri, calendar["id"])
+        calendar = await _create_calendar_via_db(events_fixtures.session_factory)
+        category = await _create_category_via_db(events_fixtures.session_factory, calendar["id"])
         create_data = {
             "title": "Category Update Event",
             "slug": f"cat-update-{uuid4().hex[:8]}",
@@ -751,7 +733,7 @@ class TestEventController:
 
     async def test_delete_event(self, events_fixtures: EventsTestFixtures) -> None:
         """Test deleting an event."""
-        calendar = await _create_calendar_via_db(events_fixtures.postgres_uri)
+        calendar = await _create_calendar_via_db(events_fixtures.session_factory)
         create_data = {
             "title": "To Delete",
             "slug": f"to-delete-{uuid4().hex[:8]}",
@@ -785,7 +767,7 @@ class TestEventOccurrenceController:
 
     async def test_create_occurrence(self, events_fixtures: EventsTestFixtures) -> None:
         """Test creating an occurrence."""
-        calendar = await _create_calendar_via_db(events_fixtures.postgres_uri)
+        calendar = await _create_calendar_via_db(events_fixtures.session_factory)
         event_data = {
             "title": "Occurrence Test Event",
             "slug": f"occurrence-test-{uuid4().hex[:8]}",
@@ -813,7 +795,7 @@ class TestEventOccurrenceController:
 
     async def test_create_all_day_occurrence(self, events_fixtures: EventsTestFixtures) -> None:
         """Test creating an all-day occurrence."""
-        calendar = await _create_calendar_via_db(events_fixtures.postgres_uri)
+        calendar = await _create_calendar_via_db(events_fixtures.session_factory)
         event_data = {
             "title": "All Day Event",
             "slug": f"all-day-{uuid4().hex[:8]}",
@@ -839,7 +821,7 @@ class TestEventOccurrenceController:
 
     async def test_get_occurrence_by_id(self, events_fixtures: EventsTestFixtures) -> None:
         """Test getting an occurrence by ID."""
-        calendar = await _create_calendar_via_db(events_fixtures.postgres_uri)
+        calendar = await _create_calendar_via_db(events_fixtures.session_factory)
         event_data = {
             "title": "Get Occurrence Event",
             "slug": f"get-occ-{uuid4().hex[:8]}",
@@ -877,7 +859,7 @@ class TestEventOccurrenceController:
 
     async def test_list_occurrences_by_event(self, events_fixtures: EventsTestFixtures) -> None:
         """Test listing occurrences for an event."""
-        calendar = await _create_calendar_via_db(events_fixtures.postgres_uri)
+        calendar = await _create_calendar_via_db(events_fixtures.session_factory)
         event_data = {
             "title": "Multi Occurrence Event",
             "slug": f"multi-occ-{uuid4().hex[:8]}",
@@ -923,7 +905,7 @@ class TestEventOccurrenceController:
 
     async def test_list_occurrences_by_date_range_with_calendar(self, events_fixtures: EventsTestFixtures) -> None:
         """Test listing occurrences by date range filtered by calendar."""
-        calendar = await _create_calendar_via_db(events_fixtures.postgres_uri)
+        calendar = await _create_calendar_via_db(events_fixtures.session_factory)
         start_date = "2025-12-01T00:00:00Z"
         end_date = "2025-12-31T23:59:59Z"
 
@@ -937,7 +919,7 @@ class TestEventOccurrenceController:
 
     async def test_update_occurrence(self, events_fixtures: EventsTestFixtures) -> None:
         """Test updating an occurrence."""
-        calendar = await _create_calendar_via_db(events_fixtures.postgres_uri)
+        calendar = await _create_calendar_via_db(events_fixtures.session_factory)
         event_data = {
             "title": "Update Occurrence Event",
             "slug": f"update-occ-{uuid4().hex[:8]}",
@@ -973,7 +955,7 @@ class TestEventOccurrenceController:
 
     async def test_delete_occurrence(self, events_fixtures: EventsTestFixtures) -> None:
         """Test deleting an occurrence."""
-        calendar = await _create_calendar_via_db(events_fixtures.postgres_uri)
+        calendar = await _create_calendar_via_db(events_fixtures.session_factory)
         event_data = {
             "title": "Delete Occurrence Event",
             "slug": f"delete-occ-{uuid4().hex[:8]}",

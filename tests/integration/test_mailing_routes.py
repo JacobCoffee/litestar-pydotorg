@@ -6,11 +6,12 @@ from typing import TYPE_CHECKING
 from uuid import uuid4
 
 import pytest
+from advanced_alchemy.extensions.litestar import SQLAlchemyPlugin
+from advanced_alchemy.extensions.litestar.plugins.init.config.asyncio import SQLAlchemyAsyncConfig
 from litestar import Litestar
-from litestar.plugins.sqlalchemy import SQLAlchemyAsyncConfig, SQLAlchemyPlugin
 from litestar.testing import AsyncTestClient
-from sqlalchemy import NullPool
-from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy import text
+from sqlalchemy.ext.asyncio import AsyncEngine, async_sessionmaker
 
 from pydotorg.core.database.base import AuditBase
 from pydotorg.domains.mailing.controllers import EmailLogController, EmailTemplateController
@@ -18,18 +19,16 @@ from pydotorg.domains.mailing.dependencies import get_mailing_dependencies
 from pydotorg.domains.mailing.models import EmailLog, EmailTemplate, EmailTemplateType
 
 if TYPE_CHECKING:
-    from collections.abc import AsyncGenerator
+    from collections.abc import AsyncIterator
 
 
 async def _create_email_template_via_db(
-    postgres_uri: str,
+    session_factory: async_sessionmaker,
     internal_name: str | None = None,
     is_active: bool = True,
 ) -> EmailTemplate:
-    """Create an email template directly in the database for testing."""
-    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
-    async_session = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-    async with async_session() as session:
+    """Create an email template directly in the database using shared session factory."""
+    async with session_factory() as session:
         template = EmailTemplate(
             internal_name=internal_name or f"test-template-{uuid4().hex[:8]}",
             display_name=f"Test Template {uuid4().hex[:8]}",
@@ -43,19 +42,16 @@ async def _create_email_template_via_db(
         session.add(template)
         await session.commit()
         await session.refresh(template)
-        await engine.dispose()
         return template
 
 
 async def _create_email_log_via_db(
-    postgres_uri: str,
+    session_factory: async_sessionmaker,
     template_name: str | None = None,
     status: str = "sent",
 ) -> EmailLog:
-    """Create an email log directly in the database for testing."""
-    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
-    async_session = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-    async with async_session() as session:
+    """Create an email log directly in the database using shared session factory."""
+    async with session_factory() as session:
         log = EmailLog(
             template_name=template_name or f"test-template-{uuid4().hex[:8]}",
             recipient_email=f"test-{uuid4().hex[:8]}@example.com",
@@ -66,37 +62,49 @@ async def _create_email_log_via_db(
         session.add(log)
         await session.commit()
         await session.refresh(log)
-        await engine.dispose()
         return log
 
 
-@pytest.fixture
-async def test_app(postgres_uri: str) -> AsyncGenerator[Litestar]:
-    """Create a test Litestar application with the mailing controllers."""
-    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
-    async with engine.begin() as conn:
-        await conn.run_sync(AuditBase.metadata.create_all)
-    await engine.dispose()
+class MailingTestFixtures:
+    """Test fixtures for mailing routes."""
 
-    sqlalchemy_config = SQLAlchemyAsyncConfig(
-        connection_string=postgres_uri,
-        before_send_handler="autocommit",
-    )
+    client: AsyncTestClient
+    session_factory: async_sessionmaker
+
+
+@pytest.fixture
+async def mailing_fixtures(
+    async_engine: AsyncEngine,
+    async_session_factory: async_sessionmaker,
+    _module_sqlalchemy_config: SQLAlchemyAsyncConfig,
+) -> AsyncIterator[MailingTestFixtures]:
+    """Create test fixtures using module-scoped config to prevent connection exhaustion.
+
+    Uses the shared _module_sqlalchemy_config from conftest.py instead of creating
+    a new SQLAlchemyAsyncConfig per test, which was causing TooManyConnectionsError.
+    """
+    async with async_engine.begin() as conn:
+        result = await conn.execute(text("SELECT tablename FROM pg_tables WHERE schemaname = 'public'"))
+        existing_tables = {row[0] for row in result.fetchall()}
+
+        for table in reversed(AuditBase.metadata.sorted_tables):
+            if table.name in existing_tables:
+                await conn.execute(text(f"TRUNCATE TABLE {table.name} CASCADE"))
+
+    sqlalchemy_plugin = SQLAlchemyPlugin(config=_module_sqlalchemy_config)
 
     app = Litestar(
         route_handlers=[EmailTemplateController, EmailLogController],
-        plugins=[SQLAlchemyPlugin(config=sqlalchemy_config)],
+        plugins=[sqlalchemy_plugin],
         dependencies=get_mailing_dependencies(),
         debug=True,
     )
-    yield app
 
-
-@pytest.fixture
-async def client(test_app: Litestar) -> AsyncGenerator[AsyncTestClient]:
-    """Create an async test client."""
-    async with AsyncTestClient(app=test_app) as client:
-        yield client
+    async with AsyncTestClient(app=app, base_url="http://testserver.local") as client:
+        fixtures = MailingTestFixtures()
+        fixtures.client = client
+        fixtures.session_factory = async_session_factory
+        yield fixtures
 
 
 class TestEmailTemplateControllerRoutes:
@@ -106,43 +114,43 @@ class TestEmailTemplateControllerRoutes:
     requests will return 401/403. We test that the routes are reachable.
     """
 
-    async def test_list_templates(self, client: AsyncTestClient, postgres_uri: str) -> None:
-        await _create_email_template_via_db(postgres_uri)
-        response = await client.get("/api/admin/email-templates/")
-        # Guards will reject unauthenticated requests (401/403) or succeed (200)
-        # 500 for internal errors
+    async def test_list_templates(self, mailing_fixtures: MailingTestFixtures) -> None:
+        await _create_email_template_via_db(mailing_fixtures.session_factory)
+        response = await mailing_fixtures.client.get("/api/admin/email-templates/")
         assert response.status_code in (200, 401, 403, 500)
 
-    async def test_list_templates_active_only(self, client: AsyncTestClient, postgres_uri: str) -> None:
-        await _create_email_template_via_db(postgres_uri, is_active=True)
-        response = await client.get("/api/admin/email-templates/?active_only=true")
+    async def test_list_templates_active_only(self, mailing_fixtures: MailingTestFixtures) -> None:
+        await _create_email_template_via_db(mailing_fixtures.session_factory, is_active=True)
+        response = await mailing_fixtures.client.get("/api/admin/email-templates/?active_only=true")
         assert response.status_code in (200, 401, 403, 500)
 
-    async def test_list_templates_by_type(self, client: AsyncTestClient, postgres_uri: str) -> None:
-        await _create_email_template_via_db(postgres_uri)
-        response = await client.get("/api/admin/email-templates/?template_type=transactional")
+    async def test_list_templates_by_type(self, mailing_fixtures: MailingTestFixtures) -> None:
+        await _create_email_template_via_db(mailing_fixtures.session_factory)
+        response = await mailing_fixtures.client.get("/api/admin/email-templates/?template_type=transactional")
         assert response.status_code in (200, 401, 403, 500)
 
-    async def test_get_template_by_id(self, client: AsyncTestClient, postgres_uri: str) -> None:
-        template = await _create_email_template_via_db(postgres_uri)
-        response = await client.get(f"/api/admin/email-templates/{template.id}")
+    async def test_get_template_by_id(self, mailing_fixtures: MailingTestFixtures) -> None:
+        template = await _create_email_template_via_db(mailing_fixtures.session_factory)
+        response = await mailing_fixtures.client.get(f"/api/admin/email-templates/{template.id}")
         assert response.status_code in (200, 401, 403, 500)
 
-    async def test_get_template_by_id_not_found(self, client: AsyncTestClient) -> None:
+    async def test_get_template_by_id_not_found(self, mailing_fixtures: MailingTestFixtures) -> None:
         fake_id = str(uuid4())
-        response = await client.get(f"/api/admin/email-templates/{fake_id}")
+        response = await mailing_fixtures.client.get(f"/api/admin/email-templates/{fake_id}")
         assert response.status_code in (401, 403, 404, 500)
 
-    async def test_get_template_by_name(self, client: AsyncTestClient, postgres_uri: str) -> None:
-        template = await _create_email_template_via_db(postgres_uri, internal_name="unique-template-name")
-        response = await client.get(f"/api/admin/email-templates/by-name/{template.internal_name}")
+    async def test_get_template_by_name(self, mailing_fixtures: MailingTestFixtures) -> None:
+        template = await _create_email_template_via_db(
+            mailing_fixtures.session_factory, internal_name="unique-template-name"
+        )
+        response = await mailing_fixtures.client.get(f"/api/admin/email-templates/by-name/{template.internal_name}")
         assert response.status_code in (200, 401, 403, 500)
 
-    async def test_get_template_by_name_not_found(self, client: AsyncTestClient) -> None:
-        response = await client.get("/api/admin/email-templates/by-name/non-existent-template")
+    async def test_get_template_by_name_not_found(self, mailing_fixtures: MailingTestFixtures) -> None:
+        response = await mailing_fixtures.client.get("/api/admin/email-templates/by-name/non-existent-template")
         assert response.status_code in (401, 403, 404, 500)
 
-    async def test_create_template(self, client: AsyncTestClient) -> None:
+    async def test_create_template(self, mailing_fixtures: MailingTestFixtures) -> None:
         data = {
             "internal_name": f"new-template-{uuid4().hex[:8]}",
             "display_name": "New Test Template",
@@ -151,127 +159,126 @@ class TestEmailTemplateControllerRoutes:
             "template_type": "transactional",
             "is_active": True,
         }
-        response = await client.post("/api/admin/email-templates/", json=data)
+        response = await mailing_fixtures.client.post("/api/admin/email-templates/", json=data)
         assert response.status_code in (201, 401, 403, 500)
 
-    async def test_update_template(self, client: AsyncTestClient, postgres_uri: str) -> None:
-        template = await _create_email_template_via_db(postgres_uri)
+    async def test_update_template(self, mailing_fixtures: MailingTestFixtures) -> None:
+        template = await _create_email_template_via_db(mailing_fixtures.session_factory)
         data = {"display_name": "Updated Template Name"}
-        response = await client.patch(f"/api/admin/email-templates/{template.id}", json=data)
+        response = await mailing_fixtures.client.patch(f"/api/admin/email-templates/{template.id}", json=data)
         assert response.status_code in (200, 401, 403, 500)
 
-    async def test_delete_template(self, client: AsyncTestClient, postgres_uri: str) -> None:
-        template = await _create_email_template_via_db(postgres_uri)
-        response = await client.delete(f"/api/admin/email-templates/{template.id}")
+    async def test_delete_template(self, mailing_fixtures: MailingTestFixtures) -> None:
+        template = await _create_email_template_via_db(mailing_fixtures.session_factory)
+        response = await mailing_fixtures.client.delete(f"/api/admin/email-templates/{template.id}")
         assert response.status_code in (200, 204, 401, 403, 500)
 
-    async def test_validate_template(self, client: AsyncTestClient, postgres_uri: str) -> None:
-        template = await _create_email_template_via_db(postgres_uri)
-        response = await client.post(f"/api/admin/email-templates/{template.id}/validate")
+    async def test_validate_template(self, mailing_fixtures: MailingTestFixtures) -> None:
+        template = await _create_email_template_via_db(mailing_fixtures.session_factory)
+        response = await mailing_fixtures.client.post(f"/api/admin/email-templates/{template.id}/validate")
         assert response.status_code in (200, 401, 403, 500)
 
-    async def test_preview_template(self, client: AsyncTestClient, postgres_uri: str) -> None:
-        template = await _create_email_template_via_db(postgres_uri)
+    async def test_preview_template(self, mailing_fixtures: MailingTestFixtures) -> None:
+        template = await _create_email_template_via_db(mailing_fixtures.session_factory)
         data = {"name": "Test User"}
-        response = await client.post(f"/api/admin/email-templates/{template.id}/preview", json=data)
+        response = await mailing_fixtures.client.post(f"/api/admin/email-templates/{template.id}/preview", json=data)
         assert response.status_code in (200, 401, 403, 500)
 
-    async def test_send_email(self, client: AsyncTestClient, postgres_uri: str) -> None:
-        template = await _create_email_template_via_db(postgres_uri)
+    async def test_send_email(self, mailing_fixtures: MailingTestFixtures) -> None:
+        template = await _create_email_template_via_db(mailing_fixtures.session_factory)
         data = {
             "template_name": template.internal_name,
             "to_email": "test@example.com",
             "context": {"name": "Test User"},
         }
-        response = await client.post("/api/admin/email-templates/send", json=data)
-        # May fail due to missing email service, but route should be reachable
+        response = await mailing_fixtures.client.post("/api/admin/email-templates/send", json=data)
         assert response.status_code in (200, 401, 403, 500)
 
-    async def test_send_bulk_email(self, client: AsyncTestClient, postgres_uri: str) -> None:
-        template = await _create_email_template_via_db(postgres_uri)
+    async def test_send_bulk_email(self, mailing_fixtures: MailingTestFixtures) -> None:
+        template = await _create_email_template_via_db(mailing_fixtures.session_factory)
         data = {
             "template_name": template.internal_name,
             "recipients": ["test1@example.com", "test2@example.com"],
             "context": {"name": "Test User"},
         }
-        response = await client.post("/api/admin/email-templates/send-bulk", json=data)
+        response = await mailing_fixtures.client.post("/api/admin/email-templates/send-bulk", json=data)
         assert response.status_code in (200, 401, 403, 500)
 
 
 class TestEmailLogControllerRoutes:
     """Tests for EmailLogController endpoints."""
 
-    async def test_list_logs(self, client: AsyncTestClient, postgres_uri: str) -> None:
-        await _create_email_log_via_db(postgres_uri)
-        response = await client.get("/api/admin/email-logs/")
+    async def test_list_logs(self, mailing_fixtures: MailingTestFixtures) -> None:
+        await _create_email_log_via_db(mailing_fixtures.session_factory)
+        response = await mailing_fixtures.client.get("/api/admin/email-logs/")
         assert response.status_code in (200, 401, 403, 500)
 
-    async def test_list_logs_with_limit(self, client: AsyncTestClient, postgres_uri: str) -> None:
+    async def test_list_logs_with_limit(self, mailing_fixtures: MailingTestFixtures) -> None:
         for _ in range(3):
-            await _create_email_log_via_db(postgres_uri)
-        response = await client.get("/api/admin/email-logs/?limit=2")
+            await _create_email_log_via_db(mailing_fixtures.session_factory)
+        response = await mailing_fixtures.client.get("/api/admin/email-logs/?limit=2")
         assert response.status_code in (200, 401, 403, 500)
 
-    async def test_list_logs_by_recipient(self, client: AsyncTestClient, postgres_uri: str) -> None:
-        await _create_email_log_via_db(postgres_uri)
-        response = await client.get("/api/admin/email-logs/?recipient=test@example.com")
+    async def test_list_logs_by_recipient(self, mailing_fixtures: MailingTestFixtures) -> None:
+        await _create_email_log_via_db(mailing_fixtures.session_factory)
+        response = await mailing_fixtures.client.get("/api/admin/email-logs/?recipient=test@example.com")
         assert response.status_code in (200, 401, 403, 500)
 
-    async def test_list_logs_by_template(self, client: AsyncTestClient, postgres_uri: str) -> None:
-        await _create_email_log_via_db(postgres_uri, template_name="test-template")
-        response = await client.get("/api/admin/email-logs/?template_name=test-template")
+    async def test_list_logs_by_template(self, mailing_fixtures: MailingTestFixtures) -> None:
+        await _create_email_log_via_db(mailing_fixtures.session_factory, template_name="test-template")
+        response = await mailing_fixtures.client.get("/api/admin/email-logs/?template_name=test-template")
         assert response.status_code in (200, 401, 403, 500)
 
-    async def test_list_failed_logs(self, client: AsyncTestClient, postgres_uri: str) -> None:
-        await _create_email_log_via_db(postgres_uri, status="failed")
-        response = await client.get("/api/admin/email-logs/?failed_only=true")
+    async def test_list_failed_logs(self, mailing_fixtures: MailingTestFixtures) -> None:
+        await _create_email_log_via_db(mailing_fixtures.session_factory, status="failed")
+        response = await mailing_fixtures.client.get("/api/admin/email-logs/?failed_only=true")
         assert response.status_code in (200, 401, 403, 500)
 
-    async def test_get_log_by_id(self, client: AsyncTestClient, postgres_uri: str) -> None:
-        log = await _create_email_log_via_db(postgres_uri)
-        response = await client.get(f"/api/admin/email-logs/{log.id}")
+    async def test_get_log_by_id(self, mailing_fixtures: MailingTestFixtures) -> None:
+        log = await _create_email_log_via_db(mailing_fixtures.session_factory)
+        response = await mailing_fixtures.client.get(f"/api/admin/email-logs/{log.id}")
         assert response.status_code in (200, 401, 403, 500)
 
-    async def test_get_log_by_id_not_found(self, client: AsyncTestClient) -> None:
+    async def test_get_log_by_id_not_found(self, mailing_fixtures: MailingTestFixtures) -> None:
         fake_id = str(uuid4())
-        response = await client.get(f"/api/admin/email-logs/{fake_id}")
+        response = await mailing_fixtures.client.get(f"/api/admin/email-logs/{fake_id}")
         assert response.status_code in (401, 403, 404, 500)
 
 
 class TestMailingValidation:
     """Validation tests for mailing domain."""
 
-    async def test_create_template_missing_internal_name(self, client: AsyncTestClient) -> None:
+    async def test_create_template_missing_internal_name(self, mailing_fixtures: MailingTestFixtures) -> None:
         data = {
             "display_name": "Test Template",
             "subject": "Test Subject",
             "content_text": "Test content",
         }
-        response = await client.post("/api/admin/email-templates/", json=data)
+        response = await mailing_fixtures.client.post("/api/admin/email-templates/", json=data)
         assert response.status_code in (400, 401, 403, 422, 500)
 
-    async def test_create_template_missing_subject(self, client: AsyncTestClient) -> None:
+    async def test_create_template_missing_subject(self, mailing_fixtures: MailingTestFixtures) -> None:
         data = {
             "internal_name": "test-template",
             "display_name": "Test Template",
             "content_text": "Test content",
         }
-        response = await client.post("/api/admin/email-templates/", json=data)
+        response = await mailing_fixtures.client.post("/api/admin/email-templates/", json=data)
         assert response.status_code in (400, 401, 403, 422, 500)
 
-    async def test_create_template_missing_content(self, client: AsyncTestClient) -> None:
+    async def test_create_template_missing_content(self, mailing_fixtures: MailingTestFixtures) -> None:
         data = {
             "internal_name": "test-template",
             "display_name": "Test Template",
             "subject": "Test Subject",
         }
-        response = await client.post("/api/admin/email-templates/", json=data)
+        response = await mailing_fixtures.client.post("/api/admin/email-templates/", json=data)
         assert response.status_code in (400, 401, 403, 422, 500)
 
-    async def test_get_template_invalid_uuid(self, client: AsyncTestClient) -> None:
-        response = await client.get("/api/admin/email-templates/not-a-uuid")
+    async def test_get_template_invalid_uuid(self, mailing_fixtures: MailingTestFixtures) -> None:
+        response = await mailing_fixtures.client.get("/api/admin/email-templates/not-a-uuid")
         assert response.status_code in (400, 401, 403, 404, 422)
 
-    async def test_get_log_invalid_uuid(self, client: AsyncTestClient) -> None:
-        response = await client.get("/api/admin/email-logs/not-a-uuid")
+    async def test_get_log_invalid_uuid(self, mailing_fixtures: MailingTestFixtures) -> None:
+        response = await mailing_fixtures.client.get("/api/admin/email-logs/not-a-uuid")
         assert response.status_code in (400, 401, 403, 404, 422)

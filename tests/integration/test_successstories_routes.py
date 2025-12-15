@@ -15,9 +15,8 @@ from advanced_alchemy.filters import LimitOffset
 from litestar import Litestar
 from litestar.params import Parameter
 from litestar.testing import AsyncTestClient
-from sqlalchemy import NullPool, text
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import text
+from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker
 
 from pydotorg.core.database.base import AuditBase
 from pydotorg.domains.pages.models import ContentType
@@ -37,14 +36,12 @@ class SuccessStoriesTestFixtures:
     """Test fixtures for success stories routes."""
 
     client: AsyncTestClient
-    postgres_uri: str
+    session_factory: async_sessionmaker
 
 
-async def _create_user_via_db(postgres_uri: str, **user_data: object) -> dict:
-    """Create a user directly in the database."""
-    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
-    async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-    async with async_session_factory() as session:
+async def _create_user_via_db(session_factory: async_sessionmaker, **user_data: object) -> dict:
+    """Create a user directly in the database using shared session factory."""
+    async with session_factory() as session:
         user = User(
             username=user_data.get("username", f"user-{uuid4().hex[:8]}"),
             email=user_data.get("email", f"user-{uuid4().hex[:8]}@example.com"),
@@ -55,20 +52,16 @@ async def _create_user_via_db(postgres_uri: str, **user_data: object) -> dict:
         session.add(user)
         await session.commit()
         await session.refresh(user)
-        result = {
+        return {
             "id": str(user.id),
             "username": user.username,
             "email": user.email,
         }
-    await engine.dispose()
-    return result
 
 
-async def _create_category_via_db(postgres_uri: str, **category_data: object) -> dict:
-    """Create a story category directly in the database."""
-    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
-    async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-    async with async_session_factory() as session:
+async def _create_category_via_db(session_factory: async_sessionmaker, **category_data: object) -> dict:
+    """Create a story category directly in the database using shared session factory."""
+    async with session_factory() as session:
         slug = category_data.get("slug", f"category-{uuid4().hex[:8]}")
         category = StoryCategory(
             name=category_data.get("name", f"Category {uuid4().hex[:8]}"),
@@ -77,22 +70,20 @@ async def _create_category_via_db(postgres_uri: str, **category_data: object) ->
         session.add(category)
         await session.commit()
         await session.refresh(category)
-        result = {
+        return {
             "id": str(category.id),
             "name": category.name,
             "slug": category.slug,
         }
-    await engine.dispose()
-    return result
 
 
-async def _create_story_via_db(postgres_uri: str, category_id: str, creator_id: str, **story_data: object) -> dict:
-    """Create a story directly in the database."""
+async def _create_story_via_db(
+    session_factory: async_sessionmaker, category_id: str, creator_id: str, **story_data: object
+) -> dict:
+    """Create a story directly in the database using shared session factory."""
     from uuid import UUID as PyUUID
 
-    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
-    async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-    async with async_session_factory() as session:
+    async with session_factory() as session:
         slug = story_data.get("slug", f"story-{uuid4().hex[:8]}")
         story = Story(
             name=story_data.get("name", f"Test Story {uuid4().hex[:8]}"),
@@ -110,7 +101,7 @@ async def _create_story_via_db(postgres_uri: str, category_id: str, creator_id: 
         session.add(story)
         await session.commit()
         await session.refresh(story)
-        result = {
+        return {
             "id": str(story.id),
             "name": story.name,
             "slug": story.slug,
@@ -118,8 +109,6 @@ async def _create_story_via_db(postgres_uri: str, category_id: str, creator_id: 
             "is_published": story.is_published,
             "featured": story.featured,
         }
-    await engine.dispose()
-    return result
 
 
 async def provide_category_service(db_session: AsyncSession) -> StoryCategoryService:
@@ -133,14 +122,23 @@ async def provide_story_service(db_session: AsyncSession) -> StoryService:
 
 
 @pytest.fixture
-async def successstories_fixtures(postgres_uri: str) -> AsyncIterator[SuccessStoriesTestFixtures]:
-    """Create test fixtures with fresh database schema."""
-    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
-    async with engine.begin() as conn:
-        await conn.execute(text("DROP SCHEMA public CASCADE"))
-        await conn.execute(text("CREATE SCHEMA public"))
-        await conn.run_sync(AuditBase.metadata.create_all)
-    await engine.dispose()
+async def successstories_fixtures(
+    async_engine: AsyncEngine,
+    async_session_factory: async_sessionmaker,
+    _module_sqlalchemy_config: SQLAlchemyAsyncConfig,
+) -> AsyncIterator[SuccessStoriesTestFixtures]:
+    """Create test fixtures using module-scoped config to prevent connection exhaustion.
+
+    Uses the shared _module_sqlalchemy_config from conftest.py instead of creating
+    a new SQLAlchemyAsyncConfig per test, which was causing TooManyConnectionsError.
+    """
+    async with async_engine.begin() as conn:
+        result = await conn.execute(text("SELECT tablename FROM pg_tables WHERE schemaname = 'public'"))
+        existing_tables = {row[0] for row in result.fetchall()}
+
+        for table in reversed(AuditBase.metadata.sorted_tables):
+            if table.name in existing_tables:
+                await conn.execute(text(f"TRUNCATE TABLE {table.name} CASCADE"))
 
     async def provide_limit_offset(
         current_page: int = Parameter(ge=1, default=1, query="currentPage"),
@@ -149,13 +147,7 @@ async def successstories_fixtures(postgres_uri: str) -> AsyncIterator[SuccessSto
         """Provide limit offset pagination."""
         return LimitOffset(page_size, page_size * (current_page - 1))
 
-    sqlalchemy_config = SQLAlchemyAsyncConfig(
-        connection_string=postgres_uri,
-        metadata=AuditBase.metadata,
-        create_all=False,
-        before_send_handler="autocommit",
-    )
-    sqlalchemy_plugin = SQLAlchemyPlugin(config=sqlalchemy_config)
+    sqlalchemy_plugin = SQLAlchemyPlugin(config=_module_sqlalchemy_config)
 
     dependencies = {
         "limit_offset": provide_limit_offset,
@@ -176,7 +168,7 @@ async def successstories_fixtures(postgres_uri: str) -> AsyncIterator[SuccessSto
     async with AsyncTestClient(app=app, base_url="http://testserver.local") as client:
         fixtures = SuccessStoriesTestFixtures()
         fixtures.client = client
-        fixtures.postgres_uri = postgres_uri
+        fixtures.session_factory = async_session_factory
         yield fixtures
 
 
@@ -194,7 +186,7 @@ class TestStoryCategoryControllerRoutes:
         """Test listing categories with pagination."""
         for i in range(3):
             await _create_category_via_db(
-                successstories_fixtures.postgres_uri,
+                successstories_fixtures.session_factory,
                 name=f"Category {i}",
                 slug=f"category-{i}-{uuid4().hex[:8]}",
             )
@@ -220,7 +212,7 @@ class TestStoryCategoryControllerRoutes:
     async def test_get_category_by_id(self, successstories_fixtures: SuccessStoriesTestFixtures) -> None:
         """Test getting a category by ID."""
         category = await _create_category_via_db(
-            successstories_fixtures.postgres_uri,
+            successstories_fixtures.session_factory,
             name="Test Category",
         )
         response = await successstories_fixtures.client.get(f"/api/v1/success-stories/categories/{category['id']}")
@@ -239,7 +231,7 @@ class TestStoryCategoryControllerRoutes:
         """Test getting a category by slug."""
         slug = f"my-unique-slug-{uuid4().hex[:8]}"
         await _create_category_via_db(
-            successstories_fixtures.postgres_uri,
+            successstories_fixtures.session_factory,
             name="Category With Slug",
             slug=slug,
         )
@@ -252,7 +244,7 @@ class TestStoryCategoryControllerRoutes:
     async def test_update_category(self, successstories_fixtures: SuccessStoriesTestFixtures) -> None:
         """Test updating a category."""
         category = await _create_category_via_db(
-            successstories_fixtures.postgres_uri,
+            successstories_fixtures.session_factory,
             name="Original Category",
         )
         update_data = {"name": "Updated Category Name"}
@@ -267,7 +259,7 @@ class TestStoryCategoryControllerRoutes:
     async def test_delete_category(self, successstories_fixtures: SuccessStoriesTestFixtures) -> None:
         """Test deleting a category."""
         category = await _create_category_via_db(
-            successstories_fixtures.postgres_uri,
+            successstories_fixtures.session_factory,
             name="Category To Delete",
         )
         response = await successstories_fixtures.client.delete(f"/api/v1/success-stories/categories/{category['id']}")
@@ -286,11 +278,11 @@ class TestStoryControllerRoutes:
 
     async def test_list_stories_with_pagination(self, successstories_fixtures: SuccessStoriesTestFixtures) -> None:
         """Test listing stories with pagination."""
-        user = await _create_user_via_db(successstories_fixtures.postgres_uri)
-        category = await _create_category_via_db(successstories_fixtures.postgres_uri)
+        user = await _create_user_via_db(successstories_fixtures.session_factory)
+        category = await _create_category_via_db(successstories_fixtures.session_factory)
         for i in range(3):
             await _create_story_via_db(
-                successstories_fixtures.postgres_uri,
+                successstories_fixtures.session_factory,
                 category_id=category["id"],
                 creator_id=user["id"],
                 name=f"Story {i}",
@@ -303,10 +295,10 @@ class TestStoryControllerRoutes:
 
     async def test_list_published_stories(self, successstories_fixtures: SuccessStoriesTestFixtures) -> None:
         """Test listing published stories."""
-        user = await _create_user_via_db(successstories_fixtures.postgres_uri)
-        category = await _create_category_via_db(successstories_fixtures.postgres_uri)
+        user = await _create_user_via_db(successstories_fixtures.session_factory)
+        category = await _create_category_via_db(successstories_fixtures.session_factory)
         await _create_story_via_db(
-            successstories_fixtures.postgres_uri,
+            successstories_fixtures.session_factory,
             category_id=category["id"],
             creator_id=user["id"],
             is_published=True,
@@ -316,10 +308,10 @@ class TestStoryControllerRoutes:
 
     async def test_list_featured_stories(self, successstories_fixtures: SuccessStoriesTestFixtures) -> None:
         """Test listing featured stories."""
-        user = await _create_user_via_db(successstories_fixtures.postgres_uri)
-        category = await _create_category_via_db(successstories_fixtures.postgres_uri)
+        user = await _create_user_via_db(successstories_fixtures.session_factory)
+        category = await _create_category_via_db(successstories_fixtures.session_factory)
         await _create_story_via_db(
-            successstories_fixtures.postgres_uri,
+            successstories_fixtures.session_factory,
             category_id=category["id"],
             creator_id=user["id"],
             is_published=True,
@@ -330,10 +322,10 @@ class TestStoryControllerRoutes:
 
     async def test_list_stories_by_category(self, successstories_fixtures: SuccessStoriesTestFixtures) -> None:
         """Test listing stories by category."""
-        user = await _create_user_via_db(successstories_fixtures.postgres_uri)
-        category = await _create_category_via_db(successstories_fixtures.postgres_uri)
+        user = await _create_user_via_db(successstories_fixtures.session_factory)
+        category = await _create_category_via_db(successstories_fixtures.session_factory)
         await _create_story_via_db(
-            successstories_fixtures.postgres_uri,
+            successstories_fixtures.session_factory,
             category_id=category["id"],
             creator_id=user["id"],
         )
@@ -342,8 +334,8 @@ class TestStoryControllerRoutes:
 
     async def test_create_story(self, successstories_fixtures: SuccessStoriesTestFixtures) -> None:
         """Test creating a story."""
-        user = await _create_user_via_db(successstories_fixtures.postgres_uri)
-        category = await _create_category_via_db(successstories_fixtures.postgres_uri)
+        user = await _create_user_via_db(successstories_fixtures.session_factory)
+        category = await _create_category_via_db(successstories_fixtures.session_factory)
         story_data = {
             "name": "Python at My Company",
             "company_name": "Test Corp",
@@ -363,10 +355,10 @@ class TestStoryControllerRoutes:
 
     async def test_get_story_by_id(self, successstories_fixtures: SuccessStoriesTestFixtures) -> None:
         """Test getting a story by ID."""
-        user = await _create_user_via_db(successstories_fixtures.postgres_uri)
-        category = await _create_category_via_db(successstories_fixtures.postgres_uri)
+        user = await _create_user_via_db(successstories_fixtures.session_factory)
+        category = await _create_category_via_db(successstories_fixtures.session_factory)
         story = await _create_story_via_db(
-            successstories_fixtures.postgres_uri,
+            successstories_fixtures.session_factory,
             category_id=category["id"],
             creator_id=user["id"],
         )
@@ -384,11 +376,11 @@ class TestStoryControllerRoutes:
 
     async def test_get_story_by_slug(self, successstories_fixtures: SuccessStoriesTestFixtures) -> None:
         """Test getting a story by slug."""
-        user = await _create_user_via_db(successstories_fixtures.postgres_uri)
-        category = await _create_category_via_db(successstories_fixtures.postgres_uri)
+        user = await _create_user_via_db(successstories_fixtures.session_factory)
+        category = await _create_category_via_db(successstories_fixtures.session_factory)
         slug = f"unique-story-slug-{uuid4().hex[:8]}"
         await _create_story_via_db(
-            successstories_fixtures.postgres_uri,
+            successstories_fixtures.session_factory,
             category_id=category["id"],
             creator_id=user["id"],
             slug=slug,
@@ -401,10 +393,10 @@ class TestStoryControllerRoutes:
 
     async def test_update_story(self, successstories_fixtures: SuccessStoriesTestFixtures) -> None:
         """Test updating a story."""
-        user = await _create_user_via_db(successstories_fixtures.postgres_uri)
-        category = await _create_category_via_db(successstories_fixtures.postgres_uri)
+        user = await _create_user_via_db(successstories_fixtures.session_factory)
+        category = await _create_category_via_db(successstories_fixtures.session_factory)
         story = await _create_story_via_db(
-            successstories_fixtures.postgres_uri,
+            successstories_fixtures.session_factory,
             category_id=category["id"],
             creator_id=user["id"],
             name="Original Story Name",
@@ -418,10 +410,10 @@ class TestStoryControllerRoutes:
 
     async def test_delete_story(self, successstories_fixtures: SuccessStoriesTestFixtures) -> None:
         """Test deleting a story."""
-        user = await _create_user_via_db(successstories_fixtures.postgres_uri)
-        category = await _create_category_via_db(successstories_fixtures.postgres_uri)
+        user = await _create_user_via_db(successstories_fixtures.session_factory)
+        category = await _create_category_via_db(successstories_fixtures.session_factory)
         story = await _create_story_via_db(
-            successstories_fixtures.postgres_uri,
+            successstories_fixtures.session_factory,
             category_id=category["id"],
             creator_id=user["id"],
         )
@@ -450,8 +442,8 @@ class TestSuccessStoriesValidation:
 
     async def test_create_story_missing_name(self, successstories_fixtures: SuccessStoriesTestFixtures) -> None:
         """Test creating story without name fails validation."""
-        user = await _create_user_via_db(successstories_fixtures.postgres_uri)
-        category = await _create_category_via_db(successstories_fixtures.postgres_uri)
+        user = await _create_user_via_db(successstories_fixtures.session_factory)
+        category = await _create_category_via_db(successstories_fixtures.session_factory)
         data = {
             "company_name": "Test Company",
             "content": "Test content",
@@ -463,7 +455,7 @@ class TestSuccessStoriesValidation:
 
     async def test_create_story_missing_category(self, successstories_fixtures: SuccessStoriesTestFixtures) -> None:
         """Test creating story without category fails validation."""
-        user = await _create_user_via_db(successstories_fixtures.postgres_uri)
+        user = await _create_user_via_db(successstories_fixtures.session_factory)
         data = {
             "name": "Test Story",
             "company_name": "Test Company",

@@ -12,9 +12,8 @@ from advanced_alchemy.extensions.litestar import SQLAlchemyPlugin
 from advanced_alchemy.extensions.litestar.plugins.init.config.asyncio import SQLAlchemyAsyncConfig
 from litestar import Litestar
 from litestar.testing import AsyncTestClient
-from sqlalchemy import NullPool
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import text
+from sqlalchemy.ext.asyncio import AsyncEngine, async_sessionmaker
 
 from pydotorg.core.auth.middleware import JWTAuthMiddleware
 from pydotorg.core.database.base import AuditBase
@@ -38,44 +37,32 @@ def _is_maildev_available() -> bool:
         return False
 
 
-async def _create_db_session(postgres_uri: str) -> tuple[AsyncSession, any]:
-    """Helper to create a database session."""
-    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
-
-    async with engine.begin() as conn:
-        await conn.run_sync(AuditBase.metadata.create_all)
-
-    async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-    session = async_session_factory()
-    return session, engine
-
-
-async def _create_sample_template(session: AsyncSession) -> EmailTemplate:
-    """Helper to create a sample template."""
-    template = EmailTemplate(
-        internal_name=f"test_template_{uuid4().hex[:8]}",
-        display_name="Test Template",
-        description="A test email template",
-        template_type=EmailTemplateType.TRANSACTIONAL,
-        subject="Hello {{ name }}!",
-        content_text="Hello {{ name }}, this is a test email.",
-        content_html="<h1>Hello {{ name }}!</h1><p>This is a test email.</p>",
-        is_active=True,
-    )
-    session.add(template)
-    await session.commit()
-    await session.refresh(template)
-    return template
+async def _create_sample_template(session_factory: async_sessionmaker) -> EmailTemplate:
+    """Helper to create a sample template using shared session factory."""
+    async with session_factory() as session:
+        template = EmailTemplate(
+            internal_name=f"test_template_{uuid4().hex[:8]}",
+            display_name="Test Template",
+            description="A test email template",
+            template_type=EmailTemplateType.TRANSACTIONAL,
+            subject="Hello {{ name }}!",
+            content_text="Hello {{ name }}, this is a test email.",
+            content_html="<h1>Hello {{ name }}!</h1><p>This is a test email.</p>",
+            is_active=True,
+        )
+        session.add(template)
+        await session.commit()
+        await session.refresh(template)
+        return template
 
 
 @pytest.mark.integration
 class TestEmailTemplateService:
     """Integration tests for EmailTemplateService."""
 
-    async def test_create_template(self, postgres_uri: str) -> None:
+    async def test_create_template(self, async_session_factory: async_sessionmaker) -> None:
         """Test creating an email template."""
-        session, engine = await _create_db_session(postgres_uri)
-        try:
+        async with async_session_factory() as session:
             service = EmailTemplateService(session=session)
             template = await service.create(
                 EmailTemplate(
@@ -91,55 +78,39 @@ class TestEmailTemplateService:
             assert "welcome_email" in template.internal_name
             assert template.display_name == "Welcome Email"
             assert template.is_active is True
-        finally:
-            await session.close()
-            await engine.dispose()
 
-    async def test_get_by_internal_name(self, postgres_uri: str) -> None:
+    async def test_get_by_internal_name(self, async_session_factory: async_sessionmaker) -> None:
         """Test retrieving template by internal name."""
-        session, engine = await _create_db_session(postgres_uri)
-        try:
-            sample_template = await _create_sample_template(session)
+        async with async_session_factory() as session:
+            sample_template = await _create_sample_template(async_session_factory)
             service = EmailTemplateService(session=session)
             found = await service.get_by_internal_name(sample_template.internal_name)
 
             assert found is not None
             assert found.id == sample_template.id
             assert found.internal_name == sample_template.internal_name
-        finally:
-            await session.close()
-            await engine.dispose()
 
-    async def test_get_by_internal_name_not_found(self, postgres_uri: str) -> None:
+    async def test_get_by_internal_name_not_found(self, async_session_factory: async_sessionmaker) -> None:
         """Test retrieving non-existent template returns None."""
-        session, engine = await _create_db_session(postgres_uri)
-        try:
+        async with async_session_factory() as session:
             service = EmailTemplateService(session=session)
             found = await service.get_by_internal_name("nonexistent_template")
 
             assert found is None
-        finally:
-            await session.close()
-            await engine.dispose()
 
-    async def test_get_active_by_name(self, postgres_uri: str) -> None:
+    async def test_get_active_by_name(self, async_session_factory: async_sessionmaker) -> None:
         """Test retrieving active template by name."""
-        session, engine = await _create_db_session(postgres_uri)
-        try:
-            sample_template = await _create_sample_template(session)
+        async with async_session_factory() as session:
+            sample_template = await _create_sample_template(async_session_factory)
             service = EmailTemplateService(session=session)
             found = await service.get_active_by_name(sample_template.internal_name)
 
             assert found is not None
             assert found.is_active is True
-        finally:
-            await session.close()
-            await engine.dispose()
 
-    async def test_get_active_by_name_inactive(self, postgres_uri: str) -> None:
+    async def test_get_active_by_name_inactive(self, async_session_factory: async_sessionmaker) -> None:
         """Test that inactive templates are not returned."""
-        session, engine = await _create_db_session(postgres_uri)
-        try:
+        async with async_session_factory() as session:
             service = EmailTemplateService(session=session)
             template = await service.create(
                 EmailTemplate(
@@ -154,14 +125,10 @@ class TestEmailTemplateService:
 
             found = await service.get_active_by_name(template.internal_name)
             assert found is None
-        finally:
-            await session.close()
-            await engine.dispose()
 
-    async def test_list_by_type(self, postgres_uri: str) -> None:
+    async def test_list_by_type(self, async_session_factory: async_sessionmaker) -> None:
         """Test listing templates by type."""
-        session, engine = await _create_db_session(postgres_uri)
-        try:
+        async with async_session_factory() as session:
             service = EmailTemplateService(session=session)
 
             await service.create(
@@ -186,14 +153,10 @@ class TestEmailTemplateService:
             newsletters = await service.list_by_type(EmailTemplateType.NEWSLETTER)
             assert len(newsletters) >= 1
             assert all(t.template_type == EmailTemplateType.NEWSLETTER for t in newsletters)
-        finally:
-            await session.close()
-            await engine.dispose()
 
-    async def test_list_active(self, postgres_uri: str) -> None:
+    async def test_list_active(self, async_session_factory: async_sessionmaker) -> None:
         """Test listing only active templates."""
-        session, engine = await _create_db_session(postgres_uri)
-        try:
+        async with async_session_factory() as session:
             service = EmailTemplateService(session=session)
 
             await service.create(
@@ -219,27 +182,19 @@ class TestEmailTemplateService:
 
             active = await service.list_active()
             assert all(t.is_active for t in active)
-        finally:
-            await session.close()
-            await engine.dispose()
 
-    async def test_validate_template_valid(self, postgres_uri: str) -> None:
+    async def test_validate_template_valid(self, async_session_factory: async_sessionmaker) -> None:
         """Test validating a valid template."""
-        session, engine = await _create_db_session(postgres_uri)
-        try:
-            sample_template = await _create_sample_template(session)
+        async with async_session_factory() as session:
+            sample_template = await _create_sample_template(async_session_factory)
             service = EmailTemplateService(session=session)
             errors = await service.validate_template(sample_template.id)
 
             assert errors == []
-        finally:
-            await session.close()
-            await engine.dispose()
 
-    async def test_validate_template_invalid(self, postgres_uri: str) -> None:
+    async def test_validate_template_invalid(self, async_session_factory: async_sessionmaker) -> None:
         """Test validating an invalid template."""
-        session, engine = await _create_db_session(postgres_uri)
-        try:
+        async with async_session_factory() as session:
             service = EmailTemplateService(session=session)
             template = await service.create(
                 EmailTemplate(
@@ -254,15 +209,11 @@ class TestEmailTemplateService:
             errors = await service.validate_template(template.id)
             assert len(errors) > 0
             assert any("subject" in error.lower() for error in errors)
-        finally:
-            await session.close()
-            await engine.dispose()
 
-    async def test_preview_template(self, postgres_uri: str) -> None:
+    async def test_preview_template(self, async_session_factory: async_sessionmaker) -> None:
         """Test previewing a rendered template."""
-        session, engine = await _create_db_session(postgres_uri)
-        try:
-            sample_template = await _create_sample_template(session)
+        async with async_session_factory() as session:
+            sample_template = await _create_sample_template(async_session_factory)
             service = EmailTemplateService(session=session)
             preview = await service.preview_template(sample_template.id, {"name": "John"})
 
@@ -270,19 +221,15 @@ class TestEmailTemplateService:
             assert preview["subject"] == "Hello John!"
             assert "Hello John" in preview["content_text"]
             assert "<h1>Hello John!</h1>" in preview["content_html"]
-        finally:
-            await session.close()
-            await engine.dispose()
 
 
 @pytest.mark.integration
 class TestEmailLogService:
     """Integration tests for EmailLogService."""
 
-    async def test_create_log(self, postgres_uri: str) -> None:
+    async def test_create_log(self, async_session_factory: async_sessionmaker) -> None:
         """Test creating an email log entry."""
-        session, engine = await _create_db_session(postgres_uri)
-        try:
+        async with async_session_factory() as session:
             service = EmailLogService(session=session)
             log = await service.create(
                 EmailLog(
@@ -296,14 +243,10 @@ class TestEmailLogService:
             assert log.id is not None
             assert log.template_name == "welcome_email"
             assert log.status == "sent"
-        finally:
-            await session.close()
-            await engine.dispose()
 
-    async def test_list_by_recipient(self, postgres_uri: str) -> None:
+    async def test_list_by_recipient(self, async_session_factory: async_sessionmaker) -> None:
         """Test listing logs by recipient."""
-        session, engine = await _create_db_session(postgres_uri)
-        try:
+        async with async_session_factory() as session:
             service = EmailLogService(session=session)
             email = f"recipient_{uuid4().hex[:8]}@example.com"
 
@@ -335,14 +278,10 @@ class TestEmailLogService:
             logs = await service.list_by_recipient(email)
             assert len(logs) == 2
             assert all(log.recipient_email == email for log in logs)
-        finally:
-            await session.close()
-            await engine.dispose()
 
-    async def test_list_by_template(self, postgres_uri: str) -> None:
+    async def test_list_by_template(self, async_session_factory: async_sessionmaker) -> None:
         """Test listing logs by template name."""
-        session, engine = await _create_db_session(postgres_uri)
-        try:
+        async with async_session_factory() as session:
             service = EmailLogService(session=session)
             template_name = f"template_{uuid4().hex[:8]}"
 
@@ -366,14 +305,10 @@ class TestEmailLogService:
             logs = await service.list_by_template(template_name)
             assert len(logs) == 2
             assert all(log.template_name == template_name for log in logs)
-        finally:
-            await session.close()
-            await engine.dispose()
 
-    async def test_list_failed(self, postgres_uri: str) -> None:
+    async def test_list_failed(self, async_session_factory: async_sessionmaker) -> None:
         """Test listing failed email logs."""
-        session, engine = await _create_db_session(postgres_uri)
-        try:
+        async with async_session_factory() as session:
             service = EmailLogService(session=session)
 
             await service.create(
@@ -397,19 +332,15 @@ class TestEmailLogService:
             failed = await service.list_failed()
             assert len(failed) >= 1
             assert all(log.status == "failed" for log in failed)
-        finally:
-            await session.close()
-            await engine.dispose()
 
 
 @pytest.mark.integration
 class TestMailingService:
     """Integration tests for MailingService."""
 
-    async def test_send_email_template_not_found(self, postgres_uri: str) -> None:
+    async def test_send_email_template_not_found(self, async_session_factory: async_sessionmaker) -> None:
         """Test sending email with non-existent template."""
-        session, engine = await _create_db_session(postgres_uri)
-        try:
+        async with async_session_factory() as session:
             service = MailingService(session=session)
             log = await service.send_email(
                 template_name="nonexistent_template",
@@ -418,14 +349,10 @@ class TestMailingService:
 
             assert log.status == "failed"
             assert "not found" in log.error_message.lower()
-        finally:
-            await session.close()
-            await engine.dispose()
 
-    async def test_send_email_inactive_template(self, postgres_uri: str) -> None:
+    async def test_send_email_inactive_template(self, async_session_factory: async_sessionmaker) -> None:
         """Test sending email with inactive template."""
-        session, engine = await _create_db_session(postgres_uri)
-        try:
+        async with async_session_factory() as session:
             template_service = EmailTemplateService(session=session)
             await template_service.create(
                 EmailTemplate(
@@ -446,15 +373,11 @@ class TestMailingService:
 
             assert log.status == "failed"
             assert "not found" in log.error_message.lower() or "inactive" in log.error_message.lower()
-        finally:
-            await session.close()
-            await engine.dispose()
 
-    async def test_send_email_success(self, postgres_uri: str) -> None:
+    async def test_send_email_success(self, async_session_factory: async_sessionmaker) -> None:
         """Test successful email sending."""
-        session, engine = await _create_db_session(postgres_uri)
-        try:
-            sample_template = await _create_sample_template(session)
+        async with async_session_factory() as session:
+            sample_template = await _create_sample_template(async_session_factory)
             service = MailingService(session=session)
 
             with patch.object(service, "_send_smtp"):
@@ -467,17 +390,13 @@ class TestMailingService:
                 assert log.status == "sent"
                 assert log.subject == "Hello Test User!"
                 assert log.recipient_email == "recipient@example.com"
-        finally:
-            await session.close()
-            await engine.dispose()
 
-    async def test_send_email_smtp_failure(self, postgres_uri: str) -> None:
+    async def test_send_email_smtp_failure(self, async_session_factory: async_sessionmaker) -> None:
         """Test email sending with SMTP failure."""
         import smtplib
 
-        session, engine = await _create_db_session(postgres_uri)
-        try:
-            sample_template = await _create_sample_template(session)
+        async with async_session_factory() as session:
+            sample_template = await _create_sample_template(async_session_factory)
             service = MailingService(session=session)
 
             with patch.object(service, "_send_smtp", side_effect=smtplib.SMTPException("Connection refused")):
@@ -489,15 +408,11 @@ class TestMailingService:
 
                 assert log.status == "failed"
                 assert "SMTP" in log.error_message
-        finally:
-            await session.close()
-            await engine.dispose()
 
-    async def test_send_bulk_email(self, postgres_uri: str) -> None:
+    async def test_send_bulk_email(self, async_session_factory: async_sessionmaker) -> None:
         """Test bulk email sending."""
-        session, engine = await _create_db_session(postgres_uri)
-        try:
-            sample_template = await _create_sample_template(session)
+        async with async_session_factory() as session:
+            sample_template = await _create_sample_template(async_session_factory)
             service = MailingService(session=session)
             recipients = ["user1@example.com", "user2@example.com", "user3@example.com"]
 
@@ -511,15 +426,11 @@ class TestMailingService:
                 assert len(logs) == 3
                 assert all(log.status == "sent" for log in logs)
                 assert mock_smtp.call_count == 3
-        finally:
-            await session.close()
-            await engine.dispose()
 
-    async def test_send_bulk_email_with_per_recipient_context(self, postgres_uri: str) -> None:
+    async def test_send_bulk_email_with_per_recipient_context(self, async_session_factory: async_sessionmaker) -> None:
         """Test bulk email with per-recipient context."""
-        session, engine = await _create_db_session(postgres_uri)
-        try:
-            sample_template = await _create_sample_template(session)
+        async with async_session_factory() as session:
+            sample_template = await _create_sample_template(async_session_factory)
             service = MailingService(session=session)
             recipients = ["alice@example.com", "bob@example.com"]
             per_recipient = {
@@ -539,14 +450,10 @@ class TestMailingService:
                 bob_log = next(log for log in logs if log.recipient_email == "bob@example.com")
                 assert "Alice" in alice_log.subject
                 assert "Bob" in bob_log.subject
-        finally:
-            await session.close()
-            await engine.dispose()
 
-    async def test_send_custom_email(self, postgres_uri: str) -> None:
+    async def test_send_custom_email(self, async_session_factory: async_sessionmaker) -> None:
         """Test sending custom email without template."""
-        session, engine = await _create_db_session(postgres_uri)
-        try:
+        async with async_session_factory() as session:
             service = MailingService(session=session)
 
             with patch.object(service, "_send_smtp"):
@@ -560,9 +467,6 @@ class TestMailingService:
                 assert log.status == "sent"
                 assert log.template_name == "custom"
                 assert log.subject == "Custom Subject"
-        finally:
-            await session.close()
-            await engine.dispose()
 
 
 @pytest.mark.integration
@@ -574,11 +478,10 @@ class TestMailingServiceWithMailDev:
         docker compose up -d maildev
     """
 
-    async def test_send_email_to_maildev(self, postgres_uri: str) -> None:
+    async def test_send_email_to_maildev(self, async_session_factory: async_sessionmaker) -> None:
         """Test sending actual email to MailDev."""
-        session, engine = await _create_db_session(postgres_uri)
-        try:
-            sample_template = await _create_sample_template(session)
+        async with async_session_factory() as session:
+            sample_template = await _create_sample_template(async_session_factory)
             service = MailingService(session=session)
             service.smtp_host = "127.0.0.1"
             service.smtp_port = 1025
@@ -594,14 +497,10 @@ class TestMailingServiceWithMailDev:
 
             assert log.status == "sent"
             assert log.recipient_email == "maildev-test@example.com"
-        finally:
-            await session.close()
-            await engine.dispose()
 
-    async def test_send_custom_email_to_maildev(self, postgres_uri: str) -> None:
+    async def test_send_custom_email_to_maildev(self, async_session_factory: async_sessionmaker) -> None:
         """Test sending custom email to MailDev."""
-        session, engine = await _create_db_session(postgres_uri)
-        try:
+        async with async_session_factory() as session:
             service = MailingService(session=session)
             service.smtp_host = "127.0.0.1"
             service.smtp_port = 1025
@@ -617,47 +516,32 @@ class TestMailingServiceWithMailDev:
             )
 
             assert log.status == "sent"
-        finally:
-            await session.close()
-            await engine.dispose()
 
 
 @pytest.mark.integration
 class TestEmailTemplateModel:
     """Integration tests for EmailTemplate model rendering."""
 
-    async def test_render_subject(self, postgres_uri: str) -> None:
+    async def test_render_subject(self, async_session_factory: async_sessionmaker) -> None:
         """Test rendering template subject."""
-        session, engine = await _create_db_session(postgres_uri)
-        try:
-            sample_template = await _create_sample_template(session)
+        async with async_session_factory() as session:
+            sample_template = await _create_sample_template(async_session_factory)
             subject = sample_template.render_subject({"name": "World"})
             assert subject == "Hello World!"
-        finally:
-            await session.close()
-            await engine.dispose()
 
-    async def test_render_content_text(self, postgres_uri: str) -> None:
+    async def test_render_content_text(self, async_session_factory: async_sessionmaker) -> None:
         """Test rendering plain text content."""
-        session, engine = await _create_db_session(postgres_uri)
-        try:
-            sample_template = await _create_sample_template(session)
+        async with async_session_factory() as session:
+            sample_template = await _create_sample_template(async_session_factory)
             content = sample_template.render_content_text({"name": "World"})
             assert "Hello World" in content
-        finally:
-            await session.close()
-            await engine.dispose()
 
-    async def test_render_content_html(self, postgres_uri: str) -> None:
+    async def test_render_content_html(self, async_session_factory: async_sessionmaker) -> None:
         """Test rendering HTML content."""
-        session, engine = await _create_db_session(postgres_uri)
-        try:
-            sample_template = await _create_sample_template(session)
+        async with async_session_factory() as session:
+            sample_template = await _create_sample_template(async_session_factory)
             content = sample_template.render_content_html({"name": "World"})
             assert "<h1>Hello World!</h1>" in content
-        finally:
-            await session.close()
-            await engine.dispose()
 
     async def test_render_content_html_none(self) -> None:
         """Test rendering template without HTML content."""
@@ -672,16 +556,12 @@ class TestEmailTemplateModel:
         result = template.render_content_html()
         assert result is None
 
-    async def test_validate_templates_valid(self, postgres_uri: str) -> None:
+    async def test_validate_templates_valid(self, async_session_factory: async_sessionmaker) -> None:
         """Test validation of valid templates."""
-        session, engine = await _create_db_session(postgres_uri)
-        try:
-            sample_template = await _create_sample_template(session)
+        async with async_session_factory() as session:
+            sample_template = await _create_sample_template(async_session_factory)
             errors = sample_template.validate_templates()
             assert errors == []
-        finally:
-            await session.close()
-            await engine.dispose()
 
     async def test_validate_templates_syntax_error(self) -> None:
         """Test validation catches syntax errors."""
@@ -700,29 +580,29 @@ class MailingTestFixtures:
     """Container for mailing test fixtures."""
 
     client: AsyncTestClient
-    postgres_uri: str
     staff_user: User
     regular_user: User
     admin_user: User
 
 
 @pytest.fixture
-async def mailing_fixtures(postgres_uri: str) -> AsyncIterator[MailingTestFixtures]:
-    """Async test client with mailing controllers and test users.
+async def mailing_fixtures(
+    async_engine: AsyncEngine,
+    async_session_factory: async_sessionmaker,
+    _module_sqlalchemy_config: SQLAlchemyAsyncConfig,
+) -> AsyncIterator[MailingTestFixtures]:
+    """Async test client with mailing controllers and test users using module-scoped config.
 
-    Creates the database schema, test users, and client in the correct order
-    to ensure all tests have access to the same database state.
+    Uses the shared _module_sqlalchemy_config from conftest.py instead of creating
+    a new engine per test, which was causing TooManyConnectionsError.
     """
-    from sqlalchemy import text
+    async with async_engine.begin() as conn:
+        result = await conn.execute(text("SELECT tablename FROM pg_tables WHERE schemaname = 'public'"))
+        existing_tables = {row[0] for row in result.fetchall()}
 
-    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
-
-    async with engine.begin() as conn:
-        await conn.execute(text("DROP SCHEMA public CASCADE"))
-        await conn.execute(text("CREATE SCHEMA public"))
-        await conn.run_sync(AuditBase.metadata.create_all)
-
-    async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+        for table in reversed(AuditBase.metadata.sorted_tables):
+            if table.name in existing_tables:
+                await conn.execute(text(f"TRUNCATE TABLE {table.name} CASCADE"))
 
     async with async_session_factory() as session:
         staff = User(
@@ -766,15 +646,7 @@ async def mailing_fixtures(postgres_uri: str) -> AsyncIterator[MailingTestFixtur
         )
         admin_data = User(id=admin.id, email=admin.email, username=admin.username, is_staff=True, is_superuser=True)
 
-    await engine.dispose()
-
-    sqlalchemy_config = SQLAlchemyAsyncConfig(
-        connection_string=postgres_uri,
-        metadata=AuditBase.metadata,
-        create_all=False,
-        before_send_handler="autocommit",
-    )
-    sqlalchemy_plugin = SQLAlchemyPlugin(config=sqlalchemy_config)
+    sqlalchemy_plugin = SQLAlchemyPlugin(config=_module_sqlalchemy_config)
 
     test_app = Litestar(
         route_handlers=[EmailTemplateController, EmailLogController],
@@ -790,7 +662,6 @@ async def mailing_fixtures(postgres_uri: str) -> AsyncIterator[MailingTestFixtur
     ) as test_client:
         fixtures = MailingTestFixtures()
         fixtures.client = test_client
-        fixtures.postgres_uri = postgres_uri
         fixtures.staff_user = staff_data
         fixtures.regular_user = regular_data
         fixtures.admin_user = admin_data

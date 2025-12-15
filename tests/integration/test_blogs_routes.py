@@ -16,9 +16,8 @@ from advanced_alchemy.filters import LimitOffset
 from litestar import Litestar
 from litestar.params import Parameter
 from litestar.testing import AsyncTestClient
-from sqlalchemy import NullPool, text
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import text
+from sqlalchemy.ext.asyncio import AsyncEngine, async_sessionmaker
 
 from pydotorg.core.database.base import AuditBase
 from pydotorg.domains.blogs.controllers import (
@@ -38,14 +37,12 @@ class BlogsTestFixtures:
     """Test fixtures for blogs routes."""
 
     client: AsyncTestClient
-    postgres_uri: str
+    session_factory: async_sessionmaker
 
 
-async def _create_feed_via_db(postgres_uri: str, **feed_data: object) -> dict:
-    """Create a feed directly in the database."""
-    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
-    async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-    async with async_session_factory() as session:
+async def _create_feed_via_db(session_factory: async_sessionmaker, **feed_data: object) -> dict:
+    """Create a feed directly in the database using shared session factory."""
+    async with session_factory() as session:
         feed = Feed(
             name=feed_data.get("name", "Test Blog"),
             website_url=feed_data.get("website_url", "https://testblog.com"),
@@ -55,22 +52,18 @@ async def _create_feed_via_db(postgres_uri: str, **feed_data: object) -> dict:
         session.add(feed)
         await session.commit()
         await session.refresh(feed)
-        result = {
+        return {
             "id": str(feed.id),
             "name": feed.name,
             "website_url": feed.website_url,
             "feed_url": feed.feed_url,
             "is_active": feed.is_active,
         }
-    await engine.dispose()
-    return result
 
 
-async def _create_entry_via_db(postgres_uri: str, feed_id: str, **entry_data: object) -> dict:
-    """Create a blog entry directly in the database."""
-    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
-    async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-    async with async_session_factory() as session:
+async def _create_entry_via_db(session_factory: async_sessionmaker, feed_id: str, **entry_data: object) -> dict:
+    """Create a blog entry directly in the database using shared session factory."""
+    async with session_factory() as session:
         from uuid import UUID as PyUUID
 
         entry = BlogEntry(
@@ -85,22 +78,18 @@ async def _create_entry_via_db(postgres_uri: str, feed_id: str, **entry_data: ob
         session.add(entry)
         await session.commit()
         await session.refresh(entry)
-        result = {
+        return {
             "id": str(entry.id),
             "feed_id": str(entry.feed_id),
             "title": entry.title,
             "url": entry.url,
             "guid": entry.guid,
         }
-    await engine.dispose()
-    return result
 
 
-async def _create_aggregate_via_db(postgres_uri: str, **aggregate_data: object) -> dict:
-    """Create a feed aggregate directly in the database."""
-    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
-    async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-    async with async_session_factory() as session:
+async def _create_aggregate_via_db(session_factory: async_sessionmaker, **aggregate_data: object) -> dict:
+    """Create a feed aggregate directly in the database using shared session factory."""
+    async with session_factory() as session:
         slug = aggregate_data.get("slug", f"aggregate-{uuid4().hex[:8]}")
         aggregate = FeedAggregate(
             name=aggregate_data.get("name", "Test Aggregate"),
@@ -110,20 +99,16 @@ async def _create_aggregate_via_db(postgres_uri: str, **aggregate_data: object) 
         session.add(aggregate)
         await session.commit()
         await session.refresh(aggregate)
-        result = {
+        return {
             "id": str(aggregate.id),
             "name": aggregate.name,
             "slug": aggregate.slug,
         }
-    await engine.dispose()
-    return result
 
 
-async def _create_related_blog_via_db(postgres_uri: str, **blog_data: object) -> dict:
-    """Create a related blog directly in the database."""
-    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
-    async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-    async with async_session_factory() as session:
+async def _create_related_blog_via_db(session_factory: async_sessionmaker, **blog_data: object) -> dict:
+    """Create a related blog directly in the database using shared session factory."""
+    async with session_factory() as session:
         blog = RelatedBlog(
             blog_name=blog_data.get("blog_name", "Related Blog"),
             blog_website=blog_data.get("blog_website", "https://relatedblog.com"),
@@ -132,24 +117,31 @@ async def _create_related_blog_via_db(postgres_uri: str, **blog_data: object) ->
         session.add(blog)
         await session.commit()
         await session.refresh(blog)
-        result = {
+        return {
             "id": str(blog.id),
             "blog_name": blog.blog_name,
             "blog_website": blog.blog_website,
         }
-    await engine.dispose()
-    return result
 
 
 @pytest.fixture
-async def blogs_fixtures(postgres_uri: str) -> AsyncIterator[BlogsTestFixtures]:
-    """Create test fixtures with fresh database schema."""
-    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
-    async with engine.begin() as conn:
-        await conn.execute(text("DROP SCHEMA public CASCADE"))
-        await conn.execute(text("CREATE SCHEMA public"))
-        await conn.run_sync(AuditBase.metadata.create_all)
-    await engine.dispose()
+async def blogs_fixtures(
+    async_engine: AsyncEngine,
+    async_session_factory: async_sessionmaker,
+    _module_sqlalchemy_config: SQLAlchemyAsyncConfig,
+) -> AsyncIterator[BlogsTestFixtures]:
+    """Create test fixtures using module-scoped config to prevent connection exhaustion.
+
+    Uses the shared _module_sqlalchemy_config from conftest.py instead of creating
+    a new SQLAlchemyAsyncConfig per test, which was causing TooManyConnectionsError.
+    """
+    async with async_engine.begin() as conn:
+        result = await conn.execute(text("SELECT tablename FROM pg_tables WHERE schemaname = 'public'"))
+        existing_tables = {row[0] for row in result.fetchall()}
+
+        for table in reversed(AuditBase.metadata.sorted_tables):
+            if table.name in existing_tables:
+                await conn.execute(text(f"TRUNCATE TABLE {table.name} CASCADE"))
 
     async def provide_limit_offset(
         current_page: int = Parameter(ge=1, default=1, query="currentPage"),
@@ -158,13 +150,7 @@ async def blogs_fixtures(postgres_uri: str) -> AsyncIterator[BlogsTestFixtures]:
         """Provide limit offset pagination."""
         return LimitOffset(page_size, page_size * (current_page - 1))
 
-    sqlalchemy_config = SQLAlchemyAsyncConfig(
-        connection_string=postgres_uri,
-        metadata=AuditBase.metadata,
-        create_all=False,
-        before_send_handler="autocommit",
-    )
-    sqlalchemy_plugin = SQLAlchemyPlugin(config=sqlalchemy_config)
+    sqlalchemy_plugin = SQLAlchemyPlugin(config=_module_sqlalchemy_config)
 
     blogs_deps = get_blogs_dependencies()
     blogs_deps["limit_offset"] = provide_limit_offset
@@ -184,7 +170,7 @@ async def blogs_fixtures(postgres_uri: str) -> AsyncIterator[BlogsTestFixtures]:
     async with AsyncTestClient(app=app, base_url="http://testserver.local") as client:
         fixtures = BlogsTestFixtures()
         fixtures.client = client
-        fixtures.postgres_uri = postgres_uri
+        fixtures.session_factory = async_session_factory
         yield fixtures
 
 
@@ -202,7 +188,7 @@ class TestFeedControllerRoutes:
         """Test listing feeds with pagination."""
         for i in range(3):
             await _create_feed_via_db(
-                blogs_fixtures.postgres_uri,
+                blogs_fixtures.session_factory,
                 name=f"Feed {i}",
                 feed_url=f"https://blog{i}.com/feed-{uuid4().hex[:8]}",
             )
@@ -214,12 +200,12 @@ class TestFeedControllerRoutes:
     async def test_list_active_feeds(self, blogs_fixtures: BlogsTestFixtures) -> None:
         """Test listing active feeds."""
         await _create_feed_via_db(
-            blogs_fixtures.postgres_uri,
+            blogs_fixtures.session_factory,
             name="Active Feed",
             is_active=True,
         )
         await _create_feed_via_db(
-            blogs_fixtures.postgres_uri,
+            blogs_fixtures.session_factory,
             name="Inactive Feed",
             is_active=False,
         )
@@ -293,10 +279,10 @@ class TestBlogEntryControllerRoutes:
 
     async def test_list_entries_with_pagination(self, blogs_fixtures: BlogsTestFixtures) -> None:
         """Test listing entries with pagination."""
-        feed = await _create_feed_via_db(blogs_fixtures.postgres_uri, name="Test Feed")
+        feed = await _create_feed_via_db(blogs_fixtures.session_factory, name="Test Feed")
         for i in range(3):
             await _create_entry_via_db(
-                blogs_fixtures.postgres_uri,
+                blogs_fixtures.session_factory,
                 feed_id=feed["id"],
                 title=f"Entry {i}",
                 guid=f"guid-{i}-{uuid4().hex}",
@@ -308,7 +294,7 @@ class TestBlogEntryControllerRoutes:
 
     async def test_list_recent_entries(self, blogs_fixtures: BlogsTestFixtures) -> None:
         """Test listing recent entries."""
-        feed = await _create_feed_via_db(blogs_fixtures.postgres_uri, name="Recent Feed")
+        feed = await _create_feed_via_db(blogs_fixtures.session_factory, name="Recent Feed")
         await _create_entry_via_db(
             blogs_fixtures.postgres_uri,
             feed_id=feed["id"],
@@ -319,7 +305,7 @@ class TestBlogEntryControllerRoutes:
 
     async def test_list_entries_by_feed(self, blogs_fixtures: BlogsTestFixtures) -> None:
         """Test listing entries for a specific feed."""
-        feed = await _create_feed_via_db(blogs_fixtures.postgres_uri, name="Feed For Entries")
+        feed = await _create_feed_via_db(blogs_fixtures.session_factory, name="Feed For Entries")
         await _create_entry_via_db(
             blogs_fixtures.postgres_uri,
             feed_id=feed["id"],
@@ -330,7 +316,7 @@ class TestBlogEntryControllerRoutes:
 
     async def test_create_entry(self, blogs_fixtures: BlogsTestFixtures) -> None:
         """Test creating a blog entry."""
-        feed = await _create_feed_via_db(blogs_fixtures.postgres_uri, name="Create Entry Feed")
+        feed = await _create_feed_via_db(blogs_fixtures.session_factory, name="Create Entry Feed")
         entry_data = {
             "feed_id": feed["id"],
             "title": "New Blog Post",
@@ -348,9 +334,9 @@ class TestBlogEntryControllerRoutes:
 
     async def test_get_entry_by_id(self, blogs_fixtures: BlogsTestFixtures) -> None:
         """Test getting an entry by ID."""
-        feed = await _create_feed_via_db(blogs_fixtures.postgres_uri, name="Get Entry Feed")
+        feed = await _create_feed_via_db(blogs_fixtures.session_factory, name="Get Entry Feed")
         entry = await _create_entry_via_db(
-            blogs_fixtures.postgres_uri,
+            blogs_fixtures.session_factory,
             feed_id=feed["id"],
             title="Get This Entry",
         )
@@ -368,9 +354,9 @@ class TestBlogEntryControllerRoutes:
 
     async def test_update_entry(self, blogs_fixtures: BlogsTestFixtures) -> None:
         """Test updating a blog entry."""
-        feed = await _create_feed_via_db(blogs_fixtures.postgres_uri, name="Update Entry Feed")
+        feed = await _create_feed_via_db(blogs_fixtures.session_factory, name="Update Entry Feed")
         entry = await _create_entry_via_db(
-            blogs_fixtures.postgres_uri,
+            blogs_fixtures.session_factory,
             feed_id=feed["id"],
             title="Original Title",
         )
@@ -383,9 +369,9 @@ class TestBlogEntryControllerRoutes:
 
     async def test_delete_entry(self, blogs_fixtures: BlogsTestFixtures) -> None:
         """Test deleting a blog entry."""
-        feed = await _create_feed_via_db(blogs_fixtures.postgres_uri, name="Delete Entry Feed")
+        feed = await _create_feed_via_db(blogs_fixtures.session_factory, name="Delete Entry Feed")
         entry = await _create_entry_via_db(
-            blogs_fixtures.postgres_uri,
+            blogs_fixtures.session_factory,
             feed_id=feed["id"],
             title="Delete Me Entry",
         )
@@ -407,7 +393,7 @@ class TestFeedAggregateControllerRoutes:
         """Test listing aggregates with pagination."""
         for i in range(3):
             await _create_aggregate_via_db(
-                blogs_fixtures.postgres_uri,
+                blogs_fixtures.session_factory,
                 name=f"Aggregate {i}",
                 slug=f"aggregate-{i}-{uuid4().hex[:8]}",
             )
@@ -433,7 +419,7 @@ class TestFeedAggregateControllerRoutes:
     async def test_get_aggregate_by_id(self, blogs_fixtures: BlogsTestFixtures) -> None:
         """Test getting an aggregate by ID."""
         aggregate = await _create_aggregate_via_db(
-            blogs_fixtures.postgres_uri,
+            blogs_fixtures.session_factory,
             name="Get Aggregate Test",
         )
         response = await blogs_fixtures.client.get(f"/api/v1/feed-aggregates/{aggregate['id']}")
@@ -452,7 +438,7 @@ class TestFeedAggregateControllerRoutes:
         """Test getting an aggregate by slug."""
         slug = f"slug-test-{uuid4().hex[:8]}"
         await _create_aggregate_via_db(
-            blogs_fixtures.postgres_uri,
+            blogs_fixtures.session_factory,
             name="Slug Test Aggregate",
             slug=slug,
         )
@@ -470,7 +456,7 @@ class TestFeedAggregateControllerRoutes:
     async def test_update_aggregate(self, blogs_fixtures: BlogsTestFixtures) -> None:
         """Test updating a feed aggregate."""
         aggregate = await _create_aggregate_via_db(
-            blogs_fixtures.postgres_uri,
+            blogs_fixtures.session_factory,
             name="Original Aggregate",
         )
         update_data = {"name": "Updated Aggregate", "description": "Updated description"}
@@ -483,7 +469,7 @@ class TestFeedAggregateControllerRoutes:
     async def test_delete_aggregate(self, blogs_fixtures: BlogsTestFixtures) -> None:
         """Test deleting a feed aggregate."""
         aggregate = await _create_aggregate_via_db(
-            blogs_fixtures.postgres_uri,
+            blogs_fixtures.session_factory,
             name="Delete Me Aggregate",
         )
         response = await blogs_fixtures.client.delete(f"/api/v1/feed-aggregates/{aggregate['id']}")
@@ -504,7 +490,7 @@ class TestRelatedBlogControllerRoutes:
         """Test listing related blogs with pagination."""
         for i in range(3):
             await _create_related_blog_via_db(
-                blogs_fixtures.postgres_uri,
+                blogs_fixtures.session_factory,
                 blog_name=f"Related Blog {i}",
                 blog_website=f"https://related{i}.com",
             )
@@ -529,7 +515,7 @@ class TestRelatedBlogControllerRoutes:
     async def test_get_related_blog_by_id(self, blogs_fixtures: BlogsTestFixtures) -> None:
         """Test getting a related blog by ID."""
         blog = await _create_related_blog_via_db(
-            blogs_fixtures.postgres_uri,
+            blogs_fixtures.session_factory,
             blog_name="Get Related Blog Test",
         )
         response = await blogs_fixtures.client.get(f"/api/v1/related-blogs/{blog['id']}")
@@ -547,7 +533,7 @@ class TestRelatedBlogControllerRoutes:
     async def test_update_related_blog(self, blogs_fixtures: BlogsTestFixtures) -> None:
         """Test updating a related blog."""
         blog = await _create_related_blog_via_db(
-            blogs_fixtures.postgres_uri,
+            blogs_fixtures.session_factory,
             blog_name="Original Related Blog",
         )
         update_data = {"blog_name": "Updated Related Blog", "description": "Updated"}
@@ -560,7 +546,7 @@ class TestRelatedBlogControllerRoutes:
     async def test_delete_related_blog(self, blogs_fixtures: BlogsTestFixtures) -> None:
         """Test deleting a related blog."""
         blog = await _create_related_blog_via_db(
-            blogs_fixtures.postgres_uri,
+            blogs_fixtures.session_factory,
             blog_name="Delete Me Related Blog",
         )
         response = await blogs_fixtures.client.delete(f"/api/v1/related-blogs/{blog['id']}")
@@ -590,7 +576,7 @@ class TestBlogsValidation:
 
     async def test_create_entry_missing_title(self, blogs_fixtures: BlogsTestFixtures) -> None:
         """Test creating an entry without title fails validation."""
-        feed = await _create_feed_via_db(blogs_fixtures.postgres_uri, name="Validation Feed")
+        feed = await _create_feed_via_db(blogs_fixtures.session_factory, name="Validation Feed")
         entry_data = {
             "feed_id": feed["id"],
             "url": "https://test.com/post",

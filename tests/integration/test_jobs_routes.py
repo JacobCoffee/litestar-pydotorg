@@ -10,9 +10,8 @@ from advanced_alchemy.extensions.litestar import SQLAlchemyPlugin
 from advanced_alchemy.extensions.litestar.plugins.init.config.asyncio import SQLAlchemyAsyncConfig
 from litestar import Litestar
 from litestar.testing import AsyncTestClient
-from sqlalchemy import NullPool
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import text
+from sqlalchemy.ext.asyncio import AsyncEngine, async_sessionmaker
 
 from pydotorg.core.auth.middleware import JWTAuthMiddleware
 from pydotorg.core.database.base import AuditBase
@@ -34,19 +33,15 @@ class JobsTestFixtures:
     """Container for jobs test fixtures."""
 
     client: AsyncTestClient
-    postgres_uri: str
+    session_factory: async_sessionmaker
     staff_user: User
     regular_user: User
     admin_user: User
 
 
-async def _create_job_via_db(postgres_uri: str, creator_id, **job_data) -> dict:
-    """Create a job directly via database. Used only at fixture setup time."""
-
-    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
-    async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-
-    async with async_session_factory() as session:
+async def _create_job_via_db(session_factory: async_sessionmaker, creator_id, **job_data) -> dict:
+    """Create a job directly via database using shared session factory."""
+    async with session_factory() as session:
         job = Job(
             slug=job_data.get("slug", f"test-job-{uuid4().hex[:8]}"),
             creator_id=creator_id,
@@ -63,7 +58,7 @@ async def _create_job_via_db(postgres_uri: str, creator_id, **job_data) -> dict:
         session.add(job)
         await session.commit()
         await session.refresh(job)
-        result = {
+        return {
             "id": str(job.id),
             "slug": job.slug,
             "company_name": job.company_name,
@@ -71,18 +66,14 @@ async def _create_job_via_db(postgres_uri: str, creator_id, **job_data) -> dict:
             "status": job.status.value,
         }
 
-    await engine.dispose()
-    return result
 
-
-async def _create_review_comment_via_db(postgres_uri: str, job_id: str, creator_id, comment_text: str) -> dict:
-    """Create a review comment directly via database."""
+async def _create_review_comment_via_db(
+    session_factory: async_sessionmaker, job_id: str, creator_id, comment_text: str
+) -> dict:
+    """Create a review comment directly via database using shared session factory."""
     from pydotorg.domains.jobs.models import JobReviewComment
 
-    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
-    async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-
-    async with async_session_factory() as session:
+    async with session_factory() as session:
         comment = JobReviewComment(
             job_id=job_id,
             creator_id=creator_id,
@@ -91,25 +82,27 @@ async def _create_review_comment_via_db(postgres_uri: str, job_id: str, creator_
         session.add(comment)
         await session.commit()
         await session.refresh(comment)
-        result = {"id": str(comment.id), "comment": comment.comment}
-
-    await engine.dispose()
-    return result
+        return {"id": str(comment.id), "comment": comment.comment}
 
 
 @pytest.fixture
-async def jobs_fixtures(postgres_uri: str) -> AsyncIterator[JobsTestFixtures]:
-    """Async test client with jobs controllers and test users."""
-    from sqlalchemy import text
+async def jobs_fixtures(
+    async_engine: AsyncEngine,
+    async_session_factory: async_sessionmaker,
+    _module_sqlalchemy_config: SQLAlchemyAsyncConfig,
+) -> AsyncIterator[JobsTestFixtures]:
+    """Create test fixtures using module-scoped config to prevent connection exhaustion.
 
-    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
+    Uses the shared _module_sqlalchemy_config from conftest.py instead of creating
+    a new SQLAlchemyAsyncConfig per test, which was causing TooManyConnectionsError.
+    """
+    async with async_engine.begin() as conn:
+        result = await conn.execute(text("SELECT tablename FROM pg_tables WHERE schemaname = 'public'"))
+        existing_tables = {row[0] for row in result.fetchall()}
 
-    async with engine.begin() as conn:
-        await conn.execute(text("DROP SCHEMA public CASCADE"))
-        await conn.execute(text("CREATE SCHEMA public"))
-        await conn.run_sync(AuditBase.metadata.create_all)
-
-    async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+        for table in reversed(AuditBase.metadata.sorted_tables):
+            if table.name in existing_tables:
+                await conn.execute(text(f"TRUNCATE TABLE {table.name} CASCADE"))
 
     async with async_session_factory() as session:
         staff = User(
@@ -153,8 +146,6 @@ async def jobs_fixtures(postgres_uri: str) -> AsyncIterator[JobsTestFixtures]:
         )
         admin_data = User(id=admin.id, email=admin.email, username=admin.username, is_staff=True, is_superuser=True)
 
-    await engine.dispose()
-
     from advanced_alchemy.filters import LimitOffset
     from litestar.params import Parameter
 
@@ -165,13 +156,7 @@ async def jobs_fixtures(postgres_uri: str) -> AsyncIterator[JobsTestFixtures]:
         """Provide limit offset pagination."""
         return LimitOffset(page_size, page_size * (current_page - 1))
 
-    sqlalchemy_config = SQLAlchemyAsyncConfig(
-        connection_string=postgres_uri,
-        metadata=AuditBase.metadata,
-        create_all=False,
-        before_send_handler="autocommit",
-    )
-    sqlalchemy_plugin = SQLAlchemyPlugin(config=sqlalchemy_config)
+    sqlalchemy_plugin = SQLAlchemyPlugin(config=_module_sqlalchemy_config)
 
     jobs_deps = get_jobs_dependencies()
     jobs_deps["limit_offset"] = provide_limit_offset
@@ -195,7 +180,7 @@ async def jobs_fixtures(postgres_uri: str) -> AsyncIterator[JobsTestFixtures]:
     ) as test_client:
         fixtures = JobsTestFixtures()
         fixtures.client = test_client
-        fixtures.postgres_uri = postgres_uri
+        fixtures.session_factory = async_session_factory
         fixtures.staff_user = staff_data
         fixtures.regular_user = regular_data
         fixtures.admin_user = admin_data
@@ -398,7 +383,7 @@ class TestJobControllerRoutes:
 
     async def test_list_jobs(self, jobs_fixtures: JobsTestFixtures) -> None:
         """Test listing jobs."""
-        await _create_job_via_db(jobs_fixtures.postgres_uri, jobs_fixtures.staff_user.id)
+        await _create_job_via_db(jobs_fixtures.session_factory, jobs_fixtures.staff_user.id)
 
         response = await jobs_fixtures.client.get("/api/v1/jobs/")
         assert response.status_code == 200
@@ -406,8 +391,8 @@ class TestJobControllerRoutes:
 
     async def test_list_jobs_filter_by_status(self, jobs_fixtures: JobsTestFixtures) -> None:
         """Test listing jobs filtered by status."""
-        await _create_job_via_db(jobs_fixtures.postgres_uri, jobs_fixtures.staff_user.id, status=JobStatus.APPROVED)
-        await _create_job_via_db(jobs_fixtures.postgres_uri, jobs_fixtures.staff_user.id, status=JobStatus.DRAFT)
+        await _create_job_via_db(jobs_fixtures.session_factory, jobs_fixtures.staff_user.id, status=JobStatus.APPROVED)
+        await _create_job_via_db(jobs_fixtures.session_factory, jobs_fixtures.staff_user.id, status=JobStatus.DRAFT)
 
         response = await jobs_fixtures.client.get("/api/v1/jobs/?status=approved")
         assert response.status_code == 200
@@ -416,7 +401,7 @@ class TestJobControllerRoutes:
 
     async def test_get_job_by_id(self, jobs_fixtures: JobsTestFixtures) -> None:
         """Test getting a job by ID."""
-        job = await _create_job_via_db(jobs_fixtures.postgres_uri, jobs_fixtures.staff_user.id)
+        job = await _create_job_via_db(jobs_fixtures.session_factory, jobs_fixtures.staff_user.id)
 
         response = await jobs_fixtures.client.get(f"/api/v1/jobs/{job['id']}")
         assert response.status_code == 200
@@ -430,7 +415,7 @@ class TestJobControllerRoutes:
 
     async def test_update_job(self, jobs_fixtures: JobsTestFixtures) -> None:
         """Test updating a job."""
-        job = await _create_job_via_db(jobs_fixtures.postgres_uri, jobs_fixtures.staff_user.id)
+        job = await _create_job_via_db(jobs_fixtures.session_factory, jobs_fixtures.staff_user.id)
 
         updated_title = f"Senior Python Developer {uuid4().hex[:8]}"
         response = await jobs_fixtures.client.put(
@@ -441,7 +426,7 @@ class TestJobControllerRoutes:
 
     async def test_update_job_with_job_types(self, jobs_fixtures: JobsTestFixtures) -> None:
         """Test updating a job with job types."""
-        job = await _create_job_via_db(jobs_fixtures.postgres_uri, jobs_fixtures.staff_user.id)
+        job = await _create_job_via_db(jobs_fixtures.session_factory, jobs_fixtures.staff_user.id)
 
         type_response = await jobs_fixtures.client.post(
             "/api/v1/job-types/",
@@ -461,21 +446,27 @@ class TestJobControllerRoutes:
 
     async def test_submit_job(self, jobs_fixtures: JobsTestFixtures) -> None:
         """Test submitting a job for review."""
-        job = await _create_job_via_db(jobs_fixtures.postgres_uri, jobs_fixtures.staff_user.id, status=JobStatus.DRAFT)
+        job = await _create_job_via_db(
+            jobs_fixtures.session_factory, jobs_fixtures.staff_user.id, status=JobStatus.DRAFT
+        )
 
         response = await jobs_fixtures.client.patch(f"/api/v1/jobs/{job['id']}/submit")
         assert response.status_code in (200, 500)
 
     async def test_approve_job(self, jobs_fixtures: JobsTestFixtures) -> None:
         """Test approving a job."""
-        job = await _create_job_via_db(jobs_fixtures.postgres_uri, jobs_fixtures.staff_user.id, status=JobStatus.REVIEW)
+        job = await _create_job_via_db(
+            jobs_fixtures.session_factory, jobs_fixtures.staff_user.id, status=JobStatus.REVIEW
+        )
 
         response = await jobs_fixtures.client.patch(f"/api/v1/jobs/{job['id']}/approve")
         assert response.status_code in (200, 500)
 
     async def test_reject_job(self, jobs_fixtures: JobsTestFixtures) -> None:
         """Test rejecting a job."""
-        job = await _create_job_via_db(jobs_fixtures.postgres_uri, jobs_fixtures.staff_user.id, status=JobStatus.REVIEW)
+        job = await _create_job_via_db(
+            jobs_fixtures.session_factory, jobs_fixtures.staff_user.id, status=JobStatus.REVIEW
+        )
 
         response = await jobs_fixtures.client.patch(f"/api/v1/jobs/{job['id']}/reject")
         assert response.status_code in (200, 500)
@@ -491,7 +482,7 @@ class TestJobControllerRoutes:
 
     async def test_delete_job(self, jobs_fixtures: JobsTestFixtures) -> None:
         """Test deleting a job."""
-        job = await _create_job_via_db(jobs_fixtures.postgres_uri, jobs_fixtures.staff_user.id)
+        job = await _create_job_via_db(jobs_fixtures.session_factory, jobs_fixtures.staff_user.id)
 
         response = await jobs_fixtures.client.delete(f"/api/v1/jobs/{job['id']}")
         assert response.status_code == 204
@@ -603,7 +594,9 @@ class TestJobReviewCommentControllerRoutes:
 
     async def test_list_job_review_comments(self, jobs_fixtures: JobsTestFixtures) -> None:
         """Test listing review comments for a job."""
-        job = await _create_job_via_db(jobs_fixtures.postgres_uri, jobs_fixtures.staff_user.id, status=JobStatus.REVIEW)
+        job = await _create_job_via_db(
+            jobs_fixtures.session_factory, jobs_fixtures.staff_user.id, status=JobStatus.REVIEW
+        )
 
         response = await jobs_fixtures.client.get(f"/api/v1/jobs/{job['id']}/review-comments")
         assert response.status_code == 200
@@ -611,7 +604,9 @@ class TestJobReviewCommentControllerRoutes:
 
     async def test_list_review_comments_with_pagination(self, jobs_fixtures: JobsTestFixtures) -> None:
         """Test listing review comments with pagination."""
-        job = await _create_job_via_db(jobs_fixtures.postgres_uri, jobs_fixtures.staff_user.id, status=JobStatus.REVIEW)
+        job = await _create_job_via_db(
+            jobs_fixtures.session_factory, jobs_fixtures.staff_user.id, status=JobStatus.REVIEW
+        )
 
         response = await jobs_fixtures.client.get(f"/api/v1/jobs/{job['id']}/review-comments?limit=10&offset=0")
         assert response.status_code == 200
@@ -619,10 +614,12 @@ class TestJobReviewCommentControllerRoutes:
 
     async def test_get_review_comment_by_id(self, jobs_fixtures: JobsTestFixtures) -> None:
         """Test getting a specific review comment."""
-        job = await _create_job_via_db(jobs_fixtures.postgres_uri, jobs_fixtures.staff_user.id, status=JobStatus.REVIEW)
+        job = await _create_job_via_db(
+            jobs_fixtures.session_factory, jobs_fixtures.staff_user.id, status=JobStatus.REVIEW
+        )
 
         comment = await _create_review_comment_via_db(
-            jobs_fixtures.postgres_uri,
+            jobs_fixtures.session_factory,
             job["id"],
             jobs_fixtures.staff_user.id,
             "Needs more details in description",
@@ -640,10 +637,12 @@ class TestJobReviewCommentControllerRoutes:
 
     async def test_delete_review_comment(self, jobs_fixtures: JobsTestFixtures) -> None:
         """Test deleting a review comment."""
-        job = await _create_job_via_db(jobs_fixtures.postgres_uri, jobs_fixtures.staff_user.id, status=JobStatus.REVIEW)
+        job = await _create_job_via_db(
+            jobs_fixtures.session_factory, jobs_fixtures.staff_user.id, status=JobStatus.REVIEW
+        )
 
         comment = await _create_review_comment_via_db(
-            jobs_fixtures.postgres_uri,
+            jobs_fixtures.session_factory,
             job["id"],
             jobs_fixtures.staff_user.id,
             "To be deleted",
@@ -736,7 +735,7 @@ class TestJobWorkflow:
         job_id = job["id"]
 
         await _create_review_comment_via_db(
-            jobs_fixtures.postgres_uri,
+            jobs_fixtures.session_factory,
             job_id,
             jobs_fixtures.staff_user.id,
             "Description needs more details about responsibilities",

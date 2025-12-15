@@ -14,9 +14,8 @@ from litestar.contrib.jinja import JinjaTemplateEngine
 from litestar.di import Provide
 from litestar.template.config import TemplateConfig
 from litestar.testing import AsyncTestClient
-from sqlalchemy import NullPool
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import text
+from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker
 
 from pydotorg.core.auth.middleware import JWTAuthMiddleware
 from pydotorg.core.database.base import AuditBase
@@ -39,19 +38,7 @@ if TYPE_CHECKING:
     from sqlalchemy.ext.asyncio import AsyncEngine
 
 
-async def _create_db_session(postgres_uri: str) -> tuple[AsyncSession, any]:
-    """Helper to create a database session."""
-    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
-
-    async with engine.begin() as conn:
-        await conn.run_sync(AuditBase.metadata.create_all)
-
-    async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-    session = async_session_factory()
-    return session, engine
-
-
-async def _create_sample_template(session: AsyncSession) -> EmailTemplate:
+async def _create_sample_template(session_factory: async_sessionmaker, session: AsyncSession) -> EmailTemplate:
     """Helper to create a sample template."""
     template = EmailTemplate(
         internal_name=f"test_template_{uuid4().hex[:8]}",
@@ -69,7 +56,9 @@ async def _create_sample_template(session: AsyncSession) -> EmailTemplate:
     return template
 
 
-async def _create_sample_log(session: AsyncSession, template_name: str = "welcome") -> EmailLog:
+async def _create_sample_log(
+    session_factory: async_sessionmaker, session: AsyncSession, template_name: str = "welcome"
+) -> EmailLog:
     """Helper to create a sample email log."""
     log = EmailLog(
         template_name=template_name,
@@ -87,7 +76,7 @@ class AdminEmailTestFixtures:
     """Container for admin email test fixtures."""
 
     client: AsyncTestClient
-    postgres_uri: str
+    session_factory: async_sessionmaker
     staff_user: User
     regular_user: User
     admin_user: User
@@ -96,14 +85,14 @@ class AdminEmailTestFixtures:
 @pytest.fixture
 async def admin_email_fixtures(
     async_engine: AsyncEngine,
-    postgres_uri: str,
+    async_session_factory: async_sessionmaker,
+    _module_sqlalchemy_config: SQLAlchemyAsyncConfig,
 ) -> AsyncIterator[AdminEmailTestFixtures]:
     """Async test client with AdminEmailController and test users.
 
     Uses session-scoped async_engine to prevent connection exhaustion.
     Creates test users and client for admin email tests.
     """
-    from sqlalchemy import text
 
     async with async_engine.begin() as conn:
         # Only truncate tables that exist - some plugin tables may not be created
@@ -113,8 +102,6 @@ async def admin_email_fixtures(
         for table in reversed(AuditBase.metadata.sorted_tables):
             if table.name in existing_tables:
                 await conn.execute(text(f"TRUNCATE TABLE {table.name} CASCADE"))
-
-    async_session_factory = sessionmaker(async_engine, class_=AsyncSession, expire_on_commit=False)
 
     async with async_session_factory() as session:
         staff = User(
@@ -171,16 +158,7 @@ async def admin_email_fixtures(
         email_module.UUID = UUID
         email_module.Request = Request
 
-    from advanced_alchemy.config import EngineConfig
-
-    sqlalchemy_config = SQLAlchemyAsyncConfig(
-        connection_string=postgres_uri,
-        metadata=AuditBase.metadata,
-        create_all=False,
-        before_send_handler="autocommit",
-        engine_config=EngineConfig(poolclass=NullPool),
-    )
-    sqlalchemy_plugin = SQLAlchemyPlugin(config=sqlalchemy_config)
+    sqlalchemy_plugin = SQLAlchemyPlugin(config=_module_sqlalchemy_config)
 
     from datetime import datetime
     from pathlib import Path
@@ -214,7 +192,7 @@ async def admin_email_fixtures(
     ) as test_client:
         fixtures = AdminEmailTestFixtures()
         fixtures.client = test_client
-        fixtures.postgres_uri = postgres_uri
+        fixtures.session_factory = async_session_factory
         fixtures.staff_user = staff_data
         fixtures.regular_user = regular_data
         fixtures.admin_user = admin_data
@@ -563,9 +541,8 @@ class TestAdminEmailTemplateActions:
         """Test sending test email as admin."""
         from pydotorg.core.auth.jwt import jwt_service
 
-        session, engine = await _create_db_session(admin_email_fixtures.postgres_uri)
-        try:
-            template = await _create_sample_template(session)
+        async with admin_email_fixtures.session_factory() as session:
+            template = await _create_sample_template(admin_email_fixtures.session_factory, session)
 
             token = jwt_service.create_access_token(admin_email_fixtures.admin_user.id)
 
@@ -581,9 +558,6 @@ class TestAdminEmailTemplateActions:
 
             assert response.status_code == 200
             assert b"sent successfully" in response.content or response.status_code == 200
-        finally:
-            await session.close()
-            await engine.dispose()
 
     async def test_send_test_email_missing_email_address(self, admin_email_fixtures: AdminEmailTestFixtures) -> None:
         """Test that sending test email without email address shows error."""
@@ -607,9 +581,8 @@ class TestAdminEmailTemplateActions:
         """Test preview with invalid JSON context."""
         from pydotorg.core.auth.jwt import jwt_service
 
-        session, engine = await _create_db_session(admin_email_fixtures.postgres_uri)
-        try:
-            template = await _create_sample_template(session)
+        async with admin_email_fixtures.session_factory() as session:
+            template = await _create_sample_template(admin_email_fixtures.session_factory, session)
 
             token = jwt_service.create_access_token(admin_email_fixtures.staff_user.id)
             response = await admin_email_fixtures.client.post(
@@ -618,9 +591,6 @@ class TestAdminEmailTemplateActions:
                 data={"context": "invalid json"},
             )
             assert response.status_code in (200, 400, 500)
-        finally:
-            await session.close()
-            await engine.dispose()
 
 
 @pytest.mark.integration
@@ -631,9 +601,8 @@ class TestAdminEmailNewRoutes:
         """Test that edit template form requires admin (superuser) permissions."""
         from pydotorg.core.auth.jwt import jwt_service
 
-        session, engine = await _create_db_session(admin_email_fixtures.postgres_uri)
-        try:
-            template = await _create_sample_template(session)
+        async with admin_email_fixtures.session_factory() as session:
+            template = await _create_sample_template(admin_email_fixtures.session_factory, session)
 
             token = jwt_service.create_access_token(admin_email_fixtures.staff_user.id)
             response = await admin_email_fixtures.client.get(
@@ -641,17 +610,13 @@ class TestAdminEmailNewRoutes:
                 headers={"Authorization": f"Bearer {token}"},
             )
             assert response.status_code == 403
-        finally:
-            await session.close()
-            await engine.dispose()
 
     async def test_edit_template_form_accessible_to_admin(self, admin_email_fixtures: AdminEmailTestFixtures) -> None:
         """Test that admin can access edit template form."""
         from pydotorg.core.auth.jwt import jwt_service
 
-        session, engine = await _create_db_session(admin_email_fixtures.postgres_uri)
-        try:
-            template = await _create_sample_template(session)
+        async with admin_email_fixtures.session_factory() as session:
+            template = await _create_sample_template(admin_email_fixtures.session_factory, session)
 
             token = jwt_service.create_access_token(admin_email_fixtures.admin_user.id)
             response = await admin_email_fixtures.client.get(
@@ -660,9 +625,6 @@ class TestAdminEmailNewRoutes:
             )
             assert response.status_code == 200
             assert b"Edit" in response.content
-        finally:
-            await session.close()
-            await engine.dispose()
 
     async def test_edit_template_form_redirects_when_not_found(
         self, admin_email_fixtures: AdminEmailTestFixtures
@@ -683,9 +645,8 @@ class TestAdminEmailNewRoutes:
         """Test that staff can access GET preview endpoint."""
         from pydotorg.core.auth.jwt import jwt_service
 
-        session, engine = await _create_db_session(admin_email_fixtures.postgres_uri)
-        try:
-            template = await _create_sample_template(session)
+        async with admin_email_fixtures.session_factory() as session:
+            template = await _create_sample_template(admin_email_fixtures.session_factory, session)
 
             token = jwt_service.create_access_token(admin_email_fixtures.staff_user.id)
             response = await admin_email_fixtures.client.get(
@@ -694,9 +655,6 @@ class TestAdminEmailNewRoutes:
             )
             assert response.status_code == 200
             assert b"Preview" in response.content or b"preview" in response.content.lower()
-        finally:
-            await session.close()
-            await engine.dispose()
 
     async def test_get_preview_returns_404_when_not_found(self, admin_email_fixtures: AdminEmailTestFixtures) -> None:
         """Test that GET preview returns 404 for non-existent template."""
@@ -726,9 +684,8 @@ class TestAdminEmailNewRoutes:
         """Test that admin can activate a template."""
         from pydotorg.core.auth.jwt import jwt_service
 
-        session, engine = await _create_db_session(admin_email_fixtures.postgres_uri)
-        try:
-            template = await _create_sample_template(session)
+        async with admin_email_fixtures.session_factory() as session:
+            template = await _create_sample_template(admin_email_fixtures.session_factory, session)
             template.is_active = False
             await session.commit()
 
@@ -738,9 +695,6 @@ class TestAdminEmailNewRoutes:
                 headers={"Authorization": f"Bearer {token}"},
             )
             assert response.status_code == 200
-        finally:
-            await session.close()
-            await engine.dispose()
 
     async def test_deactivate_template_requires_admin(self, admin_email_fixtures: AdminEmailTestFixtures) -> None:
         """Test that deactivating templates requires admin permissions."""
@@ -758,9 +712,8 @@ class TestAdminEmailNewRoutes:
         """Test that admin can deactivate a template."""
         from pydotorg.core.auth.jwt import jwt_service
 
-        session, engine = await _create_db_session(admin_email_fixtures.postgres_uri)
-        try:
-            template = await _create_sample_template(session)
+        async with admin_email_fixtures.session_factory() as session:
+            template = await _create_sample_template(admin_email_fixtures.session_factory, session)
 
             token = jwt_service.create_access_token(admin_email_fixtures.admin_user.id)
             response = await admin_email_fixtures.client.post(
@@ -768,9 +721,6 @@ class TestAdminEmailNewRoutes:
                 headers={"Authorization": f"Bearer {token}"},
             )
             assert response.status_code == 200
-        finally:
-            await session.close()
-            await engine.dispose()
 
     async def test_delete_template_requires_admin(self, admin_email_fixtures: AdminEmailTestFixtures) -> None:
         """Test that deleting templates requires admin permissions."""
@@ -788,9 +738,8 @@ class TestAdminEmailNewRoutes:
         """Test that admin can delete a template."""
         from pydotorg.core.auth.jwt import jwt_service
 
-        session, engine = await _create_db_session(admin_email_fixtures.postgres_uri)
-        try:
-            template = await _create_sample_template(session)
+        async with admin_email_fixtures.session_factory() as session:
+            template = await _create_sample_template(admin_email_fixtures.session_factory, session)
 
             token = jwt_service.create_access_token(admin_email_fixtures.admin_user.id)
             response = await admin_email_fixtures.client.delete(
@@ -798,9 +747,6 @@ class TestAdminEmailNewRoutes:
                 headers={"Authorization": f"Bearer {token}"},
             )
             assert response.status_code == 200
-        finally:
-            await session.close()
-            await engine.dispose()
 
     async def test_delete_template_returns_404_when_not_found(
         self, admin_email_fixtures: AdminEmailTestFixtures
@@ -844,9 +790,8 @@ class TestAdminEmailNewRoutes:
         """Test that retrying a non-failed email returns 400."""
         from pydotorg.core.auth.jwt import jwt_service
 
-        session, engine = await _create_db_session(admin_email_fixtures.postgres_uri)
-        try:
-            log = await _create_sample_log(session)
+        async with admin_email_fixtures.session_factory() as session:
+            log = await _create_sample_log(admin_email_fixtures.session_factory, session)
 
             token = jwt_service.create_access_token(admin_email_fixtures.admin_user.id)
             response = await admin_email_fixtures.client.post(
@@ -854,9 +799,6 @@ class TestAdminEmailNewRoutes:
                 headers={"Authorization": f"Bearer {token}"},
             )
             assert response.status_code == 400
-        finally:
-            await session.close()
-            await engine.dispose()
 
     async def test_preview_new_template_requires_auth(self, admin_email_fixtures: AdminEmailTestFixtures) -> None:
         """Test that preview new template requires authentication."""
@@ -942,7 +884,8 @@ class TestAppStartup:
 @pytest.fixture
 async def csrf_test_fixtures(
     async_engine: AsyncEngine,
-    postgres_uri: str,
+    async_session_factory: async_sessionmaker,
+    _module_sqlalchemy_config: SQLAlchemyAsyncConfig,
 ) -> AsyncIterator[AdminEmailTestFixtures]:
     """Test client with CSRF protection enabled for CSRF-specific tests.
 
@@ -951,9 +894,7 @@ async def csrf_test_fixtures(
     from datetime import datetime
     from pathlib import Path
 
-    from advanced_alchemy.config import EngineConfig
     from litestar.config.csrf import CSRFConfig
-    from sqlalchemy import text
 
     from pydotorg.config import settings
 
@@ -965,8 +906,6 @@ async def csrf_test_fixtures(
         for table in reversed(AuditBase.metadata.sorted_tables):
             if table.name in existing_tables:
                 await conn.execute(text(f"TRUNCATE TABLE {table.name} CASCADE"))
-
-    async_session_factory = sessionmaker(async_engine, class_=AsyncSession, expire_on_commit=False)
 
     async with async_session_factory() as session:
         staff = User(
@@ -984,14 +923,7 @@ async def csrf_test_fixtures(
         await session.refresh(staff)
         staff_data = User(id=staff.id, email=staff.email, username=staff.username, is_staff=True, is_superuser=False)
 
-    sqlalchemy_config = SQLAlchemyAsyncConfig(
-        connection_string=postgres_uri,
-        metadata=AuditBase.metadata,
-        create_all=False,
-        before_send_handler="autocommit",
-        engine_config=EngineConfig(poolclass=NullPool),
-    )
-    sqlalchemy_plugin = SQLAlchemyPlugin(config=sqlalchemy_config)
+    sqlalchemy_plugin = SQLAlchemyPlugin(config=_module_sqlalchemy_config)
 
     csrf_config = CSRFConfig(
         secret=settings.csrf_secret,
@@ -1032,7 +964,7 @@ async def csrf_test_fixtures(
     ) as test_client:
         fixtures = AdminEmailTestFixtures()
         fixtures.client = test_client
-        fixtures.postgres_uri = postgres_uri
+        fixtures.session_factory = async_session_factory
         fixtures.staff_user = staff_data
         yield fixtures
 

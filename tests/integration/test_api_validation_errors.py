@@ -20,8 +20,8 @@ from advanced_alchemy.filters import LimitOffset
 from litestar import Litestar
 from litestar.params import Parameter
 from litestar.testing import AsyncTestClient
-from sqlalchemy import NullPool, text
-from sqlalchemy.ext.asyncio import create_async_engine
+from sqlalchemy import text
+from sqlalchemy.ext.asyncio import AsyncEngine, async_sessionmaker
 
 from pydotorg.core.database.base import AuditBase
 from pydotorg.core.exceptions import get_exception_handlers
@@ -38,18 +38,27 @@ class ValidationTestFixtures:
     """Test fixtures for validation error tests."""
 
     client: AsyncTestClient
-    postgres_uri: str
+    session_factory: async_sessionmaker
 
 
 @pytest.fixture
-async def validation_fixtures(postgres_uri: str) -> AsyncIterator[ValidationTestFixtures]:
-    """Create test fixtures with exception handlers for validation testing."""
-    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
-    async with engine.begin() as conn:
-        await conn.execute(text("DROP SCHEMA public CASCADE"))
-        await conn.execute(text("CREATE SCHEMA public"))
-        await conn.run_sync(AuditBase.metadata.create_all)
-    await engine.dispose()
+async def validation_fixtures(
+    async_engine: AsyncEngine,
+    async_session_factory: async_sessionmaker,
+    _module_sqlalchemy_config: SQLAlchemyAsyncConfig,
+) -> AsyncIterator[ValidationTestFixtures]:
+    """Create test fixtures with exception handlers for validation testing.
+
+    Uses session-scoped async_engine to prevent connection exhaustion.
+    """
+    async with async_engine.begin() as conn:
+        # Only truncate tables that exist - some plugin tables may not be created
+        result = await conn.execute(text("SELECT tablename FROM pg_tables WHERE schemaname = 'public'"))
+        existing_tables = {row[0] for row in result.fetchall()}
+
+        for table in reversed(AuditBase.metadata.sorted_tables):
+            if table.name in existing_tables:
+                await conn.execute(text(f"TRUNCATE TABLE {table.name} CASCADE"))
 
     async def provide_limit_offset(
         current_page: int = Parameter(ge=1, default=1, query="currentPage"),
@@ -58,13 +67,7 @@ async def validation_fixtures(postgres_uri: str) -> AsyncIterator[ValidationTest
         """Provide limit offset pagination."""
         return LimitOffset(page_size, page_size * (current_page - 1))
 
-    sqlalchemy_config = SQLAlchemyAsyncConfig(
-        connection_string=postgres_uri,
-        metadata=AuditBase.metadata,
-        create_all=False,
-        before_send_handler="autocommit",
-    )
-    sqlalchemy_plugin = SQLAlchemyPlugin(config=sqlalchemy_config)
+    sqlalchemy_plugin = SQLAlchemyPlugin(config=_module_sqlalchemy_config)
 
     user_deps = get_user_dependencies()
     user_deps["limit_offset"] = provide_limit_offset
@@ -85,7 +88,7 @@ async def validation_fixtures(postgres_uri: str) -> AsyncIterator[ValidationTest
     async with AsyncTestClient(app=app, base_url="http://testserver.local") as client:
         fixtures = ValidationTestFixtures()
         fixtures.client = client
-        fixtures.postgres_uri = postgres_uri
+        fixtures.session_factory = async_session_factory
         yield fixtures
 
 

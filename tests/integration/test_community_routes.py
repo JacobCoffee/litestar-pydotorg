@@ -15,9 +15,8 @@ from advanced_alchemy.filters import LimitOffset
 from litestar import Litestar
 from litestar.params import Parameter
 from litestar.testing import AsyncTestClient
-from sqlalchemy import NullPool, text
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import text
+from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker
 
 from pydotorg.core.database.base import AuditBase
 from pydotorg.domains.community.controllers import (
@@ -39,14 +38,12 @@ class CommunityTestFixtures:
     """Test fixtures for community routes."""
 
     client: AsyncTestClient
-    postgres_uri: str
+    session_factory: async_sessionmaker
 
 
-async def _create_user_via_db(postgres_uri: str, **user_data: object) -> dict:
-    """Create a user directly in the database."""
-    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
-    async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-    async with async_session_factory() as session:
+async def _create_user_via_db(session_factory: async_sessionmaker, **user_data: object) -> dict:
+    """Create a user directly in the database using shared session factory."""
+    async with session_factory() as session:
         user = User(
             username=user_data.get("username", f"user-{uuid4().hex[:8]}"),
             email=user_data.get("email", f"user-{uuid4().hex[:8]}@example.com"),
@@ -57,22 +54,18 @@ async def _create_user_via_db(postgres_uri: str, **user_data: object) -> dict:
         session.add(user)
         await session.commit()
         await session.refresh(user)
-        result = {
+        return {
             "id": str(user.id),
             "username": user.username,
             "email": user.email,
         }
-    await engine.dispose()
-    return result
 
 
-async def _create_post_via_db(postgres_uri: str, creator_id: str, **post_data: object) -> dict:
-    """Create a post directly in the database."""
+async def _create_post_via_db(session_factory: async_sessionmaker, creator_id: str, **post_data: object) -> dict:
+    """Create a post directly in the database using shared session factory."""
     from uuid import UUID as PyUUID
 
-    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
-    async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-    async with async_session_factory() as session:
+    async with session_factory() as session:
         slug = post_data.get("slug", f"post-{uuid4().hex[:8]}")
         post = Post(
             title=post_data.get("title", f"Test Post {uuid4().hex[:8]}"),
@@ -85,24 +78,20 @@ async def _create_post_via_db(postgres_uri: str, creator_id: str, **post_data: o
         session.add(post)
         await session.commit()
         await session.refresh(post)
-        result = {
+        return {
             "id": str(post.id),
             "title": post.title,
             "slug": post.slug,
             "content": post.content,
             "is_published": post.is_published,
         }
-    await engine.dispose()
-    return result
 
 
-async def _create_photo_via_db(postgres_uri: str, creator_id: str, **photo_data: object) -> dict:
-    """Create a photo directly in the database."""
+async def _create_photo_via_db(session_factory: async_sessionmaker, creator_id: str, **photo_data: object) -> dict:
+    """Create a photo directly in the database using shared session factory."""
     from uuid import UUID as PyUUID
 
-    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
-    async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-    async with async_session_factory() as session:
+    async with session_factory() as session:
         photo = Photo(
             image=photo_data.get("image", f"/images/photo-{uuid4().hex[:8]}.jpg"),
             caption=photo_data.get("caption", "Test caption"),
@@ -112,23 +101,19 @@ async def _create_photo_via_db(postgres_uri: str, creator_id: str, **photo_data:
         session.add(photo)
         await session.commit()
         await session.refresh(photo)
-        result = {
+        return {
             "id": str(photo.id),
             "image": photo.image,
             "caption": photo.caption,
             "creator_id": str(photo.creator_id),
         }
-    await engine.dispose()
-    return result
 
 
-async def _create_video_via_db(postgres_uri: str, creator_id: str, **video_data: object) -> dict:
-    """Create a video directly in the database."""
+async def _create_video_via_db(session_factory: async_sessionmaker, creator_id: str, **video_data: object) -> dict:
+    """Create a video directly in the database using shared session factory."""
     from uuid import UUID as PyUUID
 
-    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
-    async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-    async with async_session_factory() as session:
+    async with session_factory() as session:
         video = Video(
             url=video_data.get("url", f"https://youtube.com/watch?v={uuid4().hex[:11]}"),
             title=video_data.get("title", f"Test Video {uuid4().hex[:8]}"),
@@ -138,23 +123,19 @@ async def _create_video_via_db(postgres_uri: str, creator_id: str, **video_data:
         session.add(video)
         await session.commit()
         await session.refresh(video)
-        result = {
+        return {
             "id": str(video.id),
             "url": video.url,
             "title": video.title,
             "creator_id": str(video.creator_id),
         }
-    await engine.dispose()
-    return result
 
 
-async def _create_link_via_db(postgres_uri: str, creator_id: str, **link_data: object) -> dict:
-    """Create a link directly in the database."""
+async def _create_link_via_db(session_factory: async_sessionmaker, creator_id: str, **link_data: object) -> dict:
+    """Create a link directly in the database using shared session factory."""
     from uuid import UUID as PyUUID
 
-    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
-    async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-    async with async_session_factory() as session:
+    async with session_factory() as session:
         link = Link(
             url=link_data.get("url", f"https://example.com/{uuid4().hex[:8]}"),
             title=link_data.get("title", f"Test Link {uuid4().hex[:8]}"),
@@ -164,14 +145,12 @@ async def _create_link_via_db(postgres_uri: str, creator_id: str, **link_data: o
         session.add(link)
         await session.commit()
         await session.refresh(link)
-        result = {
+        return {
             "id": str(link.id),
             "url": link.url,
             "title": link.title,
             "creator_id": str(link.creator_id),
         }
-    await engine.dispose()
-    return result
 
 
 async def provide_post_service(db_session: AsyncSession) -> PostService:
@@ -195,14 +174,23 @@ async def provide_link_service(db_session: AsyncSession) -> LinkService:
 
 
 @pytest.fixture
-async def community_fixtures(postgres_uri: str) -> AsyncIterator[CommunityTestFixtures]:
-    """Create test fixtures with fresh database schema."""
-    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
-    async with engine.begin() as conn:
-        await conn.execute(text("DROP SCHEMA public CASCADE"))
-        await conn.execute(text("CREATE SCHEMA public"))
-        await conn.run_sync(AuditBase.metadata.create_all)
-    await engine.dispose()
+async def community_fixtures(
+    async_engine: AsyncEngine,
+    async_session_factory: async_sessionmaker,
+    _module_sqlalchemy_config: SQLAlchemyAsyncConfig,
+) -> AsyncIterator[CommunityTestFixtures]:
+    """Create test fixtures using module-scoped config to prevent connection exhaustion.
+
+    Uses the shared _module_sqlalchemy_config from conftest.py instead of creating
+    a new SQLAlchemyAsyncConfig per test, which was causing TooManyConnectionsError.
+    """
+    async with async_engine.begin() as conn:
+        result = await conn.execute(text("SELECT tablename FROM pg_tables WHERE schemaname = 'public'"))
+        existing_tables = {row[0] for row in result.fetchall()}
+
+        for table in reversed(AuditBase.metadata.sorted_tables):
+            if table.name in existing_tables:
+                await conn.execute(text(f"TRUNCATE TABLE {table.name} CASCADE"))
 
     async def provide_limit_offset(
         current_page: int = Parameter(ge=1, default=1, query="currentPage"),
@@ -211,13 +199,7 @@ async def community_fixtures(postgres_uri: str) -> AsyncIterator[CommunityTestFi
         """Provide limit offset pagination."""
         return LimitOffset(page_size, page_size * (current_page - 1))
 
-    sqlalchemy_config = SQLAlchemyAsyncConfig(
-        connection_string=postgres_uri,
-        metadata=AuditBase.metadata,
-        create_all=False,
-        before_send_handler="autocommit",
-    )
-    sqlalchemy_plugin = SQLAlchemyPlugin(config=sqlalchemy_config)
+    sqlalchemy_plugin = SQLAlchemyPlugin(config=_module_sqlalchemy_config)
 
     dependencies = {
         "limit_offset": provide_limit_offset,
@@ -242,7 +224,7 @@ async def community_fixtures(postgres_uri: str) -> AsyncIterator[CommunityTestFi
     async with AsyncTestClient(app=app, base_url="http://testserver.local") as client:
         fixtures = CommunityTestFixtures()
         fixtures.client = client
-        fixtures.postgres_uri = postgres_uri
+        fixtures.session_factory = async_session_factory
         yield fixtures
 
 
@@ -258,10 +240,10 @@ class TestPostControllerRoutes:
 
     async def test_list_posts_with_pagination(self, community_fixtures: CommunityTestFixtures) -> None:
         """Test listing posts with pagination."""
-        user = await _create_user_via_db(community_fixtures.postgres_uri)
+        user = await _create_user_via_db(community_fixtures.session_factory)
         for i in range(3):
             await _create_post_via_db(
-                community_fixtures.postgres_uri,
+                community_fixtures.session_factory,
                 creator_id=user["id"],
                 title=f"Post {i}",
                 slug=f"post-{i}-{uuid4().hex[:8]}",
@@ -273,9 +255,9 @@ class TestPostControllerRoutes:
 
     async def test_list_published_posts(self, community_fixtures: CommunityTestFixtures) -> None:
         """Test listing published posts."""
-        user = await _create_user_via_db(community_fixtures.postgres_uri)
+        user = await _create_user_via_db(community_fixtures.session_factory)
         await _create_post_via_db(
-            community_fixtures.postgres_uri,
+            community_fixtures.session_factory,
             creator_id=user["id"],
             is_published=True,
         )
@@ -286,7 +268,7 @@ class TestPostControllerRoutes:
 
     async def test_create_post(self, community_fixtures: CommunityTestFixtures) -> None:
         """Test creating a post."""
-        user = await _create_user_via_db(community_fixtures.postgres_uri)
+        user = await _create_user_via_db(community_fixtures.session_factory)
         post_data = {
             "title": "New Test Post",
             "content": "Test content here",
@@ -302,8 +284,8 @@ class TestPostControllerRoutes:
 
     async def test_get_post_by_id(self, community_fixtures: CommunityTestFixtures) -> None:
         """Test getting a post by ID."""
-        user = await _create_user_via_db(community_fixtures.postgres_uri)
-        post = await _create_post_via_db(community_fixtures.postgres_uri, creator_id=user["id"])
+        user = await _create_user_via_db(community_fixtures.session_factory)
+        post = await _create_post_via_db(community_fixtures.session_factory, creator_id=user["id"])
         response = await community_fixtures.client.get(f"/api/v1/community/posts/{post['id']}")
         assert response.status_code == 200
         result = response.json()
@@ -317,10 +299,10 @@ class TestPostControllerRoutes:
 
     async def test_get_post_by_slug(self, community_fixtures: CommunityTestFixtures) -> None:
         """Test getting a post by slug."""
-        user = await _create_user_via_db(community_fixtures.postgres_uri)
+        user = await _create_user_via_db(community_fixtures.session_factory)
         slug = f"my-unique-slug-{uuid4().hex[:8]}"
         await _create_post_via_db(
-            community_fixtures.postgres_uri,
+            community_fixtures.session_factory,
             creator_id=user["id"],
             slug=slug,
         )
@@ -331,8 +313,8 @@ class TestPostControllerRoutes:
 
     async def test_update_post(self, community_fixtures: CommunityTestFixtures) -> None:
         """Test updating a post."""
-        user = await _create_user_via_db(community_fixtures.postgres_uri)
-        post = await _create_post_via_db(community_fixtures.postgres_uri, creator_id=user["id"])
+        user = await _create_user_via_db(community_fixtures.session_factory)
+        post = await _create_post_via_db(community_fixtures.session_factory, creator_id=user["id"])
         update_data = {"title": "Updated Post Title"}
         response = await community_fixtures.client.put(f"/api/v1/community/posts/{post['id']}", json=update_data)
         assert response.status_code in (200, 500)
@@ -342,8 +324,8 @@ class TestPostControllerRoutes:
 
     async def test_delete_post(self, community_fixtures: CommunityTestFixtures) -> None:
         """Test deleting a post."""
-        user = await _create_user_via_db(community_fixtures.postgres_uri)
-        post = await _create_post_via_db(community_fixtures.postgres_uri, creator_id=user["id"])
+        user = await _create_user_via_db(community_fixtures.session_factory)
+        post = await _create_post_via_db(community_fixtures.session_factory, creator_id=user["id"])
         response = await community_fixtures.client.delete(f"/api/v1/community/posts/{post['id']}")
         assert response.status_code in (200, 204)
 
@@ -360,10 +342,10 @@ class TestPhotoControllerRoutes:
 
     async def test_list_photos_with_pagination(self, community_fixtures: CommunityTestFixtures) -> None:
         """Test listing photos with pagination."""
-        user = await _create_user_via_db(community_fixtures.postgres_uri)
+        user = await _create_user_via_db(community_fixtures.session_factory)
         for i in range(3):
             await _create_photo_via_db(
-                community_fixtures.postgres_uri,
+                community_fixtures.session_factory,
                 creator_id=user["id"],
                 image=f"/images/photo-{i}.jpg",
             )
@@ -374,7 +356,7 @@ class TestPhotoControllerRoutes:
 
     async def test_create_photo(self, community_fixtures: CommunityTestFixtures) -> None:
         """Test creating a photo."""
-        user = await _create_user_via_db(community_fixtures.postgres_uri)
+        user = await _create_user_via_db(community_fixtures.session_factory)
         photo_data = {
             "image": "/images/new-photo.jpg",
             "caption": "A new test photo",
@@ -388,8 +370,8 @@ class TestPhotoControllerRoutes:
 
     async def test_get_photo_by_id(self, community_fixtures: CommunityTestFixtures) -> None:
         """Test getting a photo by ID."""
-        user = await _create_user_via_db(community_fixtures.postgres_uri)
-        photo = await _create_photo_via_db(community_fixtures.postgres_uri, creator_id=user["id"])
+        user = await _create_user_via_db(community_fixtures.session_factory)
+        photo = await _create_photo_via_db(community_fixtures.session_factory, creator_id=user["id"])
         response = await community_fixtures.client.get(f"/api/v1/community/photos/{photo['id']}")
         assert response.status_code == 200
         result = response.json()
@@ -403,8 +385,8 @@ class TestPhotoControllerRoutes:
 
     async def test_update_photo(self, community_fixtures: CommunityTestFixtures) -> None:
         """Test updating a photo."""
-        user = await _create_user_via_db(community_fixtures.postgres_uri)
-        photo = await _create_photo_via_db(community_fixtures.postgres_uri, creator_id=user["id"])
+        user = await _create_user_via_db(community_fixtures.session_factory)
+        photo = await _create_photo_via_db(community_fixtures.session_factory, creator_id=user["id"])
         update_data = {"caption": "Updated caption"}
         response = await community_fixtures.client.put(f"/api/v1/community/photos/{photo['id']}", json=update_data)
         assert response.status_code in (200, 500)
@@ -414,8 +396,8 @@ class TestPhotoControllerRoutes:
 
     async def test_delete_photo(self, community_fixtures: CommunityTestFixtures) -> None:
         """Test deleting a photo."""
-        user = await _create_user_via_db(community_fixtures.postgres_uri)
-        photo = await _create_photo_via_db(community_fixtures.postgres_uri, creator_id=user["id"])
+        user = await _create_user_via_db(community_fixtures.session_factory)
+        photo = await _create_photo_via_db(community_fixtures.session_factory, creator_id=user["id"])
         response = await community_fixtures.client.delete(f"/api/v1/community/photos/{photo['id']}")
         assert response.status_code in (200, 204)
 
@@ -432,10 +414,10 @@ class TestVideoControllerRoutes:
 
     async def test_list_videos_with_pagination(self, community_fixtures: CommunityTestFixtures) -> None:
         """Test listing videos with pagination."""
-        user = await _create_user_via_db(community_fixtures.postgres_uri)
+        user = await _create_user_via_db(community_fixtures.session_factory)
         for i in range(3):
             await _create_video_via_db(
-                community_fixtures.postgres_uri,
+                community_fixtures.session_factory,
                 creator_id=user["id"],
                 title=f"Video {i}",
             )
@@ -446,7 +428,7 @@ class TestVideoControllerRoutes:
 
     async def test_create_video(self, community_fixtures: CommunityTestFixtures) -> None:
         """Test creating a video."""
-        user = await _create_user_via_db(community_fixtures.postgres_uri)
+        user = await _create_user_via_db(community_fixtures.session_factory)
         video_data = {
             "url": "https://youtube.com/watch?v=abc123",
             "title": "New Test Video",
@@ -460,8 +442,8 @@ class TestVideoControllerRoutes:
 
     async def test_get_video_by_id(self, community_fixtures: CommunityTestFixtures) -> None:
         """Test getting a video by ID."""
-        user = await _create_user_via_db(community_fixtures.postgres_uri)
-        video = await _create_video_via_db(community_fixtures.postgres_uri, creator_id=user["id"])
+        user = await _create_user_via_db(community_fixtures.session_factory)
+        video = await _create_video_via_db(community_fixtures.session_factory, creator_id=user["id"])
         response = await community_fixtures.client.get(f"/api/v1/community/videos/{video['id']}")
         assert response.status_code == 200
         result = response.json()
@@ -475,8 +457,8 @@ class TestVideoControllerRoutes:
 
     async def test_update_video(self, community_fixtures: CommunityTestFixtures) -> None:
         """Test updating a video."""
-        user = await _create_user_via_db(community_fixtures.postgres_uri)
-        video = await _create_video_via_db(community_fixtures.postgres_uri, creator_id=user["id"])
+        user = await _create_user_via_db(community_fixtures.session_factory)
+        video = await _create_video_via_db(community_fixtures.session_factory, creator_id=user["id"])
         update_data = {"title": "Updated Video Title"}
         response = await community_fixtures.client.put(f"/api/v1/community/videos/{video['id']}", json=update_data)
         assert response.status_code in (200, 500)
@@ -486,8 +468,8 @@ class TestVideoControllerRoutes:
 
     async def test_delete_video(self, community_fixtures: CommunityTestFixtures) -> None:
         """Test deleting a video."""
-        user = await _create_user_via_db(community_fixtures.postgres_uri)
-        video = await _create_video_via_db(community_fixtures.postgres_uri, creator_id=user["id"])
+        user = await _create_user_via_db(community_fixtures.session_factory)
+        video = await _create_video_via_db(community_fixtures.session_factory, creator_id=user["id"])
         response = await community_fixtures.client.delete(f"/api/v1/community/videos/{video['id']}")
         assert response.status_code in (200, 204)
 
@@ -504,10 +486,10 @@ class TestLinkControllerRoutes:
 
     async def test_list_links_with_pagination(self, community_fixtures: CommunityTestFixtures) -> None:
         """Test listing links with pagination."""
-        user = await _create_user_via_db(community_fixtures.postgres_uri)
+        user = await _create_user_via_db(community_fixtures.session_factory)
         for i in range(3):
             await _create_link_via_db(
-                community_fixtures.postgres_uri,
+                community_fixtures.session_factory,
                 creator_id=user["id"],
                 title=f"Link {i}",
             )
@@ -518,7 +500,7 @@ class TestLinkControllerRoutes:
 
     async def test_create_link(self, community_fixtures: CommunityTestFixtures) -> None:
         """Test creating a link."""
-        user = await _create_user_via_db(community_fixtures.postgres_uri)
+        user = await _create_user_via_db(community_fixtures.session_factory)
         link_data = {
             "url": "https://python.org",
             "title": "Python.org",
@@ -532,8 +514,8 @@ class TestLinkControllerRoutes:
 
     async def test_get_link_by_id(self, community_fixtures: CommunityTestFixtures) -> None:
         """Test getting a link by ID."""
-        user = await _create_user_via_db(community_fixtures.postgres_uri)
-        link = await _create_link_via_db(community_fixtures.postgres_uri, creator_id=user["id"])
+        user = await _create_user_via_db(community_fixtures.session_factory)
+        link = await _create_link_via_db(community_fixtures.session_factory, creator_id=user["id"])
         response = await community_fixtures.client.get(f"/api/v1/community/links/{link['id']}")
         assert response.status_code == 200
         result = response.json()
@@ -547,8 +529,8 @@ class TestLinkControllerRoutes:
 
     async def test_update_link(self, community_fixtures: CommunityTestFixtures) -> None:
         """Test updating a link."""
-        user = await _create_user_via_db(community_fixtures.postgres_uri)
-        link = await _create_link_via_db(community_fixtures.postgres_uri, creator_id=user["id"])
+        user = await _create_user_via_db(community_fixtures.session_factory)
+        link = await _create_link_via_db(community_fixtures.session_factory, creator_id=user["id"])
         update_data = {"title": "Updated Link Title"}
         response = await community_fixtures.client.put(f"/api/v1/community/links/{link['id']}", json=update_data)
         assert response.status_code in (200, 500)
@@ -558,8 +540,8 @@ class TestLinkControllerRoutes:
 
     async def test_delete_link(self, community_fixtures: CommunityTestFixtures) -> None:
         """Test deleting a link."""
-        user = await _create_user_via_db(community_fixtures.postgres_uri)
-        link = await _create_link_via_db(community_fixtures.postgres_uri, creator_id=user["id"])
+        user = await _create_user_via_db(community_fixtures.session_factory)
+        link = await _create_link_via_db(community_fixtures.session_factory, creator_id=user["id"])
         response = await community_fixtures.client.delete(f"/api/v1/community/links/{link['id']}")
         assert response.status_code in (200, 204)
 
@@ -569,7 +551,7 @@ class TestCommunityValidation:
 
     async def test_create_post_missing_title(self, community_fixtures: CommunityTestFixtures) -> None:
         """Test creating post without title fails validation."""
-        user = await _create_user_via_db(community_fixtures.postgres_uri)
+        user = await _create_user_via_db(community_fixtures.session_factory)
         data = {
             "content": "Content without title",
             "creator_id": user["id"],
@@ -588,7 +570,7 @@ class TestCommunityValidation:
 
     async def test_create_photo_missing_image(self, community_fixtures: CommunityTestFixtures) -> None:
         """Test creating photo without image fails validation."""
-        user = await _create_user_via_db(community_fixtures.postgres_uri)
+        user = await _create_user_via_db(community_fixtures.session_factory)
         data = {
             "caption": "Caption without image",
             "creator_id": user["id"],
@@ -598,7 +580,7 @@ class TestCommunityValidation:
 
     async def test_create_video_missing_url(self, community_fixtures: CommunityTestFixtures) -> None:
         """Test creating video without url fails validation."""
-        user = await _create_user_via_db(community_fixtures.postgres_uri)
+        user = await _create_user_via_db(community_fixtures.session_factory)
         data = {
             "title": "Video without url",
             "creator_id": user["id"],
@@ -608,7 +590,7 @@ class TestCommunityValidation:
 
     async def test_create_link_missing_url(self, community_fixtures: CommunityTestFixtures) -> None:
         """Test creating link without url fails validation."""
-        user = await _create_user_via_db(community_fixtures.postgres_uri)
+        user = await _create_user_via_db(community_fixtures.session_factory)
         data = {
             "title": "Link without url",
             "creator_id": user["id"],

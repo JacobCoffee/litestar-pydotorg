@@ -10,9 +10,8 @@ from advanced_alchemy.extensions.litestar import SQLAlchemyPlugin
 from advanced_alchemy.extensions.litestar.plugins.init.config.asyncio import SQLAlchemyAsyncConfig
 from litestar import Litestar
 from litestar.testing import AsyncTestClient
-from sqlalchemy import NullPool, text
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import text
+from sqlalchemy.ext.asyncio import AsyncEngine, async_sessionmaker
 
 from pydotorg.core.database.base import AuditBase
 from pydotorg.domains.users.controllers import MembershipController, UserController, UserGroupController
@@ -27,7 +26,7 @@ class UsersTestFixtures:
     """Container for users test fixtures."""
 
     client: AsyncTestClient
-    postgres_uri: str
+    session_factory: async_sessionmaker
     test_user: User
     test_user2: User
     test_membership: Membership
@@ -35,20 +34,25 @@ class UsersTestFixtures:
 
 
 @pytest.fixture
-async def users_fixtures(postgres_uri: str) -> AsyncIterator[UsersTestFixtures]:
-    """Async test client with users controllers and test data.
+async def users_fixtures(
+    async_engine: AsyncEngine,
+    async_session_factory: async_sessionmaker,
+    _module_sqlalchemy_config: SQLAlchemyAsyncConfig,
+) -> AsyncIterator[UsersTestFixtures]:
+    """Create test fixtures using module-scoped config to prevent connection exhaustion.
 
+    Uses the shared _module_sqlalchemy_config from conftest.py instead of creating
+    a new SQLAlchemyAsyncConfig per test, which was causing TooManyConnectionsError.
     Creates the database schema, test users, memberships, and groups in the correct order
     to ensure all tests have access to the same database state.
     """
-    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
+    async with async_engine.begin() as conn:
+        result = await conn.execute(text("SELECT tablename FROM pg_tables WHERE schemaname = 'public'"))
+        existing_tables = {row[0] for row in result.fetchall()}
 
-    async with engine.begin() as conn:
-        await conn.execute(text("DROP SCHEMA public CASCADE"))
-        await conn.execute(text("CREATE SCHEMA public"))
-        await conn.run_sync(AuditBase.metadata.create_all)
-
-    async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+        for table in reversed(AuditBase.metadata.sorted_tables):
+            if table.name in existing_tables:
+                await conn.execute(text(f"TRUNCATE TABLE {table.name} CASCADE"))
 
     async with async_session_factory() as session:
         user1 = User(
@@ -125,8 +129,6 @@ async def users_fixtures(postgres_uri: str) -> AsyncIterator[UsersTestFixtures]:
         )
         group_data = UserGroup(id=group.id, name=group.name, location=group.location)
 
-    await engine.dispose()
-
     from advanced_alchemy.filters import LimitOffset
     from litestar.params import Parameter
 
@@ -137,13 +139,7 @@ async def users_fixtures(postgres_uri: str) -> AsyncIterator[UsersTestFixtures]:
         """Provide limit offset pagination."""
         return LimitOffset(page_size, page_size * (current_page - 1))
 
-    sqlalchemy_config = SQLAlchemyAsyncConfig(
-        connection_string=postgres_uri,
-        metadata=AuditBase.metadata,
-        create_all=False,
-        before_send_handler="autocommit",
-    )
-    sqlalchemy_plugin = SQLAlchemyPlugin(config=sqlalchemy_config)
+    sqlalchemy_plugin = SQLAlchemyPlugin(config=_module_sqlalchemy_config)
 
     user_deps = get_user_dependencies()
     user_deps["limit_offset"] = provide_limit_offset
@@ -161,7 +157,7 @@ async def users_fixtures(postgres_uri: str) -> AsyncIterator[UsersTestFixtures]:
     ) as test_client:
         fixtures = UsersTestFixtures()
         fixtures.client = test_client
-        fixtures.postgres_uri = postgres_uri
+        fixtures.session_factory = async_session_factory
         fixtures.test_user = user1_data
         fixtures.test_user2 = user2_data
         fixtures.test_membership = membership_data

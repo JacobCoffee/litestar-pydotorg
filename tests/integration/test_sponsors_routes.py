@@ -16,9 +16,8 @@ from advanced_alchemy.filters import LimitOffset
 from litestar import Litestar
 from litestar.params import Parameter
 from litestar.testing import AsyncTestClient
-from sqlalchemy import NullPool, text
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import text
+from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker
 
 from pydotorg.core.database.base import AuditBase
 from pydotorg.domains.sponsors.controllers import (
@@ -46,14 +45,12 @@ class SponsorsTestFixtures:
     """Test fixtures for sponsors routes."""
 
     client: AsyncTestClient
-    postgres_uri: str
+    session_factory: async_sessionmaker
 
 
-async def _create_level_via_db(postgres_uri: str, **level_data: object) -> dict:
-    """Create a sponsorship level directly in the database."""
-    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
-    async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-    async with async_session_factory() as session:
+async def _create_level_via_db(session_factory: async_sessionmaker, **level_data: object) -> dict:
+    """Create a sponsorship level directly in the database using shared session factory."""
+    async with session_factory() as session:
         slug = level_data.get("slug", f"level-{uuid4().hex[:8]}")
         level = SponsorshipLevel(
             name=level_data.get("name", "Gold Sponsor"),
@@ -65,22 +62,18 @@ async def _create_level_via_db(postgres_uri: str, **level_data: object) -> dict:
         session.add(level)
         await session.commit()
         await session.refresh(level)
-        result = {
+        return {
             "id": str(level.id),
             "name": level.name,
             "slug": level.slug,
             "order": level.order,
             "sponsorship_amount": level.sponsorship_amount,
         }
-    await engine.dispose()
-    return result
 
 
-async def _create_sponsor_via_db(postgres_uri: str, **sponsor_data: object) -> dict:
-    """Create a sponsor directly in the database."""
-    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
-    async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-    async with async_session_factory() as session:
+async def _create_sponsor_via_db(session_factory: async_sessionmaker, **sponsor_data: object) -> dict:
+    """Create a sponsor directly in the database using shared session factory."""
+    async with session_factory() as session:
         slug = sponsor_data.get("slug", f"sponsor-{uuid4().hex[:8]}")
         sponsor = Sponsor(
             name=sponsor_data.get("name", "Acme Corp"),
@@ -94,25 +87,21 @@ async def _create_sponsor_via_db(postgres_uri: str, **sponsor_data: object) -> d
         session.add(sponsor)
         await session.commit()
         await session.refresh(sponsor)
-        result = {
+        return {
             "id": str(sponsor.id),
             "name": sponsor.name,
             "slug": sponsor.slug,
             "description": sponsor.description,
         }
-    await engine.dispose()
-    return result
 
 
 async def _create_sponsorship_via_db(
-    postgres_uri: str, sponsor_id: str, level_id: str, **sponsorship_data: object
+    session_factory: async_sessionmaker, sponsor_id: str, level_id: str, **sponsorship_data: object
 ) -> dict:
-    """Create a sponsorship directly in the database."""
-    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
-    async_session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-    async with async_session_factory() as session:
-        from uuid import UUID as PyUUID
+    """Create a sponsorship directly in the database using shared session factory."""
+    from uuid import UUID as PyUUID
 
+    async with session_factory() as session:
         sponsorship = Sponsorship(
             sponsor_id=PyUUID(sponsor_id),
             level_id=PyUUID(level_id),
@@ -126,14 +115,12 @@ async def _create_sponsorship_via_db(
         session.add(sponsorship)
         await session.commit()
         await session.refresh(sponsorship)
-        result = {
+        return {
             "id": str(sponsorship.id),
             "sponsor_id": str(sponsorship.sponsor_id),
             "level_id": str(sponsorship.level_id),
             "status": sponsorship.status.value,
         }
-    await engine.dispose()
-    return result
 
 
 async def provide_level_service(db_session: AsyncSession) -> SponsorshipLevelService:
@@ -152,14 +139,23 @@ async def provide_sponsorship_service(db_session: AsyncSession) -> SponsorshipSe
 
 
 @pytest.fixture
-async def sponsors_fixtures(postgres_uri: str) -> AsyncIterator[SponsorsTestFixtures]:
-    """Create test fixtures with fresh database schema."""
-    engine = create_async_engine(postgres_uri, echo=False, poolclass=NullPool)
-    async with engine.begin() as conn:
-        await conn.execute(text("DROP SCHEMA public CASCADE"))
-        await conn.execute(text("CREATE SCHEMA public"))
-        await conn.run_sync(AuditBase.metadata.create_all)
-    await engine.dispose()
+async def sponsors_fixtures(
+    async_engine: AsyncEngine,
+    async_session_factory: async_sessionmaker,
+    _module_sqlalchemy_config: SQLAlchemyAsyncConfig,
+) -> AsyncIterator[SponsorsTestFixtures]:
+    """Create test fixtures using module-scoped config to prevent connection exhaustion.
+
+    Uses the shared _module_sqlalchemy_config from conftest.py instead of creating
+    a new SQLAlchemyAsyncConfig per test, which was causing TooManyConnectionsError.
+    """
+    async with async_engine.begin() as conn:
+        result = await conn.execute(text("SELECT tablename FROM pg_tables WHERE schemaname = 'public'"))
+        existing_tables = {row[0] for row in result.fetchall()}
+
+        for table in reversed(AuditBase.metadata.sorted_tables):
+            if table.name in existing_tables:
+                await conn.execute(text(f"TRUNCATE TABLE {table.name} CASCADE"))
 
     async def provide_limit_offset(
         current_page: int = Parameter(ge=1, default=1, query="currentPage"),
@@ -168,13 +164,7 @@ async def sponsors_fixtures(postgres_uri: str) -> AsyncIterator[SponsorsTestFixt
         """Provide limit offset pagination."""
         return LimitOffset(page_size, page_size * (current_page - 1))
 
-    sqlalchemy_config = SQLAlchemyAsyncConfig(
-        connection_string=postgres_uri,
-        metadata=AuditBase.metadata,
-        create_all=False,
-        before_send_handler="autocommit",
-    )
-    sqlalchemy_plugin = SQLAlchemyPlugin(config=sqlalchemy_config)
+    sqlalchemy_plugin = SQLAlchemyPlugin(config=_module_sqlalchemy_config)
 
     dependencies = {
         "limit_offset": provide_limit_offset,
@@ -197,7 +187,7 @@ async def sponsors_fixtures(postgres_uri: str) -> AsyncIterator[SponsorsTestFixt
     async with AsyncTestClient(app=app, base_url="http://testserver.local") as client:
         fixtures = SponsorsTestFixtures()
         fixtures.client = client
-        fixtures.postgres_uri = postgres_uri
+        fixtures.session_factory = async_session_factory
         yield fixtures
 
 
@@ -215,7 +205,7 @@ class TestSponsorshipLevelControllerRoutes:
         """Test listing levels with pagination."""
         for i in range(3):
             await _create_level_via_db(
-                sponsors_fixtures.postgres_uri,
+                sponsors_fixtures.session_factory,
                 name=f"Level {i}",
                 slug=f"level-{i}-{uuid4().hex[:8]}",
                 order=i,
@@ -229,7 +219,7 @@ class TestSponsorshipLevelControllerRoutes:
         """Test listing levels in order."""
         for i in [3, 1, 2]:
             await _create_level_via_db(
-                sponsors_fixtures.postgres_uri,
+                sponsors_fixtures.session_factory,
                 name=f"Level Order {i}",
                 slug=f"level-order-{i}-{uuid4().hex[:8]}",
                 order=i,
@@ -255,7 +245,7 @@ class TestSponsorshipLevelControllerRoutes:
     async def test_get_level_by_id(self, sponsors_fixtures: SponsorsTestFixtures) -> None:
         """Test getting a level by ID."""
         level = await _create_level_via_db(
-            sponsors_fixtures.postgres_uri,
+            sponsors_fixtures.session_factory,
             name="Silver Sponsor",
             slug=f"silver-{uuid4().hex[:8]}",
         )
@@ -275,7 +265,7 @@ class TestSponsorshipLevelControllerRoutes:
         """Test getting a level by slug."""
         slug = f"bronze-{uuid4().hex[:8]}"
         await _create_level_via_db(
-            sponsors_fixtures.postgres_uri,
+            sponsors_fixtures.session_factory,
             name="Bronze Sponsor",
             slug=slug,
         )
@@ -293,7 +283,7 @@ class TestSponsorshipLevelControllerRoutes:
     async def test_update_level(self, sponsors_fixtures: SponsorsTestFixtures) -> None:
         """Test updating a sponsorship level."""
         level = await _create_level_via_db(
-            sponsors_fixtures.postgres_uri,
+            sponsors_fixtures.session_factory,
             name="Community",
             slug=f"community-{uuid4().hex[:8]}",
         )
@@ -307,7 +297,7 @@ class TestSponsorshipLevelControllerRoutes:
     async def test_delete_level(self, sponsors_fixtures: SponsorsTestFixtures) -> None:
         """Test deleting a sponsorship level."""
         level = await _create_level_via_db(
-            sponsors_fixtures.postgres_uri,
+            sponsors_fixtures.session_factory,
             name="Temporary",
             slug=f"temp-{uuid4().hex[:8]}",
         )
@@ -329,7 +319,7 @@ class TestSponsorControllerRoutes:
         """Test listing sponsors with pagination."""
         for i in range(3):
             await _create_sponsor_via_db(
-                sponsors_fixtures.postgres_uri,
+                sponsors_fixtures.session_factory,
                 name=f"Company {i}",
                 slug=f"company-{i}-{uuid4().hex[:8]}",
             )
@@ -365,7 +355,7 @@ class TestSponsorControllerRoutes:
     async def test_get_sponsor_by_id(self, sponsors_fixtures: SponsorsTestFixtures) -> None:
         """Test getting a sponsor by ID."""
         sponsor = await _create_sponsor_via_db(
-            sponsors_fixtures.postgres_uri,
+            sponsors_fixtures.session_factory,
             name="Test Corp",
             slug=f"test-corp-{uuid4().hex[:8]}",
         )
@@ -385,7 +375,7 @@ class TestSponsorControllerRoutes:
         """Test getting a sponsor by slug."""
         slug = f"acme-corp-{uuid4().hex[:8]}"
         await _create_sponsor_via_db(
-            sponsors_fixtures.postgres_uri,
+            sponsors_fixtures.session_factory,
             name="Acme Corporation",
             slug=slug,
         )
@@ -403,7 +393,7 @@ class TestSponsorControllerRoutes:
     async def test_update_sponsor(self, sponsors_fixtures: SponsorsTestFixtures) -> None:
         """Test updating a sponsor."""
         sponsor = await _create_sponsor_via_db(
-            sponsors_fixtures.postgres_uri,
+            sponsors_fixtures.session_factory,
             name="Old Name Corp",
             slug=f"old-name-{uuid4().hex[:8]}",
         )
@@ -417,7 +407,7 @@ class TestSponsorControllerRoutes:
     async def test_delete_sponsor(self, sponsors_fixtures: SponsorsTestFixtures) -> None:
         """Test deleting a sponsor."""
         sponsor = await _create_sponsor_via_db(
-            sponsors_fixtures.postgres_uri,
+            sponsors_fixtures.session_factory,
             name="Delete Me Corp",
             slug=f"delete-me-{uuid4().hex[:8]}",
         )
@@ -446,17 +436,17 @@ class TestSponsorshipControllerRoutes:
     async def test_list_sponsorships_by_sponsor(self, sponsors_fixtures: SponsorsTestFixtures) -> None:
         """Test listing sponsorships for a specific sponsor."""
         level = await _create_level_via_db(
-            sponsors_fixtures.postgres_uri,
+            sponsors_fixtures.session_factory,
             name="Test Level",
             slug=f"test-level-{uuid4().hex[:8]}",
         )
         sponsor = await _create_sponsor_via_db(
-            sponsors_fixtures.postgres_uri,
+            sponsors_fixtures.session_factory,
             name="Test Sponsor",
             slug=f"test-sponsor-{uuid4().hex[:8]}",
         )
         await _create_sponsorship_via_db(
-            sponsors_fixtures.postgres_uri,
+            sponsors_fixtures.session_factory,
             sponsor_id=sponsor["id"],
             level_id=level["id"],
         )
@@ -466,17 +456,17 @@ class TestSponsorshipControllerRoutes:
     async def test_list_sponsorships_by_level(self, sponsors_fixtures: SponsorsTestFixtures) -> None:
         """Test listing sponsorships for a specific level."""
         level = await _create_level_via_db(
-            sponsors_fixtures.postgres_uri,
+            sponsors_fixtures.session_factory,
             name="Gold",
             slug=f"gold-{uuid4().hex[:8]}",
         )
         sponsor = await _create_sponsor_via_db(
-            sponsors_fixtures.postgres_uri,
+            sponsors_fixtures.session_factory,
             name="Gold Sponsor",
             slug=f"gold-sponsor-{uuid4().hex[:8]}",
         )
         await _create_sponsorship_via_db(
-            sponsors_fixtures.postgres_uri,
+            sponsors_fixtures.session_factory,
             sponsor_id=sponsor["id"],
             level_id=level["id"],
         )
@@ -486,17 +476,17 @@ class TestSponsorshipControllerRoutes:
     async def test_list_sponsorships_by_status(self, sponsors_fixtures: SponsorsTestFixtures) -> None:
         """Test listing sponsorships by status."""
         level = await _create_level_via_db(
-            sponsors_fixtures.postgres_uri,
+            sponsors_fixtures.session_factory,
             name="Silver",
             slug=f"silver-{uuid4().hex[:8]}",
         )
         sponsor = await _create_sponsor_via_db(
-            sponsors_fixtures.postgres_uri,
+            sponsors_fixtures.session_factory,
             name="Silver Sponsor",
             slug=f"silver-sponsor-{uuid4().hex[:8]}",
         )
         await _create_sponsorship_via_db(
-            sponsors_fixtures.postgres_uri,
+            sponsors_fixtures.session_factory,
             sponsor_id=sponsor["id"],
             level_id=level["id"],
             status=SponsorshipStatus.APPLIED,
@@ -512,12 +502,12 @@ class TestSponsorshipControllerRoutes:
     async def test_create_sponsorship(self, sponsors_fixtures: SponsorsTestFixtures) -> None:
         """Test creating a sponsorship."""
         level = await _create_level_via_db(
-            sponsors_fixtures.postgres_uri,
+            sponsors_fixtures.session_factory,
             name="Create Test Level",
             slug=f"create-level-{uuid4().hex[:8]}",
         )
         sponsor = await _create_sponsor_via_db(
-            sponsors_fixtures.postgres_uri,
+            sponsors_fixtures.session_factory,
             name="Create Test Sponsor",
             slug=f"create-sponsor-{uuid4().hex[:8]}",
         )
@@ -534,17 +524,17 @@ class TestSponsorshipControllerRoutes:
     async def test_get_sponsorship_by_id(self, sponsors_fixtures: SponsorsTestFixtures) -> None:
         """Test getting a sponsorship by ID."""
         level = await _create_level_via_db(
-            sponsors_fixtures.postgres_uri,
+            sponsors_fixtures.session_factory,
             name="Get Test Level",
             slug=f"get-level-{uuid4().hex[:8]}",
         )
         sponsor = await _create_sponsor_via_db(
-            sponsors_fixtures.postgres_uri,
+            sponsors_fixtures.session_factory,
             name="Get Test Sponsor",
             slug=f"get-sponsor-{uuid4().hex[:8]}",
         )
         sponsorship = await _create_sponsorship_via_db(
-            sponsors_fixtures.postgres_uri,
+            sponsors_fixtures.session_factory,
             sponsor_id=sponsor["id"],
             level_id=level["id"],
         )
@@ -560,17 +550,17 @@ class TestSponsorshipControllerRoutes:
     async def test_update_sponsorship(self, sponsors_fixtures: SponsorsTestFixtures) -> None:
         """Test updating a sponsorship."""
         level = await _create_level_via_db(
-            sponsors_fixtures.postgres_uri,
+            sponsors_fixtures.session_factory,
             name="Update Test Level",
             slug=f"update-level-{uuid4().hex[:8]}",
         )
         sponsor = await _create_sponsor_via_db(
-            sponsors_fixtures.postgres_uri,
+            sponsors_fixtures.session_factory,
             name="Update Test Sponsor",
             slug=f"update-sponsor-{uuid4().hex[:8]}",
         )
         sponsorship = await _create_sponsorship_via_db(
-            sponsors_fixtures.postgres_uri,
+            sponsors_fixtures.session_factory,
             sponsor_id=sponsor["id"],
             level_id=level["id"],
         )
@@ -581,17 +571,17 @@ class TestSponsorshipControllerRoutes:
     async def test_approve_sponsorship(self, sponsors_fixtures: SponsorsTestFixtures) -> None:
         """Test approving a sponsorship."""
         level = await _create_level_via_db(
-            sponsors_fixtures.postgres_uri,
+            sponsors_fixtures.session_factory,
             name="Approve Test Level",
             slug=f"approve-level-{uuid4().hex[:8]}",
         )
         sponsor = await _create_sponsor_via_db(
-            sponsors_fixtures.postgres_uri,
+            sponsors_fixtures.session_factory,
             name="Approve Test Sponsor",
             slug=f"approve-sponsor-{uuid4().hex[:8]}",
         )
         sponsorship = await _create_sponsorship_via_db(
-            sponsors_fixtures.postgres_uri,
+            sponsors_fixtures.session_factory,
             sponsor_id=sponsor["id"],
             level_id=level["id"],
             status=SponsorshipStatus.APPLIED,
@@ -605,17 +595,17 @@ class TestSponsorshipControllerRoutes:
     async def test_reject_sponsorship(self, sponsors_fixtures: SponsorsTestFixtures) -> None:
         """Test rejecting a sponsorship."""
         level = await _create_level_via_db(
-            sponsors_fixtures.postgres_uri,
+            sponsors_fixtures.session_factory,
             name="Reject Test Level",
             slug=f"reject-level-{uuid4().hex[:8]}",
         )
         sponsor = await _create_sponsor_via_db(
-            sponsors_fixtures.postgres_uri,
+            sponsors_fixtures.session_factory,
             name="Reject Test Sponsor",
             slug=f"reject-sponsor-{uuid4().hex[:8]}",
         )
         sponsorship = await _create_sponsorship_via_db(
-            sponsors_fixtures.postgres_uri,
+            sponsors_fixtures.session_factory,
             sponsor_id=sponsor["id"],
             level_id=level["id"],
             status=SponsorshipStatus.APPLIED,
@@ -629,17 +619,17 @@ class TestSponsorshipControllerRoutes:
     async def test_finalize_sponsorship(self, sponsors_fixtures: SponsorsTestFixtures) -> None:
         """Test finalizing a sponsorship."""
         level = await _create_level_via_db(
-            sponsors_fixtures.postgres_uri,
+            sponsors_fixtures.session_factory,
             name="Finalize Test Level",
             slug=f"finalize-level-{uuid4().hex[:8]}",
         )
         sponsor = await _create_sponsor_via_db(
-            sponsors_fixtures.postgres_uri,
+            sponsors_fixtures.session_factory,
             name="Finalize Test Sponsor",
             slug=f"finalize-sponsor-{uuid4().hex[:8]}",
         )
         sponsorship = await _create_sponsorship_via_db(
-            sponsors_fixtures.postgres_uri,
+            sponsors_fixtures.session_factory,
             sponsor_id=sponsor["id"],
             level_id=level["id"],
             status=SponsorshipStatus.APPROVED,
@@ -653,17 +643,17 @@ class TestSponsorshipControllerRoutes:
     async def test_delete_sponsorship(self, sponsors_fixtures: SponsorsTestFixtures) -> None:
         """Test deleting a sponsorship."""
         level = await _create_level_via_db(
-            sponsors_fixtures.postgres_uri,
+            sponsors_fixtures.session_factory,
             name="Delete Test Level",
             slug=f"delete-level-{uuid4().hex[:8]}",
         )
         sponsor = await _create_sponsor_via_db(
-            sponsors_fixtures.postgres_uri,
+            sponsors_fixtures.session_factory,
             name="Delete Test Sponsor",
             slug=f"delete-sponsor-{uuid4().hex[:8]}",
         )
         sponsorship = await _create_sponsorship_via_db(
-            sponsors_fixtures.postgres_uri,
+            sponsors_fixtures.session_factory,
             sponsor_id=sponsor["id"],
             level_id=level["id"],
         )
@@ -689,7 +679,7 @@ class TestSponsorsValidation:
     async def test_create_sponsorship_missing_sponsor_id(self, sponsors_fixtures: SponsorsTestFixtures) -> None:
         """Test creating a sponsorship without sponsor_id fails validation."""
         level = await _create_level_via_db(
-            sponsors_fixtures.postgres_uri,
+            sponsors_fixtures.session_factory,
             name="Validation Level",
             slug=f"validation-{uuid4().hex[:8]}",
         )
@@ -700,7 +690,7 @@ class TestSponsorsValidation:
     async def test_create_sponsorship_missing_level_id(self, sponsors_fixtures: SponsorsTestFixtures) -> None:
         """Test creating a sponsorship without level_id fails validation."""
         sponsor = await _create_sponsor_via_db(
-            sponsors_fixtures.postgres_uri,
+            sponsors_fixtures.session_factory,
             name="Validation Sponsor",
             slug=f"validation-sponsor-{uuid4().hex[:8]}",
         )
@@ -711,7 +701,7 @@ class TestSponsorsValidation:
     async def test_create_sponsorship_invalid_sponsor_id(self, sponsors_fixtures: SponsorsTestFixtures) -> None:
         """Test creating a sponsorship with invalid sponsor_id fails."""
         level = await _create_level_via_db(
-            sponsors_fixtures.postgres_uri,
+            sponsors_fixtures.session_factory,
             name="Invalid Test Level",
             slug=f"invalid-level-{uuid4().hex[:8]}",
         )
