@@ -338,10 +338,11 @@ jobs:
           DATABASE_URL: postgresql+asyncpg://postgres:postgres@localhost:5432/pydotorg_test
           REDIS_URL: redis://localhost:6379
         run: |
-          uv run pytest tests \
+          uv run pytest tests/unit tests/integration \
             --cov=src/pydotorg \
             --cov-report=term-missing \
             --cov-report=xml \
+            --maxfail=5 \
             -v
 
       - name: Upload coverage to Codecov
