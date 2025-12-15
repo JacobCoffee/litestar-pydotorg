@@ -12,11 +12,9 @@ from advanced_alchemy.extensions.litestar import SQLAlchemyPlugin
 from advanced_alchemy.extensions.litestar.plugins.init.config.asyncio import SQLAlchemyAsyncConfig
 from litestar import Litestar
 from litestar.testing import AsyncTestClient
-from sqlalchemy import text
-from sqlalchemy.ext.asyncio import AsyncEngine, async_sessionmaker
+from sqlalchemy.ext.asyncio import async_sessionmaker
 
 from pydotorg.core.auth.middleware import JWTAuthMiddleware
-from pydotorg.core.database.base import AuditBase
 from pydotorg.domains.mailing.controllers import EmailLogController, EmailTemplateController
 from pydotorg.domains.mailing.dependencies import get_mailing_dependencies
 from pydotorg.domains.mailing.models import EmailLog, EmailTemplate, EmailTemplateType
@@ -587,23 +585,15 @@ class MailingTestFixtures:
 
 @pytest.fixture
 async def mailing_fixtures(
-    async_engine: AsyncEngine,
     async_session_factory: async_sessionmaker,
     _module_sqlalchemy_config: SQLAlchemyAsyncConfig,
 ) -> AsyncIterator[MailingTestFixtures]:
-    """Async test client with mailing controllers and test users using module-scoped config.
+    """Async test client with mailing controllers and test users.
 
     Uses the shared _module_sqlalchemy_config from conftest.py instead of creating
     a new engine per test, which was causing TooManyConnectionsError.
+    Test isolation is handled by the autouse truncate_tables fixture in conftest.py.
     """
-    async with async_engine.begin() as conn:
-        result = await conn.execute(text("SELECT tablename FROM pg_tables WHERE schemaname = 'public'"))
-        existing_tables = {row[0] for row in result.fetchall()}
-
-        for table in reversed(AuditBase.metadata.sorted_tables):
-            if table.name in existing_tables:
-                await conn.execute(text(f"TRUNCATE TABLE {table.name} CASCADE"))
-
     async with async_session_factory() as session:
         staff = User(
             username=f"staff_{uuid4().hex[:8]}",

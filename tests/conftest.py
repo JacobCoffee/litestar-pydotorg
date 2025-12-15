@@ -8,6 +8,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 from advanced_alchemy.config import EngineConfig
+from advanced_alchemy.config.asyncio import AsyncSessionConfig
 from advanced_alchemy.extensions.litestar import SQLAlchemyPlugin
 from advanced_alchemy.extensions.litestar.plugins.init.config.asyncio import (
     SQLAlchemyAsyncConfig,
@@ -145,12 +146,16 @@ def _module_sqlalchemy_config(postgres_uri: str) -> SQLAlchemyAsyncConfig:
     Uses autocommit_before_send_handler to ensure transactions are committed
     before closing sessions, which fixes the issue where data created in one
     request isn't visible in subsequent requests.
+
+    Uses expire_on_commit=False to prevent MissingGreenlet errors when accessing
+    model attributes after the session has been committed.
     """
     return SQLAlchemyAsyncConfig(
         connection_string=postgres_uri,
         metadata=AuditBase.metadata,
         create_all=False,
         engine_config=EngineConfig(poolclass=NullPool),
+        session_config=AsyncSessionConfig(expire_on_commit=False),
         before_send_handler=autocommit_before_send_handler,
     )
 

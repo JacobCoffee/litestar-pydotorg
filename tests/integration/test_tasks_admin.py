@@ -118,8 +118,6 @@ async def test_job(async_session_factory: async_sessionmaker, test_user: User) -
         session.add(job)
         await session.commit()
         await session.refresh(job)
-
-        job.creator = test_user
         return job
 
 
@@ -235,6 +233,7 @@ class TestJobAdminTaskWiring:
         mock_enqueue: AsyncMock,
         async_session_factory: async_sessionmaker,
         test_job: Job,
+        test_user: User,
     ) -> None:
         """Test that approving a job enqueues approval email task."""
         mock_enqueue.return_value = "job-key-approved"
@@ -250,7 +249,7 @@ class TestJobAdminTaskWiring:
 
             email_call = mock_enqueue.call_args_list[0]
             assert email_call[0][0] == "send_job_approved_email"
-            assert email_call[1]["to_email"] == test_job.creator.email
+            assert email_call[1]["to_email"] == test_user.email
             assert email_call[1]["job_title"] == test_job.job_title
             assert email_call[1]["company_name"] == test_job.company_name
             assert "job_url" in email_call[1]
@@ -285,6 +284,7 @@ class TestJobAdminTaskWiring:
         mock_enqueue: AsyncMock,
         async_session_factory: async_sessionmaker,
         test_job: Job,
+        test_user: User,
     ) -> None:
         """Test that rejecting a job enqueues rejection email task."""
         mock_enqueue.return_value = "job-key-rejected"
@@ -300,7 +300,7 @@ class TestJobAdminTaskWiring:
             mock_enqueue.assert_called_once()
             call_args = mock_enqueue.call_args
             assert call_args[0][0] == "send_job_rejected_email"
-            assert call_args[1]["to_email"] == test_job.creator.email
+            assert call_args[1]["to_email"] == test_user.email
             assert call_args[1]["job_title"] == test_job.job_title
             assert call_args[1]["company_name"] == test_job.company_name
             assert call_args[1]["reason"] == rejection_reason
