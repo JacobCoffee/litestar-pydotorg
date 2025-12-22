@@ -18,7 +18,7 @@ RUN bun run build && bun run css
 
 
 # Stage 2: Python Builder - Install Python dependencies
-FROM python:3.13-slim AS python-builder
+FROM python:3.14-slim AS python-builder
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
@@ -49,7 +49,7 @@ RUN uv sync --frozen --no-dev
 
 
 # Stage 3: Runtime - Minimal production image
-FROM python:3.13-slim AS runtime
+FROM python:3.14-slim AS runtime
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
