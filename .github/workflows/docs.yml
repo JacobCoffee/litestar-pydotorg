@@ -17,7 +17,7 @@ jobs:
     name: Build Documentation
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6.0.1
+      - uses: actions/checkout@v6.0.2
         with:
           fetch-depth: 0
 
@@ -56,7 +56,7 @@ jobs:
             docs docs/_build/html
 
       - name: Upload documentation artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: documentation
           path: docs/_build/html
@@ -67,7 +67,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     steps:
-      - uses: actions/checkout@v6.0.1
+      - uses: actions/checkout@v6.0.2
         with:
           fetch-depth: 0
 
@@ -106,10 +106,10 @@ jobs:
       contents: write
 
     steps:
-      - uses: actions/checkout@v6.0.1
+      - uses: actions/checkout@v6.0.2
 
       - name: Download documentation artifacts
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: documentation
           path: docs/_build/html
